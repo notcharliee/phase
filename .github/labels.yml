@@ -1,0 +1,22 @@
+- name: blocked
+  color: B60205
+- name: bug
+  color: BA303E
+- name: duplicate
+  color: 6884F5
+- name: enhancement
+  color: BE00AD
+- name: feature request
+  color: 79E599
+- name: needs information
+  color: 5F826D
+- name: non-reproducible
+  color: 8945F2
+- name: priority 🔴
+  color: b60205
+- name: priority 🟠
+  color: d93f0b
+- name: priority 🟡
+  color: fbca04
+- name: reproducible
+  color: 34eb9b
