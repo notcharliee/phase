@@ -3,5 +3,8 @@
   "name": "phase",
   "type": "module",
   "author": "@notcharliee",
-  "license": "CC-BY-NC-4.0"
+  "license": "CC-BY-NC-4.0",
+  "scripts": {
+    "build": "pnpm install"
+  }
 }
