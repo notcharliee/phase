@@ -1,0 +1,35 @@
+{
+  "private": true,
+  "name": "phasesite",
+  "type": "commonjs",
+  "author": "@notcharliee",
+  "license": "CC-BY-NC-4.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "postinstall": "next build"
+  },
+  "dependencies": {
+    "@fortawesome/free-brands-svg-icons": "^6.4.0",
+    "@fortawesome/free-regular-svg-icons": "^6.4.0",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "autoprefixer": "10.4.14",
+    "discord-api-types": "^0.37.50",
+    "mongoose": "^7.4.0",
+    "next": "13.5.4",
+    "postcss": "8.4.26",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-select": "^5.7.4",
+    "sharp": "^0.32.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.5",
+    "@types/react": "^18.2.18",
+    "@types/react-dom": "^18.2.7",
+    "tailwindcss": "^3.3.3",
+    "typescript": "^5.1.6"
+  }
+}

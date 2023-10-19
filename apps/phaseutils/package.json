@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "name": "phaseutils",
+  "version": "1.0.0",
+  "type": "module",
+  "author": "@notcharliee",
+  "license": "CC-BY-NC-4.0",
+  "main": ".build/index.js",
+  "module": ".build/index.js",
+  "scripts": {
+    "postinstall": "npm run build",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "discord.js": "^14.12.1",
+    "mongoose": "^7.4.3"
+  }
+}
