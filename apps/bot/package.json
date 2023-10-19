@@ -30,7 +30,7 @@
     "dotenv": "^16.3.1",
     "googleapis": "^127.0.0",
     "mongoose": "^7.4.3",
-    "phaseutils": "*"
+    "utils": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.5.0",
