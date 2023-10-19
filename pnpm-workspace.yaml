@@ -1,0 +1,6 @@
+packages:
+  - 'apps/phasebot'
+  - 'apps/phasesite'
+  - 'apps/phaseutils'
+
+link-workspace-packages: true
