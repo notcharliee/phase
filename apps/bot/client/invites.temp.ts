@@ -8,7 +8,7 @@
  */
 
 import * as Discord from 'discord.js'
-import * as Utils from 'phaseutils'
+import * as Utils from 'utils'
 
 import invitesTracker from '@androz2091/discord-invites-tracker'
 

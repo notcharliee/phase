@@ -8,7 +8,7 @@
  */
 
 import * as Discord from 'discord.js'
-import * as Utils from 'phaseutils'
+import * as Utils from 'utils'
 
 import discordlogs from 'discord-logs'
 

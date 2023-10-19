@@ -8,7 +8,7 @@ importers:
 
   .: {}
 
-  apps/phasebot:
+  apps/bot:
     dependencies:
       '@androz2091/discord-invites-tracker':
         specifier: ^1.2.3
@@ -31,9 +31,9 @@ importers:
       mongoose:
         specifier: ^7.4.3
         version: 7.6.3
-      phaseutils:
-        specifier: '*'
-        version: link:../phaseutils
+      utils:
+        specifier: workspace:*
+        version: link:../utils
     devDependencies:
       '@types/node':
         specifier: ^20.5.0
@@ -42,7 +42,7 @@ importers:
         specifier: ^5.1.6
         version: 5.2.2
 
-  apps/phasesite:
+  apps/site:
     dependencies:
       '@fortawesome/free-brands-svg-icons':
         specifier: ^6.4.0
@@ -100,7 +100,7 @@ importers:
         specifier: ^5.1.6
         version: 5.2.2
 
-  apps/phaseutils:
+  apps/utils:
     dependencies:
       discord.js:
         specifier: ^14.12.1

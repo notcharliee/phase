@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'phaseutils'
+import * as Utils from 'utils'
 import * as dotenv from 'dotenv'
 
 import commandsHandler from '#handlers/commands'

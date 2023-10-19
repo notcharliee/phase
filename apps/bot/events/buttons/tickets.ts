@@ -1,5 +1,5 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'phaseutils'
+import * as Utils from 'utils'
 
 
 export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.' separators for backwards compatibility. Eventually this will be changed to just support '.'
