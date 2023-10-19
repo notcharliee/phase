@@ -3,7 +3,7 @@
 		"prefix": "phase-command",
 		"body": [
 			"import * as Discord from 'discord.js'",
-			"import * as Utils from 'phaseutils'",
+			"import * as Utils from 'utils'",
 			"",
 			"",
 			"export default Utils.Functions.clientSlashCommand({",
@@ -23,7 +23,7 @@
 		"prefix": "phase-event",
 		"body": [
 			"import * as Discord from 'discord.js'",
-			"import * as Utils from 'phaseutils'",
+			"import * as Utils from 'utils'",
 			"",
 			"",
 			"export default Utils.Functions.clientEvent({",
@@ -41,7 +41,7 @@
 		"prefix": "phase-loop",
 		"body": [
 			"import * as Discord from 'discord.js'",
-			"import * as Utils from 'phaseutils'",
+			"import * as Utils from 'utils'",
 			"",
 			"",
 			"export default Utils.Functions.clientLoop({",
