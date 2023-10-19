@@ -9,8 +9,7 @@ node_modules
 coverage
 
 # production
-dist
-temp
+.build
 
 # misc
 .DS_Store
@@ -22,7 +21,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env
+.env*
 
 # vercel
 .vercel
