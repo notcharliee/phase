@@ -20,6 +20,8 @@ Phase provides a comprehensive set of tools that enable effortless management, m
 
 This codebase is open source and if you would like to make any contributions or request a feature, you can create a pull request or open an issue. There are issue templates available for creating feature requests and reporting bugs, please use them.
 
+Please ensure that all commits in this repository adhere to the [Commit Convention](https://github.com/notcharliee/phase/blob/main/.github/COMMIT_CONVENTION.md) file.
+
 ### Discord Roles
 
 To recieve these roles, create a support ticket in our [Discord server](https://phasebot.xyz/redirect/discord).
