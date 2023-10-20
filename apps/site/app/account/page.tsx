@@ -26,7 +26,7 @@ export default async function page() {
     // check if user is authorised
     let session = cookies().get('session')?.value
     let authorised = await isAuthorised(session)
-    if(!authorised) return redirect(process.env.url + '/redirect/login')
+    if(!authorised) return redirect(process.env.BASE_URL + '/redirect/login')
 
     let { user, guilds } = authorised
 

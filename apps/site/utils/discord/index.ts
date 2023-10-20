@@ -16,7 +16,7 @@ import { Routes, RESTPostOAuth2AccessTokenResult, RESTGetAPICurrentUserResult, R
 
 
 class API {
-    private botToken: string | undefined = process.env.discord
+    private botToken: string | undefined = process.env.DISCORD_TOKEN
 
     /**
      * Runs a fetch request from the Discord API
@@ -65,8 +65,8 @@ class API {
             session_id: string | undefined
         }> {
 
-        let client_id: string = process.env.clientID!
-        let client_secret: string = process.env.clientSecret!
+        let client_id: string = process.env.DISCORD_ID!
+        let client_secret: string = process.env.DISCORD_SECRET!
 
         try {
 
@@ -88,7 +88,7 @@ class API {
                     client_id,
                     client_secret,
                     code: grant_type == 'refresh_token' || 'authorization_code' ? code : (await db.logins.findOne({ session_id: code }))?.refresh_token || '',
-                    redirect_uri: process.env.url + '/api/login',
+                    redirect_uri: process.env.BASE_URL + '/api/login',
                     grant_type: grant_type == 'authorization_code' ? grant_type : 'refresh_token',
                     scope: 'identity guilds'
                 })

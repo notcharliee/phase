@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 try {
-    await mongoose.connect(process.env.mongodb || '')
+    await mongoose.connect(process.env.DATABASE_URI || '')
 } catch(error) {
     throw new Error(`⛔ Mongoose Connection Error | ${error}`)
 }

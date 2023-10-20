@@ -10,8 +10,8 @@ export async function GET(request: NextRequest) {
 
     let url = new URL(request.url)
 
-    let client_id: string = process.env.clientID!
-    let client_secret: string = process.env.clientSecret!
+    let client_id: string = process.env.DISCORD_ID!
+    let client_secret: string = process.env.DISCORD_SECRET!
     let code = url.searchParams.get('code')
 
     if(!code) {

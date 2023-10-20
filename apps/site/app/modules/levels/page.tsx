@@ -23,7 +23,7 @@ export default async function page({ searchParams }: { searchParams: { guild: st
 
     // check if user is authorised
     let authorised = await isAuthorised(cookies().get('session')?.value, searchParams.guild)
-    if(!authorised) return redirect(process.env.url + '/redirect/login')
+    if(!authorised) return redirect(process.env.BASE_URL + '/redirect/login')
 
     // initialise the api
     let discordApi = new API()
@@ -35,7 +35,7 @@ export default async function page({ searchParams }: { searchParams: { guild: st
     // fetch and filter roles
     let roles = await discordApi.fetch<RESTGetAPIGuildRolesResult>(Routes.guildRoles(searchParams.guild))
 
-    let botMember = await discordApi.fetch<RESTGetAPIGuildMemberResult>(Routes.guildMember(searchParams.guild, process.env.clientID))
+    let botMember = await discordApi.fetch<RESTGetAPIGuildMemberResult>(Routes.guildMember(searchParams.guild, process.env.DISCORD_ID))
     let botRoles = roles.filter(role => botMember.roles.includes(role.id)).sort((a, b) => { return b.position - a.position })
 
     let filteredRoles = roles.filter((role) => { return role.name != '@everyone' && !role.managed && botRoles[0].position > role.position }).sort((a, b) => { return b.position - a.position })

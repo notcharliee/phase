@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
             path: '/'
         })
 
-        return NextResponse.redirect(process.env.url + '')
+        return NextResponse.redirect(process.env.BASE_URL + '')
 
     } catch(err) {
         return NextResponse.json({ err: err }, { status: 500 }),console.log(err)

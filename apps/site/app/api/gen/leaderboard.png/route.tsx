@@ -6,7 +6,7 @@ import { ImageResponse } from 'next/server'
 import { RankUser } from '@/utils/discord'
 
 
-let poppinsFont = fetch(process.env.url + '/fonts/poppins.ttf').then((res) => res.arrayBuffer())
+let poppinsFont = fetch(process.env.BASE_URL + '/fonts/poppins.ttf').then((res) => res.arrayBuffer())
 
 export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     let guildID = searchParams.get('guild')
 
     let poppinsFontData = await poppinsFont
-    let leaderboardRes = await fetch(process.env.url+`/api/gen/leaderboard?start=${startIndex || 0}&end=${endIndex || 0}&guild=${guildID || 0}`, { cache: 'no-store' })
+    let leaderboardRes = await fetch(process.env.BASE_URL+`/api/gen/leaderboard?start=${startIndex || 0}&end=${endIndex || 0}&guild=${guildID || 0}`, { cache: 'no-store' })
 
     let leaderboardData: RankUser[] | undefined
     if(leaderboardRes.ok) leaderboardData = await leaderboardRes.json() as RankUser[]

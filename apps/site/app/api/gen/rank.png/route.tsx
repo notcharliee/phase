@@ -6,7 +6,7 @@ import { ImageResponse } from 'next/server'
 import { RankUser } from '@/utils/discord'
 
 
-let poppinsFont = fetch(process.env.url + '/fonts/poppins.ttf').then((res) => res.arrayBuffer())
+let poppinsFont = fetch(process.env.BASE_URL + '/fonts/poppins.ttf').then((res) => res.arrayBuffer())
 
 export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     let guildID = searchParams.get('guild')
 
     let poppinsFontData = await poppinsFont
-    let userRes = await fetch(process.env.url+`/api/gen/rank?user=${userID || 0}&guild=${guildID || 0}`, { cache: 'no-store' })
+    let userRes = await fetch(process.env.BASE_URL+`/api/gen/rank?user=${userID || 0}&guild=${guildID || 0}`, { cache: 'no-store' })
 
     let userData: RankUser | undefined
     if(userRes.ok) userData = await userRes.json() as RankUser

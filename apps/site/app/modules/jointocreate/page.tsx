@@ -21,7 +21,7 @@ export default async function page({ searchParams }: { searchParams: { guild: st
 
     // check if user is authorised
     let authorised = await isAuthorised(cookies().get('session')?.value, searchParams.guild)
-    if(!authorised) return redirect(process.env.url + '/redirect/login')
+    if(!authorised) return redirect(process.env.BASE_URL + '/redirect/login')
 
     // initialise the api
     let discordApi = new API()

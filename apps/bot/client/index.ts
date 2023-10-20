@@ -1,6 +1,5 @@
 import * as Discord from 'discord.js'
 import * as Utils from 'utils'
-import * as dotenv from 'dotenv'
 
 import commandsHandler from '#handlers/commands'
 import eventsHandler from '#handlers/events'
@@ -14,10 +13,9 @@ import partials from '#client/partials'
 import invitesLogsFuntion from './invites.temp.js'
 import discordLogsFunction from './logs.temp.js'
 
-import path from 'path'
 
-
-dotenv.config({ path: path.resolve(process.cwd(), '..', '..', '.env') })
+// Configure Environment Variables
+Utils.Functions.configEnvVars()
 
 
 export const client = new Discord.Client({ intents, partials })

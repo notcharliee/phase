@@ -4,9 +4,9 @@
   "author": "@notcharliee",
   "license": "CC-BY-NC-4.0",
   "scripts": {
-    "dev": "next dev",
+    "dev": "node ../utils/.build/dotenv.js && next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "node ../utils/.build/dotenv.js && next start",
     "postinstall": "next build"
   },
   "dependencies": {

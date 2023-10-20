@@ -1,6 +1,9 @@
 import * as Discord from 'discord.js'
 import * as Utils from './index.js'
 
+import { configEnvVars } from './dotenv.js'
+export { configEnvVars }
+
 
 export async function alertDevs (data: { title: string, description?: string, type: 'message' | 'warning' | 'error' }) {
 

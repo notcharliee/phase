@@ -7,7 +7,7 @@ export const metadata = { title: 'Phase | Discord Bot' }
 export const dynamic = 'force-dynamic'
 
 export default async function page() {
-    let statsResponse = await fetch(process.env.url + '/api/stats', { method: 'GET', next: { revalidate: 3600 } })
+    let statsResponse = await fetch(process.env.BASE_URL + '/api/stats', { method: 'GET', next: { revalidate: 3600 } })
     let statsJSON = await statsResponse.json()
 
     return (
