@@ -8,12 +8,19 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'raw.githubusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+    domains: [
+      'cdn.discordapp.com',
+      'raw.githubusercontent.com',
     ],
   },
   distDir: '.build',
-  experimental: {
-    serverActions: true
-  },
 }
 
 module.exports = nextConfig
