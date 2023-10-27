@@ -1,12 +1,13 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 
 export default Utils.Functions.clientEvent({
   name: 'guildMemberRemove',
   async execute(client, member) {
     
-    const auditLogsSchema = await Utils.Schemas.AuditLogs.findOne({ guild: member.guild.id })
+    const auditLogsSchema = await Schemas.AuditLogs.findOne({ guild: member.guild.id })
     if (!auditLogsSchema) return
     
     const channelId = auditLogsSchema.channel

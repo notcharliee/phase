@@ -1,13 +1,14 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 
 export default Utils.Functions.clientEvent({
   name: 'channelDelete',
   async execute(client, channel) {
     
-    const guildAutoPartnerSchema = await Utils.Schemas.AutoPartners.findOne({ guild: (channel as Discord.NonThreadGuildBasedChannel).guildId }) // The partnership schema of the current guild.
-    const partnerAutoPartnerSchemas = await Utils.Schemas.AutoPartners.find({ partners: { $elemMatch: { channelId: channel.id } } }) // Any partnership schemas that had the guild as a partner.
+    const guildAutoPartnerSchema = await Schemas.AutoPartners.findOne({ guild: (channel as Discord.NonThreadGuildBasedChannel).guildId }) // The partnership schema of the current guild.
+    const partnerAutoPartnerSchemas = await Schemas.AutoPartners.find({ partners: { $elemMatch: { channelId: channel.id } } }) // Any partnership schemas that had the guild as a partner.
 
     if (!guildAutoPartnerSchema || !partnerAutoPartnerSchemas.length) return // If no partnership schema for the current guild or current guild has no partners, return.
 

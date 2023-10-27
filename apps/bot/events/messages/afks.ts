@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 
 export default Utils.Functions.clientEvent({
@@ -9,7 +10,7 @@ export default Utils.Functions.clientEvent({
     if (!client.user) return
     if (!message.guild) return
 
-    const AFKsSchema = await Utils.Schemas.AFKs.findOne({ guild: message.guildId, user: message.author.id })
+    const AFKsSchema = await Schemas.AFKs.findOne({ guild: message.guildId, user: message.author.id })
 
     if (AFKsSchema) {
 
@@ -32,7 +33,7 @@ export default Utils.Functions.clientEvent({
 
       for (const mentionedMember of mentionedMembers) {
 
-        const mentionSchema = await Utils.Schemas.AFKs.findOne({ guild: message.guild.id, user: mentionedMember })
+        const mentionSchema = await Schemas.AFKs.findOne({ guild: message.guild.id, user: mentionedMember })
         const memberName = await message.guild.members.fetch(mentionedMember)
 
         if (mentionSchema) message.reply({

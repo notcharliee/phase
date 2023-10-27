@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 
 export default Utils.Functions.clientSlashCommand({
@@ -57,7 +58,7 @@ export default Utils.Functions.clientSlashCommand({
   },
   async execute(client, interaction) {
 
-    const guildPartnerSchema = await Utils.Schemas.AutoPartners.findOne({ guild: interaction.guildId }) ?? await new Utils.Schemas.AutoPartners({
+    const guildPartnerSchema = await Schemas.AutoPartners.findOne({ guild: interaction.guildId }) ?? await new Schemas.AutoPartners({
       guild: interaction.guildId,
       channel: interaction.channelId,
       advert: undefined,
@@ -83,7 +84,7 @@ export default Utils.Functions.clientSlashCommand({
         // Returns an error if the invite code is invalid or if code belongs to same server or if a partnership already exists.
 
         const inviteCode = interaction.options.getString('code', true)
-        const invitePartnerSchema = await Utils.Schemas.AutoPartners.findOne({ invites: { $elemMatch: { code: inviteCode } } })
+        const invitePartnerSchema = await Schemas.AutoPartners.findOne({ invites: { $elemMatch: { code: inviteCode } } })
 
         if (!invitePartnerSchema || invitePartnerSchema.invites.find(invite => invite.code == inviteCode)!.expires <= new Date().getTime().toString()) return Utils.Functions.clientError<true>(
           interaction,
@@ -228,13 +229,13 @@ export default Utils.Functions.clientSlashCommand({
         )
 
 
-        // Creates partner invite code, then saves it to the Utils.Schemas.
+        // Creates partner invite code, then saves it to the Schemas.
 
         async function newInviteCode() {
 
           let inviteCode = createInvideCode()
       
-          while (await Utils.Schemas.AutoPartners.findOne({ invites: { $elemMatch: { code: inviteCode } } })) {
+          while (await Schemas.AutoPartners.findOne({ invites: { $elemMatch: { code: inviteCode } } })) {
             inviteCode = createInvideCode()
           }
       
@@ -318,8 +319,8 @@ export default Utils.Functions.clientSlashCommand({
 
         const partnerGuildId = interaction.options.getString('server', true).toString()
 
-        const invitePartnerSchema = await Utils.Schemas.AutoPartners.findOne({ guild: partnerGuildId })
-        const guildPartnerSchema = await Utils.Schemas.AutoPartners.findOne({ guild: interaction.guildId })
+        const invitePartnerSchema = await Schemas.AutoPartners.findOne({ guild: partnerGuildId })
+        const guildPartnerSchema = await Schemas.AutoPartners.findOne({ guild: interaction.guildId })
 
         // Returns an error if schema is present for either server.
 

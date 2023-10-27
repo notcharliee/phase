@@ -8,7 +8,8 @@
  */
 
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 import discordlogs from 'discord-logs'
 
@@ -19,7 +20,7 @@ export default async (client: Discord.Client<true>) => {
 
     async function sendlog (guildId: string, embed: Discord.EmbedBuilder) {
 
-        const auditLogsSchema = await Utils.Schemas.AuditLogs.findOne({ guild: guildId })
+        const auditLogsSchema = await Schemas.AuditLogs.findOne({ guild: guildId })
         if (!auditLogsSchema) return
 
         const channel = client.channels.cache.get(auditLogsSchema.channel)

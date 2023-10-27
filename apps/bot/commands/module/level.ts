@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 
 export default Utils.Functions.clientSlashCommand({
@@ -149,7 +150,7 @@ export default Utils.Functions.clientSlashCommand({
         const xp = interaction.options.getInteger('xp', true)
 
 
-        const levelsSchema = await Utils.Schemas.Levels.findOne({ guild: interaction.guildId })
+        const levelsSchema = await Schemas.Levels.findOne({ guild: interaction.guildId })
 
         if (!levelsSchema) return Utils.Functions.clientError<true>(
           interaction,

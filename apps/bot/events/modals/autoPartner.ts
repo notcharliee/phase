@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 
 export default Utils.Functions.clientModalEvent({
@@ -20,7 +21,7 @@ export default Utils.Functions.clientModalEvent({
 
     // Finds and updates the server advert schema, returns error if no schema.
 
-    const guildPartnerSchema = await Utils.Schemas.AutoPartners.findOne({ guild: interaction.guildId })
+    const guildPartnerSchema = await Schemas.AutoPartners.findOne({ guild: interaction.guildId })
 
     if (!guildPartnerSchema) return Utils.Functions.clientError(
       interaction,

@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 
 export default Utils.Functions.clientLoop({
@@ -7,7 +8,7 @@ export default Utils.Functions.clientLoop({
   interval: 1000 * 5, // 5 seconds
   async execute(client) {
 
-    const expiredGiveawaySchemas = await Utils.Schemas.Giveaways.find({ expires: { $lt: Date.now() }, expired: false })
+    const expiredGiveawaySchemas = await Schemas.Giveaways.find({ expires: { $lt: Date.now() }, expired: false })
 
     for (const giveawaySchema of expiredGiveawaySchemas) {
 

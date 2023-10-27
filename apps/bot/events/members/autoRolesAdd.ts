@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 
 export default Utils.Functions.clientEvent({
@@ -8,7 +9,7 @@ export default Utils.Functions.clientEvent({
 
     if (member.guild.features.includes(Discord.GuildFeature.MemberVerificationGateEnabled)) return
     
-    const autoRolesSchema = await Utils.Schemas.AutoRoles.findOne({ guild: member.guild.id })
+    const autoRolesSchema = await Schemas.AutoRoles.findOne({ guild: member.guild.id })
     if (!autoRolesSchema) return
 
     for (const role of autoRolesSchema.roles) {

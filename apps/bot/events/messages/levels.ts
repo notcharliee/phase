@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 
 export default Utils.Functions.clientEvent({
@@ -9,7 +10,7 @@ export default Utils.Functions.clientEvent({
     if (!message.inGuild() || message.author.bot) return
     if (!client.user) return
 
-    const levelsSchema = await Utils.Schemas.Levels.findOne({ guild: message.guildId })
+    const levelsSchema = await Schemas.Levels.findOne({ guild: message.guildId })
     if (!levelsSchema) return
 
     const userIndex = levelsSchema.levels.findIndex(u => u.id == message.author.id)

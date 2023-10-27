@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 
 export default Utils.Functions.clientSlashCommand({
@@ -77,7 +78,7 @@ export default Utils.Functions.clientSlashCommand({
   },
   async execute(client, interaction) {
 
-    const tagsSchema = await Utils.Schemas.Tags.findOne({ guild: interaction.guildId }) ?? await new Utils.Schemas.Tags({
+    const tagsSchema = await Schemas.Tags.findOne({ guild: interaction.guildId }) ?? await new Schemas.Tags({
       guild: interaction.guildId,
       tags: []
     }).save()

@@ -1,12 +1,13 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 
 export default Utils.Functions.clientEvent({
   name: 'voiceStateUpdate',
   async execute(client, oldVoice, newVoice) {
 
-    const joinToCreateSchema = await Utils.Schemas.JoinToCreate.findOne({ guild: oldVoice.guild.id })
+    const joinToCreateSchema = await Schemas.JoinToCreate.findOne({ guild: oldVoice.guild.id })
 
     if (!joinToCreateSchema) return
     if (!joinToCreateSchema.channel || joinToCreateSchema.channel == '0') return

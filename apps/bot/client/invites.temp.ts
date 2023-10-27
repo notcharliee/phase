@@ -8,7 +8,8 @@
  */
 
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 import invitesTracker from '@androz2091/discord-invites-tracker'
 
@@ -25,7 +26,7 @@ export default async (client: Discord.Client<true>) => {
 
         if (!member || !type || !invite || !invite.inviter) return
 
-        const auditLogsSchema = await Utils.Schemas.AuditLogs.findOne({ guild: member.guild.id })
+        const auditLogsSchema = await Schemas.AuditLogs.findOne({ guild: member.guild.id })
         if (!auditLogsSchema) return
         
         const channelId = auditLogsSchema.channel

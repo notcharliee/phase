@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 
 export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.' separators for backwards compatibility. Eventually this will be changed to just support '.'
@@ -19,7 +20,7 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
           ephemeral: true,
         })
 
-        const ticketsSchema = await Utils.Schemas.Tickets.findOne({ guild: interaction.guild.id })
+        const ticketsSchema = await Schemas.Tickets.findOne({ guild: interaction.guild.id })
         if (!ticketsSchema) return
 
         const ticketData = ticketsSchema.tickets.find(ticket => ticket.id == ticketId)
@@ -100,7 +101,7 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
             ] : undefined,
           })
   
-          await Utils.Schemas.Tickets.findOneAndUpdate(
+          await Schemas.Tickets.findOneAndUpdate(
             { guild: interaction.guild.id, 'tickets.id': ticketId },
             { $inc: { 'tickets.$.count': 1 } }
           )
@@ -137,7 +138,7 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
 
       case 'close': {
 
-        const ticketsSchema = await Utils.Schemas.Tickets.findOne({ guild: interaction.guild.id })
+        const ticketsSchema = await Schemas.Tickets.findOne({ guild: interaction.guild.id })
         if (!ticketsSchema) return
 
         const ticketData = ticketsSchema.tickets.find(ticket => ticket.id == ticketId)
@@ -215,7 +216,7 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
 
       case 'reopen': {
 
-        const ticketsSchema = await Utils.Schemas.Tickets.findOne({ guild: interaction.guild.id })
+        const ticketsSchema = await Schemas.Tickets.findOne({ guild: interaction.guild.id })
         if (!ticketsSchema) return
 
         const ticketData = ticketsSchema.tickets.find(ticket => ticket.id == ticketId)
@@ -293,7 +294,7 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
 
       case 'claim': {
 
-        const ticketsSchema = await Utils.Schemas.Tickets.findOne({ guild: interaction.guild.id })
+        const ticketsSchema = await Schemas.Tickets.findOne({ guild: interaction.guild.id })
         if (!ticketsSchema) return
 
         const ticketData = ticketsSchema.tickets.find(ticket => ticket.id == ticketId)
@@ -361,7 +362,7 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
 
       case 'delete': {
 
-        const ticketsSchema = await Utils.Schemas.Tickets.findOne({ guild: interaction.guild.id })
+        const ticketsSchema = await Schemas.Tickets.findOne({ guild: interaction.guild.id })
         if (!ticketsSchema) return
 
         const ticketData = ticketsSchema.tickets.find(ticket => ticket.id == ticketId)

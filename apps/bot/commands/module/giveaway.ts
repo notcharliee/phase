@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 
 export default Utils.Functions.clientSlashCommand({
@@ -129,7 +130,7 @@ export default Utils.Functions.clientSlashCommand({
 
         await giveawayMessage.react(Utils.Enums.PhaseEmoji.Tada)
 
-        await new Utils.Schemas.Giveaways({
+        await new Schemas.Giveaways({
           guild: interaction.guildId,
           message: giveawayMessage.id,
           channel: interaction.channelId,
@@ -164,7 +165,7 @@ export default Utils.Functions.clientSlashCommand({
 
         const id = interaction.options.getString('id', true)
 
-        const giveawaySchema = await Utils.Schemas.Giveaways.findOne({ guild: interaction.guildId, created: id })
+        const giveawaySchema = await Schemas.Giveaways.findOne({ guild: interaction.guildId, created: id })
 
         if (!giveawaySchema) return Utils.Functions.clientError<true>(
           interaction,
@@ -215,7 +216,7 @@ export default Utils.Functions.clientSlashCommand({
         const id = interaction.options.getString('id', true)
         const amount = interaction.options.getInteger('amount', false)
 
-        const giveawaySchema = await Utils.Schemas.Giveaways.findOne({ guild: interaction.guildId, created: id, expired: true })
+        const giveawaySchema = await Schemas.Giveaways.findOne({ guild: interaction.guildId, created: id, expired: true })
 
         if (!giveawaySchema) return Utils.Functions.clientError<true>(
           interaction,

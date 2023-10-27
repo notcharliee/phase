@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 
 export default Utils.Functions.clientEvent({
@@ -10,7 +11,7 @@ export default Utils.Functions.clientEvent({
 
     if (!reaction.message.guild || !reaction.message.guild.members) return
 
-    const reactionRolesSchema = await Utils.Schemas.ReactionRoles.findOne({ message: reaction.message.id })
+    const reactionRolesSchema = await Schemas.ReactionRoles.findOne({ message: reaction.message.id })
     if (!reactionRolesSchema) return
 
     for (const item of reactionRolesSchema.reactions) {

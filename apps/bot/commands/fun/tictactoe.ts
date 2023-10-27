@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 
 export default Utils.Functions.clientSlashCommand({
@@ -82,7 +83,7 @@ export default Utils.Functions.clientSlashCommand({
     })
 
 
-    await new Utils.Schemas.Games({
+    await new Schemas.Games({
       guild: interaction.guildId,
       message: message.id,
       type: 'TICTACTOE',

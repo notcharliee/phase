@@ -1,5 +1,6 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils'
+import * as Utils from 'utils/.build/bot'
+import * as Schemas from 'utils/.build/schemas'
 
 
 export default Utils.Functions.clientButtonEvent({
@@ -7,7 +8,7 @@ export default Utils.Functions.clientButtonEvent({
   async execute(client, interaction) {
 
     const buttonIndex = Number(interaction.customId.split('.')[1]) - 1
-    const gameSchema = await Utils.Schemas.Games.findOne({ message: interaction.message.id, type: Utils.Enums.GameType.TicTacToe })
+    const gameSchema = await Schemas.Games.findOne({ message: interaction.message.id, type: Utils.Enums.GameType.TicTacToe })
 
 
     // If no schema, return unknown error.
