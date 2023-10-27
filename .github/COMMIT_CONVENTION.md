@@ -7,7 +7,7 @@ Please ensure that all commits in this repository adhere to the following conven
 Commit messages must match the following regular expression:
 
 ```js
-/^(add|remove|edit|fix): .{1,72}/
+/^(add|remove|edit|fix|docs): .{1,72}/
 ```
 
 #### Examples
@@ -26,6 +26,10 @@ edit: vscode snippets
 
 ```
 fix: handle events correctly
+```
+
+```
+docs: new api endpoint info
 ```
 
 Should you wish to reference an issue, you can include a hashtag followed by the issue number in the message body, like this:
