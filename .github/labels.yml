@@ -4,6 +4,12 @@
 - name: bug
   color: ba303e
 
+- name: can't reproduce
+  color: 8945f2
+
+- name: docs
+  color: 7968D9
+
 - name: duplicate
   color: 6884f5
 
@@ -13,11 +19,8 @@
 - name: feature request
   color: 79e599
 
-- name: needs information
-  color: 5f826d
-
-- name: non-reproducible
-  color: 8945f2
+- name: needs info
+  color: FAD54E
 
 - name: priority 🔴
   color: b60205
