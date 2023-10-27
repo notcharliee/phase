@@ -1,7 +1,7 @@
 import * as Discord from 'discord.js'
 import * as Utils from './index.js'
 
-import { configEnvVars } from './dotenv.js'
+import { configEnvVars } from '../dotenv.js'
 export { configEnvVars }
 
 
