@@ -2,16 +2,37 @@
   "private": true,
   "name": "utils",
   "version": "1.0.0",
-  "type": "module",
   "author": "@notcharliee",
   "license": "CC-BY-NC-4.0",
   "scripts": {
     "postinstall": "npm run build",
-    "build": "tsc"
+    "build": "tsup"
+  },
+  "bin": "./dist/cli.js",
+  "exports": {
+    "./bot": {
+      "types": "./dist/bot/index.d.ts",
+      "import": "./dist/bot/index.mjs",
+      "require": "./dist/bot/index.js"
+    },
+    "./envs": {
+      "types": "./dist/dotenv.d.ts",
+      "import": "./dist/dotenv.mjs",
+      "require": "./dist/dotenv.js"
+    },
+    "./schemas": {
+      "types": "./dist/schemas/index.d.ts",
+      "import": "./dist/schemas/index.mjs",
+      "require": "./dist/schemas/index.js"
+    }
   },
   "dependencies": {
     "discord.js": "^14.12.1",
     "mongoose": "^7.4.3",
     "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.9",
+    "tsup": "^7.2.0"
   }
 }
