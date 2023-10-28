@@ -8,8 +8,8 @@
  */
 
 import * as Discord from 'discord.js'
-import * as Utils from 'utils/.build/bot'
-import * as Schemas from 'utils/.build/schemas'
+import * as Utils from 'utils/bot'
+import * as Schemas from 'utils/schemas'
 
 import discordlogs from 'discord-logs'
 
