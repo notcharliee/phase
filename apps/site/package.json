@@ -3,12 +3,14 @@
   "author": "@notcharliee",
   "license": "CC-BY-NC-4.0",
   "scripts": {
-    "dev": "node ../utils/.build/dotenv.js && next dev --turbo",
+    "dev": "utils dotenv && next dev",
     "build": "next build",
-    "start": "node ../utils/.build/dotenv.js && next start",
+    "start": "utils dotenv && next start",
     "postinstall": "next build"
   },
   "dependencies": {
+    "@discordjs/core": "^1.0.1",
+    "@discordjs/rest": "^2.0.1",
     "@fortawesome/free-brands-svg-icons": "^6.4.0",
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
