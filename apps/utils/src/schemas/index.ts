@@ -1,5 +1,6 @@
 import AFKs from './models/AFKs.js'
 import AuditLogs from './models/AuditLogs.js'
+import AuthorisedUsers from './models/AuthorisedUsers.js'
 import AutoPartners from './models/AutoPartners.js'
 import AutoRoles from './models/AutoRoles.js'
 import Games from './models/Games.js'
@@ -14,6 +15,7 @@ import Tickets from './models/Tickets.js'
 export {
   AFKs,
   AuditLogs,
+  AuthorisedUsers,
   AutoPartners,
   AutoRoles,
   Games,
