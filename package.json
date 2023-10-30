@@ -5,6 +5,7 @@
   "author": "@notcharliee",
   "license": "CC-BY-NC-4.0",
   "scripts": {
-    "build": "pnpm install"
+    "build": "pnpm install",
+    "rebuild:utils": "pnpm -C apps/utils run build && pnpm install --ignore-scripts"
   }
 }
