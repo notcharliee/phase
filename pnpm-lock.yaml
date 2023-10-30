@@ -108,6 +108,9 @@ importers:
 
   apps/utils:
     dependencies:
+      discord-api-types:
+        specifier: ^0.37.61
+        version: 0.37.61
       discord.js:
         specifier: ^14.12.1
         version: 14.13.0
@@ -1207,6 +1210,10 @@ packages:
 
   /discord-api-types@0.37.60:
     resolution: {integrity: sha512-5BELXTsv7becqVHrD81nZrqT4oEyXXWBwbsO/kwDDu6X3u19VV1tYDB5I5vaVAK+c1chcDeheI9zACBLm41LiQ==}
+    dev: false
+
+  /discord-api-types@0.37.61:
+    resolution: {integrity: sha512-o/dXNFfhBpYHpQFdT6FWzeO7pKc838QeeZ9d91CfVAtpr5XLK4B/zYxQbYgPdoMiTDvJfzcsLW5naXgmHGDNXw==}
     dev: false
 
   /discord-logs@2.2.1:
