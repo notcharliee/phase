@@ -1,5 +1,6 @@
 import 'app/globals.css'
-import 'app/fonts.css'
+
+import { GeistSans } from 'geist/font'
 
 import type { Metadata, Viewport } from 'next'
 
@@ -42,6 +43,11 @@ export const viewort: Viewport = {
 
 export default ({ children }: { children: React.ReactNode }) => {
 
-  return <html lang='en' className='--font-cubano --font-poppins' children={children}></html>
+  return <html lang='en' className={GeistSans.variable + ' font-geist-sans tracking-tight'}>
+    <body>
+      <div id='modals'></div>
+      {children}
+    </body>
+  </html>
   
 }
