@@ -6,6 +6,10 @@
   "license": "CC-BY-NC-4.0",
   "scripts": {
     "build": "pnpm install",
-    "rebuild:utils": "pnpm -C apps/utils run build && pnpm install --ignore-scripts"
+    "rebuild:bot": "pnpm -C apps/bot run build",
+    "rebuild:site": "pnpm -C apps/bot run build",
+    "rebuild:utils": "pnpm -C apps/utils run build && pnpm install --ignore-scripts",
+    "start:bot": "pnpm -C apps/bot run start",
+    "start:site": "pnpm -C apps/site run start"
   }
 }
