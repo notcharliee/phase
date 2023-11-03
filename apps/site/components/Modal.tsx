@@ -34,7 +34,7 @@ export default ({ button, children }: { button: React.ReactElement, children: Re
     {React.cloneElement(button, { onClick: onDismiss })}
     {createPortal(<>
         <div
-          className='absolute z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
+          className='absolute z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full p-6 justify-center'
           style={{ display: modalVisibility ? 'flex' : 'none' }}
           children={children}
         ></div>
