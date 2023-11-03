@@ -7,8 +7,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'cubano': ['var(--font-cubano)'],
-        'poppins': ['var(--font-poppins)'],
+        'geist-sans': ['var(--font-geist-sans)'],
       },
       backgroundImage: {
         'phase': 'linear-gradient(45deg, #7000FF, #DB00FF)',
