@@ -10,11 +10,13 @@
 ::selection {
   background-color: var(--phase-purple);
   color: white;
+  -webkit-text-fill-color: white;
 }
 
 ::-moz-selection {
   background-color: var(--phase-purple);
   color: white;
+  -moz-text-fill-color: white;
 }
 
 ::-webkit-scrollbar {
