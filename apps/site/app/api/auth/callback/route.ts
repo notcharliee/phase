@@ -69,7 +69,7 @@ export const GET = async (request: NextRequest) => {
 
     } else await new Schemas.AuthorisedUsers(discordUserData).save()
 
-    return NextResponse.json(discordUserData)
+    return NextResponse.redirect(process.env.BASE_URL + '/dashboard')
 
   } catch (error) {
 
