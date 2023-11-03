@@ -1,10 +1,12 @@
 'use client'
 
-import * as React from 'react'
+import React from 'react'
+import { createPortal } from 'react-dom'
 
 
 export default ({ button, children }: { button: React.ReactElement, children: React.ReactNode }) => {
 
+  const [mounted, setMounted] = React.useState(false)
   const [modalVisibility, setModalVisibility] = React.useState(false)
 
   const overlay = React.useRef<HTMLInputElement>(null)
@@ -25,12 +27,25 @@ export default ({ button, children }: { button: React.ReactElement, children: Re
   }, [onKeyDown])
 
 
-  return (
-    <>
-      {React.cloneElement(button, { onClick: onDismiss })}
-      <div className='absolute z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2' style={{ display: modalVisibility ? 'flex' : 'none' }} children={children}></div>
-      <div ref={overlay} className='bg-black/50 fixed inset-0 items-center justify-center z-40 w-full h-full' onClick={onClick} style={{ display: modalVisibility ? 'flex' : 'none' }}></div>
-    </>
-  )
+  React.useEffect(() => setMounted(true), [])
+
+  return mounted
+  ? <>
+    {React.cloneElement(button, { onClick: onDismiss })}
+    {createPortal(<>
+        <div
+          className='absolute z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
+          style={{ display: modalVisibility ? 'flex' : 'none' }}
+          children={children}
+        ></div>
+        <div
+          ref={overlay}
+          className='bg-black/50 fixed inset-0 items-center justify-center z-40 w-full h-full'
+          onClick={onClick}
+          style={{ display: modalVisibility ? 'flex' : 'none' }}
+        ></div>
+      </>, document.getElementById('modals')!)}
+  </>
+  : <>{React.cloneElement(button, { onClick: onDismiss })}</>
 
 }
