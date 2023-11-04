@@ -6,9 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as FaSolid from '@fortawesome/free-solid-svg-icons'
 
 
-export default ({ icon, title, items, disabled }: { icon: FaSolid.IconDefinition, title: string, items?: React.ReactElement[], disabled?: boolean }) => {
+export default ({ icon, title, items, disabled, open }: { icon: FaSolid.IconDefinition, title: string, items?: React.ReactElement[], disabled?: boolean, open?: boolean }) => {
 
-  const [linksVisibility, setLinksVisibility] = React.useState(false)
+  const [linksVisibility, setLinksVisibility] = React.useState(open ?? false)
   const toggleLinksVisibility = () => !disabled ? setLinksVisibility(!linksVisibility) : setLinksVisibility(linksVisibility)
 
   const dropdownItem = (item: React.ReactElement, key: number) => React.cloneElement(item, { className: 'pl-4 p-2 hover:bg-dark-500 font-medium text-sm text-light-400 leading-none', key })
