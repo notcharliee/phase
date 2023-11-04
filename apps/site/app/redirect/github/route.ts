@@ -1,8 +1,8 @@
-import * as Server from 'next/server'
+import { NextResponse } from 'next/server'
 
 
 export function GET () {
 
-    return Server.NextResponse.redirect('https://github.com/notcharliee/phase')
+  return NextResponse.redirect('https://github.com/notcharliee/phase')
 
 }
