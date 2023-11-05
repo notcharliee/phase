@@ -1,9 +1,5 @@
-import Redis from 'ioredis';
+import { Redis } from '@upstash/redis';
 
-declare function createRedisInstance(config?: {
-    host: string | undefined;
-    password: string | undefined;
-    port: string | undefined;
-}): Redis;
+declare const redisClient: (url: string, token: string) => Redis;
 
-export { createRedisInstance };
+export { redisClient };
