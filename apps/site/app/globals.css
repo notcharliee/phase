@@ -31,10 +31,6 @@ html, body {
   vertical-align: -0.125em;
 }
 
-.min-h-dvh { 
-  @apply min-h-[100dvh]
-}
-
 .phase-gradient-text {
   background-color: var(--phase-purple);
   background-image: var(--phase-gradient);
