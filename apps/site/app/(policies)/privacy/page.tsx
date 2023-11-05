@@ -13,10 +13,10 @@ export const metadata = {
 export default () => {
 
   return (
-    <main className='w-full max-w-6xl m-auto h-full flex flex-col flex-1 gap-6 p-8 pt-32 pb-32 font-semibold'>
+    <main className='w-full max-w-6xl m-auto h-full flex flex-col flex-1 gap-6 p-8 py-16 font-semibold'>
       <h1 className='font-black select-none text-4xl sm:text-5xl text-center sm:text-left'>Privacy Policy</h1>
 
-      <h2 className='text-xl sm:text-2xl'>Last Updated: November 2nd, 2023</h2>
+      <h2 className='text-xl sm:text-2xl text-center sm:text-left'>Last Updated: November 2nd, 2023</h2>
 
       <ol className='list-decimal ml-4'>
         <li><a href='#1' className='text-blue-500'>Information we collect</a></li>
