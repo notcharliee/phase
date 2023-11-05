@@ -20,6 +20,11 @@
       "import": "./dist/dotenv.mjs",
       "require": "./dist/dotenv.js"
     },
+    "./redis": {
+      "types": "./dist/redis.d.ts",
+      "import": "./dist/redis.mjs",
+      "require": "./dist/redis.js"
+    },
     "./schemas": {
       "types": "./dist/schemas/index.d.ts",
       "import": "./dist/schemas/index.mjs",
@@ -27,10 +32,11 @@
     }
   },
   "dependencies": {
-    "discord.js": "^14.12.1",
     "discord-api-types": "^0.37.61",
-    "mongoose": "^7.4.3",
-    "dotenv": "^16.3.1"
+    "discord.js": "^14.12.1",
+    "dotenv": "^16.3.1",
+    "ioredis": "^5.3.2",
+    "mongoose": "^7.4.3"
   },
   "devDependencies": {
     "@types/node": "^20.8.9",
