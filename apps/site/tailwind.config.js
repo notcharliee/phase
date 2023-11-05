@@ -35,6 +35,9 @@ module.exports = {
         'light-100': 'rgb(192 192 192)',
         'phase': 'rgb(164 0 255)',
       },
+      width: {
+        'fill-available': ['-webkit-fill-available', '-moz-available'],
+      },
     },
   },
   plugins: [],
