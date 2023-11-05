@@ -38,6 +38,9 @@ module.exports = {
       width: {
         'fill-available': ['-webkit-fill-available', '-moz-available'],
       },
+      height: {
+        'dvh': ['100dvh', '100vh'],
+      },
     },
   },
   plugins: [],
