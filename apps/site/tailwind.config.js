@@ -44,6 +44,9 @@ module.exports = {
       minHeight: {
         'dvh': ['100dvh', '100vh'],
       },
+      maxHeight: {
+        'dvh': ['100dvh', '100vh'],
+      },
     },
   },
   plugins: [],
