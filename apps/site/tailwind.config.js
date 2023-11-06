@@ -13,6 +13,7 @@ module.exports = {
         'phase': 'linear-gradient(45deg, #7000FF, #DB00FF)',
         'main-gif': 'url(/bg.gif)',
         'main-static': 'url(/bg.png)',
+        'grid': 'url(/docs/bg-grid.png)',
       },
       colors: {
         'dark-900': 'rgb(16 16 16)',
