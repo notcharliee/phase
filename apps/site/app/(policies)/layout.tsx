@@ -7,11 +7,13 @@ import Header from 'components/Header'
 export default ({ children }: { children: React.ReactNode }) => {
 
   return (
-    <body className='font-poppins bg-neutral-900 motion-safe:bg-main-gif motion-reduce:bg-main-static text-white min-h-dvh flex flex-col'>
+    <div className="min-h-dvh flex flex-col justify-between bg-dark-900 font-poppins text-light-800 motion-safe:bg-main-gif motion-reduce:bg-main-static">
       <Header></Header>
-      {children}
+        <main className="m-auto flex w-full max-w-6xl flex-col items-center justify-center p-8">
+          {children}
+        </main>
       <Footer></Footer>
-    </body>
+    </div>
   )
 
 }

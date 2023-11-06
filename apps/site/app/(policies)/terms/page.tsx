@@ -13,7 +13,7 @@ export const metadata = {
 export default () => {
 
   return (
-    <main className='w-full max-w-6xl m-auto h-full flex flex-col flex-1 gap-6 p-8 py-16 font-semibold'>
+    <main className='w-full max-w-6xl m-auto h-full flex flex-col flex-1 gap-6 py-16 font-semibold'>
       <h1 className='font-black select-none text-4xl sm:text-5xl text-center sm:text-left'>Terms of Service</h1>
 
       <h2 className='text-xl sm:text-2xl text-center sm:text-left'>Last Updated: October 23rd, 2023</h2>

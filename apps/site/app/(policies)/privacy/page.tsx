@@ -13,7 +13,7 @@ export const metadata = {
 export default () => {
 
   return (
-    <main className='w-full max-w-6xl m-auto h-full flex flex-col flex-1 gap-6 p-8 py-16 font-semibold'>
+    <div className='w-full max-w-6xl m-auto h-full flex flex-col flex-1 gap-6 py-16 font-semibold'>
       <h1 className='font-black select-none text-4xl sm:text-5xl text-center sm:text-left'>Privacy Policy</h1>
 
       <h2 className='text-xl sm:text-2xl text-center sm:text-left'>Last Updated: November 2nd, 2023</h2>
@@ -69,7 +69,7 @@ export default () => {
       <p>
       If you have any questions, concerns, or feedback about our services or policies, please join our <Link href='/redirect/discord' target='_blank' className='text-blue-500'>Discord server</Link> and create a support ticket. Our server is open to everyone, and we encourage all users to join to stay informed about news, updates, and information regarding Phase. A member of our support team typically responds to tickets within 20 minutes of creation.
       </p>
-    </main>
+    </div>
   )
 
 }
