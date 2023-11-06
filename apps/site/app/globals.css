@@ -23,6 +23,21 @@
   display: none;
 }
 
+.scrollbar-float::-webkit-scrollbar  {
+  display: block;
+  width: 8px;
+}
+
+.scrollbar-float::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-float::-webkit-scrollbar-thumb {
+  background-color: rgb(40 40 40);
+  border-radius: 8px;
+  max-width: 4px;
+}
+
 html, body {
   overflow-y: overlay;
 }
