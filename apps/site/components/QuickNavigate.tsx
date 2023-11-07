@@ -22,20 +22,21 @@ export default ({ text }: { text?: 'none' | 'min' | 'max' } = { text: 'max' }) =
           <FontAwesomeIcon icon={FaRegular.faCompass} className='w-5 h-5'></FontAwesomeIcon>
         </span>
         <SidebarDropdown
-          icon={FaRegular.faSquare}
+          icon={FaRegular.faWindowMaximize}
           title='pages'
           items={[
-            <Link href='/dashboard'>Dashboard</Link>,
-            <Link href='/redirect/donate'>Donate</Link>,
+            <Link href='/'>Home</Link>,
             <Link href='/blog'>Blog</Link>,
+            <Link href='/dashboard'>Dashboard</Link>,
+            <Link href='/docs'>Docs</Link>,
           ]}
           open
         ></SidebarDropdown>
         <SidebarDropdown
-          icon={FaRegular.faMap}
-          title='resources'
+          icon={FaRegular.faWindowRestore}
+          title='links'
           items={[
-            <Link href='/docs'>Documentation</Link>,
+            <Link href='/redirect/donate'>Donate</Link>,
             <Link href='/redirect/discord'>Discord Server</Link>,
             <Link href='/redirect/github'>GitHub Repository</Link>,
           ]}
