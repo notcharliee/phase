@@ -17,7 +17,7 @@ export const metadata = {
 export default () => {
 
   return (
-    <div className='font-poppins bg-dark-900 motion-safe:bg-main-gif motion-reduce:bg-main-static text-light-900 min-h-dvh flex flex-col'>
+    <div className='font-poppins bg-dark-900 bg-main text-light-900 min-h-dvh flex flex-col'>
       <Header></Header>
       <main className='w-full max-w-6xl m-auto h-full flex flex-1 flex-col-reverse lg:flex-row items-center justify-between gap-8 p-8 pt-32 pb-32'>
         <div className='flex flex-col gap-6 max-w-[600px]'>

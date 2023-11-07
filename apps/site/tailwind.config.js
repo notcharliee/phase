@@ -11,8 +11,7 @@ module.exports = {
       },
       backgroundImage: {
         'phase': 'linear-gradient(45deg, #7000FF, #DB00FF)',
-        'main-gif': 'url(/bg.gif)',
-        'main-static': 'url(/bg.png)',
+        'main': 'url(/bg.png)',
         'grid': 'url(/docs/bg-grid.png)',
       },
       colors: {
