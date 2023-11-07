@@ -47,7 +47,6 @@ export default ({ text }: { text?: 'none' | 'min' | 'max' } = { text: 'max' }) =
           items={[
             <Link href='/terms'>Terms of Service</Link>,
             <Link href='/privacy'>Privacy Policy</Link>,
-            <Link href='/guidelines'>Guidelines</Link>,
           ]}
           open
         ></SidebarDropdown>
