@@ -1,11 +1,6 @@
 import Link from 'next/link'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import * as FaRegular from '@fortawesome/free-regular-svg-icons'
-
-import Modal from 'components/Modal'
-import QuickNavigate from 'components/QuickNavigate'
-import SidebarDropdown from 'components/SidebarDropdown'
+import QuickNavigate from '@/components/QuickNavigate'
 
 
 export default () => {

@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 
-import Footer from 'components/Footer'
-import Header from 'components/Header'
+import Footer from '@/components/Footer'
+import Header from '@/components/Header'
 
 
 // Exporting page metadata

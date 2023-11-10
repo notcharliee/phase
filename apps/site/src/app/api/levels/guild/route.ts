@@ -30,7 +30,7 @@ export const GET = async (request: NextRequest) => {
     documentation: `${process.env.BASE_URL}/docs/api/authorisation`,
   }, { status: 401 })
 
-  await mongoose.connect(process.env.DATABASE_URI!)
+  await mongoose.connect(process.env.MONGODB_URI!)
 
   const authorisedUserSchema = await Schemas.AuthorisedUsers.findOne({ session: authorisationCode })
 

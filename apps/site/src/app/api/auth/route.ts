@@ -4,7 +4,7 @@ import { API } from '@discordjs/core/http-only'
 import { REST } from '@discordjs/rest'
 
 
-export const GET = async (request: NextRequest) => {
+export const GET = (request: NextRequest) => {
 
   const discordREST = new REST().setToken(process.env.DISCORD_TOKEN!)
   const discordAPI = new API(discordREST)

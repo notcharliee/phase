@@ -10,7 +10,7 @@ import type { Metadata, Viewport } from 'next'
 export const metadata: Metadata = {
   title: 'Phase',
   description: 'Phase is a free and open source all-in-one Discord bot. Our aim is to provide a comprehensive set of tools that enable effortless management, moderation, and optimization of your servers.',
-  icons: process.env.BASE_URL + '/phase.png',
+  icons: process.env.BASE_URL + '/og_image.png',
   authors: { name: '@notcharliee', url: 'https://github.com/notcharliee' },
   keywords: [ 'discord', 'bot', 'phase', 'phasebot', 'levels', 'free', 'open source', 'notcharliee' ],
   metadataBase: process.env.BASE_URL ? new URL(process.env.BASE_URL) : null,
