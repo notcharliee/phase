@@ -1,11 +1,11 @@
 {
-  "include": [ "./**/*.ts" ],
-  "exclude": [ "node_modules", ".build" ],
+  "include": [ "./src/**/*.ts" ],
+  "exclude": [ "node_modules", "build" ],
   "compilerOptions": {
     "target": "ESNext",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "outDir": ".build",
+    "outDir": "build",
     "skipLibCheck": true,
     "allowJs": true,
     "checkJs": true,
