@@ -17,16 +17,16 @@
 
       // General
 
-      "#client/main": [ "./client/index.ts" ],
-      "#client/intents": [ "./client/options/intents.ts" ],
-      "#client/partials": [ "./client/options/partials.ts" ],
+      "#client/main": [ "./src/client/index.ts" ],
+      "#client/intents": [ "./src/client/options/intents.ts" ],
+      "#client/partials": [ "./src/client/options/partials.ts" ],
 
       // Handlers
 
-      "#handlers/commands": [ "./handlers/commands.ts" ],
-      "#handlers/events": [ "./handlers/events.ts" ],
-      "#handlers/loops": [ "./handlers/loops.ts" ],
-      "#handlers/mongodb": [ "./handlers/mongodb.ts" ],
+      "#handlers/commands": [ "./src/handlers/commands.ts" ],
+      "#handlers/events": [ "./src/handlers/events.ts" ],
+      "#handlers/loops": [ "./src/handlers/loops.ts" ],
+      "#handlers/mongodb": [ "./src/handlers/mongodb.ts" ],
 
     }
   }
