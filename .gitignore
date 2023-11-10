@@ -7,7 +7,7 @@ node_modules
 temp*
 
 # production
-.build
+build
 
 # local env files
 .env*
