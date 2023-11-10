@@ -20,7 +20,7 @@ const nextConfig = {
       'raw.githubusercontent.com',
     ],
   },
-  distDir: '.build',
+  distDir: 'build',
 }
 
 module.exports = nextConfig
