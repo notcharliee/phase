@@ -1,12 +1,15 @@
-'use client'
+"use client"
 
-import * as React from 'react'
+import * as React from "react"
 
-import TypewriterEffect from 'typewriter-effect'
+import TypewriterEffect from "typewriter-effect"
 
-
-export default function Typewriter ({ typeString }: { typeString: string }) {
-
-  return <TypewriterEffect onInit={(typewriter) => { typewriter.typeString(typeString).start() }}></TypewriterEffect>
-
+export default function Typewriter({ typeString }: { typeString: string }) {
+  return (
+    <TypewriterEffect
+      onInit={(typewriter) => {
+        typewriter.typeString(typeString).start()
+      }}
+    ></TypewriterEffect>
+  )
 }

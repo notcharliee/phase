@@ -1,8 +1,5 @@
-import { NextResponse } from 'next/server'
+import { NextResponse } from "next/server"
 
-
-export function GET () {
-
-  return NextResponse.redirect('https://discord.com/invite/mZjRBKS29X')
-
+export function GET() {
+  return NextResponse.redirect("https://discord.com/invite/mZjRBKS29X")
 }

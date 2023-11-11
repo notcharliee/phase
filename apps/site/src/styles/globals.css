@@ -7,8 +7,8 @@ html {
 }
 
 :root {
-  --phase-gradient: linear-gradient(45deg, #7000FF, #DB00FF);
-  --phase-purple: #A400FF
+  --phase-gradient: linear-gradient(45deg, #7000ff, #db00ff);
+  --phase-purple: #a400ff;
 }
 
 ::selection {
@@ -27,7 +27,7 @@ html {
   display: none;
 }
 
-.scrollbar-float::-webkit-scrollbar  {
+.scrollbar-float::-webkit-scrollbar {
   display: block;
   width: 8px;
 }
@@ -42,7 +42,8 @@ html {
   max-width: 4px;
 }
 
-html, body {
+html,
+body {
   overflow-y: overlay;
 }
 
