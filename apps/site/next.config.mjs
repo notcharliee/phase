@@ -1,5 +1,7 @@
+await import("./src/env.mjs")
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const config = {
   images: {
     remotePatterns: [
       {
@@ -23,4 +25,4 @@ const nextConfig = {
   distDir: 'build',
 }
 
-module.exports = nextConfig
+export default config
