@@ -8,6 +8,7 @@ temp*
 
 # production
 build
+dist
 
 # local env files
 .env*
