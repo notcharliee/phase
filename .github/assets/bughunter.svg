@@ -1,0 +1,12 @@
+<svg fill="none" xmlns="http://www.w3.org/2000/svg">
+	<foreignObject width="100%" height="100%">
+		<div xmlns="http://www.w3.org/1999/xhtml">
+      <style>
+        * {
+          font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+        }
+      </style>
+			<span style="color: rgba(255, 124, 124, 1); background: rgba(255, 124, 124, 0.1); border-radius: 3px; padding: 0 2px;">@Bug Hunter</span>
+		</div>
+	</foreignObject>
+</svg>
