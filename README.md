@@ -26,9 +26,9 @@ Please ensure that all commits in this repository adhere to the [Commit Conventi
 
 To recieve these roles, create a support ticket in our [Discord server](https://phasebot.xyz/redirect/discord).
 
-<span style="color: rgba(255, 182, 246, 1); background: rgba(255, 182, 246, 0.1); border-radius: 3px; padding: 0 2px;">@Contributor</span> - Awarded to merged pull request owners.\
-<span style="color: rgba(255, 111, 162, 1); background: rgba(255, 111, 162, 0.1); border-radius: 3px; padding: 0 2px;">@Bug Hunter</span> - Awarded for creating 3 feature requests.\
-<span style="color: rgba(255, 124, 124, 1); background: rgba(255, 124, 124, 0.1); border-radius: 3px; padding: 0 2px;">@Bug Hunter</span> - Awarded for making 3 bug reports.
+<img src="https://raw.githubusercontent.com/notcharliee/phase/main/.github/assets/contributor.svg" width="102" height="21" alt="@Contributor" /> - Awarded to merged pull request owners.\
+<img src="https://raw.githubusercontent.com/notcharliee/phase/main/.github/assets/repohelper.svg" width="108" height="21" alt="@Repo Helper" /> - Awarded for creating 3 feature requests.\
+<img src="https://raw.githubusercontent.com/notcharliee/phase/main/.github/assets/bughunter.svg" width="101" height="21" alt="@Bug Hunter" /> - Awarded for making 3 bug reports.
 
 Make sure your Github and Discord accounts are linked before you create the ticket so we can verify it's really you.
 <br/><br/>
