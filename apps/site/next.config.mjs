@@ -17,7 +17,6 @@ const config = {
         pathname: "/**",
       },
     ],
-    domains: ["cdn.discordapp.com", "raw.githubusercontent.com"],
   },
   distDir: "build",
 }
