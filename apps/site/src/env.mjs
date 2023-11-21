@@ -10,7 +10,7 @@ export const env = createEnv({
     NODE_ENV: z.enum(["development", "test", "production"]),
     DISCORD_TOKEN: z.string(),
     DISCORD_SECRET: z.string(),
-    DISCORD_ID: z.number(),
+    DISCORD_ID: z.string(),
     MONGODB_URI: z.string(),
     UPSTASH_URL: z.string(),
     UPSTASH_TOKEN: z.string(),
