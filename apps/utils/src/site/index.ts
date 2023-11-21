@@ -1,3 +1,3 @@
 export type {
   AuthorisedUser,
-} from './types'
+} from './types.js'
