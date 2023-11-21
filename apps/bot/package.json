@@ -3,23 +3,14 @@
   "type": "module",
   "author": "@notcharliee",
   "license": "CC-BY-NC-4.0",
-  "scripts": {
-    "postinstall": "npm run build",
-    "build": "tsc",
-    "start": "node build/client/index.js",
-    "dev": "tsc --watch"
-  },
   "imports": {
-
     "#client/main": "./build/client/index.js",
     "#client/intents": "./build/client/options/intents.js",
     "#client/partials": "./build/client/options/partials.js",
-    
     "#handlers/commands": "./build/handlers/commands.js",
     "#handlers/events": "./build/handlers/events.js",
     "#handlers/loops": "./build/handlers/loops.js",
     "#handlers/mongodb": "./build/handlers/mongodb.js"
-
   },
   "dependencies": {
     "@androz2091/discord-invites-tracker": "^1.2.3",
