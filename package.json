@@ -5,11 +5,22 @@
   "author": "@notcharliee",
   "license": "CC-BY-NC-4.0",
   "scripts": {
-    "build": "pnpm install",
-    "rebuild:bot": "pnpm -C apps/bot run build",
-    "rebuild:site": "pnpm -C apps/bot run build",
-    "rebuild:utils": "pnpm -C apps/utils run build && pnpm install --ignore-scripts",
-    "start:bot": "pnpm -C apps/bot run start",
-    "start:site": "pnpm -C apps/site run start"
+    "build:bot": "utils build -a bot",
+    "build:site": "utils build -a site",
+    "build:utils": "utils build -a utils",
+
+    "dev:bot": "utils dev -a bot",
+    "dev:site": "utils dev -a site",
+    "dev:utils": "utils dev -a utils",
+
+    "start:bot": "utils start -a bot",
+    "start:site": "utils start -a site"
+  },
+  "devDependencies": {
+    "prettier": "^3.1.0",
+    "prettier-plugin-tailwindcss": "^0.5.7"
+  },
+  "dependencies": {
+    "utils": "workspace:*"
   }
 }
