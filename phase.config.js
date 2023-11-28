@@ -13,11 +13,6 @@ const config = {
       start: "npx next start",
       dev: "npx next dev",
     },
-    {
-      app: "utils",
-      build: "npx tsup",
-      dev: "npx tsup --watch",
-    },
   ],
 }
 
