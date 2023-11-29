@@ -9,6 +9,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@t3-oss/env-nextjs": "^0.7.1",
+    "@upstash/redis": "^1.24.3",
     "axios": "^1.6.0",
     "discord-api-types": "^0.37.50",
     "geist": "^1.0.0",
