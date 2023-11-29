@@ -1,5 +1,7 @@
-/** @type {import('tailwindcss').Config} */
-const config = {
+import { type Config } from "tailwindcss"
+import plugin from "tailwindcss/plugin"
+
+const config: Config = {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
@@ -30,23 +32,41 @@ const config = {
         "light-300": "rgb(208 208 208)",
         "light-200": "rgb(200 200 200)",
         "light-100": "rgb(192 192 192)",
-        phase: "rgb(164 0 255)",
+        "phase": "rgb(164 0 255)",
       },
-      width: {
+      width: { //@ts-ignore
         "fill-available": ["-webkit-fill-available", "-moz-available"],
       },
-      height: {
-        dvh: ["100dvh", "100vh"],
+      height: { //@ts-ignore
+        "dvh": ["100dvh", "100vh"],
       },
-      minHeight: {
-        dvh: ["100dvh", "100vh"],
+      minHeight: { //@ts-ignore
+        "dvh": ["100dvh", "100vh"],
       },
-      maxHeight: {
-        dvh: ["100dvh", "100vh"],
+      maxHeight: { //@ts-ignore
+        "dvh": ["100dvh", "100vh"],
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function({ addVariant }) {
+      addVariant('children', '&>*')
+    }),
+    plugin(({ matchUtilities, theme }) => {
+      matchUtilities(
+        {
+          "animation-delay": (value) => {
+            return {
+              "animation-delay": value,
+            }
+          },
+        },
+        {
+          values: theme("transitionDelay"),
+        },
+      )
+    }),
+  ],
 }
 
 export default config
