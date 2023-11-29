@@ -1,16 +1,14 @@
 import "@/styles/globals.css"
-
 import { GeistSans } from "geist/font"
+import { Metadata, Viewport } from "next"
+import { env } from '@/env'
 
-import type { Metadata, Viewport } from "next"
-
-// Exporting global metadata
 
 export const metadata: Metadata = {
   title: "Phase",
   description:
     "Phase is a free and open source all-in-one Discord bot. Our aim is to provide a comprehensive set of tools that enable effortless management, moderation, and optimization of your servers.",
-  icons: process.env.BASE_URL + "/og_image.png",
+  icons: env.NEXT_PUBLIC_BASE_URL + "/og_image.png",
   authors: { name: "@notcharliee", url: "https://github.com/notcharliee" },
   keywords: [
     "discord",
@@ -22,33 +20,31 @@ export const metadata: Metadata = {
     "open source",
     "notcharliee",
   ],
-  metadataBase: process.env.BASE_URL ? new URL(process.env.BASE_URL) : null,
+  metadataBase: env.NEXT_PUBLIC_BASE_URL ? new URL(env.NEXT_PUBLIC_BASE_URL) : null,
   openGraph: {
     type: "website",
-    url: process.env.BASE_URL,
+    url: env.NEXT_PUBLIC_BASE_URL,
     title: "Phase",
     description:
       "Phase is a free and open source all-in-one Discord bot. Our aim is to provide a comprehensive set of tools that enable effortless management, moderation, and optimization of your servers.",
-    images: process.env.BASE_URL + "/og_image.png",
+    images: env.NEXT_PUBLIC_BASE_URL + "/og_image.png",
   },
   twitter: {
     card: "summary",
     creator: "@notcharliee",
     description:
       "Phase is a free and open source all-in-one Discord bot. Our aim is to provide a comprehensive set of tools that enable effortless management, moderation, and optimization of your servers.",
-    site: process.env.BASE_URL,
-    images: process.env.BASE_URL + "/og_image.png",
+    site: env.NEXT_PUBLIC_BASE_URL,
+    images: env.NEXT_PUBLIC_BASE_URL + "/og_image.png",
   },
 }
 
-// Exporting global viewport
 
 export const viewort: Viewport = {
   colorScheme: "dark",
   themeColor: "#A400FF",
 }
 
-// Exporting global layout
 
 export default ({ children }: { children: React.ReactNode }) => {
   return (
