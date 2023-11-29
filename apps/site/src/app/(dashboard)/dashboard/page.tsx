@@ -1,33 +1,29 @@
-import Link from "next/link"
-import Image from "next/image"
-
-import { cookies } from "next/headers"
-
+import { cookies, headers } from "next/headers"
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
-
+import Link from "next/link"
+import Image from "next/image"
 import Modal from "@/components/Modal"
 
-// Exporting page metadata
 
 export const metadata = {
   title: "Dashboard - Phase",
 }
 
-// Exporting page tsx
 
 export default async () => {
   const discordREST = new REST().setToken(process.env.DISCORD_TOKEN!)
   const discordAPI = new API(discordREST)
 
-  const userId = cookies().get("auth_id")!
+  const userId = headers().get("x-user-id")!
   const userCookie = cookies().get("auth_session")!
 
-  const user = await discordAPI.users.get(userId.value)
+  const user = await discordAPI.users.get(userId)
 
   const discordUserBanner = user.banner
     ? discordREST.cdn.banner(user.id, user.banner)
     : "/discord.png"
+    
   const discordUserAvatar = user.avatar
     ? discordREST.cdn.avatar(user.id, user.avatar)
     : "/discord.png"
@@ -37,7 +33,7 @@ export default async () => {
       <div className="relative mb-[70px]">
         <Image
           src={discordUserBanner}
-          width={0}
+          width={450}
           height={150}
           alt=""
           className="max-h-[150px] min-h-[150px] w-full rounded-tl rounded-tr"
@@ -67,9 +63,11 @@ export default async () => {
                   Click to view
                 </span>
               }
-            >
-              <div className="max-w-[400px] rounded-lg border border-dark-600 bg-dark-700 p-5 font-medium text-light-100 shadow">
+              heading={
                 <h3 className="text-xl font-bold text-light-900">User Token</h3>
+              }
+            >
+              <div className="font-medium text-light-100">
                 <p className="mt-2">
                   This is your current user token.
                   <br />
@@ -85,13 +83,13 @@ export default async () => {
                   </Link>
                 </p>
                 <h3 className="mt-6 text-xl font-bold text-light-900">
-                  Warning
+                  Important Warning
                 </h3>
                 <p className="mt-2 text-[#FF5656]">
-                  Never share this token with anyone, as it can be used to make
+                  Never share this token with <u>anyone</u>, as it can be used to make
                   changes to your servers/account.
                 </p>
-                <div className="mt-6 w-full rounded border border-dark-800 bg-dark-800 p-3 pl-4 pr-4 font-medium text-light-100 shadow">
+                <div className="mt-6 w-full rounded bg-dark-800 p-3 pl-4 pr-4 font-medium text-light-100">
                   {userCookie.value}
                 </div>
               </div>
