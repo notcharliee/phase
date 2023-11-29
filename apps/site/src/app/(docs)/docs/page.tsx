@@ -1,12 +1,11 @@
 import Link from "next/link"
+import { Metadata } from 'next'
 
-// Exporting page metadata
 
-export const metadata = {
-  title: "Documentation - Phase",
+export const metadata: Metadata = {
+  title: "Docs - Phase",
+  description: "Welcome to the Phase documentation!"
 }
-
-// Exporting page tsx
 
 export default () => {
   return (
@@ -85,6 +84,16 @@ export default () => {
           While donations are appreciated to support the developer both
           financially and emotionally, they're entirely optional.
         </p>
+      </section>
+      <section className="flex flex-wrap gap-6">
+        <Link href={"/docs/modules"} className='p-4 border rounded border-phase hover:border-light-800 duration-150 shadow bg-dark-900 max-w-xs'>
+          <span className='font-bold text-light-800'>Modules</span>
+          <p className='text-sm mt-1.5'>Learn about modules, how they work, and how to enable them.</p>
+        </Link>
+        <Link href={"/docs/commands"} className='p-4 border rounded border-phase hover:border-light-800 duration-150 shadow bg-dark-900 max-w-xs'>
+          <span className='font-bold text-light-800'>Commands</span>
+          <p className='text-sm mt-1.5'>Check out every slash command Phase comes with by default.</p>
+        </Link>
       </section>
     </div>
   )
