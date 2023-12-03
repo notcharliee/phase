@@ -1,57 +1,17 @@
 import { NextResponse, NextRequest } from "next/server"
-import { cookies } from "next/headers"
-import { AuthorisedUsers, Levels } from "@repo/utils/schemas"
+import { Levels } from "@repo/utils/schemas"
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 import { env } from '@/env'
-import mongoose from "mongoose"
 
 
 export const GET = async (request: NextRequest) => {
   const discordREST = new REST().setToken(env.DISCORD_TOKEN)
   const discordAPI = new API(discordREST)
 
-  // Check if user is authorised to use endpoint...
-
-  const authorisationCode =
-    request.headers.get("Authorization")?.startsWith("Bot ") ||
-    request.headers.get("Authorization")?.startsWith("Bearer ")
-      ? request.headers.get("Authorization")?.split(" ")[1]
-      : cookies().get("authorised_user")?.value
-
   const startIndex = Number(request.nextUrl.searchParams.get("start"))
   const endIndex = Number(request.nextUrl.searchParams.get("end"))
   const guildId = request.nextUrl.searchParams.get("guild")
-
-  if (!authorisationCode)
-    return NextResponse.json(
-      {
-        error: "Unauthorised",
-        documentation: `${env.NEXT_PUBLIC_BASE_URL}/docs/api/authorisation`,
-      },
-      { status: 401 },
-    )
-
-  await mongoose.connect(env.MONGODB_URI!)
-
-  const authorisedUserSchema = await AuthorisedUsers.findOne({
-    session: authorisationCode,
-  })
-
-  const isPhaseBot = authorisationCode == env.DISCORD_SECRET
-  const isAuthorised = isPhaseBot
-    ? true
-    : !!authorisedUserSchema &&
-      !!authorisedUserSchema.guilds.find((guild) => guild.id == guildId)
-
-  if (!isAuthorised)
-    return NextResponse.json(
-      {
-        error: "Unauthorised",
-        documentation: `${env.NEXT_PUBLIC_BASE_URL}/docs/api/authorisation`,
-      },
-      { status: 401 },
-    )
 
   // Get data...
 
@@ -97,7 +57,5 @@ export const GET = async (request: NextRequest) => {
     console.log(error)
 
     return NextResponse.json(error, { status: 500 })
-  } finally {
-    await mongoose.connection.close()
   }
 }

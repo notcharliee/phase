@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ImageResponse } from "next/og"
-import { cookies } from "next/headers"
 import { REST } from "@discordjs/rest"
 import { env } from '@/env'
 import discord_api_types_v10 from "discord-api-types/v10"
@@ -14,17 +13,8 @@ export async function GET(request: NextRequest) {
 
   const discordREST = new REST().setToken(env.DISCORD_TOKEN!)
 
-  const authorisationHeader = request.headers.get("Authorization")
-  const authorisationCookie = cookies().get("authorised_user")?.value
-  const authorisationCode =
-    authorisationHeader ?? `Bearer ${authorisationCookie}`
+  const userLevelDataRequest = await fetch(`${env.NEXT_PUBLIC_BASE_URL}/api/levels/user?user=${userId}&guild=${guildId}&time=${Date.now()}`)
 
-  const userLevelDataRequest = await fetch(
-    `${
-      env.NEXT_PUBLIC_BASE_URL
-    }/api/levels/user?user=${userId}&guild=${guildId}&time=${Date.now()}`,
-    { headers: { Authorization: authorisationCode } },
-  )
   if (!userLevelDataRequest.ok)
     return NextResponse.json(await userLevelDataRequest.json(), {
       status: userLevelDataRequest.status,
