@@ -4,6 +4,7 @@
   "author": "@notcharliee",
   "license": "CC-BY-NC-4.0",
   "imports": {
+    "#env": "./build/env.js",
     "#client/main": "./build/client/index.js",
     "#client/intents": "./build/client/options/intents.js",
     "#client/partials": "./build/client/options/partials.js",
@@ -14,14 +15,15 @@
   },
   "dependencies": {
     "@androz2091/discord-invites-tracker": "^1.2.3",
+    "@repo/utils": "workspace:*",
     "axios": "^1.5.1",
     "discord-logs": "^2.2.1",
     "discord.js": "^14.12.1",
     "googleapis": "^127.0.0",
-    "mongoose": "^7.4.3",
-    "utils": "workspace:*"
+    "mongoose": "^7.4.3"
   },
   "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
     "@types/node": "^20.5.0",
     "typescript": "^5.1.6"
   }

@@ -1,33 +1,25 @@
 {
-  "include": [ "./src/**/*.ts" ],
-  "exclude": [ "node_modules", "build" ],
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "outDir": "build",
-    "skipLibCheck": true,
-    "allowJs": true,
-    "checkJs": true,
-    "strict": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "forceConsistentCasingInFileNames": true,
     "paths": {
-
-      // General
-
+      "#env": [ "./src/env.ts" ],
       "#client/main": [ "./src/client/index.ts" ],
       "#client/intents": [ "./src/client/options/intents.ts" ],
       "#client/partials": [ "./src/client/options/partials.ts" ],
-
-      // Handlers
-
       "#handlers/commands": [ "./src/handlers/commands.ts" ],
       "#handlers/events": [ "./src/handlers/events.ts" ],
       "#handlers/loops": [ "./src/handlers/loops.ts" ],
       "#handlers/mongodb": [ "./src/handlers/mongodb.ts" ],
-
-    }
-  }
+    },
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+  ],
+  "extends": "@repo/tsconfig/base.json",
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.cjs",
+    "src/**/*.mjs",
+  ],
+  "outDir": "build",
 }
