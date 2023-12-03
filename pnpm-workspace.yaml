@@ -1,6 +1,5 @@
 packages:
-  - 'apps/bot'
-  - 'apps/site'
-  - 'apps/utils'
+  - 'apps/*'
+  - 'packages/*'
 
 link-workspace-packages: true

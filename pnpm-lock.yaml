@@ -8,9 +8,9 @@ importers:
 
   .:
     dependencies:
-      utils:
+      '@repo/utils':
         specifier: workspace:*
-        version: link:apps/utils
+        version: link:packages/utils
     devDependencies:
       prettier:
         specifier: ^3.1.0
@@ -24,6 +24,9 @@ importers:
       '@androz2091/discord-invites-tracker':
         specifier: ^1.2.3
         version: 1.2.3
+      '@repo/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       axios:
         specifier: ^1.5.1
         version: 1.5.1
@@ -39,10 +42,10 @@ importers:
       mongoose:
         specifier: ^7.4.3
         version: 7.6.3
-      utils:
-        specifier: workspace:*
-        version: link:../utils
     devDependencies:
+      '@repo/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
       '@types/node':
         specifier: ^20.5.0
         version: 20.8.7
@@ -67,6 +70,9 @@ importers:
       '@fortawesome/react-fontawesome':
         specifier: ^0.2.0
         version: 0.2.0(@fortawesome/fontawesome-svg-core@6.4.2)(react@18.2.0)
+      '@repo/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@t3-oss/env-nextjs':
         specifier: ^0.7.1
         version: 0.7.1(typescript@5.2.2)(zod@3.22.4)
@@ -100,13 +106,13 @@ importers:
       typewriter-effect:
         specifier: ^2.21.0
         version: 2.21.0(react-dom@18.2.0)(react@18.2.0)
-      utils:
-        specifier: workspace:*
-        version: link:../utils
       zod:
         specifier: ^3.22.4
         version: 3.22.4
     devDependencies:
+      '@repo/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
       '@types/node':
         specifier: ^20.4.5
         version: 20.8.7
@@ -129,7 +135,9 @@ importers:
         specifier: ^5.1.6
         version: 5.2.2
 
-  apps/utils:
+  packages/tsconfig: {}
+
+  packages/utils:
     dependencies:
       chalk:
         specifier: ^5.3.0
@@ -146,10 +154,10 @@ importers:
       mongoose:
         specifier: ^7.4.3
         version: 7.6.3
-      zod:
-        specifier: ^3.22.4
-        version: 3.22.4
     devDependencies:
+      '@repo/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
       '@types/node':
         specifier: ^20.8.9
         version: 20.8.9
@@ -1918,22 +1926,6 @@ packages:
       postcss: 8.4.26
     dev: true
 
-  /postcss-load-config@4.0.1:
-    resolution: {integrity: sha512-vEJIc8RdiBRu3oRAI0ymerOn+7rPuMvRXslTvZUKZonDHFIczxztIyJ1urxM1x9JXEikvpWWTUUqal5j/8QgvA==}
-    engines: {node: '>= 14'}
-    peerDependencies:
-      postcss: '>=8.0.9'
-      ts-node: '>=9.0.0'
-    peerDependenciesMeta:
-      postcss:
-        optional: true
-      ts-node:
-        optional: true
-    dependencies:
-      lilconfig: 2.1.0
-      yaml: 2.3.3
-    dev: true
-
   /postcss-load-config@4.0.1(postcss@8.4.26):
     resolution: {integrity: sha512-vEJIc8RdiBRu3oRAI0ymerOn+7rPuMvRXslTvZUKZonDHFIczxztIyJ1urxM1x9JXEikvpWWTUUqal5j/8QgvA==}
     engines: {node: '>= 14'}
@@ -2526,7 +2518,7 @@ packages:
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
-      postcss-load-config: 4.0.1
+      postcss-load-config: 4.0.1(postcss@8.4.26)
       resolve-from: 5.0.0
       rollup: 3.29.4
       source-map: 0.8.0-beta.0
