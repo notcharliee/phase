@@ -13,8 +13,8 @@ export default () => {
           <Typewriter typeString='The <span class="phase-gradient-text">all in one</span> Discord bot '></Typewriter>
         </h1>
         <p className="max-w-xl pt-8 text-center text-lg font-medium text-light-600 sm:text-xl">
-          Phase is a free, open source, all-in-one Discord bot, built to make
-          managing Discord servers easy for everyone.
+          Phase is a free and open source Discord bot, built to make
+          managing Discord servers easy for everybody.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 pt-12">
           <Link
