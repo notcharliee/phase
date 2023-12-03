@@ -1,6 +1,7 @@
 {
   "private": true,
   "author": "@notcharliee",
+  "type": "module",
   "license": "CC-BY-NC-4.0",
   "dependencies": {
     "@discordjs/core": "^1.0.1",
@@ -9,6 +10,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@t3-oss/env-nextjs": "^0.7.1",
+    "@repo/utils": "workspace:*",
     "@upstash/redis": "^1.24.3",
     "axios": "^1.6.0",
     "discord-api-types": "^0.37.50",
@@ -19,10 +21,10 @@
     "react-dom": "18.2.0",
     "sharp": "^0.32.6",
     "typewriter-effect": "^2.21.0",
-    "utils": "workspace:*",
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
     "@types/node": "^20.4.5",
     "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
