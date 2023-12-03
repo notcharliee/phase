@@ -1,10 +1,11 @@
 import { NextResponse, NextRequest } from "next/server"
 import { cookies } from "next/headers"
+import { AuthorisedUsers, Levels } from "@repo/utils/schemas"
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 import { env } from '@/env'
 import mongoose from "mongoose"
-import Schemas from "@repo/utils/schemas"
+
 
 export const GET = async (request: NextRequest) => {
   const discordREST = new REST().setToken(env.DISCORD_TOKEN)
@@ -30,7 +31,7 @@ export const GET = async (request: NextRequest) => {
 
   await mongoose.connect(env.MONGODB_URI!)
 
-  const authorisedUserSchema = await Schemas.AuthorisedUsers.findOne({
+  const authorisedUserSchema = await AuthorisedUsers.findOne({
     session: authorisationCode,
   })
 
@@ -61,7 +62,7 @@ export const GET = async (request: NextRequest) => {
     )
 
   try {
-    const guildLevelData = await Schemas.Levels.findOne({
+    const guildLevelData = await Levels.findOne({
       guild: guildId,
       levels: { $elemMatch: { id: userId } },
     })
