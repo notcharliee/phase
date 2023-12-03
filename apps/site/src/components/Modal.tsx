@@ -1,10 +1,10 @@
 "use client"
 
-import React from "react"
-import { createPortal } from "react-dom"
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import * as FaSolid from "@fortawesome/free-solid-svg-icons"
+import { faXmark } from "@fortawesome/free-solid-svg-icons"
+import { usePathname } from "next/navigation"
+import { createPortal } from "react-dom"
+import React from "react"
 
 export default ({
   children,
@@ -19,6 +19,7 @@ export default ({
 }) => {
   const [mounted, setMounted] = React.useState(false)
   const [modalOpen, setModalOpen] = React.useState(open ?? false)
+  const pathname = usePathname()
 
   const backdrop = React.useRef<HTMLInputElement>(null)
 
@@ -26,12 +27,13 @@ export default ({
     setModalOpen(false)
   }
 
-  const onClick = React.useCallback(
+  const onBackdropClick = React.useCallback(
     (e: any) => {
       if (e.target == backdrop.current) closeModal()
     },
     [closeModal, backdrop],
   )
+
   const onKeyDown = React.useCallback(
     (e: any) => {
       if (e.key == "Escape" && modalOpen) closeModal()
@@ -42,6 +44,10 @@ export default ({
   React.useEffect(() => {
     setMounted(true)
   }, [])
+  
+  React.useEffect(() => {
+    closeModal()
+  }, [pathname])
 
   React.useEffect(() => {
     document.body.style.overflow = "hidden"
@@ -65,15 +71,15 @@ export default ({
           <div
             className="absolute z-40 left-0 top-0 flex h-full w-full items-center justify-center bg-dark-900/50"
             ref={backdrop}
-            onClick={onClick}
+            onClick={onBackdropClick}
             style={{ display: modalOpen ? "flex" : "none" }}
           >
-            <div className="relative z-50 max-h-[calc(100vh-48px)] w-full max-w-md overflow-auto rounded-lg border border-dark-600 bg-dark-700 p-6 text-light-800 shadow">
+            <div className="relative z-50 max-h-[calc(100vh-48px)] w-full max-w-md overflow-auto rounded-lg border border-dark-600 bg-dark-700 p-6 m-6 text-light-800 shadow">
               <div className="mb-4 flex items-center justify-between">
                 {heading}
                 <button onClick={closeModal} className="flex items-center">
                   <FontAwesomeIcon
-                    icon={FaSolid.faXmark}
+                    icon={faXmark}
                     className="h-5 w-5 text-light-100 hover:text-light-800 duration-150"
                   ></FontAwesomeIcon>
                 </button>
