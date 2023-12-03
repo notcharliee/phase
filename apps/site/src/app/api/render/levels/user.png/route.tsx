@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
 
   const userLevelDataRequest = await fetch(
     `${
-      process.env.BASE_URL
+      process.env.NEXT_PUBLIC_BASE_URL
     }/api/levels/user?user=${userId}&guild=${guildId}&time=${Date.now()}`,
     { headers: { Authorization: authorisationCode } },
   )
@@ -111,7 +111,7 @@ function getOrdinal(number: number): string {
   if (number >= 11 && number <= 13) return number + "th"
   return (
     number +
-    (["th", "st", "nd", "rd"][number % 10] || ["th", "st", "nd", "rd"][0])
+    (["th", "st", "nd", "rd"][number % 10] || ["th", "st", "nd", "rd"][0]!)
   )
 }
 

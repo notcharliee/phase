@@ -5,7 +5,7 @@ import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 
 import mongoose from "mongoose"
-import * as Schemas from "utils/schemas"
+import * as Schemas from "@repo/utils/schemas"
 
 import discord_api_types_v10 from "discord-api-types/v10"
 
@@ -29,7 +29,7 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json(
       {
         error: "Unauthorised",
-        documentation: `${process.env.BASE_URL}/docs/api/authorisation`,
+        documentation: `${process.env.NEXT_PUBLIC_BASE_URL}/docs/api/authorisation`,
       },
       { status: 401 },
     )
@@ -50,7 +50,7 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json(
       {
         error: "Unauthorised",
-        documentation: `${process.env.BASE_URL}/docs/api/authorisation`,
+        documentation: `${process.env.NEXT_PUBLIC_BASE_URL}/docs/api/authorisation`,
       },
       { status: 401 },
     )
@@ -67,7 +67,7 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json(
       {
         error: "Bad Request",
-        documentation: `${process.env.BASE_URL}/docs/api/levels`,
+        documentation: `${process.env.NEXT_PUBLIC_BASE_URL}/docs/api/levels`,
       },
       { status: 400 },
     )

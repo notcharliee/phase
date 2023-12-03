@@ -5,7 +5,7 @@ import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 
 import mongoose from "mongoose"
-import * as Schemas from "utils/schemas"
+import * as Schemas from "@repo/utils/schemas"
 
 export const GET = async (request: NextRequest) => {
   const discordREST = new REST().setToken(process.env.DISCORD_TOKEN!)
@@ -24,7 +24,7 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json(
       {
         error: "Unauthorised",
-        documentation: `${process.env.BASE_URL}/docs/api/authorisation`,
+        documentation: `${process.env.NEXT_PUBLIC_BASE_URL}/docs/api/authorisation`,
       },
       { status: 401 },
     )
@@ -45,7 +45,7 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json(
       {
         error: "Unauthorised",
-        documentation: `${process.env.BASE_URL}/docs/api/authorisation`,
+        documentation: `${process.env.NEXT_PUBLIC_BASE_URL}/docs/api/authorisation`,
       },
       { status: 401 },
     )
@@ -56,7 +56,7 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json(
       {
         error: "Bad Request",
-        documentation: `${process.env.BASE_URL}/docs/api/levels`,
+        documentation: `${process.env.NEXT_PUBLIC_BASE_URL}/docs/api/levels`,
       },
       { status: 400 },
     )
@@ -84,7 +84,17 @@ export const GET = async (request: NextRequest) => {
     const userLevelDataIndex = userLevelsArraySorted.findIndex(
       (user) => user.id == userId,
     )
-    const userLevelData = userLevelsArraySorted[userLevelDataIndex]
+
+    if (userLevelDataIndex == -1)
+      return NextResponse.json(
+        {
+          error: "Not Found",
+          message: `No matching data found.`,
+        },
+        { status: 404 },
+      )
+
+    const userLevelData = userLevelsArraySorted[userLevelDataIndex]!
 
     const userData = await discordAPI.users.get(userLevelData.id)
 
