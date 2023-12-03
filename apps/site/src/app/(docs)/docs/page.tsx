@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default () => {
   return (
-    <div className="flex flex-col gap-16 text-lg font-medium text-light-400">
+    <div className="flex flex-col gap-16 text-lg font-medium text-light-300">
       <section className="flex flex-col gap-8">
         <h1 className="text-4xl font-bold">
           <span className="text-light-800">phase</span>
@@ -68,31 +68,42 @@ export default () => {
           Why should I use Phase?
         </h2>
         <p>
-          You might be thinking "My server is already set up with a load of
-          other bots, why go through the hassle of switching?". And... yes, but
-          while popular bots like MEE6 or Dyno have their strengths, they lack
-          transparency. In contrast, Phase is fully open source, so you can see
-          all the wonderful spaghetti code that goes into making it - you can
-          even contribute if you want to!
+          While popular bots like MEE6 or Dyno have their strengths, they lack
+          transparency and lock their best features behind ridiculously priced
+          paywalls. In contrast, Phase is...
         </p>
+        <ul className="children:mb-2 grid gap-8 lg:grid-cols-3">
+          <li>
+            <span className='font-bold text-light-800'>1. Fully open source</span>
+            <p>You get to see all the wonderful spaghetti code that goes into making everything work. You can even <Link href="https://github.com/notcharliee/phase" className="text-phase hover:underline">contribute</Link> as well!</p>
+          </li>
+          <li>
+            <span className='font-bold text-light-800'>2. Completely free to use</span>
+            <p>While <Link href="https://www.buymeacoffee.com/notcharliee" className="text-phase hover:underline">donations</Link> are appreciated to support the developer both financially and emotionally, they're entirely optional.</p>
+          </li>
+          <li>
+            <span className='font-bold text-light-800'>3. And we listen to feedback</span>
+            <p>If you have something to say, <Link href="/redirect/discord" className="text-phase hover:underline">let us know!</Link> Feature requests, bug reports, and all kinds of feedback are greatly appreciated.</p>
+          </li>
+        </ul>
         <p>
-          But the best part is, we listen to our users. If you need a specific
-          command or module for your server, just ask and we'll make it happen.
-          You get a fancy bot experience with all the things your server needs
-          without the stress, tears, and existential questioning that comes with
-          actually building one. Plus, Phase is also completely free to use.
-          While donations are appreciated to support the developer both
-          financially and emotionally, they're entirely optional.
+          In other words, you get a fancy experience and all the things your server needs, without
+          the stress, and tears, and existential questioning that comes with
+          actually coding your own server-tailored bot, whilst also not having to spend a penny!
         </p>
       </section>
       <section className="flex flex-wrap gap-6">
         <Link href={"/docs/modules"} className='p-4 border rounded border-phase hover:border-light-800 duration-150 shadow bg-dark-900 max-w-xs'>
           <span className='font-bold text-light-800'>Modules</span>
-          <p className='text-sm mt-1.5'>Learn about modules, how they work, and how to enable them.</p>
+          <p className='text-sm mt-1.5'>Learn about Modules, how they work, and how to enable them in your servers.</p>
         </Link>
         <Link href={"/docs/commands"} className='p-4 border rounded border-phase hover:border-light-800 duration-150 shadow bg-dark-900 max-w-xs'>
-          <span className='font-bold text-light-800'>Commands</span>
-          <p className='text-sm mt-1.5'>Check out every slash command Phase comes with by default.</p>
+          <span className='font-bold text-light-800'>Slash Commands</span>
+          <p className='text-sm mt-1.5'>Check out all the Slash Commands that Phase comes with by default.</p>
+        </Link>
+        <Link href={"/docs/api"} className='p-4 border rounded border-phase hover:border-light-800 duration-150 shadow bg-dark-900 max-w-xs'>
+          <span className='font-bold text-light-800'>Developer API</span>
+          <p className='text-sm mt-1.5'>Read our Developer API docs for an inside look into how Phase works.</p>
         </Link>
       </section>
     </div>
