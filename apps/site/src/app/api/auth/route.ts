@@ -10,7 +10,7 @@ export const GET = (request: NextRequest) => {
   try {
     const authorizationURL = discordAPI.oauth2.generateAuthorizationURL({
       client_id: process.env.DISCORD_ID!,
-      redirect_uri: process.env.BASE_URL + "/api/auth/callback",
+      redirect_uri: process.env.NEXT_PUBLIC_BASE_URL + "/api/auth/callback",
       response_type: "code",
       scope: "identify guilds",
     })
