@@ -5,25 +5,25 @@
   "version": "1.0.0",
   "author": "@notcharliee",
   "license": "CC-BY-NC-4.0",
-  "bin": "./build/cli.js",
-  "main": "./build/index.js",
-  "module": "./build/index.js",
-  "typings": "./build/index.d.ts",
+  "bin": "./dist/cli.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./build/index.d.ts",
-      "import": "./build/index.js",
-      "require": "./build/index.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
     },
     "./bot": {
-      "types": "./build/bot/index.d.ts",
-      "import": "./build/bot/index.js",
-      "require": "./build/bot/index.js"
+      "types": "./dist/bot/index.d.ts",
+      "import": "./dist/bot/index.js",
+      "require": "./dist/bot/index.js"
     },
     "./schemas": {
-      "types": "./build/schemas/index.d.ts",
-      "import": "./build/schemas/index.js",
-      "require": "./build/schemas/index.js"
+      "types": "./dist/schemas/index.d.ts",
+      "import": "./dist/schemas/index.js",
+      "require": "./dist/schemas/index.js"
     }
   },
   "dependencies": {

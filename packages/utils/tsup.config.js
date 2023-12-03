@@ -5,6 +5,6 @@ export default defineConfig ({
   splitting: false,
   clean: true,
   dts: true,
-  outDir: 'build',
+  outDir: 'dist',
   format: 'esm',
 })
