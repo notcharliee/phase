@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     "open source",
     "notcharliee",
   ],
-  metadataBase: env.NEXT_PUBLIC_BASE_URL ? new URL(env.NEXT_PUBLIC_BASE_URL) : null,
+  metadataBase: new URL(env.NEXT_PUBLIC_BASE_URL),
   openGraph: {
     type: "website",
     url: env.NEXT_PUBLIC_BASE_URL,
