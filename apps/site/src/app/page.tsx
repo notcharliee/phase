@@ -1,11 +1,8 @@
 import Link from "next/link"
-
 import Footer from "@/components/Footer"
 import Header from "@/components/Header"
-
 import Typewriter from "@/components/Typewriter"
 
-// Exporting page tsx
 
 export default () => {
   return (
