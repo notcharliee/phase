@@ -1,6 +1,7 @@
 import { cookies, headers } from "next/headers"
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
+import { env } from '@/env'
 import Link from "next/link"
 import Image from "next/image"
 import Modal from "@/components/Modal"
@@ -12,7 +13,7 @@ export const metadata = {
 
 
 export default async () => {
-  const discordREST = new REST().setToken(process.env.DISCORD_TOKEN!)
+  const discordREST = new REST().setToken(env.DISCORD_TOKEN)
   const discordAPI = new API(discordREST)
 
   const userId = headers().get("x-user-id")!

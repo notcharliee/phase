@@ -2,10 +2,11 @@ import Link from "next/link"
 import QuickNavigate from "@/components/QuickNavigate"
 import axios from "axios"
 import discord_api_types_v10 from "discord-api-types/v10"
+import { env } from '@/env'
 
 
 export default async ({ children }: { children: React.ReactNode }) => {
-  const commandArray = await axios.get<discord_api_types_v10.RESTGetAPIApplicationCommandsResult>(process.env.NEXT_PUBLIC_BASE_URL + '/api/bot/commands')
+  const commandArray = await axios.get<discord_api_types_v10.RESTGetAPIApplicationCommandsResult>(env.NEXT_PUBLIC_BASE_URL + '/api/bot/commands')
 
   return (
     <div className="font-poppins flex min-h-dvh flex-col gap-3 bg-dark-900 p-6 text-light-800 md:flex-row">

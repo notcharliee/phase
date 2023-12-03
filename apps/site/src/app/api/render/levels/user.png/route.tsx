@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ImageResponse } from "next/og"
 import { cookies } from "next/headers"
-
 import { REST } from "@discordjs/rest"
-
+import { env } from '@/env'
 import discord_api_types_v10 from "discord-api-types/v10"
 
 export const runtime = "edge"
@@ -13,7 +12,7 @@ export async function GET(request: NextRequest) {
   const userId = request.nextUrl.searchParams.get("user")
   const guildId = request.nextUrl.searchParams.get("guild")
 
-  const discordREST = new REST().setToken(process.env.DISCORD_TOKEN!)
+  const discordREST = new REST().setToken(env.DISCORD_TOKEN!)
 
   const authorisationHeader = request.headers.get("Authorization")
   const authorisationCookie = cookies().get("authorised_user")?.value
@@ -22,7 +21,7 @@ export async function GET(request: NextRequest) {
 
   const userLevelDataRequest = await fetch(
     `${
-      process.env.NEXT_PUBLIC_BASE_URL
+      env.NEXT_PUBLIC_BASE_URL
     }/api/levels/user?user=${userId}&guild=${guildId}&time=${Date.now()}`,
     { headers: { Authorization: authorisationCode } },
   )

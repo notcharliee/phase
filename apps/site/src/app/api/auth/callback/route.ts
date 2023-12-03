@@ -6,13 +6,14 @@ import { Redis } from "@upstash/redis"
 import { randomUUID } from "crypto"
 import { env } from "@/env"
 
+
 export const GET = async (request: NextRequest) => {
-  const discordREST = new REST().setToken(process.env.DISCORD_TOKEN!)
+  const discordREST = new REST().setToken(env.DISCORD_TOKEN)
   const discordAPI = new API(discordREST)
 
   const redis = new Redis({
-    url: env.UPSTASH_URL!,
-    token: env.UPSTASH_TOKEN!,
+    url: env.UPSTASH_URL,
+    token: env.UPSTASH_TOKEN,
   })
 
   const tokenExchangeCode = request.nextUrl.searchParams.get("code")
@@ -27,11 +28,11 @@ export const GET = async (request: NextRequest) => {
     )
 
   const discordUserAccessToken = await discordAPI.oauth2.tokenExchange({
-    client_id: process.env.DISCORD_ID!,
-    client_secret: process.env.DISCORD_SECRET!,
+    client_id: env.DISCORD_ID,
+    client_secret: env.DISCORD_SECRET,
     code: tokenExchangeCode,
     grant_type: "authorization_code",
-    redirect_uri: process.env.NEXT_PUBLIC_BASE_URL + "/api/auth/callback",
+    redirect_uri: env.NEXT_PUBLIC_BASE_URL + "/api/auth/callback",
   })
 
   const discordUserREST = new REST({ authPrefix: "Bearer" }).setToken(
@@ -57,5 +58,5 @@ export const GET = async (request: NextRequest) => {
 
   await redis.set(`auth:${discordUserData.session}`, discordUserData)
 
-  return NextResponse.redirect(process.env.NEXT_PUBLIC_BASE_URL + "/dashboard")
+  return NextResponse.redirect(env.NEXT_PUBLIC_BASE_URL + "/dashboard")
 }

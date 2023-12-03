@@ -1,16 +1,15 @@
 import { NextResponse, NextRequest } from "next/server"
 import { cookies } from "next/headers"
-
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
-
+import { env } from '@/env'
 import mongoose from "mongoose"
-import * as Schemas from "@repo/utils/schemas"
-
+import Schemas from "@repo/utils/schemas"
 import discord_api_types_v10 from "discord-api-types/v10"
 
+
 export const GET = async (request: NextRequest) => {
-  const discordREST = new REST().setToken(process.env.DISCORD_TOKEN!)
+  const discordREST = new REST().setToken(env.DISCORD_TOKEN)
   const discordAPI = new API(discordREST)
 
   // Check if user is authorised to use endpoint...
@@ -29,18 +28,18 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json(
       {
         error: "Unauthorised",
-        documentation: `${process.env.NEXT_PUBLIC_BASE_URL}/docs/api/authorisation`,
+        documentation: `${env.NEXT_PUBLIC_BASE_URL}/docs/api/authorisation`,
       },
       { status: 401 },
     )
 
-  await mongoose.connect(process.env.MONGODB_URI!)
+  await mongoose.connect(env.MONGODB_URI!)
 
   const authorisedUserSchema = await Schemas.AuthorisedUsers.findOne({
     session: authorisationCode,
   })
 
-  const isPhaseBot = authorisationCode == process.env.DISCORD_SECRET
+  const isPhaseBot = authorisationCode == env.DISCORD_SECRET
   const isAuthorised = isPhaseBot
     ? true
     : !!authorisedUserSchema &&
@@ -50,7 +49,7 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json(
       {
         error: "Unauthorised",
-        documentation: `${process.env.NEXT_PUBLIC_BASE_URL}/docs/api/authorisation`,
+        documentation: `${env.NEXT_PUBLIC_BASE_URL}/docs/api/authorisation`,
       },
       { status: 401 },
     )
@@ -67,7 +66,7 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json(
       {
         error: "Bad Request",
-        documentation: `${process.env.NEXT_PUBLIC_BASE_URL}/docs/api/levels`,
+        documentation: `${env.NEXT_PUBLIC_BASE_URL}/docs/api/levels`,
       },
       { status: 400 },
     )

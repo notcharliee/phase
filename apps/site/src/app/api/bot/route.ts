@@ -1,10 +1,11 @@
 import { NextResponse, NextRequest } from "next/server"
-
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
+import { env } from '@/env'
+
 
 export const GET = async (request: NextRequest) => {
-  const discordREST = new REST().setToken(process.env.DISCORD_TOKEN!)
+  const discordREST = new REST().setToken(env.DISCORD_TOKEN)
   const discordAPI = new API(discordREST)
 
   try {
