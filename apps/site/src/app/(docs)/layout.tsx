@@ -5,6 +5,9 @@ import discord_api_types_v10 from "discord-api-types/v10"
 import { env } from '@/env'
 
 
+export const dynamic = "force-dynamic"
+
+
 export default async ({ children }: { children: React.ReactNode }) => {
   const commandArray = await axios.get<discord_api_types_v10.RESTGetAPIApplicationCommandsResult>(env.NEXT_PUBLIC_BASE_URL + '/api/bot/commands')
 
