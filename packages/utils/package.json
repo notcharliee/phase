@@ -1,0 +1,42 @@
+{
+  "private": true,
+  "name": "@repo/utils",
+  "type": "module",
+  "version": "1.0.0",
+  "author": "@notcharliee",
+  "license": "CC-BY-NC-4.0",
+  "bin": "./build/cli.js",
+  "main": "./build/index.js",
+  "module": "./build/index.js",
+  "typings": "./build/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "import": "./build/index.js",
+      "require": "./build/index.js"
+    },
+    "./bot": {
+      "types": "./build/bot/index.d.ts",
+      "import": "./build/bot/index.js",
+      "require": "./build/bot/index.js"
+    },
+    "./schemas": {
+      "types": "./build/schemas/index.d.ts",
+      "import": "./build/schemas/index.js",
+      "require": "./build/schemas/index.js"
+    }
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "discord-api-types": "^0.37.61",
+    "discord.js": "^14.12.1",
+    "mongoose": "^7.4.3"
+  },
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "@types/node": "^20.8.9",
+    "tsup": "^7.2.0",
+    "typescript": "^5.3.2"
+  }
+}
