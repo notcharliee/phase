@@ -14,9 +14,6 @@ export const env = createEnv({
     MONGODB_URI: z.string(),
     UPSTASH_URL: z.string(),
     UPSTASH_TOKEN: z.string(),
-    WEBHOOK_ALERT: z.string(),
-    WEBHOOK_STATUS: z.string(),
-    API_YOUTUBE: z.string(),
   },
 
   /**
@@ -41,9 +38,6 @@ export const env = createEnv({
     MONGODB_URI: process.env.MONGODB_URI,
     UPSTASH_URL: process.env.UPSTASH_URL,
     UPSTASH_TOKEN: process.env.UPSTASH_TOKEN,
-    WEBHOOK_ALERT: process.env.WEBHOOK_ALERT,
-    WEBHOOK_STATUS: process.env.WEBHOOK_STATUS,
-    API_YOUTUBE: process.env.API_YOUTUBE,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
   },
   /**
