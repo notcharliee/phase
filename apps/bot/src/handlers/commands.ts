@@ -1,19 +1,18 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils/bot'
-import * as Schemas from 'utils/schemas'
+import * as Utils from '@repo/utils/bot'
 import * as fs from 'fs'
 
 
 export default async function commandsHandler (client: Discord.Client<true>) {
 
-  const directories = fs.readdirSync('./.build/commands')
+  const directories = fs.readdirSync('./build/commands')
   const commandFileArray: Utils.Types.SlashCommand[] = []
 
 
   // Loops over command files and pushes them to the client.
 
   for (const directory of directories) {
-    const files = fs.readdirSync(`./.build/commands/${directory}`).filter((file: string) => file.endsWith('.js'))
+    const files = fs.readdirSync(`./build/commands/${directory}`).filter((file: string) => file.endsWith('.js'))
 
     for (const file of files) {
       const clientCommandFile: Utils.Types.SlashCommand = await (await import(`../commands/${directory}/${file}`)).default

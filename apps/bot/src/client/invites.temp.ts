@@ -8,10 +8,9 @@
  */
 
 import * as Discord from 'discord.js'
-import * as Utils from 'utils/bot'
-import * as Schemas from 'utils/schemas'
-
-import invitesTracker from '@androz2091/discord-invites-tracker'
+import * as Utils from '@repo/utils/bot'
+import * as Schemas from '@repo/utils/schemas'
+import * as invitesTracker from '@androz2091/discord-invites-tracker'
 
 
 export default async (client: Discord.Client<true>) => {

@@ -1,6 +1,6 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils/bot'
-import * as Schemas from 'utils/schemas'
+import * as Utils from '@repo/utils/bot'
+import * as Schemas from '@repo/utils/schemas'
 
 import { commandsArray } from '#client/main'
 

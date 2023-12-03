@@ -1,6 +1,7 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils/bot'
-import * as Schemas from 'utils/schemas'
+import * as Utils from '@repo/utils/bot'
+import * as Schemas from '@repo/utils/schemas'
+import { env } from '#env'
 
 import axios from 'axios'
 import { google } from 'googleapis'
@@ -36,7 +37,7 @@ export default Utils.Functions.clientSlashCommand({
 
     try {
 
-      const videoResponse = await youtube.videos.list({ key: process.env.API_YOUTUBE, part: ['snippet'], id: [videoId] })
+      const videoResponse = await youtube.videos.list({ key: env.API_YOUTUBE, part: ['snippet'], id: [videoId] })
 
       if (!videoResponse.data.items) return Utils.Functions.clientError<true>(
         interaction,

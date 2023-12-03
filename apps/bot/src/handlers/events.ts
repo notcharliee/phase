@@ -1,6 +1,5 @@
 import * as Discord from 'discord.js'
-import * as Utils from 'utils/bot'
-import * as Schemas from 'utils/schemas'
+import * as Utils from '@repo/utils/bot'
 import * as fs from 'fs'
 
 
@@ -8,7 +7,7 @@ export default async function eventsHandler (client: Discord.Client<true>) {
 
   client.removeAllListeners()
 
-  const eventDirectories = fs.readdirSync('./.build/events')
+  const eventDirectories = fs.readdirSync('./build/events')
   const eventArray: Utils.Types.EventFile<keyof Discord.ClientEvents>[] = []
 
 
@@ -16,7 +15,7 @@ export default async function eventsHandler (client: Discord.Client<true>) {
 
   for (const eventDirectory of eventDirectories) {
 
-    const eventFiles = fs.readdirSync(`./.build/events/${eventDirectory}`).filter((file: string) => file.endsWith('.js'))
+    const eventFiles = fs.readdirSync(`./build/events/${eventDirectory}`).filter((file: string) => file.endsWith('.js'))
 
     for (const eventFile of eventFiles) {
 
