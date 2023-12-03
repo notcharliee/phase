@@ -5,10 +5,10 @@ import { env } from '../index.js'
 
 export async function alertDevs (data: { title: string, description?: string, type: 'message' | 'warning' | 'error' }) {
 
-  if (typeof process.env.WEBHOOK_ALERT != 'string') throw new Error('Alert webhook connection URL not found.')
+  if (typeof env.WEBHOOK_ALERT != 'string') throw new Error('Alert webhook connection URL not found.')
 
   const webhookClient = new Discord.WebhookClient({
-    url: process.env.WEBHOOK_ALERT
+    url: env.WEBHOOK_ALERT
   })
 
   let emoji: string = '⚠️ '
