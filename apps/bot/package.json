@@ -4,26 +4,22 @@
   "author": "@notcharliee",
   "license": "CC-BY-NC-4.0",
   "imports": {
-    "#env": "./build/env.js",
-    "#client/main": "./build/client/index.js",
-    "#client/intents": "./build/client/options/intents.js",
-    "#client/partials": "./build/client/options/partials.js",
-    "#handlers/commands": "./build/handlers/commands.js",
-    "#handlers/events": "./build/handlers/events.js",
-    "#handlers/loops": "./build/handlers/loops.js",
-    "#handlers/mongodb": "./build/handlers/mongodb.js"
+    "#src/*": "./build/*"
   },
   "dependencies": {
     "@androz2091/discord-invites-tracker": "^1.2.3",
     "@repo/utils": "workspace:*",
     "axios": "^1.5.1",
+    "chalk": "^5.3.0",
     "discord-logs": "^2.2.1",
     "discord.js": "^14.12.1",
     "googleapis": "^127.0.0",
+    "gradient-string": "^2.0.2",
     "mongoose": "^7.4.3"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
+    "@types/gradient-string": "^1.1.5",
     "@types/node": "^20.5.0",
     "typescript": "^5.1.6"
   }
