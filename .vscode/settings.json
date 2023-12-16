@@ -1,5 +1,7 @@
 {
   "css.lint.unknownAtRules": "ignore",
   "editor.indentSize": "tabSize",
+  "javascript.preferences.quoteStyle": "double",
+  "typescript.preferences.quoteStyle": "double",
   "editor.tabSize": 2,
 }
