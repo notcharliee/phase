@@ -9,9 +9,6 @@ interface PhaseConfig {
         dev?: string;
     }[];
 }
-/**
- * @returns Readonly object with string-typed environment variables.
- */
 declare const createEnv: <T>(env: T) => Readonly<{ [K in keyof T]: string; }>;
 /**
  * Readonly object with string-typed environment variables.
@@ -26,5 +23,11 @@ declare const env: Readonly<{
     WEBHOOK_STATUS: string;
     API_YOUTUBE: string;
 }>;
+/**
+* Reads environment variables from a file.
+*
+* @param envPath - The path of the env file.
+*/
+declare const getEnvVariables: (envPath: string) => Record<string, string> | undefined;
 
-export { PhaseConfig, createEnv, env };
+export { PhaseConfig, createEnv, env, getEnvVariables };

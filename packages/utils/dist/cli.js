@@ -4,8 +4,46 @@
 import { Command } from "commander";
 import { spawn } from "child_process";
 import { pathToFileURL } from "url";
-import * as fs from "fs";
-import * as path from "path";
+
+// src/index.ts
+import {
+  existsSync,
+  readFileSync
+} from "fs";
+var createEnv = (env2) => {
+  const envVars = env2;
+  return envVars;
+};
+var env = createEnv({
+  NODE_ENV: process.env.NODE_ENV,
+  MONGODB_URI: process.env.MONGODB_URI,
+  DISCORD_TOKEN: process.env.DISCORD_TOKEN,
+  DISCORD_SECRET: process.env.DISCORD_SECRET,
+  DISCORD_ID: process.env.DISCORD_ID,
+  WEBHOOK_ALERT: process.env.WEBHOOK_ALERT,
+  WEBHOOK_STATUS: process.env.WEBHOOK_STATUS,
+  API_YOUTUBE: process.env.API_YOUTUBE
+});
+var getEnvVariables = (envPath) => {
+  const envVariables = {};
+  if (!existsSync(envPath))
+    return void 0;
+  const envFileContent = readFileSync(envPath, "utf-8");
+  const lines = envFileContent.split("\n");
+  for (const line of lines) {
+    const trimmedLine = line.trim();
+    if (trimmedLine.startsWith("#") || trimmedLine == "")
+      continue;
+    const [key, ...value] = trimmedLine.split("=");
+    if (key && value)
+      envVariables[key.trim()] = value.join("=").trim().replaceAll(`"`, "");
+  }
+  return envVariables;
+};
+
+// src/cli.ts
+import { copyFileSync } from "fs";
+import { resolve } from "path";
 
 // package.json
 var package_default = {
@@ -69,7 +107,7 @@ cli.command("build").description("Runs an app's build script.").requiredOption(
     );
     process.exit();
   }
-  spawnChildProcess(script.build, path.resolve(process.cwd(), "apps", script.app));
+  spawnChildProcess(script.build, resolve(process.cwd(), "apps", script.app));
 });
 cli.command("start").description("Runs an app's start script.").requiredOption(
   "-a, --app <STRING>",
@@ -86,7 +124,7 @@ cli.command("start").description("Runs an app's start script.").requiredOption(
     );
     process.exit();
   }
-  spawnChildProcess(script.start, path.resolve(process.cwd(), "apps", script.app));
+  spawnChildProcess(script.start, resolve(process.cwd(), "apps", script.app));
 });
 cli.command("dev").description("Runs an app's dev script.").requiredOption(
   "-a, --app <STRING>",
@@ -103,47 +141,26 @@ cli.command("dev").description("Runs an app's dev script.").requiredOption(
     );
     process.exit();
   }
-  spawnChildProcess(script.dev, path.resolve(process.cwd(), "apps", script.app));
+  spawnChildProcess(script.dev, resolve(process.cwd(), "apps", script.app));
 });
 cli.parse(process.argv);
 function spawnChildProcess(command, cwd) {
-  const globalEnvVariables = getEnvVariables(path.resolve(cwd, "..", "..", ".env"));
+  const globalEnvVariables = getEnvVariables(resolve(cwd, "..", "..", ".env"));
   if (globalEnvVariables)
-    fs.copyFileSync(path.resolve(cwd, "..", "..", ".env"), path.resolve(cwd, ".env.local"));
+    copyFileSync(resolve(cwd, "..", "..", ".env"), resolve(cwd, ".env.local"));
   process.env = { ...globalEnvVariables, ...process.env };
   process.env.FORCE_COLOR = "true";
   const [cmd, ...args] = command.split(" ");
   const childProcess = spawn(process.platform == "win32" ? cmd.replace("npm", "npm.cmd").replace("npx", "npx.cmd") : cmd, args, { cwd, env: process.env });
-  childProcess.on("spawn", async () => console.log(
-    `${chalk.magentaBright(chalk.bold("Process Spawned:"))} "${command}"
-`,
-    `${chalk.magentaBright(chalk.bold("\u21B3"))} `,
-    `This will take a few moments...
-`
-  ));
-  childProcess.on("error", (error) => console.log(
-    `
-${chalk.redBright(chalk.bold(error.name + ":"))} ${error.message}
-`,
-    error.stack ? `${chalk.redBright(chalk.bold("\u21B3"))}  ${error.stack.split("\n").slice(1).join(`
- ${chalk.redBright(chalk.bold("\u21B3"))}  `).replaceAll("    ", "")}
-` : []
-  ));
-  childProcess.on("close", (code) => console.log(
-    code == 0 ? `${chalk.magentaBright(chalk.bold("Process Closed:"))} ${code}` : `${chalk.redBright(chalk.bold("\nProcess Closed:"))} ${code}`
-  ));
-  let stdoutCount = 0;
+  childProcess.on("error", (error) => {
+    throw error;
+  });
   childProcess.stdout.on("data", (data) => {
-    let stdoutData = `${data}`.split("\n").length == 2 ? `${data}`.replace("\n", "") : `${data}`;
-    if (stdoutCount == 0)
-      console.log(`${chalk.magentaBright(chalk.bold("Process Output:"))}
-`);
-    stdoutCount++;
-    console.log(stdoutData);
+    console.log(`${data}`.split("\n").length == 2 ? `${data}`.replace("\n", "") : `${data}`);
   });
 }
 async function getPhaseConfig() {
-  const configPath = path.resolve(process.cwd(), "phase.config.js");
+  const configPath = resolve(process.cwd(), "phase.config.js");
   try {
     const config = (await import(pathToFileURL(configPath).toString())).default;
     return config;
@@ -162,22 +179,6 @@ async function getPhaseConfig() {
       `${chalk.magenta(chalk.bold("\u21B3"))} `,
       "If one does exist, make sure you're running the command in the same directory as the file."
     );
-    process.exit();
+    process.exit(1);
   }
-}
-function getEnvVariables(envPath) {
-  const envVariables = {};
-  if (!fs.existsSync(envPath))
-    return void 0;
-  const envFileContent = fs.readFileSync(envPath, "utf-8");
-  const lines = envFileContent.split("\n");
-  for (const line of lines) {
-    const trimmedLine = line.trim();
-    if (trimmedLine.startsWith("#") || trimmedLine == "")
-      continue;
-    const [key, ...value] = trimmedLine.split("=");
-    if (key && value)
-      envVariables[key.trim()] = value.join("=").trim().replaceAll(`"`, "");
-  }
-  return envVariables;
 }
