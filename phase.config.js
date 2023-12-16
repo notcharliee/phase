@@ -4,7 +4,7 @@ const config = {
     {
       app: "bot",
       build: "npx tsc",
-      start: "node build/client/index.js",
+      start: "node build/main.js",
       dev: "npx tsc --watch",
     },
     {
