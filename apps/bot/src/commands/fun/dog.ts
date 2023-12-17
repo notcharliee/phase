@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('dog')
     .setDescription('Finds a random picture of a dog.'),
@@ -22,7 +22,7 @@ export default Utils.Functions.clientSlashCommand({
       interaction.editReply({
         embeds: [
           new Discord.EmbedBuilder()
-            .setColor(Utils.Enums.PhaseColour.Primary)
+            .setColor(Utils.PhaseColour.Primary)
             .setFooter({ text: `https://${apiHostname}` })
             .setImage(apiImageUrl)
             .setTitle('Woof!')
@@ -31,16 +31,16 @@ export default Utils.Functions.clientSlashCommand({
 
     } else {
 
-      Utils.Functions.alertDevs({
+      Utils.alertDevs({
         title: `Command Failure: /${this.data.name}`,
         description: `**Error ${apiResponse.status}**\n${apiResponse.statusText}\n\n**Interaction Data**\nGuild: \`${interaction.guildId}\`\nUser: \`${interaction.user}\``,
         type: 'warning'
       })
 
-      Utils.Functions.clientError<true>(
+      Utils.clientError<true>(
         interaction,
         'Well, this is awkward..',
-        Utils.Enums.PhaseError.Unknown
+        Utils.PhaseError.Unknown
       )
 
     }

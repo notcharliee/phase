@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientModalEvent({
+export default Utils.clientModalEvent({
   customId: /autopartner\.advert/,
   fromMessage: false,
   async execute(client, interaction) {
@@ -12,7 +12,7 @@ export default Utils.Functions.clientModalEvent({
 
     const advertText = interaction.fields.getTextInputValue('autopartner.advert.text')
 
-    if (advertText.includes('@everyone') || advertText.includes('@here')) return Utils.Functions.clientError(
+    if (advertText.includes('@everyone') || advertText.includes('@here')) return Utils.clientError(
       interaction,
       'No can do!',
       'Adverts cannot include @everyone or @here pings.'
@@ -23,10 +23,10 @@ export default Utils.Functions.clientModalEvent({
 
     const guildPartnerSchema = await Schemas.AutoPartners.findOne({ guild: interaction.guildId })
 
-    if (!guildPartnerSchema) return Utils.Functions.clientError(
+    if (!guildPartnerSchema) return Utils.clientError(
       interaction,
       'Well, this is awkward..',
-      Utils.Enums.PhaseError.Unknown
+      Utils.PhaseError.Unknown
     )
 
     guildPartnerSchema.advert = advertText
@@ -38,9 +38,9 @@ export default Utils.Functions.clientModalEvent({
     interaction.reply({
       embeds: [
         new Discord.EmbedBuilder()
-        .setColor(Utils.Enums.PhaseColour.Primary)
+        .setColor(Utils.PhaseColour.Primary)
         .setDescription(`Auto-Partner advert has been set to the following:\n\n\`\`\`${guildPartnerSchema.advert}\`\`\``)
-        .setTitle(Utils.Enums.PhaseEmoji.Success + 'Advert Updated')
+        .setTitle(Utils.PhaseEmoji.Success + 'Advert Updated')
       ],
     })
 

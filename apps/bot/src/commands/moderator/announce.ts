@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('announce')
     .setDescription('Sends an announcement-style message as Phase.')
@@ -34,7 +34,7 @@ export default Utils.Functions.clientSlashCommand({
         embeds: [
           new Discord.EmbedBuilder()
             .setAuthor({ iconURL: author.displayAvatarURL(), name: author.displayName })
-            .setColor(Utils.Enums.PhaseColour.Primary)
+            .setColor(Utils.PhaseColour.Primary)
             .setDescription(interaction.options.getString('message', true))
             .setTimestamp()
         ],
@@ -43,25 +43,25 @@ export default Utils.Functions.clientSlashCommand({
       interaction.reply({
         embeds: [
           new Discord.EmbedBuilder()
-            .setColor(Utils.Enums.PhaseColour.Primary)
+            .setColor(Utils.PhaseColour.Primary)
             .setDescription('Announcement was created successfully.')
-            .setTitle(Utils.Enums.PhaseEmoji.Success + 'Announcement Sent')
+            .setTitle(Utils.PhaseEmoji.Success + 'Announcement Sent')
         ],
         ephemeral: true,
       })
 
     } catch (error) {
 
-      Utils.Functions.alertDevs({
+      Utils.alertDevs({
         title: `Command Failure: /${this.data.name}`,
         description: `${error}`,
         type: 'warning'
       })
 
-      Utils.Functions.clientError(
+      Utils.clientError(
         interaction,
         'Well, this is awkward..',
-        Utils.Enums.PhaseError.Unknown
+        Utils.PhaseError.Unknown
       )
 
     }

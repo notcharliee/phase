@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('tag')
     .setDescription('tag')
@@ -91,7 +91,7 @@ export default Utils.Functions.clientSlashCommand({
         const tagValue = interaction.options.getString('value', true)
         const tagIndex = tagsSchema.tags.findIndex(tag => tag.name == tagName)
 
-        if (tagIndex != -1) return Utils.Functions.clientError(
+        if (tagIndex != -1) return Utils.clientError(
           interaction,
           'No can do!',
           'A tag already exists with that name.'
@@ -107,9 +107,9 @@ export default Utils.Functions.clientSlashCommand({
         interaction.reply({
           embeds: [
             new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`Added tag \`${tagName}\` to the server.`)
-              .setTitle(Utils.Enums.PhaseEmoji.Success + 'Tag Added')
+              .setTitle(Utils.PhaseEmoji.Success + 'Tag Added')
           ],
         })
 
@@ -123,7 +123,7 @@ export default Utils.Functions.clientSlashCommand({
         const tagValue = interaction.options.getString('value', true)
         const tagIndex = tagsSchema.tags.findIndex(tag => tag.name == tagName)
 
-        if (tagIndex == -1) return Utils.Functions.clientError(
+        if (tagIndex == -1) return Utils.clientError(
           interaction,
           'No can do!',
           'No tag exists with that name.'
@@ -143,13 +143,13 @@ export default Utils.Functions.clientSlashCommand({
         interaction.reply({
           embeds: [
             new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`Edited tag \`${tagName}\`.`)
               .setFields([
                 { name: 'Before Value', value: tagBeforeValue },
                 { name: 'After Value', value: tagValue },
               ])
-              .setTitle(Utils.Enums.PhaseEmoji.Success + 'Tag Edited')
+              .setTitle(Utils.PhaseEmoji.Success + 'Tag Edited')
           ],
         })
 
@@ -161,7 +161,7 @@ export default Utils.Functions.clientSlashCommand({
 
         const tag = tagsSchema.tags.find(tag => tag.name == interaction.options.getString('name', true))
 
-        if (!tag) return Utils.Functions.clientError(
+        if (!tag) return Utils.clientError(
           interaction,
           'No can do!',
           'No tag exists with that name.'
@@ -180,7 +180,7 @@ export default Utils.Functions.clientSlashCommand({
         interaction.reply({
           embeds: [
             new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(embedDescription.length ? embedDescription : 'No tags found.')
               .setTitle(`Tag List (${tagsSchema.tags.length})`)
           ],
@@ -195,7 +195,7 @@ export default Utils.Functions.clientSlashCommand({
         const tagName = interaction.options.getString('name', true)
         const tagIndex = tagsSchema.tags.findIndex(tag => tag.name == tagName)
 
-        if (tagIndex == -1) return Utils.Functions.clientError(
+        if (tagIndex == -1) return Utils.clientError(
           interaction,
           'No can do!',
           'Could not find a tag by that name.'
@@ -208,9 +208,9 @@ export default Utils.Functions.clientSlashCommand({
         interaction.reply({
           embeds: [
             new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`Removed tag \`${tagName}\` from the server.`)
-              .setTitle(Utils.Enums.PhaseEmoji.Success + 'Tag Removed')
+              .setTitle(Utils.PhaseEmoji.Success + 'Tag Removed')
           ],
         })
 

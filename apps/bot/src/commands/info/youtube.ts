@@ -1,13 +1,13 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
-import { env } from '#env'
+import { env } from '#src/env.js'
 
 import axios from 'axios'
 import { google } from 'googleapis'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('youtube')
     .setDescription('Fetches info about a YouTube video.')
@@ -28,7 +28,7 @@ export default Utils.Functions.clientSlashCommand({
 
     if (videoUrl.includes('v=')) videoId = videoUrl.split('v=')[1].split('&')[0]
     else if (videoUrl.includes('.be/')) videoId = videoUrl.split('.be/')[1].split('?')[0]
-    else return Utils.Functions.clientError<true>(
+    else return Utils.clientError<true>(
       interaction,
       'No can do!',
       `Could not find YouTube video with url \`${videoUrl}\`.`,
@@ -39,7 +39,7 @@ export default Utils.Functions.clientSlashCommand({
 
       const videoResponse = await youtube.videos.list({ key: env.API_YOUTUBE, part: ['snippet'], id: [videoId] })
 
-      if (!videoResponse.data.items) return Utils.Functions.clientError<true>(
+      if (!videoResponse.data.items) return Utils.clientError<true>(
         interaction,
         'No can do!',
         `Could not find YouTube video with url \`${videoUrl}\`.`,
@@ -49,7 +49,7 @@ export default Utils.Functions.clientSlashCommand({
       const likeData = (await axios.get<YoutTubeDislikeAPI>(`https://returnyoutubedislikeapi.com/votes?videoId=${videoId}`)).data
 
       const video = videoResponse.data.items[0].snippet
-      if (!video) return Utils.Functions.clientError<true>(
+      if (!video) return Utils.clientError<true>(
         interaction,
         'No can do!',
         `Could not find YouTube video with url \`${videoUrl}\`.`,
@@ -61,8 +61,8 @@ export default Utils.Functions.clientSlashCommand({
       return interaction.editReply({
         embeds: [
           new Discord.EmbedBuilder()
-          .setColor(Utils.Enums.PhaseColour.Primary)
-          .setDescription(`**Published:** <t:${Date.parse(`${video.publishedAt}`) / 1000}:R>\n**Views:** ${Utils.Functions.formatNumber(likeData.viewCount)}\n**Likes:** ${Utils.Functions.formatNumber(likeData.likes)}\n**Dislikes:** ${Utils.Functions.formatNumber(likeData.dislikes)}\n\n**Description:**\n${video.description}`)
+          .setColor(Utils.PhaseColour.Primary)
+          .setDescription(`**Published:** <t:${Date.parse(`${video.publishedAt}`) / 1000}:R>\n**Views:** ${Utils.formatNumber(likeData.viewCount)}\n**Likes:** ${Utils.formatNumber(likeData.likes)}\n**Dislikes:** ${Utils.formatNumber(likeData.dislikes)}\n\n**Description:**\n${video.description}`)
           .setImage(videoThumbnail ?? null)
           .setTitle(`${video.channelTitle} - ${video.title}`)
           .setURL(videoUrl)
@@ -71,7 +71,7 @@ export default Utils.Functions.clientSlashCommand({
 
     } catch {
 
-      return Utils.Functions.clientError<true>(
+      return Utils.clientError<true>(
         interaction,
         'No can do!',
         `Could not find YouTube video with url \`${videoUrl}\`.`,

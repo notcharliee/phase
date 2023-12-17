@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('afk')
     .setDescription('Set your AFK status.')
@@ -35,9 +35,9 @@ export default Utils.Functions.clientSlashCommand({
     interaction.reply({
       embeds: [
         new Discord.EmbedBuilder()
-        .setColor(Utils.Enums.PhaseColour.Primary)
+        .setColor(Utils.PhaseColour.Primary)
         .setDescription(reason)
-        .setTitle(Utils.Enums.PhaseEmoji.Success + 'Updated your AFK status')
+        .setTitle(Utils.PhaseEmoji.Success + 'Updated your AFK status')
       ],
     })
     

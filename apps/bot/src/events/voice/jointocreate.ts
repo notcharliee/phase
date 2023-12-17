@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientEvent({
+export default Utils.clientEvent({
   name: 'voiceStateUpdate',
   async execute(client, oldVoice, newVoice) {
 

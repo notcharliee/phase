@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientEvent({
+export default Utils.clientEvent({
   name: 'guildMemberRemove',
   async execute(client, member) {
     
@@ -18,7 +18,7 @@ export default Utils.Functions.clientEvent({
       embeds: [
         new Discord.EmbedBuilder()
         .setAuthor({ iconURL: member.displayAvatarURL(), name: member.displayName })
-        .setColor(Utils.Enums.PhaseColour.Primary)
+        .setColor(Utils.PhaseColour.Primary)
         .setDescription(`User: ${member}\nJoined: ${member.joinedAt ? `<t:${Math.floor(member.joinedAt.getTime() / 1000)}:R>` : '`Unknown`'}`)
         .setFooter({ text: `ID: ${member.id}` })
         .setTitle('Member Left')

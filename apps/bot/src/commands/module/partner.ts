@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('partner')
     .setDescription('partner')
@@ -74,7 +74,7 @@ export default Utils.Functions.clientSlashCommand({
 
         // Returns an error if no channel or advert for this server is present.
 
-        if (!guildPartnerSchema.channel || !guildPartnerSchema.advert) return Utils.Functions.clientError<true>(
+        if (!guildPartnerSchema.channel || !guildPartnerSchema.advert) return Utils.clientError<true>(
           interaction,
           'No can do!',
           'There is no advert or partnership channel setup for this server.'
@@ -86,19 +86,19 @@ export default Utils.Functions.clientSlashCommand({
         const inviteCode = interaction.options.getString('code', true)
         const invitePartnerSchema = await Schemas.AutoPartners.findOne({ invites: { $elemMatch: { code: inviteCode } } })
 
-        if (!invitePartnerSchema || invitePartnerSchema.invites.find(invite => invite.code == inviteCode)!.expires <= new Date().getTime().toString()) return Utils.Functions.clientError<true>(
+        if (!invitePartnerSchema || invitePartnerSchema.invites.find(invite => invite.code == inviteCode)!.expires <= new Date().getTime().toString()) return Utils.clientError<true>(
           interaction,
           'No can do!',
           'The invite code is either invalid or has expired.'
         )
 
-        if (invitePartnerSchema.guild == interaction.guildId) return Utils.Functions.clientError<true>(
+        if (invitePartnerSchema.guild == interaction.guildId) return Utils.clientError<true>(
           interaction,
           'No can do!',
           'You can\'t partner with your own server!'
         )
 
-        if (guildPartnerSchema.partners.find(partner => partner.guildId == invitePartnerSchema!.guild)) return Utils.Functions.clientError<true>(
+        if (guildPartnerSchema.partners.find(partner => partner.guildId == invitePartnerSchema!.guild)) return Utils.clientError<true>(
           interaction,
           'No can do!',
           'That server is already partnered here.'
@@ -114,10 +114,10 @@ export default Utils.Functions.clientSlashCommand({
 
           if (!invitePartnerMessage || !guildPartnerMessage) {
 
-            return Utils.Functions.clientError<true>(
+            return Utils.clientError<true>(
               interaction,
               'Well, this is awkward..',
-              Utils.Enums.PhaseError.Unknown
+              Utils.PhaseError.Unknown
             )
 
           }
@@ -140,24 +140,24 @@ export default Utils.Functions.clientSlashCommand({
           interaction.editReply({
             embeds: [
               new Discord.EmbedBuilder()
-                .setColor(Utils.Enums.PhaseColour.Primary)
+                .setColor(Utils.PhaseColour.Primary)
                 .setDescription(`**${interaction.guild!.name}** has successfully partnered with **${client.guilds.cache.get(invitePartnerSchema.guild)!.name}**`)
-                .setTitle(Utils.Enums.PhaseEmoji.Success + 'Partnership Created')
+                .setTitle(Utils.PhaseEmoji.Success + 'Partnership Created')
             ],
           })
 
         } catch (error) {
 
-          Utils.Functions.alertDevs({
+          Utils.alertDevs({
             title: `Auto-Partner Error`,
             description: `${error}`,
             type: 'warning',
           })
 
-          Utils.Functions.clientError<true>(
+          Utils.clientError<true>(
             interaction,
             'Well, this is awkward..',
-            Utils.Enums.PhaseError.Unknown
+            Utils.PhaseError.Unknown
           )
 
         }
@@ -206,9 +206,9 @@ export default Utils.Functions.clientSlashCommand({
         interaction.reply({
           embeds: [
             new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`Partnership channel set to ${interaction.channel}`)
-              .setTitle(Utils.Enums.PhaseEmoji.Success + 'Channel Set')
+              .setTitle(Utils.PhaseEmoji.Success + 'Channel Set')
           ],
         })
 
@@ -222,7 +222,7 @@ export default Utils.Functions.clientSlashCommand({
 
         // Returns an error if no channel or advert for this server is present.
 
-        if (!guildPartnerSchema.channel || !guildPartnerSchema.advert) return Utils.Functions.clientError<true>(
+        if (!guildPartnerSchema.channel || !guildPartnerSchema.advert) return Utils.clientError<true>(
           interaction,
           'No can do!',
           'There is no advert or partnership channel setup for this server.'
@@ -272,9 +272,9 @@ export default Utils.Functions.clientSlashCommand({
         interaction.editReply({
           embeds: [
             new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`Run the \`/partner add\` command in another server to active the partnership.\n\n**Code:** ${inviteCode}\n**Expires:** ${inviteExpiresTimestamp}`)
-              .setTitle(Utils.Enums.PhaseEmoji.Success + 'Invite Code Created')
+              .setTitle(Utils.PhaseEmoji.Success + 'Invite Code Created')
           ],
         })
 
@@ -303,7 +303,7 @@ export default Utils.Functions.clientSlashCommand({
         interaction.editReply({
           embeds: [
             new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(embedDescription)
               .setTitle(`Partner List (${guildPartnerSchema.partners.length})`)
           ],
@@ -324,7 +324,7 @@ export default Utils.Functions.clientSlashCommand({
 
         // Returns an error if schema is present for either server.
 
-        if (!invitePartnerSchema || !guildPartnerSchema) return Utils.Functions.clientError<true>(
+        if (!invitePartnerSchema || !guildPartnerSchema) return Utils.clientError<true>(
           interaction,
           'No can do!',
           'The server ID you provided is invalid.'
@@ -341,13 +341,13 @@ export default Utils.Functions.clientSlashCommand({
 
         } catch (error) {
 
-          Utils.Functions.alertDevs({
+          Utils.alertDevs({
             title: `Auto-Partner Error`,
             description: `${error}`,
             type: 'warning',
           })
 
-          return Utils.Functions.clientError<true>(
+          return Utils.clientError<true>(
             interaction,
             'Well, this is awkward..',
             `Your advert could not be deleted from the partnered guild's partnership channel. This could be due to the server removing the bot, deleting or changing the channel, or revoking channel access permissions from the bot. For more details, please contact Phase Support.`
@@ -364,13 +364,13 @@ export default Utils.Functions.clientSlashCommand({
 
         } catch (error) {
 
-          Utils.Functions.alertDevs({
+          Utils.alertDevs({
             title: `Auto-Partner Error`,
             description: `${error}`,
             type: 'warning',
           })
 
-          return Utils.Functions.clientError<true>(
+          return Utils.clientError<true>(
             interaction,
             'Well, this is awkward..',
             `The partnered guild's advert could not be deleted from this server's partnership channel. This could be due to the server removing the bot, deleting or changing the channel, or revoking channel access permissions from the bot. For more details, please contact Phase Support.`
@@ -387,9 +387,9 @@ export default Utils.Functions.clientSlashCommand({
         interaction.editReply({
           embeds: [
             new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`**${interaction.guild!.name}** has successfully unpartnered with **${client.guilds.cache.get(invitePartnerSchema.guild)!.name}**`)
-              .setTitle(Utils.Enums.PhaseEmoji.Success + 'Partnership Terminated')
+              .setTitle(Utils.PhaseEmoji.Success + 'Partnership Terminated')
           ],
         })
 

@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('help')
     .setDescription('Having trouble? We can help.'),
@@ -16,21 +16,21 @@ export default Utils.Functions.clientSlashCommand({
             new Discord.ButtonBuilder()
               .setLabel('Modules')
               .setStyle(Discord.ButtonStyle.Link)
-              .setURL(Utils.Enums.PhaseURL.PhaseModules),
+              .setURL(Utils.PhaseURL.PhaseModules),
             new Discord.ButtonBuilder()
               .setLabel('Commands')
               .setStyle(Discord.ButtonStyle.Link)
-              .setURL(Utils.Enums.PhaseURL.PhaseCommands),
+              .setURL(Utils.PhaseURL.PhaseCommands),
             new Discord.ButtonBuilder()
               .setLabel('Support')
               .setStyle(Discord.ButtonStyle.Link)
-              .setURL(Utils.Enums.PhaseURL.PhaseSupport)
+              .setURL(Utils.PhaseURL.PhaseSupport)
           )
       ],
       embeds: [
         new Discord.EmbedBuilder()
-          .setColor(Utils.Enums.PhaseColour.Primary)
-          .setDescription(`Having trouble with Phase? We can help!\n\n**Phase Modules**\n${Utils.Enums.PhaseURL.PhaseModules}\n\n**Phase Commands**\n${Utils.Enums.PhaseURL.PhaseCommands}\n\n**Phase Support**\n${Utils.Enums.PhaseURL.PhaseSupport}`)
+          .setColor(Utils.PhaseColour.Primary)
+          .setDescription(`Having trouble with Phase? We can help!\n\n**Phase Modules**\n${Utils.PhaseURL.PhaseModules}\n\n**Phase Commands**\n${Utils.PhaseURL.PhaseCommands}\n\n**Phase Support**\n${Utils.PhaseURL.PhaseSupport}`)
           .setTitle('Help is here!')
       ],
     })

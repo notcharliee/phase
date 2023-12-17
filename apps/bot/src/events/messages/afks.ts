@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientEvent({
+export default Utils.clientEvent({
   name: 'messageCreate',
   async execute(client, message) {
     
@@ -19,7 +19,7 @@ export default Utils.Functions.clientEvent({
       message.reply({
         embeds: [
           new Discord.EmbedBuilder()
-          .setColor(Utils.Enums.PhaseColour.Primary)
+          .setColor(Utils.PhaseColour.Primary)
           .setDescription('Your AFK status has been updated to **false**.')
           .setTitle('AFK Status Changed')
         ],
@@ -39,7 +39,7 @@ export default Utils.Functions.clientEvent({
         if (mentionSchema) message.reply({
           embeds: [
             new Discord.EmbedBuilder()
-            .setColor(Utils.Enums.PhaseColour.Primary)
+            .setColor(Utils.PhaseColour.Primary)
             .setDescription(mentionSchema.reason)
             .setTitle(`${memberName.displayName} is currently AFK`)
           ],

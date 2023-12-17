@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
 	data: new Discord.SlashCommandBuilder()
 		.setName('coffee')
 		.setDescription('Buy me a coffee!'),
@@ -16,14 +16,14 @@ export default Utils.Functions.clientSlashCommand({
 						new Discord.ButtonBuilder()
 							.setLabel('Buy me a coffee!')
 							.setStyle(Discord.ButtonStyle.Link)
-							.setURL(Utils.Enums.PhaseURL.PhaseCoffee)
+							.setURL(Utils.PhaseURL.PhaseCoffee)
 					)
 			],
 			embeds: [
 				new Discord.EmbedBuilder()
-					.setColor(Utils.Enums.PhaseColour.Primary)
+					.setColor(Utils.PhaseColour.Primary)
 					.setDescription('Support the development of Phase and buy me (the developer) a cup of coffee! <3')
-					.setTitle(Utils.Enums.PhaseEmoji.Coffee + 'Buy me a coffee!')
+					.setTitle(Utils.PhaseEmoji.Coffee + 'Buy me a coffee!')
 			],
 		})
 

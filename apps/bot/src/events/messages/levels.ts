@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientEvent({
+export default Utils.clientEvent({
   name: 'messageCreate',
   async execute(client, message) {
 
@@ -61,14 +61,14 @@ export default Utils.Functions.clientEvent({
         message.author.send({
           embeds: [
             new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(levelUpMessage)
               .setFooter({ text: `Sent from ${message.guild!.name}` })
               .setTitle('You levelled up!')
           ]
         }).catch((error) => {
 
-          Utils.Functions.alertDevs({
+          Utils.alertDevs({
             title: `Message Send Failure`,
             description: `**Could not send DM**\n${error}\n\n**Message Data**\nContent: \`${levelUpMessage}\`\nType: \`Embed\`\nRecipient: \`${message.author.id}\``,
             type: 'warning'
@@ -82,12 +82,12 @@ export default Utils.Functions.clientEvent({
           embeds: [
             new Discord.EmbedBuilder()
               .setTitle('You levelled up!')
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(levelUpMessage)
           ]
         }).catch((error) => {
 
-          Utils.Functions.alertDevs({
+          Utils.alertDevs({
             title: `Message Send Failure`,
             description: `**Could not send reply**\n${error}\n\n**Message Data**\nContent: \`${levelUpMessage}\`\nType: \`Embed\`\nRecipient: \`${message.author.id}\``,
             type: 'warning'
@@ -104,13 +104,13 @@ export default Utils.Functions.clientEvent({
           content: `${message.author}`,
           embeds: [
             new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(levelUpMessage)
               .setTitle('You levelled up!')
           ]
         }).catch((error) => {
 
-          Utils.Functions.alertDevs({
+          Utils.alertDevs({
             title: `Message Send Failure`,
             description: `**Could not send message**\n${error}\n\n**Message Data**\nContent: \`${levelUpMessage}\`\nType: \`Embed\`\nChannel: \`${channel!.id}\``,
             type: 'warning'

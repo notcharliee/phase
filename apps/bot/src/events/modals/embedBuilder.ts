@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientModalEvent({
+export default Utils.clientModalEvent({
   customId: /embedbuilder\.(author|body|image|footer)/,
   fromMessage: true,
   async execute(client, interaction) {
@@ -28,7 +28,7 @@ export default Utils.Functions.clientModalEvent({
           interaction.message.embeds[0].thumbnail == null &&
           authorTextComponentValue == null &&
           interaction.message.embeds[0].footer == null
-        ) return Utils.Functions.clientError(
+        ) return Utils.clientError(
           interaction,
           'No can do!',
           'You cannot send an empty embed.',
@@ -73,7 +73,7 @@ export default Utils.Functions.clientModalEvent({
           interaction.message.embeds[0].thumbnail == null &&
           interaction.message.embeds[0].author == null &&
           interaction.message.embeds[0].footer == null
-        ) return Utils.Functions.clientError(
+        ) return Utils.clientError(
           interaction,
           'No can do!',
           'You cannot send an empty embed.',
@@ -114,7 +114,7 @@ export default Utils.Functions.clientModalEvent({
           imageThumbnailComponentValue == null &&
           interaction.message.embeds[0].author == null &&
           interaction.message.embeds[0].footer == null
-        ) return Utils.Functions.clientError(
+        ) return Utils.clientError(
           interaction,
           'No can do!',
           'You cannot send an empty embed.',
@@ -155,7 +155,7 @@ export default Utils.Functions.clientModalEvent({
           interaction.message.embeds[0].thumbnail == null &&
           interaction.message.embeds[0].author == null &&
           footerTextComponentValue == null
-        ) return Utils.Functions.clientError(
+        ) return Utils.clientError(
           interaction,
           'No can do!',
           'You cannot send an empty embed.',

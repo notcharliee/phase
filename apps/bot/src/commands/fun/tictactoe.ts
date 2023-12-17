@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('tictactoe')
     .setDescription('Play tic-tac-toe against another user.')
@@ -18,10 +18,10 @@ export default Utils.Functions.clientSlashCommand({
 
     const member = interaction.options.getMember('member') as Discord.GuildMember || null
 
-    if (!member) return Utils.Functions.clientError(
+    if (!member) return Utils.clientError(
       interaction,
       'No can do!',
-      Utils.Enums.PhaseError.MemberNotFound
+      Utils.PhaseError.MemberNotFound
     )
 
 
@@ -31,51 +31,51 @@ export default Utils.Functions.clientSlashCommand({
         .addComponents(
           new Discord.ButtonBuilder()
           .setCustomId('tictactoe.1')
-          .setLabel(Utils.Enums.PhaseEmoji.ZeroWidthJoiner)
+          .setLabel(Utils.PhaseEmoji.ZeroWidthJoiner)
           .setStyle(Discord.ButtonStyle.Secondary),
           new Discord.ButtonBuilder()
           .setCustomId('tictactoe.2')
-          .setLabel(Utils.Enums.PhaseEmoji.ZeroWidthJoiner)
+          .setLabel(Utils.PhaseEmoji.ZeroWidthJoiner)
           .setStyle(Discord.ButtonStyle.Secondary),
           new Discord.ButtonBuilder()
           .setCustomId('tictactoe.3')
-          .setLabel(Utils.Enums.PhaseEmoji.ZeroWidthJoiner)
+          .setLabel(Utils.PhaseEmoji.ZeroWidthJoiner)
           .setStyle(Discord.ButtonStyle.Secondary),
         ),
         new Discord.ActionRowBuilder<Discord.ButtonBuilder>()
         .addComponents(
           new Discord.ButtonBuilder()
           .setCustomId('tictactoe.4')
-          .setLabel(Utils.Enums.PhaseEmoji.ZeroWidthJoiner)
+          .setLabel(Utils.PhaseEmoji.ZeroWidthJoiner)
           .setStyle(Discord.ButtonStyle.Secondary),
           new Discord.ButtonBuilder()
           .setCustomId('tictactoe.5')
-          .setLabel(Utils.Enums.PhaseEmoji.ZeroWidthJoiner)
+          .setLabel(Utils.PhaseEmoji.ZeroWidthJoiner)
           .setStyle(Discord.ButtonStyle.Secondary),
           new Discord.ButtonBuilder()
           .setCustomId('tictactoe.6')
-          .setLabel(Utils.Enums.PhaseEmoji.ZeroWidthJoiner)
+          .setLabel(Utils.PhaseEmoji.ZeroWidthJoiner)
           .setStyle(Discord.ButtonStyle.Secondary),
         ),
         new Discord.ActionRowBuilder<Discord.ButtonBuilder>()
         .addComponents(
           new Discord.ButtonBuilder()
           .setCustomId('tictactoe.7')
-          .setLabel(Utils.Enums.PhaseEmoji.ZeroWidthJoiner)
+          .setLabel(Utils.PhaseEmoji.ZeroWidthJoiner)
           .setStyle(Discord.ButtonStyle.Secondary),
           new Discord.ButtonBuilder()
           .setCustomId('tictactoe.8')
-          .setLabel(Utils.Enums.PhaseEmoji.ZeroWidthJoiner)
+          .setLabel(Utils.PhaseEmoji.ZeroWidthJoiner)
           .setStyle(Discord.ButtonStyle.Secondary),
           new Discord.ButtonBuilder()
           .setCustomId('tictactoe.9')
-          .setLabel(Utils.Enums.PhaseEmoji.ZeroWidthJoiner)
+          .setLabel(Utils.PhaseEmoji.ZeroWidthJoiner)
           .setStyle(Discord.ButtonStyle.Secondary),
         ),
       ],
       embeds: [
         new Discord.EmbedBuilder()
-        .setColor(Utils.Enums.PhaseColour.Primary)
+        .setColor(Utils.PhaseColour.Primary)
         .setDescription(`${member} it's your go. Make a move!`)
         .setTitle('TicTacToe')
       ],
@@ -90,13 +90,13 @@ export default Utils.Functions.clientSlashCommand({
       participants: [ interaction.user.id, member ],
       gameData: {
         currentTurn: {
-          marker: Utils.Enums.PhaseEmoji.Cross,
+          marker: Utils.PhaseEmoji.Cross,
           participant: member.id,
         },
         moves: [
-          Utils.Enums.PhaseEmoji.ZeroWidthJoiner, Utils.Enums.PhaseEmoji.ZeroWidthJoiner, Utils.Enums.PhaseEmoji.ZeroWidthJoiner,
-          Utils.Enums.PhaseEmoji.ZeroWidthJoiner, Utils.Enums.PhaseEmoji.ZeroWidthJoiner, Utils.Enums.PhaseEmoji.ZeroWidthJoiner,
-          Utils.Enums.PhaseEmoji.ZeroWidthJoiner, Utils.Enums.PhaseEmoji.ZeroWidthJoiner, Utils.Enums.PhaseEmoji.ZeroWidthJoiner,
+          Utils.PhaseEmoji.ZeroWidthJoiner, Utils.PhaseEmoji.ZeroWidthJoiner, Utils.PhaseEmoji.ZeroWidthJoiner,
+          Utils.PhaseEmoji.ZeroWidthJoiner, Utils.PhaseEmoji.ZeroWidthJoiner, Utils.PhaseEmoji.ZeroWidthJoiner,
+          Utils.PhaseEmoji.ZeroWidthJoiner, Utils.PhaseEmoji.ZeroWidthJoiner, Utils.PhaseEmoji.ZeroWidthJoiner,
         ],
       }
     }).save()

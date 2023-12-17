@@ -1,29 +1,29 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientButtonEvent({
+export default Utils.clientButtonEvent({
   customId: /tictactoe\.\d/,
   async execute(client, interaction) {
 
     const buttonIndex = Number(interaction.customId.split('.')[1]) - 1
-    const gameSchema = await Schemas.Games.findOne({ message: interaction.message.id, type: Utils.Enums.GameType.TicTacToe })
+    const gameSchema = await Schemas.Games.findOne({ message: interaction.message.id, type: Utils.GameType.TicTacToe })
 
 
     // If no schema, return unknown error.
 
-    if (!gameSchema) return Utils.Functions.clientError(
+    if (!gameSchema) return Utils.clientError(
       interaction,
       'Well, this is awkward..',
-      Utils.Enums.PhaseError.Unknown,
+      Utils.PhaseError.Unknown,
       true,
     )
 
     
     // If user is not in game, return access denied error.
 
-    if (!gameSchema.participants.includes(interaction.user.id)) return Utils.Functions.clientError(
+    if (!gameSchema.participants.includes(interaction.user.id)) return Utils.clientError(
       interaction,
       'Access Denied!',
       `You are not a member of this game. To start a new game, run \`/tictactoe\`.`,
@@ -36,7 +36,7 @@ export default Utils.Functions.clientButtonEvent({
     const currentTurn = gameSchema.gameData.currentTurn
     const moves = gameSchema.gameData.moves
 
-    if (currentTurn.participant != interaction.user.id) return Utils.Functions.clientError(
+    if (currentTurn.participant != interaction.user.id) return Utils.clientError(
       interaction,
       'No can do!',
       `Please wait your turn.`,
@@ -46,7 +46,7 @@ export default Utils.Functions.clientButtonEvent({
 
     // If move square is already taken, defer update.
 
-    if (moves[buttonIndex] != Utils.Enums.PhaseEmoji.ZeroWidthJoiner) return await interaction.deferUpdate()
+    if (moves[buttonIndex] != Utils.PhaseEmoji.ZeroWidthJoiner) return await interaction.deferUpdate()
 
 
     // Check if user made a winning move or if game is tied.
@@ -56,7 +56,7 @@ export default Utils.Functions.clientButtonEvent({
     const winningMoves = checkWinner(moves)
     const winner = winningMoves ? currentTurn.participant : null
 
-    const gameTied = moves.every((move) => move != Utils.Enums.PhaseEmoji.ZeroWidthJoiner)
+    const gameTied = moves.every((move) => move != Utils.PhaseEmoji.ZeroWidthJoiner)
 
 
     // Update game data.
@@ -64,7 +64,7 @@ export default Utils.Functions.clientButtonEvent({
     if (winner || gameTied) await gameSchema.deleteOne()
     else {
       
-      currentTurn.marker = currentTurn.marker == Utils.Enums.PhaseEmoji.Cross ? Utils.Enums.PhaseEmoji.Naught : Utils.Enums.PhaseEmoji.Cross
+      currentTurn.marker = currentTurn.marker == Utils.PhaseEmoji.Cross ? Utils.PhaseEmoji.Naught : Utils.PhaseEmoji.Cross
       currentTurn.participant = gameSchema.participants.find(participant => participant != interaction.user.id) || currentTurn.participant
 
       gameSchema.markModified('gameData')
@@ -90,7 +90,7 @@ export default Utils.Functions.clientButtonEvent({
 
       if (gameTied) buttonBuilder.setDisabled(true)
 
-      moves[index] == Utils.Enums.PhaseEmoji.ZeroWidthJoiner
+      moves[index] == Utils.PhaseEmoji.ZeroWidthJoiner
       ? buttonBuilder.setLabel(moves[index])
       : buttonBuilder.setEmoji(moves[index])
 
@@ -123,7 +123,7 @@ export default Utils.Functions.clientButtonEvent({
       ],
       embeds: [
         new Discord.EmbedBuilder()
-        .setColor(Utils.Enums.PhaseColour.Primary)
+        .setColor(Utils.PhaseColour.Primary)
         .setDescription(tiedDescription ?? regularDescription)
         .setTitle('TicTacToe')
       ],
@@ -144,8 +144,8 @@ const checkWinner = (board: string[]): number[] | null => {
   for (const combo of winningCombinations) {
     const [a, b, c] = combo
 
-    if (board[a] == Utils.Enums.PhaseEmoji.Cross && board[b] == Utils.Enums.PhaseEmoji.Cross && board[c] == Utils.Enums.PhaseEmoji.Cross) return [a, b, c]
-    else if (board[a] == Utils.Enums.PhaseEmoji.Naught && board[b] == Utils.Enums.PhaseEmoji.Naught && board[c] == Utils.Enums.PhaseEmoji.Naught) return [a, b, c]
+    if (board[a] == Utils.PhaseEmoji.Cross && board[b] == Utils.PhaseEmoji.Cross && board[c] == Utils.PhaseEmoji.Cross) return [a, b, c]
+    else if (board[a] == Utils.PhaseEmoji.Naught && board[b] == Utils.PhaseEmoji.Naught && board[c] == Utils.PhaseEmoji.Naught) return [a, b, c]
   }
 
   return null // No winner yet

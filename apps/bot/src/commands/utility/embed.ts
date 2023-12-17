@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('embed')
     .setDescription('Opens the Phase Embed Builder.'),
@@ -37,7 +37,7 @@ export default Utils.Functions.clientSlashCommand({
       ],
       embeds: [
         new Discord.EmbedBuilder()
-          .setColor(Utils.Enums.PhaseColour.Primary)
+          .setColor(Utils.PhaseColour.Primary)
           .setDescription('Use the buttons below to edit this embed, then hit Send Embed when finished.')
           .setTitle('Embed Builder')
       ],

@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('poll')
     .setDescription('Creates a poll reaction message.')
@@ -168,7 +168,7 @@ export default Utils.Functions.clientSlashCommand({
 
       if (choice) {
 
-        const match = choice.match(Utils.Constants.emojiRegex)
+        const match = choice.match(Utils.emojiRegex)
 
         choiceArray.push({
           emoji: match ? match[0] : choiceEmojis[i],
@@ -184,7 +184,7 @@ export default Utils.Functions.clientSlashCommand({
       const message = await interaction.reply({
         embeds: [
           new Discord.EmbedBuilder()
-            .setColor(Utils.Enums.PhaseColour.Primary)
+            .setColor(Utils.PhaseColour.Primary)
             .setDescription(choiceArray.map(choice => { return `${choice.emoji} ${choice.value}\n\n` }).toString().replaceAll(',', ''))
             .setTitle(question)
         ],
@@ -198,7 +198,7 @@ export default Utils.Functions.clientSlashCommand({
       const message = await interaction.reply({
         embeds: [
           new Discord.EmbedBuilder()
-            .setColor(Utils.Enums.PhaseColour.Primary)
+            .setColor(Utils.PhaseColour.Primary)
             .setTitle(question)
         ],
         fetchReply: true,

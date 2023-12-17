@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('level')
     .setDescription('level')
@@ -93,7 +93,7 @@ export default Utils.Functions.clientSlashCommand({
 
         } else {
 
-          return Utils.Functions.clientError<true>(
+          return Utils.clientError<true>(
             interaction,
             'No can do!',
             'Make sure the Levels & XP module is enabled, then try again.'
@@ -130,7 +130,7 @@ export default Utils.Functions.clientSlashCommand({
 
         } else {
 
-          return Utils.Functions.clientError<true>(
+          return Utils.clientError<true>(
             interaction,
             'No can do!',
             'Make sure the Levels & XP module is enabled, then try again.'
@@ -152,7 +152,7 @@ export default Utils.Functions.clientSlashCommand({
 
         const levelsSchema = await Schemas.Levels.findOne({ guild: interaction.guildId })
 
-        if (!levelsSchema) return Utils.Functions.clientError<true>(
+        if (!levelsSchema) return Utils.clientError<true>(
           interaction,
           'No can do!',
           'Make sure the Levels & XP module is enabled, then try again.'
@@ -160,7 +160,7 @@ export default Utils.Functions.clientSlashCommand({
 
         const userIndex = levelsSchema.levels.findIndex(level => level.id == user.id)
 
-        if (userIndex == -1) return Utils.Functions.clientError<true>(
+        if (userIndex == -1) return Utils.clientError<true>(
           interaction,
           'No can do!',
           'The user has not sent any messages yet.'
@@ -178,9 +178,9 @@ export default Utils.Functions.clientSlashCommand({
         interaction.editReply({
           embeds: [
             new Discord.EmbedBuilder()
-            .setColor(Utils.Enums.PhaseColour.Primary)
+            .setColor(Utils.PhaseColour.Primary)
             .setDescription('Level data was updated successfully.')
-            .setTitle(Utils.Enums.PhaseEmoji.Success + 'Level Data Set')
+            .setTitle(Utils.PhaseEmoji.Success + 'Level Data Set')
           ],
         })
 

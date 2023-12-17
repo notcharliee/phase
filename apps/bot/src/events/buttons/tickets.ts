@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.' separators for backwards compatibility. Eventually this will be changed to just support '.'
+export default Utils.clientButtonEvent({ // Supports either '-' or '.' separators for backwards compatibility. Eventually this will be changed to just support '.'
   customId: /ticket(\.|-)(open|close|reopen|claim|delete)(\.|-)[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/,
   async execute(client, interaction) {
 
@@ -82,12 +82,12 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
               .setComponents(
                 new Discord.ButtonBuilder()
                 .setCustomId(`ticket-close-${ticketId}`)
-                .setEmoji(Utils.Enums.PhaseEmoji.Locked)
+                .setEmoji(Utils.PhaseEmoji.Locked)
                 .setLabel('Close Ticket')
                 .setStyle(Discord.ButtonStyle.Secondary),
                 new Discord.ButtonBuilder()
                 .setCustomId(`ticket-claim-${ticketId}`)
-                .setEmoji(Utils.Enums.PhaseEmoji.Pin)
+                .setEmoji(Utils.PhaseEmoji.Pin)
                 .setLabel('Claim Ticket')
                 .setStyle(Discord.ButtonStyle.Secondary),
               )
@@ -95,7 +95,7 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
             content: `${ticketData.message}`,
             embeds: ticketData.embed ? [
               new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(ticketData.embed.message)
               .setTitle(ticketData.embed.title)
             ] : undefined,
@@ -109,24 +109,24 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
           interaction.editReply({
             embeds: [
               new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`Your ticket has been created! ${ticket}`)
-              .setTitle(Utils.Enums.PhaseEmoji.Success + 'Ticket Created')
+              .setTitle(Utils.PhaseEmoji.Success + 'Ticket Created')
             ],
           })
 
         } catch (error) {
 
-          Utils.Functions.alertDevs({
+          Utils.alertDevs({
             title: 'Ticket Error',
             description: `${error}`,
             type: 'warning',
           })
 
-          return Utils.Functions.clientError<true>(
+          return Utils.clientError<true>(
             interaction,
             'Well, this is awkward..',
-            Utils.Enums.PhaseError.Unknown,
+            Utils.PhaseError.Unknown,
             true,
           )
 
@@ -147,10 +147,10 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
         if (
           ticketData.permissions?.locked?.close &&
           !(interaction.member as Discord.GuildMember).roles.cache.some(role => ticketData?.permissions?.access.includes(role.id))
-        ) return Utils.Functions.clientError(
+        ) return Utils.clientError(
           interaction,
           'Access Denied!',
-          Utils.Enums.PhaseError.AccessDenied,
+          Utils.PhaseError.AccessDenied,
           true,
         )
 
@@ -162,12 +162,12 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
               .setComponents(
                 new Discord.ButtonBuilder()
                 .setCustomId(`ticket-reopen-${ticketId}`)
-                .setEmoji(Utils.Enums.PhaseEmoji.Lock)
+                .setEmoji(Utils.PhaseEmoji.Lock)
                 .setLabel('Reopen Ticket')
                 .setStyle(Discord.ButtonStyle.Secondary),
                 new Discord.ButtonBuilder()
                 .setCustomId(`ticket-delete-${ticketId}`)
-                .setEmoji(Utils.Enums.PhaseEmoji.Explode)
+                .setEmoji(Utils.PhaseEmoji.Explode)
                 .setLabel('Delete Ticket')
                 .setStyle(Discord.ButtonStyle.Secondary),
               )
@@ -179,9 +179,9 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
           await interaction.channel.send({
             embeds: [
               new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`${interaction.member} has closed this ticket.`)
-              .setTitle(Utils.Enums.PhaseEmoji.Locked + 'Ticket Closed')
+              .setTitle(Utils.PhaseEmoji.Locked + 'Ticket Closed')
             ],
           })
   
@@ -195,16 +195,16 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
 
         } catch (error) {
 
-          Utils.Functions.alertDevs({
+          Utils.alertDevs({
             title: 'Ticket Error',
             description: `${error}`,
             type: 'warning',
           })
 
-          return Utils.Functions.clientError<true>(
+          return Utils.clientError<true>(
             interaction,
             'Well, this is awkward..',
-            Utils.Enums.PhaseError.Unknown,
+            Utils.PhaseError.Unknown,
             true,
           )
 
@@ -225,10 +225,10 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
         if (
           ticketData.permissions?.locked?.reopen &&
           !(interaction.member as Discord.GuildMember).roles.cache.some(role => ticketData?.permissions?.access.includes(role.id))
-        ) return Utils.Functions.clientError(
+        ) return Utils.clientError(
           interaction,
           'Access Denied!',
-          Utils.Enums.PhaseError.AccessDenied,
+          Utils.PhaseError.AccessDenied,
           true,
         )
 
@@ -240,12 +240,12 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
               .setComponents(
                 new Discord.ButtonBuilder()
                 .setCustomId(`ticket-close-${ticketId}`)
-                .setEmoji(Utils.Enums.PhaseEmoji.Locked)
+                .setEmoji(Utils.PhaseEmoji.Locked)
                 .setLabel('Close Ticket')
                 .setStyle(Discord.ButtonStyle.Secondary),
                 new Discord.ButtonBuilder()
                 .setCustomId(`ticket-claim-${ticketId}`)
-                .setEmoji(Utils.Enums.PhaseEmoji.Pin)
+                .setEmoji(Utils.PhaseEmoji.Pin)
                 .setLabel('Claim Ticket')
                 .setStyle(Discord.ButtonStyle.Secondary),
               )
@@ -257,9 +257,9 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
           await channel.send({
             embeds: [
               new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`${interaction.member} has reopened this ticket.`)
-              .setTitle(Utils.Enums.PhaseEmoji.Lock + 'Ticket Reopened')
+              .setTitle(Utils.PhaseEmoji.Lock + 'Ticket Reopened')
             ],
           })
   
@@ -273,16 +273,16 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
 
         } catch (error) {
 
-          Utils.Functions.alertDevs({
+          Utils.alertDevs({
             title: 'Ticket Error',
             description: `${error}`,
             type: 'warning',
           })
 
-          return Utils.Functions.clientError<true>(
+          return Utils.clientError<true>(
             interaction,
             'Well, this is awkward..',
-            Utils.Enums.PhaseError.Unknown,
+            Utils.PhaseError.Unknown,
             true,
           )
 
@@ -300,10 +300,10 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
         const ticketData = ticketsSchema.tickets.find(ticket => ticket.id == ticketId)
         if (!ticketData) return
 
-        if (!(interaction.member as Discord.GuildMember).roles.cache.some(role => ticketData?.permissions?.access.includes(role.id))) return Utils.Functions.clientError(
+        if (!(interaction.member as Discord.GuildMember).roles.cache.some(role => ticketData?.permissions?.access.includes(role.id))) return Utils.clientError(
           interaction,
           'Access Denied!',
-          Utils.Enums.PhaseError.AccessDenied,
+          Utils.PhaseError.AccessDenied,
           true,
         )
 
@@ -315,13 +315,13 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
               .setComponents(
                 new Discord.ButtonBuilder()
                 .setCustomId(`ticket-close-${ticketId}`)
-                .setEmoji(Utils.Enums.PhaseEmoji.Locked)
+                .setEmoji(Utils.PhaseEmoji.Locked)
                 .setLabel('Close Ticket')
                 .setStyle(Discord.ButtonStyle.Secondary),
                 new Discord.ButtonBuilder()
                 .setCustomId(`ticket-claim-${ticketId}`)
                 .setDisabled(true)
-                .setEmoji(Utils.Enums.PhaseEmoji.Pin)
+                .setEmoji(Utils.PhaseEmoji.Pin)
                 .setLabel('Claim Ticket')
                 .setStyle(Discord.ButtonStyle.Secondary),
               )
@@ -331,9 +331,9 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
           await interaction.channel.send({
             embeds: [
               new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`${interaction.member} has claimed this ticket.`)
-              .setTitle(Utils.Enums.PhaseEmoji.Pin + 'Ticket Claimed')
+              .setTitle(Utils.PhaseEmoji.Pin + 'Ticket Claimed')
             ],
           })
   
@@ -341,16 +341,16 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
 
         } catch (error) {
 
-          Utils.Functions.alertDevs({
+          Utils.alertDevs({
             title: 'Ticket Error',
             description: `${error}`,
             type: 'warning',
           })
 
-          return Utils.Functions.clientError<true>(
+          return Utils.clientError<true>(
             interaction,
             'Well, this is awkward..',
-            Utils.Enums.PhaseError.Unknown,
+            Utils.PhaseError.Unknown,
             true,
           )
 
@@ -371,10 +371,10 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
         if (
           ticketData.permissions?.locked?.delete &&
           !(interaction.member as Discord.GuildMember).roles.cache.some(role => ticketData?.permissions?.access.includes(role.id))
-        ) return Utils.Functions.clientError(
+        ) return Utils.clientError(
           interaction,
           'Access Denied!',
-          Utils.Enums.PhaseError.AccessDenied,
+          Utils.PhaseError.AccessDenied,
           true,
         )
 
@@ -387,13 +387,13 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
                 new Discord.ButtonBuilder()
                 .setCustomId(`ticket-reopen-${ticketId}`)
                 .setDisabled(true)
-                .setEmoji(Utils.Enums.PhaseEmoji.Lock)
+                .setEmoji(Utils.PhaseEmoji.Lock)
                 .setLabel('Reopen Ticket')
                 .setStyle(Discord.ButtonStyle.Secondary),
                 new Discord.ButtonBuilder()
                 .setCustomId(`ticket-delete-${ticketId}`)
                 .setDisabled(true)
-                .setEmoji(Utils.Enums.PhaseEmoji.Explode)
+                .setEmoji(Utils.PhaseEmoji.Explode)
                 .setLabel('Delete Ticket')
                 .setStyle(Discord.ButtonStyle.Secondary),
               )
@@ -405,9 +405,9 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
           await channel.send({
             embeds: [
               new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`${interaction.member} has deleted this ticket.\nThis may take a few seconds...`)
-              .setTitle(Utils.Enums.PhaseEmoji.Explode + 'Ticket Deleted')
+              .setTitle(Utils.PhaseEmoji.Explode + 'Ticket Deleted')
             ],
           })
   
@@ -419,16 +419,16 @@ export default Utils.Functions.clientButtonEvent({ // Supports either '-' or '.'
 
         } catch (error) {
 
-          Utils.Functions.alertDevs({
+          Utils.alertDevs({
             title: 'Ticket Error',
             description: `${error}`,
             type: 'warning',
           })
 
-          return Utils.Functions.clientError<true>(
+          return Utils.clientError<true>(
             interaction,
             'Well, this is awkward..',
-            Utils.Enums.PhaseError.Unknown,
+            Utils.PhaseError.Unknown,
             true,
           )
 
