@@ -1,15 +1,9 @@
 {
   "compilerOptions": {
     "paths": {
-      "#env": [ "./src/env.ts" ],
-      "#client/main": [ "./src/client/index.ts" ],
-      "#client/intents": [ "./src/client/options/intents.ts" ],
-      "#client/partials": [ "./src/client/options/partials.ts" ],
-      "#handlers/commands": [ "./src/handlers/commands.ts" ],
-      "#handlers/events": [ "./src/handlers/events.ts" ],
-      "#handlers/loops": [ "./src/handlers/loops.ts" ],
-      "#handlers/mongodb": [ "./src/handlers/mongodb.ts" ],
+      "#src/*": [ "./src/*" ],
     },
+    "outDir": "build",
   },
   "exclude": [
     "node_modules",
@@ -21,5 +15,4 @@
     "src/**/*.cjs",
     "src/**/*.mjs",
   ],
-  "outDir": "build",
 }
