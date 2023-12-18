@@ -10,10 +10,7 @@ import {
   existsSync,
   readFileSync
 } from "fs";
-var createEnv = (env2) => {
-  const envVars = env2;
-  return envVars;
-};
+var createEnv = (env2) => env2;
 var env = createEnv({
   NODE_ENV: process.env.NODE_ENV,
   MONGODB_URI: process.env.MONGODB_URI,
@@ -42,7 +39,6 @@ var getEnvVariables = (envPath) => {
 };
 
 // src/cli.ts
-import { copyFileSync } from "fs";
 import { resolve } from "path";
 
 // package.json
@@ -146,9 +142,7 @@ cli.command("dev").description("Runs an app's dev script.").requiredOption(
 cli.parse(process.argv);
 function spawnChildProcess(command, cwd) {
   const globalEnvVariables = getEnvVariables(resolve(cwd, "..", "..", ".env"));
-  if (globalEnvVariables)
-    copyFileSync(resolve(cwd, "..", "..", ".env"), resolve(cwd, ".env.local"));
-  process.env = { ...globalEnvVariables, ...process.env };
+  process.env = globalEnvVariables ? { ...globalEnvVariables, ...process.env } : process.env;
   process.env.FORCE_COLOR = "true";
   const [cmd, ...args] = command.split(" ");
   const childProcess = spawn(process.platform == "win32" ? cmd.replace("npm", "npm.cmd").replace("npx", "npx.cmd") : cmd, args, { cwd, env: process.env });
