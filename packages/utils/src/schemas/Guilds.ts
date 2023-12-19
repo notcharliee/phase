@@ -24,7 +24,16 @@ export type Guild = {
   id: string,
   admins: string[],
   commands: Record<string, GuildCommand>,
-  modules: Record<string, GuildModule>,
+  modules: {
+    AFKs: GuildModuleAFKs,
+    AuditLogs: GuildModuleAuditLogs,
+    AutoPartners: GuildModuleAutoPartners,
+    AutoRoles: GuildModuleAutoRoles,
+    JoinToCreates: GuildModuleJoinToCreates,
+    Levels: GuildModuleLevels,
+    ReactionRoles: GuildModuleReactionRoles,
+    Tags: GuildModuleTags,
+  },
   news_channel: string | null,
   owner: string,
 }
