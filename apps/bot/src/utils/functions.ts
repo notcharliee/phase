@@ -32,6 +32,18 @@ export async function alertDevs (data: { title: string, description?: string, ty
 }
 
 
+export function moduleNotEnabled(interaction: Discord.CommandInteraction, module: string) {
+  return interaction.reply({
+    embeds: [
+      new Discord.EmbedBuilder()
+      .setColor(Utils.PhaseColour.Failure)
+      .setDescription(`The \`${module}\` module is not enabled in this server. Contact a server admin to enable it.`)
+      .setTitle(Utils.PhaseEmoji.Failure + "Module Not Enabled")
+    ],
+  })
+}
+
+
 /**
  * 
  * @param interaction An interaction or message to reply to. 
