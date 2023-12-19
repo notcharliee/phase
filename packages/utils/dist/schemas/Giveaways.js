@@ -8,6 +8,7 @@ var schema = new mongoose.Schema({
   winners: Number,
   prize: String,
   duration: String,
+  expires: String,
   expired: Boolean
 });
 var GiveawaySchema = mongoose.models["Giveaways"] || mongoose.model("Giveaways", schema);

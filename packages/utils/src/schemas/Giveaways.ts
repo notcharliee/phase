@@ -11,6 +11,7 @@ const schema = new mongoose.Schema<Giveaway>({
   winners: Number,
   prize: String,
   duration: String,
+  expires: String,
   expired: Boolean,
 })
 
@@ -30,5 +31,6 @@ export type Giveaway = {
   winners: number,
   prize: string,
   duration: string,
+  expires: string,
   expired: boolean,
 }

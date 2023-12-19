@@ -11,6 +11,7 @@ type Giveaway = {
     winners: number;
     prize: string;
     duration: string;
+    expires: string;
     expired: boolean;
 };
 
