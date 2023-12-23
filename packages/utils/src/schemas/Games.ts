@@ -26,7 +26,7 @@ export type Game = {
 }
 
 export type GameDataTictactoe = {
-  currentTurn: {
+  current_turn: {
     marker: string,
     player: string,
   },

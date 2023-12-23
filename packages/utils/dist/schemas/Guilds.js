@@ -9,10 +9,8 @@ var schema = new mongoose.Schema({
   // Commands config
   modules: Object,
   // Modules config
-  news_channel: String,
+  news_channel: String
   // Bot news channel
-  owner: String
-  // Guild owner ID
 });
 var GuildSchema = mongoose.models["Guilds"] || mongoose.model("Guilds", schema);
 export {

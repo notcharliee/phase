@@ -8,26 +8,19 @@ type Guild = {
     admins: string[];
     commands: Record<string, GuildCommand>;
     modules: {
-        AFKs: GuildModuleAFKs;
-        AuditLogs: GuildModuleAuditLogs;
-        AutoPartners: GuildModuleAutoPartners;
-        AutoRoles: GuildModuleAutoRoles;
-        JoinToCreates: GuildModuleJoinToCreates;
+        AuditLog: GuildModuleAuditLogs;
+        AutoPartner: GuildModuleAutoPartners;
+        AutoRole: GuildModuleAutoRoles;
+        JoinToCreate: GuildModuleJoinToCreates;
         Levels: GuildModuleLevels;
         ReactionRoles: GuildModuleReactionRoles;
-        Tags: GuildModuleTags;
+        Tickets: GuildModuleTickets;
     };
     news_channel: string | null;
-    owner: string;
 };
 type GuildCommand = {
     name: string;
     permissions: string | null;
-};
-type GuildModuleAFKs = {
-    enabled: boolean;
-    user: string;
-    reason: string;
 };
 type GuildModuleAuditLogs = {
     enabled: boolean;
@@ -60,9 +53,9 @@ type GuildModuleAutoRoles = {
 };
 type GuildModuleJoinToCreates = {
     enabled: boolean;
+    active: string[];
     channel: string;
     category: string;
-    created: string[];
 };
 type GuildModuleLevels = {
     enabled: boolean;
@@ -83,13 +76,6 @@ type GuildModuleReactionRoles = {
         role: string;
     }[];
 };
-type GuildModuleTags = {
-    enabled: boolean;
-    tags: {
-        name: string;
-        value: string;
-    }[];
-};
 type GuildModuleTickets = {
     enabled: boolean;
     channel: string;
@@ -97,10 +83,9 @@ type GuildModuleTickets = {
         id: string;
         name: string;
         message: string;
-        admins: string[];
-        count: number;
+        max_open: number;
     }[];
 };
-type GuildModule = GuildModuleAFKs | GuildModuleAuditLogs | GuildModuleAutoPartners | GuildModuleAutoRoles | GuildModuleJoinToCreates | GuildModuleLevels | GuildModuleReactionRoles | GuildModuleTags | GuildModuleTickets;
+type GuildModule = GuildModuleAuditLogs | GuildModuleAutoPartners | GuildModuleAutoRoles | GuildModuleJoinToCreates | GuildModuleLevels | GuildModuleReactionRoles | GuildModuleTickets;
 
-export { Guild, GuildCommand, GuildModule, GuildModuleAFKs, GuildModuleAuditLogs, GuildModuleAutoPartners, GuildModuleAutoRoles, GuildModuleJoinToCreates, GuildModuleLevels, GuildModuleReactionRoles, GuildModuleTags, GuildModuleTickets, GuildSchema };
+export { Guild, GuildCommand, GuildModule, GuildModuleAuditLogs, GuildModuleAutoPartners, GuildModuleAutoRoles, GuildModuleJoinToCreates, GuildModuleLevels, GuildModuleReactionRoles, GuildModuleTickets, GuildSchema };

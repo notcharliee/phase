@@ -9,7 +9,6 @@ const schema = new mongoose.Schema<Guild>({
   commands: Object, // Commands config
   modules: Object, // Modules config
   news_channel: String, // Bot news channel
-  owner: String, // Guild owner ID
 })
 
 export const GuildSchema = (
@@ -25,28 +24,20 @@ export type Guild = {
   admins: string[],
   commands: Record<string, GuildCommand>,
   modules: {
-    AFKs: GuildModuleAFKs,
-    AuditLogs: GuildModuleAuditLogs,
-    AutoPartners: GuildModuleAutoPartners,
-    AutoRoles: GuildModuleAutoRoles,
-    JoinToCreates: GuildModuleJoinToCreates,
+    AuditLog: GuildModuleAuditLogs,
+    AutoPartner: GuildModuleAutoPartners,
+    AutoRole: GuildModuleAutoRoles,
+    JoinToCreate: GuildModuleJoinToCreates,
     Levels: GuildModuleLevels,
     ReactionRoles: GuildModuleReactionRoles,
-    Tags: GuildModuleTags,
+    Tickets: GuildModuleTickets,
   },
   news_channel: string | null,
-  owner: string,
 }
 
 export type GuildCommand = {
   name: string,
   permissions: string | null,
-}
-
-export type GuildModuleAFKs = {
-  enabled: boolean,
-  user: string,
-  reason: string,
 }
 
 export type GuildModuleAuditLogs = {
@@ -83,9 +74,9 @@ export type GuildModuleAutoRoles = {
 
 export type GuildModuleJoinToCreates = {
   enabled: boolean,
+  active: string[],
   channel: string,
   category: string,
-  created: string[],
 }
 
 export type GuildModuleLevels = {
@@ -109,14 +100,6 @@ export type GuildModuleReactionRoles = {
   }[],
 }
 
-export type GuildModuleTags = {
-  enabled: boolean,
-  tags: {
-    name: string,
-    value: string,
-  }[],
-}
-
 export type GuildModuleTickets = {
   enabled: boolean,
   channel: string,
@@ -124,9 +107,8 @@ export type GuildModuleTickets = {
     id: string,
     name: string,
     message: string,
-    admins: string[],
-    count: number,
+    max_open: number,
   }[],
 }
 
-export type GuildModule = GuildModuleAFKs | GuildModuleAuditLogs | GuildModuleAutoPartners | GuildModuleAutoRoles | GuildModuleJoinToCreates | GuildModuleLevels | GuildModuleReactionRoles | GuildModuleTags | GuildModuleTickets
+export type GuildModule = | GuildModuleAuditLogs | GuildModuleAutoPartners | GuildModuleAutoRoles | GuildModuleJoinToCreates | GuildModuleLevels | GuildModuleReactionRoles | GuildModuleTickets

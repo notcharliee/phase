@@ -1,4 +1,6 @@
+export * from "./AFKs.js"
 export * from "./Games.js"
 export * from "./Giveaways.js"
 export * from "./Guilds.js"
 export * from "./Levels.js"
+export * from "./Tags.js"

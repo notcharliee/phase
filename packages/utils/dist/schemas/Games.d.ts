@@ -10,7 +10,7 @@ type Game = {
     players: string[];
 };
 type GameDataTictactoe = {
-    currentTurn: {
+    current_turn: {
         marker: string;
         player: string;
     };
