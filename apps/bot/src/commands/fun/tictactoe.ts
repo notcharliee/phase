@@ -16,7 +16,7 @@ export default Utils.clientSlashCommand({
     ),
   async execute(client, interaction) {
 
-    const member = interaction.options.getMember('member') as Discord.GuildMember || null
+    const member = interaction.options.getMember('member') as Discord.GuildMember | null
 
     if (!member) return Utils.clientError(
       interaction,
@@ -83,22 +83,24 @@ export default Utils.clientSlashCommand({
     })
 
 
-    await new Schemas.Games({
-      guild: interaction.guildId,
-      message: message.id,
+    new Schemas.GameSchema({
+      id: message.id,
       type: 'TICTACTOE',
-      participants: [ interaction.user.id, member ],
-      gameData: {
-        currentTurn: {
+      game_data: {
+        current_turn: {
           marker: Utils.PhaseEmoji.Cross,
-          participant: member.id,
+          player: member.id,
         },
         moves: [
           Utils.PhaseEmoji.ZeroWidthJoiner, Utils.PhaseEmoji.ZeroWidthJoiner, Utils.PhaseEmoji.ZeroWidthJoiner,
           Utils.PhaseEmoji.ZeroWidthJoiner, Utils.PhaseEmoji.ZeroWidthJoiner, Utils.PhaseEmoji.ZeroWidthJoiner,
           Utils.PhaseEmoji.ZeroWidthJoiner, Utils.PhaseEmoji.ZeroWidthJoiner, Utils.PhaseEmoji.ZeroWidthJoiner,
         ],
-      }
+      },
+      players: [
+        interaction.user.id,
+        member.id,
+      ],
     }).save()
 
   }

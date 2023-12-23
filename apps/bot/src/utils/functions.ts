@@ -11,14 +11,10 @@ export async function alertDevs (data: { title: string, description?: string, ty
     url: env.WEBHOOK_ALERT
   })
 
-  let emoji: string = '⚠️ '
-  if (data.type == 'message') emoji = Utils.PhaseEmoji.Announce
-  else if (data.type == 'error') emoji = Utils.PhaseEmoji.Failure
-
   const webhookAlert = await webhookClient.send({
     embeds: [
       new Discord.EmbedBuilder()
-        .setTitle(emoji + data.title)
+        .setTitle(data.title)
         .setDescription(data.description ?? null)
         .setColor(data.type == 'message' ? Utils.PhaseColour.Primary : data.type == 'warning' ? Utils.PhaseColour.Warning : Utils.PhaseColour.Failure)
         .setTimestamp()
@@ -32,13 +28,13 @@ export async function alertDevs (data: { title: string, description?: string, ty
 }
 
 
-export function moduleNotEnabled(interaction: Discord.CommandInteraction, module: string) {
+export function moduleNotEnabled(interaction: Discord.CommandInteraction | Discord.ButtonInteraction, module: string) {
   return interaction.reply({
     embeds: [
       new Discord.EmbedBuilder()
       .setColor(Utils.PhaseColour.Failure)
       .setDescription(`The \`${module}\` module is not enabled in this server. Contact a server admin to enable it.`)
-      .setTitle(Utils.PhaseEmoji.Failure + "Module Not Enabled")
+      .setTitle("Module Not Enabled")
     ],
   })
 }
@@ -72,7 +68,7 @@ export function clientError <deffered = false> (
       new Discord.EmbedBuilder()
         .setColor(Utils.PhaseColour.Failure)
         .setDescription(error)
-        .setTitle(Utils.PhaseEmoji.Failure + title)
+        .setTitle(title)
     ],
     ephemeral
   }

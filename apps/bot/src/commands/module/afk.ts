@@ -15,21 +15,16 @@ export default Utils.clientSlashCommand({
       .setRequired(false)
     ),
   async execute(client, interaction) {
-    
     const reason = interaction.options.getString('reason', false) ?? 'No reason set.'
 
-    const AFKsSchema = await Schemas.AFKs.findOne({ guild: interaction.guildId, user: interaction.user.id })
+    const AFKSchema = await Schemas.AFKSchema.findOne({ user: interaction.user.id })
 
-    if (AFKsSchema) {
-
-      AFKsSchema.reason = reason
-
-      await AFKsSchema.save()
-
-    } else await new Schemas.AFKs({
-      guild: interaction.guildId,
+    if (AFKSchema) {
+      AFKSchema.reason = reason
+      await AFKSchema.save()
+    } else await new Schemas.AFKSchema({
       user: interaction.user.id,
-      reason 
+      reason,
     }).save()
 
     interaction.reply({
@@ -37,9 +32,8 @@ export default Utils.clientSlashCommand({
         new Discord.EmbedBuilder()
         .setColor(Utils.PhaseColour.Primary)
         .setDescription(reason)
-        .setTitle(Utils.PhaseEmoji.Success + 'Updated your AFK status')
+        .setTitle('AFK Status Changed')
       ],
     })
-    
   }
 })

@@ -48,7 +48,7 @@ export default Utils.clientSlashCommand({
         new Discord.EmbedBuilder()
           .setColor(Utils.PhaseColour.Primary)
           .setDescription(`Purged **${deletedMessages.size}** messages in total` + `${author ? ` sent by ${author}` : '.'}`)
-          .setTitle(Utils.PhaseEmoji.Success + 'Purge Successful')
+          .setTitle('Purge Successful')
       ],
     })
 

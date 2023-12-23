@@ -130,17 +130,15 @@ export default Utils.clientSlashCommand({
 
         await giveawayMessage.react(Utils.PhaseEmoji.Tada)
 
-        await new Schemas.Giveaways({
-          guild: interaction.guildId,
-          message: giveawayMessage.id,
+        await new Schemas.GiveawaySchema({
+          id: giveawayMessage.id,
           channel: interaction.channelId,
           created,
           host: host.id,
-          entries: [],
           winners,
           prize,
-          expires,
           duration,
+          expires,
           expired: false,
         }).save()
 
@@ -149,7 +147,7 @@ export default Utils.clientSlashCommand({
             new Discord.EmbedBuilder()
             .setColor(Utils.PhaseColour.Primary)
             .setDescription(`**Prize:** ${prize}\n**Winners:** ${winners}\n**Duration:** <t:${Math.floor(expires / 1000)}:R>`)
-            .setTitle(Utils.PhaseEmoji.Success + 'Giveaway Created')
+            .setTitle('Giveaway Created')
           ]
         })
 
@@ -165,7 +163,7 @@ export default Utils.clientSlashCommand({
 
         const id = interaction.options.getString('id', true)
 
-        const giveawaySchema = await Schemas.Giveaways.findOne({ guild: interaction.guildId, created: id })
+        const giveawaySchema = await Schemas.GiveawaySchema.findOne({ guild: interaction.guildId, created: id })
 
         if (!giveawaySchema) return Utils.clientError<true>(
           interaction,
@@ -178,7 +176,7 @@ export default Utils.clientSlashCommand({
 
         try {
 
-          const giveawayMessage = await giveawayChannel?.messages.fetch(giveawaySchema.message)
+          const giveawayMessage = await giveawayChannel?.messages.fetch(giveawaySchema.id)
 
           await giveawayMessage?.delete()
           await giveawaySchema.deleteOne()
@@ -188,7 +186,7 @@ export default Utils.clientSlashCommand({
               new Discord.EmbedBuilder()
               .setColor(Utils.PhaseColour.Primary)
               .setDescription(`Giveaway with ID of \`${id}\` has been deleted.`)
-              .setTitle(Utils.PhaseEmoji.Success + 'Giveaway Deleted')
+              .setTitle('Giveaway Deleted')
             ]
           })
 
@@ -216,7 +214,7 @@ export default Utils.clientSlashCommand({
         const id = interaction.options.getString('id', true)
         const amount = interaction.options.getInteger('amount', false)
 
-        const giveawaySchema = await Schemas.Giveaways.findOne({ guild: interaction.guildId, created: id, expired: true })
+        const giveawaySchema = await Schemas.GiveawaySchema.findOne({ guild: interaction.guildId, created: id, expired: true })
 
         if (!giveawaySchema) return Utils.clientError<true>(
           interaction,
@@ -242,7 +240,7 @@ export default Utils.clientSlashCommand({
 
         try {
 
-          const giveawayMessage = await giveawayChannel.messages.fetch(giveawaySchema.message)
+          const giveawayMessage = await giveawayChannel.messages.fetch(giveawaySchema.id)
           const giveawayHost = await giveawayChannel.guild.members.fetch(giveawaySchema.host)
 
           const giveawayWinners = giveawaySchema.winners
@@ -297,7 +295,7 @@ export default Utils.clientSlashCommand({
               new Discord.EmbedBuilder()
               .setColor(Utils.PhaseColour.Primary)
               .setDescription(`New Winners: ${giveawayNewWinners.join('')}`)
-              .setTitle(Utils.PhaseEmoji.Success + 'Rerolled Giveaway')
+              .setTitle('Rerolled Giveaway')
             ],
           })
   

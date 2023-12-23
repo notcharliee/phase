@@ -24,11 +24,32 @@ export default Utils.clientSlashCommand({
       Utils.PhaseError.MemberNotFound
     )
 
+    const keyPermissionsArray = [
+      'Administrator',
+      'ManageGuild',
+      'ManageRoles',
+      'ManageChannels',
+      'ManageMessages',
+      'ManageWebhooks',
+      'ManageNicknames',
+      'ManageEmojisAndStickers',
+      'ManageEvents',
+      'KickMembers',
+      'BanMembers',
+      'MentionEveryone',
+      'MuteMembers',
+      'DeafenMembers',
+      'PrioritySpeaker',
+      'MoveMembers',
+      'ManageEvents',
+      'ManageThreads',
+      'ModerateMembers',
+      'ViewCreatorMonetizationAnalytics',
+      'ViewAuditLog',
+    ]
 
-    const keyPermissionsArray = Utils.keyPermissionsArray
-
-    const memberPermissions = member.permissions.serialize(true) // @ts-ignore
-    const permissionsArray = keyPermissionsArray.filter(permission => memberPermissions[permission])
+    const memberPermissions = member.permissions.serialize(true)
+    const permissionsArray = keyPermissionsArray.filter(permission => memberPermissions[permission as keyof Discord.PermissionResolvable])
 
 
     interaction.reply({

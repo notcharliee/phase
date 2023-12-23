@@ -3,440 +3,182 @@ import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.clientButtonEvent({ // Supports either '-' or '.' separators for backwards compatibility. Eventually this will be changed to just support '.'
-  customId: /ticket(\.|-)(open|close|reopen|claim|delete)(\.|-)[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/,
+export default Utils.clientButtonEvent({
+  customId: /ticket.(open|lock|unlock|delete).[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/,
   async execute(client, interaction) {
+    if (
+      !interaction.inGuild() ||
+      !interaction.member ||
+      !interaction.channel
+    ) return
 
-    if (!interaction.guild || !interaction.member || !interaction.channel) return
+    const customIdParts = interaction.customId.split(".") as [
+      "ticket", // button type
+      "open" | "lock" | "unlock" | "delete", // ticket action
+      `${string}-${string}-${string}-${string}-${string}`, // ticket id
+    ]
+
+    const ticketAction = customIdParts[1]
+    const ticketId = customIdParts[2]
+
+    const guildSchema = await Schemas.GuildSchema.findOne({ id: interaction.guildId })
+    const ticketModule = guildSchema?.modules.Tickets
+    if (!ticketModule?.enabled) return Utils.moduleNotEnabled(interaction, "Tickets")
+
     
-    const customIdParts = interaction.customId.includes('.') ? interaction.customId.split('.') : interaction.customId.split('-')
-    const ticketId = [...customIdParts].slice(2, 7).join('-')
-
-    switch (customIdParts[1]) {
-
-      case 'open': {
-
+    switch (ticketAction) {
+      case "open": {
         await interaction.deferReply({
           ephemeral: true,
         })
 
-        const ticketsSchema = await Schemas.Tickets.findOne({ guild: interaction.guild.id })
-        if (!ticketsSchema) return
-
-        const ticketData = ticketsSchema.tickets.find(ticket => ticket.id == ticketId)
-        if (!ticketData) return
-
-        const permissionOverwrites: Discord.OverwriteResolvable[] = [
-          {
-            id: interaction.guild.id,
-            deny: [
-              Discord.PermissionFlagsBits.ViewChannel,
-              Discord.PermissionFlagsBits.SendMessages,
-              Discord.PermissionFlagsBits.ReadMessageHistory,
-            ],
-          },
-          {
-            id: (interaction.member as Discord.GuildMember).id,
-            allow: [
-              Discord.PermissionFlagsBits.ViewChannel,
-              Discord.PermissionFlagsBits.SendMessages,
-              Discord.PermissionFlagsBits.ReadMessageHistory,
-            ],
-          },
-          {
-            id: client.user.id,
-            allow: [
-              Discord.PermissionFlagsBits.ViewChannel,
-              Discord.PermissionFlagsBits.SendMessages,
-              Discord.PermissionFlagsBits.ReadMessageHistory,
-            ],
-          },
-        ]
-
-        if (ticketData.permissions) for (const id of ticketData.permissions.access) {
-
-          permissionOverwrites.push({
-            id,
-            allow: [
-              Discord.PermissionFlagsBits.ViewChannel,
-              Discord.PermissionFlagsBits.SendMessages,
-              Discord.PermissionFlagsBits.ReadMessageHistory,
-            ],
-          })
-
-        }
-
-        try {
-
-          const ticket = await interaction.guild.channels.create({
-            name: `${ticketData.name}-${ticketData.count}`,
-            topic: (interaction.member as Discord.GuildMember).id,
-            type: Discord.ChannelType.GuildText,
-            parent: ticketData.category,
-            permissionOverwrites,
-          })
-  
-          await ticket.send({
-            components: [
-              new Discord.ActionRowBuilder<Discord.ButtonBuilder>()
-              .setComponents(
-                new Discord.ButtonBuilder()
-                .setCustomId(`ticket-close-${ticketId}`)
-                .setEmoji(Utils.PhaseEmoji.Locked)
-                .setLabel('Close Ticket')
-                .setStyle(Discord.ButtonStyle.Secondary),
-                new Discord.ButtonBuilder()
-                .setCustomId(`ticket-claim-${ticketId}`)
-                .setEmoji(Utils.PhaseEmoji.Pin)
-                .setLabel('Claim Ticket')
-                .setStyle(Discord.ButtonStyle.Secondary),
-              )
-            ],
-            content: `${ticketData.message}`,
-            embeds: ticketData.embed ? [
-              new Discord.EmbedBuilder()
-              .setColor(Utils.PhaseColour.Primary)
-              .setDescription(ticketData.embed.message)
-              .setTitle(ticketData.embed.title)
-            ] : undefined,
-          })
-  
-          await Schemas.Tickets.findOneAndUpdate(
-            { guild: interaction.guild.id, 'tickets.id': ticketId },
-            { $inc: { 'tickets.$.count': 1 } }
-          )
-  
-          interaction.editReply({
-            embeds: [
-              new Discord.EmbedBuilder()
-              .setColor(Utils.PhaseColour.Primary)
-              .setDescription(`Your ticket has been created! ${ticket}`)
-              .setTitle(Utils.PhaseEmoji.Success + 'Ticket Created')
-            ],
-          })
-
-        } catch (error) {
-
-          Utils.alertDevs({
-            title: 'Ticket Error',
-            description: `${error}`,
-            type: 'warning',
-          })
-
-          return Utils.clientError<true>(
-            interaction,
-            'Well, this is awkward..',
-            Utils.PhaseError.Unknown,
-            true,
-          )
-
-        }
-
-      } break
-
-
-
-      case 'close': {
-
-        const ticketsSchema = await Schemas.Tickets.findOne({ guild: interaction.guild.id })
-        if (!ticketsSchema) return
-
-        const ticketData = ticketsSchema.tickets.find(ticket => ticket.id == ticketId)
-        if (!ticketData) return
+        const ticketChannel = client.channels.cache.get(ticketModule.channel) as Discord.TextChannel | undefined
+        const ticketData = ticketModule.tickets.find(ticket => ticket.id == ticketId)
 
         if (
-          ticketData.permissions?.locked?.close &&
-          !(interaction.member as Discord.GuildMember).roles.cache.some(role => ticketData?.permissions?.access.includes(role.id))
-        ) return Utils.clientError(
-          interaction,
-          'Access Denied!',
-          Utils.PhaseError.AccessDenied,
-          true,
-        )
+          !ticketChannel ||
+          !ticketData
+        ) return Utils.moduleNotEnabled(interaction, "Tickets")
 
-        try {
+        const ticketMessage = `${interaction.member}`
+        const ticketName = `🎫 ${interaction.member.user.username}`
 
-          await interaction.message.edit({
-            components: [
-              new Discord.ActionRowBuilder<Discord.ButtonBuilder>()
-              .setComponents(
-                new Discord.ButtonBuilder()
-                .setCustomId(`ticket-reopen-${ticketId}`)
-                .setEmoji(Utils.PhaseEmoji.Lock)
-                .setLabel('Reopen Ticket')
-                .setStyle(Discord.ButtonStyle.Secondary),
-                new Discord.ButtonBuilder()
-                .setCustomId(`ticket-delete-${ticketId}`)
-                .setEmoji(Utils.PhaseEmoji.Explode)
-                .setLabel('Delete Ticket')
-                .setStyle(Discord.ButtonStyle.Secondary),
-              )
-            ],
-          })
-  
-          const channel = interaction.channel as Discord.BaseGuildTextChannel
-  
-          await interaction.channel.send({
-            embeds: [
-              new Discord.EmbedBuilder()
-              .setColor(Utils.PhaseColour.Primary)
-              .setDescription(`${interaction.member} has closed this ticket.`)
-              .setTitle(Utils.PhaseEmoji.Locked + 'Ticket Closed')
-            ],
-          })
-  
-          await channel.permissionOverwrites.create(`${channel.topic}`, {
-            ViewChannel: true,
-            ReadMessageHistory: true,
-            SendMessages: false
-          })
-  
-          await interaction.deferUpdate()
+        const ticketsOpen = ticketChannel.threads.cache.filter(thread => thread.name.startsWith(ticketName)).size
+        if (ticketsOpen >= ticketData.max_open) return interaction.editReply(`You can't open any more than ${ticketData.max_open} tickets at a time!`)
 
-        } catch (error) {
+        const ticketThread = await ticketChannel.threads.create({
+          name: ticketName + (ticketsOpen ? `(${ticketsOpen+1})` : ""),
+          startMessage: ticketMessage,
+          type: Discord.ChannelType.PrivateThread,
+          invitable: true,
+        })
 
-          Utils.alertDevs({
-            title: 'Ticket Error',
-            description: `${error}`,
-            type: 'warning',
-          })
+        ticketThread.send({
+          components: [
+            new Discord.ActionRowBuilder<Discord.ButtonBuilder>()
+            .setComponents(
+              new Discord.ButtonBuilder()
+              .setCustomId(`ticket.lock.${ticketId}`)
+              .setEmoji("🔒")
+              .setLabel("Lock Ticket")
+              .setStyle(Discord.ButtonStyle.Secondary),
+            ),
+          ],
+          embeds: [
+            new Discord.EmbedBuilder()
+            .setColor(Utils.PhaseColour.Primary)
+            .setDescription(ticketData.message)
+            .setTitle(ticketName),
+          ],
+        })
 
-          return Utils.clientError<true>(
-            interaction,
-            'Well, this is awkward..',
-            Utils.PhaseError.Unknown,
-            true,
-          )
-
-        }
-
+        interaction.editReply(`Your ticket has been created! ${ticketThread}`)
       } break
 
 
-
-      case 'reopen': {
-
-        const ticketsSchema = await Schemas.Tickets.findOne({ guild: interaction.guild.id })
-        if (!ticketsSchema) return
-
-        const ticketData = ticketsSchema.tickets.find(ticket => ticket.id == ticketId)
-        if (!ticketData) return
+      case "lock": {
+        const ticketThread = interaction.channel
+        const ticketData = ticketModule.tickets.find(ticket => ticket.id == ticketId)
 
         if (
-          ticketData.permissions?.locked?.reopen &&
-          !(interaction.member as Discord.GuildMember).roles.cache.some(role => ticketData?.permissions?.access.includes(role.id))
-        ) return Utils.clientError(
-          interaction,
-          'Access Denied!',
-          Utils.PhaseError.AccessDenied,
-          true,
-        )
+          !ticketThread.isThread() ||
+          !ticketData
+        ) return Utils.moduleNotEnabled(interaction, "Tickets")
 
-        try {
-
-          await interaction.message.edit({
-            components: [
-              new Discord.ActionRowBuilder<Discord.ButtonBuilder>()
-              .setComponents(
-                new Discord.ButtonBuilder()
-                .setCustomId(`ticket-close-${ticketId}`)
-                .setEmoji(Utils.PhaseEmoji.Locked)
-                .setLabel('Close Ticket')
-                .setStyle(Discord.ButtonStyle.Secondary),
-                new Discord.ButtonBuilder()
-                .setCustomId(`ticket-claim-${ticketId}`)
-                .setEmoji(Utils.PhaseEmoji.Pin)
-                .setLabel('Claim Ticket')
-                .setStyle(Discord.ButtonStyle.Secondary),
-              )
-            ],
-          })
-  
-          const channel = interaction.channel as Discord.BaseGuildTextChannel
-  
-          await channel.send({
-            embeds: [
-              new Discord.EmbedBuilder()
-              .setColor(Utils.PhaseColour.Primary)
-              .setDescription(`${interaction.member} has reopened this ticket.`)
-              .setTitle(Utils.PhaseEmoji.Lock + 'Ticket Reopened')
-            ],
-          })
-  
-          await channel.permissionOverwrites.create(`${channel.topic}`, {
-            ViewChannel: true,
-            ReadMessageHistory: true,
-            SendMessages: true
-          })
-  
+        if (ticketThread.locked)
+          return interaction.reply(`${Utils.PhaseEmoji.Failure} You can't lock an already locked ticket!`)
+        else
           await interaction.deferUpdate()
 
-        } catch (error) {
+        await ticketThread.send({
+          components: [
+            new Discord.ActionRowBuilder<Discord.ButtonBuilder>()
+            .setComponents(
+              new Discord.ButtonBuilder()
+              .setCustomId(`ticket.unlock.${ticketId}`)
+              .setEmoji("🔓")
+              .setLabel("Unlock Ticket")
+              .setStyle(Discord.ButtonStyle.Secondary),
+              new Discord.ButtonBuilder()
+              .setCustomId(`ticket.delete.${ticketId}`)
+              .setEmoji("🔥")
+              .setLabel("Delete Ticket")
+              .setStyle(Discord.ButtonStyle.Secondary),
+            ),
+          ],
+          embeds: [
+            new Discord.EmbedBuilder()
+            .setColor(Utils.PhaseColour.Primary)
+            .setDescription(`Ticket locked by ${interaction.member}`)
+            .setTitle("Ticket Locked"),
+          ],
+        })
 
-          Utils.alertDevs({
-            title: 'Ticket Error',
-            description: `${error}`,
-            type: 'warning',
-          })
-
-          return Utils.clientError<true>(
-            interaction,
-            'Well, this is awkward..',
-            Utils.PhaseError.Unknown,
-            true,
-          )
-
-        }
-
+        ticketThread.setLocked(true)
       } break
 
 
-
-      case 'claim': {
-
-        const ticketsSchema = await Schemas.Tickets.findOne({ guild: interaction.guild.id })
-        if (!ticketsSchema) return
-
-        const ticketData = ticketsSchema.tickets.find(ticket => ticket.id == ticketId)
-        if (!ticketData) return
-
-        if (!(interaction.member as Discord.GuildMember).roles.cache.some(role => ticketData?.permissions?.access.includes(role.id))) return Utils.clientError(
-          interaction,
-          'Access Denied!',
-          Utils.PhaseError.AccessDenied,
-          true,
-        )
-
-        try {
-
-          await interaction.message.edit({
-            components: [
-              new Discord.ActionRowBuilder<Discord.ButtonBuilder>()
-              .setComponents(
-                new Discord.ButtonBuilder()
-                .setCustomId(`ticket-close-${ticketId}`)
-                .setEmoji(Utils.PhaseEmoji.Locked)
-                .setLabel('Close Ticket')
-                .setStyle(Discord.ButtonStyle.Secondary),
-                new Discord.ButtonBuilder()
-                .setCustomId(`ticket-claim-${ticketId}`)
-                .setDisabled(true)
-                .setEmoji(Utils.PhaseEmoji.Pin)
-                .setLabel('Claim Ticket')
-                .setStyle(Discord.ButtonStyle.Secondary),
-              )
-            ],
-          })
-  
-          await interaction.channel.send({
-            embeds: [
-              new Discord.EmbedBuilder()
-              .setColor(Utils.PhaseColour.Primary)
-              .setDescription(`${interaction.member} has claimed this ticket.`)
-              .setTitle(Utils.PhaseEmoji.Pin + 'Ticket Claimed')
-            ],
-          })
-  
-          await interaction.deferUpdate()
-
-        } catch (error) {
-
-          Utils.alertDevs({
-            title: 'Ticket Error',
-            description: `${error}`,
-            type: 'warning',
-          })
-
-          return Utils.clientError<true>(
-            interaction,
-            'Well, this is awkward..',
-            Utils.PhaseError.Unknown,
-            true,
-          )
-
-        }
-
-      } break
-
-
-
-      case 'delete': {
-
-        const ticketsSchema = await Schemas.Tickets.findOne({ guild: interaction.guild.id })
-        if (!ticketsSchema) return
-
-        const ticketData = ticketsSchema.tickets.find(ticket => ticket.id == ticketId)
-        if (!ticketData) return
+      case "unlock": {
+        const ticketThread = interaction.channel
+        const ticketData = ticketModule.tickets.find(ticket => ticket.id == ticketId)
 
         if (
-          ticketData.permissions?.locked?.delete &&
-          !(interaction.member as Discord.GuildMember).roles.cache.some(role => ticketData?.permissions?.access.includes(role.id))
-        ) return Utils.clientError(
-          interaction,
-          'Access Denied!',
-          Utils.PhaseError.AccessDenied,
-          true,
-        )
+          !ticketThread.isThread() ||
+          !ticketData
+        ) return Utils.moduleNotEnabled(interaction, "Tickets")
 
-        try {
-
-          await interaction.message.edit({
-            components: [
-              new Discord.ActionRowBuilder<Discord.ButtonBuilder>()
-              .setComponents(
-                new Discord.ButtonBuilder()
-                .setCustomId(`ticket-reopen-${ticketId}`)
-                .setDisabled(true)
-                .setEmoji(Utils.PhaseEmoji.Lock)
-                .setLabel('Reopen Ticket')
-                .setStyle(Discord.ButtonStyle.Secondary),
-                new Discord.ButtonBuilder()
-                .setCustomId(`ticket-delete-${ticketId}`)
-                .setDisabled(true)
-                .setEmoji(Utils.PhaseEmoji.Explode)
-                .setLabel('Delete Ticket')
-                .setStyle(Discord.ButtonStyle.Secondary),
-              )
-            ],
-          })
-  
-          const channel = interaction.channel as Discord.BaseGuildTextChannel
-  
-          await channel.send({
-            embeds: [
-              new Discord.EmbedBuilder()
-              .setColor(Utils.PhaseColour.Primary)
-              .setDescription(`${interaction.member} has deleted this ticket.\nThis may take a few seconds...`)
-              .setTitle(Utils.PhaseEmoji.Explode + 'Ticket Deleted')
-            ],
-          })
-  
+        if (!ticketThread.locked)
+          return interaction.reply(`${Utils.PhaseEmoji.Failure} You can't unlock an already unlocked ticket!`)
+        else
           await interaction.deferUpdate()
 
-          setTimeout(() => {
-            channel.delete().catch(() => {return})
-          }, 3000)
+        await ticketThread.setLocked(false)
 
-        } catch (error) {
-
-          Utils.alertDevs({
-            title: 'Ticket Error',
-            description: `${error}`,
-            type: 'warning',
-          })
-
-          return Utils.clientError<true>(
-            interaction,
-            'Well, this is awkward..',
-            Utils.PhaseError.Unknown,
-            true,
-          )
-
-        }
-
+        ticketThread.send({
+          components: [
+            new Discord.ActionRowBuilder<Discord.ButtonBuilder>()
+            .setComponents(
+              new Discord.ButtonBuilder()
+              .setCustomId(`ticket.lock.${ticketId}`)
+              .setEmoji("🔒")
+              .setLabel("Lock Ticket")
+              .setStyle(Discord.ButtonStyle.Secondary),
+            ),
+          ],
+          embeds: [
+            new Discord.EmbedBuilder()
+            .setColor(Utils.PhaseColour.Primary)
+            .setDescription(`Ticket unlocked by ${interaction.member}`)
+            .setTitle("Ticket Unlocked"),
+          ],
+        })
       } break
 
+
+      case "delete": {
+        const ticketThread = interaction.channel
+        const ticketData = ticketModule.tickets.find(ticket => ticket.id == ticketId)
+
+        if (
+          !ticketThread.isThread() ||
+          !ticketData
+        ) return Utils.moduleNotEnabled(interaction, "Tickets")
+
+        await interaction.deferUpdate()
+        await interaction.message.delete()
+
+        await ticketThread.send({
+          embeds: [
+            new Discord.EmbedBuilder()
+            .setColor(Utils.PhaseColour.Primary)
+            .setDescription(`Ticket deleted by ${interaction.member}`)
+            .setFooter({ text: "Thread will be deleted shortly..." })
+            .setTitle("Ticket Deleted"),
+          ],
+        })
+
+        setTimeout(() => ticketThread.delete(), 3 * 1000)
+      } break
     }
-    
   }
 })

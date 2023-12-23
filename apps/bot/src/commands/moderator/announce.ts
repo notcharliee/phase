@@ -45,7 +45,7 @@ export default Utils.clientSlashCommand({
           new Discord.EmbedBuilder()
             .setColor(Utils.PhaseColour.Primary)
             .setDescription('Announcement was created successfully.')
-            .setTitle(Utils.PhaseEmoji.Success + 'Announcement Sent')
+            .setTitle('Announcement Sent')
         ],
         ephemeral: true,
       })

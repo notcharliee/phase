@@ -38,7 +38,7 @@ export default Utils.clientButtonEvent({
             new Discord.EmbedBuilder()
               .setColor(Utils.PhaseColour.Primary)
               .setDescription(`#${interaction.channel.name} was successfully nuked.`)
-              .setTitle(Utils.PhaseEmoji.Success + 'Channel Nuked')
+              .setTitle('Channel Nuked')
           ]
         })
 
@@ -70,7 +70,7 @@ export default Utils.clientButtonEvent({
           new Discord.EmbedBuilder()
             .setColor(Utils.PhaseColour.Primary)
             .setDescription(`Aborted channel nuke. Phew!`)
-            .setTitle(Utils.PhaseEmoji.Success + 'Nuke Aborted')
+            .setTitle('Nuke Aborted')
         ],
       })
 

@@ -8,7 +8,7 @@ export default Utils.clientButtonEvent({
   async execute(client, interaction) {
 
     const buttonIndex = Number(interaction.customId.split('.')[1]) - 1
-    const gameSchema = await Schemas.Games.findOne({ message: interaction.message.id, type: Utils.GameType.TicTacToe })
+    const gameSchema = await Schemas.GameSchema.findOne({ id: interaction.message.id, type: "TICTACTOE" })
 
 
     // If no schema, return unknown error.
@@ -23,7 +23,7 @@ export default Utils.clientButtonEvent({
     
     // If user is not in game, return access denied error.
 
-    if (!gameSchema.participants.includes(interaction.user.id)) return Utils.clientError(
+    if (!gameSchema.players.includes(interaction.user.id)) return Utils.clientError(
       interaction,
       'Access Denied!',
       `You are not a member of this game. To start a new game, run \`/tictactoe\`.`,
@@ -33,10 +33,10 @@ export default Utils.clientButtonEvent({
 
     // If user is not current turn, return no can do error.
 
-    const currentTurn = gameSchema.gameData.currentTurn
-    const moves = gameSchema.gameData.moves
+    const currentTurn = gameSchema.game_data.current_turn
+    const moves = gameSchema.game_data.moves
 
-    if (currentTurn.participant != interaction.user.id) return Utils.clientError(
+    if (currentTurn.player != interaction.user.id) return Utils.clientError(
       interaction,
       'No can do!',
       `Please wait your turn.`,
@@ -54,7 +54,7 @@ export default Utils.clientButtonEvent({
     moves[buttonIndex] = currentTurn.marker
 
     const winningMoves = checkWinner(moves)
-    const winner = winningMoves ? currentTurn.participant : null
+    const winner = winningMoves ? currentTurn.player : null
 
     const gameTied = moves.every((move) => move != Utils.PhaseEmoji.ZeroWidthJoiner)
 
@@ -65,7 +65,7 @@ export default Utils.clientButtonEvent({
     else {
       
       currentTurn.marker = currentTurn.marker == Utils.PhaseEmoji.Cross ? Utils.PhaseEmoji.Naught : Utils.PhaseEmoji.Cross
-      currentTurn.participant = gameSchema.participants.find(participant => participant != interaction.user.id) || currentTurn.participant
+      currentTurn.player = gameSchema.players.find(player => player != interaction.user.id) || currentTurn.player
 
       gameSchema.markModified('gameData')
       await gameSchema.save()
@@ -75,7 +75,7 @@ export default Utils.clientButtonEvent({
 
     // Update message data.
 
-    const regularDescription = winner ? `<@${winner}> has won!` : `<@${currentTurn.participant}> it's your go. Make a move!`
+    const regularDescription = winner ? `<@${winner}> has won!` : `<@${currentTurn.player}> it's your go. Make a move!`
     const tiedDescription = gameTied ? 'Game is tied! Nobody wins.' : null
 
     const button = (index: number) => {
