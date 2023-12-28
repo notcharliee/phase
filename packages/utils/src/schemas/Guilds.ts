@@ -24,10 +24,10 @@ export type Guild = {
   admins: string[],
   commands: Record<string, GuildCommand>,
   modules: {
-    AuditLog: GuildModuleAuditLogs,
-    AutoPartner: GuildModuleAutoPartners,
-    AutoRole: GuildModuleAutoRoles,
-    JoinToCreate: GuildModuleJoinToCreates,
+    AuditLogs: GuildModuleAuditLogs,
+    AutoPartners: GuildModuleAutoPartners,
+    AutoRoles: GuildModuleAutoRoles,
+    JoinToCreates: GuildModuleJoinToCreates,
     Levels: GuildModuleLevels,
     ReactionRoles: GuildModuleReactionRoles,
     Tickets: GuildModuleTickets,
@@ -69,7 +69,6 @@ export type GuildModuleAutoPartners = {
 export type GuildModuleAutoRoles = {
   enabled: boolean,
   roles: string[],
-  pending: boolean,
 }
 
 export type GuildModuleJoinToCreates = {

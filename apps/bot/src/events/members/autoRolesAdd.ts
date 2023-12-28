@@ -9,7 +9,7 @@ export default Utils.clientEvent({
     if (member.guild.features.includes(Discord.GuildFeature.MemberVerificationGateEnabled)) return
 
     const guildSchema = await Schemas.GuildSchema.findOne({ id: member.guild.id })
-    const autoRolesModule = guildSchema?.modules.AutoRole
+    const autoRolesModule = guildSchema?.modules.AutoRoles
     if (!autoRolesModule?.enabled) return
 
     for (const role of autoRolesModule.roles) {

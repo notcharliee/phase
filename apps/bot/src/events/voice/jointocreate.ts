@@ -8,7 +8,7 @@ export default Utils.clientEvent({
   async execute(client, oldVoice, newVoice) {
     try {
       const guildSchema = await Schemas.GuildSchema.findOne({ id: oldVoice.guild.id })
-      const joinToCreateModule = guildSchema?.modules.JoinToCreate
+      const joinToCreateModule = guildSchema?.modules.JoinToCreates
       if (!guildSchema || !joinToCreateModule?.enabled) return
 
       if ( // If...
@@ -18,7 +18,7 @@ export default Utils.clientEvent({
       ) { // Delete old jtc channel and update database.
         oldVoice.channel.delete()
 
-        guildSchema.modules.JoinToCreate.active.splice(joinToCreateModule.active.indexOf(oldVoice.channel.id), 1)
+        guildSchema.modules.JoinToCreates.active.splice(joinToCreateModule.active.indexOf(oldVoice.channel.id), 1)
         guildSchema.markModified("modules")
         guildSchema.save()
       }
@@ -34,7 +34,7 @@ export default Utils.clientEvent({
 
         newVoice.setChannel(newVoiceChannel)
 
-        guildSchema.modules.JoinToCreate.active.push(newVoiceChannel.id)
+        guildSchema.modules.JoinToCreates.active.push(newVoiceChannel.id)
         guildSchema.markModified("modules")
         guildSchema.save()
       }

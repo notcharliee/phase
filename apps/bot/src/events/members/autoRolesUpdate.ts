@@ -13,7 +13,7 @@ export default Utils.clientEvent({
     ) return // Return early
 
     const guildSchema = await Schemas.GuildSchema.findOne({ id: newMember.guild.id })
-    const autoRolesModule = guildSchema?.modules.AutoRole
+    const autoRolesModule = guildSchema?.modules.AutoRoles
     if (!autoRolesModule?.enabled) return
 
     for (const role of autoRolesModule.roles) {
