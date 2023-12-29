@@ -1,4 +1,8 @@
 {
+	"guildSchema": {
+		"prefix": "guildSchema",
+		"body": "const guildSchema = await Schemas.GuildSchema.findOne({ id: $1 })"
+	},
 	"Phase Command": {
 		"prefix": "phase-command",
 		"body": [

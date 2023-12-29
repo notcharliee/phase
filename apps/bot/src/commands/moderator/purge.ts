@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('purge')
     .setDescription('Purges up to 100 messages from the channel at a time.')
@@ -37,7 +37,7 @@ export default Utils.Functions.clientSlashCommand({
 
     const deletedMessages = await channel.bulkDelete(fetchedMessages, true)
 
-    if (!deletedMessages.size) return Utils.Functions.clientError(
+    if (!deletedMessages.size) return Utils.clientError(
       interaction,
       'No can do!',
       'No messages were found.'
@@ -46,9 +46,9 @@ export default Utils.Functions.clientSlashCommand({
     interaction.reply({
       embeds: [
         new Discord.EmbedBuilder()
-          .setColor(Utils.Enums.PhaseColour.Primary)
+          .setColor(Utils.PhaseColour.Primary)
           .setDescription(`Purged **${deletedMessages.size}** messages in total` + `${author ? ` sent by ${author}` : '.'}`)
-          .setTitle(Utils.Enums.PhaseEmoji.Success + 'Purge Successful')
+          .setTitle('Purge Successful')
       ],
     })
 

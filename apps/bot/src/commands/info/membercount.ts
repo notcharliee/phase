@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('membercount')
     .setDescription('Displays the server member count.')
@@ -13,7 +13,7 @@ export default Utils.Functions.clientSlashCommand({
     interaction.reply({
       embeds: [
         new Discord.EmbedBuilder()
-          .setColor(Utils.Enums.PhaseColour.Primary)
+          .setColor(Utils.PhaseColour.Primary)
           .setDescription(`This server has ${interaction.guild!.memberCount} total members.`)
           .setThumbnail(interaction.guild!.iconURL())
           .setTitle(interaction.guild!.name)

@@ -1,55 +1,45 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientEvent({
+export default Utils.clientEvent({
   name: 'voiceStateUpdate',
   async execute(client, oldVoice, newVoice) {
+    try {
+      const guildSchema = await Schemas.GuildSchema.findOne({ id: oldVoice.guild.id })
+      const joinToCreateModule = guildSchema?.modules.JoinToCreates
+      if (!guildSchema || !joinToCreateModule?.enabled) return
 
-    const joinToCreateSchema = await Schemas.JoinToCreate.findOne({ guild: oldVoice.guild.id })
+      if ( // If...
+        oldVoice.channel && // User was in a channel before update AND...
+        joinToCreateModule.active.includes(oldVoice.channel.id) && // The channel was a jtc channel AND...
+        (!oldVoice.channel.members.size || oldVoice.channel.members.every(member => member.user.bot)) // There's no members left OR the only members left are bots...
+      ) { // Delete old jtc channel and update database.
+        oldVoice.channel.delete()
 
-    if (!joinToCreateSchema) return
-    if (!joinToCreateSchema.channel || joinToCreateSchema.channel == '0') return
-
-
-    // If user was in channel before current channel and channel was a JTC subchannel and theres no members in it:
-
-    if (oldVoice.channel && joinToCreateSchema.active.includes(oldVoice.channel.id) && (!oldVoice.channel.members.size || oldVoice.channel.members.every(member => member.user.bot))) {
-
-      oldVoice.channel.delete(`@${newVoice.member?.displayName} left Phase's Join to Create voice channel ('${joinToCreateSchema.channel}') and there were no members left`)
-
-      joinToCreateSchema.active.splice(joinToCreateSchema.active.indexOf(oldVoice.channel.id), 1)
-      joinToCreateSchema.save()
-
-    }
-
-
-    // If current channel is main JTC channel:
-
-    if (newVoice.channelId == joinToCreateSchema.channel) {
-
-      const parent = joinToCreateSchema.category && joinToCreateSchema.category != '0' ? joinToCreateSchema.category : newVoice.channel?.parentId
-
-      const newVoiceChannel = await newVoice.guild.channels.create({
-        name: newVoice.member?.displayName || 'voice channel',
-        type: Discord.ChannelType.GuildVoice,
-        topic: `${newVoice.member?.displayName}'s voice channel - Created by Phase`,
-        reason: `${newVoice.member?.displayName} joined Phase's Join to Create voice channel ('${joinToCreateSchema.channel}')`,
-        parent,
-      })
-
-
-      // If bot has perms to move members:
-
-      if ((await newVoice.guild.members.fetchMe()).permissions.has('MoveMembers')) {
-        newVoice.setChannel(newVoiceChannel.id, `${newVoice.member?.displayName} joined Phase's Join to Create voice channel ('${joinToCreateSchema.channel}')`)
+        guildSchema.modules.JoinToCreates.active.splice(joinToCreateModule.active.indexOf(oldVoice.channel.id), 1)
+        guildSchema.markModified("modules")
+        guildSchema.save()
       }
 
-      joinToCreateSchema.active.push(newVoiceChannel.id)
-      joinToCreateSchema.save()
+      if ( // If...
+        newVoice.channelId == joinToCreateModule.channel // New channel is the jtc base channel...
+      ) { // Create new jtc channel, move member, and update database.
+        const newVoiceChannel = await newVoice.guild.channels.create({
+          name: newVoice.member?.displayName ?? "voice channel",
+          type: Discord.ChannelType.GuildVoice,
+          parent: joinToCreateModule.category,
+        })
 
+        newVoice.setChannel(newVoiceChannel)
+
+        guildSchema.modules.JoinToCreates.active.push(newVoiceChannel.id)
+        guildSchema.markModified("modules")
+        guildSchema.save()
+      }
+    } catch (error) {
+      throw error
     }
-    
   }
 })

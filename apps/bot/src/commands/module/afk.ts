@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('afk')
     .setDescription('Set your AFK status.')
@@ -15,31 +15,25 @@ export default Utils.Functions.clientSlashCommand({
       .setRequired(false)
     ),
   async execute(client, interaction) {
-    
     const reason = interaction.options.getString('reason', false) ?? 'No reason set.'
 
-    const AFKsSchema = await Schemas.AFKs.findOne({ guild: interaction.guildId, user: interaction.user.id })
+    const AFKSchema = await Schemas.AFKSchema.findOne({ user: interaction.user.id })
 
-    if (AFKsSchema) {
-
-      AFKsSchema.reason = reason
-
-      await AFKsSchema.save()
-
-    } else await new Schemas.AFKs({
-      guild: interaction.guildId,
+    if (AFKSchema) {
+      AFKSchema.reason = reason
+      await AFKSchema.save()
+    } else await new Schemas.AFKSchema({
       user: interaction.user.id,
-      reason 
+      reason,
     }).save()
 
     interaction.reply({
       embeds: [
         new Discord.EmbedBuilder()
-        .setColor(Utils.Enums.PhaseColour.Primary)
+        .setColor(Utils.PhaseColour.Primary)
         .setDescription(reason)
-        .setTitle(Utils.Enums.PhaseEmoji.Success + 'Updated your AFK status')
+        .setTitle('AFK Status Changed')
       ],
     })
-    
   }
 })

@@ -5,7 +5,6 @@ import { Command } from "commander"
 import { spawn } from "child_process"
 import { pathToFileURL } from 'url'
 import { getEnvVariables } from "./index.js"
-import { copyFileSync } from 'fs'
 import { resolve } from "path"
 import packageJson from "../package.json"
 import chalk from 'chalk'
@@ -108,9 +107,8 @@ cli.parse(process.argv)
  */
 function spawnChildProcess(command: string, cwd: string) {
   const globalEnvVariables = getEnvVariables(resolve(cwd, "..", "..", ".env"))
-  if (globalEnvVariables) copyFileSync(resolve(cwd, "..", "..", ".env"), resolve(cwd, ".env.local"))
 
-  process.env = { ...globalEnvVariables, ...process.env } ?? process.env
+  process.env = globalEnvVariables ? { ...globalEnvVariables, ...process.env } : process.env
   process.env.FORCE_COLOR = "true"
 
   const [ cmd, ...args ] = command.split(" ")

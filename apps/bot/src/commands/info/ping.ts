@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('ping')
     .setDescription('Calculates the current bot latency metrics.'),
@@ -18,7 +18,7 @@ export default Utils.Functions.clientSlashCommand({
     interaction.editReply({
       embeds: [
         new Discord.EmbedBuilder()
-          .setColor(Utils.Enums.PhaseColour.Primary)
+          .setColor(Utils.PhaseColour.Primary)
           .setDescription(`Command Latency: ${commandLatency}ms\nDiscord API Latency: ${apiLatency}ms\n\nLast Reboot: ${rebootTimestamp}`)
           .setTitle('Pong! 🏓')
       ],

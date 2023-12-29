@@ -1,53 +1,46 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientEvent({
+export default Utils.clientEvent({
   name: 'messageCreate',
   async execute(client, message) {
-    
-    if (!client.user) return
-    if (!message.guild) return
+    if (!message.inGuild()) return
 
-    const AFKsSchema = await Schemas.AFKs.findOne({ guild: message.guildId, user: message.author.id })
+    const AFKSchema = await Schemas.AFKSchema.findOne({ user: message.author.id })
 
-    if (AFKsSchema) {
-
-      await AFKsSchema.deleteOne()
+    if (AFKSchema) {
+      await AFKSchema.deleteOne()
 
       message.reply({
         embeds: [
           new Discord.EmbedBuilder()
-          .setColor(Utils.Enums.PhaseColour.Primary)
+          .setColor(Utils.PhaseColour.Primary)
           .setDescription('Your AFK status has been updated to **false**.')
           .setTitle('AFK Status Changed')
         ],
       })
-
     } else {
-
-      const mentionedMembers = message.mentions.users.map(usr => usr.id)
-
+      const mentionedMembers = message.mentions.users.map(user => user.id)
       if (!mentionedMembers) return
 
       for (const mentionedMember of mentionedMembers) {
+        const mentionAFKSchema = await Schemas.AFKSchema.findOne({ user: mentionedMember })
 
-        const mentionSchema = await Schemas.AFKs.findOne({ guild: message.guild.id, user: mentionedMember })
-        const memberName = await message.guild.members.fetch(mentionedMember)
+        if (mentionAFKSchema) {
+          const memberName = await message.guild.members.fetch(mentionedMember)
 
-        if (mentionSchema) message.reply({
-          embeds: [
-            new Discord.EmbedBuilder()
-            .setColor(Utils.Enums.PhaseColour.Primary)
-            .setDescription(mentionSchema.reason)
-            .setTitle(`${memberName.displayName} is currently AFK`)
-          ],
-        })
-
+          message.reply({
+            embeds: [
+              new Discord.EmbedBuilder()
+              .setColor(Utils.PhaseColour.Primary)
+              .setDescription(mentionAFKSchema.reason)
+              .setTitle(`${memberName.displayName} is currently AFK`)
+            ],
+          })
+        }
       }
-
     }
-    
   }
 })

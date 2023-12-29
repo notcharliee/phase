@@ -1,7 +1,3 @@
-export enum GameType {
-  TicTacToe = "TICTACTOE",
-}
-
 export enum PhaseColour {
   Failure = "#ED4245",
   GradientPrimary = "#8000FF",

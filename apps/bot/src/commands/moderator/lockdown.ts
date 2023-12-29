@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('lock')
     .setDescription('Locks and unlocks a channel.')
@@ -29,7 +29,7 @@ export default Utils.Functions.clientSlashCommand({
     const state = interaction.options.getBoolean('state', true)
     const role = interaction.options.getRole('role', false)
 
-    if (channel.isThread()) return Utils.Functions.clientError(
+    if (channel.isThread()) return Utils.clientError(
       interaction,
       'No can do!',
       'This command cannot be used in threads.'
@@ -43,9 +43,9 @@ export default Utils.Functions.clientSlashCommand({
       interaction.reply({
         embeds: [
           new Discord.EmbedBuilder()
-            .setColor(Utils.Enums.PhaseColour.Primary)
+            .setColor(Utils.PhaseColour.Primary)
             .setDescription(`Channel has been locked for ${role ?? '@everyone'}.`)
-            .setTitle(Utils.Enums.PhaseEmoji.Locked + 'Channel Locked')
+            .setTitle(Utils.PhaseEmoji.Locked + 'Channel Locked')
         ],
       })
 
@@ -57,9 +57,9 @@ export default Utils.Functions.clientSlashCommand({
       interaction.reply({
         embeds: [
           new Discord.EmbedBuilder()
-            .setColor(Utils.Enums.PhaseColour.Primary)
+            .setColor(Utils.PhaseColour.Primary)
             .setDescription(`Channel has been unlocked for ${role ?? '@everyone'}.`)
-            .setTitle(Utils.Enums.PhaseEmoji.Lock + 'Channel Unlocked')
+            .setTitle(Utils.PhaseEmoji.Lock + 'Channel Unlocked')
         ],
       })
 

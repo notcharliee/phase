@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('tag')
     .setDescription('tag')
@@ -78,7 +78,7 @@ export default Utils.Functions.clientSlashCommand({
   },
   async execute(client, interaction) {
 
-    const tagsSchema = await Schemas.Tags.findOne({ guild: interaction.guildId }) ?? await new Schemas.Tags({
+    const tagSchema = await Schemas.TagSchema.findOne({ guild: interaction.guildId }) ?? await new Schemas.TagSchema({
       guild: interaction.guildId,
       tags: []
     }).save()
@@ -89,27 +89,27 @@ export default Utils.Functions.clientSlashCommand({
 
         const tagName = interaction.options.getString('name', true)
         const tagValue = interaction.options.getString('value', true)
-        const tagIndex = tagsSchema.tags.findIndex(tag => tag.name == tagName)
+        const tagIndex = tagSchema.tags.findIndex(tag => tag.name == tagName)
 
-        if (tagIndex != -1) return Utils.Functions.clientError(
+        if (tagIndex != -1) return Utils.clientError(
           interaction,
           'No can do!',
           'A tag already exists with that name.'
         )
 
-        tagsSchema.tags.push({
+        tagSchema.tags.push({
           name: tagName,
           value: tagValue,
         })
 
-        tagsSchema.save()
+        tagSchema.save()
 
         interaction.reply({
           embeds: [
             new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`Added tag \`${tagName}\` to the server.`)
-              .setTitle(Utils.Enums.PhaseEmoji.Success + 'Tag Added')
+              .setTitle('Tag Added')
           ],
         })
 
@@ -121,35 +121,35 @@ export default Utils.Functions.clientSlashCommand({
 
         const tagName = interaction.options.getString('name', true)
         const tagValue = interaction.options.getString('value', true)
-        const tagIndex = tagsSchema.tags.findIndex(tag => tag.name == tagName)
+        const tagIndex = tagSchema.tags.findIndex(tag => tag.name == tagName)
 
-        if (tagIndex == -1) return Utils.Functions.clientError(
+        if (tagIndex == -1) return Utils.clientError(
           interaction,
           'No can do!',
           'No tag exists with that name.'
         )
 
-        const tagBeforeValue = tagsSchema.tags[tagIndex].value
+        const tagBeforeValue = tagSchema.tags[tagIndex].value
 
-        tagsSchema.tags.splice(tagIndex, 1)
+        tagSchema.tags.splice(tagIndex, 1)
 
-        tagsSchema.tags.push({
+        tagSchema.tags.push({
           name: tagName,
           value: tagValue,
         })
 
-        tagsSchema.save()
+        tagSchema.save()
 
         interaction.reply({
           embeds: [
             new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`Edited tag \`${tagName}\`.`)
               .setFields([
                 { name: 'Before Value', value: tagBeforeValue },
                 { name: 'After Value', value: tagValue },
               ])
-              .setTitle(Utils.Enums.PhaseEmoji.Success + 'Tag Edited')
+              .setTitle('Tag Edited')
           ],
         })
 
@@ -159,9 +159,9 @@ export default Utils.Functions.clientSlashCommand({
 
       case 'get': {
 
-        const tag = tagsSchema.tags.find(tag => tag.name == interaction.options.getString('name', true))
+        const tag = tagSchema.tags.find(tag => tag.name == interaction.options.getString('name', true))
 
-        if (!tag) return Utils.Functions.clientError(
+        if (!tag) return Utils.clientError(
           interaction,
           'No can do!',
           'No tag exists with that name.'
@@ -175,14 +175,14 @@ export default Utils.Functions.clientSlashCommand({
 
       case 'list': {
 
-        const embedDescription = tagsSchema.tags.map(tag => `${tag.name}`).toString().replaceAll(',', ', ')
+        const embedDescription = tagSchema.tags.map(tag => `${tag.name}`).toString().replaceAll(',', ', ')
 
         interaction.reply({
           embeds: [
             new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(embedDescription.length ? embedDescription : 'No tags found.')
-              .setTitle(`Tag List (${tagsSchema.tags.length})`)
+              .setTitle(`Tag List (${tagSchema.tags.length})`)
           ],
         })
 
@@ -193,24 +193,24 @@ export default Utils.Functions.clientSlashCommand({
       case 'remove': {
 
         const tagName = interaction.options.getString('name', true)
-        const tagIndex = tagsSchema.tags.findIndex(tag => tag.name == tagName)
+        const tagIndex = tagSchema.tags.findIndex(tag => tag.name == tagName)
 
-        if (tagIndex == -1) return Utils.Functions.clientError(
+        if (tagIndex == -1) return Utils.clientError(
           interaction,
           'No can do!',
           'Could not find a tag by that name.'
         )
 
-        tagsSchema.tags.splice(tagIndex, 1)
+        tagSchema.tags.splice(tagIndex, 1)
 
-        tagsSchema.save()
+        tagSchema.save()
 
         interaction.reply({
           embeds: [
             new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`Removed tag \`${tagName}\` from the server.`)
-              .setTitle(Utils.Enums.PhaseEmoji.Success + 'Tag Removed')
+              .setTitle('Tag Removed')
           ],
         })
 

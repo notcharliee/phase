@@ -1,29 +1,23 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientEvent({
+export default Utils.clientEvent({
   name: 'ready',
   async execute(client) {
-
-    cacheMessages()
+    const guildSchemas = await Schemas.GuildSchema.find()
     
-    async function cacheMessages() {
-      const reactionRolesSchemas = await Schemas.ReactionRoles.find()
-      
-      for (const schema of reactionRolesSchemas) {
+    // Cache reaction roles messages
+    for (const guildSchema of guildSchemas) {
+      const reactionRolesModule = guildSchema.modules.ReactionRoles
+      if (!reactionRolesModule.enabled) continue
 
-        const { guild, channel, message } = schema
+      const channel = client.channels.cache.get(`${reactionRolesModule.channel}`)
+      if (!channel || !channel.isTextBased()) continue
 
-        const fetchedChannel = client.channels.cache.get(`${channel}`)
-        if (!fetchedChannel || !fetchedChannel.isTextBased()) return Schemas.ReactionRoles.deleteOne({ channel, guild, message })
-
-        const fetchedMessage = await fetchedChannel.messages.fetch(`${message}`).catch(() => {return})
-        if (!fetchedMessage) return Schemas.ReactionRoles.deleteOne({ channel, guild, message })
-
-      }
+      const fetchedMessage = await channel.messages.fetch(reactionRolesModule.message)
+      if (!fetchedMessage) continue
     }
-    
   }
 })

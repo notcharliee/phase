@@ -1,16 +1,16 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientButtonEvent({
+export default Utils.clientButtonEvent({
   customId: /embedbuilder\.(author|body|image|footer|send)/,
   async execute(client, interaction) {
 
-    if (interaction.user.id != interaction.message.interaction?.user.id) return Utils.Functions.clientError(
+    if (interaction.user.id != interaction.message.interaction?.user.id) return Utils.clientError(
       interaction,
       'Access Denied!',
-      Utils.Enums.PhaseError.AccessDenied,
+      Utils.PhaseError.AccessDenied,
       true
     )
 

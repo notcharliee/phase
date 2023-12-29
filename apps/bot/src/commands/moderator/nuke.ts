@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('nuke')
     .setDescription('Deletes the current channel and creates an exact copy with no messages.')
@@ -15,7 +15,7 @@ export default Utils.Functions.clientSlashCommand({
 
     if (!interaction.channel) return
 
-    if (interaction.channel.isThread()) return Utils.Functions.clientError(
+    if (interaction.channel.isThread()) return Utils.clientError(
       interaction,
       'No can do!',
       'This command cannot be used in threads.'

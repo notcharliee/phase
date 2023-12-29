@@ -9,6 +9,9 @@ interface PhaseConfig {
         dev?: string;
     }[];
 }
+/**
+ * @returns Readonly object with string-typed environment variables.
+ */
 declare const createEnv: <T>(env: T) => Readonly<{ [K in keyof T]: string; }>;
 /**
  * Readonly object with string-typed environment variables.

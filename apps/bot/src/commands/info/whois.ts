@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('whois')
     .setDescription('Displays member data in an embed.')
@@ -18,17 +18,38 @@ export default Utils.Functions.clientSlashCommand({
 
     const member = interaction.options.getMember('member') as Discord.GuildMember || null
 
-    if (!member) return Utils.Functions.clientError(
+    if (!member) return Utils.clientError(
       interaction,
       'No can do!',
-      Utils.Enums.PhaseError.MemberNotFound
+      Utils.PhaseError.MemberNotFound
     )
 
+    const keyPermissionsArray = [
+      'Administrator',
+      'ManageGuild',
+      'ManageRoles',
+      'ManageChannels',
+      'ManageMessages',
+      'ManageWebhooks',
+      'ManageNicknames',
+      'ManageEmojisAndStickers',
+      'ManageEvents',
+      'KickMembers',
+      'BanMembers',
+      'MentionEveryone',
+      'MuteMembers',
+      'DeafenMembers',
+      'PrioritySpeaker',
+      'MoveMembers',
+      'ManageEvents',
+      'ManageThreads',
+      'ModerateMembers',
+      'ViewCreatorMonetizationAnalytics',
+      'ViewAuditLog',
+    ]
 
-    const keyPermissionsArray = Utils.Constants.keyPermissionsArray
-
-    const memberPermissions = member.permissions.serialize(true) // @ts-ignore
-    const permissionsArray = keyPermissionsArray.filter(permission => memberPermissions[permission])
+    const memberPermissions = member.permissions.serialize(true)
+    const permissionsArray = keyPermissionsArray.filter(permission => memberPermissions[permission as keyof Discord.PermissionResolvable])
 
 
     interaction.reply({
@@ -38,18 +59,18 @@ export default Utils.Functions.clientSlashCommand({
             iconURL: member.displayAvatarURL(),
             name: member.displayName
           })
-          .setColor(Utils.Enums.PhaseColour.Primary)
+          .setColor(Utils.PhaseColour.Primary)
           .setDescription(`${member}`)
           .setFields([
             {
               inline: true,
               name: 'Joined',
-              value: member.joinedAt ? Utils.Functions.formatDate(member.joinedAt) : 'Unknown',
+              value: member.joinedAt ? Utils.formatDate(member.joinedAt) : 'Unknown',
             },
             {
               inline: true,
               name: 'Registered',
-              value: Utils.Functions.formatDate(member.user.createdAt),
+              value: Utils.formatDate(member.user.createdAt),
             },
             {
               inline: false,

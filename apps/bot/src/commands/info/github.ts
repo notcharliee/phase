@@ -1,11 +1,11 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 import axios from 'axios'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('github')
     .setDescription('Fetches info about a GitHub repository.')
@@ -37,7 +37,7 @@ export default Utils.Functions.clientSlashCommand({
         embeds: [
           new Discord.EmbedBuilder()
           .setAuthor({ name: githubRepoData.owner.login, iconURL: githubRepoData.owner.avatar_url, url: githubRepoData.owner.html_url })
-          .setColor(Utils.Enums.PhaseColour.Primary)
+          .setColor(Utils.PhaseColour.Primary)
           .setDescription(`${githubRepoData.description}\n\n**Language:** ${githubRepoData.language ?? 'None'}\n**Issues:** ${githubRepoData.open_issues}\n**Forks:** ${githubRepoData.forks}\n**Stars:** ${githubRepoData.stargazers_count}\n**License:** ${githubRepoData.license ? githubRepoData.license.name : 'None'}\n**Created:** <t:${Math.floor(new Date(githubRepoData.created_at).getTime() / 1000)}:R>`)
           .setThumbnail(githubRepoData.owner.avatar_url)
           .setTitle(githubRepoData.name)
@@ -47,7 +47,7 @@ export default Utils.Functions.clientSlashCommand({
 
     } catch {
 
-      return Utils.Functions.clientError<true>(
+      return Utils.clientError<true>(
         interaction,
         'No can do!',
         `Could not find GitHub repo with name \`${user}/${repo}\`.`,

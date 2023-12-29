@@ -1,9 +1,9 @@
 import * as Discord from 'discord.js'
-import * as Utils from '@repo/utils/bot'
+import * as Utils from '#src/utils/index.js'
 import * as Schemas from '@repo/utils/schemas'
 
 
-export default Utils.Functions.clientSlashCommand({
+export default Utils.clientSlashCommand({
   data: new Discord.SlashCommandBuilder()
     .setName('giveaway')
     .setDescription('giveaway')
@@ -121,35 +121,33 @@ export default Utils.Functions.clientSlashCommand({
           embeds: [
             new Discord.EmbedBuilder()
             .setAuthor({ iconURL: host.displayAvatarURL(), name: `Hosted by ${host.displayName}` })
-            .setColor(Utils.Enums.PhaseColour.Primary)
-            .setDescription(`React with ${Utils.Enums.PhaseEmoji.Tada} to enter!\nGiveaway ends: <t:${Math.floor(expires / 1000)}:R>`)
+            .setColor(Utils.PhaseColour.Primary)
+            .setDescription(`React with ${Utils.PhaseEmoji.Tada} to enter!\nGiveaway ends: <t:${Math.floor(expires / 1000)}:R>`)
             .setFooter({ text: `ID: ${created}` })
             .setTitle(`${prize}`)
           ],
         })
 
-        await giveawayMessage.react(Utils.Enums.PhaseEmoji.Tada)
+        await giveawayMessage.react(Utils.PhaseEmoji.Tada)
 
-        await new Schemas.Giveaways({
-          guild: interaction.guildId,
-          message: giveawayMessage.id,
+        await new Schemas.GiveawaySchema({
+          id: giveawayMessage.id,
           channel: interaction.channelId,
           created,
           host: host.id,
-          entries: [],
           winners,
           prize,
-          expires,
           duration,
+          expires,
           expired: false,
         }).save()
 
         interaction.editReply({
           embeds: [
             new Discord.EmbedBuilder()
-            .setColor(Utils.Enums.PhaseColour.Primary)
+            .setColor(Utils.PhaseColour.Primary)
             .setDescription(`**Prize:** ${prize}\n**Winners:** ${winners}\n**Duration:** <t:${Math.floor(expires / 1000)}:R>`)
-            .setTitle(Utils.Enums.PhaseEmoji.Success + 'Giveaway Created')
+            .setTitle('Giveaway Created')
           ]
         })
 
@@ -165,9 +163,9 @@ export default Utils.Functions.clientSlashCommand({
 
         const id = interaction.options.getString('id', true)
 
-        const giveawaySchema = await Schemas.Giveaways.findOne({ guild: interaction.guildId, created: id })
+        const giveawaySchema = await Schemas.GiveawaySchema.findOne({ guild: interaction.guildId, created: id })
 
-        if (!giveawaySchema) return Utils.Functions.clientError<true>(
+        if (!giveawaySchema) return Utils.clientError<true>(
           interaction,
           'No can do!',
           `Giveaway not found! Make sure you have the correct ID and try again.`,
@@ -178,7 +176,7 @@ export default Utils.Functions.clientSlashCommand({
 
         try {
 
-          const giveawayMessage = await giveawayChannel?.messages.fetch(giveawaySchema.message)
+          const giveawayMessage = await giveawayChannel?.messages.fetch(giveawaySchema.id)
 
           await giveawayMessage?.delete()
           await giveawaySchema.deleteOne()
@@ -186,15 +184,15 @@ export default Utils.Functions.clientSlashCommand({
           interaction.editReply({
             embeds: [
               new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`Giveaway with ID of \`${id}\` has been deleted.`)
-              .setTitle(Utils.Enums.PhaseEmoji.Success + 'Giveaway Deleted')
+              .setTitle('Giveaway Deleted')
             ]
           })
 
         } catch {
 
-          return Utils.Functions.clientError<true>(
+          return Utils.clientError<true>(
             interaction,
             'No can do!',
             `Failed to delete giveaway message. Make sure both the message and channel still exist, and that Phase has access to them, then try again.`,
@@ -216,9 +214,9 @@ export default Utils.Functions.clientSlashCommand({
         const id = interaction.options.getString('id', true)
         const amount = interaction.options.getInteger('amount', false)
 
-        const giveawaySchema = await Schemas.Giveaways.findOne({ guild: interaction.guildId, created: id, expired: true })
+        const giveawaySchema = await Schemas.GiveawaySchema.findOne({ guild: interaction.guildId, created: id, expired: true })
 
-        if (!giveawaySchema) return Utils.Functions.clientError<true>(
+        if (!giveawaySchema) return Utils.clientError<true>(
           interaction,
           'No can do!',
           `No expired giveaway was found. Make sure you have the correct ID and try again.`,
@@ -231,7 +229,7 @@ export default Utils.Functions.clientSlashCommand({
 
           await giveawaySchema.deleteOne()
 
-          return Utils.Functions.clientError<true>(
+          return Utils.clientError<true>(
             interaction,
             'No can do!',
             `No expired giveaway was found. Make sure you have the correct ID and try again.`,
@@ -242,26 +240,26 @@ export default Utils.Functions.clientSlashCommand({
 
         try {
 
-          const giveawayMessage = await giveawayChannel.messages.fetch(giveawaySchema.message)
+          const giveawayMessage = await giveawayChannel.messages.fetch(giveawaySchema.id)
           const giveawayHost = await giveawayChannel.guild.members.fetch(giveawaySchema.host)
 
           const giveawayWinners = giveawaySchema.winners
           const giveawayRerollAmount = amount ?? giveawayWinners
 
-          if (giveawayRerollAmount > giveawayWinners) return Utils.Functions.clientError<true>(
+          if (giveawayRerollAmount > giveawayWinners) return Utils.clientError<true>(
             interaction,
             'No can do!',
             `Reroll amount cannot be bigger than number of giveaway max winners (${giveawayWinners}).`,
             true,
           )
   
-          const giveawayReaction = giveawayMessage.reactions.cache.get(Utils.Enums.PhaseEmoji.Tada.split(':')[2].replace('>', ''))
+          const giveawayReaction = giveawayMessage.reactions.cache.get(Utils.PhaseEmoji.Tada.split(':')[2].replace('>', ''))
   
           if (!giveawayReaction) {
             await giveawayMessage.delete()
             await giveawaySchema.deleteOne()
   
-            return Utils.Functions.clientError<true>(
+            return Utils.clientError<true>(
               interaction,
               'No can do!',
               `Giveaway not found! Make sure you have the correct ID and try again.`,
@@ -273,21 +271,21 @@ export default Utils.Functions.clientSlashCommand({
   
           giveawayEntries.splice(giveawayEntries.findIndex(user => user.id == client.user.id), 1)
   
-          if (!giveawayEntries.length) return Utils.Functions.clientError<true>(
+          if (!giveawayEntries.length) return Utils.clientError<true>(
             interaction,
             'No can do!',
             `Make sure at least 1 member has entered then try again.`,
             true,
           )
 
-          const giveawayNewWinners = Utils.Functions.getRandomArrayElements(giveawayEntries, giveawayRerollAmount)
+          const giveawayNewWinners = Utils.getRandomArrayElements(giveawayEntries, giveawayRerollAmount)
   
           giveawayMessage.reply({
             content: giveawayNewWinners.join(''),
             embeds: [
               new Discord.EmbedBuilder()
               .setAuthor({ iconURL: giveawayHost.displayAvatarURL(), name: `Hosted by ${giveawayHost.displayName}` })
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`Congratulations, you have won the giveaway!`)
             ],
           })
@@ -295,9 +293,9 @@ export default Utils.Functions.clientSlashCommand({
           interaction.editReply({
             embeds: [
               new Discord.EmbedBuilder()
-              .setColor(Utils.Enums.PhaseColour.Primary)
+              .setColor(Utils.PhaseColour.Primary)
               .setDescription(`New Winners: ${giveawayNewWinners.join('')}`)
-              .setTitle(Utils.Enums.PhaseEmoji.Success + 'Rerolled Giveaway')
+              .setTitle('Rerolled Giveaway')
             ],
           })
   
@@ -305,7 +303,7 @@ export default Utils.Functions.clientSlashCommand({
   
           await giveawaySchema.deleteOne()
 
-          return Utils.Functions.clientError<true>(
+          return Utils.clientError<true>(
             interaction,
             'No can do!',
             `No expired giveaway was found. Make sure you have the correct ID and try again.`,
