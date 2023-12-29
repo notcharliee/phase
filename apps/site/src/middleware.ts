@@ -27,6 +27,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/api/auth", request.url))
 
   const requestHeaders = new Headers(request.headers)
+  requestHeaders.set("x-user-token", validAuth.token.access_token)
+  requestHeaders.set("x-user-session", validAuth.session)
   requestHeaders.set("x-user-id", validAuth.id)
 
   return NextResponse.next({
