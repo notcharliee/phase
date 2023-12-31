@@ -12,6 +12,13 @@ export async function GET(request: NextRequest) {
   const rankEnd = parseInt(request.nextUrl.searchParams.get("rankEnd") || "1", 10)
   const guildId = request.nextUrl.searchParams.get("guild")
 
+  const primaryColour = request.nextUrl.searchParams.get("primaryColour") ?? "f8f8f8"
+  const secondaryColour = request.nextUrl.searchParams.get("secondaryColour") ?? "c0c0c0"
+
+  const backgroundColour = request.nextUrl.searchParams.get("backgroundColour") ?? "080808"
+  const backgroundImage = request.nextUrl.searchParams.get("backgroundImage") ?? undefined
+  const background = backgroundImage ? `url(${backgroundImage})` : "#"+backgroundColour
+
   try {
     const dataResponse = await fetch(`${env.NEXT_PUBLIC_BASE_URL}/api/levels/guild?guild=${guildId}&rankStart=${rankStart}&rankEnd=${rankEnd}&t=${Date.now()}`)
     const dataResponseJSON = await dataResponse.json() as unknown
@@ -54,7 +61,7 @@ export async function GET(request: NextRequest) {
   
     return new ImageResponse((
       <div style={{
-        background: "#080808",
+        background: background,
         padding: "24px",
         display: "flex",
         flexDirection: "column",
@@ -81,12 +88,12 @@ export async function GET(request: NextRequest) {
                 flexDirection: "column",
               }}>
                 <span style={{
-                  color: "#f8f8f8",
+                  color: "#"+primaryColour,
                   fontSize: "20px",
                   fontWeight: "600",
                 }}>{getOrdinal(user.rank)} Place</span>
                 <span style={{
-                  color: "#c0c0c0",
+                  color: "#"+secondaryColour,
                   fontSize: "20px",
                   fontWeight: "600",
                 }}>{user.username}</span>
@@ -96,11 +103,11 @@ export async function GET(request: NextRequest) {
                 marginLeft: "auto",
               }}>
                 <g transform="rotate(-90 16 16)">
-                  <circle cx="16" cy="16" r="15.9155" stroke="#f8f8f8" stroke-width="2" fill="none"/>
-                  <circle cx="16" cy="16" r="15.9155" stroke="#c0c0c0" stroke-width="2" stroke-dasharray="100 100" stroke-dashoffset={-((user.xp / user.target) * 100)} fill="none"/>
+                  <circle cx="16" cy="16" r="15.9155" stroke={"#"+primaryColour} stroke-width="2" fill="none"/>
+                  <circle cx="16" cy="16" r="15.9155" stroke={"#"+secondaryColour} stroke-width="2" stroke-dasharray="100 100" stroke-dashoffset={-((user.xp / user.target) * 100)} fill="none"/>
                 </g>
                 <span style={{
-                  color: "#f8f8f8",
+                  color: "#"+primaryColour,
                   fontSize: "20px",
                   fontWeight: "600",
                   margin: "auto",
