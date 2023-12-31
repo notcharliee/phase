@@ -36,29 +36,23 @@ const config: Config = {
         "light-100": "rgb(192 192 192)",
         "phase": "rgb(164 0 255)",
       },
-      width: {
-        "fill-available": [
-          "-webkit-fill-available",
-          "-moz-available",
-        ].join(", "),
-      },
-      height: {
+      height: { // @ts-ignore
         "dvh": [
           "100dvh",
           "100vh",
-        ].join(", "),
+        ],
       },
-      minHeight: {
+      minHeight: { // @ts-ignore
         "dvh": [
           "100dvh",
           "100vh",
-        ].join(", "),
+        ],
       },
-      maxHeight: {
+      maxHeight: { // @ts-ignore
         "dvh": [
           "100dvh",
           "100vh",
-        ].join(", "),
+        ],
       },
     },
   },
