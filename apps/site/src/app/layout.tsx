@@ -29,7 +29,7 @@ export const metadata = {
 
 export const viewort = {
   colorScheme: "dark",
-  themeColor: "#F5F5F5",
+  themeColor: "#F8F8F8",
 } satisfies Viewport
 
 

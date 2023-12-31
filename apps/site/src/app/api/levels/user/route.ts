@@ -1,73 +1,61 @@
 import { NextResponse, NextRequest } from "next/server"
-import { Levels } from "@repo/utils/schemas"
+import { LevelSchema } from "@repo/utils/schemas"
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
-import { env } from '@/env'
+import { env } from "@/env"
+import mongoose from "mongoose"
 
+const discordREST = new REST().setToken(env.DISCORD_TOKEN)
+const discordAPI = new API(discordREST)
 
 export const GET = async (request: NextRequest) => {
-  const discordREST = new REST().setToken(env.DISCORD_TOKEN)
-  const discordAPI = new API(discordREST)
-
   const userId = request.nextUrl.searchParams.get("user")
   const guildId = request.nextUrl.searchParams.get("guild")
 
-  // Get data...
-
-  if (!userId || !guildId)
-    return NextResponse.json(
-      {
-        error: "Bad Request",
-        documentation: `${env.NEXT_PUBLIC_BASE_URL}/docs/api/levels`,
-      },
-      { status: 400 },
-    )
+  if (!userId || !guildId) return NextResponse.json({
+    error: "Bad Request",
+    documentation: `${env.NEXT_PUBLIC_BASE_URL}/docs/api/levels`,
+  }, { status: 400 })
 
   try {
-    const guildLevelData = await Levels.findOne({
-      guild: guildId,
-      levels: { $elemMatch: { id: userId } },
-    })
+    // Connect to database
+    await mongoose.connect(env.MONGODB_URI)
 
-    if (!guildLevelData)
-      return NextResponse.json(
-        {
-          error: "Not Found",
-          message: `No matching data found.`,
-        },
-        { status: 404 },
-      )
+    // Get user and level data
+    const user = await discordAPI.users.get(userId)
+    const data = await LevelSchema.findOne({ user: userId, guild: guildId })
+    
+    // Return 404 if data not found
+    if (!data) return NextResponse.json({
+      error: "Not Found",
+      message: "Level data not found.",
+    }, { status: 404 })
 
-    const userLevelsArray = guildLevelData.levels
-    const userLevelsArraySorted = userLevelsArray.sort((a, b) =>
-      a == b ? b.xp - a.xp : b.level - a.level,
-    )
+    // Calculate user rank within the guild
+    const rank = await LevelSchema.countDocuments({ $or: [
+      { guild: guildId, level: { $gt: data.level } },
+      { guild: guildId, level: data.level, xp: { $gt: data.xp } }
+    ] }) + 1
 
-    const userLevelDataIndex = userLevelsArraySorted.findIndex(
-      (user) => user.id == userId,
-    )
+    // Disconnect from database
+    await mongoose.disconnect()
 
-    if (userLevelDataIndex == -1)
-      return NextResponse.json(
-        {
-          error: "Not Found",
-          message: `No matching data found.`,
-        },
-        { status: 404 },
-      )
-
-    const userLevelData = userLevelsArraySorted[userLevelDataIndex]!
-
-    const userData = await discordAPI.users.get(userLevelData.id)
-
+    // Respond with user data, level, XP, and rank
     return NextResponse.json({
-      ...userData,
-      ...(({ id, ...rest }) => rest)(userLevelData),
-      rank: userLevelDataIndex + 1,
+      id: user.id,
+      username: user.username,
+      global_name: user.global_name,
+      avatar: user.avatar ? discordREST.cdn.avatar(user.id, user.avatar, { size: 128, forceStatic: true, extension: "png" }) : `${env.NEXT_PUBLIC_BASE_URL}/discord.png`,
+      level: data.level,
+      xp: data.xp,
+      rank: rank,
+      target: 500 * (data.level + 1),
     })
   } catch (error) {
-    console.log(error)
+    // Disconnect from database
+    await mongoose.disconnect()
 
+    console.log(error)
     return NextResponse.json(error, { status: 500 })
   }
 }
