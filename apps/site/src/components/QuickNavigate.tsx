@@ -7,7 +7,7 @@ export default ({ text }: { text?: "none" | "min" | "max" } = { text: "max" }) =
   return (
     <Modal
       button={
-        <button className="flex items-center gap-2 rounded-3xl border border-dark-600 bg-dark-700 bg-opacity-75 p-1.5 px-3 text-sm hover:bg-opacity-100">
+        <button className="flex items-center gap-2 rounded-3xl border border-dark-300 bg-dark-600 bg-opacity-75 p-1.5 px-3 text-sm hover:bg-opacity-100">
           <FontAwesomeIcon
             icon={faCompass}
             className="h-4 w-4"
