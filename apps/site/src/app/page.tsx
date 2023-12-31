@@ -6,7 +6,7 @@ import Typewriter from "@/components/Typewriter"
 
 export default () => {
   return (
-    <div className="font-poppins flex min-h-dvh flex-col justify-between bg-dark-900 bg-main text-light-900">
+    <div className="font-poppins flex min-h-dvh flex-col justify-between bg-dark-700 bg-main text-light-900">
       <Header></Header>
       <main className="m-auto flex w-full max-w-6xl flex-col items-center justify-center p-8 pb-32 pt-32">
         <h1 className="max-w-[475px] text-center text-5xl font-black tracking-tighter sm:mr-0 sm:text-6xl">
