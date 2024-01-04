@@ -5,10 +5,8 @@
 // authentication endpoint.
 
 import { NextResponse, NextRequest } from "next/server"
-import { Redis } from "@upstash/redis"
 import { AuthorisedUser } from "@/types"
-import { env } from "@/env"
-
+import { kv } from "@vercel/kv"
 
 export async function middleware(request: NextRequest) {
   const authSessionCookie = request.cookies.get("auth_session")
@@ -16,12 +14,7 @@ export async function middleware(request: NextRequest) {
   if (!authSessionCookie)
     return NextResponse.redirect(new URL("/api/auth", request.url))
 
-  const redis = new Redis({
-    url: env.UPSTASH_URL!,
-    token: env.UPSTASH_TOKEN!,
-  })
-
-  const validAuth = await redis.get(`auth:${authSessionCookie.value}`) as AuthorisedUser | undefined
+  const validAuth = await kv.get(`auth:${authSessionCookie.value}`) as AuthorisedUser | undefined
 
   if (!validAuth)
     return NextResponse.redirect(new URL("/api/auth", request.url))
