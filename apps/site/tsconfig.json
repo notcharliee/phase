@@ -5,24 +5,22 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "esnext",
     ],
     "noUncheckedIndexedAccess": true,
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"],
     },
     "plugins": [
       {
-        "name": "next"
-      }
+        "name": "next",
+      },
     ],
     "target": "es2017",
-    "noEmit": true
+    "noEmit": true,
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
   ],
   "extends": "@repo/tsconfig/nextjs.json",
   "include": [
