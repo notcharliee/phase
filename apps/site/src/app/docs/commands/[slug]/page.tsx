@@ -20,8 +20,10 @@ import { Clipboard } from "@/components/ui/clipboard"
 
 import { ApplicationCommandOptionType } from "discord-api-types/v10"
 
-import notFoundDocs from "../../[...not-found]/page"
-import commands from "../commands"
+import NotFound from "../../[...not-found]/page"
+
+import commands from "@/lib/commands"
+import modules from "@/lib/modules"
 
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
@@ -39,7 +41,7 @@ export default (props: { params: { slug: string } }) => {
   const commandIndex = commands.findIndex(command => command.name.replaceAll(" ", "-") == props.params.slug)
   const command = commandIndex != -1 ? commands[commandIndex]! : null
 
-  if (!command) return notFoundDocs
+  if (!command) return <NotFound />
 
   return (
     <div>
@@ -47,33 +49,35 @@ export default (props: { params: { slug: string } }) => {
         <h1 className="text-4xl font-bold tracking-tight">/{command.name}</h1>
         <p className="text-lg text-muted-foreground">{command.description}</p>
       </div>
-      <div className="pb-12 pt-8">
+      <div className="pb-12 pt-8 flex flex-col gap-12">
+        {command.options && (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold tracking-tight">Command Options</h2>
+            {command.options.map((option, index) => {
+              return (
+                <Card key={index}>
+                  <CardHeader>
+                    <CardTitle>{option.name}</CardTitle>
+                    <CardDescription>{option.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="w-min text-sm">
+                      <div className="flex justify-between">
+                        <span className="mr-6 font-semibold">Type:</span>
+                        <span className="text-muted-foreground">{ApplicationCommandOptionType[option.type]}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="mr-6 font-semibold">Required:</span>
+                        <span className="text-muted-foreground">{`${(option.required ?? false)}`.replace(/\b\w/g, match => match.toUpperCase())}</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
+        )}
         <div className="space-y-4">
-          {command.options && <h2 className="mt-12 text-2xl font-semibold tracking-tight">Command Options</h2>}
-          {command.options?.map((option, index) => {
-            return (
-              <Card key={index}>
-                <CardHeader>
-                  <CardTitle>{option.name}</CardTitle>
-                  <CardDescription>{option.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="w-min text-sm">
-                    <div className="flex justify-between">
-                      <span className="mr-6 font-semibold">Type:</span>
-                      <span className="text-muted-foreground">{ApplicationCommandOptionType[option.type]}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="mr-6 font-semibold">Required:</span>
-                      <span className="text-muted-foreground">{`${(option.required ?? false)}`.replace(/\b\w/g, match => match.toUpperCase())}</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )
-          })}
-        </div>
-        <div className="mt-12 space-y-4">
           <h2 className="text-2xl font-semibold tracking-tight">Copy Command</h2>
           <p className="leading-7">
             To use this command, click the button below to copy it, then run it in a Discord channel. Make sure the bot is in the server you want to run the command in, and that the bot has access to the channel.
@@ -84,12 +88,12 @@ export default (props: { params: { slug: string } }) => {
       <div className="flex items-center justify-between">
         <Link href={
           commandIndex-1 == -1
-          ? "/docs/modules/audit-logs"
+          ? modules[modules.length-1]!.docs_url
           : "/docs/commands/" + commands[commandIndex-1]!.name.replaceAll(" ", "-")
         }>
           <Button variant={"outline"}><ChevronLeftIcon className="mr-2 h-4 w-4" /> {
             commandIndex-1 == -1
-              ? "Tickets"
+              ? modules[modules.length-1]!.name
               : "/" + commands[commandIndex-1]!.name
           }</Button>
         </Link>
