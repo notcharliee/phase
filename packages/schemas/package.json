@@ -3,8 +3,8 @@
   "name": "@repo/schemas",
   "type": "module",
   "version": "1.0.0",
-  "main": "./dist/schemas/index.js",
-  "module": "./dist/schemas/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
     "mongoose": "^7.4.3"

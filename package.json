@@ -5,14 +5,14 @@
   "author": "@notcharliee",
   "license": "CC-BY-NC-4.0",
   "scripts": {
-    "build:bot": "cd apps/bot && npx tsc",
+    "build:bot": "cd apps/bot && pnpm dlx tsc",
     "start:bot": "cd apps/bot && env-cmd -f ../../.env node build/main.js",
-    "dev:bot": "cd apps/bot && npx tsc --watch",
-    "build:site": "cd apps/site && env-cmd -f ../../.env npx next build",
-    "start:site": "cd apps/site && env-cmd -f ../../.env npx next start",
-    "dev:site": "cd apps/site && env-cmd -f ../../.env npx next dev",
-    "build:schemas": "cd packages/schemas && npx tsup",
-    "dev:schemas": "cd packages/schemas && tsup npx --watch"
+    "dev:bot": "cd apps/bot && pnpm dlx tsc --watch",
+    "build:site": "cd apps/site && env-cmd -f ../../.env pnpm dlx next build",
+    "start:site": "cd apps/site && env-cmd -f ../../.env pnpm dlx next start",
+    "dev:site": "cd apps/site && env-cmd -f ../../.env pnpm dlx next dev",
+    "build:schemas": "cd packages/schemas && pnpm dlx tsup",
+    "dev:schemas": "cd packages/schemas && tsup pnpm dlx --watch"
   },
   "devDependencies": {
     "env-cmd": "^10.1.0",
