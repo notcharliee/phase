@@ -1,4 +1,4 @@
-// src/schemas/Guilds.ts
+// src/Guilds.ts
 import mongoose from "mongoose";
 var schema = new mongoose.Schema({
   id: String,

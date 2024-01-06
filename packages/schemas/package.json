@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "name": "@repo/schemas",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "./dist/schemas/index.js",
+  "module": "./dist/schemas/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "mongoose": "^7.4.3"
+  },
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "@types/node": "^20.8.9",
+    "tsup": "^7.2.0",
+    "typescript": "^5.3.2"
+  }
+}

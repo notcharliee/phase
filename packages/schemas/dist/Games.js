@@ -1,4 +1,4 @@
-// src/schemas/Games.ts
+// src/Games.ts
 import mongoose from "mongoose";
 var schema = new mongoose.Schema({
   id: String,

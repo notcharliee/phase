@@ -1,4 +1,4 @@
-// src/schemas/AFKs.ts
+// src/AFKs.ts
 import mongoose from "mongoose";
 var schema = new mongoose.Schema({
   user: String,
@@ -6,7 +6,7 @@ var schema = new mongoose.Schema({
 });
 var AFKSchema = mongoose.models["AFKs"] || mongoose.model("AFKs", schema);
 
-// src/schemas/Games.ts
+// src/Games.ts
 import mongoose2 from "mongoose";
 var schema2 = new mongoose2.Schema({
   id: String,
@@ -20,7 +20,7 @@ var schema2 = new mongoose2.Schema({
 });
 var GameSchema = mongoose2.models["Games"] || mongoose2.model("Games", schema2);
 
-// src/schemas/Giveaways.ts
+// src/Giveaways.ts
 import mongoose3 from "mongoose";
 var schema3 = new mongoose3.Schema({
   id: String,
@@ -35,7 +35,7 @@ var schema3 = new mongoose3.Schema({
 });
 var GiveawaySchema = mongoose3.models["Giveaways"] || mongoose3.model("Giveaways", schema3);
 
-// src/schemas/Guilds.ts
+// src/Guilds.ts
 import mongoose4 from "mongoose";
 var schema4 = new mongoose4.Schema({
   id: String,
@@ -51,7 +51,7 @@ var schema4 = new mongoose4.Schema({
 });
 var GuildSchema = mongoose4.models["Guilds"] || mongoose4.model("Guilds", schema4);
 
-// src/schemas/Levels.ts
+// src/Levels.ts
 import mongoose5 from "mongoose";
 var schema5 = new mongoose5.Schema({
   guild: String,
@@ -61,7 +61,7 @@ var schema5 = new mongoose5.Schema({
 });
 var LevelSchema = mongoose5.models["Levels"] || mongoose5.model("Levels", schema5);
 
-// src/schemas/Tags.ts
+// src/Tags.ts
 import mongoose6 from "mongoose";
 var schema6 = new mongoose6.Schema({
   guild: String,

@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server"
-import { LevelSchema } from "@repo/utils/schemas"
+import { LevelSchema } from "@repo/schemas"
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 import { env } from "@/env"

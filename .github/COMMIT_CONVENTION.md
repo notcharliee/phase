@@ -7,7 +7,7 @@ Please ensure that all commits in this repository adhere to the following conven
 Commit messages must match the following regular expression:
 
 ```js
-/^(create|remove|modify|fix)(\((bot|site|docs|dash|api|utils|tsconfig)\))?: .{1,72}/
+/^(create|remove|modify|fix)(\((bot|site|docs|dash|api|schemas|tsconfig)\))?: .{1,72}/
 ```
 
 #### Examples
@@ -17,7 +17,7 @@ create(bot): `/foo` command
 ```
 
 ```
-remove(utils): `foo()` function
+remove(schemas): `foo()` function
 ```
 
 ```

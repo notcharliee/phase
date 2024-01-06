@@ -1,4 +1,4 @@
-// src/schemas/AFKs.ts
+// src/AFKs.ts
 import mongoose from "mongoose";
 var schema = new mongoose.Schema({
   user: String,

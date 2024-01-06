@@ -1,4 +1,4 @@
-// src/schemas/Levels.ts
+// src/Levels.ts
 import mongoose from "mongoose";
 var schema = new mongoose.Schema({
   guild: String,

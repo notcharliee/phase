@@ -2,19 +2,14 @@ import { NextResponse, NextRequest } from "next/server"
 import { cookies } from "next/headers"
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
-import { Redis } from "@upstash/redis"
 import { randomUUID } from "crypto"
+import { kv } from "@vercel/kv"
 import { env } from "@/env"
 
 
 export const GET = async (request: NextRequest) => {
   const discordREST = new REST().setToken(env.DISCORD_TOKEN)
   const discordAPI = new API(discordREST)
-
-  const redis = new Redis({
-    url: env.UPSTASH_URL,
-    token: env.UPSTASH_TOKEN,
-  })
 
   const tokenExchangeCode = request.nextUrl.searchParams.get("code")
 
@@ -49,14 +44,14 @@ export const GET = async (request: NextRequest) => {
   }
 
   if (cookies().get("auth_session")?.value)
-    await redis.del(`auth:${cookies().get("auth_session")?.value}`)
+    await kv.del(`auth:${cookies().get("auth_session")?.value}`)
 
   cookies().set("auth_session", discordUserData.session, {
     sameSite: true,
     secure: true,
   })
 
-  await redis.set(`auth:${discordUserData.session}`, discordUserData)
+  await kv.set(`auth:${discordUserData.session}`, discordUserData)
 
   return NextResponse.redirect(env.NEXT_PUBLIC_BASE_URL + "/dashboard")
 }

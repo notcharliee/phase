@@ -11,6 +11,13 @@ export async function GET(request: NextRequest) {
   const userId = request.nextUrl.searchParams.get("user")
   const guildId = request.nextUrl.searchParams.get("guild")
 
+  const primaryColour = request.nextUrl.searchParams.get("primaryColour") ?? "f8f8f8"
+  const secondaryColour = request.nextUrl.searchParams.get("secondaryColour") ?? "c0c0c0"
+
+  const backgroundColour = request.nextUrl.searchParams.get("backgroundColour") ?? "080808"
+  const backgroundImage = request.nextUrl.searchParams.get("backgroundImage") ?? undefined
+  const background = backgroundImage ? `url(${backgroundImage})` : "#"+backgroundColour
+
   try {
     const dataResponse = await fetch(`${env.NEXT_PUBLIC_BASE_URL}/api/levels/user?user=${userId}&guild=${guildId}&t=${Date.now()}`)
     const dataResponseJSON = await dataResponse.json() as unknown
@@ -54,10 +61,9 @@ export async function GET(request: NextRequest) {
   
     return new ImageResponse((
       <div style={{
-        background: "#080808",
+        background: background,
         padding: "24px",
         display: "flex",
-        flexDirection: "row",
         gap: "36px",
         alignItems: "center",
         justifyContent: "center",
@@ -69,11 +75,10 @@ export async function GET(request: NextRequest) {
           borderRadius: "18px",
         }}/>
         <div style={{
-          background: "#f8f8f8",
+          background: "#"+primaryColour,
           borderRadius: "9px",
           padding: "6px 9px 6px 9px",
           display: "flex",
-          flexDirection: "row",
           alignItems: "center",
           justifyContent: "flex-end",
           height: "27px",
@@ -82,13 +87,11 @@ export async function GET(request: NextRequest) {
           top: "99.75px",
         }}>
           <span style={{
-            color: "#080808",
+            color: "#"+backgroundColour,
             textAlign: "center",
-            fontFamily: "Geist",
             fontSize: "16px",
             lineHeight: "100%",
             fontWeight: "600",
-            position: "relative",
           }}>{getOrdinal(data.rank)}</span>
         </div>
         <div style={{
@@ -101,31 +104,23 @@ export async function GET(request: NextRequest) {
         }}>
           <div style={{
             display: "flex",
-            flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
             alignSelf: "stretch",
-            flexShrink: "0",
-            position: "relative",
           }}>
             <div style={{
               display: "flex",
               flexDirection: "column",
-              gap: "0px",
               alignItems: "flex-start",
               justifyContent: "center",
-              flexShrink: "0",
-              position: "relative",
             }}>
               <span style={{
-                color: "#f8f8f8",
-                textAlign: "left",
+                color: "#"+primaryColour,
                 fontSize: "20px",
                 fontWeight: "600",
               }}>{data.global_name}</span>
               <span style={{
-                color: "#c0c0c0",
-                textAlign: "left",
+                color: "#"+secondaryColour,
                 fontSize: "20px",
                 fontWeight: "600",
               }}>{data.username}</span>
@@ -138,14 +133,14 @@ export async function GET(request: NextRequest) {
             }}>
               <div style={{
                 display: "flex",
-                color: "#f8f8f8",
+                color: "#"+primaryColour,
                 textAlign: "right",
                 fontSize: "20px",
                 fontWeight: "600",
               }}>Level {data.level}</div>
               <div style={{
                 display: "flex",
-                color: "#c0c0c0",
+                color: "#"+secondaryColour,
                 textAlign: "right",
                 fontSize: "20px",
                 fontWeight: "600",
@@ -153,7 +148,7 @@ export async function GET(request: NextRequest) {
             </div>
           </div>
           <div style={{
-            background: "#c0c0c0",
+            background: "#"+secondaryColour,
             borderRadius: "18px",
             alignSelf: "stretch",
             height: "18px",
@@ -161,7 +156,7 @@ export async function GET(request: NextRequest) {
             display: "flex"
           }}>
             <div style={{
-              background: "#f8f8f8",
+              background: "#"+primaryColour,
               borderRadius: "18px",
               width: `${(data.xp / data.target) * 100}%`,
               height: "18px",
