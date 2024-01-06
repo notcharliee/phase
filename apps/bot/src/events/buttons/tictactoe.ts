@@ -1,6 +1,6 @@
 import * as Discord from 'discord.js'
 import * as Utils from '#src/utils/index.js'
-import * as Schemas from '@repo/utils/schemas'
+import * as Schemas from '@repo/schemas'
 
 
 export default Utils.clientButtonEvent({

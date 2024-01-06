@@ -1,4 +1,4 @@
-import { createEnv } from '@repo/utils'
+const createEnv = <T> (env: T) => env as Readonly<{ [K in keyof T]: string }>
 
 /**
  * Readonly object with string-typed environment variables.
