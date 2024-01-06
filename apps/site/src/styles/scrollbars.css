@@ -1,29 +1,17 @@
-::-webkit-scrollbar {
-  display: block;
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: rgb(64 64 64);
-  border-radius: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: rgb(40 40 40);
-  border-radius: 8px;
-  max-width: 4px;
-}
-
 .scrollbar-float::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-float:hover::-webkit-scrollbar {
   display: block;
   width: 8px;
 }
 
-.scrollbar-float::-webkit-scrollbar-track {
+.scrollbar-float:hover::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.scrollbar-float::-webkit-scrollbar-thumb {
+.scrollbar-float:hover::-webkit-scrollbar-thumb {
   background-color: rgb(40 40 40);
   border-radius: 8px;
   max-width: 4px;
