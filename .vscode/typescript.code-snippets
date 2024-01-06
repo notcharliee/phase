@@ -3,12 +3,12 @@
 		"prefix": "guildSchema",
 		"body": "const guildSchema = await Schemas.GuildSchema.findOne({ id: $1 })"
 	},
-	"Phase Command": {
-		"prefix": "phase-command",
+	"phaseCommand": {
+		"prefix": "phaseCommand",
 		"body": [
 			"import * as Discord from 'discord.js'",
 			"import * as Utils from '#src/utils/index.js'",
-			"import * as Schemas from '@repo/utils/schemas'",
+			"import * as Schemas from '@repo/schemas'",
 			"",
 			"",
 			"export default Utils.clientSlashCommand({",
@@ -22,14 +22,13 @@
 			"  }",
 			"})",
 		],
-		"description": "Loads phase command file preset."
 	},
-	"Phase Event": {
-		"prefix": "phase-event",
+	"phaseEvent": {
+		"prefix": "phaseEvent",
 		"body": [
 			"import * as Discord from 'discord.js'",
 			"import * as Utils from '#src/utils/index.js'",
-			"import * as Schemas from '@repo/utils/schemas'",
+			"import * as Schemas from '@repo/schemas'",
 			"",
 			"",
 			"export default Utils.clientEvent({",
@@ -41,14 +40,13 @@
 			"  }",
 			"})",
 		],
-		"description": "Loads phase event file preset."
 	},
-	"Phase Loop": {
-		"prefix": "phase-loop",
+	"phaseLoop": {
+		"prefix": "phaseLoop",
 		"body": [
 			"import * as Discord from 'discord.js'",
 			"import * as Utils from '#src/utils/index.js'",
-			"import * as Schemas from '@repo/utils/schemas'",
+			"import * as Schemas from '@repo/schemas'",
 			"",
 			"",
 			"export default Utils.clientLoop({",
@@ -61,23 +59,5 @@
 			"  }",
 			"})",
 		],
-		"description": "Loads phase event file preset."
 	},
-	"Phase Modal": {
-		"prefix": "phase-modal",
-		"body": [
-			"import mongoose, { Schema } from 'mongoose'",
-			"",
-			"",
-			"const Data: Schema = new mongoose.Schema<DataTypes>({",
-			"  $1",
-			"})",
-			"",
-			"interface DataTypes {",
-			"  $2",
-			"}",
-			"",
-			"export default mongoose.models['$3'] as mongoose.Model<DataTypes> || mongoose.model<DataTypes>('$3', Data)",
-		]
-	}
 }
