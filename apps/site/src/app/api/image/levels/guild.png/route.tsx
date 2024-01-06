@@ -103,8 +103,8 @@ export async function GET(request: NextRequest) {
                 marginLeft: "auto",
               }}>
                 <g transform="rotate(-90 16 16)">
-                  <circle cx="16" cy="16" r="15.9155" stroke={"#"+primaryColour} stroke-width="2" fill="none"/>
-                  <circle cx="16" cy="16" r="15.9155" stroke={"#"+secondaryColour} stroke-width="2" stroke-dasharray="100 100" stroke-dashoffset={-((user.xp / user.target) * 100)} fill="none"/>
+                  <circle cx="16" cy="16" r="15.9155" stroke={"#"+primaryColour} strokeWidth="2" fill="none"/>
+                  <circle cx="16" cy="16" r="15.9155" stroke={"#"+secondaryColour} strokeWidth="2" strokeDasharray="100 100" strokeDashoffset={-((user.xp / user.target) * 100)} fill="none"/>
                 </g>
                 <span style={{
                   color: "#"+primaryColour,
