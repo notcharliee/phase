@@ -1,0 +1,12 @@
+{
+  "exclude": [
+    "node_modules",
+    "dist",
+  ],
+  "extends": "@repo/tsconfig/base.json",
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.cjs",
+    "src/**/*.mjs",
+  ],
+}
