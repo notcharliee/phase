@@ -44,7 +44,7 @@ export default () => (
       <Link href={"/docs"}>
         <Button variant={"outline"}><ChevronLeftIcon className="mr-2 h-4 w-4" /> Introduction</Button>
       </Link>
-      <Link href={"/docs/modules/audit-logs"}>
+      <Link href={"/redirect/discord"}>
         <Button variant={"default"}>Report a Bug</Button>
       </Link>
     </div>

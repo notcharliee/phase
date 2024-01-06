@@ -106,8 +106,8 @@ export default () => (
       <Link href={"/"}>
         <Button variant={"outline"}><ChevronLeftIcon className="mr-2 h-4 w-4" /> Back to Home</Button>
       </Link>
-      <Link href={"/docs/modules/audit-logs"}>
-        <Button variant={"outline"}>Audit Logs <ChevronRightIcon className="ml-2 h-4 w-4" /></Button>
+      <Link href={"/docs/modules"}>
+        <Button variant={"outline"}>Modules <ChevronRightIcon className="ml-2 h-4 w-4" /></Button>
       </Link>
     </div>
   </div>
