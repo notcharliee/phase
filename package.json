@@ -8,11 +8,9 @@
     "build:bot": "cd apps/bot && npx tsc",
     "start:bot": "cd apps/bot && env-cmd -f ../../.env node build/main.js",
     "dev:bot": "cd apps/bot && npx tsc --watch",
-
     "build:site": "cd apps/site && env-cmd -f ../../.env npx next build",
     "start:site": "cd apps/site && env-cmd -f ../../.env npx next start",
     "dev:site": "cd apps/site && env-cmd -f ../../.env npx next dev",
-
     "build:schemas": "cd packages/schemas && npx tsup",
     "dev:schemas": "cd packages/schemas && tsup npx --watch"
   },
@@ -20,9 +18,6 @@
     "env-cmd": "^10.1.0",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7"
-  },
-  "dependencies": {
-    "@repo/utils": "workspace:*"
   },
   "packageManager": "pnpm@8.9.2"
 }
