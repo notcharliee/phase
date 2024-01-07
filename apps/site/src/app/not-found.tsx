@@ -1,5 +1,11 @@
+"use client"
+
 import { Metadata } from "next"
-import { SVGProps } from "react"
+
+import {
+  SVGProps,
+  useEffect,
+} from "react"
 
 
 export const metadata: Metadata = {
@@ -7,19 +13,26 @@ export const metadata: Metadata = {
 }
 
 
-export default () => (
-  <main className="min-h-dvh grid text-light-900">
-    <Stars className="place-self-center fixed -z-10 overflow-hidden scale-50 rotate-90 sm:scale-[.6] sm:rotate-0 md:scale-75" />
-    <div className="place-self-center w-full flex flex-col items-center">
-      <div className="relative flex justify-center items-center w-full">
-        <h1 className="shadow-light-100/50 text-shadow-glow text-6xl sm:text-7xl md:text-8xl max-w-[500px] sm:max-w-[600px] md:max-w-[700px] font-black tracking-tighter text-center absolute opacity-0 animate-[text-fade-in_1s_2s_forwards]">404</h1>
-        <Moon className="animate-[moon-shrink_1s_forwards] w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96" />
-        <Twinkle className="animate-[moon-twinkle_1s_0.9s_forwards] absolute w-0 h-0" />
+export default () => {
+  useEffect(() => {
+    const audio = new Audio("/audio/moon-shrink.mp3")
+    audio.play()
+  }, [])
+
+  return (
+    <main className="min-h-dvh grid text-light-900">
+      <Stars className="place-self-center fixed -z-10 overflow-hidden scale-50 rotate-90 sm:scale-[.6] sm:rotate-0 md:scale-75" />
+      <div className="place-self-center w-full flex flex-col justify-center items-center">
+          <div className="absolute opacity-0 animate-[text-fade-in_1s_2s_forwards] text-center">
+            <h1 className="shadow-light-100/50 text-shadow-glow text-[9rem] leading-none font-black tracking-tighter">404</h1>
+            <p className="shadow-light-100/50 text-shadow-glow text-5xl font-extrabold tracking-tighter">Not Found</p>
+          </div>
+          <Moon className="animate-[moon-shrink_1s_forwards] w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96" />
+          <Twinkle className="animate-[moon-twinkle_1s_0.9s_forwards] absolute w-0 h-0" />
       </div>
-    </div>
-    <audio autoPlay src="/audio/moon-shrink.mp3" typeof="audio/mp3" />
-  </main>
-)
+    </main>
+  )
+}
 
 
 const Moon: React.FC<SVGProps<SVGSVGElement>> = (props) => (
