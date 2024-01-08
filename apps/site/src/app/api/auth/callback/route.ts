@@ -1,57 +1,58 @@
+import { randomUUID } from "crypto"
+
 import { NextResponse, NextRequest } from "next/server"
 import { cookies } from "next/headers"
+import { kv } from "@vercel/kv"
+
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
-import { randomUUID } from "crypto"
-import { kv } from "@vercel/kv"
+
+import { User } from "@/lib/types"
 import { env } from "@/env"
 
 
+const discordREST = new REST().setToken(env.DISCORD_TOKEN)
+const discordAPI = new API(discordREST)
+
+
 export const GET = async (request: NextRequest) => {
-  const discordREST = new REST().setToken(env.DISCORD_TOKEN)
-  const discordAPI = new API(discordREST)
+  const code = request.nextUrl.searchParams.get("code")
+  const sessionCookie = request.cookies.get("session")
 
-  const tokenExchangeCode = request.nextUrl.searchParams.get("code")
+  if (!code) return NextResponse.json({
+    error: "Bad Request",
+    message: "Provide a valid token exchange code.",
+  }, { status: 400 })
 
-  if (!tokenExchangeCode)
-    return NextResponse.json(
-      {
-        error: "Bad Request",
-        message: "Provide a valid token exchange code.",
-      },
-      { status: 400 },
-    )
-
-  const discordUserAccessToken = await discordAPI.oauth2.tokenExchange({
+  const token = await discordAPI.oauth2.tokenExchange({
     client_id: env.DISCORD_ID,
     client_secret: env.DISCORD_SECRET,
-    code: tokenExchangeCode,
     grant_type: "authorization_code",
     redirect_uri: env.NEXT_PUBLIC_BASE_URL + "/api/auth/callback",
+    code,
   })
 
-  const discordUserREST = new REST({ authPrefix: "Bearer" }).setToken(
-    discordUserAccessToken.access_token,
-  )
-  const discordUserAPI = new API(discordUserREST)
-  const discordUserIdentity = await discordUserAPI.users.getCurrent()
+  const userREST = new REST({ authPrefix: "Bearer" }).setToken(token.access_token)
+  const userAPI = new API(userREST)
+  const user = await userAPI.users.getCurrent()
 
-  const discordUserData = {
-    id: discordUserIdentity.id,
-    session: randomUUID(),
-    token: discordUserAccessToken,
-    timestamp: new Date().toISOString(),
-  }
+  const updatedUser = {
+    user_id: user.id,
+    session_id: randomUUID(),
+    access_token: token.access_token,
+    refresh_token: token.refresh_token,
+    created_timestamp: Math.floor(Date.now() / 1000),
+    expires_timestamp: Math.floor(Date.now() / 1000) + 604800,
+  } satisfies User
 
-  if (cookies().get("auth_session")?.value)
-    await kv.del(`auth:${cookies().get("auth_session")?.value}`)
+  if (sessionCookie) await kv.rename("auth:" + sessionCookie.value, "auth:" + updatedUser.session_id)
+  await kv.set("auth:" + updatedUser.session_id, updatedUser)
 
-  cookies().set("auth_session", discordUserData.session, {
+  cookies().set("session", updatedUser.session_id, {
+    httpOnly: true,
     sameSite: true,
     secure: true,
   })
 
-  await kv.set(`auth:${discordUserData.session}`, discordUserData)
-
-  return NextResponse.redirect(env.NEXT_PUBLIC_BASE_URL + "/dashboard")
+  return NextResponse.redirect(new URL("/dashboard", request.url))
 }
