@@ -10,7 +10,7 @@ export const Clipboard = (props: { content: string }) => (
   <Button variant={"outline"} className="w-full max-w-[256px] text-muted-foreground flex justify-between" onClick={() => {
     toast("Copied to clipboard.", {
       description: (
-        <span>Copied <code className="rounded-md border border-accent px-1 py-0.5 text-foreground">{props.content}</code> to your clipboard.</span>
+        <span>Copied <code className="rounded-md border border-border px-1 py-0.5 text-foreground">{props.content}</code> to your clipboard.</span>
       ),
     })
     
