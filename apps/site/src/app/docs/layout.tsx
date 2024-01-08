@@ -49,7 +49,7 @@ export default ({ children }: { children: React.ReactNode }) => {
             </SheetContent>
           </Sheet>
           {pathnameParts.map((part, index) => (
-            <div className="flex items-center space-x-1">
+            <div className="flex items-center space-x-1" key={index}>
               <span className={index+1 == pathnameParts.length ? "font-medium text-foreground" : ""}>{part}</span>
               {index+1 != pathnameParts.length ? (
                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-4 w-4">
