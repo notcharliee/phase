@@ -1,179 +1,51 @@
+import { Metadata } from "next"
 import Link from "next/link"
 
-// Exporting page metadata
 
-export const metadata = {
-  title: "Privacy Policy - Phase",
+export const metadata: Metadata = {
+  title: "Privacy Policy - Phase Bot",
+  description: "This document explains what data is stored, why it's stored, how it's kept safe, and the process of deleting it."
 }
 
-// Exporting page tsx
 
-export default () => {
-  return (
-    <div className="m-auto flex h-full w-full max-w-6xl flex-1 flex-col gap-6 py-16 font-semibold">
-      <h1 className="select-none text-center text-4xl font-black sm:text-left sm:text-5xl">
-        Privacy Policy
-      </h1>
-
-      <h2 className="text-center text-xl sm:text-left sm:text-2xl">
-        Last Updated: November 2nd, 2023
-      </h2>
-
-      <ol className="ml-4 list-decimal">
-        <li>
-          <a href="#1" className="text-blue-500">
-            Information we collect
-          </a>
-        </li>
-        <li>
-          <a href="#2" className="text-blue-500">
-            How we store data
-          </a>
-        </li>
-        <li>
-          <a href="#3" className="text-blue-500">
-            How we keep data safe
-          </a>
-        </li>
-        <li>
-          <a href="#4" className="text-blue-500">
-            Data deletion
-          </a>
-        </li>
-        <li>
-          <a href="#5" className="text-blue-500">
-            Terms of Service
-          </a>
-        </li>
-        <li>
-          <a href="#6" className="text-blue-500">
-            Contact Us
-          </a>
-        </li>
-      </ol>
-
-      <h3 id="0" className="mt-8 text-3xl font-black sm:text-4xl">
-        TL;DR Version
-      </h3>
-      <p>
-        Our privacy policy outlines that Phase only collects and stores data
-        essential for its bot and website dashboard's functionality, ensuring no
-        data is shared or sold to third parties. User data, such as names, IDs,
-        and avatars/icons, may be collected, along with Discord OAuth2 tokens
-        via the website dashboard. We use secure MongoDB storage, maintain
-        strict access controls, and employ robust security measures to protect
-        data. Users can request manual data deletion at any time. We encourage
-        you to review our{" "}
-        <Link href="/terms" className="text-blue-500">
-          Terms of Service
-        </Link>{" "}
-        for service usage rules and welcome you to contact our support team
-        through Discord for questions or concerns.
-      </p>
-
-      <div className="mt-8 h-1 w-full bg-phase"></div>
-
-      <h3 id="1" className="mt-8 text-2xl font-black sm:text-3xl">
-        1. Information we collect
-      </h3>
-      <p>
-        Phase only stores data when necessary for the functionality of the bot
-        and website dashboard. This means that no data is stored about you
-        simply by sharing a guild with the bot, and we never share or sell data
-        to any third parties under any circumstances.
-      </p>
-      <p>
-        Examples of data we may collect through the usage of slash commands and
-        modules include channel, message, guild, and user names, IDs, and
-        avatars/icons. When using the website dashboard, we collect your Discord
-        OAuth2 tokens, your user ID, and a list of your guilds.
-      </p>
-
-      <h3 id="2" className="mt-8 text-2xl font-black sm:text-3xl">
-        2. How we store data
-      </h3>
-      <p>
-        We utilize a NoSQL MongoDB database to securely store and protect data.
-        Access to the database is strictly limited to the owner of Phase and the
-        bot itself. Data is used only within the scope required for developing,
-        testing, and implementing the services Phase offers, and it is never
-        shared or sold to third parties.
-      </p>
-
-      <h3 id="3" className="mt-8 text-2xl font-black sm:text-3xl">
-        3. How we keep data safe
-      </h3>
-      <p>
-        We implement robust security measures to safeguard user and guild data
-        from unauthorized access or disclosure. Active security procedures are
-        in place on both our end and within MongoDB to ensure data security.
-      </p>
-      <p>
-        However, while we take every precaution, no data transmission on the
-        internet can be guaranteed to be 100% secure, and there is always a
-        potential for a data breach. In the event of a breach, we will promptly
-        inform all members of our{" "}
-        <Link
-          href="/redirect/discord"
-          target="_blank"
-          className="text-blue-500"
-        >
-          Discord server
-        </Link>{" "}
-        and take immediate steps to contain the breach and address any
-        vulnerabilities.
-      </p>
-
-      <h3 id="4" className="mt-8 text-2xl font-black sm:text-3xl">
-        4. Data deletion
-      </h3>
-      <p>
-        Users have the option to delete their stored data related to their
-        Discord account and any servers that Phase is a part of from the
-        database at any time. Since data may be distributed across multiple
-        Discord servers and parts of the database, we perform this process
-        manually to ensure thorough data removal. To initiate this process,
-        please contact the owner of Phase through our{" "}
-        <Link
-          href="/redirect/discord"
-          target="_blank"
-          className="text-blue-500"
-        >
-          Discord server
-        </Link>
-        's ticket system.
-      </p>
-
-      <h3 id="5" className="mt-8 text-2xl font-black sm:text-3xl">
-        5. Terms of Service
-      </h3>
-      <p>
-        Please review our{" "}
-        <Link href="/terms" className="text-blue-500">
-          Terms of Service
-        </Link>{" "}
-        to understand the rules and guidelines you must adhere to when using our
-        services.
-      </p>
-
-      <h3 id="6" className="mt-8 text-2xl font-black sm:text-3xl">
-        6. Contact Us
-      </h3>
-      <p>
-        If you have any questions, concerns, or feedback about our services or
-        policies, please join our{" "}
-        <Link
-          href="/redirect/discord"
-          target="_blank"
-          className="text-blue-500"
-        >
-          Discord server
-        </Link>{" "}
-        and create a support ticket. Our server is open to everyone, and we
-        encourage all users to join to stay informed about news, updates, and
-        information regarding Phase. A member of our support team typically
-        responds to tickets within 20 minutes of creation.
+export default () => (
+  <main className="w-full max-w-[1400px] min-h-screen py-8 lg:py-16 px-8 lg:px-16 mx-auto">
+    <div className="space-y-2">
+      <h1 className="text-4xl font-bold tracking-tight">{metadata.title?.toString().replace(" - Phase Bot", "")}</h1>
+      <p className="text-lg text-muted-foreground">{metadata.description}</p>
+    </div>
+    <div className="mt-12 space-y-4">
+      <h2 className="text-2xl font-semibold tracking-tight">What data we store</h2>
+      <p className="leading-7">
+        When you use the bot's commands or modules in any server, we may sometimes store data in our database - this is usually limited to just your user ID. When you add the bot to one of your servers, we will save the ID of the server in our database so it can be configured on the dashboard. When you log into our dashboard with your Discord account, in order for it to work, we need to store your OAuth2 credentials, which are required to fetch data about your account.
       </p>
     </div>
-  )
-}
+    <div className="mt-12 space-y-4">
+      <h2 className="text-2xl font-semibold tracking-tight">Why we store data</h2>
+      <p className="leading-7">
+        Many parts of the bot require data from Discord to work. An example of this is the Levels module, which saves the IDs of users in the database to keep track of their levels. If we didn't save the ID of the user, there would be no way to find and update the user's level data since the user ID is used as an index. This is a common way to index user-related data and the same will be true for almost all Discord bots that utilise databases.
+      </p>
+    </div>
+    <div className="mt-12 space-y-4">
+      <h2 className="text-2xl font-semibold tracking-tight">How we keep data safe</h2>
+      <p className="leading-7">
+        We have 2 databases. One database is for bot-related operations, for example module configuration, and the other is for dashboard-related operations, for example authentication. Database credentials are kept highly secure, and therefor are unlikely to be exposed, however in the event of exposure, they will swiftly be invalidated and we will do everything we can to make sure no data was breached. If data was found to be breached, we will make sure we inform all effected users, and in the case of authentication data being breached, we will also revoke <strong>all</strong> OAuth2 credentials we have stored.
+      </p>
+      <p className="leading-7">
+        We are always looking for ways to make our data even more secure, and we regularly update our code to try and do just that. However, if you believe you have found a security vulnerability in our code, we encourage you to responsibly disclose this and not open a public issue. We will investigate all legitimate reports. Contact the developers in a <strong><Link href={"/redirect/discord"} className="underline">support ticket</Link></strong> to disclose any security vulnerabilities.
+      </p>
+    </div>
+    <div className="mt-12 space-y-4">
+      <h2 className="text-2xl font-semibold tracking-tight">How to delete your data</h2>
+      <p className="leading-7">
+        If you want to delete all the data pertaining to your server, simply remove the bot and it will be automatically deleted from the database. If you want to delete your own OAuth2 credentials from the database, you can do so through the dashboard under your account settings - this will sign you out. If you want your data to be removed from <strong>all</strong> servers in our database, we'll need to do that manually, so you'll have to open a <strong><Link href={"/redirect/discord"} className="underline">support ticket</Link></strong>.
+      </p>
+    </div>
+    <div className="mt-12 space-y-4">
+      <h2 className="text-2xl font-semibold tracking-tight">Last Updated</h2>
+      <p className="leading-7">
+        10th of January, 2024
+      </p>
+    </div>
+  </main>
+)
