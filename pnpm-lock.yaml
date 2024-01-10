@@ -57,6 +57,9 @@ importers:
       '@types/node':
         specifier: ^20.5.0
         version: 20.8.7
+      env-cmd:
+        specifier: ^10.1.0
+        version: 10.1.0
       typescript:
         specifier: ^5.1.6
         version: 5.2.2
@@ -181,6 +184,9 @@ importers:
       autoprefixer:
         specifier: 10.4.14
         version: 10.4.14(postcss@8.4.26)
+      env-cmd:
+        specifier: ^10.1.0
+        version: 10.1.0
       postcss:
         specifier: 8.4.26
         version: 8.4.26

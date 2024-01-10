@@ -5,13 +5,11 @@
   "author": "@notcharliee",
   "scripts": {
     "bot:build": "cd apps/bot && pnpm run build",
-    "bot:start": "cd apps/bot && env-cmd -f ../../.env pnpm run start",
+    "bot:start": "cd apps/bot && pnpm run start",
     "bot:dev": "cd apps/bot && pnpm run dev",
-
-    "site:build": "cd apps/site && env-cmd -f ../../.env pnpm run build",
-    "site:start": "cd apps/site && env-cmd -f ../../.env pnpm run start",
-    "site:dev": "cd apps/site && env-cmd -f ../../.env pnpm run dev",
-
+    "site:build": "cd apps/site && pnpm run build",
+    "site:start": "cd apps/site && pnpm run start",
+    "site:dev": "cd apps/site && pnpm run dev",
     "schemas:build": "cd packages/schemas && pnpm run build",
     "schemas:dev": "cd packages/schemas && pnpm run dev"
   },

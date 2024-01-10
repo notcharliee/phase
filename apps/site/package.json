@@ -3,9 +3,9 @@
   "author": "@notcharliee",
   "type": "module",
   "scripts": {
-    "build": "next build",
-    "dev": "next dev",
-    "start": "next start"
+    "build": "env-cmd -f ../../.env && next build",
+    "dev": "env-cmd -f ../../.env && next dev",
+    "start": "env-cmd -f ../../.env && next start"
   },
   "dependencies": {
     "@discordjs/core": "^1.0.1",
@@ -49,6 +49,7 @@
     "@types/react-dom": "^18.2.7",
     "@types/uuid": "^9.0.7",
     "autoprefixer": "10.4.14",
+    "env-cmd": "^10.1.0",
     "postcss": "8.4.26",
     "tailwindcss": "^3.3.3",
     "typescript": "^5.1.6"
