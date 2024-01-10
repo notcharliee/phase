@@ -1,6 +1,6 @@
 <div align="center">
 	<a href="https://phasebot.xyz" align="center">
-		<img src="./.github/assets/banner.svg" width="512">
+		<img src="./assets/banner.svg" width="512">
 	</a>
 </div>
 
@@ -24,9 +24,9 @@ Please make sure that all commits in this repository follow the [Commit Conventi
 
 To recieve these roles, create a support ticket with a Discord account that has the right Github connection so we know it's you.
 
-<img src="https://raw.githubusercontent.com/notcharliee/phase/main/.github/assets/contributor.svg" width="102" height="21" alt="@Contributor" /> - Awarded to merged pull request owners.\
-<img src="https://raw.githubusercontent.com/notcharliee/phase/main/.github/assets/repohelper.svg" width="108" height="21" alt="@Repo Helper" /> - Awarded for creating 3 feature requests.\
-<img src="https://raw.githubusercontent.com/notcharliee/phase/main/.github/assets/bughunter.svg" width="101" height="21" alt="@Bug Hunter" /> - Awarded for making 3 bug reports.
+<img src="./assets/contributor.svg" width="102" height="21" alt="@Contributor" /> - Awarded to merged pull request owners.\
+<img src="./assets/repohelper.svg" width="108" height="21" alt="@Repo Helper" /> - Awarded for creating 3 feature requests.\
+<img src="./assets/bughunter.svg" width="101" height="21" alt="@Bug Hunter" /> - Awarded for making 3 bug reports.
 
 ## Security
 
