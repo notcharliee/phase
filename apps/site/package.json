@@ -2,6 +2,11 @@
   "private": true,
   "author": "@notcharliee",
   "type": "module",
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "start": "next start"
+  },
   "dependencies": {
     "@discordjs/core": "^1.0.1",
     "@discordjs/rest": "^2.0.1",
@@ -50,9 +55,6 @@
   },
   "ct3aMetadata": {
     "initVersion": "7.23.1"
-  },
-  "overrides": {
-    "react": "17.0.2"
   },
   "packageManager": "pnpm@8.9.2"
 }

@@ -1,8 +1,12 @@
 {
   "private": true,
   "name": "@repo/schemas",
-  "type": "module",
   "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",

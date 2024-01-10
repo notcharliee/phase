@@ -1,6 +1,5 @@
 {
   "private": true,
   "name": "@repo/tsconfig",
-  "version": "0.0.0",
-  "license": "CC-BY-NC-4.0"
+  "version": "1.0.0"
 }

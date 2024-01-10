@@ -3,16 +3,17 @@
   "name": "phase-monorepo",
   "type": "module",
   "author": "@notcharliee",
-  "license": "CC-BY-NC-4.0",
   "scripts": {
-    "build:bot": "cd apps/bot && pnpm dlx tsc",
-    "start:bot": "cd apps/bot && env-cmd -f ../../.env node build/main.js",
-    "dev:bot": "cd apps/bot && pnpm dlx tsc --watch",
-    "build:site": "cd apps/site && env-cmd -f ../../.env pnpm dlx next build",
-    "start:site": "cd apps/site && env-cmd -f ../../.env pnpm dlx next start",
-    "dev:site": "cd apps/site && env-cmd -f ../../.env pnpm dlx next dev",
-    "build:schemas": "cd packages/schemas && pnpm dlx tsup",
-    "dev:schemas": "cd packages/schemas && tsup pnpm dlx --watch"
+    "bot:build": "cd apps/bot && pnpm run build",
+    "bot:start": "cd apps/bot && env-cmd -f ../../.env pnpm run start",
+    "bot:dev": "cd apps/bot && pnpm run dev",
+
+    "site:build": "cd apps/site && env-cmd -f ../../.env pnpm run build",
+    "site:start": "cd apps/site && env-cmd -f ../../.env pnpm run start",
+    "site:dev": "cd apps/site && env-cmd -f ../../.env pnpm run dev",
+
+    "schemas:build": "cd packages/schemas && pnpm run build",
+    "schemas:dev": "cd packages/schemas && pnpm run dev"
   },
   "devDependencies": {
     "env-cmd": "^10.1.0",

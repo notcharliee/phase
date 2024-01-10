@@ -1,10 +1,11 @@
 {
   "private": true,
-  "type": "module",
   "author": "@notcharliee",
-  "license": "CC-BY-NC-4.0",
-  "imports": {
-    "#src/*": "./build/*"
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node build/main.js"
   },
   "dependencies": {
     "@androz2091/discord-invites-tracker": "^1.2.3",
@@ -22,5 +23,8 @@
     "@types/gradient-string": "^1.1.5",
     "@types/node": "^20.5.0",
     "typescript": "^5.1.6"
+  },
+  "imports": {
+    "#src/*": "./build/*"
   }
 }
