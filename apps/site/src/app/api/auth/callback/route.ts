@@ -52,6 +52,7 @@ export const GET = async (request: NextRequest) => {
     httpOnly: true,
     sameSite: true,
     secure: true,
+    expires: new Date("Tue, 19 Jan 2038 04:14:07 GMT"),
   })
 
   return NextResponse.redirect(new URL("/dashboard", request.url))

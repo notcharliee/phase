@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid"
 
 import { NextResponse, NextRequest } from "next/server"
+import { cookies } from "next/headers"
 import { kv } from "@vercel/kv"
 
 import { Routes, RESTPostOAuth2AccessTokenResult } from "discord-api-types/v10"
@@ -53,6 +54,13 @@ export async function middleware(request: NextRequest) {
 
     await kv.rename("auth:" + sessionCookie.value, "auth:" + updatedUser.session_id)
     await kv.set("auth:" + updatedUser.session_id, updatedUser)
+
+    cookies().set("session", updatedUser.session_id, {
+      httpOnly: true,
+      sameSite: true,
+      secure: true,
+      expires: new Date("Tue, 19 Jan 2038 04:14:07 GMT"),
+    })
 
     headers.set("x-user-id", updatedUser.user_id)
     headers.set("x-user-token", updatedUser.access_token)
