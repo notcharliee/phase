@@ -4,18 +4,23 @@
   "author": "@notcharliee",
   "type": "module",
   "scripts": {
-    "bot:build": "cd apps/bot && pnpm run build",
+    "bot:build": "turbo run build --filter=bot",
+    "bot:dev": "turbo run dev --filter=bot",
     "bot:start": "cd apps/bot && pnpm run start",
-    "bot:dev": "cd apps/bot && pnpm run dev",
-    "site:build": "cd apps/site && pnpm run build",
+
+    "site:build": "turbo run build --filter=site",
+    "site:dev": "turbo run dev --filter=site",
     "site:start": "cd apps/site && pnpm run start",
-    "site:dev": "cd apps/site && pnpm run dev",
-    "schemas:build": "cd packages/schemas && pnpm run build",
-    "schemas:dev": "cd packages/schemas && pnpm run dev"
+
+    "schemas:build": "turbo run build --filter=@repo/schemas",
+    "schemas:dev": "turbo run dev --filter=@repo/schemas"
   },
   "devDependencies": {
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7"
   },
-  "packageManager": "pnpm@8.9.2"
+  "packageManager": "pnpm@8.9.2",
+  "dependencies": {
+    "turbo": "^1.11.3"
+  }
 }

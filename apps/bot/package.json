@@ -1,5 +1,6 @@
 {
   "private": true,
+  "name": "bot",
   "author": "@notcharliee",
   "type": "module",
   "scripts": {

@@ -1,5 +1,6 @@
 {
   "private": true,
+  "name": "site",
   "author": "@notcharliee",
   "type": "module",
   "scripts": {

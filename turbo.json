@@ -1,0 +1,23 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      // A package's `build` script depends on that package's
+      // dependencies and devDependencies
+      // `build` tasks  being completed first
+      // (the `^` symbol signifies `upstream`).
+      "cache": true,
+      "dependsOn": ["^build"],
+      // note: output globs are relative to each package's `package.json`
+      // (and not the monorepo root)
+      "outputs": ["build/**", "!build/cache/**"]
+    },
+    // A package's `lint` script has no dependencies and
+    // can be run whenever. It also has no filesystem outputs.
+    "lint": {},
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}
