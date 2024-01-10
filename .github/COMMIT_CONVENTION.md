@@ -72,7 +72,7 @@ A commit message consists of a **header**, **body**, and **footer**. The header 
 <footer>
 ```
 
-The **header** is obligatory, while all other parts are optional.
+The **header** is obligatory if working in an app or package directory, while all other parts are optional.
 
 ### Subject
 
