@@ -11,11 +11,11 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
+    "@repo/tsconfig": "workspace:*",
     "mongoose": "^7.4.3",
     "tsup": "^8.0.1"
   },
   "devDependencies": {
-    "@repo/tsconfig": "workspace:*",
     "@types/node": "^20.8.9",
     "typescript": "^5.3.2"
   }

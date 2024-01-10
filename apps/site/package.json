@@ -21,6 +21,7 @@
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@repo/schemas": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
     "@t3-oss/env-nextjs": "^0.7.1",
     "@vercel/analytics": "^1.1.1",
     "@vercel/kv": "^1.0.1",
@@ -45,7 +46,6 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@repo/tsconfig": "workspace:*",
     "@types/node": "^20.8.7",
     "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
