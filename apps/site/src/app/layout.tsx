@@ -10,6 +10,7 @@ import { Metadata, Viewport } from "next"
 import { env } from "@/env"
 
 import { Toaster } from "@/components/ui/sonner"
+import { TooltipProvider } from "@/components/ui/tooltip"
 
 
 export const metadata = {
@@ -49,7 +50,7 @@ export default ({
     <body className="bg-dark-800 text-foreground">
       <div id="modals"></div>
       <div className="pointer-events-none fixed -z-10 h-full w-full overflow-hidden before:absolute before:-left-1/2 before:-top-1/2 before:h-[200%] before:w-[200%] before:animate-[noise_2s_steps(3)_both_infinite] before:bg-[auto_768px] before:bg-[url(/noise.png)]"/>
-      {children}
+      <TooltipProvider children={children} />
       <Analytics />
       <SpeedInsights />
       <Toaster />
