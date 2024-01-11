@@ -19,7 +19,6 @@ const config: Config = {
       },
       backgroundImage: {
         "main": "url(/bg.png)",
-        "grid": "url(/docs/bg-grid.png)",
         "noise": "url(/noise.png)",
       },
       boxShadow: {
