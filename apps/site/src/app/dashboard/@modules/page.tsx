@@ -18,7 +18,11 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  CardDescription,
+  CardFooter,
 } from "@/components/ui/card"
+
+import { Button } from "@/components/ui/button"
 
 import {
   Select,
@@ -26,6 +30,8 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select"
+
+import modules from "@/lib/modules"
 
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
@@ -45,7 +51,7 @@ const SelectGuild = async () => {
 
   return (
     <Select defaultValue={guild} value={guild} onValueChange={setGuildCookie}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-[180px] bg-popover">
         {guild && guildObj ? (
           <div className="flex items-center gap-2">
             <Avatar className="w-5 h-5">
@@ -82,12 +88,12 @@ const setGuildCookie = async (guild: string) => {
 
 
 export default () => (
-  <Card className="w-full grow md:grow-0">
-    <CardHeader className="border-b border-border flex flex-row items-center justify-between gap-4 space-y-0 py-4">
+  <Card className="w-full grow md:grow-0 md:overflow-auto relative">
+    <CardHeader className="border-b border-border flex flex-row items-center justify-between gap-4 space-y-0 py-4 sticky top-0 bg-card/50 backdrop-blur-sm">
       <CardTitle className="text-lg">Modules</CardTitle>
       <Suspense fallback={(
-        <Select >
-          <SelectTrigger className="w-[180px]">
+        <Select>
+          <SelectTrigger className="w-[180px] bg-popover">
             Loading...
           </SelectTrigger>
         </Select>
@@ -95,8 +101,18 @@ export default () => (
         <SelectGuild />
       </Suspense>
     </CardHeader>
-    <CardContent className="pt-6 flex flex-col">
-      this is being worked on i promise
+    <CardContent className="pt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
+      {modules.map((module, index) => (
+        <Card key={index} className="flex flex-col justify-between">
+          <CardHeader>
+            <CardTitle>{module.name}</CardTitle>
+            <CardDescription>{module.description}</CardDescription>
+          </CardHeader>
+          <CardFooter>
+            <Button variant={"secondary"} className="w-full">Configure</Button>
+          </CardFooter>
+        </Card>
+      ))}
     </CardContent>
   </Card>
 )
