@@ -89,7 +89,7 @@ const setGuildCookie = async (guild: string) => {
 
 export default () => (
   <Card className="w-full grow md:grow-0 md:overflow-auto relative">
-    <CardHeader className="border-b border-border flex flex-row items-center justify-between gap-4 space-y-0 py-4 sticky top-0 bg-card/50 backdrop-blur-sm">
+    <CardHeader className="border-b border-border flex flex-row items-center justify-between gap-4 space-y-0 py-4 md:sticky md:top-0 md:bg-card">
       <CardTitle className="text-lg">Modules</CardTitle>
       <Suspense fallback={(
         <Select>
