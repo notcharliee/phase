@@ -1,4 +1,5 @@
 import { headers } from "next/headers"
+import Link from "next/link"
 
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
@@ -49,10 +50,12 @@ export default async () => {
         </div>
         <Tooltip delayDuration={150}>
           <TooltipTrigger className="ml-auto">
-            <ExitIcon className="h-4 w-4" />
+            <Link href={"/api/auth"}>
+              <ExitIcon className="h-4 w-4" />
+            </Link>
           </TooltipTrigger>
           <TooltipContent className="m-1.5">
-            <span>Sign Out</span>
+            <span>Switch Account</span>
           </TooltipContent>
         </Tooltip>
       </CardContent>
