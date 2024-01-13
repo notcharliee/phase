@@ -82,7 +82,7 @@ export default (props: { params: { slug: string } }) => {
           <p className="leading-7">
             To use this command, click the button below to copy it, then run it in a Discord channel. Make sure the bot is in the server you want to run the command in, and that the bot has access to the channel.
           </p>
-          <Clipboard content={"/" + command.name} />
+          <Clipboard>{"/" + command.name}</Clipboard>
         </div>
       </div>
       <div className="flex items-center justify-between">
