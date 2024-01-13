@@ -22,11 +22,7 @@ Please make sure that all commits in this repository follow the [Commit Conventi
 
 ### Community Roles
 
-To recieve these roles, create a support ticket with a Discord account that has the right Github connection so we know it's you.
-
-<img src="./assets/contributor.svg" width="102" height="21" alt="@Contributor" /> - Awarded to merged pull request owners.\
-<img src="./assets/repohelper.svg" width="108" height="21" alt="@Repo Helper" /> - Awarded for creating 3 feature requests.\
-<img src="./assets/bughunter.svg" width="101" height="21" alt="@Bug Hunter" /> - Awarded for making 3 bug reports.
+<img src="./assets/community-roles.png" />
 
 ## Security
 
