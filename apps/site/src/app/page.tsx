@@ -7,10 +7,10 @@ export default () => (
     <Stars className="place-self-center fixed -z-10 overflow-hidden scale-50 rotate-90 sm:scale-[.6] sm:rotate-0 md:scale-75" />
     <div className="place-self-center w-full flex flex-col items-center">
       <div className="relative flex justify-center items-center w-full">
-        <h1 className="animate-[scale-up_1s_ease-out_forwards] shadow-light-100/50 text-shadow-glow text-6xl sm:text-7xl md:text-8xl max-w-[500px] sm:max-w-[600px] md:max-w-[700px] font-black tracking-tighter text-center absolute z-10">The all in one Discord Bot</h1>
+        <h1 className="animate-[scale-up_1s_ease-out_forwards] shadow-foreground/40 text-shadow-glow text-6xl sm:text-7xl md:text-8xl max-w-[500px] sm:max-w-[600px] md:max-w-[700px] font-black tracking-tighter text-center absolute z-10">The all in one Discord Bot</h1>
         <Moon className="w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96 animate-[moon-rotate_1s_ease-out_forwards]" />
       </div>
-      <div className="animate-[scale-up_1s_ease-out_forwards] opacity-0 animation-delay-500 flex flex-col sm:flex-row gap-6 shadow-light-100/50 mt-20">
+      <div className="animate-[scale-up_1s_ease-out_forwards] opacity-0 animation-delay-500 flex flex-col sm:flex-row gap-6 shadow-foreground/40 mt-20">
         <Button variant={"default"} className="shadow-glow" size={"xl"}>
           <Link href={"/dashboard"}>Get Started</Link>
         </Button>
