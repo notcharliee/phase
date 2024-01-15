@@ -8,7 +8,7 @@ import { Routes, RESTPostOAuth2AccessTokenResult } from "discord-api-types/v10"
 import { REST, makeURLSearchParams } from "@discordjs/rest"
 
 import { User, UserSchema } from "@/lib/types"
-import { env } from "@/env"
+import { env } from "@/lib/env"
 
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
