@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { env } from '@/env'
+import { env } from "@/lib/env"
 
 export function GET() {
   return NextResponse.redirect(

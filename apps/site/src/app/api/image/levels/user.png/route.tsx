@@ -1,7 +1,7 @@
 import { Font } from "next/dist/compiled/@vercel/og/satori"
 import { NextRequest, NextResponse } from "next/server"
 import { ImageResponse } from "next/og"
-import { env } from '@/env'
+import { env } from "@/lib/env"
 import { z } from "zod"
 
 export const runtime = "edge"

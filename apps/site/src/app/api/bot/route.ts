@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server"
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
-import { env } from '@/env'
+import { env } from "@/lib/env"
 
 
 export const GET = async (request: NextRequest) => {
