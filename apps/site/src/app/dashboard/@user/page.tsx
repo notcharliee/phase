@@ -5,7 +5,7 @@ import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 
 import { getInitials } from "@/lib/utils"
-import { env } from "@/env"
+import { env } from "@/lib/env"
 
 import {
   ExitIcon,

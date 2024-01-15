@@ -4,9 +4,9 @@ import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 
 import { LevelSchema } from "@repo/schemas"
-import { dbConnect } from "@/lib/db"
 
-import { env } from "@/env"
+import { dbConnect } from "@/lib/db"
+import { env } from "@/lib/env"
 
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
-import { env } from "@/env"
+
+import { env } from "@/lib/env"
 import commands from "@/lib/commands"
 
 export const GET = () => 

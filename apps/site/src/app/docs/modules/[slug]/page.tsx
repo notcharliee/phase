@@ -1,8 +1,6 @@
 import { Metadata } from "next"
 import Link from "next/link"
 
-import { env } from "@/env"
-
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -12,6 +10,7 @@ import { Button } from "@/components/ui/button"
 
 import NotFound from "../../[...not-found]/page"
 
+import { env } from "@/lib/env"
 import modules from "@/lib/modules"
 
 

@@ -7,7 +7,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import { GeistSans } from "geist/font"
 import { Metadata, Viewport } from "next"
-import { env } from "@/env"
+
+import { env } from "@/lib/env"
 
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"

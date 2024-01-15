@@ -8,7 +8,7 @@ import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 
 import { User } from "@/lib/types"
-import { env } from "@/env"
+import { env } from "@/lib/env"
 
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
