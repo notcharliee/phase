@@ -13,8 +13,8 @@ export default () => (
     <Stars className="place-self-center fixed -z-10 overflow-hidden scale-50 rotate-90 sm:scale-[.6] sm:rotate-0 md:scale-75" />
     <div className="place-self-center w-full flex flex-col justify-center items-center">
         <div className="absolute opacity-0 animate-[text-fade-in_1s_2s_forwards] text-center">
-          <h1 className="shadow-light-100/50 text-shadow-glow text-[9rem] leading-none font-black tracking-tighter">404</h1>
-          <p className="shadow-light-100/50 text-shadow-glow text-5xl font-extrabold tracking-tighter">Not Found</p>
+          <h1 className="shadow-foreground/30 text-shadow-glow text-[9rem] leading-none font-black tracking-tighter">404</h1>
+          <p className="shadow-foreground/30 text-shadow-glow text-5xl font-extrabold tracking-tighter">Not Found</p>
         </div>
         <Moon className="animate-[moon-shrink_1s_forwards] w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96" />
         <Twinkle className="animate-[moon-twinkle_1s_0.9s_forwards] absolute w-0 h-0" />
