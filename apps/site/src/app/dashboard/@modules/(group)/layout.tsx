@@ -1,5 +1,6 @@
 import { cookies, headers } from "next/headers"
-import { Suspense } from "react"
+import React, { Suspense } from "react"
+import Link from "next/link"
 
 import { REST } from "@discordjs/rest"
 import { API } from "@discordjs/core/http-only"
@@ -102,7 +103,7 @@ const setGuildCookie = async (guild: string) => {
 }
 
 
-export default () => (
+export default ({ children }: { children: React.ReactNode }) => (
   <Card className="w-full grow md:grow-0 md:overflow-auto relative">
     <CardHeader className="border-b border-border flex flex-row items-center justify-between gap-4 space-y-0 py-4 md:sticky md:top-0 md:bg-card">
       <CardTitle className="text-lg">Modules</CardTitle>
@@ -117,17 +118,7 @@ export default () => (
       </Suspense>
     </CardHeader>
     <CardContent className="pt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
-      {modules.map((module, index) => (
-        <Card key={index} className={"flex flex-col justify-between " + (!cookies().get("guild")?.value ? "pointer-events-none opacity-50" : "")}>
-          <CardHeader>
-            <CardTitle>{module.name}</CardTitle>
-            <CardDescription>{module.description}</CardDescription>
-          </CardHeader>
-          <CardFooter>
-            <Button variant={"secondary"} className="w-full">Configure</Button>
-          </CardFooter>
-        </Card>
-      ))}
+      {children}
     </CardContent>
   </Card>
 )
