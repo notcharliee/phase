@@ -4,7 +4,10 @@ import { Suspense } from "react"
 import { REST } from "@discordjs/rest"
 import { API } from "@discordjs/core/http-only"
 
+import { GuildSchema } from "@repo/schemas"
+
 import { getInitials } from "@/lib/utils"
+import { dbConnect } from "@/lib/db"
 import { env } from "@/lib/env"
 
 import {
@@ -38,33 +41,45 @@ const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 
 
 const SelectGuild = async () => {
-  const guild = cookies().get("guild")?.value
+  await dbConnect()
 
-  const userToken = headers().get("x-user-token")!
-  const userREST = new REST({ authPrefix: "Bearer" }).setToken(userToken)
+  const user = {
+    id: headers().get("x-user-id")!,
+    token: headers().get("x-user-token")!,
+  }
+
+  const userREST = new REST({ authPrefix: "Bearer" }).setToken(user.token)
   const userAPI = new API(userREST)
 
-  const userGuilds = (await userAPI.users.getGuilds())
-    .sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+  const guildDocuments = await GuildSchema.find({ admins: { $in: user.id } })
+  const guildObjects = (await userAPI.users.getGuilds()).sort((a, b) => {
+    const aIsInDocuments = guildDocuments.some(doc => doc.id == a.id)
+    const bIsInDocuments = guildDocuments.some(doc => doc.id == b.id)
+  
+    if (aIsInDocuments && !bIsInDocuments) return -1
+    else if (!aIsInDocuments && bIsInDocuments) return 1
+    else return a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+  })
 
-  const guildObj = userGuilds.find(g => g.id == guild)
+  const selectedGuildDocument = guildDocuments.find(guild => guild.id == cookies().get("guild")?.value)
+  const selectedGuildObject = guildObjects.find(guild => guild.id == selectedGuildDocument?.id)
 
   return (
-    <Select defaultValue={guild} value={guild} onValueChange={setGuildCookie}>
+    <Select defaultValue={selectedGuildObject?.id} value={selectedGuildObject?.id} onValueChange={setGuildCookie}>
       <SelectTrigger className="w-[180px] bg-popover">
-        {guild && guildObj ? (
+        {selectedGuildObject ? (
           <div className="flex items-center gap-2">
             <Avatar className="w-5 h-5">
-              <AvatarImage src={guildObj.icon ? discordREST.cdn.icon(guildObj.id, guildObj.icon) : undefined} />
-              <AvatarFallback className="text-xs">{getInitials(guildObj.name)}</AvatarFallback>
+              <AvatarImage src={selectedGuildObject.icon ? discordREST.cdn.icon(selectedGuildObject.id, selectedGuildObject.icon) : undefined} />
+              <AvatarFallback className="text-xs">{getInitials(selectedGuildObject.name)}</AvatarFallback>
             </Avatar>
-            <span>{guildObj.name}</span>
+            <span>{selectedGuildObject.name}</span>
           </div>
         ) : "Select a server"}
       </SelectTrigger>
       <SelectContent>
-        {userGuilds.map(guild => (
-          <SelectItem value={guild.id} key={guild.id}>
+        {guildObjects.map((guild, index) => (
+          <SelectItem value={guild.id} key={index} disabled={!!(index >= guildDocuments.length)}>
             <div className="flex items-center gap-2">
               <Avatar className="w-5 h-5">
                 <AvatarImage src={guild.icon ? discordREST.cdn.icon(guild.id, guild.icon) : undefined} />
@@ -103,7 +118,7 @@ export default () => (
     </CardHeader>
     <CardContent className="pt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
       {modules.map((module, index) => (
-        <Card key={index} className="flex flex-col justify-between">
+        <Card key={index} className={"flex flex-col justify-between " + (!cookies().get("guild")?.value ? "pointer-events-none opacity-50" : "")}>
           <CardHeader>
             <CardTitle>{module.name}</CardTitle>
             <CardDescription>{module.description}</CardDescription>
