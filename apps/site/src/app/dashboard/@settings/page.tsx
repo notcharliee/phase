@@ -1,4 +1,9 @@
-import { headers } from "next/headers"
+import { cookies, headers } from "next/headers"
+
+import { API } from "@discordjs/core/http-only"
+import { REST } from "@discordjs/rest"
+
+import { env } from "@/lib/env"
 
 import {
   AlertDialog,
@@ -12,14 +17,18 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-import { Button } from "@/components/ui/button"
+import {
+  Button,
+} from "@/components/ui/button"
 
 import {
   Card,
   CardContent,
 } from "@/components/ui/card"
 
-import { Clipboard } from "@/components/ui/clipboard"
+import {
+  Clipboard,
+} from "@/components/ui/clipboard"
 
 import {
   Dialog,
@@ -32,7 +41,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
-import { Label } from "@/components/ui/label"
+import {
+  Label,
+} from "@/components/ui/label"
 
 import {
   Tabs,
@@ -45,7 +56,15 @@ import {
   deleteAccount,
 } from "./actions"
 
+import {
+  BotNicknameForm,
+} from "./forms"
+
 import { ServerAction } from "@/components/server-action"
+
+
+const discordREST = new REST().setToken(env.DISCORD_TOKEN)
+const discordAPI = new API(discordREST)
 
 
 export default () => (
@@ -59,7 +78,7 @@ export default () => (
         <TabsContent value="account" className="mt-0 space-y-12">
           <Account />
         </TabsContent>
-        <TabsContent value="server" className="mt-0">
+        <TabsContent value="server" className="mt-0 space-y-8">
           <Server />
         </TabsContent>
       </Tabs>
@@ -134,11 +153,19 @@ const Account = () => (<>
 </>)
 
 
-const Server = () => (<>
-  <div>
-    <h2 className="font-semibold">Server Settings</h2>
-    <p className="text-muted-foreground">
-      Manage the currently selected server's basic bot settings.
-    </p>
-  </div>
-</>)
+const Server = async () => {
+  const guildId = cookies().get("guild")?.value
+  const botId = env.DISCORD_ID
+
+  const defaultNickname = guildId ? (await discordAPI.guilds.getMember(guildId, botId)).nick : undefined
+
+  return (<>
+    <div>
+      <h2 className="font-semibold">Server Settings</h2>
+      <p className="text-muted-foreground">
+        Manage the currently selected server's basic bot settings.
+      </p>
+    </div>
+    <BotNicknameForm default={defaultNickname ?? undefined} />
+  </>)
+}
