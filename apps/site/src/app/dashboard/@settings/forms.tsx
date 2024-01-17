@@ -24,8 +24,10 @@ import {
 
 export const BotNicknameForm = (props: { default?: string }) => {
   const FormSchema = z.object({
-    nickname: z.string().min(2, {
+    nickname: z.string().min(1, {
       message: "Nickname must be at least 1 character.",
+    }).max(32, {
+      message: "Nickname cannot be longer than 32 characters.",
     }),
   })
 
