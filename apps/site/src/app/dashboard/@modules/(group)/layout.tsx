@@ -11,6 +11,8 @@ import { getInitials } from "@/lib/utils"
 import { dbConnect } from "@/lib/db"
 import { env } from "@/lib/env"
 
+import { PlusCircledIcon } from "@radix-ui/react-icons"
+
 import {
   Avatar,
   AvatarFallback,
@@ -22,20 +24,15 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardFooter,
 } from "@/components/ui/card"
-
-import { Button } from "@/components/ui/button"
 
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
+  SelectSeparator,
 } from "@/components/ui/select"
-
-import modules from "@/lib/modules"
 
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
@@ -79,6 +76,10 @@ const SelectGuild = async () => {
         ) : "Select a server"}
       </SelectTrigger>
       <SelectContent>
+        <Link href={"/redirect/invite"} className="select-none text-sm py-1.5 px-2 flex items-center hover:underline">
+          <PlusCircledIcon className="mr-2 w-4 h-4" /> Add a server
+        </Link>
+        <SelectSeparator />
         {guildObjects.map((guild, index) => (
           <SelectItem value={guild.id} key={index} disabled={!!(index >= guildDocuments.length)}>
             <div className="flex items-center gap-2">
