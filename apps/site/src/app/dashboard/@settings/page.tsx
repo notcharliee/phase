@@ -75,7 +75,7 @@ export default () => (
           <TabsTrigger value="account">Account</TabsTrigger>
           <TabsTrigger value="server">Server</TabsTrigger>
         </TabsList>
-        <TabsContent value="account" className="mt-0 space-y-12">
+        <TabsContent value="account" className="mt-0 space-y-8">
           <Account />
         </TabsContent>
         <TabsContent value="server" className="mt-0 space-y-8">
@@ -95,7 +95,7 @@ const Account = () => (<>
     </p>
   </div>
   <div>
-    <h3 className="font-semibold">Your Details</h3>
+    <h3>Your Details</h3>
     <p className="text-muted-foreground">See your current authentication details.</p>
     <Dialog>
       <DialogTrigger asChild>
@@ -127,7 +127,7 @@ const Account = () => (<>
     </Dialog>
   </div>
   <div>
-    <h3 className="font-semibold">Delete Account</h3>
+    <h3>Delete Account</h3>
     <p className="text-muted-foreground">Delete your Discord OAuth2 data from the database. <strong>This cannot be undone.</strong></p>
     <AlertDialog>
       <AlertDialogTrigger asChild>
