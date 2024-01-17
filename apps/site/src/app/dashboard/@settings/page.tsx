@@ -89,13 +89,13 @@ export default () => (
 
 const Account = () => (<>
   <div>
-    <h2 className="font-semibold">Account Settings</h2>
+    <Label>Account Settings</Label>
     <p className="text-muted-foreground">
       Manage the currently logged in Discord account.
     </p>
   </div>
   <div>
-    <h3>Your Details</h3>
+    <Label>Your Details</Label>
     <p className="text-muted-foreground">See your current authentication details.</p>
     <Dialog>
       <DialogTrigger asChild>
@@ -127,7 +127,7 @@ const Account = () => (<>
     </Dialog>
   </div>
   <div>
-    <h3>Delete Account</h3>
+    <Label>Delete Account</Label>
     <p className="text-muted-foreground">Delete your Discord OAuth2 data from the database. <strong>This cannot be undone.</strong></p>
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -161,7 +161,7 @@ const Server = async () => {
 
   return (<>
     <div>
-      <h2 className="font-semibold">Server Settings</h2>
+      <Label>Server Settings</Label>
       <p className="text-muted-foreground">
         Manage the currently selected server's basic bot settings.
       </p>
