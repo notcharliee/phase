@@ -66,7 +66,7 @@ const SelectGuild = async () => {
     <Select defaultValue={selectedGuildObject?.id} value={selectedGuildObject?.id} onValueChange={setGuildCookie}>
       <SelectTrigger className="w-[180px] bg-popover">
         {selectedGuildObject ? (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 line-clamp-1">
             <Avatar className="w-5 h-5">
               <AvatarImage src={selectedGuildObject.icon ? discordREST.cdn.icon(selectedGuildObject.id, selectedGuildObject.icon) : undefined} />
               <AvatarFallback className="text-xs">{getInitials(selectedGuildObject.name)}</AvatarFallback>
@@ -118,8 +118,6 @@ export default ({ children }: { children: React.ReactNode }) => (
         <SelectGuild />
       </Suspense>
     </CardHeader>
-    <CardContent className="pt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
-      {children}
-    </CardContent>
+    {children}
   </Card>
 )
