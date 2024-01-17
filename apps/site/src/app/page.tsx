@@ -1,5 +1,7 @@
 import Link from "next/link"
-import { SVGProps } from "react"
+
+import { type SVGProps } from "react"
+
 import { Button } from "@/components/ui/button"
 
 export default () => (
@@ -11,12 +13,16 @@ export default () => (
         <Moon className="w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96 animate-[moon-rotate_1s_ease-out_forwards]" />
       </div>
       <div className="animate-[scale-up_1s_ease-out_forwards] opacity-0 animation-delay-500 flex flex-col sm:flex-row gap-6 shadow-foreground/30 mt-20">
-        <Button variant={"default"} className="shadow-glow" size={"xl"}>
-          <Link href={"/dashboard"}>Get Started</Link>
-        </Button>
-        <Button variant={"outline"} className="shadow-glow border-2 border-light-800" size={"xl"}>
-          <Link href={"/docs"}>Learn More</Link>
-        </Button>
+        <Link href={"/dashboard"}>
+          <Button variant={"default"} className="shadow-glow" size={"xl"}>
+            Get Started
+          </Button>
+        </Link>
+        <Link href={"/docs"}>
+          <Button variant={"outline"} className="shadow-glow border-2 border-light-800" size={"xl"}>
+            Learn More
+          </Button>
+        </Link>
       </div>
     </div>
   </main>
