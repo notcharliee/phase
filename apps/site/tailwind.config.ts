@@ -82,25 +82,25 @@ const config: Config = {
         "DEFAULT": "0 2px 4px var(--tw-shadow-color)",
         "lg": "0 8px 16px var(--tw-shadow-color)",
         "glow-sm": `
-          0 0 4px 0 var(--tw-shadow-color),
-          0 0 11px 0 var(--tw-shadow-color),
-          0 0 19px 0 var(--tw-shadow-color),
-          0 0 40px 0 var(--tw-shadow-color)
+          0 0 4px var(--tw-shadow-color),
+          0 0 11px var(--tw-shadow-color),
+          0 0 19px var(--tw-shadow-color),
+          0 0 40px var(--tw-shadow-color)
         `,
         "glow": `
-          0 0 4px 0 var(--tw-shadow-color),
-          0 0 11px 0 var(--tw-shadow-color),
-          0 0 19px 0 var(--tw-shadow-color),
-          0 0 40px 0 var(--tw-shadow-color),
-          0 0 80px 0 var(--tw-shadow-color)
+          0 0 4px var(--tw-shadow-color),
+          0 0 11px var(--tw-shadow-color),
+          0 0 19px var(--tw-shadow-color),
+          0 0 40px var(--tw-shadow-color),
+          0 0 80px var(--tw-shadow-color)
         `,
         "glow-lg": `
-          0 0 4px 0 var(--tw-shadow-color),
-          0 0 11px 0 var(--tw-shadow-color),
-          0 0 19px 0 var(--tw-shadow-color),
-          0 0 40px 0 var(--tw-shadow-color),
-          0 0 80px 0 var(--tw-shadow-color),
-          0 0 120px 0 var(--tw-shadow-color)
+          0 0 4px var(--tw-shadow-color),
+          0 0 11px var(--tw-shadow-color),
+          0 0 19px var(--tw-shadow-color),
+          0 0 40px var(--tw-shadow-color),
+          0 0 80px var(--tw-shadow-color),
+          0 0 120px var(--tw-shadow-color)
         `,
       },
     },
