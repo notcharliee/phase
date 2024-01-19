@@ -1,4 +1,5 @@
 import { cookies, headers } from "next/headers"
+import { type Metadata } from "next"
 
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
@@ -19,6 +20,12 @@ import { AuditLogsForm } from "./form"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
+
+
+export const metadata: Metadata = {
+  title: "Audit Logs - Phase Bot",
+  description: "Provides a detailed log of all server activities and events to the channel of your choice.",
+}
 
 
 export default async () => {
