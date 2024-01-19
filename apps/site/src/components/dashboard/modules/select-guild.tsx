@@ -1,5 +1,4 @@
 import { cookies, headers } from "next/headers"
-import React, { Suspense } from "react"
 import Link from "next/link"
 
 import { REST } from "@discordjs/rest"
@@ -7,6 +6,7 @@ import { API } from "@discordjs/core/http-only"
 
 import { GuildSchema } from "@repo/schemas"
 
+import { setGuildCookie } from "@/lib/actions"
 import { getInitials } from "@/lib/utils"
 import { dbConnect } from "@/lib/db"
 import { env } from "@/lib/env"
@@ -20,13 +20,6 @@ import {
 } from "@/components/ui/avatar"
 
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -38,7 +31,7 @@ import {
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 
 
-const SelectGuild = async () => {
+export const SelectGuild = async () => {
   await dbConnect()
 
   const user = {
@@ -97,27 +90,10 @@ const SelectGuild = async () => {
 }
 
 
-const setGuildCookie = async (guild: string) => {
-  "use server"
-
-  cookies().set("guild", guild)
-}
-
-
-export default ({ children }: { children: React.ReactNode }) => (
-  <Card className="w-full grow md:grow-0 md:overflow-auto relative">
-    <CardHeader className="border-b border-border flex flex-row items-center justify-between gap-4 space-y-0 py-4 md:sticky md:top-0 md:bg-card">
-      <CardTitle className="text-lg">Modules</CardTitle>
-      <Suspense fallback={(
-        <Select>
-          <SelectTrigger className="w-[180px] bg-popover">
-            Loading...
-          </SelectTrigger>
-        </Select>
-      )}>
-        <SelectGuild />
-      </Suspense>
-    </CardHeader>
-    {children}
-  </Card>
+export const SelectGuildFallback = () => (
+  <Select>
+    <SelectTrigger className="w-[180px] bg-popover">
+      Loading...
+    </SelectTrigger>
+  </Select>
 )
