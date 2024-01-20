@@ -18,4 +18,4 @@ type GameDataTictactoe = {
 };
 type GameData = GameDataTictactoe;
 
-export { Game, GameData, GameDataTictactoe, GameSchema };
+export { type Game, type GameData, type GameDataTictactoe, GameSchema };

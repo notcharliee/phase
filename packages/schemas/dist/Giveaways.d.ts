@@ -15,4 +15,4 @@ type Giveaway = {
     expired: boolean;
 };
 
-export { Giveaway, GiveawaySchema };
+export { type Giveaway, GiveawaySchema };

@@ -10,4 +10,4 @@ type Level = {
     xp: number;
 };
 
-export { Level, LevelSchema };
+export { type Level, LevelSchema };

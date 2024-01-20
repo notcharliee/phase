@@ -11,4 +11,4 @@ type Tag = {
     }[];
 };
 
-export { Tag, TagSchema };
+export { type Tag, TagSchema };

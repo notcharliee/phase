@@ -87,4 +87,4 @@ type GuildModuleTickets = {
 };
 type GuildModule = GuildModuleAuditLogs | GuildModuleAutoPartners | GuildModuleAutoRoles | GuildModuleJoinToCreates | GuildModuleLevels | GuildModuleReactionRoles | GuildModuleTickets;
 
-export { Guild, GuildCommand, GuildModule, GuildModuleAuditLogs, GuildModuleAutoPartners, GuildModuleAutoRoles, GuildModuleJoinToCreates, GuildModuleLevels, GuildModuleReactionRoles, GuildModuleTickets, GuildSchema };
+export { type Guild, type GuildCommand, type GuildModule, type GuildModuleAuditLogs, type GuildModuleAutoPartners, type GuildModuleAutoRoles, type GuildModuleJoinToCreates, type GuildModuleLevels, type GuildModuleReactionRoles, type GuildModuleTickets, GuildSchema };

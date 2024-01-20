@@ -8,4 +8,4 @@ type AFK = {
     reason: string;
 };
 
-export { AFK, AFKSchema };
+export { type AFK, AFKSchema };
