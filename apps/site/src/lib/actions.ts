@@ -12,6 +12,12 @@ import { StatusCodes } from "http-status-codes"
 import {
   GuildSchema,
   type GuildModuleAuditLogs,
+  type GuildModuleAutoPartners,
+  type GuildModuleAutoRoles,
+  type GuildModuleJoinToCreates,
+  type GuildModuleLevels,
+  type GuildModuleReactionRoles,
+  type GuildModuleTickets,
 } from "@repo/schemas"
 
 import { dbConnect } from "@/lib/db"
@@ -35,15 +41,46 @@ export const deleteAccount = async () => {
 }
 
 
-export const updateAuditLogsModule = async (data: GuildModuleAuditLogs) => {
-  const promise = new Promise(resolve => {
-    setTimeout(() => {
-      console.log(data)
-      resolve(data)
-    }, 3000)
-  })
+type ModuleNames = "AuditLogs" | "AutoPartners" | "AutoRoles" | "JoinToCreates" | "Levels" | "ReactionRoles" | "Tickets"
 
-  return await promise
+type ModuleTypes = {
+  "AuditLogs": GuildModuleAuditLogs,
+  "AutoPartners": GuildModuleAutoPartners,
+  "AutoRoles": GuildModuleAutoRoles,
+  "JoinToCreates": GuildModuleJoinToCreates,
+  "Levels": GuildModuleLevels,
+  "ReactionRoles": GuildModuleReactionRoles,
+  "Tickets": GuildModuleTickets,
+}
+
+export const updateModule = async <TName extends ModuleNames> (module: TName, data: ModuleTypes[TName]) => {
+  await dbConnect()
+
+  const guildId = cookies().get("guild")?.value
+  const userId = headers().get("x-user-id")
+  const userToken = headers().get("x-user-token")
+
+  if (!guildId || !userId || !userToken) return StatusCodes.BAD_REQUEST
+
+  // Checks if user id and token are valid
+  const validUser = await getUser(userId, userToken)
+  if (!validUser) return StatusCodes.UNAUTHORIZED
+
+  // Checks if user is a dashboard admin for the guild
+  const guildSchema = await GuildSchema.findOne({ id: guildId, admins: { $in: userId } })
+  if (!guildSchema) return StatusCodes.UNAUTHORIZED
+
+  // Update module data
+  guildSchema.modules[module] = data
+  guildSchema.markModified("modules")
+
+  try {
+    await guildSchema.save()
+    return StatusCodes.OK
+  } catch (error) {
+    console.log(error)
+    return StatusCodes.INTERNAL_SERVER_ERROR
+  }
 }
 
 
