@@ -1,7 +1,4 @@
-import { promises as fs } from "fs"
-
 import { cookies } from "next/headers"
-import { type Metadata } from "next"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
@@ -14,18 +11,14 @@ import {
   CardFooter,
 } from "@/components/ui/card"
 
+import * as modules from "./modules"
+
 
 export default async () => {
-  const moduleDirs = await fs.readdir(process.cwd() + "/src/app/dashboard/modules")
-
-  const moduleData = await Promise.all(moduleDirs.map(async (moduleDir) => {
-    const moduleMetadata = (await import(`./modules/${moduleDir}/page`)).metadata as Metadata
-
-    return {
-      name: moduleMetadata.title?.toString().replace(" - Phase Bot", ""),
-      description: moduleMetadata.description,
-      url: `/dashboard/modules/${moduleDir}`,
-    }
+  const moduleData = Object.values(modules).map((module, index) => ({
+    name: module.title?.toString().replace(" - Phase Bot", ""),
+    description: module.description,
+    url: `/dashboard/modules/${Object.keys(modules)[index]?.replaceAll("_","-")}`,
   }))
   
   return (
