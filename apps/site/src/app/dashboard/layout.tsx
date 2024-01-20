@@ -18,8 +18,7 @@ export default ({ children }: { children: React.ReactNode }) => (
       <CardHeader className="border-b border-border flex flex-row items-center justify-between gap-4 space-y-0 py-4 md:sticky md:top-0 md:bg-card">
         <CardTitle className="text-lg">Modules</CardTitle>
         <Suspense fallback={<SelectGuildFallback />}>
-          {/* Temporarily disable to work on later */}
-          {/* <SelectGuild /> */}
+          <SelectGuild />
         </Suspense>
       </CardHeader>
       <CardContent className="pt-6">
