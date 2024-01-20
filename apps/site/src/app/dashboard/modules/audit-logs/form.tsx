@@ -2,9 +2,9 @@
 
 import { useRouter } from "next/navigation"
 
-import { z } from "zod"
+import { updateModule } from "@/lib/actions"
 
-import { updateAuditLogsModule } from "@/lib/actions"
+import { z } from "zod"
 
 import {
   type APIGuildCategoryChannel,
@@ -82,7 +82,7 @@ export const AuditLogsForm = (props: {
 
   return formBuilder({
     defaultValues: props.defaultValues,
-    onSubmit: updateAuditLogsModule,
+    onSubmit: (data) => updateModule("AuditLogs", data),
     schema: formSchema,
   },
   ({ form }) => (
