@@ -38,7 +38,7 @@
     "geist": "^1.2.1",
     "http-status-codes": "^2.3.0",
     "lucide-react": "^0.303.0",
-    "mongoose": "^7.6.8",
+    "mongoose": "^8.1.0",
     "next": "^14.1.0",
     "next-themes": "^0.2.1",
     "postcss": "8.4.26",
