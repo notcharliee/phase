@@ -17,7 +17,6 @@ const discordAPI = new API(discordREST)
 
 export const GET = async (request: NextRequest) => {
   const code = request.nextUrl.searchParams.get("code")
-  const sessionCookie = request.cookies.get("session")
 
   if (!code) return NextResponse.json({
     error: "Bad Request",
@@ -44,11 +43,8 @@ export const GET = async (request: NextRequest) => {
     created_timestamp: Math.floor(Date.now() / 1000),
     expires_timestamp: Math.floor(Date.now() / 1000) + 604800,
   } satisfies User
-
-  if (sessionCookie) 
-    await kv.rename("auth:" + sessionCookie.value, "auth:" + updatedUser.session_id).catch(e => e)
   
-  await kv.set("auth:" + updatedUser.session_id, updatedUser).catch(e => e)
+  await kv.set("auth:" + updatedUser.session_id, updatedUser)
 
   cookies().set("session", updatedUser.session_id, {
     httpOnly: true,
