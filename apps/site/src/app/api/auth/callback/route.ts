@@ -45,8 +45,10 @@ export const GET = async (request: NextRequest) => {
     expires_timestamp: Math.floor(Date.now() / 1000) + 604800,
   } satisfies User
 
-  if (sessionCookie) await kv.rename("auth:" + sessionCookie.value, "auth:" + updatedUser.session_id)
-  await kv.set("auth:" + updatedUser.session_id, updatedUser)
+  if (sessionCookie) 
+    await kv.rename("auth:" + sessionCookie.value, "auth:" + updatedUser.session_id).catch(e => e)
+  
+  await kv.set("auth:" + updatedUser.session_id, updatedUser).catch(e => e)
 
   cookies().set("session", updatedUser.session_id, {
     httpOnly: true,
