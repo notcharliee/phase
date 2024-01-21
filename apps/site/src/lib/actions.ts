@@ -43,7 +43,7 @@ export const deleteAccount = async () => {
 
 type ModuleNames = "AuditLogs" | "AutoPartners" | "AutoRoles" | "JoinToCreates" | "Levels" | "ReactionRoles" | "Tickets"
 
-type ModuleTypes = {
+type ModuleType = {
   "AuditLogs": GuildModuleAuditLogs,
   "AutoPartners": GuildModuleAutoPartners,
   "AutoRoles": GuildModuleAutoRoles,
@@ -53,7 +53,7 @@ type ModuleTypes = {
   "Tickets": GuildModuleTickets,
 }
 
-export const updateModule = async <TName extends ModuleNames> (module: TName, data: ModuleTypes[TName]) => {
+export const updateModule = async <TName extends ModuleNames> (module: TName, data: Partial<ModuleType[TName]>) => {
   await dbConnect()
 
   const guildId = cookies().get("guild")?.value
@@ -71,7 +71,7 @@ export const updateModule = async <TName extends ModuleNames> (module: TName, da
   if (!guildSchema) return StatusCodes.UNAUTHORIZED
 
   // Update module data
-  guildSchema.modules[module] = data
+  for (const key of Object.keys(data)) guildSchema.modules[module][key as keyof ModuleType[TName]] = data[key as keyof ModuleType[TName]]!
   guildSchema.markModified("modules")
 
   try {
