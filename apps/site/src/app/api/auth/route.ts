@@ -16,7 +16,7 @@ export const GET = (request: NextRequest) => {
     redirect_uri: env.NEXT_PUBLIC_BASE_URL + "/api/auth/callback",
     response_type: "code",
     scope: "identify guilds",
-    prompt: "none",
+    prompt: "consent",
   })
 
   return NextResponse.redirect(authorizationURL)
