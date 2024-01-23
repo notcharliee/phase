@@ -7,6 +7,8 @@ import { kv } from "@vercel/kv"
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 
+import { default as axios } from "axios"
+
 import { StatusCodes } from "http-status-codes"
 
 import {
@@ -30,14 +32,37 @@ const discordAPI = new API(discordREST)
 
 
 export const deleteAccount = async () => {
-  const sessionId = headers().get("x-user-session")
-  const key = "auth:" + sessionId
+  const userSession = headers().get("x-auth-id")
+  const userToken = headers().get("x-user-token")
 
-  await kv.del(key)
-  
-  cookies().delete("session")
+  if (!userSession || !userToken) return StatusCodes.BAD_REQUEST
 
-  redirect("/")
+  try {
+    cookies().delete("session")
+    
+    await kv.del("auth:" + userSession)
+    
+    await axios.post("https://discord.com/api/v10/oauth2/token/revoke",
+      new URLSearchParams({
+        token: userToken,
+        token_type_hint: "access_token",
+      }),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        auth: {
+          username: env.DISCORD_ID,
+          password: env.DISCORD_SECRET,
+        },
+      },
+    )
+
+    redirect("/")
+  } catch (error) {
+    console.log(error)
+    return StatusCodes.INTERNAL_SERVER_ERROR
+  }
 }
 
 

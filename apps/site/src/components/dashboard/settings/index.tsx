@@ -104,7 +104,7 @@ export const Settings = async () => {
                     </div>
                     <div className="grid flex-1 gap-2">
                       <Label>Authentication Token</Label>
-                      <Clipboard secret>{headers().get("x-user-session")!}</Clipboard>
+                      <Clipboard secret>{headers().get("x-auth-id")!}</Clipboard>
                     </div>
                   </div>
                   <DialogFooter className="sm:justify-start">

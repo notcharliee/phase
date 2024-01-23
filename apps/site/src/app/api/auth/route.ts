@@ -11,12 +11,14 @@ const discordAPI = new API(discordREST)
 
 
 export const GET = (request: NextRequest) => {
+  const prompt = request.cookies.has("user") ? "none" : "consent"
+
   const authorizationURL = discordAPI.oauth2.generateAuthorizationURL({
     client_id: env.DISCORD_ID,
-    redirect_uri: env.NEXT_PUBLIC_BASE_URL + "/api/auth/callback",
+    redirect_uri: request.nextUrl.origin + "/api/auth/callback",
     response_type: "code",
     scope: "identify guilds",
-    prompt: "consent",
+    prompt,
   })
 
   return NextResponse.redirect(authorizationURL)

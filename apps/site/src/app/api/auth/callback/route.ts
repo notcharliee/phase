@@ -17,6 +17,9 @@ const discordAPI = new API(discordREST)
 
 export const GET = async (request: NextRequest) => {
   const code = request.nextUrl.searchParams.get("code")
+  const error = request.nextUrl.searchParams.get("error")
+
+  if (error == "access_denied") return NextResponse.redirect("/")
 
   if (!code) return NextResponse.json({
     error: "Bad Request",
@@ -27,7 +30,7 @@ export const GET = async (request: NextRequest) => {
     client_id: env.DISCORD_ID,
     client_secret: env.DISCORD_SECRET,
     grant_type: "authorization_code",
-    redirect_uri: env.NEXT_PUBLIC_BASE_URL + "/api/auth/callback",
+    redirect_uri: request.nextUrl.origin + "/api/auth/callback",
     code,
   })
 
@@ -35,23 +38,22 @@ export const GET = async (request: NextRequest) => {
   const userAPI = new API(userREST)
   const user = await userAPI.users.getCurrent()
 
-  const updatedUser = {
-    user_id: user.id,
-    session_id: randomUUID(),
-    access_token: token.access_token,
-    refresh_token: token.refresh_token,
+  const userObject = {
+    id: randomUUID(),
+    discord_id: user.id,
+    discord_token: token.access_token,
     created_timestamp: Math.floor(Date.now() / 1000),
     expires_timestamp: Math.floor(Date.now() / 1000) + 604800,
   } satisfies User
-  
-  await kv.set("auth:" + updatedUser.session_id, updatedUser)
 
-  cookies().set("session", updatedUser.session_id, {
+  cookies().set("user", userObject.id, {
+    expires: new Date("2038/1/19"),
     httpOnly: true,
     sameSite: true,
     secure: true,
-    expires: new Date("Tue, 19 Jan 2038 04:14:07 GMT"),
   })
+
+  await kv.set(`user:${userObject.id}`, userObject, { exat: userObject.expires_timestamp })
 
   return NextResponse.redirect(new URL("/dashboard", request.url))
 }
