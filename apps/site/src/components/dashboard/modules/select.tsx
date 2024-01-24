@@ -65,16 +65,19 @@ export const RoleSelect = (props: {
   roles: APIRole[],
   field: ControllerRenderProps<any, any>,
 }) => {
-  const roles = props.roles.sort((a, b) => a.position - b.position)
+  const roles = props.roles.filter(role => role.name !== "@everyone").sort((a, b) => b.position - a.position)
+  const selectedRole = roles.find(role => role.id == props.field.value)
 
   return (
     <Select defaultValue={props.field.value ?? undefined} onValueChange={props.field.onChange} name={props.field.name} disabled={props.field.disabled}>
       <SelectTrigger className="bg-popover">
-        {roles.find(role => role.id == props.field.value)?.name ?? "Select a role"}
+        <span style={{ color: selectedRole?.color ? "#" + selectedRole.color.toString(16) : undefined }}>{selectedRole?.name ?? "Select a role"}</span>
       </SelectTrigger>
       <SelectContent>
         {roles.map(role => (
-          <SelectItem value={role.id} key={role.id} className="text-muted-foreground">{role.name}</SelectItem>
+          <SelectItem value={role.id} key={role.id} className="text-muted-foreground" style={{ color: role?.color ? "#" + role.color.toString(16) : undefined }}>
+            {role.name}
+          </SelectItem>
         ))}
       </SelectContent>
     </Select>
