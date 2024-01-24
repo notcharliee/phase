@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  *,
+  ::before,
+  ::after {
+    @apply border-border;
+  }
+}
+
 .svg-inline--fa {
   vertical-align: -0.125em;
 }
