@@ -87,7 +87,7 @@ export const ModuleForm = (props: {
         />
       </div>
       <Button type="submit" className="mr-3">Save Changes</Button>
-      <Button type="reset" variant={"destructive"} onClick={() => router.back()}>Discard Changes</Button>
+      <Button type="reset" variant="secondary" onClick={() => router.back()}>Go Back</Button>
     </div>
   ))
 }
@@ -108,6 +108,6 @@ export const ModuleFormFallback = () => (
       </div>
     </div>
     <Button type="submit" className="mr-3">Save Changes</Button>
-    <Button type="reset" variant={"destructive"}>Discard Changes</Button>
+    <Button type="reset" variant="secondary">Go Back</Button>
   </div>
 )
