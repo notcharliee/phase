@@ -1,6 +1,8 @@
 import { type Metadata } from "next"
 import { cookies, headers } from "next/headers"
 
+import { GuildSchema } from "@repo/schemas"
+
 import { REST } from "@discordjs/rest"
 import { API } from "@discordjs/core/http-only"
 
@@ -12,9 +14,7 @@ import type {
 import { dbConnect } from "@/lib/db"
 import { env } from "@/lib/env"
 
-import { GuildSchema } from "@repo/schemas"
-
-import { JoinToCreateForm } from "./form"
+import { ModuleForm } from "./form"
 
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
@@ -44,7 +44,7 @@ export default async () => {
         <h1 className="text-2xl font-bold tracking-tight">{metadata.title?.toString().replace(" - Phase Bot", "")}</h1>
         <p className="text-muted-foreground">{metadata.description}</p>
       </div>
-      <JoinToCreateForm
+      <ModuleForm
         data={{ channels }}
         defaultValues={guild.modules.JoinToCreates}
       />

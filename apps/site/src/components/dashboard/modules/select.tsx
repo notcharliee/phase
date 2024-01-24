@@ -3,6 +3,7 @@ import { type ControllerRenderProps } from "react-hook-form"
 import type {
   GuildChannelType,
   APIGuildChannel,
+  APIRole,
 } from "discord-api-types/v10"
 
 import { ChannelType } from "discord-api-types/v10"
@@ -32,7 +33,7 @@ export const ChannelSelect = <T extends GuildChannelType> (props: {
 
   return (
     <Select defaultValue={props.field.value ?? undefined} onValueChange={props.field.onChange} name={props.field.name} disabled={props.field.disabled}>
-      <SelectTrigger className="w-full bg-popover">
+      <SelectTrigger className="bg-popover">
         {props.channels.find(channel => channel.id == props.field.value)?.name ?? `Select a ${props.type == ChannelType.GuildCategory ? "category" : "channel"}`}
       </SelectTrigger>
       <SelectContent>
@@ -60,9 +61,30 @@ export const ChannelSelect = <T extends GuildChannelType> (props: {
 }
 
 
-export const ChannelSelectFallback = () => (
+export const RoleSelect = (props: {
+  roles: APIRole[],
+  field: ControllerRenderProps<any, any>,
+}) => {
+  const roles = props.roles.sort((a, b) => a.position - b.position)
+
+  return (
+    <Select defaultValue={props.field.value ?? undefined} onValueChange={props.field.onChange} name={props.field.name} disabled={props.field.disabled}>
+      <SelectTrigger className="bg-popover">
+        {roles.find(role => role.id == props.field.value)?.name ?? "Select a role"}
+      </SelectTrigger>
+      <SelectContent>
+        {roles.map(role => (
+          <SelectItem value={role.id} key={role.id} className="text-muted-foreground">{role.name}</SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  )
+}
+
+
+export const SelectFallback = () => (
   <Select>
-    <SelectTrigger className="w-full bg-popover">
+    <SelectTrigger className="bg-popover">
       Loading...
     </SelectTrigger>
   </Select>

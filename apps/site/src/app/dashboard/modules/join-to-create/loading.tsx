@@ -1,12 +1,8 @@
-import { type Metadata } from "next"
+import { metadata as pageMetadata } from "./page"
+import { ModuleFormFallback } from "./form"
 
-import { JoinToCreateFormFallback } from "./form"
 
-
-export const metadata: Metadata = {
-  title: "Join to Create - Phase Bot",
-  description: "Dynamically creates a new, temporary voice channel and deletes it when all members leave.",
-}
+export const metadata = pageMetadata
 
 
 export default () => {
@@ -16,7 +12,7 @@ export default () => {
         <h1 className="text-2xl font-bold tracking-tight">{metadata.title?.toString().replace(" - Phase Bot", "")}</h1>
         <p className="text-muted-foreground">{metadata.description}</p>
       </div>
-      <JoinToCreateFormFallback />
+      <ModuleFormFallback />
     </div>
   )
 }

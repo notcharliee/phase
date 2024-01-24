@@ -29,8 +29,8 @@ import { Label } from "@/components/ui/label"
 
 import {
   ChannelSelect,
-  ChannelSelectFallback,
-} from "@/components/dashboard/modules/select-channel"
+  SelectFallback,
+} from "@/components/dashboard/modules/select"
 
 
 const formSchema = z.object({
@@ -40,7 +40,7 @@ const formSchema = z.object({
 })
 
 
-export const JoinToCreateForm = (props: {
+export const ModuleForm = (props: {
   defaultValues: z.TypeOf<typeof formSchema>,
   data: {
     channels: APIGuildChannel<GuildChannelType>[],
@@ -93,17 +93,17 @@ export const JoinToCreateForm = (props: {
 }
 
 
-export const JoinToCreateFormFallback = () => (
+export const ModuleFormFallback = () => (
   <div className="space-y-6">
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
       <div className="space-y-2">
         <Label>Trigger Channel</Label>
-        <ChannelSelectFallback />
+        <SelectFallback />
         <p className="text-sm text-muted-foreground">This will be used to trigger the module</p>
       </div>
       <div className="space-y-2">
         <Label>Category</Label>
-        <ChannelSelectFallback />
+        <SelectFallback />
         <p className="text-sm text-muted-foreground">This is where the temporary channels will be created</p>
       </div>
     </div>
