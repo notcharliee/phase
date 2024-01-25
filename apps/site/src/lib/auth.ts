@@ -1,8 +1,6 @@
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 
-import { dbConnect } from "./db"
-
 
 /**
  * Checks if the user id and user token are valid and returns a user object.
@@ -11,8 +9,6 @@ import { dbConnect } from "./db"
  * @param userToken The user access token
  */
 export const getUser = async (userId: string, userToken: string) => {
-  await dbConnect()
-
   const userREST = new REST({ authPrefix: "Bearer" }).setToken(userToken)
   const userAPI = new API(userREST)
 
