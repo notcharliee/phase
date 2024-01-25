@@ -176,18 +176,11 @@ FormMessage.displayName = "FormMessage"
 
 const formBuilder = <TSchema extends z.AnyZodObject> (
   formData: {
-    data?: any,
     defaultValues: DefaultValues<z.TypeOf<TSchema>>,
     onSubmit: (data: z.TypeOf<TSchema>) => Promise<any>,
     schema: TSchema,
   },
-  FormFields: ({
-    form,
-    data
-  }: {
-    form: UseFormReturn<z.TypeOf<TSchema>, any, undefined>,
-    data?: typeof formData.data,
-  }) => JSX.Element,
+  FormFields: ({ form }: { form: UseFormReturn<z.TypeOf<TSchema>, any, undefined> }) => JSX.Element,
 ) => {
   const form = useForm<z.TypeOf<TSchema>>({
     resolver: zodResolver(formData.schema),
@@ -205,7 +198,7 @@ const formBuilder = <TSchema extends z.AnyZodObject> (
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormFields form={form} data={formData.data} />
+        <FormFields form={form} />
       </form>
     </Form>
   )
