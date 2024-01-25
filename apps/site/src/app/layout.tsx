@@ -5,7 +5,7 @@ import "@/styles/scrollbars.css"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
-import { GeistSans } from "geist/font"
+import { GeistSans } from "geist/font/sans"
 import { Metadata, Viewport } from "next"
 
 import { env } from "@/lib/env"
@@ -48,13 +48,12 @@ export default ({
   children: React.ReactNode,
 }) => (
   <html lang="en" className={GeistSans.variable + " font-geist-sans tracking-tight"} style={{ colorScheme: "dark" }}>
-    <body className="bg-background text-foreground">
-      <div id="modals"></div>
-      <div className="pointer-events-none fixed -z-10 h-full w-full overflow-hidden before:absolute before:-left-1/2 before:-top-1/2 before:h-[200%] before:w-[200%] before:animate-[noise_2s_steps(3)_both_infinite] before:bg-[auto_768px] before:bg-[url(/noise.png)]"/>
+    <body>
+      <div className="pointer-events-none fixed -z-10 h-full w-full overflow-hidden before:absolute before:-left-1/2 before:-top-1/2 before:h-[200%] before:w-[200%] before:bg-[auto_768px] before:bg-[url(/noise.png)]"/>
       <TooltipProvider children={children} />
+      <Toaster />
       <Analytics />
       <SpeedInsights />
-      <Toaster />
     </body>
   </html>
 )
