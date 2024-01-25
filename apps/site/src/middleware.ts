@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server"
 import { kv } from "@vercel/kv"
 
-import type { User } from "@/lib/types"
+import type { User } from "@/types/auth"
 
 
 export async function middleware(request: NextRequest) {
