@@ -7,7 +7,7 @@ import { kv } from "@vercel/kv"
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 
-import { User } from "@/lib/types"
+import { User } from "@/types/auth"
 import { env } from "@/lib/env"
 
 
