@@ -11,7 +11,11 @@ const discordAPI = new API(discordREST)
 
 
 export const GET = (request: NextRequest) => {
-  const prompt = request.cookies.has("user") ? "none" : "consent"
+  const prompt = request.nextUrl.searchParams.get("prompt") == "consent"
+    ? "consent"
+    : request.cookies.has("user")
+      ? "none"
+      : "consent"
 
   const authorizationURL = discordAPI.oauth2.generateAuthorizationURL({
     client_id: env.DISCORD_ID,
