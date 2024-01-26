@@ -49,7 +49,6 @@ export default ({
 }) => (
   <html lang="en" className={GeistSans.variable + " font-geist-sans tracking-tight"} style={{ colorScheme: "dark" }}>
     <body>
-      <div className="pointer-events-none fixed -z-10 h-full w-full overflow-hidden before:absolute before:-left-1/2 before:-top-1/2 before:h-[200%] before:w-[200%] before:bg-[auto_768px] before:bg-[url(/noise.png)]"/>
       <TooltipProvider children={children} />
       <Toaster />
       <Analytics />
