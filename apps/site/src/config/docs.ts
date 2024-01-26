@@ -15,11 +15,11 @@ export const docsConfig: DocsConfig = {
     },
     {
       title: "Modules",
-      href: "/docs/modules",
+      href: "/docs/modules/audit-logs",
     },
     {
       title: "Commands",
-      href: "/docs/commands",
+      href: "/docs/commands/afk",
     },
     {
       title: "Changelog",
