@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "incremental": true,
     "jsx": "preserve",
     "lib": [
@@ -10,6 +11,7 @@
     "noUncheckedIndexedAccess": true,
     "paths": {
       "@/*": ["./src/*"],
+      "contentlayer/generated": ["./.contentlayer/generated"],
     },
     "plugins": [
       {
@@ -30,5 +32,6 @@
     "src/**/*.mjs",
     "src/**/*.ts",
     "src/**/*.tsx",
+    ".contentlayer/generated",
   ]
 }
