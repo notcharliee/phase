@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectGroup,
   SelectLabel,
+  SelectSeparator,
 } from "@/components/ui/select"
 
 
@@ -74,6 +75,14 @@ export const RoleSelect = (props: {
         <span style={{ color: selectedRole?.color ? "#" + selectedRole.color.toString(16) : undefined }}>{selectedRole?.name ?? "Select a role"}</span>
       </SelectTrigger>
       <SelectContent>
+        {props.field.value !== "" && props.field.value !== " " && (
+          <>
+            <SelectItem value={" "} className="text-muted-foreground">
+              Deselect Role
+            </SelectItem>
+            <SelectSeparator />
+          </>
+        )}
         {roles.map(role => (
           <SelectItem value={role.id} key={role.id} className="text-muted-foreground" style={{ color: role?.color ? "#" + role.color.toString(16) : undefined }}>
             {role.name}
