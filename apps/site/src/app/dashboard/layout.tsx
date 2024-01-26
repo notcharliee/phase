@@ -1,39 +1,47 @@
-import { Suspense } from "react"
+import { cookies } from "next/headers"
 
-import { Settings } from "@/components/dashboard/settings"
-import { SelectGuild, SelectGuildFallback } from "@/components/dashboard/modules"
-import { User, UserFallback } from "@/components/dashboard/user"
-
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { MainNav } from "./components/main-nav"
+import { UserNav } from "./components/user-nav"
+import { SearchDashboard } from "./components/search-dashboard"
+import { SelectGuild } from "./components/select-guild"
 
 
-export default ({ children }: { children: React.ReactNode }) => (
-  <main className="flex flex-col md:flex-row gap-4 p-8 min-h-screen md:max-h-screen">
-    <Card className="w-full grow md:grow-0 md:overflow-auto relative">
-      <CardHeader className="border-b border-border flex flex-row items-center justify-between gap-4 space-y-0 py-4 md:sticky md:top-0 md:bg-card">
-        <CardTitle className="text-lg">Modules</CardTitle>
-        <Suspense fallback={<SelectGuildFallback />}>
+const mainNavItems = [
+  {
+    title: "Overview",
+    href: "/dashboard",
+  },
+  {
+    title: "Modules",
+    href: "/dashboard/modules",
+  },
+  {
+    title: "Commands",
+    href: "/dashboard/commands",
+  },
+]
+
+
+export default ({ children }: { children: React.ReactNode }) => {
+  const guildId = cookies().get("guild")
+
+  return (
+    <main className="w-full min-h-screen flex flex-col">
+      <header className="border-b z-50 sticky top-0 backdrop-blur-sm">
+        <div className="flex h-16 items-center px-4">
           <SelectGuild />
-        </Suspense>
-      </CardHeader>
-      <CardContent className="pt-6">
-        {children}
-      </CardContent>
-    </Card>
-    <div className="md:max-w-[20rem] lg:max-w-[24rem] w-full min-h-full flex flex-col md:flex-col gap-4 md:grow">
-      <div className="h-full">
-        <Settings />
+          <MainNav items={mainNavItems} className="mx-6" />
+          <div className="ml-auto flex items-center space-x-4">
+            <SearchDashboard />
+            <UserNav />
+          </div>
+        </div>
+      </header>
+      <div className="grid flex-1 space-y-4 p-8 pt-6">
+        {guildId ? children : (
+          <div>Select a server first!</div>
+        )}
       </div>
-      <div className="h-min">
-        <Suspense fallback={<UserFallback />}>
-          <User />
-        </Suspense>
-      </div>
-    </div>
-  </main>
-)
+    </main>
+  )
+}
