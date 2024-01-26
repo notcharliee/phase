@@ -47,12 +47,12 @@ export const docsConfig: DocsConfig = {
         },
         {
           title: "Terms",
-          href: "/terms",
+          href: "/docs/terms",
           items: [],
         },
         {
           title: "Privacy",
-          href: "/privacy",
+          href: "/docs/privacy",
           items: [],
         },
         {
