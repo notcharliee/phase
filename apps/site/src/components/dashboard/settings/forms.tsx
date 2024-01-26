@@ -23,7 +23,7 @@ export const NicknameForm = (props: {
   onSubmit: (data) => updateBotNickname(data.nickname),
   schema: formSchema,
 },
-({ form, data }) => (
+({ form }) => (
   <FormField
     control={form.control}
     name="nickname"
