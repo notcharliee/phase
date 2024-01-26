@@ -13,6 +13,7 @@ import { StatusCodes } from "http-status-codes"
 
 import {
   GuildSchema,
+  type GuildCommand,
   type GuildModuleAuditLogs,
   type GuildModuleAutoPartners,
   type GuildModuleAutoRoles,
@@ -21,6 +22,8 @@ import {
   type GuildModuleReactionRoles,
   type GuildModuleTickets,
 } from "@repo/schemas"
+
+import { dashboardConfig } from "@/config/dashboard"
 
 import { dbConnect } from "@/lib/db"
 import { getUser } from "@/lib/auth"
@@ -105,6 +108,44 @@ export const updateModule = async <TName extends ModuleNames> (module: TName, da
   } catch (error) {
     console.log(error)
     return StatusCodes.INTERNAL_SERVER_ERROR
+  }
+}
+
+
+export const updateCommand = async (command: string, data: GuildCommand) => {
+  await dbConnect()
+
+  const guildId = cookies().get("guild")?.value
+  const userId = headers().get("x-user-id")
+  const userToken = headers().get("x-user-token")
+
+  const commands = dashboardConfig.sidebarNav[1]!.items.map(item => item.title.replace("/",""))
+
+  if (!guildId || !userId || !userToken || !commands.includes(command)) throw StatusCodes.BAD_REQUEST
+
+  // Checks if user id and token are valid
+  const validUser = await getUser(userId, userToken)
+  if (!validUser) throw StatusCodes.UNAUTHORIZED
+
+  // Checks if user is a dashboard admin for the guild
+  const guildSchema = await GuildSchema.findOne({ id: guildId, admins: { $in: userId } })
+  if (!guildSchema) throw StatusCodes.UNAUTHORIZED
+
+  // Update command data
+  if (!guildSchema.commands) guildSchema.commands = {}
+  if (data.permissions == " ") data.permissions = null
+  
+  guildSchema.commands[command] = data
+  guildSchema.markModified("commands")
+
+  console.log(guildSchema.commands)
+
+  try {
+    await guildSchema.save()
+    return StatusCodes.OK
+  } catch (error) {
+    console.log(error)
+    throw StatusCodes.INTERNAL_SERVER_ERROR
   }
 }
 
