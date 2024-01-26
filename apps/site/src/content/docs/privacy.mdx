@@ -1,0 +1,26 @@
+---
+title: Privacy Policy
+description: This document explains what data is stored, why it's stored, how it's kept safe, and the process of deleting it.
+---
+
+## What data we store
+
+When you use the bot's commands or modules in any server, we may sometimes store data in our database - this is usually limited to just your user ID. When you add the bot to one of your servers, we will save the ID of the server in our database so it can be configured on the dashboard. When you log into our dashboard with your Discord account, in order for it to work, we need to store your OAuth2 credentials, which are required to fetch data about your account.
+
+## Why we store data
+
+Many parts of the bot require data from Discord to work. An example of this is the Levels module, which saves the IDs of users in the database to keep track of their levels. If we didn't save the ID of the user, there would be no way to find and update the user's level data since the user ID is used as an index. This is a common way to index user-related data and the same will be true for almost all Discord bots that utilise databases.
+
+## How we keep data safe
+
+We have 2 databases. One database is for bot-related operations, for example module configuration, and the other is for dashboard-related operations, for example authentication. Database credentials are kept highly secure, and therefor are unlikely to be exposed, however in the event of exposure, they will swiftly be invalidated and we will do everything we can to make sure no data was breached. If data was found to be breached, we will make sure we inform all effected users, and in the case of authentication data being breached, we will also revoke <strong>all</strong> OAuth2 credentials we have stored.
+
+We are always looking for ways to make our data even more secure, and we regularly update our code to try and do just that. However, if you believe you have found a security vulnerability in our code, we encourage you to responsibly disclose this and not open a public issue. We will investigate all legitimate reports. Contact the developers in a <Link href={"/redirect/discord"} className="underline">support ticket</Link> to disclose any security vulnerabilities.
+
+## How to delete your data
+
+If you want to delete all the data pertaining to your server, simply remove the bot and it will be automatically deleted from the database. If you want to delete your own OAuth2 credentials from the database, you can do so through the dashboard under your account settings - this will sign you out. If you want your data to be removed from <strong>all</strong> servers in our database, we'll need to do that manually, so you'll have to open a <Link href={"/redirect/discord"} className="underline">support ticket</Link>.
+
+## Last Updated
+
+10th of January, 2024
