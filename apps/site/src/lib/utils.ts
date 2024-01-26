@@ -1,9 +1,12 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
+import { env } from "./env"
+
+
+export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs))
+
+export const absoluteURL = (path: string) => env.NEXT_PUBLIC_BASE_URL + path
 
 export const getInitials = (input: string) => {
   const words = input.split(' ')
