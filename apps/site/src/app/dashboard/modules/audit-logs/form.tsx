@@ -1,29 +1,29 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-
-import { z } from "zod"
-
-import { ChannelType } from "discord-api-types/v10"
-
-import type {
-  GuildChannelType,
-  APIGuildChannel,
+import {
+  ChannelType,
+  type GuildChannelType,
+  type APIGuildChannel,
 } from "discord-api-types/v10"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
 
 import { updateModule } from "@/lib/actions"
 
 import { Button } from "@/components/ui/button"
 
 import {
+  Form,
   FormControl,
   FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  formBuilder,
 } from "@/components/ui/form"
+
+import { useForm } from "react-hook-form"
 
 import { Label } from "@/components/ui/label"
 
@@ -31,6 +31,8 @@ import {
   ChannelSelect,
   SelectFallback,
 } from "@/components/dashboard/modules/select"
+
+import { toast } from "sonner"
 
 
 const formSchema = z.object({
@@ -45,24 +47,33 @@ const formSchema = z.object({
   })
 })
 
+type FormValues = z.infer<typeof formSchema>
+
 
 export const ModuleForm = (props: {
-  defaultValues: z.TypeOf<typeof formSchema>,
+  defaultValues: FormValues,
   data: {
     channels: APIGuildChannel<GuildChannelType>[],
   },
 }) => {
-  const channels = props.data.channels
-  const router = useRouter()
-
-  return formBuilder({
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
     defaultValues: props.defaultValues,
-    onSubmit: (data) => updateModule("AuditLogs", data),
-    schema: formSchema,
-  },
-  ({ form }) => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+  })
+
+  const onSubmit = (data: FormValues) => {
+    toast.promise(updateModule("AuditLogs", data), {
+      loading: "Saving changes...",
+      success: "Changes saved!",
+      error: "An error occured.",
+    })
+  }
+
+  const channels = props.data.channels
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
           name="channels.server"
@@ -147,49 +158,13 @@ export const ModuleForm = (props: {
             </FormItem>
           )}
         />
-      </div>
-      <Button type="submit" className="mr-3">Save Changes</Button>
-      <Button type="reset" variant="secondary" onClick={() => router.back()}>Go Back</Button>
-    </div>
-  ))
+        <Button type="submit">Update module</Button>
+      </form>
+    </Form>
+  )
 }
 
 
 export const ModuleFormFallback = () => (
-  <div className="space-y-6">
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-      <div className="space-y-2">
-        <Label>Server Logs</Label>
-        <SelectFallback />
-        <p className="text-sm text-muted-foreground">Logs for channels, roles, boosts, and emojis</p>
-      </div>
-      <div className="space-y-2">
-        <Label>Message Logs</Label>
-        <SelectFallback />
-        <p className="text-sm text-muted-foreground">Logs for message deletes and edits</p>
-      </div>
-      <div className="space-y-2">
-        <Label>Member Logs</Label>
-        <SelectFallback />
-        <p className="text-sm text-muted-foreground">Logs for member joins, leaves and edits</p>
-      </div>
-      <div className="space-y-2">
-        <Label>Voice Logs</Label>
-        <SelectFallback />
-        <p className="text-sm text-muted-foreground">Logs for voice channel joins, leaves, mutes, and deafens</p>
-      </div>
-      <div className="space-y-2">
-        <Label>Invite Logs</Label>
-        <SelectFallback />
-        <p className="text-sm text-muted-foreground">Logs for invite creates and usage</p>
-      </div>
-      <div className="space-y-2">
-        <Label>Punishment Logs</Label>
-        <SelectFallback />
-        <p className="text-sm text-muted-foreground">Logs for bans, timeouts, and warns</p>
-      </div>
-    </div>
-    <Button type="submit" className="mr-3">Save Changes</Button>
-    <Button type="reset" variant="secondary">Go Back</Button>
-  </div>
+  <></>
 )

@@ -14,6 +14,8 @@ import type {
 import { dbConnect } from "@/lib/db"
 import { env } from "@/lib/env"
 
+import { Separator } from "@/components/ui/separator"
+
 import { ModuleForm } from "./form"
 
 
@@ -39,11 +41,12 @@ export default async () => {
   const channels = await discordAPI.guilds.getChannels(guildId) as APIGuildChannel<GuildChannelType>[]
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight">{metadata.title?.toString().replace(" - Phase Bot", "")}</h1>
-        <p className="text-muted-foreground">{metadata.description}</p>
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-medium">{metadata.title?.toString().replace(" - Phase Bot", "")}</h3>
+        <p className="text-sm text-muted-foreground">{metadata.description}</p>
       </div>
+      <Separator />
       <ModuleForm
         data={{ channels }}
         defaultValues={guild.modules.AuditLogs}
