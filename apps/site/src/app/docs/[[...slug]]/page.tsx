@@ -8,6 +8,7 @@ import Balancer from "react-wrap-balancer"
 import { Mdx } from "@/components/mdx-components"
 import { DocsPager } from "@/components/pager"
 
+import { siteConfig } from "@/config/site"
 import { absoluteURL } from "@/lib/utils"
 
 
@@ -25,17 +26,28 @@ export async function generateMetadata({ params }: { params: { slug: string[] } 
   if (!doc) return {}
 
   return {
-    title: doc.title + " - Phase Docs",
+    title: doc.title,
     description: doc.description,
     openGraph: {
-      title: doc.title + " - Phase Docs",
+      title: doc.title,
       description: doc.description,
       type: "article",
       url: absoluteURL(doc.slug),
+      images: [
+        {
+          url: siteConfig.ogImage,
+          width: 1200,
+          height: 630,
+          alt: siteConfig.name,
+        },
+      ],
     },
     twitter: {
-      title: doc.title + " - Phase Docs",
+      card: "summary_large_image",
+      title: doc.title,
       description: doc.description,
+      images: [siteConfig.ogImage],
+      creator: "@" + siteConfig.creator,
     },
   }
 }
