@@ -1,38 +1,34 @@
-import { NextResponse, NextRequest } from "next/server"
+import { NextResponse } from "next/server"
+import { AppConfigDynamic } from "next/dist/build/utils"
+
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
+
 import { env } from "@/lib/env"
+import type { ExtractAPIType } from "@/types/api"
 
 
-export const GET = async (request: NextRequest) => {
-  const discordREST = new REST().setToken(env.DISCORD_TOKEN)
-  const discordAPI = new API(discordREST)
+const discordREST = new REST().setToken(env.DISCORD_TOKEN)
+const discordAPI = new API(discordREST)
 
-  try {
-    const botApplicationInfo =
-      await discordAPI.oauth2.getCurrentBotApplicationInformation()
 
-    const botStats = {
-      id: botApplicationInfo.id,
-      name: botApplicationInfo.name,
-      icon: botApplicationInfo.icon
-        ? discordREST.cdn.appIcon(
-            botApplicationInfo.id,
-            botApplicationInfo.icon,
-            { size: 512 },
-          )
-        : null,
-      description: botApplicationInfo.description,
-      terms_of_service_url: botApplicationInfo.terms_of_service_url ?? null,
-      privacy_policy_url: botApplicationInfo.privacy_policy_url ?? null,
-      bot_public: botApplicationInfo.bot_public,
-      approximate_guild_count: botApplicationInfo.approximate_guild_count,
-    }
+export const dynamic: AppConfigDynamic = "force-dynamic"
 
-    return NextResponse.json(botStats)
-  } catch (error) {
-    console.log(error)
 
-    return NextResponse.json(error, { status: 500 })
+export const GET = async () => {
+  const bot = await discordAPI.oauth2.getCurrentBotApplicationInformation()
+
+  const response = {
+    id: bot.id,
+    name: bot.name,
+    description: bot.description,
+    icon: bot.icon ? discordREST.cdn.appIcon(bot.id, bot.icon) : null,
+    owner: bot.owner ?? null,
+    guild_count: bot.approximate_guild_count ?? null,
   }
+
+  return NextResponse.json(response)
 }
+
+
+export type GetBotResponse = ExtractAPIType<typeof GET>
