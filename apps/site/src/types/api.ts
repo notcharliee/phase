@@ -11,3 +11,4 @@ export type { GetBotResponse } from "@/app/api/bot/route"
 export type { GetBotCommandsResponse } from "@/app/api/bot/commands/route"
 
 export type { GetLevelsGuildResponse } from "@/app/api/levels/guild/route"
+export type { GetLevelsUserResponse } from "@/app/api/levels/user/route"

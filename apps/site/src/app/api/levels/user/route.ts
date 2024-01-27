@@ -6,7 +6,9 @@ import { REST } from "@discordjs/rest"
 import { LevelSchema } from "@repo/schemas"
 
 import { dbConnect } from "@/lib/db"
+import { absoluteURL } from "@/lib/utils"
 import { env } from "@/lib/env"
+import { type ExtractAPIType } from "@/types/api"
 
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
@@ -19,37 +21,37 @@ export const GET = async (request: NextRequest) => {
 
   if (!userId || !guildId) return NextResponse.json({
     error: "Bad Request",
-    documentation: `${env.NEXT_PUBLIC_BASE_URL}/docs/api/levels`,
+    documentation: absoluteURL("/docs/api/levels"),
   }, { status: 400 })
 
-  try {
-    await dbConnect()
+  await dbConnect()
 
-    const user = await discordAPI.users.get(userId)
-    const data = await LevelSchema.findOne({ user: userId, guild: guildId })
-    
-    if (!data) return NextResponse.json({
-      error: "Not Found",
-      message: "Level data not found.",
-    }, { status: 404 })
+  const user = await discordAPI.users.get(userId)
+  const data = await LevelSchema.findOne({ user: userId, guild: guildId })
+  
+  if (!data) return NextResponse.json({
+    error: "Not Found",
+    message: "Level data not found.",
+  }, { status: 404 })
 
-    const rank = await LevelSchema.countDocuments({ $or: [
-      { guild: guildId, level: { $gt: data.level } },
-      { guild: guildId, level: data.level, xp: { $gt: data.xp } }
-    ] }) + 1
+  const rank = await LevelSchema.countDocuments({ $or: [
+    { guild: guildId, level: { $gt: data.level } },
+    { guild: guildId, level: data.level, xp: { $gt: data.xp } }
+  ] }) + 1
 
-    return NextResponse.json({
-      id: user.id,
-      username: user.username,
-      global_name: user.global_name,
-      avatar: user.avatar ? discordREST.cdn.avatar(user.id, user.avatar, { size: 128, forceStatic: true, extension: "png" }) : `${env.NEXT_PUBLIC_BASE_URL}/discord.png`,
-      level: data.level,
-      xp: data.xp,
-      rank: rank,
-      target: 500 * (data.level + 1),
-    })
-  } catch (error) {
-    console.log(error)
-    return NextResponse.json(error, { status: 500 })
+  const response = {
+    id: user.id,
+    username: user.username,
+    global_name: user.global_name,
+    avatar: user.avatar ? discordREST.cdn.avatar(user.id, user.avatar, { size: 128, forceStatic: true, extension: "png" }) : absoluteURL("/discord.png"),
+    level: data.level,
+    xp: data.xp,
+    rank: rank,
+    target: 500 * (data.level + 1),
   }
+
+  return NextResponse.json(response)
 }
+
+
+export type GetLevelsUserResponse = ExtractAPIType<typeof GET>
