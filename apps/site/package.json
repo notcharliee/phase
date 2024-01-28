@@ -4,7 +4,7 @@
   "author": "@notcharliee",
   "type": "module",
   "scripts": {
-    "build": "dotenv -e ../../.env contentlayer build && next build",
+    "build": "contentlayer build && dotenv -e ../../.env next build",
     "dev": "dotenv -e ../../.env -- concurrently \"contentlayer dev\" \"next dev --turbo\"",
     "start": "dotenv -e ../../.env next start"
   },
@@ -66,6 +66,7 @@
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^9.0.1",
+    "vaul": "^0.8.9",
     "zod": "^3.22.4"
   },
   "devDependencies": {
