@@ -4,16 +4,14 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 import { cn } from "@/lib/utils"
+import type { MainNavItem } from "@/types/nav"
 
 
-interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
-  items: {
-    href: string
-    title: string
-  }[]
+interface MainNavProps extends React.HTMLAttributes<HTMLElement> {
+  items: MainNavItem[]
 }
 
-export const MainNav = ({ className, items, ...props }: SidebarNavProps) => {
+export const MainNav = ({ className, items, ...props }: MainNavProps) => {
   const pathname = usePathname()
 
   return (
@@ -24,7 +22,7 @@ export const MainNav = ({ className, items, ...props }: SidebarNavProps) => {
       {items.map((item) => (
         <Link
           key={item.href}
-          href={item.href}
+          href={item.href!}
           className={cn(
             "text-sm font-medium transition-colors hover:text-primary",
             pathname !== item.href && "text-muted-foreground",
