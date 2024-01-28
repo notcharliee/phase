@@ -22,10 +22,6 @@ export const dashboardConfig: DashboardConfig = {
       href: "/dashboard/commands",
     },
     {
-      title: "Profile",
-      href: "/dashboard/profile",
-    },
-    {
       title: "Settings",
       href: "/dashboard/settings",
     },
