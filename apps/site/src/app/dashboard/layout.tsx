@@ -62,7 +62,7 @@ const ServerSelectCombobox = async (props: { fallback?: boolean }) => {
   const databaseGuilds = await GuildSchema.find({ admins: user.id })
   const discordGuilds = await userAPI.users.getGuilds()
 
-  const guilds = discordGuilds.toSorted((a, b) => {
+  const guilds = [...discordGuilds].sort((a, b) => {
     const aIsInDocuments = databaseGuilds.some(doc => doc.id == a.id)
     const bIsInDocuments = databaseGuilds.some(doc => doc.id == b.id)
 
