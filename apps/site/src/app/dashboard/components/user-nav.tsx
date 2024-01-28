@@ -22,9 +22,12 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Skeleton } from "@/components/ui/skeleton"
 
 
-export const UserNav = async () => {
+export const UserNav = async (props: { fallback?: boolean }) => {
+  if (props.fallback) return <Skeleton className="h-8 w-8 rounded-full" />
+
   const userId = headers().get("x-user-id")!
   const userToken = headers().get("x-user-token")!
   const user = (await getUser(userId, userToken))!
@@ -47,18 +50,14 @@ export const UserNav = async () => {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            Profile
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
         <Link href={"/api/auth?prompt=consent"}>
           <DropdownMenuItem>
             Switch Account
+          </DropdownMenuItem>
+        </Link>
+        <Link href={"/dashboard/settings"}>
+          <DropdownMenuItem className="text-destructive">
+            Delete Account
           </DropdownMenuItem>
         </Link>
       </DropdownMenuContent>
