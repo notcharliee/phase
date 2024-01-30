@@ -22,7 +22,7 @@ export default () => {
   const guildId = cookies().get("guild")!.value
 
   return (
-    <div className="flex flex-col overflow-auto md:h-[calc(100vh-65px)] md:overflow-hidden space-y-4 p-8 pt-6 sticky top-[5.5rem]">
+    <div className="flex flex-col overflow-auto md:h-[calc(100vh-65px)] md:overflow-hidden space-y-4 p-8 py-6 sticky top-[5.5rem]">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <TotalMembers />
         <OnlineNow />

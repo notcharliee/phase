@@ -17,7 +17,7 @@ import { dashboardConfig } from "@/config/dashboard"
 export default ({ children }: { children: React.ReactNode }) => (
   <main className="w-full min-h-screen flex flex-col">
     <header className="border-b z-50 sticky top-0 backdrop-blur-sm">
-      <div className="flex h-16 items-center px-4">
+      <div className="flex h-16 items-center px-8">
         <Suspense fallback={<SelectServerCombobox fallback />}>
           <SelectServerCombobox />
         </Suspense>
