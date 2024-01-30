@@ -14,8 +14,8 @@ export const siteConfig = {
     url: "https://github.com/notcharliee",
   },
   links: {
-    twitter: "https://twitter.com/notcharliee",
-    github: "https://github.com/notcharliee/phase",
+    discord: "/redirect/discord",
+    github: "/redirect/github",
   },
   keywords: [
     "Discord",
