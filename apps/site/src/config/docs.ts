@@ -25,16 +25,6 @@ export const docsConfig: DocsConfig = {
       title: "Changelog",
       href: "/docs/changelog",
     },
-    {
-      title: "Discord",
-      href: "/redirect/discord",
-      external: true,
-    },
-    {
-      title: "GitHub",
-      href: "/redirect/github",
-      external: true,
-    },
   ],
   sidebarNav: [
     {
