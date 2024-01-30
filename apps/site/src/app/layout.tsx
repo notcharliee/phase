@@ -8,11 +8,13 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import { Metadata, Viewport } from "next"
 
-import { cn } from "@/lib/utils"
-import { siteConfig } from "@/config/site"
-
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
+
+import { SiteHeader } from "@/components/site-header"
+
+import { cn } from "@/lib/utils"
+import { siteConfig } from "@/config/site"
 
 
 export const metadata = {
@@ -61,7 +63,12 @@ export const viewort = {
 export default ({ children }: { children: React.ReactNode }) => (
   <html lang="en" style={{ colorScheme: "dark" }}>
     <body className={cn("font-geist-sans tracking-tight", GeistSans.variable)}>
-      <TooltipProvider children={children} />
+      <TooltipProvider>
+        <main className="w-full min-h-screen flex flex-col">
+          <SiteHeader />
+          <div className="flex-1">{children}</div>
+        </main>
+      </TooltipProvider>
       <Toaster />
       <Analytics />
       <SpeedInsights />
