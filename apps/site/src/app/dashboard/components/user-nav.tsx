@@ -3,9 +3,6 @@ import Link from "next/link"
 
 import { REST } from "@discordjs/rest"
 
-import { getUser } from "@/lib/auth"
-import { getInitials } from "@/lib/utils"
-
 import {
   Avatar,
   AvatarFallback,
@@ -15,14 +12,16 @@ import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Skeleton } from "@/components/ui/skeleton"
+
+import { getUser } from "../cache/user"
+
+import { getInitials } from "@/lib/utils"
 
 
 export const UserNav = async (props: { fallback?: boolean }) => {
@@ -30,7 +29,9 @@ export const UserNav = async (props: { fallback?: boolean }) => {
 
   const userId = headers().get("x-user-id")!
   const userToken = headers().get("x-user-token")!
-  const user = (await getUser(userId, userToken))!
+  const user = await getUser(userId, userToken)
+
+  if (!user) return <Skeleton className="h-8 w-8 rounded-full" />
   
   return (
     <DropdownMenu>
