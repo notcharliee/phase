@@ -16,3 +16,11 @@ export const getInitials = (input: string) => {
 
   return words[0]!.charAt(0).toUpperCase() + words[words.length - 1]!.charAt(0).toUpperCase()
 }
+
+export const getOrdinal = (number: number): string => {
+  if (number >= 11 && number <= 13) return number + "th"
+  return (
+    number +
+    (["th", "st", "nd", "rd"][number % 10] || ["th", "st", "nd", "rd"][0]!)
+  )
+}
