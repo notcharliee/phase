@@ -177,5 +177,7 @@ export const updateBotNickname = async (nickname: string) => {
 
 export const setGuildCookie = async (guild: string) => {
   "use server"
-  cookies().set("guild", guild)
+
+  if (guild === "") cookies().delete("guild")
+  else cookies().set("guild", guild)
 }
