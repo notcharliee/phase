@@ -14,7 +14,7 @@ import { buttonVariants } from "@/components/ui/button"
 import { useMounted } from "@/hooks/use-mounted"
 
 
-export const SelectServerDialog = (props: { combobox: JSX.Element }) => {
+export const SelectServerDialog = (props: { children: JSX.Element }) => {
   const mounted = useMounted()
 
   return (
@@ -27,7 +27,7 @@ export const SelectServerDialog = (props: { combobox: JSX.Element }) => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className="flex gap-4 flex-col sm:flex-row">
-          {props.combobox}
+          {props.children}
           <Link className={buttonVariants({ variant: "default" })} href={"/redirect/invite"}>
             Add a server
           </Link>
