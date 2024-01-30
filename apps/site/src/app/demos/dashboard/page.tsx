@@ -24,7 +24,7 @@ import { LevelsLeaderboard } from "@/app/dashboard/components/levels-leaderboard
 import { dashboardConfig } from "@/config/dashboard"
 
 
-export const DashboardDemo = () => (
+export default () => (
   <main className="w-full min-h-screen flex flex-col">
     <header className="border-b z-50 sticky top-0 backdrop-blur-sm">
       <div className="flex h-16 items-center px-8">
@@ -120,5 +120,3 @@ export const DashboardDemo = () => (
     </div>
   </main>
 )
-
-export default DashboardDemo
