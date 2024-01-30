@@ -26,7 +26,7 @@ export default ({ children }: { children: React.ReactNode }) => {
   getUser(userId, userToken)
 
   return (
-    <main className="w-full h-screen flex flex-col">
+    <main className="w-full min-h-screen flex flex-col">
       <header className="border-b z-50 sticky top-0 backdrop-blur-sm">
         <div className="flex h-16 items-center px-4">
           <Suspense fallback={<SelectServerCombobox fallback />}>
