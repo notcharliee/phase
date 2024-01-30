@@ -32,7 +32,7 @@ export const BotStatus = async (props: { fallback?: boolean }) => {
       <CardContent>
         <span className="text-2xl font-bold">Loading...</span>
         <Link className="flex items-center hover:underline underline-offset-2 hover:animate-pulse" href={"/redirect/discord"}>
-          <p className="text-xs text-muted-foreground">Discord server</p>
+          <p className="text-xs text-muted-foreground">Join our Discord for alerts</p>
           <OpenInNewWindowIcon className="h-3 w-3 ml-1 text-muted-foreground" />
         </Link>
       </CardContent>
