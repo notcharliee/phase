@@ -38,15 +38,14 @@ export default () => (
         priority
         src={DashboardDemo}
       />
-      <div className="flex flex-col gap-2 items-center">
+      <div className="flex flex-col gap-2 items-center sm:pb-10 lg:pb-0">
         <PageSubheading className="lg:text-start">
           All the tools you need, all in one place.
         </PageSubheading>
-        <PageDescription className="lg:text-start mb-4">
+        <PageDescription className="sm:text-lg lg:text-start">
           Through the dashboard, you can easily customise every aspect of the bot to meet all of your server's needs. Sign in once, and you're done – no need to do it again.
-        </PageDescription>
-        <PageDescription className="lg:text-start">
-          Does the bot not have something that you need? <Link className="text-foreground font-medium underline underline-offset-4" href={"/redirect/discord"}>Join our Discord</Link> and let us know! We'll get it added in no time.
+          <span className="w-full mb-4 block">{" "}</span>
+          Is the bot missing something that you need? <Link className="font-medium underline underline-offset-4" href={"/redirect/discord"}>Join our Discord</Link> and let us know! We'll get it added in no time.
         </PageDescription>
       </div>
     </section>
