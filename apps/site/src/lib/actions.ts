@@ -1,6 +1,5 @@
 "use server"
 
-import { redirect } from "next/navigation"
 import { cookies, headers } from "next/headers"
 import { kv } from "@vercel/kv"
 
@@ -38,7 +37,7 @@ export const deleteAccount = async () => {
   const userSession = headers().get("x-auth-id")
   const userToken = headers().get("x-user-token")
 
-  if (!userSession || !userToken) return StatusCodes.BAD_REQUEST
+  if (!userSession || !userToken) throw StatusCodes.BAD_REQUEST
 
   try {
     cookies().delete("session")
@@ -60,11 +59,8 @@ export const deleteAccount = async () => {
         },
       },
     )
-
-    redirect("/")
   } catch (error) {
-    console.log(error)
-    return StatusCodes.INTERNAL_SERVER_ERROR
+    throw error
   }
 }
 
@@ -88,15 +84,15 @@ export const updateModule = async <TName extends ModuleNames> (module: TName, da
   const userId = headers().get("x-user-id")
   const userToken = headers().get("x-user-token")
 
-  if (!guildId || !userId || !userToken) return StatusCodes.BAD_REQUEST
+  if (!guildId || !userId || !userToken) throw StatusCodes.BAD_REQUEST
 
   // Checks if user id and token are valid
   const validUser = await getUser(userId, userToken)
-  if (!validUser) return StatusCodes.UNAUTHORIZED
+  if (!validUser) throw StatusCodes.UNAUTHORIZED
 
   // Checks if user is a dashboard admin for the guild
   const guildSchema = await GuildSchema.findOne({ id: guildId, admins: { $in: userId } })
-  if (!guildSchema) return StatusCodes.UNAUTHORIZED
+  if (!guildSchema) throw StatusCodes.UNAUTHORIZED
 
   // Update module data
   for (const key of Object.keys(data)) guildSchema.modules[module][key as keyof ModuleType[TName]] = data[key as keyof ModuleType[TName]]!
@@ -106,8 +102,7 @@ export const updateModule = async <TName extends ModuleNames> (module: TName, da
     await guildSchema.save()
     return StatusCodes.OK
   } catch (error) {
-    console.log(error)
-    return StatusCodes.INTERNAL_SERVER_ERROR
+    throw error
   }
 }
 
@@ -155,15 +150,15 @@ export const updateBotNickname = async (nickname: string) => {
   const userId = headers().get("x-user-id")
   const userToken = headers().get("x-user-token")
 
-  if (!guildId || !userId || !userToken) return StatusCodes.BAD_REQUEST
+  if (!guildId || !userId || !userToken) throw StatusCodes.BAD_REQUEST
 
   // Checks if user id and token are valid
   const validUser = await getUser(userId, userToken)
-  if (!validUser) return StatusCodes.UNAUTHORIZED
+  if (!validUser) throw StatusCodes.UNAUTHORIZED
 
   // Checks if user is a dashboard admin for the guild
   const userIsAdmin = !!(await GuildSchema.findOne({ id: guildId, admins: { $in: userId } }))
-  if (!userIsAdmin) return StatusCodes.UNAUTHORIZED
+  if (!userIsAdmin) throw StatusCodes.UNAUTHORIZED
 
   await discordAPI.users.editCurrentGuildMember(guildId, {
     nick: nickname
