@@ -7,11 +7,9 @@
     "bot:build": "turbo run build --filter=bot",
     "bot:dev": "turbo run dev --filter=bot",
     "bot:start": "cd apps/bot && pnpm run start",
-
     "site:build": "turbo run build --filter=site",
     "site:dev": "turbo run dev --filter=site",
     "site:start": "cd apps/site && pnpm run start",
-
     "schemas:build": "turbo run build --filter=@repo/schemas",
     "schemas:dev": "turbo run dev --filter=@repo/schemas"
   },
@@ -21,6 +19,6 @@
   },
   "packageManager": "pnpm@8.9.2",
   "dependencies": {
-    "turbo": "^1.11.3"
+    "turbo": "^1.12.2"
   }
 }
