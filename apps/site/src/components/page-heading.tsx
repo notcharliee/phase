@@ -20,6 +20,23 @@ export const PageHeading = ({
   )
 }
 
+export const PageSubheading = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) => {
+  return (
+    <h2>
+      <Balance
+        className={cn(
+          "text-center text-2xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]",
+          className
+        )}
+        {...props}
+      />
+    </h2>
+  )
+}
+
 export const PageDescription = ({
   className,
   ...props
