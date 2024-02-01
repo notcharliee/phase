@@ -1,14 +1,12 @@
 "use client"
 
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
 import { type APIRole } from "discord-api-types/v10"
 
-import { CheckIcon } from "@radix-ui/react-icons"
-
-import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -56,12 +54,7 @@ export const CommandForm = <T extends boolean> (props: CommandFormProps<T>) => {
   if (props.fallback) return (
     <div className="space-y-2">
       <Label className="sr-only">Required Role</Label>
-      <div className="flex gap-2">
-        <SelectFallback />
-        <Button size={"icon"} variant={"secondary"} type="submit" className="min-w-9">
-          <CheckIcon className="h-5 w-5" />
-        </Button>
-      </div>
+      <SelectFallback />
     </div>
   )
 
@@ -86,6 +79,12 @@ export const CommandForm = <T extends boolean> (props: CommandFormProps<T>) => {
   }
 
 
+  useEffect(() => {
+    const subscription = form.watch(() => form.handleSubmit(onSubmit)())
+    return () => subscription.unsubscribe()
+  }, [form.handleSubmit, form.watch])
+
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -93,15 +92,10 @@ export const CommandForm = <T extends boolean> (props: CommandFormProps<T>) => {
           control={form.control}
           name="role"
           render={({ field }) => (
-            <FormItem>
+            <FormItem onChange={() => form.handleSubmit(onSubmit)}>
               <FormLabel className="sr-only">Required Role</FormLabel>
-              <FormControl className="flex gap-2">
-                <div>
-                  <RoleSelect roles={props.data.roles} field={field} />
-                  <Button size={"icon"} variant={"secondary"} type="submit" className="min-w-9">
-                    <CheckIcon className="h-5 w-5" />
-                  </Button>
-                </div>
+              <FormControl>
+                <RoleSelect roles={props.data.roles} field={field} />
               </FormControl>
               <FormMessage />
             </FormItem>
