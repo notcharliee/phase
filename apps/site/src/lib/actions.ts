@@ -138,8 +138,6 @@ export const updateCommand = async (command: string, data: GuildCommand) => {
   guildSchema.commands[command] = data
   guildSchema.markModified("commands")
 
-  console.log(guildSchema.commands)
-
   try {
     await guildSchema.save()
     return StatusCodes.OK
