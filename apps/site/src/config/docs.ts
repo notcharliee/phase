@@ -10,20 +10,22 @@ interface DocsConfig {
 export const docsConfig: DocsConfig = {
   mainNav: [
     {
-      title: "Documentation",
+      title: "Dashboard",
+      href: "/dashboard",
+    },
+    {
+      title: "Docs",
       href: "/docs",
     },
     {
-      title: "Modules",
-      href: "/docs/modules/audit-logs",
+      title: "Invite",
+      href: "/redirect/invite",
+      external: true,
     },
     {
-      title: "Commands",
-      href: "/docs/commands/afk",
-    },
-    {
-      title: "Changelog",
-      href: "/docs/changelog",
+      title: "Discord",
+      href: "/redirect/discord",
+      external: true,
     },
   ],
   sidebarNav: [

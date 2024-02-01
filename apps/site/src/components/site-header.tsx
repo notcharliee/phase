@@ -6,37 +6,16 @@ import Link from "next/link"
 import { GitHubLogoIcon } from "@radix-ui/react-icons"
 
 import { MainNav } from "@/components/main-nav"
+import { MobileNav } from "./mobile-nav"
 import { Moon } from "@/components/moon"
 import { buttonVariants } from "@/components/ui/button"
 
 import { DocsSearch } from "./docs-search"
 
+import { docsConfig } from "@/config/docs"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 
-import type { MainNavItem } from "@/types/nav"
-
-
-const mainNavItems: MainNavItem[] = [
-  {
-    title: "Dashboard",
-    href: "/dashboard",
-  },
-  {
-    title: "Docs",
-    href: "/docs",
-  },
-  {
-    title: "Invite",
-    href: "/redirect/invite",
-    external: true,
-  },
-  {
-    title: "Discord",
-    href: "/redirect/discord",
-    external: true,
-  },
-]
 
 const ignoredPaths: string[] = [
   "/dashboard",
@@ -55,8 +34,9 @@ export const SiteHeader = () => {
             <Moon className="h-5 w-5" />
             <span className="hidden font-bold leading-tight sm:inline-block">Phase Bot</span>
           </Link>
-          <MainNav items={mainNavItems} />
+          <MainNav items={docsConfig.mainNav} />
         </div>
+        <MobileNav pageNav={docsConfig.sidebarNav} />
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none">
             <DocsSearch />
