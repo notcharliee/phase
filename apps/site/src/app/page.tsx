@@ -31,7 +31,13 @@ export default () => (
       </PageActions>
     </section>
     <section className="mx-auto flex flex-col lg:flex-row items-center gap-8 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20">
-      <Image priority src={DashboardDemo} alt="Dashboard Demo" width={2880} height={1800} className="px-8 lg:w-1/2 xl:w-2/3" />
+      <Image
+        alt="Dashboard Demo"
+        className="px-8 lg:w-1/2 xl:w-2/3"
+        placeholder="blur"
+        priority
+        src={DashboardDemo}
+      />
       <div className="flex flex-col gap-2 items-center">
         <PageSubheading className="lg:text-start">
           All the tools you need, all in one place.
