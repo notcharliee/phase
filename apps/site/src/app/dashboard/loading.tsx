@@ -39,7 +39,7 @@ export default () => (
       <div className="h-full md:w-full rounded-xl overflow-hidden">
         <Card className="h-full overflow-auto">
           <CardHeader>
-            <CardTitle>Command Config</CardTitle>
+            <CardTitle>Command Permissions</CardTitle>
             <CardDescription>Set required roles for each slash command.</CardDescription>
           </CardHeader>
           <CardContent>
