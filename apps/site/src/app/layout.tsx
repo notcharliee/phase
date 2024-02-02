@@ -12,9 +12,11 @@ import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 
 import { SiteHeader } from "@/components/site-header"
+import { DocsSearch } from "@/components/docs-search"
 
 import { cn } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
+import { docsConfig } from "@/config/docs"
 
 
 export const metadata = {
@@ -65,7 +67,12 @@ export default ({ children }: { children: React.ReactNode }) => (
     <body className={cn("font-geist-sans tracking-tight", GeistSans.variable)}>
       <TooltipProvider>
         <main className="w-full min-h-screen flex flex-col">
-          <SiteHeader />
+          <SiteHeader
+            mainNav={docsConfig.mainNav}
+            sidebarNav={docsConfig.sidebarNav}
+            searchBar={DocsSearch}
+            ignoredPaths={["/dashboard", "/demos"]}
+          />
           <div className="flex-1">{children}</div>
         </main>
       </TooltipProvider>
