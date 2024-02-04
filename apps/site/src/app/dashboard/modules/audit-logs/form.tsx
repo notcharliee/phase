@@ -1,18 +1,16 @@
 "use client"
 
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
+
 import {
   ChannelType,
   type GuildChannelType,
   type APIGuildChannel,
 } from "discord-api-types/v10"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-
-import { updateModule } from "@/lib/actions"
-
 import { Button } from "@/components/ui/button"
-
 import {
   Form,
   FormControl,
@@ -22,17 +20,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-
-import { useForm } from "react-hook-form"
-
-import { Label } from "@/components/ui/label"
-
-import {
-  ChannelSelect,
-  SelectFallback,
-} from "@/components/dashboard/modules/select"
-
+import { SelectChannel } from "../../components/select/channel"
 import { toast } from "sonner"
+
+import { updateModule } from "@/lib/actions"
 
 
 const formSchema = z.object({
@@ -81,7 +72,12 @@ export const ModuleForm = (props: {
             <FormItem>
               <FormLabel>Server Logs</FormLabel>
               <FormControl>
-                <ChannelSelect channels={channels} field={field} type={ChannelType.GuildText} showCategories />
+                <SelectChannel
+                  categories
+                  channelType={ChannelType.GuildText}
+                  channels={channels}
+                  {...field}
+                />
               </FormControl>
               <FormDescription>Logs for channels, roles, boosts, and emojis</FormDescription>
               <FormMessage />
@@ -95,7 +91,12 @@ export const ModuleForm = (props: {
             <FormItem>
               <FormLabel>Message Logs</FormLabel>
               <FormControl>
-                <ChannelSelect channels={channels} field={field} type={ChannelType.GuildText} showCategories />
+                <SelectChannel
+                  categories
+                  channelType={ChannelType.GuildText}
+                  channels={channels}
+                  {...field}
+                />
               </FormControl>
               <FormDescription>Logs for message deletes and edits</FormDescription>
               <FormMessage />
@@ -109,7 +110,12 @@ export const ModuleForm = (props: {
             <FormItem>
               <FormLabel>Member Logs</FormLabel>
               <FormControl>
-                <ChannelSelect channels={channels} field={field} type={ChannelType.GuildText} showCategories />
+                <SelectChannel
+                  categories
+                  channelType={ChannelType.GuildText}
+                  channels={channels}
+                  {...field}
+                />
               </FormControl>
               <FormDescription>Logs for member joins, leaves and edits</FormDescription>
               <FormMessage />
@@ -123,7 +129,12 @@ export const ModuleForm = (props: {
             <FormItem>
               <FormLabel>Voice Logs</FormLabel>
               <FormControl>
-                <ChannelSelect channels={channels} field={field} type={ChannelType.GuildText} showCategories />
+                <SelectChannel
+                  categories
+                  channelType={ChannelType.GuildText}
+                  channels={channels}
+                  {...field}
+                />
               </FormControl>
               <FormDescription>Logs for voice channel joins, leaves, mutes, and deafens</FormDescription>
               <FormMessage />
@@ -137,7 +148,12 @@ export const ModuleForm = (props: {
             <FormItem>
               <FormLabel>Invite Logs</FormLabel>
               <FormControl>
-                <ChannelSelect channels={channels} field={field} type={ChannelType.GuildText} showCategories />
+                <SelectChannel
+                  categories
+                  channelType={ChannelType.GuildText}
+                  channels={channels}
+                  {...field}
+                />
               </FormControl>
               <FormDescription>Logs for invite creates and usage</FormDescription>
               <FormMessage />
@@ -151,14 +167,22 @@ export const ModuleForm = (props: {
             <FormItem>
               <FormLabel>Punishment Logs</FormLabel>
               <FormControl>
-                <ChannelSelect channels={channels} field={field} type={ChannelType.GuildText} showCategories />
+                <SelectChannel
+                  categories
+                  channelType={ChannelType.GuildText}
+                  channels={channels}
+                  {...field}
+                />
               </FormControl>
               <FormDescription>Logs for bans, timeouts, and warns</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Update module</Button>
+        <div className="flex space-x-3">
+          <Button type="submit">Save changes</Button>
+          <Button type="reset" variant={"destructive"} disabled={!form.formState.isDirty} onClick={() => form.reset(props.defaultValues)}>Undo changes</Button>
+        </div>
       </form>
     </Form>
   )
