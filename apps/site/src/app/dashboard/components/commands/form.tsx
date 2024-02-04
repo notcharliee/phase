@@ -17,10 +17,8 @@ import {
 } from "@/components/ui/form"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
-import {
-  RoleSelect,
-  SelectFallback,
-} from "@/components/dashboard/modules/select"
+
+import { SelectRole } from "../select/role"
 
 import { type Command } from "@/types/commands"
 import { updateCommand } from "@/lib/actions"
@@ -54,7 +52,7 @@ export const CommandForm = <T extends boolean> (props: CommandFormProps<T>) => {
   if (props.fallback) return (
     <div className="space-y-2">
       <Label className="sr-only">Required Role</Label>
-      <SelectFallback />
+      <SelectRole fallback />
     </div>
   )
 
@@ -95,7 +93,10 @@ export const CommandForm = <T extends boolean> (props: CommandFormProps<T>) => {
             <FormItem onChange={() => form.handleSubmit(onSubmit)}>
               <FormLabel className="sr-only">Required Role</FormLabel>
               <FormControl>
-                <RoleSelect roles={props.data.roles} field={field} />
+                <SelectRole
+                  roles={props.data.roles}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
