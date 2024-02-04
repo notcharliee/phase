@@ -5,6 +5,7 @@
 @layer base {
   * {
     @apply border-border;
+    @apply shadow-black
   }
   body {
     @apply bg-background text-foreground;
