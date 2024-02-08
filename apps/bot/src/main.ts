@@ -1,11 +1,16 @@
-import * as Discord from "discord.js"
-import * as mongoose from "mongoose"
-import * as fileSystem from "fs"
+import { readdirSync } from "fs"
+
+import mongoose from "mongoose"
+
 import chalk from "chalk"
 import gradient from "gradient-string"
 
+import * as Discord from "discord.js"
 import * as Utils from "#src/utils/index.js"
+
 import { env } from "#src/env.js"
+
+import invitesTracker from "@androz2091/discord-invites-tracker"
 
 
 // Create timings array
@@ -68,6 +73,15 @@ try {
 }
 
 
+// Invite logger
+
+export const inviteEvents = invitesTracker.init(client, {
+  fetchGuilds: true,
+  fetchVanity: true,
+  fetchAuditLogs: true,
+})
+
+
 // Create command/event/loop function records
 
 const commands: Record<string, Utils.SlashCommand> = {}
@@ -77,8 +91,8 @@ const loops: Record<string, Utils.LoopFile> = {}
 
 // Get command functions
 
-for (const dir of fileSystem.readdirSync("build/commands")) {
-  for (const file of fileSystem.readdirSync(`build/commands/${dir}`)) {
+for (const dir of readdirSync("build/commands")) {
+  for (const file of readdirSync(`build/commands/${dir}`).filter(file => file.endsWith(".js") && !file.startsWith("_"))) {
     try {
       const commandFunction: Utils.SlashCommand = await (await import(`./commands/${dir}/${file}`)).default
       commands[commandFunction.data.name] = commandFunction
@@ -138,8 +152,8 @@ timings.push({
 
 // Handle event functions
 
-for (const dir of fileSystem.readdirSync("build/events")) {
-  for (const file of fileSystem.readdirSync(`build/events/${dir}`).filter(file => file.endsWith(".js"))) {
+for (const dir of readdirSync("build/events")) {
+  for (const file of readdirSync(`build/events/${dir}`).filter(file => file.endsWith(".js") && !file.startsWith("_"))) {
     try {
       const eventFunction: Utils.EventFile<keyof Discord.ClientEvents> = await (await import(`./events/${dir}/${file}`)).default
       events[eventFunction.name] = eventFunction
@@ -160,8 +174,8 @@ timings.push({
 // Handle loop functions
 // Warning: Will be swapped for cron jobs soon
 
-for (const dir of fileSystem.readdirSync("build/loops")) {
-  for (const file of fileSystem.readdirSync(`build/loops/${dir}`)) {
+for (const dir of readdirSync("build/loops")) {
+  for (const file of readdirSync(`build/loops/${dir}`).filter(file => file.endsWith(".js") && !file.startsWith("_"))) {
     try {
       const loopFunction: Utils.LoopFile = await (await import(`./loops/${dir}/${file}`)).default
       loops[loopFunction.name] = loopFunction
