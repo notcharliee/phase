@@ -180,8 +180,17 @@ export const ModuleForm = (props: {
           )}
         />
         <div className="flex space-x-3">
-          <Button type="submit">Save changes</Button>
-          <Button type="reset" variant={"destructive"} disabled={!form.formState.isDirty} onClick={() => form.reset(props.defaultValues)}>Undo changes</Button>
+          <Button type="submit">
+            Save changes
+          </Button>
+          <Button
+            type="reset"
+            variant={"destructive"}
+            disabled={!form.formState.isDirty}
+            onClick={() => form.reset(props.defaultValues)}
+          >
+            Undo changes
+          </Button>
         </div>
       </form>
     </Form>
