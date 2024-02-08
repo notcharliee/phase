@@ -3,7 +3,7 @@ import { SidebarNav } from "../components/sidebar-nav"
 import { dashboardConfig } from "@/config/dashboard"
 
 
-const sidebarNavItems = dashboardConfig.sidebarNav[0]!.items.map(item => ({ title: item.title, href: item.href! }))
+const sidebarNavItems = dashboardConfig.sidebarNav[0]!.items
 
 
 export default ({ children }: { children: React.ReactNode }) => (

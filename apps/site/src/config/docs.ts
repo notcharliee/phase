@@ -1,5 +1,7 @@
 import type { MainNavItem, SidebarNavItem } from "@/types/nav"
 
+import { modulesConfig } from "./modules"
+
 
 interface DocsConfig {
   mainNav: MainNavItem[]
@@ -56,43 +58,13 @@ export const docsConfig: DocsConfig = {
     },
     {
       title: "Modules",
-      items: [
-        {
-          title: "Audit Logs",
-          href: "/docs/modules/audit-logs",
-          items: [],
-        },
-        {
-          title: "Auto Partners",
-          href: "/docs/modules/auto-partners",
-          items: [],
-        },
-        {
-          title: "Auto Roles",
-          href: "/docs/modules/auto-roles",
-          items: [],
-        },
-        {
-          title: "Join to Create",
-          href: "/docs/modules/join-to-create",
-          items: [],
-        },
-        {
-          title: "Levels",
-          href: "/docs/modules/levels",
-          items: [],
-        },
-        {
-          title: "Reaction Roles",
-          href: "/docs/modules/reaction-roles",
-          items: [],
-        },
-        {
-          title: "Tickets",
-          href: "/docs/modules/tickets",
-          items: [],
-        },
-      ],
+      items: modulesConfig.map(module => ({
+        title: module.name,
+        href: "/docs/modules" + module.path,
+        disabled: module.disabled,
+        label: module.label,
+        items: [],
+      })),
     },
     {
       title: "Commands",
