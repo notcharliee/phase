@@ -1,15 +1,18 @@
-const createEnv = <T> (env: T) => env as Readonly<{ [K in keyof T]: string }>
+import { createEnv } from "@t3-oss/env-core"
+import { z } from "zod"
 
-/**
- * Readonly object with string-typed environment variables.
- */
+
 export const env = createEnv({
-  NODE_ENV: process.env.NODE_ENV,
-  MONGODB_URI: process.env.MONGODB_URI,
-  DISCORD_TOKEN: process.env.DISCORD_TOKEN,
-  DISCORD_SECRET: process.env.DISCORD_SECRET,
-  DISCORD_ID: process.env.DISCORD_ID,
-  WEBHOOK_ALERT: process.env.WEBHOOK_ALERT,
-  WEBHOOK_STATUS: process.env.WEBHOOK_STATUS,
-  API_YOUTUBE: process.env.API_YOUTUBE,
+  server: {
+    NODE_ENV: z.enum(["development", "test", "production"]),
+    MONGODB_URI: z.string(),
+    DISCORD_TOKEN: z.string(),
+    DISCORD_SECRET: z.string(),
+    DISCORD_ID: z.string(),
+    WEBHOOK_ALERT: z.string(),
+    WEBHOOK_STATUS: z.string(),
+    API_YOUTUBE: z.string(),
+  },
+  runtimeEnv: process.env,
+  emptyStringAsUndefined: true,
 })

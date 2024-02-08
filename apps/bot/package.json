@@ -6,11 +6,12 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "start": "dotenv -e ../../.env node build/main.js"
+    "start": "dotenv node build/main.js"
   },
   "dependencies": {
     "@androz2091/discord-invites-tracker": "^1.2.3",
     "@repo/schemas": "workspace:*",
+    "@t3-oss/env-core": "^0.8.0",
     "axios": "^1.5.1",
     "chalk": "^5.3.0",
     "discord-logs": "^2.2.1",
@@ -18,7 +19,8 @@
     "dotenv-cli": "^7.3.0",
     "googleapis": "^127.0.0",
     "gradient-string": "^2.0.2",
-    "mongoose": "^8.1.0"
+    "mongoose": "^8.1.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
