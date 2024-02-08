@@ -18,7 +18,7 @@
     "dotenv-cli": "^7.3.0",
     "googleapis": "^127.0.0",
     "gradient-string": "^2.0.2",
-    "mongoose": "^7.4.3"
+    "mongoose": "^8.1.0"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
