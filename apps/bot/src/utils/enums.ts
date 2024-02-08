@@ -1,9 +1,9 @@
 export enum PhaseColour {
+  Primary = "#f8f8f8",
+  Warning = "#FEE75C",
   Failure = "#ED4245",
   GradientPrimary = "#8000FF",
   GradientSecondary = "#DB00FF",
-  Primary = "#A400FF",
-  Warning = "#FEE75C",
 }
 
 export enum PhaseError {
@@ -28,8 +28,8 @@ export enum PhaseEmoji {
 }
 
 export enum PhaseURL {
-  PhaseCoffee = "https://www.buymeacoffee.com/notcharliee",
-  PhaseCommands = "https://phasebot.xyz/commands",
-  PhaseModules = "https://phasebot.xyz/modules",
+  PhaseCoffee = "https://phasebot.xyz/redirect/donate",
+  PhaseCommands = "https://phasebot.xyz/docs/commands",
+  PhaseModules = "https://phasebot.xyz/docs/modules",
   PhaseSupport = "https://discord.gg/338tyqeg82",
 }
