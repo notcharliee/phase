@@ -11,6 +11,7 @@ import * as Utils from "#src/utils/index.js"
 import { env } from "#src/env.js"
 
 import invitesTracker from "@androz2091/discord-invites-tracker"
+import discordLogs from "./logs.js"
 
 
 // Create timings array
@@ -170,6 +171,12 @@ for (const dir of readdirSync("build/events")) {
       throw error
     }
   }
+}
+
+try {
+  await discordLogs(client)
+} catch (error) {
+  throw error
 }
 
 timings.push({
