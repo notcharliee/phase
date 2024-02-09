@@ -29,7 +29,6 @@ export enum PhaseEmoji {
 
 export enum PhaseURL {
   PhaseCoffee = "https://phasebot.xyz/redirect/donate",
-  PhaseCommands = "https://phasebot.xyz/docs/commands",
-  PhaseModules = "https://phasebot.xyz/docs/modules",
+  PhaseDocs = "https://phasebot.xyz/docs",
   PhaseSupport = "https://discord.gg/338tyqeg82",
 }
