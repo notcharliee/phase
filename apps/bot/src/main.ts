@@ -121,6 +121,13 @@ client.on("interactionCreate", (interaction) => {
   if (interaction.isChatInputCommand()) {
     const command = commands[interaction.commandName]
 
+    if (!command) return Utils.clientError(
+      interaction,
+      "No can do!",
+      "Command doesn't exist anymore.",
+      true,
+    )
+
     if (command.permissions) {
       const baseCommandPermissions = command.permissions.baseCommand
       const subCommandsPermissions = Object.entries(command.permissions.subCommands ?? {})
