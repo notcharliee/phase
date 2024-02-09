@@ -61,7 +61,6 @@ export default Utils.clientEvent({
               new Discord.EmbedBuilder()
               .setColor(Utils.PhaseColour.Primary)
               .setDescription(levelUpMessage)
-              .setFooter({ text: `Sent from ${message.guild!.name}` })
               .setTitle('You levelled up!')
             ],
           })
@@ -77,7 +76,6 @@ export default Utils.clientEvent({
               new Discord.EmbedBuilder()
               .setColor(Utils.PhaseColour.Primary)
               .setDescription(levelUpMessage)
-              .setFooter({ text: `Sent from ${message.guild!.name}` })
               .setTitle('You levelled up!')
             ],
           })
