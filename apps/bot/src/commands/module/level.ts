@@ -79,7 +79,7 @@ export default Utils.clientSlashCommand({
         const userId = interaction.options.getUser('user', false)?.id ?? interaction.user.id
 
         
-        const apiResponse = await fetch(`https://phasebot.xyz/api/gen/rank.png?user=${userId}&guild=${interaction.guildId}&date=${Date.now()}`)
+        const apiResponse = await fetch(`https://phasebot.xyz/api/image/levels/user.png?user=${userId}&guild=${interaction.guildId}&date=${Date.now()}`)
 
         if (apiResponse.ok) {
 
@@ -111,12 +111,9 @@ export default Utils.clientSlashCommand({
 
         const rankStart = interaction.options.getInteger('rank-start', true)
         const rankCount = interaction.options.getInteger('rank-count', true)
+        const rankEnd = rankStart + (rankCount - 1)
 
-        const startIndex = rankStart - 1
-        const endIndex = startIndex + (rankCount - 1)
-
-
-        const apiResponse = await fetch(`https://phasebot.xyz/api/gen/leaderboard.png?start=${startIndex}&end=${endIndex}&guild=${interaction.guildId}&date=${Date.now()}`)
+        const apiResponse = await fetch(`https://phasebot.xyz/api/image/levels/guild.png?rankStart=${rankStart}&rankEnd=${rankEnd}&guild=${interaction.guildId}&date=${Date.now()}`)
 
         if (apiResponse.ok) {
 
