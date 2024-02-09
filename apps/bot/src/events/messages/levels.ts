@@ -25,20 +25,20 @@ export default Utils.clientEvent({
     const currentTarget = 500*(levelSchema.level+1)
     const xpToAdd = Math.floor(Math.random()*70)+5
 
-    if ((currentXP + xpToAdd) >= currentTarget) {
+    if ((currentXP + xpToAdd) <= currentTarget) {
       levelSchema.level = currentLevel
       levelSchema.xp = currentXP+xpToAdd
     } else {
       levelSchema.level += 1
       levelSchema.xp = 0
 
-      const levelUpMessage = `${levelModule.message}`
+      let levelUpMessage = `${levelModule.message}`
 
-      levelUpMessage.replaceAll("{member}", `${message.author}`)
-      levelUpMessage.replaceAll("{member.name}", `${message.author.username}`)
-      levelUpMessage.replaceAll("{member.level}", `${levelSchema.level}`)
-      levelUpMessage.replaceAll("{member.xp}", `${levelSchema.xp}`)
-      levelUpMessage.replaceAll("{member.target}", `${500*(levelSchema.level+1)}`)
+      levelUpMessage = levelUpMessage.replaceAll("{member}", `${message.author}`)
+      levelUpMessage = levelUpMessage.replaceAll("{member.name}", `${message.author.username}`)
+      levelUpMessage = levelUpMessage.replaceAll("{member.level}", `${levelSchema.level}`)
+      levelUpMessage = levelUpMessage.replaceAll("{member.xp}", `${levelSchema.xp}`)
+      levelUpMessage = levelUpMessage.replaceAll("{member.target}", `${500*(levelSchema.level+1)}`)
 
       switch (levelModule.channel) {
         case "dm": {
