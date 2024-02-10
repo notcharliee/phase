@@ -55,7 +55,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
 
   return (
     <header className="border-b w-full z-50 sticky top-0 backdrop-blur-sm">
-      <div className="container flex h-16 max-w-screen-2xl items-center mx-auto px-4">
+      <div className="flex h-16 items-center mx-auto px-4">
         <MainNav mainNav={props.mainNav} pathname={pathname} />
         <MobileNav mainNav={props.mainNav} pageNav={props.sidebarNav} pathname={pathname} />
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
