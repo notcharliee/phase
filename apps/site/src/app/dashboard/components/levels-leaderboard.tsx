@@ -44,7 +44,7 @@ export const LevelsLeaderboard = async <T extends boolean> (props: LevelsLeaderb
     </div>
   ))
 
-  const request = await getGuildLevels(new NextRequest(new URL(absoluteURL(`/api/levels/guild?guild=${props.guild}`))))
+  const request = await getGuildLevels(new NextRequest(new URL(absoluteURL(`/api/levels/guild?guild=${props.guild}&rankEnd=10`))))
   const guildLevels = request.status === 200 ? await request.json().then(json => json as GetLevelsGuildResponse) : []
 
   if (!guildLevels.length) return (
