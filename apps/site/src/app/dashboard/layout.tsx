@@ -11,7 +11,7 @@ import {
   SelectServerDialog,
 } from "./components/select-server"
 
-import { dashboardConfig } from "@/config/dashboard"
+import { dashboardNavConfig } from "@/config/nav/dashboard"
 
 
 export default ({ children }: { children: React.ReactNode }) => (
@@ -21,7 +21,7 @@ export default ({ children }: { children: React.ReactNode }) => (
         <Suspense fallback={<SelectServerCombobox fallback />}>
           <SelectServerCombobox />
         </Suspense>
-        <MainNav items={dashboardConfig.mainNav} className="mx-6" />
+        <MainNav items={dashboardNavConfig.mainNav} className="mx-6" />
         <div className="ml-auto flex items-center space-x-4">
           <SearchDashboard />
           <Suspense fallback={<UserNav fallback />}>

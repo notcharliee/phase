@@ -27,7 +27,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select"
 
-import { dashboardConfig } from "@/config/dashboard"
+import { dashboardNavConfig } from "@/config/nav/dashboard"
 import { cn } from "@/lib/utils"
 
 
@@ -49,7 +49,7 @@ export default () => (
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
         <nav className="flex items-center space-x-4 lg:space-x-6 mx-6">
-          {dashboardConfig.mainNav.map((item) => (
+          {dashboardNavConfig.mainNav.map((item) => (
             <span
               key={item.href}
               className={cn(

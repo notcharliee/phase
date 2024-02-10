@@ -1,9 +1,9 @@
 import { SidebarNav } from "../components/sidebar-nav"
 
-import { dashboardConfig } from "@/config/dashboard"
+import { dashboardNavConfig } from "@/config/nav/dashboard"
 
 
-const sidebarNavItems = dashboardConfig.sidebarNav[0]!.items
+const sidebarNavItems = dashboardNavConfig.sidebarNav[0]!.items
 
 
 export default ({ children }: { children: React.ReactNode }) => (

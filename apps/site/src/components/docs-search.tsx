@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/command"
 import { DialogProps } from "@radix-ui/react-alert-dialog"
 
-import { docsConfig } from "@/config/docs"
+import { docsNavConfig } from "@/config/nav/docs"
 import { cn } from "@/lib/utils"
 
 
@@ -75,7 +75,7 @@ export const DocsSearch = ({ ...props }: DialogProps) => {
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Links">
-            {docsConfig.mainNav
+            {docsNavConfig.mainNav
               .filter((navitem) => !navitem.external)
               .map((navItem) => (
                 <CommandItem
@@ -90,7 +90,7 @@ export const DocsSearch = ({ ...props }: DialogProps) => {
                 </CommandItem>
               ))}
           </CommandGroup>
-          {docsConfig.sidebarNav.map((group) => (
+          {docsNavConfig.sidebarNav.map((group) => (
             <CommandGroup key={group.title} heading={group.title}>
               {group.items.map((navItem) => (
                 <CommandItem

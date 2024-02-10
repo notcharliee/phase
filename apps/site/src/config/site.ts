@@ -1,5 +1,6 @@
 import { absoluteURL } from "@/lib/utils"
 
+
 export const siteConfig = {
   name: "Phase Bot",
   url: absoluteURL(""),

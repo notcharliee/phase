@@ -8,7 +8,7 @@ import {
   CubeIcon,
 } from "@radix-ui/react-icons"
 
-import { dashboardConfig } from "@/config/dashboard"
+import { dashboardNavConfig } from "@/config/nav/dashboard"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -72,7 +72,7 @@ export const SearchDashboard = ({ ...props }: DialogProps) => {
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Links">
-            {dashboardConfig.mainNav
+            {dashboardNavConfig.mainNav
               .filter((navitem) => !navitem.external)
               .map((navItem) => (
                 <CommandItem
@@ -87,7 +87,7 @@ export const SearchDashboard = ({ ...props }: DialogProps) => {
                 </CommandItem>
               ))}
           </CommandGroup>
-          {dashboardConfig.sidebarNav.map((group) => (
+          {dashboardNavConfig.sidebarNav.map((group) => (
             <CommandGroup key={group.title} heading={group.title}>
               {group.items.map((navItem) => (
                 <CommandItem

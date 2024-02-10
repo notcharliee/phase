@@ -16,7 +16,7 @@ import { DocsSearch } from "@/components/docs-search"
 
 import { cn } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
-import { docsConfig } from "@/config/docs"
+import { docsNavConfig } from "@/config/nav/docs"
 
 
 export const metadata = {
@@ -68,8 +68,8 @@ export default ({ children }: { children: React.ReactNode }) => (
       <TooltipProvider>
         <main className="w-full min-h-screen flex flex-col">
           <SiteHeader
-            mainNav={docsConfig.mainNav}
-            sidebarNav={docsConfig.sidebarNav}
+            mainNav={docsNavConfig.mainNav}
+            sidebarNav={docsNavConfig.sidebarNav}
             searchBar={DocsSearch}
             ignoredPaths={["/dashboard", "/demos"]}
           />

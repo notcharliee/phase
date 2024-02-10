@@ -22,7 +22,7 @@ import {
   type GuildModuleTickets,
 } from "@repo/schemas"
 
-import { dashboardConfig } from "@/config/dashboard"
+import { dashboardNavConfig } from "@/config/nav/dashboard"
 
 import { dbConnect } from "@/lib/db"
 import { getUser } from "@/lib/auth"
@@ -114,7 +114,7 @@ export const updateCommand = async (command: string, data: GuildCommand) => {
   const userId = headers().get("x-user-id")
   const userToken = headers().get("x-user-token")
 
-  const commands = dashboardConfig.sidebarNav[1]!.items.map(item => item.title.replace("/",""))
+  const commands = dashboardNavConfig.sidebarNav[1]!.items.map(item => item.title.replace("/",""))
 
   if (!guildId || !userId || !userToken || !commands.includes(command)) throw StatusCodes.BAD_REQUEST
 
