@@ -4,9 +4,9 @@
   "author": "@notcharliee",
   "type": "module",
   "scripts": {
-    "build": "contentlayer build && dotenv -e ../../.env next build",
-    "dev": "dotenv -e ../../.env -- concurrently \"contentlayer dev\" \"next dev --turbo\"",
-    "start": "dotenv -e ../../.env next start"
+    "build": "contentlayer build && next build",
+    "dev": "concurrently \"contentlayer dev\" \"next dev --turbo\"",
+    "start": "next start"
   },
   "dependencies": {
     "@discordjs/core": "^1.1.1",
@@ -43,7 +43,6 @@
     "concurrently": "^8.2.2",
     "contentlayer": "^0.3.4",
     "discord-api-types": "^0.37.67",
-    "dotenv-cli": "^7.3.0",
     "geist": "^1.2.1",
     "http-status-codes": "^2.3.0",
     "lucide-react": "^0.303.0",

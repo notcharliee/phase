@@ -4,14 +4,14 @@
   "author": "@notcharliee",
   "type": "module",
   "scripts": {
-    "bot:build": "turbo run build --filter=bot",
-    "bot:dev": "turbo run dev --filter=bot",
-    "bot:start": "cd apps/bot && pnpm run start",
-    "site:build": "turbo run build --filter=site",
-    "site:dev": "turbo run dev --filter=site",
-    "site:start": "cd apps/site && pnpm run start",
-    "schemas:build": "turbo run build --filter=@repo/schemas",
-    "schemas:dev": "turbo run dev --filter=@repo/schemas"
+    "bot:build": "turbo run build --filter=bot --color",
+    "bot:dev": "turbo run dev --filter=bot --color",
+    "bot:start": "cd apps/bot && pnpm run start --color",
+    "site:build": "turbo run build --filter=site --color",
+    "site:dev": "turbo run dev --filter=site --color",
+    "site:start": "cd apps/site && pnpm run start --color",
+    "schemas:build": "turbo run build --filter=@repo/schemas --color",
+    "schemas:dev": "turbo run dev --filter=@repo/schemas --color"
   },
   "devDependencies": {
     "prettier": "^3.1.0",

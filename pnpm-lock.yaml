@@ -175,9 +175,6 @@ importers:
       discord-api-types:
         specifier: ^0.37.67
         version: 0.37.67
-      dotenv-cli:
-        specifier: ^7.3.0
-        version: 7.3.0
       geist:
         specifier: ^1.2.1
         version: 1.2.1(next@14.1.0)
