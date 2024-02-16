@@ -18,12 +18,6 @@ Our [Code of Conduct](https://github.com/notcharliee/phase/blob/main/.github/COD
 
 To contribute you can create pull requests or open issues. There are issue templates available for creating feature requests and reporting bugs, please use them.
 
-Please make sure that all commits in this repository follow the [Commit Convention](https://github.com/notcharliee/phase/blob/main/.github/COMMIT_CONVENTION.md) file.
-
-### Community Roles
-
-<img src="./assets/community-roles.png" />
-
 ## Security
 
 If you believe you have found a security vulnerability in our code, we encourage you to responsibly disclose this and not open a public issue. We will investigate all legitimate reports. Contact the developers in a support ticket to disclose any security vulnerabilities.
