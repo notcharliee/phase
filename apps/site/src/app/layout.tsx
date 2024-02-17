@@ -11,13 +11,8 @@ import { Metadata, Viewport } from "next"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 
-import { SiteHeader } from "@/components/site-header"
-import { DocsSearch } from "@/components/docs-search"
-
 import { cn } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
-import { docsNavConfig } from "@/config/nav/docs"
-
 
 export const metadata = {
   title: { default: siteConfig.name, template: `%s - ${siteConfig.name}` },
@@ -55,30 +50,26 @@ export const metadata = {
   },
 } satisfies Metadata
 
-
 export const viewort = {
   colorScheme: "dark",
   themeColor: "#f8f8f8",
 } satisfies Viewport
 
-
-export default ({ children }: { children: React.ReactNode }) => (
-  <html lang="en" style={{ colorScheme: "dark" }}>
-    <body className={cn("font-geist-sans tracking-tight", GeistSans.variable)}>
-      <TooltipProvider>
-        <main className="w-full min-h-screen flex flex-col">
-          <SiteHeader
-            mainNav={docsNavConfig.mainNav}
-            sidebarNav={docsNavConfig.sidebarNav}
-            searchBar={DocsSearch}
-            ignoredPaths={["/dashboard", "/demos"]}
-          />
-          <div className="flex-1">{children}</div>
-        </main>
-      </TooltipProvider>
-      <Toaster />
-      <Analytics />
-      <SpeedInsights />
-    </body>
-  </html>
-)
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en" style={{ colorScheme: "dark" }}>
+      <body
+        className={cn("font-geist-sans tracking-tight", GeistSans.variable)}
+      >
+        <TooltipProvider>{children}</TooltipProvider>
+        <Toaster />
+        <Analytics />
+        <SpeedInsights />
+      </body>
+    </html>
+  )
+}
