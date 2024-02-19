@@ -13,12 +13,16 @@
     "schemas:build": "turbo run build --filter=@repo/schemas --color",
     "schemas:dev": "turbo run dev --filter=@repo/schemas --color"
   },
+  "dependencies": {
+    "turbo": "^1.12.2"
+  },
   "devDependencies": {
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7"
   },
-  "packageManager": "pnpm@8.9.2",
-  "dependencies": {
-    "turbo": "^1.12.2"
-  }
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "packageManager": "bun@1.0.27"
 }
