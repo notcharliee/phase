@@ -1,0 +1,29 @@
+{
+  "private": true,
+  "name": "phase.js",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "bin": {
+    "phase": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsup ./src --minify --clean --no-splitting --dts --format=esm",
+    "dev": "tsup ./src --minify --clean --no-splitting --dts --format=esm --watch"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "discord.js": "^14.12.1",
+    "dotenv-flow": "^4.1.0",
+    "ora": "^8.0.1",
+    "tsup": "^8.0.2"
+  },
+  "devDependencies": {
+    "@types/dotenv-flow": "^3.3.3",
+    "@types/node": "^20.11.19",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "bun@1.0.27"
+}
