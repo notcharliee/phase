@@ -8,6 +8,9 @@ import { resolve } from "node:path"
 import { sync as rimrafSync } from "rimraf"
 
 import { getConfig, getEnv, version } from "~/index"
+
+import { handleSlashCommands } from "~/handlers/slashCommands"
+
 import { getAllFiles } from "~/utils/getAllFiles"
 import { cliSpinner } from "~/utils/spinner"
 
@@ -44,17 +47,24 @@ program.command("start")
       await cliSpinner(
         client.login(token),
         "Connecting to Discord...",
-        "Connected successfully."
+        "Connected to Discord."
       )
+    } catch (error) {
+      throw error
+    }
 
-      if (client.isReady()) console.log(`-  ${chalk.bold(client.user.username)} is online.\n`)
+    try {
+      await cliSpinner(
+        handleSlashCommands(client),
+        "Loading slash commands...",
+        "Slash commands loaded."
+      )
     } catch (error) {
       throw error
     }
 
     /**
      * todo:
-     * add command handling
      * add regular event handling
      * add specialised event functions e.g. buttons, modals
      */
