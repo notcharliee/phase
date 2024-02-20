@@ -5,16 +5,18 @@ import { existsSync } from "node:fs"
 import { pathToFileURL } from "node:url"
 import { resolve } from "node:path"
 
-import { sync as rimrafSync } from "rimraf"
-
-import { getConfig, getEnv, version } from "~/index"
+import { version } from "~/index"
 
 import { handleBotCommands } from "~/handlers/botCommands"
-import { handleBotEvents } from "./handlers/botEvents"
+import { handleBotEvents } from "~/handlers/botEvents"
 
 import { getAllFiles } from "~/utils/getAllFiles"
+import { getConfig } from "~/utils/config"
+import { getEnv } from "~/utils/dotenv"
+import { getPrestart } from "~/utils/prestart"
 import { cliSpinner } from "~/utils/spinner"
 
+import { sync as rimrafSync } from "rimraf"
 import { Client } from "discord.js"
 import { Command } from "commander"
 import chalk from "chalk"
@@ -44,6 +46,17 @@ program.command("start")
     try {
       const token = process.env.BOT_TOKEN
       if (!token) throw new Error("Missing 'BOT_TOKEN' environment variable.")
+
+      const runPrestart = async () => {
+        const prestartFn = await getPrestart()
+        return await prestartFn()
+      }
+
+      await cliSpinner(
+        runPrestart(),
+        "Executing prestart...",
+        "Prestart complete."
+      )
 
       const events = await cliSpinner(
         handleBotEvents(client),
