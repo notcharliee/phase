@@ -6,21 +6,21 @@ import type {
 } from "discord.js"
 
 // Define the structure of a slash command
-interface SlashCommand {
+export interface SlashCommand {
   (data: SlashCommandData, execute: SlashCommandExecute): SlashCommandReturn
 }
 
 // Define the structure of slash command data
-interface SlashCommandData extends SlashCommandBuilder {}
+export interface SlashCommandData extends SlashCommandBuilder {}
 
 // Define the structure of slash command execution
-type SlashCommandExecute = (
+export type SlashCommandExecute = (
   client: Client<true>,
   interaction: ChatInputCommandInteraction,
 ) => Promise<any>
 
 // Define the structure of the returned object from the slash command
-interface SlashCommandReturn
+export interface SlashCommandReturn
   extends RESTPostAPIChatInputApplicationCommandsJSONBody {
   execute: SlashCommandExecute
 }
