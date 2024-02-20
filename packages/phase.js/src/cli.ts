@@ -9,7 +9,7 @@ import { sync as rimrafSync } from "rimraf"
 
 import { getConfig, getEnv, version } from "~/index"
 
-import { handleSlashCommands } from "~/handlers/slashCommands"
+import { handleBotCommands } from "~/handlers/botCommands"
 
 import { getAllFiles } from "~/utils/getAllFiles"
 import { cliSpinner } from "~/utils/spinner"
@@ -55,7 +55,7 @@ program.command("start")
 
     try {
       await cliSpinner(
-        handleSlashCommands(client),
+        handleBotCommands(client),
         "Loading slash commands...",
         "Slash commands loaded."
       )

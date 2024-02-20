@@ -3,28 +3,28 @@ import { pathToFileURL } from "node:url"
 import { resolve } from "node:path"
 
 import { getAllFiles } from "~/utils/getAllFiles"
-import type { SlashCommandReturn } from "~/utils/slashCommand"
+import type { BotCommand } from "~/utils/botCommand"
 
 import { Client } from "discord.js"
 
 
-export const handleSlashCommands = async (client: Client<boolean>) => {
-  const commands: Record<string, SlashCommandReturn> = {}
+export const handleBotCommands = async (client: Client<boolean>) => {
+  const commands: Record<string, ReturnType<BotCommand>> = {}
   const commandDir = resolve(process.cwd(), "build/commands")
 
   if (!existsSync(pathToFileURL(commandDir))) return commands
 
   for (const commandFile of getAllFiles(commandDir)) {
     try {
-      const commandFunction: SlashCommandReturn = await (await import(pathToFileURL(commandFile).toString())).default
+      const commandFunction: ReturnType<BotCommand> = await (await import(pathToFileURL(commandFile).toString())).default
       commands[commandFunction.name] = commandFunction
     } catch (error) {
       throw error
     }
   }
 
-  if (client.isReady()) updateClientSlashCommands(client, commands)
-  else client.once("ready", (readyClient) => { updateClientSlashCommands(readyClient, commands) })
+  if (client.isReady()) updateBotCommands(client, commands)
+  else client.once("ready", (readyClient) => { updateBotCommands(readyClient, commands) })
 
   client.on("interactionCreate", (interaction) => {
     if (interaction.isChatInputCommand()) {
@@ -47,9 +47,9 @@ export const handleSlashCommands = async (client: Client<boolean>) => {
 /**
  * Fetches the existing commands, then checks if any new commands need to be added or existing commands need to be removed. If so, it updates the commands accordingly.
  */
-const updateClientSlashCommands = async (
+const updateBotCommands = async (
   client: Client<true>,
-  newCommands: Record<string, SlashCommandReturn>,
+  newCommands: Record<string, ReturnType<BotCommand>>,
 ) => {
   const existingCommands = await client.application.commands.fetch()
 

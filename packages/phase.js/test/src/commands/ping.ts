@@ -1,8 +1,8 @@
-import { slashCommand } from "~/index"
+import { botCommand } from "~/index"
 
 import { SlashCommandBuilder } from "discord.js"
 
-export default slashCommand (
+export default botCommand (
   new SlashCommandBuilder()
   .setName("ping")
   .setDescription("pong"),
