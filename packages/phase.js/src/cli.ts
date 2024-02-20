@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 
 import { execSync } from "node:child_process"
-import { existsSync, readdirSync, statSync } from "node:fs"
+import { existsSync } from "node:fs"
 import { pathToFileURL } from "node:url"
-import { resolve, join } from "node:path"
+import { resolve } from "node:path"
 
 import { sync as rimrafSync } from "rimraf"
 
 import { getConfig, getEnv, version } from "~/index"
+import { getAllFiles } from "~/utils/getAllFiles"
 import { cliSpinner } from "~/utils/spinner"
 
 import { Client } from "discord.js"
@@ -69,13 +70,6 @@ program.command("build")
     if (!existsSync(pathToFileURL(srcPath))) throw new Error("No 'src' directory found.")
 
     if (existsSync(pathToFileURL(buildPath))) rimrafSync(resolve(buildPath))
-
-    const getAllFiles = (dirPath: string): string[] => {
-      return readdirSync(dirPath).flatMap((entry) => statSync(join(dirPath, entry)).isDirectory()
-        ? getAllFiles(join(dirPath, entry))
-        : join(dirPath, entry)
-      )
-    }
 
     const runBuild: Promise<Buffer> = new Promise((resolve, reject) => {
       try {
