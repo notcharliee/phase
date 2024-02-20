@@ -8,7 +8,7 @@ import { resolve, join } from "node:path"
 import { sync as rimrafSync } from "rimraf"
 
 import { getConfig, getEnv, version } from "~/index"
-import { cliSpinner } from "~/utils/cli-spinner"
+import { cliSpinner } from "~/utils/spinner"
 
 import { Client } from "discord.js"
 import { Command } from "commander"
