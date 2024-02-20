@@ -9,7 +9,6 @@ import { sync as rimrafSync } from "rimraf"
 
 import { getConfig, getEnv, version } from "~/index"
 import { cliSpinner } from "~/utils/cli-spinner"
-import { startBot } from "~/handlers/startBot"
 
 import { Client } from "discord.js"
 import { Command } from "commander"
@@ -32,11 +31,25 @@ program.command("start")
     const env = getEnv()
     if (env.files.length) console.log(`-  Environments:  ${env.files.join(" ")}\n`)
 
-    // ----------------------------------- //
 
-    const client = await startBot(new Client(config.clientOptions))
+    // Start client
 
-    console.log(`-  ${chalk.bold(client.user.username)} is online.\n`)
+    const client = new Client(config.clientOptions)
+
+    try {
+      const token = process.env.BOT_TOKEN
+      if (!token) throw new Error("Missing 'BOT_TOKEN' environment variable.")
+  
+      await cliSpinner(
+        client.login(token),
+        "Connecting to Discord...",
+        "Connected successfully."
+      )
+
+      if (client.isReady()) console.log(`-  ${chalk.bold(client.user.username)} is online.\n`)
+    } catch (error) {
+      throw error
+    }
 
     /**
      * todo:
