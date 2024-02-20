@@ -15,8 +15,8 @@ export interface SlashCommandData extends SlashCommandBuilder {}
 
 // Define the structure of slash command execution
 export type SlashCommandExecute = (
-  client: Client<true>,
   interaction: ChatInputCommandInteraction,
+  client: Client<true>,
 ) => Promise<any>
 
 // Define the structure of the returned object from the slash command
