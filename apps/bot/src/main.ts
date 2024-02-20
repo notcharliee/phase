@@ -174,7 +174,7 @@ for (const dir of readdirSync("build/events")) {
 }
 
 try {
-  await discordLogs(client)
+  await discordLogs(client as Discord.Client<true>)
 } catch (error) {
   throw error
 }
