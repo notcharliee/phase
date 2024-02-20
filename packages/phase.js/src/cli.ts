@@ -10,6 +10,7 @@ import { sync as rimrafSync } from "rimraf"
 import { getConfig, getEnv, version } from "~/index"
 
 import { handleBotCommands } from "~/handlers/botCommands"
+import { handleBotEvents } from "./handlers/botEvents"
 
 import { getAllFiles } from "~/utils/getAllFiles"
 import { cliSpinner } from "~/utils/spinner"
@@ -43,31 +44,30 @@ program.command("start")
     try {
       const token = process.env.BOT_TOKEN
       if (!token) throw new Error("Missing 'BOT_TOKEN' environment variable.")
+
+      const events = await cliSpinner(
+        handleBotEvents(client),
+        "Loading bot events...",
+        "Bot events loaded."
+      )
+
+      await cliSpinner(
+        handleBotCommands(client),
+        "Loading bot commands...",
+        "Bot commands loaded."
+      )
   
       await cliSpinner(
         client.login(token),
         "Connecting to Discord...",
-        "Connected to Discord."
+        "Connected to Discord.\n"
       )
+
+      for (const readyEvent of Object.values(events).filter(e => e.name === "ready"))
+        readyEvent.execute(client as Client<true>, client as Client<true>)
     } catch (error) {
       throw error
     }
-
-    try {
-      await cliSpinner(
-        handleBotCommands(client),
-        "Loading slash commands...",
-        "Slash commands loaded."
-      )
-    } catch (error) {
-      throw error
-    }
-
-    /**
-     * todo:
-     * add regular event handling
-     * add specialised event functions e.g. buttons, modals
-     */
   })
 
 

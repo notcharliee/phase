@@ -19,8 +19,9 @@ export const handleBotEvents = async (client: Client<boolean>) => {
       const eventFunction: ReturnType<BotEvent> = await (await import(pathToFileURL(eventFile).toString())).default
       events[eventFunction.name] = eventFunction
 
-      if (client.isReady()) client.on(eventFunction.name, (...data) => eventFunction.execute(client, ...data).catch((error) => { throw error }))
-      else client.once("ready", (readyClient) => { readyClient.on(eventFunction.name, (...data) => eventFunction.execute(readyClient, ...data).catch((error) => { throw error })) })
+      if (eventFunction.name !== "ready") client.once("ready", (readyClient) => {
+        client.on(eventFunction.name, (...data) => eventFunction.execute(readyClient, ...data))
+      })
     } catch (error) {
       throw error
     }

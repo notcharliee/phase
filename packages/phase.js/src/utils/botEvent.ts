@@ -6,13 +6,13 @@ export interface BotEvent {
     execute: (
       client: Client<true>,
       ...data: ClientEvents[BotEventName]
-    ) => Promise<any>,
+    ) => any,
   ): {
     name: keyof ClientEvents
     execute: (
       client: Client<true>,
       ...data: ClientEvents[BotEventName]
-    ) => Promise<any>
+    ) => any
   }
 }
 
