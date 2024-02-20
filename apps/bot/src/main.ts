@@ -148,7 +148,7 @@ client.on("interactionCreate", (interaction) => {
       }
     }
 
-    command.execute(client, interaction).catch((error) => { throw error })
+    command.execute(client as Discord.Client<true>, interaction).catch((error) => { throw error })
   }
 })
 
