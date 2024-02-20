@@ -1,7 +1,15 @@
 #!/usr/bin/env node
 
+import { execSync } from "node:child_process"
+import { existsSync, readdirSync, statSync } from "node:fs"
+import { pathToFileURL } from "node:url"
+import { resolve, join } from "node:path"
+
+import { sync as rimrafSync } from "rimraf"
+
 import { getConfig, getEnv, version } from "~/index"
-import { startBot } from "./handlers/startBot"
+import { cliSpinner } from "~/utils/cli-spinner"
+import { startBot } from "~/handlers/startBot"
 
 import { Client } from "discord.js"
 import { Command } from "commander"
@@ -32,11 +40,45 @@ program.command("start")
 
     /**
      * todo:
-     * add phase build command
-     * add command handling (requires build)
-     * add regular event handling (requires build)
-     * add specialised event functions e.g. buttons, modals (requires build)
+     * add command handling
+     * add regular event handling
+     * add specialised event functions e.g. buttons, modals
      */
+  })
+
+
+program.command("build")
+  .description("Build the bot.")
+  .action(() => {
+    const srcPath = resolve(process.cwd(), "src")
+    const buildPath = resolve(process.cwd(), "build")
+
+    if (!existsSync(pathToFileURL(srcPath))) throw new Error("No 'src' directory found.")
+
+    if (existsSync(pathToFileURL(buildPath))) rimrafSync(resolve(buildPath))
+
+    const getAllFiles = (dirPath: string): string[] => {
+      return readdirSync(dirPath).flatMap((entry) => statSync(join(dirPath, entry)).isDirectory()
+        ? getAllFiles(join(dirPath, entry))
+        : join(dirPath, entry)
+      )
+    }
+
+    const runBuild: Promise<Buffer> = new Promise((resolve, reject) => {
+      try {
+        const output = execSync(`bun build ${getAllFiles(srcPath).join(" ")} --minify --target=node --outdir=build`)
+        resolve(output)
+      } catch (error) {
+        reject(error)
+      }
+    })
+
+    try {
+      cliSpinner(runBuild, "Building the bot...", "Bot built successfully.")
+        .then((buffer) => process.stdout.write(buffer))
+    } catch (error) {
+      throw error
+    }
   })
 
 
