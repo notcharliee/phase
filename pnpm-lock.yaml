@@ -269,21 +269,24 @@ importers:
 
   packages/phase.js:
     dependencies:
-      bun:
-        specifier: ^1.0.28
-        version: 1.0.28
       chalk:
         specifier: ^5.3.0
         version: 5.3.0
       commander:
         specifier: ^12.0.0
         version: 12.0.0
+      cron:
+        specifier: ^3.1.6
+        version: 3.1.6
       discord.js:
         specifier: ^14.12.1
         version: 14.14.1
       dotenv-flow:
         specifier: ^4.1.0
         version: 4.1.0
+      esbuild:
+        specifier: ^0.20.1
+        version: 0.20.1
       ora:
         specifier: ^8.0.1
         version: 8.0.1
@@ -294,6 +297,9 @@ importers:
         specifier: ^8.0.2
         version: 8.0.2(typescript@5.3.3)
     devDependencies:
+      '@repo/tsconfig':
+        specifier: workspace:^
+        version: link:../tsconfig
       '@types/dotenv-flow':
         specifier: ^3.3.3
         version: 3.3.3
@@ -1501,54 +1507,6 @@ packages:
     resolution: {integrity: sha512-lkC8kZYntxVKr7b8xmjCVUgE0a8xgDakPyDo9uSWavXPyYqLgYYGdEd2j8NxihRyb6UwpX3G/hFUF4/9q2V+/g==}
     engines: {node: '>=14'}
     dev: false
-
-  /@oven/bun-darwin-aarch64@1.0.28:
-    resolution: {integrity: sha512-6wfvHpBAM+4FitGTYOpSnZ4X79j9vQlJoyP+kTeHma2h/2UmyvUUdtYtzQJ/dcdiNzSDRwWOSkt1iDRPOsn+Ng==}
-    cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@oven/bun-darwin-x64-baseline@1.0.28:
-    resolution: {integrity: sha512-4/wnvq4/PufThDqaZLn4l7LXwTG4IO7+Scd1LQ5z4W783X7hPnaRWpps1/2lEIskrsCBdgpyLolEr/u0NhaM9w==}
-    cpu: [x64]
-    os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@oven/bun-darwin-x64@1.0.28:
-    resolution: {integrity: sha512-ujucsd8y4Uq0w3Sp+kj7dYiscj1QGGGWcAVHq4qAfvYcJa+ApKf3OLBo+aifYpEC7OKro0g76kNFd4h9fY/OeA==}
-    cpu: [x64]
-    os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@oven/bun-linux-aarch64@1.0.28:
-    resolution: {integrity: sha512-PGECrkAVZDZdLFSGNZai8bcr06A8rrSWaMv4s3qEZ+IAGDNs5uFPasD8BaKdPWz7pXNTh3AFB203VwFq7atQkw==}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@oven/bun-linux-x64-baseline@1.0.28:
-    resolution: {integrity: sha512-tpQvbjHvLIOZx4DInOQOawyH00Sg/MqwCbtg/y27r3oRTGHjjrm/09RgqP0nUATofDhdoLYy20iWLlnMKePuFg==}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@oven/bun-linux-x64@1.0.28:
-    resolution: {integrity: sha512-lb8hkLylJ1m55AU5TGL3N6HAJVyCSMxzgdtzTkVsxMggkDYk0l3r4j3ktfqlCVi2Gb65b0BBIXA9/gowEMDG7w==}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@pkgjs/parseargs@0.11.0:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -3023,6 +2981,10 @@ packages:
       '@types/unist': 3.0.2
     dev: false
 
+  /@types/luxon@3.3.8:
+    resolution: {integrity: sha512-jYvz8UMLDgy3a5SkGJne8H7VA7zPV2Lwohjx0V8V31+SqAjNmurWMkk9cQhfvlcnXWudBpK9xPM1n4rljOcHYQ==}
+    dev: false
+
   /@types/mdast@3.0.15:
     resolution: {integrity: sha512-LnwD+mUEfxWMa1QpDraczIn6k0Ee3SMicuYSSzS6ZYl2gKS09EClnJYGd8Du6rfc5r/GZEk5o1mRb8TaTj03sQ==}
     dependencies:
@@ -3417,21 +3379,6 @@ packages:
       ieee754: 1.2.1
     dev: false
 
-  /bun@1.0.28:
-    resolution: {integrity: sha512-tTxCYdwBcSPblIoBOyEshe6n5/Ga6K0VTzucJV/OfsCpJpnRh1iN3snLntTF4HD20HuTFZIfDqUnjrRtLNBc7A==}
-    cpu: [arm64, x64]
-    os: [darwin, linux]
-    hasBin: true
-    requiresBuild: true
-    optionalDependencies:
-      '@oven/bun-darwin-aarch64': 1.0.28
-      '@oven/bun-darwin-x64': 1.0.28
-      '@oven/bun-darwin-x64-baseline': 1.0.28
-      '@oven/bun-linux-aarch64': 1.0.28
-      '@oven/bun-linux-x64': 1.0.28
-      '@oven/bun-linux-x64-baseline': 1.0.28
-    dev: false
-
   /bundle-require@4.0.2(esbuild@0.19.12):
     resolution: {integrity: sha512-jwzPOChofl67PSTW2SGubV9HBQAhhR2i6nskiOThauo9dzwDUgOWQScFVaJkjEfYX+UXiD+LEx8EblQMc2wIag==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
@@ -3690,6 +3637,13 @@ packages:
 
   /core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
+    dev: false
+
+  /cron@3.1.6:
+    resolution: {integrity: sha512-cvFiQCeVzsA+QPM6fhjBtlKGij7tLLISnTSvFxVdnFGLdz+ZdXN37kNe0i2gefmdD17XuZA6n2uPVwzl4FxW/w==}
+    dependencies:
+      '@types/luxon': 3.3.8
+      luxon: 3.4.4
     dev: false
 
   /cross-spawn@7.0.3:
@@ -4914,6 +4868,11 @@ packages:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.2.0
+    dev: false
+
+  /luxon@3.4.4:
+    resolution: {integrity: sha512-zobTr7akeGHnv7eBOXcRgMeCP6+uyYsczwmeRCauvpvaAltgNyTbLH/+VaEAPUeWBT+1GuNmz4wC/6jtQzbbVA==}
+    engines: {node: '>=12'}
     dev: false
 
   /magic-bytes.js@1.8.0:
@@ -6185,6 +6144,22 @@ packages:
       postcss: 8.4.26
     dev: false
 
+  /postcss-load-config@4.0.2:
+    resolution: {integrity: sha512-bSVhyJGL00wMVoPUzAVAnbEoWyqRxkjv64tUl427SKnPrENtq6hJwUojroMz2VB+Q1edmi4IfrAPpami5VVgMQ==}
+    engines: {node: '>= 14'}
+    peerDependencies:
+      postcss: '>=8.0.9'
+      ts-node: '>=9.0.0'
+    peerDependenciesMeta:
+      postcss:
+        optional: true
+      ts-node:
+        optional: true
+    dependencies:
+      lilconfig: 3.1.1
+      yaml: 2.3.4
+    dev: false
+
   /postcss-load-config@4.0.2(postcss@8.4.26):
     resolution: {integrity: sha512-bSVhyJGL00wMVoPUzAVAnbEoWyqRxkjv64tUl427SKnPrENtq6hJwUojroMz2VB+Q1edmi4IfrAPpami5VVgMQ==}
     engines: {node: '>= 14'}
@@ -7263,7 +7238,7 @@ packages:
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
-      postcss-load-config: 4.0.2(postcss@8.4.26)
+      postcss-load-config: 4.0.2
       resolve-from: 5.0.0
       rollup: 4.12.0
       source-map: 0.8.0-beta.0
