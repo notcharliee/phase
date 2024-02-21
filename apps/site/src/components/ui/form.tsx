@@ -9,19 +9,11 @@ import {
   FieldPath,
   FieldValues,
   FormProvider,
-  useForm,
   useFormContext,
-  type UseFormReturn,
-  type DefaultValues,
 } from "react-hook-form"
-
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
 
 import { cn } from "@/lib/utils"
 import { Label } from "@/components/ui/label"
-
-import { toast } from "sonner"
 
 const Form = FormProvider
 
@@ -174,39 +166,8 @@ const FormMessage = React.forwardRef<
 })
 FormMessage.displayName = "FormMessage"
 
-const formBuilder = <TSchema extends z.AnyZodObject> (
-  formData: {
-    defaultValues: DefaultValues<z.TypeOf<TSchema>>,
-    onSubmit: (data: z.TypeOf<TSchema>) => Promise<any>,
-    schema: TSchema,
-  },
-  FormFields: ({ form }: { form: UseFormReturn<z.TypeOf<TSchema>, any, undefined> }) => JSX.Element,
-) => {
-  const form = useForm<z.TypeOf<TSchema>>({
-    resolver: zodResolver(formData.schema),
-    defaultValues: formData.defaultValues,
-  })
-
-  const onSubmit = (data: z.TypeOf<typeof formData.schema>) => {
-    toast.promise(formData.onSubmit(data), {
-      loading: "Saving changes...",
-      success: "Changes saved!",
-      error: "An error occured.",
-    })
-  }
-
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormFields form={form} />
-      </form>
-    </Form>
-  )
-}
-
 export {
   useFormField,
-  formBuilder,
   Form,
   FormItem,
   FormLabel,
