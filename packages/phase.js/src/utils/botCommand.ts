@@ -2,12 +2,16 @@ import type {
   ChatInputCommandInteraction,
   Client,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
-  SlashCommandBuilder,
 } from "discord.js"
+
+import { SlashCommandBuilder } from "discord.js"
+
+
+export class BotCommandBuilder extends SlashCommandBuilder {}
 
 export interface BotCommand {
   (
-    command: SlashCommandBuilder,
+    command: BotCommandBuilder,
     execute: (
       interaction: ChatInputCommandInteraction,
       client: Client<true>,

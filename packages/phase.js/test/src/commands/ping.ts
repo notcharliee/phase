@@ -1,9 +1,8 @@
-import { botCommand } from "~/index"
+import { botCommand, BotCommandBuilder } from "~/index"
 
-import { SlashCommandBuilder } from "discord.js"
 
 export default botCommand (
-  new SlashCommandBuilder()
+  new BotCommandBuilder()
   .setName("ping")
   .setDescription("pong"),
   (interaction, client) => {

@@ -16,7 +16,7 @@ export const handleBotCommands = async (client: Client<boolean>) => {
 
   for (const commandFile of getAllFiles(commandDir)) {
     try {
-      const commandFunction: ReturnType<BotCommand> = await (await import(pathToFileURL(commandFile).toString())).default
+      const commandFunction: ReturnType<BotCommand> = (await (await import(pathToFileURL(commandFile).toString())).default).default
       commands[commandFunction.name] = commandFunction
     } catch (error) {
       throw error

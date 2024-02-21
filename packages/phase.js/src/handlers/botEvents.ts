@@ -8,7 +8,7 @@ import type { BotEvent } from "~/utils/botEvent"
 import { Client } from "discord.js"
 
 
-export const handleBotEvents = async (client: Client<boolean>) => {
+export const handleBotEvents = async (client: Client<boolean>): Promise<Record<string, ReturnType<BotEvent>>> => {
   const events: Record<string, ReturnType<BotEvent>> = {}
   const eventDir = resolve(process.cwd(), "build/events")
 
@@ -16,7 +16,7 @@ export const handleBotEvents = async (client: Client<boolean>) => {
 
   for (const eventFile of getAllFiles(eventDir)) {
     try {
-      const eventFunction: ReturnType<BotEvent> = await (await import(pathToFileURL(eventFile).toString())).default
+      const eventFunction: ReturnType<BotEvent> = (await (await import(pathToFileURL(eventFile).toString())).default).default
       events[eventFunction.name] = eventFunction
 
       if (eventFunction.name !== "ready") client.once("ready", (readyClient) => {
