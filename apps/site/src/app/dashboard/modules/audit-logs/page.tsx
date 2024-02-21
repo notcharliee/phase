@@ -19,16 +19,14 @@ import { ModuleForm } from "./form"
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
 
-const moduleData = modulesConfig.find(
-  (module) => module.name === "Audit Logs",
-)!
+const moduleData = modulesConfig.find((module) => module.name === "Audit Logs")!
 
 export const metadata: Metadata = {
   title: moduleData.name,
   description: moduleData.description,
 }
 
-export default async () => {
+export default async function ModulePage() {
   await dbConnect()
 
   const guildId = cookies().get("guild")?.value!
