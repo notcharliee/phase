@@ -23,11 +23,13 @@ export const modulesConfig: ModulesConfig[] = [
     name: "Auto Roles",
     description: "Automatically assigns roles to new members of your server as soon as they join.",
     path: "/auto-roles",
+    disabled: true,
   },
   {
     name: "Join to Create",
     description: "Creates a temporary voice channel, then deletes it once all members have left.",
     path: "/join-to-create",
+    disabled: true,
   },
   {
     name: "Levels",
