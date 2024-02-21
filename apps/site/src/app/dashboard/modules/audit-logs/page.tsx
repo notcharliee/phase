@@ -19,7 +19,7 @@ import { ModuleForm } from "./form"
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
 
-export const moduleData = modulesConfig.find(
+const moduleData = modulesConfig.find(
   (module) => module.name === "Audit Logs",
 )!
 
