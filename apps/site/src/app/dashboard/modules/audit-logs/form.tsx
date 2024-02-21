@@ -25,7 +25,6 @@ import { toast } from "sonner"
 
 import { updateModule } from "@/lib/actions"
 
-
 const formSchema = z.object({
   enabled: z.boolean(),
   channels: z.object({
@@ -35,18 +34,23 @@ const formSchema = z.object({
     invites: z.string().nullable(),
     members: z.string().nullable(),
     punishments: z.string().nullable(),
-  })
+  }),
 })
 
 type FormValues = z.infer<typeof formSchema>
 
-
-export const ModuleForm = (props: {
-  defaultValues: FormValues,
+interface ModuleFormProps {
+  defaultValues: FormValues
   data: {
-    channels: APIGuildChannel<GuildChannelType>[],
-  },
-}) => {
+    channels: APIGuildChannel<GuildChannelType>[]
+  }
+}
+
+export const ModuleForm = <Fallback extends boolean>(
+  props: Fallback extends true
+    ? Partial<ModuleFormProps> & { fallback: Fallback }
+    : Partial<ModuleFormProps> & { fallback?: Fallback },
+) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: props.defaultValues,
@@ -60,8 +64,6 @@ export const ModuleForm = (props: {
     })
   }
 
-  const channels = props.data.channels
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -72,14 +74,20 @@ export const ModuleForm = (props: {
             <FormItem>
               <FormLabel>Server Logs</FormLabel>
               <FormControl>
-                <SelectChannel
-                  categories
-                  channelType={ChannelType.GuildText}
-                  channels={channels}
-                  {...field}
-                />
+                {props.fallback ? (
+                  <SelectChannel fallback />
+                ) : (
+                  <SelectChannel
+                    categories
+                    channelType={ChannelType.GuildText}
+                    channels={props.data!.channels}
+                    {...field}
+                  />
+                )}
               </FormControl>
-              <FormDescription>Logs for channels, roles, boosts, and emojis</FormDescription>
+              <FormDescription>
+                Logs for channels, roles, boosts, and emojis
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -91,14 +99,20 @@ export const ModuleForm = (props: {
             <FormItem>
               <FormLabel>Message Logs</FormLabel>
               <FormControl>
-                <SelectChannel
-                  categories
-                  channelType={ChannelType.GuildText}
-                  channels={channels}
-                  {...field}
-                />
+                {props.fallback ? (
+                  <SelectChannel fallback />
+                ) : (
+                  <SelectChannel
+                    categories
+                    channelType={ChannelType.GuildText}
+                    channels={props.data!.channels}
+                    {...field}
+                  />
+                )}
               </FormControl>
-              <FormDescription>Logs for message deletes and edits</FormDescription>
+              <FormDescription>
+                Logs for message deletes and edits
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -110,14 +124,20 @@ export const ModuleForm = (props: {
             <FormItem>
               <FormLabel>Member Logs</FormLabel>
               <FormControl>
-                <SelectChannel
-                  categories
-                  channelType={ChannelType.GuildText}
-                  channels={channels}
-                  {...field}
-                />
+                {props.fallback ? (
+                  <SelectChannel fallback />
+                ) : (
+                  <SelectChannel
+                    categories
+                    channelType={ChannelType.GuildText}
+                    channels={props.data!.channels}
+                    {...field}
+                  />
+                )}
               </FormControl>
-              <FormDescription>Logs for member joins, leaves and edits</FormDescription>
+              <FormDescription>
+                Logs for member joins, leaves and edits
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -129,14 +149,20 @@ export const ModuleForm = (props: {
             <FormItem>
               <FormLabel>Voice Logs</FormLabel>
               <FormControl>
-                <SelectChannel
-                  categories
-                  channelType={ChannelType.GuildText}
-                  channels={channels}
-                  {...field}
-                />
+                {props.fallback ? (
+                  <SelectChannel fallback />
+                ) : (
+                  <SelectChannel
+                    categories
+                    channelType={ChannelType.GuildText}
+                    channels={props.data!.channels}
+                    {...field}
+                  />
+                )}
               </FormControl>
-              <FormDescription>Logs for voice channel joins, leaves, mutes, and deafens</FormDescription>
+              <FormDescription>
+                Logs for voice channel joins, leaves, mutes, and deafens
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -148,14 +174,20 @@ export const ModuleForm = (props: {
             <FormItem>
               <FormLabel>Invite Logs</FormLabel>
               <FormControl>
-                <SelectChannel
-                  categories
-                  channelType={ChannelType.GuildText}
-                  channels={channels}
-                  {...field}
-                />
+                {props.fallback ? (
+                  <SelectChannel fallback />
+                ) : (
+                  <SelectChannel
+                    categories
+                    channelType={ChannelType.GuildText}
+                    channels={props.data!.channels}
+                    {...field}
+                  />
+                )}
               </FormControl>
-              <FormDescription>Logs for invite creates and usage</FormDescription>
+              <FormDescription>
+                Logs for invite creates and usage
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -167,22 +199,26 @@ export const ModuleForm = (props: {
             <FormItem>
               <FormLabel>Punishment Logs</FormLabel>
               <FormControl>
-                <SelectChannel
-                  categories
-                  channelType={ChannelType.GuildText}
-                  channels={channels}
-                  {...field}
-                />
+                {props.fallback ? (
+                  <SelectChannel fallback />
+                ) : (
+                  <SelectChannel
+                    categories
+                    channelType={ChannelType.GuildText}
+                    channels={props.data!.channels}
+                    {...field}
+                  />
+                )}
               </FormControl>
-              <FormDescription>Logs for bans, timeouts, and warns</FormDescription>
+              <FormDescription>
+                Logs for bans, timeouts, and warns
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         <div className="flex space-x-3">
-          <Button type="submit">
-            Save changes
-          </Button>
+          <Button type="submit">Save changes</Button>
           <Button
             type="reset"
             variant={"destructive"}
@@ -196,8 +232,3 @@ export const ModuleForm = (props: {
     </Form>
   )
 }
-
-
-export const ModuleFormFallback = () => (
-  <></>
-)
