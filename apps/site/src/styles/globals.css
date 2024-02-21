@@ -5,15 +5,6 @@
 @layer base {
   * {
     @apply border-border;
-    @apply shadow-black
+    @apply shadow-black;
   }
-  body {
-    @apply bg-background text-foreground;
-    font-synthesis-weight: none;
-    text-rendering: optimizeLegibility;
-  }
-}
-
-.svg-inline--fa {
-  vertical-align: -0.125em;
 }

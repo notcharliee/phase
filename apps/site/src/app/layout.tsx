@@ -62,7 +62,10 @@ export default function RootLayout({
   return (
     <html lang="en" style={{ colorScheme: "dark" }}>
       <body
-        className={cn("font-geist-sans tracking-tight", GeistSans.variable)}
+        className={cn(
+          "font-geist-sans bg-background text-foreground tracking-tight",
+          GeistSans.variable,
+        )}
       >
         <TooltipProvider>{children}</TooltipProvider>
         <Toaster />
