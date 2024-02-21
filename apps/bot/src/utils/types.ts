@@ -31,7 +31,7 @@ export type SlashCommandExecute = (
 export type EventFile<T extends keyof Discord.ClientEvents> = {
   name: T,
   execute: (
-    client: Discord.Client<boolean>,
+    client: Discord.Client<true>,
     ...data: Discord.ClientEvents[T]
   ) => Promise<any>,
 }
@@ -41,6 +41,6 @@ export type LoopFile = {
   name: string,
   interval: number,
   execute: (
-    client: Discord.Client<boolean>,
+    client: Discord.Client<true>,
   ) => Promise<any>,
 }

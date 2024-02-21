@@ -166,7 +166,7 @@ for (const dir of readdirSync("build/events")) {
       const eventFunction: Utils.EventFile<keyof Discord.ClientEvents> = await (await import(`./events/${dir}/${file}`)).default
       events[eventFunction.name] = eventFunction
 
-      client.on(eventFunction.name, (...data) => eventFunction.execute(client, ...data).catch((error) => { throw error }))
+      client.on(eventFunction.name, (...data) => eventFunction.execute(client as Discord.Client<true>, ...data).catch((error) => { throw error }))
     } catch (error) {
       throw error
     }
@@ -194,7 +194,7 @@ for (const dir of readdirSync("build/loops")) {
       const loopFunction: Utils.LoopFile = await (await import(`./loops/${dir}/${file}`)).default
       loops[loopFunction.name] = loopFunction
 
-      setInterval(() => loopFunction.execute(client).catch((error) => { throw error }), loopFunction.interval)
+      setInterval(() => loopFunction.execute(client as Discord.Client<true>).catch((error) => { throw error }), loopFunction.interval)
     } catch (error) {
       throw error
     }
