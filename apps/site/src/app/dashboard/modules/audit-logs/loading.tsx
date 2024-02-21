@@ -1,19 +1,10 @@
-import { Separator } from "@/components/ui/separator"
-
-import { moduleData } from "./page"
+import { ModuleHeading } from "@/app/dashboard/components/module-heading"
 import { ModuleForm } from "./form"
 
 export default function ModuleLoading() {
   return (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-medium">{moduleData.name}</h3>
-        <p className="text-muted-foreground text-sm">
-          {moduleData.description}
-        </p>
-      </div>
-      <Separator />
+    <ModuleHeading>
       <ModuleForm fallback />
-    </div>
+    </ModuleHeading>
   )
 }

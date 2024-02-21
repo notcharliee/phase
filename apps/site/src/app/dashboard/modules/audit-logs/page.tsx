@@ -13,7 +13,7 @@ import { modulesConfig } from "@/config/modules"
 import { dbConnect } from "@/lib/db"
 import { env } from "@/lib/env"
 
-import { Separator } from "@/components/ui/separator"
+import { ModuleHeading } from "@/app/dashboard/components/module-heading"
 import { ModuleForm } from "./form"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
@@ -45,15 +45,8 @@ export default async () => {
   )) as APIGuildChannel<GuildChannelType>[]
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-medium">{moduleData.name}</h3>
-        <p className="text-muted-foreground text-sm">
-          {moduleData.description}
-        </p>
-      </div>
-      <Separator />
+    <ModuleHeading>
       <ModuleForm data={{ channels }} defaultValues={guild.modules.AuditLogs} />
-    </div>
+    </ModuleHeading>
   )
 }
