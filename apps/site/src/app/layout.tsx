@@ -1,5 +1,4 @@
 import "@/styles/globals.css"
-import "@/styles/keyframes.css"
 
 import { GeistSans } from "geist/font/sans"
 

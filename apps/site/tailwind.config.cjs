@@ -1,7 +1,5 @@
 module.exports = {
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
       animation: {
@@ -15,7 +13,7 @@ module.exports = {
           0 0 19px 0 var(--tw-shadow-color),
           0 0 40px 0 var(--tw-shadow-color)
         `,
-        "glow": `
+        glow: `
           0 0 4px 0 var(--tw-shadow-color),
           0 0 11px 0 var(--tw-shadow-color),
           0 0 19px 0 var(--tw-shadow-color),
@@ -32,28 +30,59 @@ module.exports = {
         `,
       },
       colors: {
-        "background": "rgb(8 8 8)",
-        "foreground": "rgb(248 248 248)",
-        "card": "rgb(8 8 8)",
+        background: "rgb(8 8 8)",
+        foreground: "rgb(248 248 248)",
+        card: "rgb(8 8 8)",
         "card-foreground": "rgb(248 248 248)",
-        "popover": "rgb(8 8 8)",
+        popover: "rgb(8 8 8)",
         "popover-foreground": "rgb(248 248 248)",
-        "primary": "rgb(248 248 248)",
+        primary: "rgb(248 248 248)",
         "primary-foreground": "rgb(24 24 24)",
-        "secondary": "rgb(40 40 40)",
+        secondary: "rgb(40 40 40)",
         "secondary-foreground": "rgb(248 248 248)",
-        "muted": "rgb(40 40 40)",
+        muted: "rgb(40 40 40)",
         "muted-foreground": "rgb(192 192 192)",
-        "accent": "rgb(40 40 40)",
+        accent: "rgb(40 40 40)",
         "accent-foreground": "rgb(248 248 248)",
-        "destructive": "rgb(171 58 58)",
+        destructive: "rgb(171 58 58)",
         "destructive-foreground": "rgb(248 248 248)",
-        "border": "rgb(40 40 40)",
-        "input": "rgb(40 40 40)",
-        "ring": "rgb(216 216 216)",
+        border: "rgb(40 40 40)",
+        input: "rgb(40 40 40)",
+        ring: "rgb(216 216 216)",
       },
       fontFamily: {
         "geist-sans": "var(--font-geist-sans)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "moon-twinkle": {
+          "0%": { width: "0px", height: "0px" },
+          "65%": {
+            width: "100px",
+            height: "100px",
+            transform: "rotate(120deg)",
+          },
+          "100%": { width: "0px", height: "0px", transform: "rotate(180deg)" },
+        },
+        "moon-shrink": {
+          "100%": {
+            width: "0px",
+            height: "0px",
+            filter: "contrast(2.5)",
+            transform: "rotate(120deg)",
+          },
+        },
+        "text-fade-in": {
+          from: { opacity: "0%" },
+          to: { opacity: "100%" },
+        },
       },
     },
   },
