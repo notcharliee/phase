@@ -20,9 +20,9 @@ interface EmojiPickerProps {
   disabled?: boolean
   fallback?: boolean,
   name?: string
-  onBlur?: React.FocusEventHandler<HTMLInputElement>
-  onValueChange?: (value: string) => void
-  ref?: React.Ref<HTMLDivElement>
+  onBlur?: React.FocusEventHandler<any>
+  onChange?: (value: string) => void
+  ref?: React.Ref<any>
   value?: string
 }
 
@@ -50,23 +50,22 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
     setSearchedEmojis(results)
   }
 
+  const [open, setOpen] = useState(false)
+
   const updateValue = (value: string) => {
+    if (props.onChange) props.onChange(value)
     setValue(value)
-    if (props.onValueChange) props.onValueChange(value)
+    setOpen(false)
   }
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="icon" disabled={props.disabled}>
+        <Button variant="outline" size="icon" disabled={props.disabled} onBlur={props.onBlur} ref={props.ref}>
           {value}
         </Button>
       </PopoverTrigger>
-      <PopoverContent
-        className="size-80 space-y-4"
-        onBlur={props.onBlur}
-        ref={props.ref}
-      >
+      <PopoverContent className="size-80 space-y-4">
         <Input
           placeholder="Search emojis..."
           onChange={(e) => search(e.target.value)}
