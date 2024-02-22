@@ -68,14 +68,19 @@ export const ModuleForm = <Fallback extends boolean>(
     name: "reactions",
   })
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
     const url = new URL(data.messageUrl).pathname.split("/")
+
+    const { enabled, reactions } = data
+    const channel = url[3]
+    const message = url[4]
 
     toast.promise(
       updateModule("ReactionRoles", {
-        ...data,
-        channel: url[2],
-        message: url[3],
+        enabled,
+        channel,
+        message,
+        reactions,
       }),
       {
         loading: "Saving changes...",
@@ -109,8 +114,8 @@ export const ModuleForm = <Fallback extends boolean>(
         />
         <div className="space-y-4">
           <div className="grid gap-4 gap-x-8 lg:grid-cols-2">
-            {fieldArray.fields.map((_, index) => (
-              <div className="space-y-2" key={index}>
+            {fieldArray.fields.map((field, index) => (
+              <div className="space-y-2" key={field.id}>
                 <Label>Reaction {index + 1}</Label>
                 <div className="flex gap-3">
                   <FormField
@@ -130,7 +135,7 @@ export const ModuleForm = <Fallback extends boolean>(
                     )}
                   />
                   <FormField
-                    key={index}
+                    key={field.id}
                     control={form.control}
                     name={`reactions.${index}.role`}
                     render={({ field }) => (
