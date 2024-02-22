@@ -24,3 +24,14 @@ export const getOrdinal = (number: number): string => {
     (["th", "st", "nd", "rd"][number % 10] || ["th", "st", "nd", "rd"][0]!)
   )
 }
+
+export const timeoutPromise: (ms: number, error: string) => Promise<Error> = (
+  ms,
+  error,
+) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      reject(new Error(error))
+    }, ms)
+  })
+}
