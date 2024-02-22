@@ -23,7 +23,6 @@ export const modulesConfig: ModulesConfig[] = [
     name: "Auto Roles",
     description: "Automatically assigns roles to new members of your server as soon as they join.",
     path: "/auto-roles",
-    disabled: true,
   },
   {
     name: "Join to Create",
