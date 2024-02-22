@@ -80,7 +80,7 @@ export const ModuleForm = <Fallback extends boolean>(
               <FormField
                 key={index}
                 control={form.control}
-                name={`roles.${index}`}
+                name={`roles.${index}.role`}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Role {index + 1}</FormLabel>
@@ -89,14 +89,7 @@ export const ModuleForm = <Fallback extends boolean>(
                         {props.fallback ? (
                           <SelectRole fallback />
                         ) : (
-                          <SelectRole
-                            {...field}
-                            value={field.value.role}
-                            roles={props.data.roles}
-                            onChange={(value) =>
-                              field.onChange({ role: value })
-                            }
-                          />
+                          <SelectRole roles={props.data.roles} {...field} />
                         )}
                         <Button
                           variant="outline"
