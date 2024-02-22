@@ -39,7 +39,6 @@ export const modulesConfig: ModulesConfig[] = [
     name: "Reaction Roles",
     description: "Lets members self-assign roles by reacting to a message.",
     path: "/reaction-roles",
-    disabled: true,
   },
   {
     name: "Tickets",

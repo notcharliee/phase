@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Spinner } from "@/components/spinner"
 import {
   Popover,
   PopoverContent,
@@ -17,6 +18,7 @@ import {
 
 interface EmojiPickerProps {
   disabled?: boolean
+  fallback?: boolean,
   name?: string
   onBlur?: React.FocusEventHandler<HTMLInputElement>
   onValueChange?: (value: string) => void
@@ -25,6 +27,12 @@ interface EmojiPickerProps {
 }
 
 export const EmojiPicker = (props: EmojiPickerProps) => {
+  if (props.fallback) return (
+    <Button variant="outline" size="icon" disabled={props.disabled}>
+      <Spinner className="size-5" />
+    </Button>
+  )
+
   const [value, setValue] = useState(props.value ?? "🌙")
   const [searchedEmojis, setSearchedEmojis] = useState<string[]>([])
 
