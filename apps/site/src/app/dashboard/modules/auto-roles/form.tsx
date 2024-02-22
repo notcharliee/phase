@@ -76,9 +76,9 @@ export const ModuleForm = <Fallback extends boolean>(
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="space-y-4">
           <div className="grid gap-4 gap-x-8 lg:grid-cols-2">
-            {fieldArray.fields.map((_, index) => (
+            {fieldArray.fields.map((field, index) => (
               <FormField
-                key={index}
+                key={field.id}
                 control={form.control}
                 name={`roles.${index}.role`}
                 render={({ field }) => (
