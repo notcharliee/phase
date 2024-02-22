@@ -28,7 +28,6 @@ export const modulesConfig: ModulesConfig[] = [
     name: "Join to Create",
     description: "Creates a temporary voice channel, then deletes it once all members have left.",
     path: "/join-to-create",
-    disabled: true,
   },
   {
     name: "Levels",
