@@ -37,37 +37,39 @@ var GiveawaySchema = mongoose3.models["Giveaways"] || mongoose3.model("Giveaways
 
 // src/Guilds.ts
 import mongoose4 from "mongoose";
-var schema4 = new mongoose4.Schema({
-  id: String,
-  // Guild ID
-  admins: Array,
-  // Dashboard admin IDs
-  commands: Object,
-  // Commands config
-  modules: Object,
-  // Modules config
-  news_channel: String
-  // Bot news channel
-});
-var GuildSchema = mongoose4.models["Guilds"] || mongoose4.model("Guilds", schema4);
+var GuildSchema = mongoose4.models["Guilds"] || mongoose4.model(
+  "Guilds",
+  new mongoose4.Schema({
+    id: String,
+    // Guild ID
+    admins: Array,
+    // Dashboard admin IDs
+    commands: Object,
+    // Commands config
+    modules: Object,
+    // Modules config
+    news_channel: String
+    // Bot news channel
+  })
+);
 
 // src/Levels.ts
 import mongoose5 from "mongoose";
-var schema5 = new mongoose5.Schema({
+var schema4 = new mongoose5.Schema({
   guild: String,
   user: String,
   level: Number,
   xp: Number
 });
-var LevelSchema = mongoose5.models["Levels"] || mongoose5.model("Levels", schema5);
+var LevelSchema = mongoose5.models["Levels"] || mongoose5.model("Levels", schema4);
 
 // src/Tags.ts
 import mongoose6 from "mongoose";
-var schema6 = new mongoose6.Schema({
+var schema5 = new mongoose6.Schema({
   guild: String,
   tags: Array
 });
-var TagSchema = mongoose6.models["Tags"] || mongoose6.model("Tags", schema6);
+var TagSchema = mongoose6.models["Tags"] || mongoose6.model("Tags", schema5);
 export {
   AFKSchema,
   GameSchema,
