@@ -10,7 +10,13 @@ import { dashboardNavConfig } from "@/config/nav/dashboard"
 import { dbConnect } from "@/lib/db"
 import { getUser } from "@/lib/auth"
 
-export { updateModule } from "@/lib/actions/updateModule"
+import { updateModule } from "@/lib/actions/updateModule"
+import { updateReactions } from "@/lib/actions/updateReactions"
+
+export {
+  updateModule,
+  updateReactions,
+}
 
 export const updateCommand = async (command: string, data: GuildCommand) => {
   await dbConnect()

@@ -40,10 +40,10 @@ export const updateModule = async <TName extends keyof GuildModules>(
   if (!guildSchema) throw StatusCodes.UNAUTHORIZED
 
   const module: GuildModule<TName> = guildSchema.modules[moduleName]
-  const moduleDataKeys = Object.keys(module) as (keyof typeof module)[]
+  const moduleDataKeys = Object.keys(moduleData) as (keyof typeof module)[]
 
   for (const key of moduleDataKeys) {
-    if (moduleData[key]) module[key] = (moduleData as GuildModule<TName>)[key]
+    module[key] = (moduleData as GuildModule<TName>)[key]
   }
 
   guildSchema.markModified("modules")
