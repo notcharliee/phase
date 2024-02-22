@@ -49,7 +49,7 @@ interface ModuleFormProps {
 export const ModuleForm = <Fallback extends boolean>(
   props: Fallback extends true
     ? Partial<ModuleFormProps> & { fallback: Fallback }
-    : Partial<ModuleFormProps> & { fallback?: Fallback },
+    : ModuleFormProps & { fallback?: Fallback },
 ) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -80,7 +80,7 @@ export const ModuleForm = <Fallback extends boolean>(
                   <SelectChannel
                     categories
                     channelType={ChannelType.GuildText}
-                    channels={props.data!.channels}
+                    channels={props.data.channels}
                     {...field}
                   />
                 )}
@@ -105,7 +105,7 @@ export const ModuleForm = <Fallback extends boolean>(
                   <SelectChannel
                     categories
                     channelType={ChannelType.GuildText}
-                    channels={props.data!.channels}
+                    channels={props.data.channels}
                     {...field}
                   />
                 )}
@@ -130,7 +130,7 @@ export const ModuleForm = <Fallback extends boolean>(
                   <SelectChannel
                     categories
                     channelType={ChannelType.GuildText}
-                    channels={props.data!.channels}
+                    channels={props.data.channels}
                     {...field}
                   />
                 )}
@@ -155,7 +155,7 @@ export const ModuleForm = <Fallback extends boolean>(
                   <SelectChannel
                     categories
                     channelType={ChannelType.GuildText}
-                    channels={props.data!.channels}
+                    channels={props.data.channels}
                     {...field}
                   />
                 )}
@@ -180,7 +180,7 @@ export const ModuleForm = <Fallback extends boolean>(
                   <SelectChannel
                     categories
                     channelType={ChannelType.GuildText}
-                    channels={props.data!.channels}
+                    channels={props.data.channels}
                     {...field}
                   />
                 )}
@@ -205,7 +205,7 @@ export const ModuleForm = <Fallback extends boolean>(
                   <SelectChannel
                     categories
                     channelType={ChannelType.GuildText}
-                    channels={props.data!.channels}
+                    channels={props.data.channels}
                     {...field}
                   />
                 )}
