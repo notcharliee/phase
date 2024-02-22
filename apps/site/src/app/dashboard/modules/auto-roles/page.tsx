@@ -11,7 +11,6 @@ import { modulesConfig } from "@/config/modules"
 import { dbConnect } from "@/lib/db"
 import { env } from "@/lib/env"
 
-import { ModuleHeading } from "@/app/dashboard/components/module-heading"
 import { ModuleForm } from "./form"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
@@ -39,14 +38,12 @@ export default async function ModulePage() {
   const roles = await discordAPI.guilds.getRoles(guildId)
 
   return (
-    <ModuleHeading>
-      <ModuleForm
-        data={{ roles }}
-        defaultValues={{
-          ...guild.modules.AutoRoles,
-          roles: guild.modules.AutoRoles.roles.map((role) => ({ role })),
-        }}
-      />
-    </ModuleHeading>
+    <ModuleForm
+      data={{ roles }}
+      defaultValues={{
+        ...guild.modules.AutoRoles,
+        roles: guild.modules.AutoRoles.roles.map((role) => ({ role })),
+      }}
+    />
   )
 }

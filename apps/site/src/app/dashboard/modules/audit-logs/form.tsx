@@ -67,156 +67,158 @@ export const ModuleForm = <Fallback extends boolean>(
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="channels.server"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Server Logs</FormLabel>
-              <FormControl>
-                {props.fallback ? (
-                  <SelectChannel fallback />
-                ) : (
-                  <SelectChannel
-                    categories
-                    channelType={ChannelType.GuildText}
-                    channels={props.data.channels}
-                    {...field}
-                  />
-                )}
-              </FormControl>
-              <FormDescription>
-                Logs for channels, roles, boosts, and emojis
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="channels.messages"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Message Logs</FormLabel>
-              <FormControl>
-                {props.fallback ? (
-                  <SelectChannel fallback />
-                ) : (
-                  <SelectChannel
-                    categories
-                    channelType={ChannelType.GuildText}
-                    channels={props.data.channels}
-                    {...field}
-                  />
-                )}
-              </FormControl>
-              <FormDescription>
-                Logs for message deletes and edits
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="channels.members"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Member Logs</FormLabel>
-              <FormControl>
-                {props.fallback ? (
-                  <SelectChannel fallback />
-                ) : (
-                  <SelectChannel
-                    categories
-                    channelType={ChannelType.GuildText}
-                    channels={props.data.channels}
-                    {...field}
-                  />
-                )}
-              </FormControl>
-              <FormDescription>
-                Logs for member joins, leaves and edits
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="channels.voice"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Voice Logs</FormLabel>
-              <FormControl>
-                {props.fallback ? (
-                  <SelectChannel fallback />
-                ) : (
-                  <SelectChannel
-                    categories
-                    channelType={ChannelType.GuildText}
-                    channels={props.data.channels}
-                    {...field}
-                  />
-                )}
-              </FormControl>
-              <FormDescription>
-                Logs for voice channel joins, leaves, mutes, and deafens
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="channels.invites"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Invite Logs</FormLabel>
-              <FormControl>
-                {props.fallback ? (
-                  <SelectChannel fallback />
-                ) : (
-                  <SelectChannel
-                    categories
-                    channelType={ChannelType.GuildText}
-                    channels={props.data.channels}
-                    {...field}
-                  />
-                )}
-              </FormControl>
-              <FormDescription>
-                Logs for invite creates and usage
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="channels.punishments"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Punishment Logs</FormLabel>
-              <FormControl>
-                {props.fallback ? (
-                  <SelectChannel fallback />
-                ) : (
-                  <SelectChannel
-                    categories
-                    channelType={ChannelType.GuildText}
-                    channels={props.data.channels}
-                    {...field}
-                  />
-                )}
-              </FormControl>
-              <FormDescription>
-                Logs for bans, timeouts, and warns
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid gap-4 gap-x-8 lg:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="channels.server"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Server Logs</FormLabel>
+                <FormControl>
+                  {props.fallback ? (
+                    <SelectChannel fallback />
+                  ) : (
+                    <SelectChannel
+                      categories
+                      channelType={ChannelType.GuildText}
+                      channels={props.data.channels}
+                      {...field}
+                    />
+                  )}
+                </FormControl>
+                <FormDescription>
+                  Logs for channels, roles, boosts, and emojis
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="channels.messages"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Message Logs</FormLabel>
+                <FormControl>
+                  {props.fallback ? (
+                    <SelectChannel fallback />
+                  ) : (
+                    <SelectChannel
+                      categories
+                      channelType={ChannelType.GuildText}
+                      channels={props.data.channels}
+                      {...field}
+                    />
+                  )}
+                </FormControl>
+                <FormDescription>
+                  Logs for message deletes and edits
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="channels.members"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Member Logs</FormLabel>
+                <FormControl>
+                  {props.fallback ? (
+                    <SelectChannel fallback />
+                  ) : (
+                    <SelectChannel
+                      categories
+                      channelType={ChannelType.GuildText}
+                      channels={props.data.channels}
+                      {...field}
+                    />
+                  )}
+                </FormControl>
+                <FormDescription>
+                  Logs for member joins, leaves and edits
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="channels.voice"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Voice Logs</FormLabel>
+                <FormControl>
+                  {props.fallback ? (
+                    <SelectChannel fallback />
+                  ) : (
+                    <SelectChannel
+                      categories
+                      channelType={ChannelType.GuildText}
+                      channels={props.data.channels}
+                      {...field}
+                    />
+                  )}
+                </FormControl>
+                <FormDescription>
+                  Logs for voice channel joins, leaves, mutes, and deafens
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="channels.invites"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Invite Logs</FormLabel>
+                <FormControl>
+                  {props.fallback ? (
+                    <SelectChannel fallback />
+                  ) : (
+                    <SelectChannel
+                      categories
+                      channelType={ChannelType.GuildText}
+                      channels={props.data.channels}
+                      {...field}
+                    />
+                  )}
+                </FormControl>
+                <FormDescription>
+                  Logs for invite creates and usage
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="channels.punishments"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Punishment Logs</FormLabel>
+                <FormControl>
+                  {props.fallback ? (
+                    <SelectChannel fallback />
+                  ) : (
+                    <SelectChannel
+                      categories
+                      channelType={ChannelType.GuildText}
+                      channels={props.data.channels}
+                      {...field}
+                    />
+                  )}
+                </FormControl>
+                <FormDescription>
+                  Logs for bans, timeouts, and warns
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <div className="flex space-x-3">
           <Button type="submit">Save changes</Button>
           <Button
