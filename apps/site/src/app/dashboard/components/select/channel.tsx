@@ -55,6 +55,8 @@ export const SelectChannel: SelectChannelType = (props) => {
 
   const placeholder = `Select a ${props.channelType === DiscordAPITypes.ChannelType.GuildCategory ? "category" : "channel"}`
 
+  const selectedChannel = channels.find(channel => channel.id === props.value)
+
   return (
     <Select
       disabled={props.disabled}
@@ -63,7 +65,7 @@ export const SelectChannel: SelectChannelType = (props) => {
       value={props.value}
     >
       <SelectTrigger className="bg-popover">
-        {props.value ? channels.find(c=>c.id==props.value)?.name : placeholder}
+        {selectedChannel ? selectedChannel.name : placeholder}
       </SelectTrigger>
       <SelectContent className="no-scroll-buttons">
         <div className="max-h-[30vh] overflow-y-scroll overflow-x-hidden p-1" children={
@@ -73,7 +75,7 @@ export const SelectChannel: SelectChannelType = (props) => {
               .map((key) => (
                 <SelectGroup key={key}>
                   <SelectLabel>
-                    {categories.find(category => category.id == key)!.name}
+                    {categories.find(category => category.id === key)!.name}
                   </SelectLabel>
                   {channelsWithCategories.get(key)!.map(channel => (
                     <SelectItem
