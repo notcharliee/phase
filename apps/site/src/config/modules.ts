@@ -33,7 +33,6 @@ export const modulesConfig: ModulesConfig[] = [
     name: "Levels",
     description: "Rewards activity with XP and level-ups as members reach milestones.",
     path: "/levels",
-    disabled: true,
   },
   {
     name: "Reaction Roles",
