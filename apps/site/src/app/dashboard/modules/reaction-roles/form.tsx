@@ -24,16 +24,23 @@ import { Label } from "@/components/ui/label"
 import { SelectRole } from "@/app/dashboard/components/select/role"
 import { toast } from "sonner"
 
-import { updateModule } from "@/lib/actions"
+import { updateModule, updateReactions } from "@/lib/actions"
 
 const formSchema = z.object({
   enabled: z.boolean(),
-  messageUrl: z.string().url().refine((url) => {
-    const discordChannelRegex = /^https:\/\/discord\.com\/channels\/\d+\/\d+\/\d+$/
-    return discordChannelRegex.test(url)
-  }, {
-    message: 'URL does not match the Discord message URL pattern'
-  }),
+  messageUrl: z
+    .string()
+    .url()
+    .refine(
+      (url) => {
+        const discordChannelRegex =
+          /^https:\/\/discord\.com\/channels\/\d+\/\d+\/\d+$/
+        return discordChannelRegex.test(url)
+      },
+      {
+        message: "URL does not match the Discord message URL pattern",
+      },
+    ),
   reactions: z
     .array(
       z.object({
@@ -84,7 +91,22 @@ export const ModuleForm = <Fallback extends boolean>(
       }),
       {
         loading: "Saving changes...",
-        success: "Changes saved!",
+        success: (data) => {
+          toast.promise(
+            updateReactions(
+              data.channel,
+              data.message,
+              data.reactions.map((r) => r.emoji),
+            ),
+            {
+              loading: "Updating reactions...",
+              success: "Reactions updated!",
+              error: "An error occured.",
+            },
+          )
+
+          return "Changes saved!"
+        },
         error: "An error occured.",
       },
     )
@@ -125,10 +147,11 @@ export const ModuleForm = <Fallback extends boolean>(
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          {props.fallback
-                            ? <EmojiPicker fallback {...field} />
-                            : <EmojiPicker {...field} />
-                          }
+                          {props.fallback ? (
+                            <EmojiPicker fallback {...field} />
+                          ) : (
+                            <EmojiPicker {...field} />
+                          )}
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -141,10 +164,11 @@ export const ModuleForm = <Fallback extends boolean>(
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormControl>
-                          {props.fallback
-                              ? <SelectRole fallback />
-                              : <SelectRole roles={props.data.roles} {...field} />
-                            }
+                          {props.fallback ? (
+                            <SelectRole fallback />
+                          ) : (
+                            <SelectRole roles={props.data.roles} {...field} />
+                          )}
                         </FormControl>
                         <FormMessage />
                       </FormItem>
