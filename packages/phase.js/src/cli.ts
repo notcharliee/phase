@@ -57,7 +57,7 @@ program
         "Prestart complete.",
       )
 
-      const events = await cliSpinner(
+      await cliSpinner(
         handleBotEvents(client),
         "Loading bot events...",
         "Bot events loaded.",
@@ -80,11 +80,6 @@ program
         "Connecting to Discord...",
         "Connected to Discord.\n",
       )
-
-      for (const readyEvent of Object.values(events).filter(
-        (e) => e.name === "ready",
-      ))
-        readyEvent.execute(client as Client<true>, client as Client<true>)
     } catch (error) {
       throw error
     }
