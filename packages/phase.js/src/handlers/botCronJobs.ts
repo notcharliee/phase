@@ -17,7 +17,7 @@ export const handleCronJobs = async (client: Client<boolean>) => {
 
   for (const cronJobFile of getAllFiles(cronJobDir)) {
     try {
-      const cronJobFunction: ReturnType<BotCronJob> = (await (await import(pathToFileURL(cronJobFile).toString())).default).default
+      const cronJobFunction: ReturnType<BotCronJob> = await (await import(pathToFileURL(cronJobFile).toString())).default
       cronJobs[basename(cronJobDir, extname(cronJobDir))] = cronJobFunction
 
       if (client.isReady()) addCronJob(cronJobFunction, client)
