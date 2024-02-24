@@ -5,7 +5,7 @@ export default botCommand (
   new BotCommandBuilder()
   .setName("ping")
   .setDescription("pong"),
-  (interaction, client) => {
+  (client, interaction) => {
     return interaction.reply("pong")
   }
 )

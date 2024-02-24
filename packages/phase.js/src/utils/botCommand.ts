@@ -13,13 +13,13 @@ export interface BotCommand {
   (
     command: BotCommandBuilder,
     execute: (
-      interaction: ChatInputCommandInteraction,
       client: Client<true>,
+      interaction: ChatInputCommandInteraction,
     ) => Promise<any>,
   ): RESTPostAPIChatInputApplicationCommandsJSONBody & {
     execute: (
-      interaction: ChatInputCommandInteraction,
       client: Client<true>,
+      interaction: ChatInputCommandInteraction,
     ) => Promise<any>
   }
 }

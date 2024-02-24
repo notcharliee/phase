@@ -32,8 +32,8 @@ export const handleBotCommands = async (client: Client<boolean>) => {
       if (!command) return
 
       command.execute(
-        interaction,
         client as Client<true>,
+        interaction,
       ).catch(error => {
         console.log(error)
       })
