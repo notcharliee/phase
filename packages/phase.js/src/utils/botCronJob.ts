@@ -1,6 +1,6 @@
 import type { Client } from "discord.js"
 
-export interface CronJob {
+export interface BotCronJob {
   (
     cronTime: string,
     execute: (client: Client<true>) => any
@@ -10,7 +10,7 @@ export interface CronJob {
   }
 }
 
-export const cronJob: CronJob = (cronTime, execute) => ({
+export const botCronJob: BotCronJob = (cronTime, execute) => ({
   cronTime,
   execute,
 })

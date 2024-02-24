@@ -1,6 +1,6 @@
 export { botCommand, BotCommandBuilder, type BotCommand } from "~/utils/botCommand"
 export { botEvent, type BotEvent } from "~/utils/botEvent"
-export { cronJob, type CronJob } from "~/utils/cronJob"
+export { botCronJob, type BotCronJob } from "~/utils/botCronJob"
 
 export { setConfig, type ConfigOptions } from "~/utils/config"
 

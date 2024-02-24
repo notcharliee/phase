@@ -8,7 +8,7 @@ import { version } from "~/index"
 
 import { handleBotCommands } from "~/handlers/botCommands"
 import { handleBotEvents } from "~/handlers/botEvents"
-import { handleCronJobs } from "~/handlers/cronJobs"
+import { handleCronJobs } from "~/handlers/botCronJobs"
 
 import { getAllFiles } from "~/utils/getAllFiles"
 import { getConfig } from "~/utils/config"
