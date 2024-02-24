@@ -28,12 +28,12 @@ import { updateModule } from "@/lib/actions"
 const formSchema = z.object({
   enabled: z.boolean(),
   channels: z.object({
-    server: z.string().nullable(),
-    messages: z.string().nullable(),
-    voice: z.string().nullable(),
-    invites: z.string().nullable(),
-    members: z.string().nullable(),
-    punishments: z.string().nullable(),
+    server: z.string().optional().nullable(),
+    messages: z.string().optional().nullable(),
+    voice: z.string().optional().nullable(),
+    invites: z.string().optional().nullable(),
+    members: z.string().optional().nullable(),
+    punishments: z.string().optional().nullable(),
   }),
 })
 
@@ -57,11 +57,19 @@ export const ModuleForm = <Fallback extends boolean>(
   })
 
   const onSubmit = (data: FormValues) => {
-    toast.promise(updateModule("AuditLogs", data), {
-      loading: "Saving changes...",
-      success: "Changes saved!",
-      error: "An error occured.",
-    })
+    toast.promise(
+      updateModule("AuditLogs", {
+        ...data,
+        channels: Object.fromEntries(
+          Object.entries(data.channels).map(([k, v]) => [k, v ?? null]),
+        ) as Record<keyof typeof data.channels, string | null>,
+      }),
+      {
+        loading: "Saving changes...",
+        success: "Changes saved!",
+        error: "An error occured.",
+      },
+    )
   }
 
   return (
