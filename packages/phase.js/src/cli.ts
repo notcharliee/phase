@@ -40,7 +40,7 @@ program
 
     // Start client
 
-    const client = new Client(config.clientOptions)
+    const client = new Client(config)
 
     try {
       const token = process.env.BOT_TOKEN
@@ -96,16 +96,13 @@ program
         bundle: true,
         clean: true,
         entry: ["./src"],
-        format: "cjs",
+        format: "esm",
         minify: true,
         skipNodeModulesBundle: true,
         splitting: true,
         treeshake: true,
-        tsconfig: "../tsconfig.json",
+        tsconfig: existsSync("./tsconfig.json") ? "./tsconfig.json" : undefined,
         outDir: "./build",
-        outExtension() {
-          return { js: ".cjs" }
-        },
       })
     } catch (error) {
       throw error
