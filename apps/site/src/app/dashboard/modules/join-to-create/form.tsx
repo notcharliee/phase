@@ -51,6 +51,8 @@ export const ModuleForm = <Fallback extends boolean>(
   })
 
   const onSubmit = (data: FormValues) => {
+    data.enabled = true
+    
     toast.promise(updateModule("JoinToCreates", data), {
       loading: "Saving changes...",
       success: "Changes saved!",

@@ -82,6 +82,8 @@ export const ModuleForm = <Fallback extends boolean>(
     const channel = url[3]
     const message = url[4]
 
+    data.enabled = true
+
     toast.promise(
       updateModule("ReactionRoles", {
         enabled,
@@ -91,12 +93,12 @@ export const ModuleForm = <Fallback extends boolean>(
       }),
       {
         loading: "Saving changes...",
-        success: (data) => {
+        success: (moduleData) => {
           toast.promise(
             updateReactions(
-              data.channel,
-              data.message,
-              data.reactions.map((r) => r.emoji),
+              moduleData.channel,
+              moduleData.message,
+              moduleData.reactions.map((r) => r.emoji),
             ),
             {
               loading: "Updating reactions...",
