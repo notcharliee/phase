@@ -1,28 +1,27 @@
-import * as Discord from 'discord.js'
-import * as Utils from '#src/utils/index.js'
-import * as Schemas from '@repo/schemas'
+import { botCommand, BotCommandBuilder } from "phase.js"
+import { EmbedBuilder } from "discord.js"
 
+import { PhaseColour } from "~/utils"
 
-export default Utils.clientSlashCommand({
-  data: new Discord.SlashCommandBuilder()
-    .setName('ping')
-    .setDescription('Calculates the current bot latency metrics.'),
-  async execute(client, interaction) {
-
+export default botCommand(
+  new BotCommandBuilder()
+    .setName("ping")
+    .setDescription("Calculates the current bot ping."),
+  async (client, interaction) => {
     const ping = await interaction.deferReply({ fetchReply: true })
-
     const commandLatency = ping.createdTimestamp - interaction.createdTimestamp
     const apiLatency = client.ws.ping
     const rebootTimestamp = `<t:${Math.round(client.readyTimestamp / 1000)}:R>`
 
     interaction.editReply({
       embeds: [
-        new Discord.EmbedBuilder()
-          .setColor(Utils.PhaseColour.Primary)
-          .setDescription(`Command Latency: ${commandLatency}ms\nDiscord API Latency: ${apiLatency}ms\n\nLast Reboot: ${rebootTimestamp}`)
-          .setTitle('Pong! 🏓')
+        new EmbedBuilder()
+          .setColor(PhaseColour.Primary)
+          .setDescription(
+            `Command Latency: ${commandLatency}ms\nDiscord API Latency: ${apiLatency}ms\n\nLast Reboot: ${rebootTimestamp}`,
+          )
+          .setTitle("Pong! 🏓"),
       ],
     })
-
-  }
-})
+  },
+)

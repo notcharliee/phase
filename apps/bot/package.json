@@ -1,12 +1,10 @@
 {
   "private": true,
   "name": "bot",
-  "author": "@notcharliee",
   "type": "module",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "start": "dotenv node build/main.js"
+    "build": "phase build",
+    "start": "phase start"
   },
   "dependencies": {
     "@androz2091/discord-invites-tracker": "^1.2.3",
@@ -18,17 +16,13 @@
     "discord.js": "^14.12.1",
     "dotenv-cli": "^7.3.0",
     "googleapis": "^127.0.0",
-    "gradient-string": "^2.0.2",
     "mongoose": "^8.1.0",
+    "phase.js": "workspace:*",
     "zod": "^3.22.4"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
-    "@types/gradient-string": "^1.1.5",
     "@types/node": "^20.5.0",
     "typescript": "^5.1.6"
-  },
-  "imports": {
-    "#src/*": "./build/*"
   }
 }

@@ -1,9 +1,13 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "paths": {
-      "#src/*": [ "./src/*" ],
+      "~/*": [
+        "./src/*"
+      ],
     },
-    "outDir": "build",
+    "moduleResolution": "bundler",
+    "module": "esnext",
   },
   "exclude": [
     "node_modules",
@@ -11,8 +15,7 @@
   ],
   "extends": "@repo/tsconfig/base.json",
   "include": [
-    "src/**/*.ts",
-    "src/**/*.cjs",
-    "src/**/*.mjs",
+    "src/**/*",
+    "src/**/*",
   ],
 }
