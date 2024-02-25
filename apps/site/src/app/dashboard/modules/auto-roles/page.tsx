@@ -37,12 +37,14 @@ export default async function ModulePage() {
 
   const roles = await discordAPI.guilds.getRoles(guildId)
 
+  const moduleConfig = guild.modules.AutoRoles
+
   return (
     <ModuleForm
       data={{ roles }}
       defaultValues={{
-        ...guild.modules.AutoRoles,
-        roles: guild.modules.AutoRoles.roles.map((role) => ({ role })),
+        ...moduleConfig,
+        roles: ("roles" in moduleConfig) ? moduleConfig.roles.map((role) => ({ role })) : [],
       }}
     />
   )
