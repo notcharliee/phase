@@ -11,8 +11,12 @@ import {
   type GuildCommand,
 } from "@repo/schemas"
 
-import { REST } from "@discordjs/rest"
-import { API } from "@discordjs/core/http-only"
+import { REST, type RawFile } from "@discordjs/rest"
+import {
+  API,
+  type APIMessage,
+  type RESTPostAPIChannelMessageJSONBody,
+} from "@discordjs/core/http-only"
 
 import { dashboardNavConfig } from "@/config/nav/dashboard"
 
@@ -22,6 +26,47 @@ import { env } from "@/lib/env"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
+
+export const updateTicketMessage = async (
+  channelId: string,
+  oldMessage: APIMessage| undefined,
+  {
+    files,
+    ...body
+  }: RESTPostAPIChannelMessageJSONBody & { files?: RawFile[] | undefined },
+) => {
+  await dbConnect()
+
+  const guildId = cookies().get("guild")?.value
+  const userId = headers().get("x-user-id")
+  const userToken = headers().get("x-user-token")
+
+  if (!guildId || !userId || !userToken) throw StatusCodes.BAD_REQUEST
+
+  const validUser = await getUser(userId, userToken)
+  if (!validUser) throw StatusCodes.UNAUTHORIZED
+
+  const guildSchema = await GuildSchema.findOne({
+    id: guildId,
+    admins: { $in: userId },
+  })
+
+  if (!guildSchema) throw StatusCodes.UNAUTHORIZED
+
+  if (oldMessage)
+    await discordAPI.channels.deleteMessage(
+      oldMessage.channel_id,
+      oldMessage.id,
+    )
+
+  const message = await discordAPI.channels.createMessage(channelId, {
+    files,
+    ...body,
+  })
+  await discordAPI.channels.pinMessage(channelId, message.id)
+
+  return message
+}
 
 /**
  * @param moduleName The name of the module.
@@ -75,6 +120,24 @@ export const updateReactions = async (
   messageId: string,
   emojis: string[],
 ) => {
+  await dbConnect()
+
+  const guildId = cookies().get("guild")?.value
+  const userId = headers().get("x-user-id")
+  const userToken = headers().get("x-user-token")
+
+  if (!guildId || !userId || !userToken) throw StatusCodes.BAD_REQUEST
+
+  const validUser = await getUser(userId, userToken)
+  if (!validUser) throw StatusCodes.UNAUTHORIZED
+
+  const guildSchema = await GuildSchema.findOne({
+    id: guildId,
+    admins: { $in: userId },
+  })
+
+  if (!guildSchema) throw StatusCodes.UNAUTHORIZED
+
   try {
     await discordAPI.channels.deleteAllMessageReactions(channelId, messageId)
     for (const emoji of emojis)
