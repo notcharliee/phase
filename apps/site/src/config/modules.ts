@@ -43,6 +43,5 @@ export const modulesConfig: ModulesConfig[] = [
     name: "Tickets",
     description: "Lets members create individualised staff assistance channels.",
     path: "/tickets",
-    disabled: true,
   },
 ]
