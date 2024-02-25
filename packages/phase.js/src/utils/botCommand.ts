@@ -2,25 +2,36 @@ import type {
   ChatInputCommandInteraction,
   Client,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
+  APIApplicationCommandSubcommandGroupOption,
+  SlashCommandOptionsOnlyBuilder,
+  SlashCommandSubcommandsOnlyBuilder,
 } from "discord.js"
 
-import { SlashCommandBuilder } from "discord.js"
-
-
-export class BotCommandBuilder extends SlashCommandBuilder {}
+import {
+  SlashCommandBuilder,
+  SlashCommandSubcommandGroupBuilder,
+} from "discord.js"
 
 export interface BotCommand {
   (
-    command: BotCommandBuilder,
+    command:
+      | SlashCommandBuilder
+      | Omit<BotCommandBuilder, "addSubcommandGroup" | "addSubcommand">
+      | SlashCommandOptionsOnlyBuilder
+      | SlashCommandSubcommandGroupBuilder
+      | SlashCommandSubcommandsOnlyBuilder,
     execute: (
       client: Client<true>,
       interaction: ChatInputCommandInteraction,
-    ) => Promise<any>,
-  ): RESTPostAPIChatInputApplicationCommandsJSONBody & {
+    ) => any,
+  ): (
+    | RESTPostAPIChatInputApplicationCommandsJSONBody
+    | APIApplicationCommandSubcommandGroupOption
+  ) & {
     execute: (
       client: Client<true>,
       interaction: ChatInputCommandInteraction,
-    ) => Promise<any>
+    ) => any
   }
 }
 
@@ -28,3 +39,5 @@ export const botCommand: BotCommand = (command, execute) => ({
   ...command.toJSON(),
   execute,
 })
+
+export class BotCommandBuilder extends SlashCommandBuilder {}

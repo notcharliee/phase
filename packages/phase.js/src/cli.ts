@@ -99,6 +99,7 @@ program
         format: "esm",
         minify: true,
         skipNodeModulesBundle: true,
+        sourcemap: true,
         splitting: true,
         treeshake: true,
         tsconfig: existsSync("./tsconfig.json") ? "./tsconfig.json" : undefined,

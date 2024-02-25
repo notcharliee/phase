@@ -10,8 +10,8 @@
     "phase": "./dist/cli.js"
   },
   "scripts": {
-    "build": "tsup ./src --minify --clean --no-splitting --dts --format=esm",
-    "dev": "tsup ./src --minify --clean --no-splitting --dts --format=esm --watch",
+    "build": "tsup ./src --minify --sourcemap --clean --no-splitting --dts --format=esm",
+    "dev": "tsup ./src --minify --sourcemap --clean --no-splitting --dts --format=esm --watch",
     "postinstall": "npm run build"
   },
   "dependencies": {
