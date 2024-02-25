@@ -217,7 +217,7 @@ export const ModuleForm = <Fallback extends boolean>(
                             />
                           </FormControl>
                           <FormDescription>
-                            Cap the number of tickets that can be open at once
+                            Limit the number of open tickets per member
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
