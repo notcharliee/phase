@@ -125,7 +125,7 @@ export default botCommand(
       case "set":
         {
           if (
-            interaction.memberPermissions?.missing(
+            !interaction.memberPermissions!.has(
               PermissionFlagsBits.ManageGuild,
             )
           )

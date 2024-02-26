@@ -81,7 +81,7 @@ export default botCommand(
       case "add":
         {
           if (
-            interaction.memberPermissions?.missing(
+            !interaction.memberPermissions?.has(
               PermissionFlagsBits.ManageMessages,
             )
           )
@@ -123,7 +123,7 @@ export default botCommand(
       case "edit":
         {
           if (
-            interaction.memberPermissions?.missing(
+            !interaction.memberPermissions?.has(
               PermissionFlagsBits.ManageMessages,
             )
           )
@@ -208,7 +208,7 @@ export default botCommand(
       case "remove":
         {
           if (
-            interaction.memberPermissions?.missing(
+            !interaction.memberPermissions?.has(
               PermissionFlagsBits.ManageMessages,
             )
           )
