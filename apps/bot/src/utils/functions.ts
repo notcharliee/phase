@@ -1,11 +1,60 @@
+import { PhaseColour, PhaseURL } from "~/utils"
 import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
   EmbedBuilder,
   InteractionReplyOptions,
+  WebhookClient,
 } from "discord.js"
-import { PhaseURL } from "~/utils"
+
+import { env } from "~/env"
+
+export async function alertDevs(data: {
+  title: string
+  description?: string
+  type: "message" | "warning" | "error"
+}) {
+  if (typeof env.WEBHOOK_ALERT != "string")
+    throw new Error("Alert webhook connection URL not found.")
+
+  const webhookClient = new WebhookClient({
+    url: env.WEBHOOK_ALERT,
+  })
+
+  const webhookAlert = await webhookClient.send({
+    embeds: [
+      new EmbedBuilder()
+        .setTitle(data.title)
+        .setDescription(data.description ?? null)
+        .setColor(
+          data.type == "message"
+            ? PhaseColour.Primary
+            : data.type == "warning"
+              ? PhaseColour.Warning
+              : PhaseColour.Failure,
+        )
+        .setTimestamp()
+        .setFooter({
+          text:
+            env.NODE_ENV == "development"
+              ? "Phase [Alpha]"
+              : "Phase [Production]",
+        }),
+    ],
+  })
+
+  if (data.type === "message" || data.type === "warning")
+    console.log(
+      `[Alert] ${data.title}\n➤ https://discord.com/channels/1078130365421596733/${webhookAlert.channel_id}/${webhookAlert.id}`,
+    )
+  else
+    throw new Error(
+      data.title && data.description
+        ? `${data.title} \n${data.description}`
+        : data.title,
+    )
+}
 
 export const memberNotFound = (
   ephemeral?: boolean,
