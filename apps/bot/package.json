@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "build": "phase build",
-    "start": "phase start"
+    "start": "phase start",
+    "dev": "pnpm run build && pnpm run start"
   },
   "dependencies": {
     "@androz2091/discord-invites-tracker": "^1.2.3",
