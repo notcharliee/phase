@@ -5,6 +5,7 @@ import {
   ButtonStyle,
   EmbedBuilder,
   InteractionReplyOptions,
+  PermissionFlagsBits,
   WebhookClient,
 } from "discord.js"
 
@@ -56,9 +57,15 @@ export async function alertDevs(data: {
     )
 }
 
-export const memberNotFound = (
-  ephemeral?: boolean,
-): InteractionReplyOptions => ({
+export const errorMessage = ({
+  title,
+  description,
+  ephemeral,
+}: {
+  title: string
+  description: string
+  ephemeral?: boolean
+}) => ({
   components: [
     new ActionRowBuilder<ButtonBuilder>().setComponents(
       new ButtonBuilder()
@@ -69,14 +76,29 @@ export const memberNotFound = (
   ],
   embeds: [
     new EmbedBuilder()
-      .setTitle("Member Not Found")
-      .setDescription(
-        "Member not found. Make sure they are in this server, then try again.",
-      )
+      .setTitle(title)
+      .setDescription(description)
       .setColor("Red"),
   ],
   ephemeral,
 })
+
+export const memberNotFound = (ephemeral?: boolean): InteractionReplyOptions =>
+  errorMessage({
+    title: "Member Not Found",
+    description:
+      "Member not found. Make sure they are in this server, then try again.",
+    ephemeral,
+  })
+
+export const missingPermission = (
+  permission: string | bigint,
+): InteractionReplyOptions =>
+  errorMessage({
+    title: "Missing Permission",
+    description: `You are missing the \`${typeof permission === "bigint" ? getPermissionName(permission) : permission}\` permission, which is required to perform this action.`,
+    ephemeral: true,
+  })
 
 /**
  *
@@ -94,4 +116,16 @@ export function getRandomArrayElements(array: any[], amount: number) {
   }
 
   return shuffledArray.slice(0, amount)
+}
+
+/**
+ *
+ * @param permission The permission to you want the name of.
+ * @returns The name of the permission.
+ */
+export function getPermissionName(permission: bigint): string {
+  for (const perm of Object.keys(PermissionFlagsBits))
+    if ((PermissionFlagsBits as any)[perm] == permission) return perm
+
+  return "UnknownPermission"
 }
