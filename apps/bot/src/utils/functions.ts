@@ -1,3 +1,4 @@
+import { GuildModules } from "@repo/schemas"
 import { PhaseColour, PhaseURL } from "~/utils"
 import {
   ActionRowBuilder,
@@ -91,12 +92,19 @@ export const memberNotFound = (ephemeral?: boolean): InteractionReplyOptions =>
     ephemeral,
   })
 
+export const moduleNotEnabled = (module: keyof GuildModules) =>
+  errorMessage({
+    title: "Module Not Enabled",
+    description: `The \`${module.replace(/([A-Z])/g, " $1")}\` module is not enabled, which is required to perform this action.`,
+    ephemeral: true,
+  })
+
 export const missingPermission = (
   permission: string | bigint,
 ): InteractionReplyOptions =>
   errorMessage({
     title: "Missing Permission",
-    description: `You are missing the \`${typeof permission === "bigint" ? getPermissionName(permission) : permission}\` permission, which is required to perform this action.`,
+    description: `You are missing the \`${typeof permission === "bigint" ? getPermissionName(permission).replace(/([A-Z])/g, " $1") : permission}\` permission, which is required to perform this action.`,
     ephemeral: true,
   })
 
