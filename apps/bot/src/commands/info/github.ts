@@ -62,7 +62,7 @@ export default botCommand(
                   })
                   .setColor(PhaseColour.Primary)
                   .setDescription(
-                    `${user.bio}\n\n**Followers:** ${user.followers}\n**Following:** ${user.following}\n**Joined:** <t:${Math.floor((new Date().getTime() - new Date(user.created_at).getTime()) / 1000)}:R>`,
+                    `${user.bio}\n\n**Followers:** ${user.followers}\n**Following:** ${user.following}\n**Joined:** <t:${Math.floor(Date.parse(user.created_at) / 1000)}:R>`,
                   )
                   .setThumbnail(user.avatar_url)
                   .setFooter({
@@ -101,7 +101,7 @@ export default botCommand(
                   .setTitle(repo.name)
                   .setURL(repo.html_url)
                   .setDescription(
-                    `${repo.description}\n\n**Language:** ${repo.language ?? "None"}\n**Issues:** ${repo.open_issues}\n**Forks:** ${repo.forks}\n**Stars:** ${repo.stargazers_count}\n**License:** ${repo.license ? repo.license.name : "None"}\n**Created:** <t:${Math.floor((new Date().getTime() - new Date(repo.created_at).getTime()) / 1000)}:R>`,
+                    `${repo.description}\n\n**Language:** ${repo.language ?? "None"}\n**Issues:** ${repo.open_issues}\n**Forks:** ${repo.forks}\n**Stars:** ${repo.stargazers_count}\n**License:** ${repo.license ? repo.license.name : "None"}\n**Created:** <t:${Math.floor(Date.parse(repo.created_at) / 1000)}:R>`,
                   )
                   .setFooter({
                     text: `ID: ${repo.id}`,

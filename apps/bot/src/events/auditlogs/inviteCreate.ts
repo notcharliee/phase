@@ -30,7 +30,7 @@ export default botEvent("inviteCreate", async (client, invite) => {
         })
         .setColor(PhaseColour.Primary)
         .setDescription(
-          `Code: \`${invite.code}\`\nExpires: ${invite.expiresAt ? `<t:${Math.floor((new Date().getTime() - invite.expiresAt.getTime()) / 1000)}:R>` : "`N/A`"}\nMax uses: ${invite.maxUses ?? "`N/A`"}\nChannel: ${invite.channel ?? "`N/A`"}\nURL: ${invite.url}`,
+          `Code: \`${invite.code}\`\nExpires: ${invite.expiresAt ? `<t:${Math.floor(invite.expiresAt.getTime() / 1000)}:R>` : "`N/A`"}\nMax uses: ${invite.maxUses ?? "`N/A`"}\nChannel: ${invite.channel ?? "`N/A`"}\nURL: ${invite.url}`,
         )
         .setTitle("Audit Logs - Invites"),
     ],
