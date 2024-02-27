@@ -11,8 +11,7 @@
   },
   "scripts": {
     "build": "tsup ./src --minify --sourcemap --clean --no-splitting --dts --format=esm",
-    "dev": "tsup ./src --minify --sourcemap --clean --no-splitting --dts --format=esm --watch",
-    "postinstall": "npm run build"
+    "dev": "tsup ./src --minify --sourcemap --clean --no-splitting --dts --format=esm --watch"
   },
   "dependencies": {
     "chalk": "^5.3.0",
