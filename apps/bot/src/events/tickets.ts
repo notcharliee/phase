@@ -49,12 +49,12 @@ export default botEvent("interactionCreate", async (client, interaction) => {
 
           if (!ticketChannel || !ticketData) return moduleNotEnabled("Tickets")
 
-          const ticketMessage = `${interaction.member}`
           const ticketName = `🎫 ${interaction.member.user.username}`
 
           const ticketsOpen = ticketChannel.threads.cache.filter((thread) =>
             thread.name.startsWith(ticketName),
           ).size
+
           if (ticketsOpen >= ticketData.max_open)
             return interaction.editReply(
               `You can't open any more than ${ticketData.max_open} tickets at a time!`,
@@ -62,12 +62,13 @@ export default botEvent("interactionCreate", async (client, interaction) => {
 
           const ticketThread = await ticketChannel.threads.create({
             name: ticketName + (ticketsOpen ? `(${ticketsOpen + 1})` : ""),
-            startMessage: ticketMessage,
             type: ChannelType.PrivateThread,
             invitable: true,
           })
 
-          ticketThread.send({
+          await ticketThread.send(`${interaction.member}`)
+
+          await ticketThread.send({
             components: [
               new ActionRowBuilder<ButtonBuilder>().setComponents(
                 new ButtonBuilder()
