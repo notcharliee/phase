@@ -5,7 +5,16 @@ import { resolve } from "node:path"
 import type { BotCommand } from "~/utils/botCommand"
 import { getAllFiles } from "~/utils/getAllFiles"
 
-import { Client, type ApplicationCommandDataResolvable } from "discord.js"
+import {
+  type Client,
+  type APIApplicationCommandOption,
+  type ApplicationCommandOption,
+  type APIApplicationCommandSubcommandOption,
+  ApplicationCommandOptionType,
+  ApplicationCommandDataResolvable,
+} from "discord.js"
+
+import type { AddUndefinedToPossiblyUndefinedPropertiesOfInterface } from "node_modules/discord-api-types/utils/internals"
 
 export const handleBotCommands = async (client: Client<boolean>) => {
   const commands: Record<string, ReturnType<BotCommand>> = {}
@@ -53,21 +62,86 @@ const updateBotCommands = async (
   client: Client<true>,
   newCommands: Record<string, ReturnType<BotCommand>>,
 ) => {
-  const existingCommands = await client.application.commands.fetch()
+  const newCommandsData = Object.entries(newCommands)
+    .map(([name, command]) => ({
+      name,
+      description: command.description,
+      options: command.options?.map(getOptions) ?? [],
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name))
 
-  const existingCommandNames = existingCommands.map((command) => command.name)
-  const newCommandNames = Object.keys(newCommands)
+  const existingCommandsData = (await client.application.commands.fetch())
+    .map((command) => ({
+      name: command.name,
+      description: command.description,
+      options: command.options.map(getOptions),
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name))
 
   if (
-    !newCommandNames.every((newCommand) =>
-      existingCommandNames.includes(newCommand),
-    ) || // the new commands are missing an existing command
-    !existingCommandNames.every((existingCommand) =>
-      newCommandNames.includes(existingCommand),
-    ) // the existing commands are missing new commands
+    JSON.stringify(newCommandsData, null, 2) !==
+    JSON.stringify(existingCommandsData, null, 2)
   ) {
     client.application.commands.set(
       Object.values(newCommands) as ApplicationCommandDataResolvable[],
     )
+  }
+}
+
+function getOptions(
+  commandOption:
+    | APIApplicationCommandSubcommandOption
+    | ApplicationCommandOption
+    | AddUndefinedToPossiblyUndefinedPropertiesOfInterface<APIApplicationCommandOption>,
+) {
+  const { name, description, type } = commandOption
+
+  if (type === ApplicationCommandOptionType.SubcommandGroup) {
+    return {
+      name,
+      description,
+      type,
+      options:
+        commandOption.options
+          ?.map((subcommandOption) => ({
+            name: subcommandOption.name,
+            description: subcommandOption.description,
+            type: subcommandOption.type,
+            options:
+              subcommandOption.options
+                ?.map((option) => ({
+                  name: option.name,
+                  description: option.description,
+                  type: option.type,
+                  required: option.required,
+                }))
+                .sort((a, b) => a.name.localeCompare(b.name)) || [],
+          }))
+          .sort((a, b) => a.name.localeCompare(b.name)) || [],
+    }
+  }
+
+  if (type === ApplicationCommandOptionType.Subcommand) {
+    return {
+      name,
+      description,
+      type,
+      options:
+        commandOption.options
+          ?.map((option) => ({
+            name: option.name,
+            description: option.description,
+            type: option.type,
+            required: option.required,
+          }))
+          .sort((a, b) => a.name.localeCompare(b.name)) || [],
+    }
+  }
+
+  return {
+    name,
+    description,
+    type,
+    required: commandOption.required,
   }
 }
