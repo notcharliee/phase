@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@androz2091/discord-invites-tracker": "^1.2.3",
+    "@octokit/rest": "^20.0.2",
     "@repo/schemas": "workspace:*",
     "@t3-oss/env-core": "^0.8.0",
     "axios": "^1.5.1",
