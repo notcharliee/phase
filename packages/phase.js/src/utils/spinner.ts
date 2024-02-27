@@ -10,6 +10,7 @@ export const cliSpinner = async <T extends any> (promise: Promise<T>, loading: s
       frames: ["🌕︎","🌖︎","🌗︎","🌘︎","🌑︎","🌒︎","🌓︎","🌔︎"],
       interval: 60,
     },
+    stream: process.stdout,
   }).start()
 
   try {

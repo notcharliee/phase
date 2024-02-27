@@ -36,7 +36,9 @@ program
 
     const env = getEnv()
     if (env.files.length)
-      console.log(`-  Environments:  ${env.files.join(" ")}\n`)
+      console.log(`-  Environments:  ${env.files.join(" ")}`)
+
+    console.log(" ")
 
     // Start client
 
