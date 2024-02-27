@@ -78,11 +78,11 @@ export const ModuleForm = <Fallback extends boolean>(
   const onSubmit = async (data: FormValues) => {
     const url = new URL(data.messageUrl).pathname.split("/")
 
+    data.enabled = true
+
     const { enabled, reactions } = data
     const channel = url[3]
     const message = url[4]
-
-    data.enabled = true
 
     toast.promise(
       updateModule("ReactionRoles", {
