@@ -1,10 +1,10 @@
+import { BotCommandBuilder, botCommand } from "phase.js"
+import { PhaseColour, errorMessage, missingPermission } from "~/utils"
 import {
   PermissionFlagsBits,
   GuildTextBasedChannel,
   EmbedBuilder,
 } from "discord.js"
-import { BotCommandBuilder, botCommand } from "phase.js"
-import { PhaseColour, errorMessage, missingPermission } from "~/utils"
 
 export default botCommand(
   new BotCommandBuilder()
@@ -49,7 +49,7 @@ export default botCommand(
         errorMessage({
           title: "Messages Not Found",
           description:
-            "No messages were found.\n\nDeveloper Note:\nDiscord doesn't allow bots to purge (bulk delete) messages that older than 14 days. If you need to purge the entire channel, run `/nuke` instead.",
+            "No messages were found.\n\n**Developer Note:**\nDiscord doesn't allow bots to purge (bulk delete) messages that older than 14 days. If you need to purge the entire channel, run `/nuke` instead.",
         }),
       )
     }
