@@ -176,7 +176,7 @@ export const ModuleForm = <Fallback extends boolean>(
               <FormField
                 control={form.control}
                 name="card.background"
-                disabled={!formFields.card.enabled}
+                disabled={!formFields?.card?.enabled}
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
