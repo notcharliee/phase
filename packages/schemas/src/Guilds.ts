@@ -36,6 +36,7 @@ export type GuildModules = {
   Levels: GuildModuleLevels
   ReactionRoles: GuildModuleReactionRoles
   Tickets: GuildModuleTickets
+  Warnings: GuildModuleWarnings
   WelcomeMessages: GuildModuleWelcomeMessages
 }
 
@@ -109,6 +110,11 @@ export type GuildModuleTickets = {
     message: string
     max_open: number
   }[]
+}
+
+export type GuildModuleWarnings = {
+  enabled: false
+  warnings: string[]
 }
 
 export type GuildModuleWelcomeMessages = {

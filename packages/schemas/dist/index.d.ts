@@ -64,6 +64,7 @@ type GuildModules = {
     Levels: GuildModuleLevels;
     ReactionRoles: GuildModuleReactionRoles;
     Tickets: GuildModuleTickets;
+    Warnings: GuildModuleWarnings;
     WelcomeMessages: GuildModuleWelcomeMessages;
 };
 type GuildModule<T extends keyof GuildModules> = GuildModules[T];
@@ -130,6 +131,10 @@ type GuildModuleTickets = {
         max_open: number;
     }[];
 };
+type GuildModuleWarnings = {
+    enabled: false;
+    warnings: string[];
+};
 type GuildModuleWelcomeMessages = {
     enabled: boolean;
     channel: string;
@@ -162,4 +167,4 @@ type Tag = {
     }[];
 };
 
-export { type AFK, AFKSchema, type Game, type GameData, type GameDataTictactoe, GameSchema, type Giveaway, GiveawaySchema, type Guild, type GuildCommand, type GuildCommands, type GuildModule, type GuildModuleAuditLogs, type GuildModuleAutoPartners, type GuildModuleAutoRoles, type GuildModuleJoinToCreates, type GuildModuleLevels, type GuildModuleReactionRoles, type GuildModuleTickets, type GuildModuleWelcomeMessages, type GuildModules, GuildSchema, type Level, LevelSchema, type Tag, TagSchema };
+export { type AFK, AFKSchema, type Game, type GameData, type GameDataTictactoe, GameSchema, type Giveaway, GiveawaySchema, type Guild, type GuildCommand, type GuildCommands, type GuildModule, type GuildModuleAuditLogs, type GuildModuleAutoPartners, type GuildModuleAutoRoles, type GuildModuleJoinToCreates, type GuildModuleLevels, type GuildModuleReactionRoles, type GuildModuleTickets, type GuildModuleWarnings, type GuildModuleWelcomeMessages, type GuildModules, GuildSchema, type Level, LevelSchema, type Tag, TagSchema };

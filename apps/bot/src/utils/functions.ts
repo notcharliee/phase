@@ -149,3 +149,11 @@ export function formatNumber(number: number) {
   else if (number >= 1e3) return (number / 1e3).toFixed(1) + "K"
   else return number.toString()
 }
+
+export const getOrdinal = (number: number): string => {
+  if (number >= 11 && number <= 13) return number + "th"
+  return (
+    number +
+    (["th", "st", "nd", "rd"][number % 10] || ["th", "st", "nd", "rd"][0]!)
+  )
+}
