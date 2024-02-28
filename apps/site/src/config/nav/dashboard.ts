@@ -36,7 +36,6 @@ export const dashboardNavConfig: DashboardNav = {
         title: module.name,
         href: "/dashboard/modules" + module.path,
         disabled: module.disabled,
-        label: module.label,
         items: [],
       })),
     },

@@ -6,7 +6,7 @@ export default botEvent("ready", async (client) => {
 
   for (const guildSchema of guildSchemas) {
     const reactionRolesModule = guildSchema.modules.ReactionRoles
-    if (!reactionRolesModule.enabled) continue
+    if (!reactionRolesModule?.enabled) continue
 
     const channel = client.channels.cache.get(`${reactionRolesModule.channel}`)
     if (!channel || !channel.isTextBased()) continue

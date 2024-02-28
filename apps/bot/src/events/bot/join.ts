@@ -10,15 +10,7 @@ export default botEvent("guildCreate", async (client, guild) => {
     id: guild.id,
     admins: [guild.ownerId],
     commands: {},
-    modules: {
-      AuditLogs: { enabled: false },
-      AutoPartners: { enabled: false },
-      AutoRoles: { enabled: false },
-      JoinToCreates: { enabled: false },
-      Levels: { enabled: false },
-      ReactionRoles: { enabled: false },
-      Tickets: { enabled: false },
-    },
+    modules: {},
     news_channel: null,
   }).save()
 

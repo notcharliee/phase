@@ -46,7 +46,6 @@ export const docsNavConfig: DocsConfig = {
         title: module.name,
         href: "/docs/modules" + module.path,
         disabled: module.disabled,
-        label: module.label,
         items: [],
       })),
     },

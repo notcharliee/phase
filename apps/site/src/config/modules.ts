@@ -1,47 +1,63 @@
 interface ModulesConfig {
-  name: string,
-  description: string,
-  label?: string,
-  path?: string,
-  disabled?: boolean,
+  name: string
+  description: string
+  path: string
+  disabled: boolean
 }
 
-
-export const modulesConfig: ModulesConfig[] = [
+export const modulesConfig = [
   {
     name: "Audit Logs",
-    description: "Sends a log of all server events to the channel of your choice.",
+    description:
+      "Sends a log of all server events to the channel of your choice.",
     path: "/audit-logs",
+    disabled: false,
   },
   {
     name: "Auto Partners",
-    description: "Manages adverts and tracks invite stats across your partnered servers.",
+    description:
+      "Manages adverts and tracks invite stats across your partnered servers.",
     path: "/auto-partners",
     disabled: true,
   },
   {
     name: "Auto Roles",
-    description: "Automatically assigns roles to new members of your server as soon as they join.",
+    description:
+      "Automatically assigns roles to new members of your server as soon as they join.",
     path: "/auto-roles",
+    disabled: false,
   },
   {
     name: "Join to Create",
-    description: "Creates a temporary voice channel, then deletes it once all members have left.",
+    description:
+      "Creates a temporary voice channel, then deletes it once all members have left.",
     path: "/join-to-create",
+    disabled: false,
   },
   {
     name: "Levels",
-    description: "Rewards activity with XP and level-ups as members reach milestones.",
+    description:
+      "Rewards activity with XP and level-ups as members reach milestones.",
     path: "/levels",
+    disabled: false,
   },
   {
     name: "Reaction Roles",
     description: "Lets members self-assign roles by reacting to a message.",
     path: "/reaction-roles",
+    disabled: false,
   },
   {
     name: "Tickets",
-    description: "Lets members create individualised staff assistance channels.",
+    description:
+      "Lets members create individualised staff assistance channels.",
     path: "/tickets",
+    disabled: false,
   },
-]
+  {
+    name: "Welcome Messages",
+    description: "Give new members a warm welcome to your server.",
+    path: "/welcome-messages",
+    disabled: false,
+  },
+] as const satisfies ModulesConfig[]

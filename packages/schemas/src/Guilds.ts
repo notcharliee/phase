@@ -17,7 +17,7 @@ export type Guild = {
   id: string
   admins: string[]
   commands: GuildCommands
-  modules: GuildModules
+  modules: Partial<GuildModules>
   news_channel: string | undefined
 }
 
@@ -36,9 +36,10 @@ export type GuildModules = {
   Levels: GuildModuleLevels
   ReactionRoles: GuildModuleReactionRoles
   Tickets: GuildModuleTickets
+  WelcomeMessages: GuildModuleWelcomeMessages
 }
 
-export type GuildModule <T extends keyof GuildModules> = GuildModules[T]
+export type GuildModule<T extends keyof GuildModules> = GuildModules[T]
 
 export type GuildModuleAuditLogs = {
   enabled: boolean
@@ -108,4 +109,15 @@ export type GuildModuleTickets = {
     message: string
     max_open: number
   }[]
+}
+
+export type GuildModuleWelcomeMessages = {
+  enabled: boolean
+  channel: string
+  message: string
+  mention: boolean
+  card: {
+    enabled: boolean
+    background?: string
+  }
 }

@@ -19,7 +19,7 @@ const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
 
 const moduleData = modulesConfig.find(
-  (module) => module.name === "Join to Create",
+  (module) => module.name === "Welcome Messages",
 )!
 
 export const metadata: Metadata = {
@@ -37,17 +37,28 @@ export default async function ModulePage() {
     id: guildId,
     admins: { $in: userId },
   })
+
   if (!guild) return <h1>Access Denied</h1>
 
   const channels = (await discordAPI.guilds.getChannels(
     guildId,
   )) as APIGuildChannel<GuildChannelType>[]
 
-  const moduleConfig = guild.modules.JoinToCreates ?? {
+  const moduleConfig = guild.modules.WelcomeMessages ?? {
     enabled: false,
     channel: "",
-    category: "",
+    message: "",
+    mention: false,
+    card: {
+      enabled: false,
+      background: undefined,
+    },
   }
 
-  return <ModuleForm data={{ channels }} defaultValues={moduleConfig} />
+  return (
+    <ModuleForm
+      data={{ channels }}
+      defaultValues={moduleConfig}
+    />
+  )
 }

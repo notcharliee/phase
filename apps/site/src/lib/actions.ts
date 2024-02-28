@@ -7,7 +7,6 @@ import { StatusCodes } from "http-status-codes"
 import {
   GuildSchema,
   type GuildModules,
-  type GuildModule,
   type GuildCommand,
 } from "@repo/schemas"
 
@@ -29,7 +28,7 @@ const discordAPI = new API(discordREST)
 
 export const updateTicketMessage = async (
   channelId: string,
-  oldMessage: APIMessage| undefined,
+  oldMessage: APIMessage | undefined,
   {
     files,
     ...body
@@ -78,7 +77,7 @@ export const updateTicketMessage = async (
  */
 export const updateModule = async <TName extends keyof GuildModules>(
   moduleName: TName,
-  moduleData: Partial<GuildModule<TName>>,
+  moduleData: Partial<Partial<GuildModules>[TName]>,
 ) => {
   await dbConnect()
 
@@ -98,18 +97,16 @@ export const updateModule = async <TName extends keyof GuildModules>(
 
   if (!guildSchema) throw StatusCodes.UNAUTHORIZED
 
-  const module: GuildModule<TName> = guildSchema.modules[moduleName]
-  const moduleDataKeys = Object.keys(moduleData) as (keyof typeof module)[]
-
-  for (const key of moduleDataKeys) {
-    module[key] = (moduleData as GuildModule<TName>)[key]
+  guildSchema.modules[moduleName] = {
+    ...guildSchema.modules[moduleName],
+    ...moduleData,
   }
 
   guildSchema.markModified("modules")
 
   try {
     await guildSchema.save()
-    return module
+    return guildSchema.modules[moduleName]!
   } catch (error) {
     throw error
   }

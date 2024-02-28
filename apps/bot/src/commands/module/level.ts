@@ -145,7 +145,7 @@ export default botCommand(
             user: user.id,
           })
 
-          if (!guildSchema?.modules.Levels.enabled)
+          if (!guildSchema?.modules.Levels?.enabled)
             interaction.reply(moduleNotEnabled("Tickets"))
 
           if (!levelSchema)

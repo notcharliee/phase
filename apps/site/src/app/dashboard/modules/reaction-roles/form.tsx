@@ -81,8 +81,8 @@ export const ModuleForm = <Fallback extends boolean>(
     data.enabled = true
 
     const { enabled, reactions } = data
-    const channel = url[3]
-    const message = url[4]
+    const channel = url[3]!
+    const message = url[4]!
 
     toast.promise(
       updateModule("ReactionRoles", {

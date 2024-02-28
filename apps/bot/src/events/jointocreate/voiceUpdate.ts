@@ -20,10 +20,11 @@ export default botEvent(
         // Delete old jtc channel and update database.
         oldVoice.channel.delete()
 
-        guildSchema.modules.JoinToCreates.active.splice(
+        joinToCreateModule.active.splice(
           joinToCreateModule.active.indexOf(oldVoice.channel.id),
           1,
         )
+
         guildSchema.markModified("modules")
         guildSchema.save()
       }
@@ -41,7 +42,8 @@ export default botEvent(
 
         newVoice.setChannel(newVoiceChannel)
 
-        guildSchema.modules.JoinToCreates.active.push(newVoiceChannel.id)
+        joinToCreateModule.active.push(newVoiceChannel.id)
+
         guildSchema.markModified("modules")
         guildSchema.save()
       }

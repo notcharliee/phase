@@ -22,7 +22,7 @@ export default botEvent("ready", async (client) => {
     if (!guildSchema) return
 
     if (
-      !guildSchema.modules.AuditLogs.enabled ||
+      !guildSchema.modules.AuditLogs?.enabled ||
       !guildSchema.modules.AuditLogs.channels.server ||
       !client.channels.cache.has(guildSchema.modules.AuditLogs.channels.server)
     )

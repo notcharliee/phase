@@ -16,7 +16,9 @@ import { ModuleForm } from "./form"
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
 
-const moduleData = modulesConfig.find((module) => module.name === "Reaction Roles")!
+const moduleData = modulesConfig.find(
+  (module) => module.name === "Reaction Roles",
+)!
 
 export const metadata: Metadata = {
   title: moduleData.name,
@@ -36,14 +38,23 @@ export default async function ModulePage() {
   if (!guild) return <h1>Access Denied</h1>
 
   const roles = await discordAPI.guilds.getRoles(guildId)
-  const moduleConfig = guild.modules.ReactionRoles
+
+  const moduleConfig = guild.modules.ReactionRoles ?? {
+    enabled: false,
+    channel: "",
+    message: "",
+    reactions: [],
+  }
 
   return (
     <ModuleForm
       data={{ roles }}
       defaultValues={{
         ...moduleConfig,
-        messageUrl: moduleConfig.channel && moduleConfig.message ? `https://discord.com/channels/${guildId}/${moduleConfig.channel}/${moduleConfig.message}` : ""
+        messageUrl:
+          moduleConfig.channel && moduleConfig.message
+            ? `https://discord.com/channels/${guildId}/${moduleConfig.channel}/${moduleConfig.message}`
+            : "",
       }}
     />
   )

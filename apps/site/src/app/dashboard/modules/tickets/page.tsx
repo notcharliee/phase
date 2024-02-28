@@ -42,7 +42,11 @@ export default async function ModulePage() {
     guildId,
   )) as APIGuildChannel<GuildChannelType>[]
 
-  const moduleConfig = guild.modules.Tickets
+  const moduleConfig = guild.modules.Tickets ?? {
+    enabled: false,
+    channel: "",
+    tickets: [],
+  }
 
   const pins =
     channels.find((c) => c.id === moduleConfig.channel) &&

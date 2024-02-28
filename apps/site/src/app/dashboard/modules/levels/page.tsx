@@ -43,7 +43,13 @@ export default async function ModulePage() {
 
   const roles = await discordAPI.guilds.getRoles(guildId)
 
-  return (
-    <ModuleForm data={{ channels, roles }} defaultValues={guild.modules.Levels} />
-  )
+  const moduleConfig = guild.modules.Levels ?? {
+    enabled: false,
+    channel: "",
+    message: "",
+    mention: false,
+    roles: [],
+  }
+
+  return <ModuleForm data={{ channels, roles }} defaultValues={moduleConfig} />
 }

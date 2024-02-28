@@ -37,7 +37,10 @@ export default async function ModulePage() {
 
   const roles = await discordAPI.guilds.getRoles(guildId)
 
-  const moduleConfig = guild.modules.AutoRoles
+  const moduleConfig = guild.modules.AutoRoles ?? {
+    enabled: false,
+    roles: [],
+  }
 
   return (
     <ModuleForm

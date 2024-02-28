@@ -48,7 +48,7 @@ type Guild = {
     id: string;
     admins: string[];
     commands: GuildCommands;
-    modules: GuildModules;
+    modules: Partial<GuildModules>;
     news_channel: string | undefined;
 };
 type GuildCommands = Record<string, GuildCommand>;
@@ -64,6 +64,7 @@ type GuildModules = {
     Levels: GuildModuleLevels;
     ReactionRoles: GuildModuleReactionRoles;
     Tickets: GuildModuleTickets;
+    WelcomeMessages: GuildModuleWelcomeMessages;
 };
 type GuildModule<T extends keyof GuildModules> = GuildModules[T];
 type GuildModuleAuditLogs = {
@@ -129,6 +130,16 @@ type GuildModuleTickets = {
         max_open: number;
     }[];
 };
+type GuildModuleWelcomeMessages = {
+    enabled: boolean;
+    channel: string;
+    message: string;
+    mention: boolean;
+    card: {
+        enabled: boolean;
+        background?: string;
+    };
+};
 
 declare const LevelSchema: mongoose.Model<Level, {}, {}, {}, mongoose.Document<unknown, {}, Level> & Level & {
     _id: mongoose.Types.ObjectId;
@@ -151,4 +162,4 @@ type Tag = {
     }[];
 };
 
-export { type AFK, AFKSchema, type Game, type GameData, type GameDataTictactoe, GameSchema, type Giveaway, GiveawaySchema, type Guild, type GuildCommand, type GuildCommands, type GuildModule, type GuildModuleAuditLogs, type GuildModuleAutoPartners, type GuildModuleAutoRoles, type GuildModuleJoinToCreates, type GuildModuleLevels, type GuildModuleReactionRoles, type GuildModuleTickets, type GuildModules, GuildSchema, type Level, LevelSchema, type Tag, TagSchema };
+export { type AFK, AFKSchema, type Game, type GameData, type GameDataTictactoe, GameSchema, type Giveaway, GiveawaySchema, type Guild, type GuildCommand, type GuildCommands, type GuildModule, type GuildModuleAuditLogs, type GuildModuleAutoPartners, type GuildModuleAutoRoles, type GuildModuleJoinToCreates, type GuildModuleLevels, type GuildModuleReactionRoles, type GuildModuleTickets, type GuildModuleWelcomeMessages, type GuildModules, GuildSchema, type Level, LevelSchema, type Tag, TagSchema };

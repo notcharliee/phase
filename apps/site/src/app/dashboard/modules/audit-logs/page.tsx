@@ -41,7 +41,17 @@ export default async function ModulePage() {
     guildId,
   )) as APIGuildChannel<GuildChannelType>[]
 
-  return (
-    <ModuleForm data={{ channels }} defaultValues={guild.modules.AuditLogs} />
-  )
+  const moduleConfig = guild.modules.AuditLogs ?? {
+    enabled: false,
+    channels: {
+      server: null,
+      members: null,
+      messages: null,
+      punishments: null,
+      voice: null,
+      invites: null,
+    },
+  }
+
+  return <ModuleForm data={{ channels }} defaultValues={moduleConfig} />
 }
