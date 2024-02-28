@@ -32,6 +32,7 @@ export default botEvent("guildMemberAdd", async (client, member) => {
 
   if (card) {
     card.searchParams.append("avatar", avatar)
+    card.searchParams.append("username", username)
     card.searchParams.append("membercount", membercount)
 
     if (background) card.searchParams.append("background", background)
@@ -40,8 +41,8 @@ export default botEvent("guildMemberAdd", async (client, member) => {
   }
 
   const message = moduleData.message
-    .replaceAll("username", username)
-    .replaceAll("membercount", membercount)
+    .replaceAll("{username}", username)
+    .replaceAll("{membercount}", membercount)
 
   channel.send({
     content: moduleData.mention ? `${member}` : undefined,
