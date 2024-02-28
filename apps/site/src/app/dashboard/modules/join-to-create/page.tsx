@@ -43,7 +43,7 @@ export default async function ModulePage() {
     guildId,
   )) as APIGuildChannel<GuildChannelType>[]
 
-  const moduleConfig = guild.modules.JoinToCreates ?? {
+  const moduleConfig = guild.modules?.JoinToCreates ?? {
     enabled: false,
     channel: "",
     category: "",

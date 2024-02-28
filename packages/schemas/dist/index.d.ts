@@ -47,8 +47,8 @@ declare const GuildSchema: mongoose.Model<Guild, {}, {}, {}, mongoose.Document<u
 type Guild = {
     id: string;
     admins: string[];
-    commands: GuildCommands;
-    modules: Partial<GuildModules>;
+    commands: GuildCommands | undefined;
+    modules: Partial<GuildModules> | undefined;
     news_channel: string | undefined;
 };
 type GuildCommands = Record<string, GuildCommand>;

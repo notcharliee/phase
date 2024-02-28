@@ -16,8 +16,8 @@ export const GuildSchema =
 export type Guild = {
   id: string
   admins: string[]
-  commands: GuildCommands
-  modules: Partial<GuildModules>
+  commands: GuildCommands | undefined
+  modules: Partial<GuildModules> | undefined
   news_channel: string | undefined
 }
 

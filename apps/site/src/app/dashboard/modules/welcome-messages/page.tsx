@@ -44,7 +44,7 @@ export default async function ModulePage() {
     guildId,
   )) as APIGuildChannel<GuildChannelType>[]
 
-  const moduleConfig = guild.modules.WelcomeMessages ?? {
+  const moduleConfig = guild.modules?.WelcomeMessages ?? {
     enabled: false,
     channel: "",
     message: "",

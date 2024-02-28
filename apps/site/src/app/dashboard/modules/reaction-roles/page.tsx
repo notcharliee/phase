@@ -39,7 +39,7 @@ export default async function ModulePage() {
 
   const roles = await discordAPI.guilds.getRoles(guildId)
 
-  const moduleConfig = guild.modules.ReactionRoles ?? {
+  const moduleConfig = guild.modules?.ReactionRoles ?? {
     enabled: false,
     channel: "",
     message: "",

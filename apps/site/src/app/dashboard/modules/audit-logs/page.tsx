@@ -41,7 +41,7 @@ export default async function ModulePage() {
     guildId,
   )) as APIGuildChannel<GuildChannelType>[]
 
-  const moduleConfig = guild.modules.AuditLogs ?? {
+  const moduleConfig = guild.modules?.AuditLogs ?? {
     enabled: false,
     channels: {
       server: null,
