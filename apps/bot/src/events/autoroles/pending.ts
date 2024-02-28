@@ -15,7 +15,7 @@ export default botEvent(
       return
 
     const guildSchema = await GuildSchema.findOne({ id: newMember.guild.id })
-    const autoRolesModule = guildSchema?.modules.AutoRoles
+    const autoRolesModule = guildSchema?.modules?.AutoRoles
 
     if (!autoRolesModule?.enabled) return
 

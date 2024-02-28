@@ -97,6 +97,8 @@ export const updateModule = async <TName extends keyof GuildModules>(
 
   if (!guildSchema) throw StatusCodes.UNAUTHORIZED
 
+  if (!guildSchema.modules) guildSchema.modules = {}
+
   guildSchema.modules[moduleName] = {
     ...guildSchema.modules[moduleName],
     ...moduleData,

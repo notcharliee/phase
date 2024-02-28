@@ -9,7 +9,7 @@ export default botEvent("guildMemberAdd", async (client, member) => {
     return
 
   const guildSchema = await GuildSchema.findOne({ id: member.guild.id })
-  const autoRolesModule = guildSchema?.modules.AutoRoles
+  const autoRolesModule = guildSchema?.modules?.AutoRoles
   
   if (!autoRolesModule?.enabled) return
 

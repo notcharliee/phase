@@ -9,7 +9,7 @@ export default botEvent("inviteCreate", async (client, invite) => {
   if (!guildSchema) return
 
   if (
-    !guildSchema.modules.AuditLogs?.enabled ||
+    !guildSchema.modules?.AuditLogs?.enabled ||
     !guildSchema.modules.AuditLogs.channels.invites ||
     !client.channels.cache.has(guildSchema.modules.AuditLogs.channels.invites)
   )

@@ -5,7 +5,7 @@ import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
 
 export default botEvent("guildMemberAdd", async (client, member) => {
   const guildSchema = await GuildSchema.findOne({ id: member.guild.id })
-  if (!guildSchema || !guildSchema.modules.WelcomeMessages?.enabled) return
+  if (!guildSchema || !guildSchema.modules?.WelcomeMessages?.enabled) return
 
   const moduleData = guildSchema.modules.WelcomeMessages
 

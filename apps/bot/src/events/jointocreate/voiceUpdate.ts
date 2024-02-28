@@ -7,7 +7,7 @@ export default botEvent(
   async (client, oldVoice, newVoice) => {
     try {
       const guildSchema = await GuildSchema.findOne({ id: oldVoice.guild.id })
-      const joinToCreateModule = guildSchema?.modules.JoinToCreates
+      const joinToCreateModule = guildSchema?.modules?.JoinToCreates
       if (!guildSchema || !joinToCreateModule?.enabled) return
 
       if (

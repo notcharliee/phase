@@ -30,7 +30,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
     const ticketId = customIdParts[2]
 
     const guildSchema = await GuildSchema.findOne({ id: interaction.guildId })
-    const ticketModule = guildSchema?.modules.Tickets
+    const ticketModule = guildSchema?.modules?.Tickets
     if (!ticketModule?.enabled) return moduleNotEnabled("Tickets")
 
     switch (ticketAction) {

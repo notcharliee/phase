@@ -9,7 +9,7 @@ export default botEvent(
     const guildSchema = await GuildSchema.findOne({
       id: reaction.message.guildId,
     })
-    const reactionRolesModule = guildSchema?.modules.ReactionRoles
+    const reactionRolesModule = guildSchema?.modules?.ReactionRoles
     
     if (!reactionRolesModule?.enabled) return
 

@@ -9,7 +9,7 @@ export default botEvent("messageCreate", async (client, message) => {
   const guildSchema = await GuildSchema.findOne({
     id: message.guildId,
   })
-  const levelModule = guildSchema?.modules.Levels
+  const levelModule = guildSchema?.modules?.Levels
   if (!levelModule?.enabled) return
 
   let levelSchema = await LevelSchema.findOne({
