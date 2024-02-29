@@ -15,9 +15,9 @@ export default function ModulesLayout({
         <aside className="hidden md:block w-xs xl:w-sm">
           <SidebarNav items={dashboardNavConfig.sidebarNav[0]!.items} />
         </aside>
-        <Card className="flex-1">
-          <ModuelHeader />
-          <CardContent className="w-full">
+        <Card className="flex-1 max-sm:rounded-none max-sm:border-0 max-sm:shadow-none">
+          <ModuelHeader className="max-sm:px-0" />
+          <CardContent className="w-full max-sm:p-0 max-sm:pb-6">
             {children}
           </CardContent>
         </Card>
