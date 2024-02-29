@@ -60,8 +60,6 @@ export const ModuleForm = <Fallback extends boolean>(
     name: "warnings",
   })
 
-  const formFields = form.watch()
-
   const onSubmit = (data: FormValues) => {
     data.enabled = true
 
