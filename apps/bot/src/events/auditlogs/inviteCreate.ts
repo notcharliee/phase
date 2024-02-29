@@ -1,4 +1,4 @@
-import { EmbedBuilder } from "discord.js"
+import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
 
 import { GuildSchema } from "@repo/schemas"
 import { PhaseColour } from "~/utils"
@@ -15,24 +15,26 @@ export default botEvent("inviteCreate", async (client, invite) => {
   )
     return
 
-  const channel = client.channels.cache.get(
+  const logsChannel = client.channels.cache.get(
     guildSchema.modules.AuditLogs.channels.invites,
-  )!
+  ) as GuildTextBasedChannel
 
-  if (!channel.isTextBased()) return
+  const inviter = invite.inviter ?? "`Unknown`"
+  const code = invite?.code ? `\`${invite.code}\`` : "`Unknown`"
+  const expires = invite.expiresAt
+    ? `<t:${Math.floor(invite.expiresAt.getTime() / 1000)}:R>`
+    : "`N/A`"
+  const maxUses = invite.maxUses ?? "N/A"
+  const channel = invite.channel ?? "`N/A`"
 
-  channel.send({
+  logsChannel.send({
     embeds: [
       new EmbedBuilder()
-        .setAuthor({
-          iconURL: invite.inviter?.displayAvatarURL(),
-          name: "Invite created.",
-        })
         .setColor(PhaseColour.Primary)
         .setDescription(
-          `Code: \`${invite.code}\`\nExpires: ${invite.expiresAt ? `<t:${Math.floor(invite.expiresAt.getTime() / 1000)}:R>` : "`N/A`"}\nMax uses: ${invite.maxUses ?? "`N/A`"}\nChannel: ${invite.channel ?? "`N/A`"}\nURL: ${invite.url}`,
+          `**Inviter:** ${inviter}\n**Code:** \`${code}\`\n**Expires:** ${expires}\n**Max Uses:** \`${maxUses}\`\n**Channel:** ${channel}`,
         )
-        .setTitle("Audit Logs - Invites"),
+        .setTitle("Invite Created"),
     ],
   })
 })
