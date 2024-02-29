@@ -14,13 +14,6 @@ export const modulesConfig = [
     disabled: false,
   },
   {
-    name: "Auto Partners",
-    description:
-      "Manages adverts and tracks invite stats across your partnered servers.",
-    path: "/auto-partners",
-    disabled: true,
-  },
-  {
     name: "Auto Roles",
     description:
       "Automatically assigns roles to new members of your server as soon as they join.",

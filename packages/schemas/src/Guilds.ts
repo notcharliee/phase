@@ -30,7 +30,6 @@ export type GuildCommand = {
 
 export type GuildModules = {
   AuditLogs: GuildModuleAuditLogs
-  AutoPartners: GuildModuleAutoPartners
   AutoRoles: GuildModuleAutoRoles
   JoinToCreates: GuildModuleJoinToCreates
   Levels: GuildModuleLevels
@@ -52,20 +51,6 @@ export type GuildModuleAuditLogs = {
     members: string | null // joins, leaves, role changes, nickname changes
     punishments: string | null // warns, unwarns, bans, tempbans, timeouts
   }
-}
-
-export type GuildModuleAutoPartners = {
-  enabled: boolean
-  channel: string
-  partners: {
-    guild: string
-    channel: string
-    message: string
-  }[]
-  invites: {
-    code: string
-    expires: string
-  }[]
 }
 
 export type GuildModuleAutoRoles = {
