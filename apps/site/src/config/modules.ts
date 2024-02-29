@@ -55,6 +55,12 @@ export const modulesConfig = [
     disabled: false,
   },
   {
+    name: "Warnings",
+    description: "Helps moderators add, remove, and track member warnings.",
+    path: "/warnings",
+    disabled: false,
+  },
+  {
     name: "Welcome Messages",
     description: "Give new members a warm welcome to your server.",
     path: "/welcome-messages",

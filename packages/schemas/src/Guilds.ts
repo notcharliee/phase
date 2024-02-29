@@ -113,7 +113,7 @@ export type GuildModuleTickets = {
 }
 
 export type GuildModuleWarnings = {
-  enabled: false
+  enabled: boolean
   warnings: string[]
 }
 

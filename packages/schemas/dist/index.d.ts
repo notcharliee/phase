@@ -132,7 +132,7 @@ type GuildModuleTickets = {
     }[];
 };
 type GuildModuleWarnings = {
-    enabled: false;
+    enabled: boolean;
     warnings: string[];
 };
 type GuildModuleWelcomeMessages = {
