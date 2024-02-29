@@ -13,6 +13,7 @@ import {
 import { REST, type RawFile } from "@discordjs/rest"
 import {
   API,
+  MessageType,
   type APIMessage,
   type RESTPostAPIChannelMessageJSONBody,
 } from "@discordjs/core/http-only"
@@ -26,7 +27,7 @@ import { env } from "@/lib/env"
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
 
-export const updateTicketMessage = async (
+export const updateModuleMessage = async (
   channelId: string,
   oldMessage: APIMessage | undefined,
   {
@@ -53,16 +54,27 @@ export const updateTicketMessage = async (
   if (!guildSchema) throw StatusCodes.UNAUTHORIZED
 
   if (oldMessage)
-    await discordAPI.channels.deleteMessage(
-      oldMessage.channel_id,
-      oldMessage.id,
-    )
+    await discordAPI.channels
+      .deleteMessage(oldMessage.channel_id, oldMessage.id)
+      .catch(() => {})
 
   const message = await discordAPI.channels.createMessage(channelId, {
     files,
     ...body,
   })
+
   await discordAPI.channels.pinMessage(channelId, message.id)
+
+  const pinMessage = (
+    await discordAPI.channels.getMessages(channelId, {
+      after: message.id,
+      limit: 1,
+    })
+  ).at(0)
+
+  if (pinMessage && pinMessage.type === MessageType.ChannelPinnedMessage) {
+    discordAPI.channels.deleteMessage(channelId, pinMessage.id)
+  }
 
   return message
 }

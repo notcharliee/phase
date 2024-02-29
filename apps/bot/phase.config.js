@@ -4,6 +4,7 @@ import { setConfig } from "phase.js"
 /** @type {import("phase.js").ConfigOptions} */
 export default setConfig({
   intents: [
+    GatewayIntentBits.DirectMessages,
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildModeration,

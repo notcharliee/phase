@@ -58,8 +58,8 @@ type GuildCommand = {
 };
 type GuildModules = {
     AuditLogs: GuildModuleAuditLogs;
-    AutoPartners: GuildModuleAutoPartners;
     AutoRoles: GuildModuleAutoRoles;
+    Forms: GuildModuleForms;
     JoinToCreates: GuildModuleJoinToCreates;
     Levels: GuildModuleLevels;
     ReactionRoles: GuildModuleReactionRoles;
@@ -79,22 +79,19 @@ type GuildModuleAuditLogs = {
         punishments: string | null;
     };
 };
-type GuildModuleAutoPartners = {
-    enabled: boolean;
-    channel: string;
-    partners: {
-        guild: string;
-        channel: string;
-        message: string;
-    }[];
-    invites: {
-        code: string;
-        expires: string;
-    }[];
-};
 type GuildModuleAutoRoles = {
     enabled: boolean;
     roles: string[];
+};
+type GuildModuleForms = {
+    enabled: boolean;
+    channel: string;
+    forms: {
+        id: string;
+        name: string;
+        channel: string;
+        questions: string[];
+    }[];
 };
 type GuildModuleJoinToCreates = {
     enabled: boolean;
@@ -168,4 +165,4 @@ type Tag = {
     }[];
 };
 
-export { type AFK, AFKSchema, type Game, type GameData, type GameDataTictactoe, GameSchema, type Giveaway, GiveawaySchema, type Guild, type GuildCommand, type GuildCommands, type GuildModule, type GuildModuleAuditLogs, type GuildModuleAutoPartners, type GuildModuleAutoRoles, type GuildModuleJoinToCreates, type GuildModuleLevels, type GuildModuleReactionRoles, type GuildModuleTickets, type GuildModuleWarnings, type GuildModuleWelcomeMessages, type GuildModules, GuildSchema, type Level, LevelSchema, type Tag, TagSchema };
+export { type AFK, AFKSchema, type Game, type GameData, type GameDataTictactoe, GameSchema, type Giveaway, GiveawaySchema, type Guild, type GuildCommand, type GuildCommands, type GuildModule, type GuildModuleAuditLogs, type GuildModuleAutoRoles, type GuildModuleForms, type GuildModuleJoinToCreates, type GuildModuleLevels, type GuildModuleReactionRoles, type GuildModuleTickets, type GuildModuleWarnings, type GuildModuleWelcomeMessages, type GuildModules, GuildSchema, type Level, LevelSchema, type Tag, TagSchema };

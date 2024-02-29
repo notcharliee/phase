@@ -33,7 +33,7 @@ import { SelectRole } from "../../components/select/role"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 
-import { updateTicketMessage, updateModule } from "@/lib/actions"
+import { updateModuleMessage, updateModule } from "@/lib/actions"
 
 const formSchema = z.object({
   enabled: z.boolean(),
@@ -92,7 +92,7 @@ export const ModuleForm = <Fallback extends boolean>(
         loading: "Saving changes...",
         success: (newData) => {
           toast.promise(
-            updateTicketMessage(newData.channel, props.data?.message, {
+            updateModuleMessage(newData.channel, props.data?.message, {
               components: [
                 {
                   components: newData.tickets.map((ticket) => ({

@@ -31,6 +31,7 @@ export type GuildCommand = {
 export type GuildModules = {
   AuditLogs: GuildModuleAuditLogs
   AutoRoles: GuildModuleAutoRoles
+  Forms: GuildModuleForms
   JoinToCreates: GuildModuleJoinToCreates
   Levels: GuildModuleLevels
   ReactionRoles: GuildModuleReactionRoles
@@ -56,6 +57,17 @@ export type GuildModuleAuditLogs = {
 export type GuildModuleAutoRoles = {
   enabled: boolean
   roles: string[]
+}
+
+export type GuildModuleForms = {
+  enabled: boolean
+  channel: string
+  forms: {
+    id: string
+    name: string
+    channel: string
+    questions: string[]
+  }[]
 }
 
 export type GuildModuleJoinToCreates = {

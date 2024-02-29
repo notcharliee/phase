@@ -21,6 +21,12 @@ export const modulesConfig = [
     disabled: false,
   },
   {
+    name: "Forms",
+    description: "Adds dynamic application forms within the bot's direct messages.",
+    path: "/forms",
+    disabled: false,
+  },
+  {
     name: "Join to Create",
     description:
       "Creates a temporary voice channel, then deletes it once all members have left.",
@@ -55,7 +61,7 @@ export const modulesConfig = [
   },
   {
     name: "Welcome Messages",
-    description: "Give new members a warm welcome to your server.",
+    description: "Gives new members a warm welcome to your server.",
     path: "/welcome-messages",
     disabled: false,
   },
