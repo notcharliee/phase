@@ -44,13 +44,33 @@ export default botEvent("guildMemberAdd", async (client, member) => {
     .replaceAll("{username}", username)
     .replaceAll("{membercount}", membercount)
 
-  channel.send({
-    content: moduleData.mention ? `${member}` : undefined,
-    embeds: [
-      new EmbedBuilder()
-        .setDescription(message.length ? message : null)
-        .setImage(card)
-        .setColor(PhaseColour.Primary),
-    ],
-  })
+  if (message.length) {
+    channel.send({
+      content: moduleData.mention ? `${member}` : undefined,
+      embeds: [
+        new EmbedBuilder()
+          .setAuthor({ name: "New Member", iconURL: avatar })
+          .setDescription(message)
+          .setImage(card)
+          .setColor(PhaseColour.Primary),
+      ],
+    })
+  } else if (!message.length && card) {
+    await channel.sendTyping()
+
+    const attachment = await fetch(card).then((res) =>
+      res.arrayBuffer().then((ab) => ab),
+    )
+
+    channel.send({
+      content: moduleData.mention ? `${member}` : undefined,
+      files: [Buffer.from(attachment)],
+    })
+  } else {
+    guildSchema.modules.WelcomeMessages.enabled = false
+    guildSchema.markModified("modules")
+    guildSchema.save()
+
+    return
+  }
 })
