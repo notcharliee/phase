@@ -124,11 +124,12 @@ type GuildModuleReactionRoles = {
 type GuildModuleTickets = {
     enabled: boolean;
     channel: string;
+    max_open?: number;
     tickets: {
         id: string;
         name: string;
         message: string;
-        max_open: number;
+        mention?: string;
     }[];
 };
 type GuildModuleWarnings = {

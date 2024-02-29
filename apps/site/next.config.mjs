@@ -37,8 +37,8 @@ const config = {
       },
       {
         source: "/redirect/invite",
-        destination: `https://discord.com/oauth2/authorize?client_id=${env.DISCORD_ID}&response_type=code&scope=guilds%20identify%20bot%20applications.commands&redirect_uri=${env.NEXT_PUBLIC_BASE_URL}/api/auth/callback&permissions=486911216`,
-        permanent: true,
+        destination: `https://discord.com/oauth2/authorize?client_id=${env.DISCORD_ID}&response_type=code&scope=guilds%20identify%20bot%20applications.commands&redirect_uri=${env.NEXT_PUBLIC_BASE_URL}/api/auth/callback&permissions=17666911472`,
+        permanent: false,
       },
       {
         source: "/terms",

@@ -12,6 +12,7 @@ import {
   type GuildChannelType,
   type APIGuildChannel,
   type APIMessage,
+  APIRole,
 } from "discord-api-types/v10"
 
 import { Button } from "@/components/ui/button"
@@ -28,6 +29,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { SelectChannel } from "../../components/select/channel"
+import { SelectRole } from "../../components/select/role"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 
@@ -37,13 +39,14 @@ const formSchema = z.object({
   enabled: z.boolean(),
   channel: z.string(),
   message: z.string(),
+  max_open: z.number().int().optional(),
   tickets: z
     .array(
       z.object({
         id: z.string(),
         name: z.string(),
         message: z.string(),
-        max_open: z.number().int(),
+        mention: z.string().optional(),
       }),
     )
     .max(5),
@@ -55,6 +58,7 @@ interface ModuleFormProps {
   defaultValues: FormValues
   data: {
     channels: APIGuildChannel<GuildChannelType>[]
+    roles: APIRole[]
     message: APIMessage | undefined
   }
 }
@@ -81,6 +85,7 @@ export const ModuleForm = <Fallback extends boolean>(
       updateModule("Tickets", {
         enabled: data.enabled,
         channel: data.channel,
+        max_open: data.max_open,
         tickets: data.tickets,
       }),
       {
@@ -172,6 +177,32 @@ export const ModuleForm = <Fallback extends boolean>(
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="max_open"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Max Open</FormLabel>
+              <FormControl>
+                <Input
+                  className="appearance-none"
+                  type="number"
+                  placeholder="5"
+                  min={1}
+                  max={100}
+                  {...field}
+                  onChange={(event) =>
+                    field.onChange(parseInt(event.target.value, 10))
+                  }
+                />
+              </FormControl>
+              <FormDescription>
+                Limit the number of open tickets per member
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="space-y-4">
           <div className="space-y-1">
             <Label>Tickets</Label>
@@ -202,24 +233,19 @@ export const ModuleForm = <Fallback extends boolean>(
                     />
                     <FormField
                       control={form.control}
-                      name={`tickets.${index}.max_open`}
+                      name={`tickets.${index}.mention`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Max Open</FormLabel>
+                          <FormLabel>Mention</FormLabel>
                           <FormControl>
-                            <Input
-                              className="appearance-none"
-                              type="number"
-                              placeholder="5"
-                              min={1}
-                              {...field}
-                              onChange={(event) =>
-                                field.onChange(parseInt(event.target.value, 10))
-                              }
-                            />
+                          {props.fallback ? (
+                            <SelectRole fallback />
+                          ) : (
+                            <SelectRole roles={props.data.roles} {...field} />
+                          )}
                           </FormControl>
                           <FormDescription>
-                            Limit the number of open tickets per member
+                            The role to mention on ticket create
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -267,7 +293,6 @@ export const ModuleForm = <Fallback extends boolean>(
                 fieldArray.append({
                   id: randomUUID(),
                   name: "New Ticket",
-                  max_open: 5,
                   message: "",
                 })
               }

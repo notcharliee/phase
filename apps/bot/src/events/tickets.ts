@@ -1,6 +1,12 @@
+import { UUID } from "crypto"
 import { botEvent } from "phase.js"
 import { GuildSchema } from "@repo/schemas"
-import { PhaseColour, PhaseEmoji, moduleNotEnabled } from "~/utils"
+import {
+  PhaseColour,
+  errorMessage,
+  missingPermission,
+  moduleNotEnabled,
+} from "~/utils"
 import {
   EmbedBuilder,
   ActionRowBuilder,
@@ -8,30 +14,53 @@ import {
   ButtonStyle,
   ChannelType,
   TextChannel,
+  AnyThreadChannel,
+  PermissionFlagsBits,
 } from "discord.js"
 
 export default botEvent("interactionCreate", async (client, interaction) => {
   if (
     interaction.isButton() &&
-    /ticket.(open|lock|unlock|delete).[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/.test(
+    /ticket.(open|lock).[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/.test(
       interaction.customId,
     ) &&
     interaction.inGuild() &&
     interaction.member &&
     interaction.channel
   ) {
-    const customIdParts = interaction.customId.split(".") as [
-      "ticket", // button type
-      "open" | "lock" | "unlock" | "delete", // ticket action
-      `${string}-${string}-${string}-${string}-${string}`, // ticket id
-    ]
+    if (
+      !(await interaction.guild?.members.fetchMe())!.permissions.has(
+        PermissionFlagsBits.ManageThreads,
+      )
+    ) {
+      return interaction.reply(
+        missingPermission(PermissionFlagsBits.ManageThreads, true),
+      )
+    }
 
-    const ticketAction = customIdParts[1]
-    const ticketId = customIdParts[2]
+    const customIdParts = interaction.customId.split(".")
+
+    const ticketAction = customIdParts[1] as "open" | "lock"
+    const ticketId = customIdParts[2] as UUID
 
     const guildSchema = await GuildSchema.findOne({ id: interaction.guildId })
     const ticketModule = guildSchema?.modules?.Tickets
-    if (!ticketModule?.enabled) return moduleNotEnabled("Tickets")
+
+    if (!ticketModule?.enabled) {
+      return interaction.reply(moduleNotEnabled("Tickets"))
+    }
+
+    const ticketData = ticketModule.tickets.find(
+      (ticket) => ticket.id == ticketId,
+    )
+
+    const ticketChannel = client.channels.cache.get(ticketModule.channel) as
+      | TextChannel
+      | undefined
+
+    if (!ticketData || !ticketChannel) {
+      return interaction.reply(moduleNotEnabled("Tickets"))
+    }
 
     switch (ticketAction) {
       case "open":
@@ -40,35 +69,33 @@ export default botEvent("interactionCreate", async (client, interaction) => {
             ephemeral: true,
           })
 
-          const ticketChannel = client.channels.cache.get(
-            ticketModule.channel,
-          ) as TextChannel | undefined
-          const ticketData = ticketModule.tickets.find(
-            (ticket) => ticket.id == ticketId,
-          )
-
-          if (!ticketChannel || !ticketData) return moduleNotEnabled("Tickets")
-
           const ticketName = `🎫 ${interaction.member.user.username}`
 
           const ticketsOpen = ticketChannel.threads.cache.filter((thread) =>
             thread.name.startsWith(ticketName),
           ).size
 
-          if (ticketsOpen >= ticketData.max_open)
+          if (ticketModule.max_open && ticketsOpen >= ticketModule.max_open) {
             return interaction.editReply(
-              `You can't open any more than ${ticketData.max_open} tickets at a time!`,
+              errorMessage({
+                title: "Failed to open",
+                description: `You are not allowed to open more than ${ticketModule.max_open} ticket${ticketModule.max_open > 1 ? "s" : ""} at a time.`,
+                ephemeral: true,
+              }),
             )
+          }
 
-          const ticketThread = await ticketChannel.threads.create({
-            name: ticketName + (ticketsOpen ? `(${ticketsOpen + 1})` : ""),
+          const ticket = await ticketChannel.threads.create({
+            name: ticketName + (ticketsOpen ? ` (${ticketsOpen + 1})` : ""),
             type: ChannelType.PrivateThread,
             invitable: true,
           })
 
-          await ticketThread.send(`${interaction.member}`)
+          await ticket.send(
+            `${interaction.member}${ticketData.mention ? `<@&${ticketData.mention}>` : ""}`,
+          )
 
-          await ticketThread.send({
+          await ticket.send({
             components: [
               new ActionRowBuilder<ButtonBuilder>().setComponents(
                 new ButtonBuilder()
@@ -86,115 +113,36 @@ export default botEvent("interactionCreate", async (client, interaction) => {
             ],
           })
 
-          interaction.editReply(`Your ticket has been created! ${ticketThread}`)
+          interaction.editReply(`Your ticket has been created! ${ticket}`)
         }
         break
 
       case "lock":
         {
-          const ticketThread = interaction.channel
-          const ticketData = ticketModule.tickets.find(
-            (ticket) => ticket.id == ticketId,
-          )
+          const ticket = interaction.channel as AnyThreadChannel<boolean>
 
-          if (!ticketThread.isThread() || !ticketData)
-            return moduleNotEnabled("Tickets")
-
-          if (ticketThread.locked)
+          if (ticket.locked) {
             return interaction.reply(
-              `${PhaseEmoji.Failure} You can't lock an already locked ticket!`,
+              errorMessage({
+                title: "Failed to lock",
+                description: "Ticket is already locked.",
+              }),
             )
-          else await interaction.deferUpdate()
+          }
 
-          await ticketThread.send({
-            components: [
-              new ActionRowBuilder<ButtonBuilder>().setComponents(
-                new ButtonBuilder()
-                  .setCustomId(`ticket.unlock.${ticketId}`)
-                  .setEmoji("🔓")
-                  .setLabel("Unlock Ticket")
-                  .setStyle(ButtonStyle.Secondary),
-                new ButtonBuilder()
-                  .setCustomId(`ticket.delete.${ticketId}`)
-                  .setEmoji("🔥")
-                  .setLabel("Delete Ticket")
-                  .setStyle(ButtonStyle.Secondary),
-              ),
-            ],
+          ticket.setLocked(true)
+          ticket.setName(ticket.name.replace("🎫", "🔒"))
+
+          interaction.reply({
             embeds: [
               new EmbedBuilder()
                 .setColor(PhaseColour.Primary)
-                .setDescription(`Ticket locked by ${interaction.member}`)
+                .setDescription(
+                  `Ticket locked by ${interaction.member}\n\nModerators can unlock this ticket using \`/ticket unlock\`.`,
+                )
                 .setTitle("Ticket Locked"),
             ],
           })
-
-          ticketThread.setLocked(true)
-        }
-        break
-
-      case "unlock":
-        {
-          const ticketThread = interaction.channel
-          const ticketData = ticketModule.tickets.find(
-            (ticket) => ticket.id == ticketId,
-          )
-
-          if (!ticketThread.isThread() || !ticketData)
-            return moduleNotEnabled("Tickets")
-
-          if (!ticketThread.locked)
-            return interaction.reply(
-              `${PhaseEmoji.Failure} You can't unlock an already unlocked ticket!`,
-            )
-          else await interaction.deferUpdate()
-
-          await ticketThread.setLocked(false)
-
-          ticketThread.send({
-            components: [
-              new ActionRowBuilder<ButtonBuilder>().setComponents(
-                new ButtonBuilder()
-                  .setCustomId(`ticket.lock.${ticketId}`)
-                  .setEmoji("🔒")
-                  .setLabel("Lock Ticket")
-                  .setStyle(ButtonStyle.Secondary),
-              ),
-            ],
-            embeds: [
-              new EmbedBuilder()
-                .setColor(PhaseColour.Primary)
-                .setDescription(`Ticket unlocked by ${interaction.member}`)
-                .setTitle("Ticket Unlocked"),
-            ],
-          })
-        }
-        break
-
-      case "delete":
-        {
-          const ticketThread = interaction.channel
-          const ticketData = ticketModule.tickets.find(
-            (ticket) => ticket.id == ticketId,
-          )
-
-          if (!ticketThread.isThread() || !ticketData)
-            return moduleNotEnabled("Tickets")
-
-          await interaction.deferUpdate()
-          await interaction.message.delete()
-
-          await ticketThread.send({
-            embeds: [
-              new EmbedBuilder()
-                .setColor(PhaseColour.Primary)
-                .setDescription(`Ticket deleted by ${interaction.member}`)
-                .setFooter({ text: "Thread will be deleted shortly..." })
-                .setTitle("Ticket Deleted"),
-            ],
-          })
-
-          setTimeout(() => ticketThread.delete(), 3 * 1000)
         }
         break
     }

@@ -101,10 +101,11 @@ export const moduleNotEnabled = (module: keyof GuildModules) =>
 
 export const missingPermission = (
   permission: string | bigint,
+  bot?: boolean,
 ): InteractionReplyOptions =>
   errorMessage({
     title: "Missing Permission",
-    description: `You are missing the \`${typeof permission === "bigint" ? getPermissionName(permission).replace(/([A-Z])/g, " $1") : permission}\` permission, which is required to perform this action.`,
+    description: `${!bot ? "You are" : "Phase is"} missing the \`${typeof permission === "bigint" ? getPermissionName(permission).replace(/([A-Z])/g, " $1") : permission}\` permission, which is required to perform this action.`,
     ephemeral: true,
   })
 

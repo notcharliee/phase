@@ -42,6 +42,8 @@ export default async function ModulePage() {
     guildId,
   )) as APIGuildChannel<GuildChannelType>[]
 
+  const roles = await discordAPI.guilds.getRoles(guildId)
+
   const moduleConfig = guild.modules?.Tickets ?? {
     enabled: false,
     channel: "",
@@ -56,7 +58,7 @@ export default async function ModulePage() {
 
   const message = pins && pins[0]
 
-  const data = { channels, message }
+  const data = { channels, roles, message }
   const defaultValues = {
     ...moduleConfig,
     message: message?.embeds[0]?.description ?? "",
