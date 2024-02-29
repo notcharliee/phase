@@ -43,16 +43,15 @@ export default botEvent("ready", async (client) => {
     channel.send({
       embeds: [
         new EmbedBuilder()
-          .setAuthor({
-            iconURL: member.displayAvatarURL(),
-            name: `${member.displayName} joined.`,
-          })
           .setColor(PhaseColour.Primary)
+          .setTitle("Invite Used")
           .setDescription(
-            `New member: ${member}\nInvited by: ${inviter}\nUsing code: ${code}\nUses left: ${uses}`,
+            `**Member:** ${member}\n**Inviter:** ${inviter}\n**Code:** ${code}\n**Uses:** \`${uses}\``,
           )
-          .setFooter({ text: `ID: ${member.id}` })
-          .setTitle("Audit Logs - Invites"),
+          .setFooter({
+            text: `${member.id}`,
+            iconURL: member.displayAvatarURL(),
+          }),
       ],
     })
   })
