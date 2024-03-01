@@ -1,11 +1,9 @@
 import type { MainNavItem, SidebarNavItem } from "@/types/nav"
 
-
 interface MainNav {
   mainNav: MainNavItem[]
   sidebarNav: SidebarNavItem[]
 }
-
 
 export const mainNavConfig: MainNav = {
   mainNav: [
@@ -28,7 +26,5 @@ export const mainNavConfig: MainNav = {
       external: true,
     },
   ],
-  sidebarNav: [
-
-  ],
-} 
+  sidebarNav: [],
+}
