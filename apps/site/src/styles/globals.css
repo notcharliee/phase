@@ -7,4 +7,11 @@
     @apply border-border;
     @apply shadow-black;
   }
+
+  .emoji {
+    display: inline-block;
+    width: auto;
+    height: 1em;
+    vertical-align: -0.125em;
+  }
 }

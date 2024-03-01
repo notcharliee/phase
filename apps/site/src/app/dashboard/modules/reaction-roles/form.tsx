@@ -1,5 +1,7 @@
 "use client"
 
+import { useMemo } from "react"
+
 import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -7,6 +9,8 @@ import { z } from "zod"
 import { type RESTGetAPIGuildRolesResult } from "discord-api-types/v10"
 
 import { TrashIcon } from "@radix-ui/react-icons"
+
+import emojiData from "@emoji-mart/data"
 
 import { Button } from "@/components/ui/button"
 import { EmojiPicker } from "@/components/emoji-picker"
@@ -114,6 +118,8 @@ export const ModuleForm = <Fallback extends boolean>(
     )
   }
 
+  const emojis = useMemo(() => emojiData, [emojiData])
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -149,11 +155,7 @@ export const ModuleForm = <Fallback extends boolean>(
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          {props.fallback ? (
-                            <EmojiPicker fallback {...field} />
-                          ) : (
-                            <EmojiPicker {...field} />
-                          )}
+                          <EmojiPicker emojis={emojis} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

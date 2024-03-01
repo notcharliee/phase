@@ -1,6 +1,5 @@
 "use client"
 
-import emojiData from "@emoji-mart/data"
 import * as emojiMart from "emoji-mart"
 
 import { useState } from "react"
@@ -10,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Spinner } from "@/components/spinner"
+import { Twemoji } from "@/components/twemoji"
 import {
   Popover,
   PopoverContent,
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/popover"
 
 interface EmojiPickerProps {
+  emojis: any,
   disabled?: boolean
   fallback?: boolean,
   name?: string
@@ -36,10 +37,10 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
   const [value, setValue] = useState(props.value ?? "🌙")
   const [searchedEmojis, setSearchedEmojis] = useState<string[]>([])
 
-  emojiMart.init({ data: emojiData })
+  emojiMart.init({ data: props.emojis })
 
-  const natives: [string, string][] = Object.entries((emojiData as any).natives)
-  const categories = (emojiData as any).categories
+  const natives: [string, string][] = Object.entries((props.emojis as any).natives)
+  const categories = (props.emojis as any).categories
 
   const search = async (value: string) => {
     const emojis = value.length ? await emojiMart.SearchIndex.search(value) : []
@@ -62,7 +63,7 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="outline" size="icon" disabled={props.disabled} onBlur={props.onBlur} ref={props.ref}>
-          {value}
+          <Twemoji emoji={value} />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="size-80 space-y-4">
@@ -83,7 +84,7 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
                         key={emoji}
                         onClick={(e) => updateValue(e.currentTarget.ariaLabel!)}
                       >
-                        {emoji}
+                        <Twemoji emoji={emoji} />
                       </button>
                     ))}
                   </div>
@@ -108,7 +109,7 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
                             updateValue(e.currentTarget.ariaLabel!)
                           }
                         >
-                          {natives.find((native) => native[1] === emoji)![0]}
+                          <Twemoji emoji={natives.find((native) => native[1] === emoji)![0]} />
                         </button>
                       ))}
                     </div>
