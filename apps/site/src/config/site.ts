@@ -1,6 +1,5 @@
 import { absoluteURL } from "@/lib/utils"
 
-
 export const siteConfig = {
   name: "Phase Bot",
   url: absoluteURL(""),
@@ -18,12 +17,7 @@ export const siteConfig = {
     discord: "/redirect/discord",
     github: "/redirect/github",
   },
-  keywords: [
-    "Discord",
-    "Bot",
-    "Phase",
-    "Free",
-  ],
+  keywords: ["Discord", "Bot", "Phase", "Free"],
 }
 
 export type SiteConfig = typeof siteConfig

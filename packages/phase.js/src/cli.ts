@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { existsSync } from "node:fs"
+import { existsSync, writeFileSync } from "node:fs"
 
 import { version } from "~/index"
 
@@ -17,6 +17,7 @@ import { build } from "tsup"
 import { Client } from "discord.js"
 import { Command } from "commander"
 import chalk from "chalk"
+import { resolve } from "node:path"
 
 export const program = new Command("phase")
   .version(version)
@@ -110,6 +111,24 @@ program
     } catch (error) {
       throw error
     }
+  })
+
+program
+  .command("commands")
+  .description("Export commands to a JSON file.")
+  .requiredOption("--outFile <PATH>", "Where to create the file file.")
+  .action(async ({ outFile }: { outFile: string }) => {
+    if (!outFile.endsWith(".json")) throw Error("outFile path must end in '.json'")
+
+    getEnv()
+    
+    const commands = Object.values(await handleBotCommands().catch(() => undefined) ?? {})
+
+    for (const command of commands) {
+      delete (command as any)["execute"]
+    }
+
+    writeFileSync(outFile, JSON.stringify(commands, null, 2))
   })
 
 program.parse(process.argv)

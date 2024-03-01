@@ -3,7 +3,7 @@
   "name": "bot",
   "type": "module",
   "scripts": {
-    "build": "phase build",
+    "build": "phase build && phase commands --outFile=../site/src/config/commands.json",
     "start": "phase start",
     "dev": "pnpm run build && pnpm run start"
   },

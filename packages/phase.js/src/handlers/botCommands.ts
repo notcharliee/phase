@@ -16,7 +16,7 @@ import {
 
 import type { AddUndefinedToPossiblyUndefinedPropertiesOfInterface } from "node_modules/discord-api-types/utils/internals"
 
-export const handleBotCommands = async (client: Client<boolean>) => {
+export const handleBotCommands = async (client?: Client<boolean>) => {
   const commands: Record<string, ReturnType<BotCommand>> = {}
   const commandDir = resolve(process.cwd(), "build/commands")
 
@@ -33,11 +33,15 @@ export const handleBotCommands = async (client: Client<boolean>) => {
     }
   }
 
-  if (client.isReady()) updateBotCommands(client, commands)
-  else
+  if (!client) return commands
+
+  if (client.isReady()) {
+    updateBotCommands(client, commands)
+  } else {
     client.once("ready", (readyClient) => {
       updateBotCommands(readyClient, commands)
     })
+  }
 
   client.on("interactionCreate", async (interaction) => {
     if (interaction.isChatInputCommand()) {
