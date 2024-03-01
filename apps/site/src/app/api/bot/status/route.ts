@@ -15,6 +15,8 @@ export const dynamic: AppConfigDynamic = "force-dynamic"
 
 
 export const GET = async () => {
+  if (env.NODE_ENV !== "production") return NextResponse.json("OK")
+
   const statusChannel = await discordAPI.channels.get("1201548460290224178")
 
   const status = statusChannel.name?.startsWith("🟢")
