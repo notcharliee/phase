@@ -1,6 +1,6 @@
 import { botEvent } from "phase.js"
 import { GameSchema } from "@repo/schemas"
-import { errorMessage, PhaseError, PhaseColour, PhaseEmoji } from "~/utils"
+import { errorMessage, PhaseError, PhaseColour, ZeroWidthJoiner } from "~/utils"
 import {
   EmbedBuilder,
   ActionRowBuilder,
@@ -56,7 +56,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
 
     // If move square is already taken, defer update.
 
-    if (moves[buttonIndex] != PhaseEmoji.ZeroWidthJoiner)
+    if (moves[buttonIndex] != ZeroWidthJoiner)
       return await interaction.deferUpdate()
 
     // Check if user made a winning move or if game is tied.
@@ -66,16 +66,13 @@ export default botEvent("interactionCreate", async (client, interaction) => {
     const winningMoves = checkWinner(moves)
     const winner = winningMoves ? currentTurn.player : null
 
-    const gameTied = moves.every((move) => move != PhaseEmoji.ZeroWidthJoiner)
+    const gameTied = moves.every((move) => move != ZeroWidthJoiner)
 
     // Update game data.
 
     if (winner || gameTied) await gameSchema.deleteOne()
     else {
-      currentTurn.marker =
-        currentTurn.marker == PhaseEmoji.Cross
-          ? PhaseEmoji.Naught
-          : PhaseEmoji.Cross
+      currentTurn.marker = currentTurn.marker == "❌" ? "⭕" : "❌"
       currentTurn.player =
         gameSchema.players.find((player) => player != interaction.user.id) ||
         currentTurn.player
@@ -103,7 +100,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
 
       if (gameTied) buttonBuilder.setDisabled(true)
 
-      moves[index] == PhaseEmoji.ZeroWidthJoiner
+      moves[index] == ZeroWidthJoiner
         ? buttonBuilder.setLabel(moves[index])
         : buttonBuilder.setEmoji(moves[index])
 
@@ -155,17 +152,9 @@ const checkWinner = (board: string[]): number[] | null => {
   for (const combo of winningCombinations) {
     const [a, b, c] = combo
 
-    if (
-      board[a] == PhaseEmoji.Cross &&
-      board[b] == PhaseEmoji.Cross &&
-      board[c] == PhaseEmoji.Cross
-    )
+    if (board[a] == "❌" && board[b] == "❌" && board[c] == "❌")
       return [a, b, c]
-    else if (
-      board[a] == PhaseEmoji.Naught &&
-      board[b] == PhaseEmoji.Naught &&
-      board[c] == PhaseEmoji.Naught
-    )
+    else if (board[a] == "⭕" && board[b] == "⭕" && board[c] == "⭕")
       return [a, b, c]
   }
 

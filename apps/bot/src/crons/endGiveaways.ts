@@ -1,77 +1,56 @@
 import { botCronJob } from "phase.js"
-import { getRandomArrayElements, PhaseColour, PhaseEmoji } from "~/utils"
 import { GiveawaySchema } from "@repo/schemas"
-import { GuildTextBasedChannel, EmbedBuilder } from "discord.js"
+import { PhaseColour } from "~/utils"
+import { GuildTextBasedChannel, EmbedBuilder, User } from "discord.js"
 
 export default botCronJob("*/10 * * * * *", async (client) => {
-  const expiredGiveawaySchemas = await GiveawaySchema.find({
+  const expiredGiveaways = await GiveawaySchema.find({
     expires: { $lt: Date.now() },
     expired: false,
   })
 
-  for (const giveawaySchema of expiredGiveawaySchemas) {
-    const giveawayWinners = giveawaySchema.winners
+  for (const giveaway of expiredGiveaways) {
+    const channel = client.channels.cache.get(giveaway.channel) as
+      | GuildTextBasedChannel
+      | undefined
 
-    const giveawayChannel = client.channels.cache.get(
-      giveawaySchema.channel,
-    ) as GuildTextBasedChannel | undefined
-
-    if (!giveawayChannel) return giveawaySchema.deleteOne()
+    if (!channel) return giveaway.deleteOne()
 
     try {
-      const giveawayMessage = await giveawayChannel.messages.fetch(
-        giveawaySchema.id,
-      )
-      const giveawayHost = await giveawayChannel.guild.members.fetch(
-        giveawaySchema.host,
-      )
+      const message = await channel.messages.fetch(giveaway.id)
+      const host = await channel.guild.members.fetch(giveaway.host)
+      const entries = await message.reactions.cache.get("🎉")?.users.fetch()
 
-      const giveawayReaction = giveawayMessage.reactions.cache.get(
-        PhaseEmoji.Tada.split(":")[2].replace(">", ""),
-      )
+      const filter = (user: User) => user.id !== client.user.id
 
-      if (!giveawayReaction) {
-        await giveawayMessage.delete()
-        await giveawaySchema.deleteOne()
-
+      if (!entries || !entries.filter(filter).size) {
+        await message.delete()
+        await giveaway.deleteOne()
         return
       }
 
-      const giveawayEntries = (await giveawayReaction.users.fetch()).map(
-        (user) => user,
-      )
-
-      giveawayEntries.splice(
-        giveawayEntries.findIndex((user) => user.id == client.user.id),
-        1,
-      )
-
-      if (!giveawayEntries.length) {
-        await giveawayMessage.delete()
-        await giveawaySchema.deleteOne()
-
-        return
-      }
-
-      giveawayMessage.reply({
-        content: getRandomArrayElements(giveawayEntries, giveawayWinners).join(
-          "",
-        ),
+      message.reply({
+        content: entries.filter(filter).random(giveaway.winners).join(""),
         embeds: [
           new EmbedBuilder()
             .setAuthor({
-              iconURL: giveawayHost.displayAvatarURL(),
-              name: `Hosted by ${giveawayHost.displayName}`,
+              iconURL: host.displayAvatarURL(),
+              name: `Hosted by ${host.displayName}`,
             })
+            .setTitle(giveaway.prize)
+            .setDescription(`Congratulations, you won the giveaway!`)
             .setColor(PhaseColour.Primary)
-            .setDescription(`Congratulations, you have won the giveaway!`),
+            .setFooter({
+              text: `ID: ${giveaway.id}`,
+            }),
         ],
       })
 
-      giveawaySchema.expired = true
-      await giveawaySchema.save()
+      giveaway.expired = true
+
+      await giveaway.save()
     } catch {
-      await giveawaySchema.deleteOne()
+      await giveaway.deleteOne()
     }
   }
 })

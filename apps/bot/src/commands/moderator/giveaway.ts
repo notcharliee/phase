@@ -2,7 +2,6 @@ import { BotCommandBuilder, botCommand } from "phase.js"
 import { GiveawaySchema } from "@repo/schemas"
 import {
   PhaseColour,
-  PhaseEmoji,
   errorMessage,
   getRandomArrayElements,
   missingPermission,
@@ -124,11 +123,24 @@ export default botCommand(
           const winners = interaction.options.getInteger("winners", true)
           const duration = interaction.options.getString("duration", true)
 
-          const created = Date.now()
-          const expires = new Date(created + Number(duration)).getTime()
+          const message = await interaction.channel!.send({
+            embeds: [
+              new EmbedBuilder()
+                .setColor(PhaseColour.Primary)
+                .setTitle("One moment...")
+                .setDescription(
+                  "To save the message ID, we need to send this first.",
+                ),
+            ],
+          })
+
+          const expires = new Date(
+            message.createdTimestamp * 1000 + parseInt(duration, 10),
+          ).getTime()
+
           const host = interaction.member as GuildMember
 
-          const giveawayMessage = await interaction.channel!.send({
+          await message.edit({
             embeds: [
               new EmbedBuilder()
                 .setAuthor({
@@ -136,20 +148,20 @@ export default botCommand(
                   name: `Hosted by ${host.displayName}`,
                 })
                 .setColor(PhaseColour.Primary)
+                .setTitle(`${prize}`)
                 .setDescription(
-                  `React with ${PhaseEmoji.Tada} to enter!\nGiveaway ends: <t:${Math.floor(expires / 1000)}:R>`,
+                  `React with 🎉 to enter!\nGiveaway ends: <t:${Math.floor(expires / 1000)}:R>`,
                 )
-                .setFooter({ text: `ID: ${created}` })
-                .setTitle(`${prize}`),
+                .setFooter({ text: `ID: ${message.id}` }),
             ],
           })
 
-          await giveawayMessage.react(PhaseEmoji.Tada)
+          await message.react("🎉")
 
           await new GiveawaySchema({
-            id: giveawayMessage.id,
-            channel: interaction.channelId,
-            created,
+            id: message.id,
+            channel: message.channelId,
+            created: message.createdTimestamp * 1000,
             host: host.id,
             winners,
             prize,
@@ -162,10 +174,11 @@ export default botCommand(
             embeds: [
               new EmbedBuilder()
                 .setColor(PhaseColour.Primary)
+                .setTitle("Giveaway Created")
                 .setDescription(
                   `**Prize:** ${prize}\n**Winners:** ${winners}\n**Duration:** <t:${Math.floor(expires / 1000)}:R>`,
                 )
-                .setTitle("Giveaway Created"),
+                .setFooter({ text: `ID: ${message.id}` }),
             ],
           })
         }
@@ -179,12 +192,9 @@ export default botCommand(
 
           const id = interaction.options.getString("id", true)
 
-          const giveawaySchema = await GiveawaySchema.findOne({
-            guild: interaction.guildId,
-            created: id,
-          })
+          const giveaway = await GiveawaySchema.findOne({ id })
 
-          if (!giveawaySchema) {
+          if (!giveaway) {
             return interaction.editReply(
               errorMessage({
                 title: "Giveaway Not Found",
@@ -194,26 +204,24 @@ export default botCommand(
             )
           }
 
-          const giveawayChannel = client.channels.cache.get(
-            giveawaySchema.channel,
-          ) as GuildTextBasedChannel | undefined
+          const channel = client.channels.cache.get(giveaway.channel) as
+            | GuildTextBasedChannel
+            | undefined
 
           try {
-            const giveawayMessage = await giveawayChannel?.messages.fetch(
-              giveawaySchema.id,
-            )
+            const message = await channel?.messages
+              .fetch(giveaway.id)
+              .catch(() => {})
 
-            await giveawayMessage?.delete()
-            await giveawaySchema.deleteOne()
+            if (message) await message.delete()
+            await giveaway.deleteOne()
 
             interaction.editReply({
               embeds: [
                 new EmbedBuilder()
                   .setColor(PhaseColour.Primary)
-                  .setDescription(
-                    `Giveaway with ID of \`${id}\` has been deleted.`,
-                  )
-                  .setTitle("Giveaway Deleted"),
+                  .setTitle("Giveaway Deleted")
+                  .setDescription(`Giveaway has been deleted.`),
               ],
             })
           } catch {
@@ -221,7 +229,7 @@ export default botCommand(
               errorMessage({
                 title: "Failed to delete",
                 description:
-                  "Failed to delete giveaway message. Make sure both the message and channel still exist, and that Phase has access to them, then try again.",
+                  "Failed to delete giveaway message. Make sure both the message and channel still exist, and that the bot has access to them, then try again.",
                 ephemeral: true,
               }),
             )
@@ -291,9 +299,7 @@ export default botCommand(
               )
             }
 
-            const giveawayReaction = giveawayMessage.reactions.cache.get(
-              PhaseEmoji.Tada.split(":")[2].replace(">", ""),
-            )
+            const giveawayReaction = giveawayMessage.reactions.cache.get("🎉")
 
             if (!giveawayReaction) {
               await giveawayMessage.delete()

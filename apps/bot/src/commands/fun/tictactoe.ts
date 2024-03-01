@@ -1,6 +1,6 @@
 import { botCommand, BotCommandBuilder } from "phase.js"
 import { GameSchema } from "@repo/schemas"
-import { PhaseEmoji, PhaseColour, memberNotFound } from "~/utils"
+import { ZeroWidthJoiner, PhaseColour, memberNotFound } from "~/utils"
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -29,43 +29,43 @@ export default botCommand(
         new ActionRowBuilder<ButtonBuilder>().addComponents(
           new ButtonBuilder()
             .setCustomId("tictactoe.1")
-            .setLabel(PhaseEmoji.ZeroWidthJoiner)
+            .setLabel(ZeroWidthJoiner)
             .setStyle(ButtonStyle.Secondary),
           new ButtonBuilder()
             .setCustomId("tictactoe.2")
-            .setLabel(PhaseEmoji.ZeroWidthJoiner)
+            .setLabel(ZeroWidthJoiner)
             .setStyle(ButtonStyle.Secondary),
           new ButtonBuilder()
             .setCustomId("tictactoe.3")
-            .setLabel(PhaseEmoji.ZeroWidthJoiner)
+            .setLabel(ZeroWidthJoiner)
             .setStyle(ButtonStyle.Secondary),
         ),
         new ActionRowBuilder<ButtonBuilder>().addComponents(
           new ButtonBuilder()
             .setCustomId("tictactoe.4")
-            .setLabel(PhaseEmoji.ZeroWidthJoiner)
+            .setLabel(ZeroWidthJoiner)
             .setStyle(ButtonStyle.Secondary),
           new ButtonBuilder()
             .setCustomId("tictactoe.5")
-            .setLabel(PhaseEmoji.ZeroWidthJoiner)
+            .setLabel(ZeroWidthJoiner)
             .setStyle(ButtonStyle.Secondary),
           new ButtonBuilder()
             .setCustomId("tictactoe.6")
-            .setLabel(PhaseEmoji.ZeroWidthJoiner)
+            .setLabel(ZeroWidthJoiner)
             .setStyle(ButtonStyle.Secondary),
         ),
         new ActionRowBuilder<ButtonBuilder>().addComponents(
           new ButtonBuilder()
             .setCustomId("tictactoe.7")
-            .setLabel(PhaseEmoji.ZeroWidthJoiner)
+            .setLabel(ZeroWidthJoiner)
             .setStyle(ButtonStyle.Secondary),
           new ButtonBuilder()
             .setCustomId("tictactoe.8")
-            .setLabel(PhaseEmoji.ZeroWidthJoiner)
+            .setLabel(ZeroWidthJoiner)
             .setStyle(ButtonStyle.Secondary),
           new ButtonBuilder()
             .setCustomId("tictactoe.9")
-            .setLabel(PhaseEmoji.ZeroWidthJoiner)
+            .setLabel(ZeroWidthJoiner)
             .setStyle(ButtonStyle.Secondary),
         ),
       ],
@@ -83,19 +83,19 @@ export default botCommand(
       type: "TICTACTOE",
       game_data: {
         current_turn: {
-          marker: PhaseEmoji.Cross,
+          marker: "❌",
           player: member.id,
         },
         moves: [
-          PhaseEmoji.ZeroWidthJoiner,
-          PhaseEmoji.ZeroWidthJoiner,
-          PhaseEmoji.ZeroWidthJoiner,
-          PhaseEmoji.ZeroWidthJoiner,
-          PhaseEmoji.ZeroWidthJoiner,
-          PhaseEmoji.ZeroWidthJoiner,
-          PhaseEmoji.ZeroWidthJoiner,
-          PhaseEmoji.ZeroWidthJoiner,
-          PhaseEmoji.ZeroWidthJoiner,
+          ZeroWidthJoiner,
+          ZeroWidthJoiner,
+          ZeroWidthJoiner,
+          ZeroWidthJoiner,
+          ZeroWidthJoiner,
+          ZeroWidthJoiner,
+          ZeroWidthJoiner,
+          ZeroWidthJoiner,
+          ZeroWidthJoiner,
         ],
       },
       players: [interaction.user.id, member.id],
