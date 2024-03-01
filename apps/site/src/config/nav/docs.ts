@@ -5,12 +5,10 @@ import { modulesConfig } from "../modules"
 
 import { mainNavConfig } from "./main"
 
-
 interface DocsConfig {
   mainNav: MainNavItem[]
   sidebarNav: SidebarNavItem[]
 }
-
 
 export const docsNavConfig: DocsConfig = {
   mainNav: mainNavConfig.mainNav,
@@ -42,7 +40,7 @@ export const docsNavConfig: DocsConfig = {
     },
     {
       title: "Modules",
-      items: modulesConfig.map(module => ({
+      items: modulesConfig.map((module) => ({
         title: module.name,
         href: "/docs/modules" + module.path,
         disabled: module.disabled,
@@ -51,11 +49,9 @@ export const docsNavConfig: DocsConfig = {
     },
     {
       title: "Commands",
-      items: commandsConfig.map(command => ({
-        title: command.name,
+      items: commandsConfig.map((command) => ({
+        title: "/" + command.name,
         href: "/docs/commands" + command.path,
-        disabled: command.disabled,
-        label: command.label,
         items: [],
       })),
     },

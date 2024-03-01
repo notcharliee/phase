@@ -15,8 +15,8 @@ export default function DocsLayout({
   return (
     <main className="flex min-h-screen w-full flex-col">
       <DocsHeader />
-      <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-[1400px] gap-12 px-8">
-        <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] w-64 py-8 pr-6 md:block">
+      <div className="mx-auto flex min-h-[calc(100dvh-4rem-1px)] w-full max-w-[1400px] gap-12 px-8">
+        <aside className="sticky top-16 hidden h-[calc(100dvh-4rem-1px)] w-64 py-8 pr-6 md:block">
           <DocsSidebarNav items={docsNavConfig.sidebarNav} />
         </aside>
         <div className="w-full py-8">
