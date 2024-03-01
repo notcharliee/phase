@@ -2,22 +2,6 @@ import { env } from "./src/lib/env.js"
 
 /** @type {import('next').NextConfig} */
 const config = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "cdn.discordapp.com",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "raw.githubusercontent.com",
-        port: "",
-        pathname: "/**",
-      },
-    ],
-  },
   async redirects() {
     return [
       {
