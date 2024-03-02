@@ -83,12 +83,12 @@ export const DocsHeader = () => {
             </Link>
           ))}
         </nav>
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+        <div className="flex flex-1 items-center justify-between space-x-3 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none">
             <Button
               variant="outline"
               className={cn(
-                "bg-background text-muted-foreground relative h-8 w-full justify-start rounded-[0.5rem] text-sm font-normal shadow-none sm:pr-12 md:w-64",
+                "bg-background text-muted-foreground relative h-9 w-full justify-start rounded-[0.5rem] text-sm font-normal shadow-none sm:pr-[52px] md:w-64",
               )}
               onClick={() => setOpen(true)}
             >
@@ -96,7 +96,7 @@ export const DocsHeader = () => {
                 <RocketIcon className="h-3.5 w-3.5" />
                 Wanna explore?
               </span>
-              <kbd className="bg-muted pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-5 select-none items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+              <kbd className="bg-muted pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-6 select-none items-center gap-1 rounded border px-2 font-mono text-[10px] font-medium opacity-100 sm:flex">
                 <span className="text-xs">⌘</span>K
               </kbd>
             </Button>
@@ -172,7 +172,7 @@ export const DocsHeader = () => {
               rel="noreferrer"
             >
               <div
-                className={cn(buttonVariants({ variant: "ghost" }), "w-9 px-0")}
+                className={cn(buttonVariants({ variant: "outline", size: "icon" }))}
               >
                 <GitHubLogoIcon className="h-5 w-5" />
                 <span className="sr-only">GitHub</span>

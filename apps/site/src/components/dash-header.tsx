@@ -1,204 +1,163 @@
 "use client"
 
-import Link, { type LinkProps } from "next/link"
-import { useRouter, usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import Link from "next/link"
 
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
-import { ArrowTopRightIcon, HamburgerMenuIcon } from "@radix-ui/react-icons"
-
-import { Button, buttonVariants } from "@/components/ui/button"
 import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
-import { Separator } from "@/components/ui/separator"
-import { ScrollArea } from "@/components/ui/scroll-area"
+  CircleIcon,
+  FileIcon,
+  GlobeIcon,
+  RocketIcon,
+} from "@radix-ui/react-icons"
+
+import { Button } from "@/components/ui/button"
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command"
 
 import { dashboardNavConfig } from "@/config/nav/dashboard"
+
 import { cn } from "@/lib/utils"
-
-import { SearchDashboard } from "@/app/dashboard/components/search-dashboard"
-
-import type { MainNavItem, SidebarNavItem } from "@/types/nav"
 
 export const DashHeader = (props: {
   selectServerCombobox: JSX.Element
-  userNav: JSX.Element
-}) => (
-  <header className="sticky top-0 z-50 w-full border-b backdrop-blur-sm">
-    <div className="mx-auto flex h-16 items-center px-8">
-      <MainNav
-        mainNav={dashboardNavConfig.mainNav}
-        selectServerCombobox={props.selectServerCombobox}
-      />
-      <div className="flex flex-1 items-center justify-between space-x-4 md:justify-end">
-        <div className="w-full flex-1 md:w-auto md:flex-none">
-          <SearchDashboard />
-        </div>
-        <nav className="flex items-center">{props.userNav}</nav>
-      </div>
-    </div>
-  </header>
-)
-
-export const MainNav = (props: {
-  mainNav: MainNavItem[]
-  selectServerCombobox: JSX.Element
+  userAvatar: JSX.Element
 }) => {
   const pathname = usePathname()
-
-  return (
-    <nav className="mr-8 hidden items-center space-x-4 md:flex lg:space-x-6">
-      {props.selectServerCombobox}
-      {props.mainNav.map((item) => (
-        <Link
-          key={item.href}
-          href={item.href!}
-          className={cn(
-            "hover:text-primary relative text-sm font-medium transition-colors",
-            pathname !== item.href && "text-muted-foreground",
-          )}
-        >
-          {item.title}
-          {item.external && (
-            <ArrowTopRightIcon
-              shapeRendering="geometricPrecision"
-              className="absolute -right-[12px] top-0.5 h-[9px] w-[9px]"
-            />
-          )}
-        </Link>
-      ))}
-    </nav>
-  )
-}
-
-export const MobileNav = (props: {
-  mainNav: MainNavItem[]
-  pageNav: SidebarNavItem[]
-  selectServerCombobox: JSX.Element
-}) => {
-  const [open, setOpen] = useState(false)
-  const pathname = usePathname()
-
-  return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button
-          variant={"ghost"}
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            "mr-2 w-9 px-0 md:hidden",
-          )}
-        >
-          <HamburgerMenuIcon className="h-5 w-5" />
-        </Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <ScrollArea className="mx-auto h-[70vh] w-full max-w-sm px-6 py-10">
-          <div className="flex flex-col gap-6">
-            <DrawerHeader className="gap-3 pt-0">
-              {props.selectServerCombobox}
-            </DrawerHeader>
-            <div className="mr-3 flex justify-between gap-3">
-              {props.mainNav.map(
-                (item) =>
-                  item.href && (
-                    <MobileLink
-                      key={item.href}
-                      href={item.href}
-                      onOpenChange={setOpen}
-                      className={cn(
-                        pathname === item.href
-                          ? "text-foreground"
-                          : "text-muted-foreground",
-                        "relative",
-                      )}
-                    >
-                      {item.title}
-                      {item.external && (
-                        <ArrowTopRightIcon
-                          shapeRendering="geometricPrecision"
-                          className="absolute -right-[12px] top-0.5 h-[9px] w-[9px]"
-                        />
-                      )}
-                    </MobileLink>
-                  ),
-              )}
-            </div>
-            <Separator />
-            <div className="flex flex-col gap-8">
-              {props.pageNav.map((item, index) => (
-                <div key={index} className="flex flex-col gap-3">
-                  <h4 className="font-medium">{item.title}</h4>
-                  {item?.items?.length &&
-                    item.items.map(
-                      (item, index) =>
-                        !item.disabled &&
-                        (item.href ? (
-                          <MobileLink
-                            key={index}
-                            href={item.href}
-                            onOpenChange={setOpen}
-                            className={"text-muted-foreground relative"}
-                          >
-                            {item.title}
-                            {item.external && (
-                              <ArrowTopRightIcon
-                                shapeRendering="geometricPrecision"
-                                className="absolute -right-[12px] top-0.5 h-[9px] w-[9px]"
-                              />
-                            )}
-                          </MobileLink>
-                        ) : (
-                          <span key={index} className="relative">
-                            {item.title}
-                            {item.external && (
-                              <ArrowTopRightIcon
-                                shapeRendering="geometricPrecision"
-                                className="absolute -right-[12px] top-0.5 h-[9px] w-[9px]"
-                              />
-                            )}
-                          </span>
-                        )),
-                    )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </ScrollArea>
-      </DrawerContent>
-    </Drawer>
-  )
-}
-
-interface MobileLinkProps extends LinkProps {
-  onOpenChange?: (open: boolean) => void
-  children: React.ReactNode
-  className?: string
-}
-
-const MobileLink = ({
-  href,
-  onOpenChange,
-  className,
-  children,
-  ...props
-}: MobileLinkProps) => {
   const router = useRouter()
+
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || e.key === "/") {
+        if (
+          (e.target instanceof HTMLElement && e.target.isContentEditable) ||
+          e.target instanceof HTMLInputElement ||
+          e.target instanceof HTMLTextAreaElement ||
+          e.target instanceof HTMLSelectElement
+        ) {
+          return
+        }
+
+        e.preventDefault()
+        setOpen((open) => !open)
+      }
+    }
+
+    document.addEventListener("keydown", down)
+    return () => document.removeEventListener("keydown", down)
+  }, [])
+
+  const runCommand = useCallback((command: () => unknown) => {
+    setOpen(false)
+    command()
+  }, [])
+
   return (
-    <Link
-      href={href}
-      onClick={() => {
-        router.push(href.toString())
-        onOpenChange?.(false)
-      }}
-      className={cn(className)}
-      {...props}
-    >
-      {children}
-    </Link>
+    <header className="sticky top-0 z-50 w-full border-b backdrop-blur-sm">
+      <div className="mx-auto flex h-16 items-center gap-4 px-8">
+        <nav className="hidden items-center space-x-6 md:flex">
+          {props.selectServerCombobox}
+          <nav className="hidden items-center space-x-6 lg:flex">
+            {dashboardNavConfig.mainNav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href!}
+                className={cn(
+                  "hover:text-primary relative text-sm font-medium transition-colors",
+                  pathname !== item.href && "text-muted-foreground",
+                )}
+              >
+                {item.title}
+              </Link>
+            ))}
+          </nav>
+        </nav>
+        <nav className="flex flex-1 items-center justify-between space-x-3 md:justify-end">
+          <div className="w-full flex-1 lg:w-auto lg:flex-none">
+            <Button
+              variant="outline"
+              className={cn(
+                "bg-background text-muted-foreground relative h-9 w-full justify-start rounded-[0.5rem] text-sm font-normal shadow-none sm:pr-[52px] lg:w-64",
+              )}
+              onClick={() => setOpen(true)}
+            >
+              <span className="flex items-center gap-2">
+                <RocketIcon className="h-3.5 w-3.5" />
+                Wanna explore?
+              </span>
+              <kbd className="bg-muted pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-6 select-none items-center gap-1 rounded border px-2 font-mono text-[10px] font-medium opacity-100 sm:flex">
+                <span className="text-xs">⌘</span>K
+              </kbd>
+            </Button>
+            <CommandDialog open={open} onOpenChange={setOpen}>
+              <CommandInput placeholder="Where do you want to go?" />
+              <CommandList>
+                <CommandEmpty>No results found.</CommandEmpty>
+                <CommandGroup heading="Dashboard">
+                  {dashboardNavConfig.mainNav
+                    .filter((navitem) => !navitem.external)
+                    .map((navItem) => (
+                      <CommandItem
+                        key={navItem.href}
+                        value={navItem.title}
+                        onSelect={() => {
+                          runCommand(() => router.push(navItem.href as string))
+                        }}
+                      >
+                        <FileIcon className="mr-2 h-4 w-4" />
+                        {navItem.title}
+                      </CommandItem>
+                    ))}
+                  {dashboardNavConfig.mainNav
+                    .filter((navitem) => navitem.external)
+                    .map((navItem) => (
+                      <CommandItem
+                        key={navItem.href}
+                        value={navItem.title}
+                        onSelect={() => {
+                          runCommand(() => router.push(navItem.href as string))
+                        }}
+                      >
+                        <GlobeIcon className="mr-2 h-4 w-4" />
+                        {navItem.title}
+                      </CommandItem>
+                    ))}
+                </CommandGroup>
+                <CommandSeparator className="mb-2 mt-1" />
+                {dashboardNavConfig.sidebarNav.map((group) => (
+                  <CommandGroup key={group.title} heading={group.title}>
+                    {group.items.map((navItem) => (
+                      <CommandItem
+                        key={navItem.href}
+                        value={navItem.title}
+                        onSelect={() => {
+                          runCommand(() => router.push(navItem.href as string))
+                        }}
+                      >
+                        <div className="mr-2 flex h-4 w-4 items-center justify-center">
+                          <CircleIcon className="h-3 w-3" />
+                        </div>
+                        {navItem.title}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                ))}
+              </CommandList>
+            </CommandDialog>
+          </div>
+          <div className="flex items-center justify-center size-9">{props.userAvatar}</div>
+        </nav>
+      </div>
+    </header>
   )
 }

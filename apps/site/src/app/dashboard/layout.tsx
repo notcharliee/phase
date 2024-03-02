@@ -6,8 +6,8 @@ import { DashHeader } from "@/components/dash-header"
 import {
   SelectServerCombobox,
   SelectServerDialog,
-} from "@/app/dashboard/components/select-server"
-import { UserNav } from "@/app/dashboard/components/user-nav"
+} from "./components/select/server"
+import { UserAvatar } from "./components/user-avatar"
 
 export default function DashboardLayout({
   children,
@@ -20,9 +20,9 @@ export default function DashboardLayout({
     </Suspense>
   )
 
-  const userNav = (
-    <Suspense fallback={<UserNav fallback />}>
-      <UserNav />
+  const userAvatar = (
+    <Suspense fallback={<UserAvatar fallback />}>
+      <UserAvatar />
     </Suspense>
   )
 
@@ -30,7 +30,7 @@ export default function DashboardLayout({
     <main className="flex min-h-screen w-full flex-col">
       <DashHeader
         selectServerCombobox={selectServerCombobox}
-        userNav={userNav}
+        userAvatar={userAvatar}
       />
       <div className="flex-1">
         {cookies().has("guild") ? (

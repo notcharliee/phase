@@ -1,15 +1,25 @@
-import { cookies, headers } from "next/headers"
+import { LightningBoltIcon, OpenInNewWindowIcon } from "@radix-ui/react-icons"
+import { Guild } from "@repo/schemas"
+import { Document, Types } from "mongoose"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { modulesConfig } from "@/config/modules"
 import Link from "next/link"
 
-import { LightningBoltIcon, OpenInNewWindowIcon } from "@radix-ui/react-icons"
+type DatabaseGuild = Document<unknown, {}, Guild> &
+  Guild & {
+    _id: Types.ObjectId
+  }
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+type EnabledModulesProps<T extends boolean> = T extends true
+  ? { fallback: T }
+  : {
+      guild: DatabaseGuild | undefined
+      fallback?: T
+    }
 
-import { getGuilds } from "../../cache/guilds"
-
-import { modulesConfig } from "@/config/modules"
-
-export const EnabledModules = async (props: { fallback?: boolean }) => {
+export const EnabledModules = async <T extends boolean>(
+  props: EnabledModulesProps<T>,
+) => {
   const fallback = (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -29,19 +39,9 @@ export const EnabledModules = async (props: { fallback?: boolean }) => {
     </Card>
   )
 
-  if (props.fallback) return fallback
+  if (props.fallback || !props.guild) return fallback
 
-  const userId = headers().get("x-user-id")!
-  const userToken = headers().get("x-user-token")!
-
-  const cachedGuilds = await getGuilds(userId, userToken)
-
-  const guildId = cookies().get("guild")!.value
-  const guild = cachedGuilds.database.find((guild) => guild.id === guildId)
-
-  if (!guild) return fallback
-
-  const enabledModules = `${Object.values(guild.modules ?? {}).filter((module) => module.enabled).length} / ${modulesConfig.length}`
+  const enabledModules = `${Object.values(props.guild.modules ?? {}).filter((module) => module.enabled).length} / ${modulesConfig.length}`
 
   return (
     <Card>
