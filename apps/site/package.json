@@ -6,7 +6,8 @@
   "scripts": {
     "build": "contentlayer build && next build",
     "dev": "concurrently \"contentlayer dev\" \"next dev --turbo\"",
-    "start": "next start"
+    "start": "next start",
+    "preview": "pnpm build && pnpm start"
   },
   "dependencies": {
     "@discordjs/core": "^1.1.1",
