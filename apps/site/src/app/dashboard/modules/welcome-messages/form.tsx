@@ -31,7 +31,9 @@ import Link from "next/link"
 
 const formSchema = z.object({
   enabled: z.boolean(),
-  channel: z.string(),
+  channel: z.string().min(1, {
+    message: "Channel is required",
+  }),
   message: z.string(),
   mention: z.boolean(),
   card: z.object({
@@ -183,6 +185,13 @@ export const ModuleForm = <Fallback extends boolean>(
                       <Input
                         placeholder={`https://placehold.co/1200x448.png`}
                         {...field}
+                        onChange={(event) =>
+                          field.onChange(
+                            event.target.value.length > 0
+                              ? event.target.value
+                              : undefined,
+                          )
+                        }
                       />
                     </FormControl>
                     <FormDescription>

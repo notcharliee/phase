@@ -48,8 +48,12 @@ const formSchema = z.object({
   reactions: z
     .array(
       z.object({
-        emoji: z.string().emoji(),
-        role: z.string(),
+        emoji: z.string().emoji().min(1, {
+          message: "Emoji is required",
+        }),
+        role: z.string().min(1, {
+          message: "Role is required"
+        }),
       }),
     )
     .max(20),

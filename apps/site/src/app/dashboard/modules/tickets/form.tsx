@@ -37,15 +37,23 @@ import { updateModuleMessage, updateModule } from "@/lib/actions"
 
 const formSchema = z.object({
   enabled: z.boolean(),
-  channel: z.string(),
-  message: z.string(),
+  channel: z.string().min(1, {
+    message: "Channel is required",
+  }),
+  message: z.string().min(1, {
+    message: "Message is required",
+  }),
   max_open: z.number().int().optional(),
   tickets: z
     .array(
       z.object({
         id: z.string(),
-        name: z.string(),
-        message: z.string(),
+        name: z.string().min(1, {
+          message: "Name is required",
+        }),
+        message: z.string().min(1, {
+          message: "Message is required",
+        }),
         mention: z.string().optional(),
       }),
     )

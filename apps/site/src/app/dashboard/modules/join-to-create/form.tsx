@@ -27,8 +27,12 @@ import { updateModule } from "@/lib/actions"
 
 const formSchema = z.object({
   enabled: z.boolean(),
-  channel: z.string(),
-  category: z.string(),
+  channel: z.string().min(1, {
+    message: "Channel is required",
+  }),
+  category: z.string().min(1, {
+    message: "Category is required",
+  }),
 })
 
 type FormValues = z.infer<typeof formSchema>

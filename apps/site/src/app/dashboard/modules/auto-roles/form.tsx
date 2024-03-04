@@ -27,7 +27,9 @@ const formSchema = z.object({
   roles: z
     .array(
       z.object({
-        role: z.string(),
+        role: z.string().min(1, {
+          message: "Role is required",
+        }),
       }),
     )
     .max(10),
@@ -59,7 +61,7 @@ export const ModuleForm = <Fallback extends boolean>(
 
   const onSubmit = (data: FormValues) => {
     data.enabled = true
-    
+
     toast.promise(
       updateModule("AutoRoles", {
         enabled: data.enabled,

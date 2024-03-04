@@ -28,8 +28,8 @@ const formSchema = z.object({
   warnings: z
     .array(
       z.object({
-        role: z.string().refine((str) => str.length > 1, {
-          message: "Select a role or remove the warning",
+        role: z.string().min(1, {
+          message: "Role is required"
         }),
       }),
     )

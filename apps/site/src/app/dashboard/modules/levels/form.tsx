@@ -37,11 +37,9 @@ import { updateModule } from "@/lib/actions"
 const formSchema = z.object({
   enabled: z.boolean(),
   channel: z
-    .string()
-    .refine(
-      (channel) => channel !== "channel",
-      "You must pick a channel from the dropdown.",
-    ),
+    .string().min(1, {
+      message: "Channel is required",
+    }),
   message: z.string(),
   mention: z.boolean(),
   roles: z
