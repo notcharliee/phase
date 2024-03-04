@@ -25,6 +25,13 @@ export async function generateMetadata({ params }: { params: { slug: string[] } 
   const doc = await getDocFromParams({ params })
   if (!doc) return {}
 
+  let ogImage: string | URL = new URL("/api/image/docs.png", siteConfig.url)
+
+  ogImage.searchParams.append("title", doc.title)
+  ogImage.searchParams.append("description", doc.description)
+
+  ogImage = ogImage.toString()
+
   return {
     title: doc.title,
     description: doc.description,
@@ -35,7 +42,7 @@ export async function generateMetadata({ params }: { params: { slug: string[] } 
       url: absoluteURL(doc.slug),
       images: [
         {
-          url: siteConfig.ogImage,
+          url: ogImage,
           width: 1200,
           height: 630,
           alt: siteConfig.name,
@@ -46,7 +53,7 @@ export async function generateMetadata({ params }: { params: { slug: string[] } 
       card: "summary_large_image",
       title: doc.title,
       description: doc.description,
-      images: [siteConfig.ogImage],
+      images: [ogImage],
       creator: "@" + siteConfig.creator,
     },
   }
