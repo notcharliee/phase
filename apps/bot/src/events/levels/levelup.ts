@@ -37,7 +37,7 @@ export default botEvent("messageCreate", async (client, message) => {
     levelSchema.level += 1
     levelSchema.xp = 0
 
-    let levelUpMessage = `${levelModule.message}`
+    let levelUpMessage: string | null = `${levelModule.message}`
 
     levelUpMessage = levelUpMessage.replaceAll("{member}", `${message.author}`)
     levelUpMessage = levelUpMessage.replaceAll(
@@ -56,6 +56,8 @@ export default botEvent("messageCreate", async (client, message) => {
       "{member.target}",
       `${500 * (levelSchema.level + 1)}`,
     )
+
+    if (!levelUpMessage.length) levelUpMessage = null
 
     switch (levelModule.channel) {
       case "dm":
