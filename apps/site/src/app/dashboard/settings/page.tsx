@@ -1,4 +1,6 @@
-import { headers } from "next/headers"
+import { cookies, headers } from "next/headers"
+
+import { GuildSchema } from "@repo/schemas"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -24,20 +26,46 @@ import { SelectChannel } from "../components/select/channel"
 import { SelectServerCombobox } from "../components/select/server"
 import { Suspense } from "react"
 
-import { API } from "@discordjs/core/http-only"
+import {
+  API,
+  type APIGuildChannel,
+  type GuildChannelType,
+} from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 
 import { env } from "@/lib/env"
+import { dbConnect } from "@/lib/db"
 import { cn, getInitials } from "@/lib/utils"
+import { ChannelType } from "discord-api-types/v10"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
 
 export default async function SettingsPage() {
-  const userId = headers().get("x-user-id")!
-  const userIsOwner = true
+  await dbConnect()
 
-  const admins = [userId]
+  const guildId = cookies().get("guild")!.value
+  const userId = headers().get("x-user-id")!
+
+  const dbGuild = await GuildSchema.findOne({
+    id: guildId,
+    admins: { $in: userId },
+  })
+
+  if (!dbGuild) return <h1>Access Denied</h1>
+
+  const discordGuild = await discordAPI.guilds.get(guildId)
+  const discordChannels = (await discordAPI.guilds.getChannels(
+    guildId,
+  )) as APIGuildChannel<GuildChannelType>[]
+
+  const admins = dbGuild.admins
+  const userIsOwner = discordGuild.owner_id === userId
+
+  const me = await discordAPI.guilds.getMember(guildId, env.DISCORD_ID)
+  const nickname = me.nick ?? undefined
+
+  const newsChannel = dbGuild.news_channel
 
   return (
     <div className="space-y-6 p-8 pt-6">
@@ -157,7 +185,7 @@ export default async function SettingsPage() {
             </CardHeader>
             <CardContent className="w-full pb-6">
               <div className="flex gap-4">
-                <Input placeholder="Enter a nickname here" />
+                <Input placeholder="Enter a nickname here" value={nickname} />
                 <Button>Save</Button>
               </div>
             </CardContent>
@@ -174,7 +202,7 @@ export default async function SettingsPage() {
             </CardHeader>
             <CardContent className="w-full pb-6">
               <div className="flex gap-4">
-                <SelectChannel fallback />
+                <SelectChannel channels={discordChannels} channelType={ChannelType.GuildText} categories value={newsChannel} />
                 <Button>Save</Button>
               </div>
             </CardContent>
