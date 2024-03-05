@@ -14,11 +14,6 @@ import { CommandForm } from "./form"
 
 import { getGuilds } from "../../cache/guilds"
 
-import {
-  GET as getCommands,
-  type GetBotCommandsResponse,
-} from "@/app/api/bot/commands/route"
-
 import { commandsConfig } from "@/config/commands"
 
 import { dbConnect } from "@/lib/db"
@@ -44,10 +39,6 @@ export const Commands = async (props: { fallback?: boolean }) => {
 
   await dbConnect()
 
-  const commands = await getCommands().then(
-    (res) => res.json() as Promise<GetBotCommandsResponse>,
-  )
-
   const userId = headers().get("x-user-id")!
   const userToken = headers().get("x-user-token")!
 
@@ -59,7 +50,7 @@ export const Commands = async (props: { fallback?: boolean }) => {
 
   const roles = await discordAPI.guilds.getRoles(guildId)
 
-  return commands.map((command) => (
+  return commandsConfig.map((command) => (
     <Card key={command.name} className="flex flex-col justify-between">
       <CardHeader>
         <CardTitle>{`/${command.name}`}</CardTitle>
@@ -68,7 +59,7 @@ export const Commands = async (props: { fallback?: boolean }) => {
       <CardContent>
         <CommandForm
           data={{
-            command,
+            command: command.name,
             roles,
           }}
           defaultValues={{

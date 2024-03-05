@@ -18,7 +18,6 @@ import { toast } from "sonner"
 
 import { SelectRole } from "../select/role"
 
-import { type Command } from "@/types/commands"
 import { updateCommand } from "@/lib/actions"
 
 const formSchema = z.object({
@@ -32,7 +31,7 @@ type CommandFormProps<T extends boolean> = T extends true
       fallback: T
       defaultValues?: FormValues
       data?: {
-        command: Command
+        command: string
         roles: APIRole[]
       }
     }
@@ -40,7 +39,7 @@ type CommandFormProps<T extends boolean> = T extends true
       fallback?: T
       defaultValues: FormValues
       data: {
-        command: Command
+        command: string
         roles: APIRole[]
       }
     }
@@ -53,8 +52,8 @@ export const CommandForm = <T extends boolean>(props: CommandFormProps<T>) => {
 
   const onSubmit = (data: FormValues) => {
     toast.promise(
-      updateCommand(props.data!.command.name, {
-        name: props.data!.command.name,
+      updateCommand(props.data!.command, {
+        name: props.data!.command,
         permissions: data.role ?? "",
       }),
       {
