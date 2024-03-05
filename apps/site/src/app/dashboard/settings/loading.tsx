@@ -1,6 +1,3 @@
-import { headers } from "next/headers"
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Dialog,
   DialogTrigger,
@@ -19,26 +16,12 @@ import {
   CardContent,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { SelectChannel } from "../components/select/channel"
 import { SelectServerCombobox } from "../components/select/server"
+import { Spinner } from "@/components/spinner"
 import { Suspense } from "react"
 
-import { API } from "@discordjs/core/http-only"
-import { REST } from "@discordjs/rest"
-
-import { env } from "@/lib/env"
-import { cn, getInitials } from "@/lib/utils"
-
-const discordREST = new REST().setToken(env.DISCORD_TOKEN)
-const discordAPI = new API(discordREST)
-
-export default async function SettingsPage() {
-  const userId = headers().get("x-user-id")!
-  const userIsOwner = true
-
-  const admins = [userId]
-
+export default function SettingsPage() {
   return (
     <div className="space-y-6 p-8 pt-6">
       <div className="flex items-center justify-between">
@@ -75,73 +58,8 @@ export default async function SettingsPage() {
                 manage the bot.
               </CardDescription>
             </CardHeader>
-            <CardContent className="relative w-full space-y-4">
-              <ScrollArea>
-                <ul className="mt-2 space-y-2.5">
-                  {await Promise.all(
-                    admins.map(async (admin, index) => {
-                      const user = await discordAPI.users.get(admin)
-
-                      return (
-                        <li
-                          key={index}
-                          className="animate-in slide-in-from-top-2 fade-in duration-700 "
-                          style={{
-                            animationDelay: `${150 * index}ms`,
-                            animationFillMode: "backwards",
-                          }}
-                        >
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start gap-2",
-                              userIsOwner && "hover:animate-jiggle",
-                            )}
-                          >
-                            <Avatar className="h-4 w-4">
-                              <AvatarImage
-                                src={
-                                  user.avatar
-                                    ? discordREST.cdn.avatar(
-                                        user.id,
-                                        user.avatar,
-                                        {
-                                          size: 16,
-                                        },
-                                      )
-                                    : "/discord.png"
-                                }
-                                alt={user.username}
-                              />
-                              <AvatarFallback className="text-xs">
-                                {getInitials(user.username)}
-                              </AvatarFallback>
-                            </Avatar>
-                            {user.username}
-                          </Button>
-                        </li>
-                      )
-                    }),
-                  )}
-                </ul>
-              </ScrollArea>
-              {userIsOwner && (
-                <div
-                  className="animate-in slide-in-from-top-2 fade-in flex flex-col gap-2.5 duration-1000"
-                  style={{
-                    animationDelay: `${150 * (admins.length + 1)}ms`,
-                    animationFillMode: "backwards",
-                  }}
-                >
-                  <div className="flex gap-2.5">
-                    <Input placeholder="Enter a user ID here" type="number" />
-                    <Button>Add</Button>
-                  </div>
-                  <p className="text-muted-foreground text-sm">
-                    You are the server owner! Click on an admin to remove them.
-                  </p>
-                </div>
-              )}
+            <CardContent className="py-4">
+              <Spinner className="mx-auto h-8 w-8" />
             </CardContent>
           </Card>
         </aside>
