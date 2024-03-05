@@ -24,7 +24,7 @@ type SelectChannelType = <
 >(
   props: TFallback extends true
     ? { fallback: TFallback }
-    : ControllerRenderProps & {
+    : Partial<ControllerRenderProps> & {
         categories?: true
         channels: DiscordAPITypes.APIGuildChannel<DiscordAPITypes.GuildChannelType>[]
         channelType: TChannel
@@ -73,7 +73,8 @@ export const SelectChannel: SelectChannelType = (props) => {
       disabled={props.disabled}
       name={props.name}
       onValueChange={(value) => {
-        value === "deselect" ? props.onChange(null) : props.onChange(value)
+        if (props.onChange)
+          value === "deselect" ? props.onChange(null) : props.onChange(value)
       }}
       value={props.value ? `${props.value}` : undefined}
     >
