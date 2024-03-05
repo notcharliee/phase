@@ -49,7 +49,7 @@ export const metadata = {
   },
 } satisfies Metadata
 
-export const viewort = {
+export const viewport = {
   colorScheme: "dark",
   themeColor: "#f8f8f8",
 } satisfies Viewport
