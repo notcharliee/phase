@@ -2,6 +2,13 @@ import { cookies, headers } from "next/headers"
 
 import { GuildSchema } from "@repo/schemas"
 
+import {
+  API,
+  type APIGuildChannel,
+  type GuildChannelType,
+} from "@discordjs/core/http-only"
+import { REST } from "@discordjs/rest"
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Dialog,
@@ -21,22 +28,14 @@ import {
   CardContent,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { NewsChannelForm } from "./forms/news-channel"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { SelectChannel } from "../components/select/channel"
 import { SelectServerCombobox } from "../components/select/server"
 import { Suspense } from "react"
-
-import {
-  API,
-  type APIGuildChannel,
-  type GuildChannelType,
-} from "@discordjs/core/http-only"
-import { REST } from "@discordjs/rest"
 
 import { env } from "@/lib/env"
 import { dbConnect } from "@/lib/db"
 import { cn, getInitials } from "@/lib/utils"
-import { ChannelType } from "discord-api-types/v10"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
@@ -65,7 +64,8 @@ export default async function SettingsPage() {
   const me = await discordAPI.guilds.getMember(guildId, env.DISCORD_ID)
   const nickname = me.nick ?? undefined
 
-  const newsChannel = dbGuild.news_channel
+  const newsChannel =
+    (dbGuild.news_channel as string | null | undefined) ?? undefined
 
   return (
     <div className="space-y-6 p-8 pt-6">
@@ -185,7 +185,7 @@ export default async function SettingsPage() {
             </CardHeader>
             <CardContent className="w-full pb-6">
               <div className="flex gap-4">
-                <Input placeholder="Enter a nickname here" value={nickname} />
+                <Input placeholder="Enter a nickname here" defaultValue={nickname} />
                 <Button>Save</Button>
               </div>
             </CardContent>
@@ -201,10 +201,10 @@ export default async function SettingsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="w-full pb-6">
-              <div className="flex gap-4">
-                <SelectChannel channels={discordChannels} channelType={ChannelType.GuildText} categories value={newsChannel} />
-                <Button>Save</Button>
-              </div>
+              <NewsChannelForm
+                discordChannels={discordChannels}
+                defaultValues={{ channel: newsChannel }}
+              />
             </CardContent>
           </Card>
           <Card className="border-destructive bg-destructive/10">
