@@ -10,6 +10,7 @@ import {
 import { REST } from "@discordjs/rest"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { BotNicknameForm } from "./forms/bot-nickname"
 import {
   Dialog,
   DialogTrigger,
@@ -184,10 +185,7 @@ export default async function SettingsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="w-full pb-6">
-              <div className="flex gap-4">
-                <Input placeholder="Enter a nickname here" defaultValue={nickname} />
-                <Button>Save</Button>
-              </div>
+              <BotNicknameForm defaultValues={{ nickname }} />
             </CardContent>
           </Card>
           <Card>
