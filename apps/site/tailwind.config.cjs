@@ -5,6 +5,7 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "jiggle": "jiggle 0.2s infinite",
       },
       boxShadow: {
         "glow-sm": `
@@ -70,6 +71,10 @@ module.exports = {
             transform: "rotate(120deg)",
           },
           "100%": { width: "0px", height: "0px", transform: "rotate(180deg)" },
+        },
+        "jiggle": {
+          "0%": { transform: "rotate(-1deg)" },
+          "50%": { transform: "rotate(1deg)" },
         },
         "moon-shrink": {
           "100%": {
