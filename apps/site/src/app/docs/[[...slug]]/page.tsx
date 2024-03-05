@@ -11,7 +11,6 @@ import { DocsPager } from "@/components/pager"
 import { siteConfig } from "@/config/site"
 import { absoluteURL } from "@/lib/utils"
 
-
 async function getDocFromParams({ params }: { params: { slug: string[] } }) {
   const slug = params.slug?.join("/") || ""
   const doc = allDocs.find((doc) => doc.slugAsParams === slug)
@@ -20,8 +19,11 @@ async function getDocFromParams({ params }: { params: { slug: string[] } }) {
   return doc
 }
 
-
-export async function generateMetadata({ params }: { params: { slug: string[] } }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string[] }
+}): Promise<Metadata> {
   const doc = await getDocFromParams({ params })
   if (!doc) return {}
 
@@ -59,8 +61,11 @@ export async function generateMetadata({ params }: { params: { slug: string[] } 
   }
 }
 
-
-export default async ({ params }: { params: { slug: string[] } }) => {
+export default async function DocsPage({
+  params,
+}: {
+  params: { slug: string[] }
+}) {
   const doc = await getDocFromParams({ params })
   if (!doc) notFound()
 
@@ -68,7 +73,7 @@ export default async ({ params }: { params: { slug: string[] } }) => {
     <div className="space-y-8">
       <div className="space-y-2">
         <h1 className="text-4xl font-bold tracking-tight">{doc.title}</h1>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-muted-foreground text-lg">
           <Balancer>{doc.description}</Balancer>
         </p>
       </div>

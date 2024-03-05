@@ -7,6 +7,7 @@
     "build": "contentlayer build && next build",
     "dev": "concurrently \"contentlayer dev\" \"next dev --turbo\"",
     "start": "next start",
+    "lint": "next lint",
     "preview": "pnpm build && pnpm start"
   },
   "dependencies": {

@@ -44,14 +44,14 @@ export const Commands = async (props: { fallback?: boolean }) => {
 
   await dbConnect()
 
-  const commands: GetBotCommandsResponse = await (await getCommands())
-    .json()
-    .then((json) => json)
+  const commands = await getCommands().then(
+    (res) => res.json() as Promise<GetBotCommandsResponse>,
+  )
 
   const userId = headers().get("x-user-id")!
   const userToken = headers().get("x-user-token")!
 
-  const guildId = cookies().get("guild")?.value!
+  const guildId = cookies().get("guild")!.value
   const cachedGuilds = await getGuilds(userId, userToken)
   const guild = cachedGuilds.database.find((guild) => guild.id == guildId)
 

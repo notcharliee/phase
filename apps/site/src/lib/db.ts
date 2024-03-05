@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import mongoose from "mongoose"
 import { env } from "@/lib/env"
 
 declare global {
+  // eslint-disable-next-line no-var
   var mongoose: {
-    conn: null | typeof import("mongoose"),
-    promise: null | Promise<typeof import("mongoose")>,
+    conn: null | typeof import("mongoose")
+    promise: null | Promise<typeof import("mongoose")>
   }
 }
 
@@ -19,9 +21,11 @@ if (!cached) {
 
 export async function dbConnect() {
   if (cached.conn) return cached.conn
-  
+
   if (!cached.promise) {
-    cached.promise = mongoose.connect(env.MONGODB_URI, { bufferCommands: false })
+    cached.promise = mongoose.connect(env.MONGODB_URI, {
+      bufferCommands: false,
+    })
   }
 
   try {

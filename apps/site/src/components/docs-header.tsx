@@ -121,7 +121,7 @@ export const DocsHeader = () => {
                         key={navItem.href}
                         value={navItem.title}
                         onSelect={() => {
-                          runCommand(() => router.push(navItem.href as string))
+                          runCommand(() => router.push(navItem.href!))
                         }}
                       >
                         <FileIcon className="mr-2 h-4 w-4" />
@@ -135,7 +135,7 @@ export const DocsHeader = () => {
                         key={navItem.href}
                         value={navItem.title}
                         onSelect={() => {
-                          runCommand(() => router.push(navItem.href as string))
+                          runCommand(() => router.push(navItem.href!))
                         }}
                       >
                         <GlobeIcon className="mr-2 h-4 w-4" />
@@ -143,7 +143,7 @@ export const DocsHeader = () => {
                       </CommandItem>
                     ))}
                 </CommandGroup>
-                <CommandSeparator className="mt-1 mb-2" />
+                <CommandSeparator className="mb-2 mt-1" />
                 {docsNavConfig.sidebarNav.map((group) => (
                   <CommandGroup key={group.title} heading={group.title}>
                     {group.items.map((navItem) => (
@@ -151,7 +151,7 @@ export const DocsHeader = () => {
                         key={navItem.href}
                         value={navItem.title}
                         onSelect={() => {
-                          runCommand(() => router.push(navItem.href as string))
+                          runCommand(() => router.push(navItem.href!))
                         }}
                       >
                         <div className="mr-2 flex h-4 w-4 items-center justify-center">
@@ -172,7 +172,9 @@ export const DocsHeader = () => {
               rel="noreferrer"
             >
               <div
-                className={cn(buttonVariants({ variant: "outline", size: "icon" }))}
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "icon" }),
+                )}
               >
                 <GitHubLogoIcon className="h-5 w-5" />
                 <span className="sr-only">GitHub</span>

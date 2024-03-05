@@ -29,7 +29,7 @@ const formSchema = z.object({
     .array(
       z.object({
         role: z.string().min(1, {
-          message: "Role is required"
+          message: "Role is required",
         }),
       }),
     )

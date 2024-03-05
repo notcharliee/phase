@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -15,7 +14,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 
 import { SelectRole } from "../select/role"
@@ -48,14 +46,6 @@ type CommandFormProps<T extends boolean> = T extends true
     }
 
 export const CommandForm = <T extends boolean>(props: CommandFormProps<T>) => {
-  if (props.fallback)
-    return (
-      <div className="space-y-2">
-        <Label className="sr-only">Required Role</Label>
-        <SelectRole fallback />
-      </div>
-    )
-
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: props.defaultValues,
@@ -63,8 +53,8 @@ export const CommandForm = <T extends boolean>(props: CommandFormProps<T>) => {
 
   const onSubmit = (data: FormValues) => {
     toast.promise(
-      updateCommand(props.data.command.name, {
-        name: props.data.command.name,
+      updateCommand(props.data!.command.name, {
+        name: props.data!.command.name,
         permissions: data.role ?? "",
       }),
       {
@@ -74,11 +64,6 @@ export const CommandForm = <T extends boolean>(props: CommandFormProps<T>) => {
       },
     )
   }
-
-  useEffect(() => {
-    const subscription = form.watch(() => form.handleSubmit(onSubmit)())
-    return () => subscription.unsubscribe()
-  }, [form.handleSubmit, form.watch])
 
   return (
     <Form {...form}>
@@ -90,7 +75,15 @@ export const CommandForm = <T extends boolean>(props: CommandFormProps<T>) => {
             <FormItem onChange={() => form.handleSubmit(onSubmit)}>
               <FormLabel className="sr-only">Required Role</FormLabel>
               <FormControl>
-                <SelectRole roles={props.data.roles} {...field} />
+                {props.fallback ? (
+                  <SelectRole fallback />
+                ) : (
+                  <SelectRole
+                    {...field}
+                    roles={props.data.roles}
+                    value={field.value}
+                  />
+                )}
               </FormControl>
               <FormMessage />
             </FormItem>

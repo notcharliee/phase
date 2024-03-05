@@ -12,7 +12,7 @@ import {
   type GuildChannelType,
   type APIGuildChannel,
   type APIMessage,
-  APIRole,
+  type APIRole,
 } from "discord-api-types/v10"
 
 import { Button } from "@/components/ui/button"
@@ -246,11 +246,11 @@ export const ModuleForm = <Fallback extends boolean>(
                         <FormItem>
                           <FormLabel>Mention</FormLabel>
                           <FormControl>
-                          {props.fallback ? (
-                            <SelectRole fallback />
-                          ) : (
-                            <SelectRole roles={props.data.roles} {...field} />
-                          )}
+                            {props.fallback ? (
+                              <SelectRole fallback />
+                            ) : (
+                              <SelectRole roles={props.data.roles} {...field} />
+                            )}
                           </FormControl>
                           <FormDescription>
                             The role to mention on ticket create

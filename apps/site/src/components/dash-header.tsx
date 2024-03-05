@@ -111,7 +111,7 @@ export const DashHeader = (props: {
                         key={navItem.href}
                         value={navItem.title}
                         onSelect={() => {
-                          runCommand(() => router.push(navItem.href as string))
+                          runCommand(() => router.push(navItem.href!))
                         }}
                       >
                         <FileIcon className="mr-2 h-4 w-4" />
@@ -125,7 +125,7 @@ export const DashHeader = (props: {
                         key={navItem.href}
                         value={navItem.title}
                         onSelect={() => {
-                          runCommand(() => router.push(navItem.href as string))
+                          runCommand(() => router.push(navItem.href!))
                         }}
                       >
                         <GlobeIcon className="mr-2 h-4 w-4" />
@@ -141,7 +141,7 @@ export const DashHeader = (props: {
                         key={navItem.href}
                         value={navItem.title}
                         onSelect={() => {
-                          runCommand(() => router.push(navItem.href as string))
+                          runCommand(() => router.push(navItem.href!))
                         }}
                       >
                         <div className="mr-2 flex h-4 w-4 items-center justify-center">
@@ -155,7 +155,9 @@ export const DashHeader = (props: {
               </CommandList>
             </CommandDialog>
           </div>
-          <div className="flex items-center justify-center size-9">{props.userAvatar}</div>
+          <div className="flex size-9 items-center justify-center">
+            {props.userAvatar}
+          </div>
         </nav>
       </div>
     </header>

@@ -1,7 +1,7 @@
 import {
-  APIApplicationCommandSubcommandOption,
+  type APIApplicationCommandSubcommandOption,
   ApplicationCommandOptionType,
-  RESTPostAPIChatInputApplicationCommandsJSONBody,
+  type RESTPostAPIChatInputApplicationCommandsJSONBody,
 } from "discord-api-types/v10"
 
 import commands from "./commands.json" assert { type: "json" }
@@ -45,4 +45,5 @@ export const commandsConfig = commands
     name: command.name,
     description: command.description,
     path: command.name.replaceAll(" ", "-"),
-  })).sort((a, b) => a.name.localeCompare(b.name)) satisfies CommandsConfig[]
+  }))
+  .sort((a, b) => a.name.localeCompare(b.name)) satisfies CommandsConfig[]

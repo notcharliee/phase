@@ -9,7 +9,7 @@ export const Twemoji = memo(({ emoji }: { emoji: string }) => (
       __html: twemoji.parse(emoji, {
         attributes() {
           return {
-            loading: "lazy"
+            loading: "lazy",
           }
         },
         folder: "svg",
@@ -18,3 +18,5 @@ export const Twemoji = memo(({ emoji }: { emoji: string }) => (
     }}
   />
 ))
+
+Twemoji.displayName = "Twemoji"

@@ -22,8 +22,8 @@ export const SelectServerDialog = (props: { children: JSX.Element }) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Welcome to the dashboard!</AlertDialogTitle>
           <AlertDialogDescription>
-            You need to select a server to get started. If you don't have the
-            bot in any of your servers yet, you can add it by clicking the
+            You need to select a server to get started. If you don&rsquo;t have
+            the bot in any of your servers yet, you can add it by clicking the
             button below.
           </AlertDialogDescription>
         </AlertDialogHeader>

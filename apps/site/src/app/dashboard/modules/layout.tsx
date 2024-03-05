@@ -12,7 +12,7 @@ export default function ModulesLayout({
   return (
     <div className="p-8 py-6">
       <div className="md:flex md:gap-4">
-        <aside className="hidden md:block w-xs xl:w-sm">
+        <aside className="w-xs xl:w-sm hidden md:block">
           <SidebarNav items={dashboardNavConfig.sidebarNav[0]!.items} />
         </aside>
         <Card className="flex-1 max-sm:rounded-none max-sm:border-0 max-sm:shadow-none">

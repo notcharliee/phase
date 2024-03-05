@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server"
+import { type NextRequest } from "next/server"
 import { ImageResponse } from "next/og"
 
 import { absoluteURL } from "@/lib/utils"
@@ -41,6 +41,7 @@ export const GET = async (request: NextRequest) => {
               : "rgba(8,8,8,0)",
           }}
         ></div>
+        {/* eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text */}
         <img
           src={avatar}
           style={{

@@ -1,5 +1,5 @@
 import { ChatBubbleIcon } from "@radix-ui/react-icons"
-import { RESTAPIPartialCurrentUserGuild } from "discord-api-types/v10"
+import { type RESTAPIPartialCurrentUserGuild } from "discord-api-types/v10"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 type OnlineNowProps<T extends boolean> = T extends true
@@ -22,7 +22,7 @@ export const OnlineNow = async <T extends boolean>(
     </Card>
   )
 
-  if (props.fallback || !props.guild) return fallback
+  if (props.fallback ?? !props.guild) return fallback
 
   return (
     <Card>

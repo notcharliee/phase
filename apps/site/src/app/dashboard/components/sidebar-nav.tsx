@@ -19,7 +19,7 @@ export const SidebarNav = (props: { items: SidebarNavItem[] }) => {
         <div className="border-b p-6">
           <h4 className="text-base font-semibold">Modules</h4>
           <p className="text-muted-foreground text-sm">
-            Manage your server's module settings.
+            Manage your server&rsquo;s module settings.
           </p>
         </div>
         <div className="flex flex-col gap-2 p-6">

@@ -5,7 +5,7 @@ import Link from "next/link"
 
 import { ScrollArea } from "@/components/ui/scroll-area"
 
-import { SidebarNavItem } from "@/types/nav"
+import { type SidebarNavItem } from "@/types/nav"
 
 import { cn } from "@/lib/utils"
 

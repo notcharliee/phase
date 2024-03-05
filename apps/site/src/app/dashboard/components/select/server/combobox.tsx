@@ -41,5 +41,10 @@ export const SelectServerCombobox = async (props: { fallback?: boolean }) => {
     ? cachedGuilds.database.find((guild) => guild.id === guildId)
     : null
 
-  return <SelectServer guilds={guilds} defaultValue={defaultValue?.id ?? ""} />
+  return (
+    <SelectServer
+      guilds={guilds}
+      defaultValue={defaultValue?.id ? `${defaultValue.id}` : ""}
+    />
+  )
 }

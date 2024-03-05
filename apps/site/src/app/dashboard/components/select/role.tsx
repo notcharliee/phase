@@ -51,7 +51,7 @@ export const SelectRole: SelectRoleType = (props) => {
       onValueChange={(value) =>
         props.onChange(value !== "deselect" ? value : null)
       }
-      value={selectedRole && props.value}
+      value={selectedRole && `${props.value}`}
     >
       <SelectTrigger
         style={{
@@ -64,9 +64,8 @@ export const SelectRole: SelectRoleType = (props) => {
         {selectedRole?.name ?? "Select a role"}
       </SelectTrigger>
       <SelectContent className="no-scroll-buttons">
-        <div
-          className="max-h-[30vh] overflow-x-hidden overflow-y-scroll p-1"
-          children={roles.map((role) => (
+        <div className="max-h-[30vh] overflow-x-hidden overflow-y-scroll p-1">
+          {roles.map((role) => (
             <SelectItem
               value={role.id === props.value ? "deselect" : role.id}
               key={role.id}
@@ -86,7 +85,7 @@ export const SelectRole: SelectRoleType = (props) => {
               </div>
             </SelectItem>
           ))}
-        />
+        </div>
       </SelectContent>
     </Select>
   )

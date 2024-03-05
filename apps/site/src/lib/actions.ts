@@ -56,7 +56,7 @@ export const updateModuleMessage = async (
   if (oldMessage)
     await discordAPI.channels
       .deleteMessage(oldMessage.channel_id, oldMessage.id)
-      .catch(() => {})
+      .catch(noop)
 
   const message = await discordAPI.channels.createMessage(channelId, {
     files,
@@ -73,7 +73,7 @@ export const updateModuleMessage = async (
   ).at(0)
 
   if (pinMessage && pinMessage.type === MessageType.ChannelPinnedMessage) {
-    discordAPI.channels.deleteMessage(channelId, pinMessage.id)
+    discordAPI.channels.deleteMessage(channelId, pinMessage.id).catch(noop)
   }
 
   return message
@@ -204,3 +204,5 @@ export const setGuildCookie = async (guild: string) => {
   if (guild === "") cookies().delete("guild")
   else cookies().set("guild", guild)
 }
+
+const noop = (reason: unknown): unknown => reason

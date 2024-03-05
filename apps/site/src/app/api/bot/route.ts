@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { AppConfigDynamic } from "next/dist/build/utils"
+import { type AppConfigDynamic } from "next/dist/build/utils"
 
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
@@ -7,13 +7,10 @@ import { REST } from "@discordjs/rest"
 import { env } from "@/lib/env"
 import type { ExtractAPIType } from "@/types/api"
 
-
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
 
-
 export const dynamic: AppConfigDynamic = "force-dynamic"
-
 
 export const GET = async () => {
   const bot = await discordAPI.oauth2.getCurrentBotApplicationInformation()
@@ -29,6 +26,5 @@ export const GET = async () => {
 
   return NextResponse.json(response)
 }
-
 
 export type GetBotResponse = ExtractAPIType<typeof GET>

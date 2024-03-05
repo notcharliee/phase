@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 export default async function ModulePage() {
   await dbConnect()
 
-  const guildId = cookies().get("guild")?.value!
+  const guildId = cookies().get("guild")!.value
   const userId = headers().get("x-user-id")!
 
   const guild = await GuildSchema.findOne({
@@ -55,10 +55,5 @@ export default async function ModulePage() {
     },
   }
 
-  return (
-    <ModuleForm
-      data={{ channels }}
-      defaultValues={moduleConfig}
-    />
-  )
+  return <ModuleForm data={{ channels }} defaultValues={moduleConfig} />
 }

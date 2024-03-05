@@ -37,6 +37,9 @@ type SelectServerProps<T extends boolean> = T extends true
 export const SelectServer = <T extends boolean>(
   props: SelectServerProps<T>,
 ) => {
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState(props.defaultValue)
+
   if (props.fallback)
     return (
       <Button
@@ -48,9 +51,6 @@ export const SelectServer = <T extends boolean>(
         Loading...
       </Button>
     )
-
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState(props.defaultValue)
 
   const guild = props.guilds.find((guild) => guild.id === value)
 
@@ -92,7 +92,7 @@ export const SelectServer = <T extends boolean>(
                     key={guild.id}
                     value={guild.name}
                     disabled={guild.disabled}
-                    onSelect={async (currentValue) => {
+                    onSelect={(currentValue) => {
                       currentValue = props.guilds.find(
                         (g) =>
                           g.name.toLowerCase() === currentValue ||
@@ -100,7 +100,9 @@ export const SelectServer = <T extends boolean>(
                       )!.id
 
                       setValue(currentValue === value ? "" : currentValue)
-                      setGuildCookie(currentValue === value ? "" : currentValue).then(() => console.log("e"))
+                      void setGuildCookie(
+                        currentValue === value ? "" : currentValue,
+                      )
                       setOpen(false)
                     }}
                   >

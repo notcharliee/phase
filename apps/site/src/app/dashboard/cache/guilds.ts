@@ -1,16 +1,19 @@
 import { cache } from "react"
 
-import { Guild, GuildSchema } from "@repo/schemas"
-import { Document, Types } from "mongoose"
+import { type Guild, GuildSchema } from "@repo/schemas"
+import { type Document, type Types } from "mongoose"
 
 import { REST } from "@discordjs/rest"
-import { API, RESTAPIPartialCurrentUserGuild } from "@discordjs/core/http-only"
+import {
+  API,
+  type RESTAPIPartialCurrentUserGuild,
+} from "@discordjs/core/http-only"
 
 import { dbConnect } from "@/lib/db"
 
 type DiscordGuild = RESTAPIPartialCurrentUserGuild
 
-type DatabaseGuild = Document<unknown, {}, Guild> &
+type DatabaseGuild = Document<unknown, object, Guild> &
   Guild & {
     _id: Types.ObjectId
   }

@@ -33,7 +33,8 @@ export default function SettingsPage() {
               <DialogTitle>Select a server</DialogTitle>
               <DialogDescription>
                 Please select a server to continue. You can change this at any
-                time. If you don't see your server, make sure the bot is in it.
+                time. If you don&rsquo;t see your server, make sure the bot is
+                in it.
               </DialogDescription>
             </DialogHeader>
             <div className="flex flex-col gap-4 sm:flex-row">
@@ -51,7 +52,7 @@ export default function SettingsPage() {
             <CardHeader>
               <CardTitle>Dashboard Admins</CardTitle>
               <CardDescription>
-                Manage your server's dashboard admins
+                Manage your server&rsquo;s dashboard admins
               </CardDescription>
             </CardHeader>
             <CardContent className="w-full pb-6">
@@ -65,8 +66,8 @@ export default function SettingsPage() {
               <CardTitle>Bot Nickname</CardTitle>
               <CardDescription>
                 Change the nickname of the bot in your server. This will not
-                affect the bot's username. This is useful for servers with a lot
-                of bots.
+                affect the bot&rsquo;s username. This is useful for servers with
+                a lot of bots.
               </CardDescription>
             </CardHeader>
             <CardContent className="w-full pb-6">

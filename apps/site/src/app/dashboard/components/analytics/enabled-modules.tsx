@@ -1,11 +1,11 @@
 import { LightningBoltIcon, OpenInNewWindowIcon } from "@radix-ui/react-icons"
-import { Guild } from "@repo/schemas"
-import { Document, Types } from "mongoose"
+import { type Guild } from "@repo/schemas"
+import { type Document, type Types } from "mongoose"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { modulesConfig } from "@/config/modules"
 import Link from "next/link"
 
-type DatabaseGuild = Document<unknown, {}, Guild> &
+type DatabaseGuild = Document<unknown, object, Guild> &
   Guild & {
     _id: Types.ObjectId
   }
@@ -39,7 +39,7 @@ export const EnabledModules = async <T extends boolean>(
     </Card>
   )
 
-  if (props.fallback || !props.guild) return fallback
+  if (props.fallback ?? !props.guild) return fallback
 
   const enabledModules = `${Object.values(props.guild.modules ?? {}).filter((module) => module.enabled).length} / ${modulesConfig.length}`
 

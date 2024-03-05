@@ -1,3 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client"
 
 import * as emojiMart from "emoji-mart"
@@ -17,9 +24,9 @@ import {
 } from "@/components/ui/popover"
 
 interface EmojiPickerProps {
-  emojis: any,
+  emojis: any
   disabled?: boolean
-  fallback?: boolean,
+  fallback?: boolean
   name?: string
   onBlur?: React.FocusEventHandler<any>
   onChange?: (value: string) => void
@@ -28,30 +35,33 @@ interface EmojiPickerProps {
 }
 
 export const EmojiPicker = (props: EmojiPickerProps) => {
-  if (props.fallback) return (
-    <Button variant="outline" size="icon" disabled={props.disabled}>
-      <Spinner className="size-5" />
-    </Button>
-  )
-
   const [value, setValue] = useState(props.value ?? "🌙")
   const [searchedEmojis, setSearchedEmojis] = useState<string[]>([])
 
-  emojiMart.init({ data: props.emojis })
+  const [open, setOpen] = useState(false)
 
-  const natives: [string, string][] = Object.entries((props.emojis as any).natives)
-  const categories = (props.emojis as any).categories
+  if (props.fallback)
+    return (
+      <Button variant="outline" size="icon" disabled={props.disabled}>
+        <Spinner className="size-5" />
+      </Button>
+    )
+
+  void emojiMart.init({ data: props.emojis })
+
+  const natives: [string, string][] = Object.entries(props.emojis.natives)
+  const categories = props.emojis.categories
 
   const search = async (value: string) => {
-    const emojis = value.length ? await emojiMart.SearchIndex.search(value) : []
+    const emojis: any[] = value.length
+      ? await emojiMart.SearchIndex.search(value)
+      : []
     const results: string[] = emojis.map((emoji: any) => {
       return emoji.skins[0].native
     })
 
     setSearchedEmojis(results)
   }
-
-  const [open, setOpen] = useState(false)
 
   const updateValue = (value: string) => {
     if (props.onChange) props.onChange(value)
@@ -62,7 +72,13 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="icon" disabled={props.disabled} onBlur={props.onBlur} ref={props.ref}>
+        <Button
+          variant="outline"
+          size="icon"
+          disabled={props.disabled}
+          onBlur={props.onBlur}
+          ref={props.ref}
+        >
           <Twemoji emoji={value} />
         </Button>
       </PopoverTrigger>
@@ -109,7 +125,11 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
                             updateValue(e.currentTarget.ariaLabel!)
                           }
                         >
-                          <Twemoji emoji={natives.find((native) => native[1] === emoji)![0]} />
+                          <Twemoji
+                            emoji={
+                              natives.find((native) => native[1] === emoji)![0]
+                            }
+                          />
                         </button>
                       ))}
                     </div>

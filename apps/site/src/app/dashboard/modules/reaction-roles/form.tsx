@@ -52,7 +52,7 @@ const formSchema = z.object({
           message: "Emoji is required",
         }),
         role: z.string().min(1, {
-          message: "Role is required"
+          message: "Role is required",
         }),
       }),
     )
@@ -122,7 +122,7 @@ export const ModuleForm = <Fallback extends boolean>(
     )
   }
 
-  const emojis = useMemo(() => emojiData, [emojiData])
+  const emojis = useMemo(() => emojiData, [])
 
   return (
     <Form {...form}>

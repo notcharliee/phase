@@ -5,7 +5,10 @@ import { CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { modulesConfig } from "@/config/modules"
 import { cn } from "@/lib/utils"
 
-export const ModuelHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
+export const ModuelHeader = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
   const pathname = usePathname()
 
   const moduleData = modulesConfig.find(

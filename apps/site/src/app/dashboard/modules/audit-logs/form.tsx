@@ -58,7 +58,7 @@ export const ModuleForm = <Fallback extends boolean>(
 
   const onSubmit = (data: FormValues) => {
     data.enabled = true
-    
+
     toast.promise(
       updateModule("AuditLogs", {
         ...data,

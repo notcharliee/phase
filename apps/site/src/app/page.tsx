@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 
-import DashboardDemo from "@/../public/dashboard-demo.png"
+import DashboardDemo from "public/dashboard-demo.png"
 
 import { buttonVariants } from "@/components/ui/button"
 import { DocsHeader } from "@/components/docs-header"
@@ -23,7 +23,7 @@ export default function HomePage() {
         <section className="flex max-w-[980px] flex-col items-center gap-4 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20">
           <Link
             href="/docs/changelog"
-            className="inline-flex items-center rounded-lg bg-muted px-3 py-1 text-sm font-medium"
+            className="bg-muted inline-flex items-center rounded-lg px-3 py-1 text-sm font-medium"
           >
             <span className="mr-4">🎉</span>
             <span className="inline">Check out the v3 changelog.</span>
@@ -52,13 +52,13 @@ export default function HomePage() {
             src={DashboardDemo}
           />
           <div className="flex w-full max-w-[450px] flex-col items-center gap-2 sm:w-auto sm:max-w-none sm:pb-10 lg:pb-0">
-            <PageSubheading className="hidden sm:block text-center lg:text-start">
+            <PageSubheading className="hidden text-center sm:block lg:text-start">
               All the tools you need, all in one place.
             </PageSubheading>
             <PageDescription className="text-center sm:text-lg lg:text-start">
               Through the dashboard, you can easily customise every aspect of
-              the bot to meet all of your server's needs. Sign in once, and
-              you're done – no need to do it again.
+              the bot to meet all of your server&apos;s needs. Sign in once, and
+              you&apos;re done – no need to do it again.
               <span className="mb-4 block w-full"> </span>
               Is the bot missing something that you need?{" "}
               <Link
@@ -67,7 +67,7 @@ export default function HomePage() {
               >
                 Join our Discord
               </Link>{" "}
-              and let us know! We'll get it added in no time.
+              and let us know! We&apos;ll get it added in no time.
             </PageDescription>
           </div>
         </section>

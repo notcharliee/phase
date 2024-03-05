@@ -1,6 +1,6 @@
 "use client"
 
-import { useForm, useFieldArray, UseFormReturn } from "react-hook-form"
+import { useForm, useFieldArray, type UseFormReturn } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
@@ -11,8 +11,7 @@ import {
   type GuildChannelType,
   type APIGuildChannel,
   type APIButtonComponentWithCustomId,
-  APIMessage,
-  ComponentType,
+  type APIMessage,
   ButtonStyle,
 } from "discord-api-types/v10"
 
@@ -139,7 +138,7 @@ export const ModuleForm = <Fallback extends boolean>(
                         label: form.name,
                         style: ButtonStyle.Secondary,
                         type: 2,
-                      }
+                      },
                     ],
                     type: 1,
                   },
@@ -150,15 +149,18 @@ export const ModuleForm = <Fallback extends boolean>(
                     title: `${form.name}`,
                     description: `Press the button below to start filling out the form.`,
                     footer: {
-                      text: `${form.questions.length} questions in total.`
-                    }
+                      text: `${form.questions.length} questions in total.`,
+                    },
                   },
                 ],
               }),
               {
                 loading: `${oldMessage ? "Resending" : "Sending"} ${form.name} message...`,
                 success: (newTicketMessage) => {
-                  if (oldMessage) props.data!.messages[props.data!.messages.indexOf(oldMessage)] = newTicketMessage
+                  if (oldMessage)
+                    props.data!.messages[
+                      props.data!.messages.indexOf(oldMessage)
+                    ] = newTicketMessage
                   else props.data!.messages.push(newTicketMessage)
                   return `${form.name} message ${oldMessage ? "resent" : "sent"}!`
                 },
@@ -313,7 +315,7 @@ export const ModuleForm = <Fallback extends boolean>(
 }
 
 const FormQuestions = (props: {
-  form: UseFormReturn<FormValues, any, FormValues>
+  form: UseFormReturn<FormValues, unknown, FormValues>
   formIndex: number
 }) => {
   const fieldArray = useFieldArray({

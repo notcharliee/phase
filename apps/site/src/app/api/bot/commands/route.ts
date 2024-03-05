@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { AppConfigDynamic } from "next/dist/build/utils"
+import { type AppConfigDynamic } from "next/dist/build/utils"
 
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
@@ -26,6 +26,7 @@ export const GET = async () => {
     if (
       command.options &&
       command.options.every(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
         (option) => option.type === ApplicationCommandOptionType.Subcommand,
       )
     ) {

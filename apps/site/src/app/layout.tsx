@@ -5,7 +5,7 @@ import { GeistSans } from "geist/font/sans"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
-import { Metadata, Viewport } from "next"
+import { type Metadata, type Viewport } from "next"
 
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"

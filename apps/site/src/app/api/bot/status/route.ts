@@ -1,18 +1,15 @@
 import { NextResponse } from "next/server"
-import { AppConfigDynamic } from "next/dist/build/utils"
+import { type AppConfigDynamic } from "next/dist/build/utils"
 
 import { REST } from "@discordjs/rest"
 import { API } from "@discordjs/core/http-only"
 
 import { env } from "@/lib/env"
 
-
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
 
-
 export const dynamic: AppConfigDynamic = "force-dynamic"
-
 
 export const GET = async () => {
   if (env.NODE_ENV !== "production") return NextResponse.json("OK")
@@ -29,6 +26,5 @@ export const GET = async () => {
 
   return NextResponse.json(status)
 }
-
 
 export type GetBotStatusResponse = "OK" | "ISSUES" | "DOWN" | "UNKNOWN"

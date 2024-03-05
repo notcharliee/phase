@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 export default async function ModulePage() {
   await dbConnect()
 
-  const guildId = cookies().get("guild")?.value!
+  const guildId = cookies().get("guild")!.value
   const userId = headers().get("x-user-id")!
 
   const guild = await GuildSchema.findOne({
@@ -48,7 +48,10 @@ export default async function ModulePage() {
       data={{ roles }}
       defaultValues={{
         ...moduleConfig,
-        warnings: ("warnings" in moduleConfig) ? moduleConfig.warnings.map((role) => ({ role })) : [],
+        warnings:
+          "warnings" in moduleConfig
+            ? moduleConfig.warnings.map((role) => ({ role }))
+            : [],
       }}
     />
   )

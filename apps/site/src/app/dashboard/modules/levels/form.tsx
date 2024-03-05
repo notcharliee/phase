@@ -36,10 +36,9 @@ import { updateModule } from "@/lib/actions"
 
 const formSchema = z.object({
   enabled: z.boolean(),
-  channel: z
-    .string().min(1, {
-      message: "Channel is required",
-    }),
+  channel: z.string().min(1, {
+    message: "Channel is required",
+  }),
   message: z.string(),
   mention: z.boolean(),
   roles: z
@@ -79,7 +78,7 @@ export const ModuleForm = <Fallback extends boolean>(
 
   const onSubmit = (data: FormValues) => {
     data.enabled = true
-    
+
     toast.promise(updateModule("Levels", data), {
       loading: "Saving changes...",
       success: "Changes saved!",

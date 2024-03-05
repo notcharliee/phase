@@ -1,10 +1,9 @@
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 
-
 /**
  * Checks if the user id and user token are valid and returns a user object.
- * 
+ *
  * @param userId The user ID
  * @param userToken The user access token
  */

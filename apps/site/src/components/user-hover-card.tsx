@@ -13,6 +13,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
+import { getInitials } from "@/lib/utils"
 
 
 export interface UserHoverCardProps {
@@ -27,23 +28,23 @@ export interface UserHoverCardProps {
 export const UserHoverCard = (props: UserHoverCardProps) => (
   <HoverCard>
     <HoverCardTrigger asChild>
-      <Link href={"https://github.com/notcharliee"} className="font-semibold hover:underline">@notcharliee</Link>
+      <Link href={props.url} className="font-semibold hover:underline">{props.username}</Link>
     </HoverCardTrigger>
     <HoverCardContent>
       <div className="flex justify-between space-x-4">
         <Avatar>
-          <AvatarImage src="https://github.com/notcharliee.png" />
-          <AvatarFallback>NC</AvatarFallback>
+          <AvatarImage src={props.avatar} />
+          <AvatarFallback>{getInitials(props.username)}</AvatarFallback>
         </Avatar>
         <div className="space-y-1">
-          <h4 className="text-sm font-semibold">@notcharliee</h4>
+          <h4 className="text-sm font-semibold">{props.username}</h4>
           <p className="text-sm">
-            non-binary monster addict that codes things
+            {props.bio}
           </p>
           <div className="flex items-center pt-2">
             <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
             <span className="text-xs text-muted-foreground">
-              Joined February 2022
+              Joined {props.joined}
             </span>
           </div>
         </div>

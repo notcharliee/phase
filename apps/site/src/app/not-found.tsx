@@ -1,4 +1,4 @@
-import { Metadata } from "next"
+import { type Metadata } from "next"
 
 import { DocsHeader } from "@/components/docs-header"
 import { Moon } from "@/components/moon"

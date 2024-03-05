@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server"
+import { type NextRequest } from "next/server"
 import { ImageResponse } from "next/og"
 
 import { absoluteURL } from "@/lib/utils"
@@ -9,8 +9,8 @@ export const dynamic = "force-dynamic"
 export const GET = async (request: NextRequest) => {
   const searchParams = request.nextUrl.searchParams
 
-  const title = searchParams.get("title") || "Hello, World!"
-  const description = searchParams.get("description") || "This is a description"
+  const title = searchParams.get("title") ?? "Hello, World!"
+  const description = searchParams.get("description") ?? "This is a description"
 
   return new ImageResponse(
     (
