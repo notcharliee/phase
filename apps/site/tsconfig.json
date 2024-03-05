@@ -1,37 +1,44 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "incremental": true,
-    "jsx": "preserve",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext",
-    ],
+    /* Base Options: */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es2022",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+
+    /* Strictness */
+    "strict": true,
     "noUncheckedIndexedAccess": true,
+    "checkJs": true,
+
+    /* Bundled projects */
+    "lib": ["dom", "dom.iterable", "ES2022"],
+    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "preserve",
+    "plugins": [{ "name": "next" }],
+    "incremental": true,
+
+    /* Path Aliases */
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "contentlayer/generated": ["./.contentlayer/generated"],
-    },
-    "plugins": [
-      {
-        "name": "next",
-      },
-    ],
-    "target": "es2017",
-    "noEmit": true,
+      "contentlayer/generated": ["./.contentlayer/generated"]
+    }
   },
-  "exclude": [
-    "node_modules",
-  ],
-  "extends": "@repo/tsconfig/nextjs.json",
+  "exclude": ["node_modules"],
   "include": [
-    "next-env.d.ts",
-    "build/types/**/*.ts",
-    "src/**/*.cjs",
-    "src/**/*.mjs",
-    "src/**/*.ts",
-    "src/**/*.tsx",
     ".contentlayer/generated",
+    ".eslintrc.cjs",
+    "./build/types/**/*.ts",
+    "./next-env.d.ts",
+    "./**/*.ts",
+    "./**/*.tsx",
+    "./**/*.cjs",
+    "./**/*.js"
   ]
 }
