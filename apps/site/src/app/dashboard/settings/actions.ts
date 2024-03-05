@@ -1,5 +1,6 @@
 "use server"
 
+import { revalidatePath } from "next/cache"
 import { cookies, headers } from "next/headers"
 import { StatusCodes } from "http-status-codes"
 
@@ -80,4 +81,50 @@ export const updateBotNickname = async (nickname: string | undefined) => {
   })
 
   return StatusCodes.OK
+}
+
+export const updateDashboardAdmins = async (admins: string[]) => {
+  await dbConnect()
+
+  const guildId = cookies().get("guild")!.value
+  const userId = headers().get("x-user-id")!
+
+  const dbGuild = await GuildSchema.findOne({
+    id: guildId,
+    admins: { $in: userId },
+  })
+
+  if (!dbGuild) throw StatusCodes.FORBIDDEN
+
+  try {
+    const adminData = []
+
+    for (const adminId of admins) {
+      if (
+        adminId.length < 17 ||
+        adminId.length > 19 ||
+        ![...adminId].every((char) => Number.isInteger(parseInt(char)))
+      ) {
+        throw StatusCodes.BAD_REQUEST
+      }
+
+      const admin = await discordAPI.users.get(adminId)
+
+      adminData.push({
+        id: admin.id,
+        name: admin.username,
+        avatar: admin.avatar
+          ? discordREST.cdn.avatar(admin.id, admin.avatar)
+          : "/discord.png",
+      })
+    }
+
+    await dbGuild.updateOne({
+      admins,
+    })
+  } catch (error) {
+    console.error(error)
+  }
+
+  revalidatePath("/dashboard/settings", "page")
 }

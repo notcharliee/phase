@@ -9,8 +9,8 @@ import {
 } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { BotNicknameForm } from "./forms/bot-nickname"
+import { DashboardAdminsForm } from "./forms/dashboard-admins"
 import {
   Dialog,
   DialogTrigger,
@@ -28,15 +28,12 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { NewsChannelForm } from "./forms/news-channel"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { SelectServerCombobox } from "../components/select/server"
 import { Suspense } from "react"
 
-import { env } from "@/lib/env"
 import { dbConnect } from "@/lib/db"
-import { cn, getInitials } from "@/lib/utils"
+import { env } from "@/lib/env"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
@@ -59,8 +56,31 @@ export default async function SettingsPage() {
     guildId,
   )) as APIGuildChannel<GuildChannelType>[]
 
-  const admins = dbGuild.admins
   const userIsOwner = discordGuild.owner_id === userId
+
+  const admins = await Promise.all(
+    dbGuild.admins.map(async (admin) => {
+      let user
+  
+      try {
+        user = await discordAPI.users.get(admin)
+      } catch (error) {
+        console.error(error)
+      }
+  
+      return {
+        id: admin,
+        name: user ? user.username : "Unknown User",
+        avatar: user?.avatar
+          ? discordREST.cdn.avatar(user.id, user.avatar, {
+              size: 16,
+            })
+          : "/discord.png",
+      }
+    }),
+  )
+
+  
 
   const me = await discordAPI.guilds.getMember(guildId, env.DISCORD_ID)
   const nickname = me.nick ?? undefined
@@ -105,72 +125,11 @@ export default async function SettingsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="relative w-full space-y-4">
-              <ScrollArea>
-                <ul className="mt-2 space-y-2.5">
-                  {await Promise.all(
-                    admins.map(async (admin, index) => {
-                      const user = await discordAPI.users.get(admin)
-
-                      return (
-                        <li
-                          key={index}
-                          className="animate-in slide-in-from-top-2 fade-in duration-700 "
-                          style={{
-                            animationDelay: `${150 * index}ms`,
-                            animationFillMode: "backwards",
-                          }}
-                        >
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start gap-2",
-                              userIsOwner && "hover:animate-jiggle",
-                            )}
-                          >
-                            <Avatar className="h-4 w-4">
-                              <AvatarImage
-                                src={
-                                  user.avatar
-                                    ? discordREST.cdn.avatar(
-                                        user.id,
-                                        user.avatar,
-                                        {
-                                          size: 16,
-                                        },
-                                      )
-                                    : "/discord.png"
-                                }
-                                alt={user.username}
-                              />
-                              <AvatarFallback className="text-xs">
-                                {getInitials(user.username)}
-                              </AvatarFallback>
-                            </Avatar>
-                            {user.username}
-                          </Button>
-                        </li>
-                      )
-                    }),
-                  )}
-                </ul>
-              </ScrollArea>
-              {userIsOwner && (
-                <div
-                  className="animate-in slide-in-from-top-2 fade-in flex flex-col gap-2.5 duration-1000"
-                  style={{
-                    animationDelay: `${150 * (admins.length + 1)}ms`,
-                    animationFillMode: "backwards",
-                  }}
-                >
-                  <div className="flex gap-2.5">
-                    <Input placeholder="Enter a user ID here" type="number" />
-                    <Button>Add</Button>
-                  </div>
-                  <p className="text-muted-foreground text-sm">
-                    You are the server owner! Click on an admin to remove them.
-                  </p>
-                </div>
-              )}
+              <DashboardAdminsForm
+                userId={userId}
+                userIsOwner={userIsOwner}
+                defaultValues={{ admins }}
+              />
             </CardContent>
           </Card>
         </aside>
