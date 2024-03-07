@@ -36,6 +36,7 @@ export type GuildModules = {
   Levels: GuildModuleLevels
   ReactionRoles: GuildModuleReactionRoles
   Tickets: GuildModuleTickets
+  TwitchNotifications: GuildModuleTwitchNotifications
   Warnings: GuildModuleWarnings
   WelcomeMessages: GuildModuleWelcomeMessages
 }
@@ -107,6 +108,19 @@ export type GuildModuleTickets = {
     name: string
     message: string
     mention?: string
+  }[]
+}
+
+export type GuildModuleTwitchNotifications = {
+  enabled: boolean
+  streamers: {
+    id: string // the id of the streamer
+    channel: string // the channel to send the notification
+    events: (
+      | "stream.online"
+      | "stream.offline"
+    )[] // the events to listen to
+    mention?: string // the mention to use
   }[]
 }
 

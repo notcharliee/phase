@@ -64,6 +64,7 @@ type GuildModules = {
     Levels: GuildModuleLevels;
     ReactionRoles: GuildModuleReactionRoles;
     Tickets: GuildModuleTickets;
+    TwitchNotifications: GuildModuleTwitchNotifications;
     Warnings: GuildModuleWarnings;
     WelcomeMessages: GuildModuleWelcomeMessages;
 };
@@ -129,6 +130,15 @@ type GuildModuleTickets = {
         mention?: string;
     }[];
 };
+type GuildModuleTwitchNotifications = {
+    enabled: boolean;
+    streamers: {
+        id: string;
+        channel: string;
+        events: ("stream.online" | "stream.offline")[];
+        mention?: string;
+    }[];
+};
 type GuildModuleWarnings = {
     enabled: boolean;
     warnings: string[];
@@ -165,4 +175,4 @@ type Tag = {
     }[];
 };
 
-export { type AFK, AFKSchema, type Game, type GameData, type GameDataTictactoe, GameSchema, type Giveaway, GiveawaySchema, type Guild, type GuildCommand, type GuildCommands, type GuildModule, type GuildModuleAuditLogs, type GuildModuleAutoRoles, type GuildModuleForms, type GuildModuleJoinToCreates, type GuildModuleLevels, type GuildModuleReactionRoles, type GuildModuleTickets, type GuildModuleWarnings, type GuildModuleWelcomeMessages, type GuildModules, GuildSchema, type Level, LevelSchema, type Tag, TagSchema };
+export { type AFK, AFKSchema, type Game, type GameData, type GameDataTictactoe, GameSchema, type Giveaway, GiveawaySchema, type Guild, type GuildCommand, type GuildCommands, type GuildModule, type GuildModuleAuditLogs, type GuildModuleAutoRoles, type GuildModuleForms, type GuildModuleJoinToCreates, type GuildModuleLevels, type GuildModuleReactionRoles, type GuildModuleTickets, type GuildModuleTwitchNotifications, type GuildModuleWarnings, type GuildModuleWelcomeMessages, type GuildModules, GuildSchema, type Level, LevelSchema, type Tag, TagSchema };

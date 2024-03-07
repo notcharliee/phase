@@ -47,6 +47,11 @@ export const modulesConfig = [
     path: "/tickets",
   },
   {
+    name: "Twitch Notifications",
+    description: "Notifies your server when a Twitch streamer goes live.",
+    path: "/twitch-notifications",
+  },
+  {
     name: "Warnings",
     description: "Helps moderators add, remove, and track member warnings.",
     path: "/warnings",
