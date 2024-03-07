@@ -13,7 +13,9 @@ import { getHmac, getHmacMessage, verifyHmac } from "../verifyHmac"
  * @returns A NextResponse object with the appropriate response based on the request.
  */
 export const POST = async (request: NextRequest) => {
-  const message = getHmacMessage(request.headers, await request.json())
+  const json = (await request.json()) as object
+
+  const message = getHmacMessage(request.headers, json)
   const hmac = getHmac(message)
   const sig = request.headers.get("twitch-eventsub-message-signature")
 
@@ -29,8 +31,6 @@ export const POST = async (request: NextRequest) => {
   if (messageType === "webhook_callback_verification") {
     return challengeResponse(request)
   }
-
-  const json = (await request.json()) as object
 
   if (
     !(
