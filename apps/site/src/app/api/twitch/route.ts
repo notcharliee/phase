@@ -61,29 +61,38 @@ export const POST = async (request: NextRequest) => {
 
   const accessToken = await getAppAccessToken()
 
-  const res1 = await fetch("https://api.twitch.tv/helix/eventsub/subscriptions", {
-    method: "POST",
-    headers: {
-      "Client-ID": env.TWITCH_CLIENT_ID,
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
+  const res1 = await fetch(
+    "https://api.twitch.tv/helix/eventsub/subscriptions",
+    {
+      method: "POST",
+      headers: {
+        "Client-ID": env.TWITCH_CLIENT_ID,
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(events[0]),
     },
-    body: JSON.stringify(events[0]),
-  })
+  )
 
-  const res2 = await fetch("https://api.twitch.tv/helix/eventsub/subscriptions", {
-    method: "POST",
-    headers: {
-      "Client-ID": env.TWITCH_CLIENT_ID,
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
+  const res2 = await fetch(
+    "https://api.twitch.tv/helix/eventsub/subscriptions",
+    {
+      method: "POST",
+      headers: {
+        "Client-ID": env.TWITCH_CLIENT_ID,
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(events[1]),
     },
-    body: JSON.stringify(events[1]),
-  })
+  )
 
   if (!res1.ok || !res2.ok) {
-    console.log(await res1.json())
-    console.log(await res2.json())
+    if (res1.status !== (StatusCodes.CONFLICT as number))
+      console.error(await res1.json())
+
+    if (res2.status !== (StatusCodes.CONFLICT as number))
+      console.error(await res2.json())
 
     return NextResponse.json(
       { error: "Failed to create subscription" },
