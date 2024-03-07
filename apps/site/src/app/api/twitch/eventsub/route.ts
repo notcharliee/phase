@@ -110,8 +110,8 @@ export const POST = async (request: NextRequest) => {
 
         console.log("Stream is offline", streamer, event)
       }
-
-      return new Response(undefined, { status: StatusCodes.NO_CONTENT })
     }
   }
+
+  return new Response(undefined, { status: StatusCodes.NO_CONTENT })
 }
