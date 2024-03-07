@@ -125,6 +125,38 @@
   {
     "options": [
       {
+        "type": 1,
+        "name": "user",
+        "description": "Get info about a Twitch user.",
+        "options": [
+          {
+            "type": 3,
+            "name": "username",
+            "description": "The user's username.",
+            "required": true
+          }
+        ]
+      },
+      {
+        "type": 1,
+        "name": "stream",
+        "description": "Get info about a Twitch stream.",
+        "options": [
+          {
+            "type": 3,
+            "name": "user",
+            "description": "The streamer's username.",
+            "required": true
+          }
+        ]
+      }
+    ],
+    "name": "twitch",
+    "description": "Get info from Twitch."
+  },
+  {
+    "options": [
+      {
         "name": "member",
         "description": "The member you want to select.",
         "required": true,

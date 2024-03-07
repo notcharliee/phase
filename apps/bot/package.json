@@ -12,6 +12,8 @@
     "@octokit/rest": "^20.0.2",
     "@repo/schemas": "workspace:*",
     "@t3-oss/env-core": "^0.8.0",
+    "@twurple/api": "^7.0.10",
+    "@twurple/auth": "^7.0.10",
     "axios": "^1.5.1",
     "chalk": "^5.3.0",
     "discord-logs": "^2.2.1",
