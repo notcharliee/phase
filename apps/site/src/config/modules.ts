@@ -46,11 +46,11 @@ export const modulesConfig = [
       "Lets members create individualised staff assistance channels.",
     path: "/tickets",
   },
-  // {
-  //   name: "Twitch Notifications",
-  //   description: "Notifies your server when a Twitch streamer goes live.",
-  //   path: "/twitch-notifications",
-  // },
+  {
+    name: "Twitch Notifications",
+    description: "Notifies your server when a Twitch streamer goes live.",
+    path: "/twitch-notifications",
+  },
   {
     name: "Warnings",
     description: "Helps moderators add, remove, and track member warnings.",

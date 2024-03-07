@@ -3,7 +3,14 @@ import { StatusCodes } from "http-status-codes"
 
 import { GuildSchema } from "@repo/schemas"
 
+import { AppTokenAuthProvider } from "@twurple/auth"
+import { ApiClient } from "@twurple/api"
+
+import { API } from "@discordjs/core/http-only"
+import { REST } from "@discordjs/rest"
+
 import { dbConnect } from "@/lib/db"
+import { env } from "@/lib/env"
 
 import { challengeResponse } from "../challengeResponse"
 import { getHmac, getHmacMessage, verifyHmac } from "../verifyHmac"
@@ -74,45 +81,105 @@ export const POST = async (request: NextRequest) => {
   }
 
   if (messageType === "notification") {
-    const channelId = body.subscription.condition.broadcaster_user_id
+    const streamerId = body.subscription.condition.broadcaster_user_id
 
     const guilds = await GuildSchema.find({
-      "modules.TwitchNotifications.streamers.id": channelId,
+      "modules.TwitchNotifications.enabled": true,
+      "modules.TwitchNotifications.streamers.id": streamerId,
+    })
+
+    const discordREST = new REST().setToken(env.DISCORD_TOKEN)
+    const discordAPI = new API(discordREST)
+
+    const twitchAPI = new ApiClient({
+      authProvider: new AppTokenAuthProvider(
+        env.TWITCH_CLIENT_ID,
+        env.TWITCH_CLIENT_SECRET,
+      ),
     })
 
     for (const guild of guilds) {
-      const streamer = guild.modules!.TwitchNotifications!.streamers.find(
-        (streamer) => streamer.id === channelId,
+      const moduleConfig = guild.modules!.TwitchNotifications!.streamers.find(
+        (streamer) => streamer.id === streamerId,
       )!
 
-      if (!("event" in body && typeof body.event === "object")) {
-        return NextResponse.json(
-          { error: "Invalid body" },
-          { status: StatusCodes.BAD_REQUEST },
-        )
+      const streamer = (await twitchAPI.users.getUserById(streamerId))!
+
+      if (
+        body.subscription.type === "stream.online" &&
+        moduleConfig.events.includes("stream.online")
+      ) {
+        const stream = (await twitchAPI.streams.getStreamByUserId(streamerId))!
+
+        await discordAPI.channels.createMessage(moduleConfig.channel, {
+          content: moduleConfig.mention && `<@&${moduleConfig.mention}>`,
+          embeds: [
+            {
+              color: parseInt("f8f8f8", 16),
+              author: {
+                name: `${streamer.displayName} is live on Twitch!`,
+                url: `https://twitch.tv/${streamer.name}`,
+                icon_url: streamer.profilePictureUrl,
+              },
+              title: stream.title,
+              url: `https://twitch.tv/${stream.userName}`,
+              fields: [
+                {
+                  name: "Game",
+                  value: stream.gameName,
+                  inline: true,
+                },
+                {
+                  name: "Viewers",
+                  value: stream.viewers.toString(),
+                  inline: true,
+                },
+              ],
+              image: {
+                url: stream.getThumbnailUrl(400, 225),
+              },
+              footer: {
+                text: "phasebot.xyz",
+              },
+              timestamp: stream.startDate.toISOString(),
+            },
+          ],
+          components: [
+            {
+              type: 1,
+              components: [
+                {
+                  type: 2,
+                  label: "Watch Stream",
+                  style: 5,
+                  url: `https://twitch.tv/${stream.userName}`,
+                },
+              ],
+            },
+          ],
+        })
       }
 
-      if (body.subscription.type === "stream.online") {
-        const event = body.event as {
-          id: "9001"
-          broadcaster_user_id: string
-          broadcaster_user_login: string
-          broadcaster_user_name: string
-          type: "live"
-          started_at: string
-        }
-
-        console.log("Stream is online", streamer, event)
-      }
-
-      if (body.subscription.type === "stream.offline") {
-        const event = body.event as {
-          broadcaster_user_id: string
-          broadcaster_user_login: string
-          broadcaster_user_name: string
-        }
-
-        console.log("Stream is offline", streamer, event)
+      if (
+        body.subscription.type === "stream.offline" &&
+        moduleConfig.events.includes("stream.offline")
+      ) {
+        await discordAPI.channels.createMessage(moduleConfig.channel, {
+          embeds: [
+            {
+              color: parseInt("f8f8f8", 16),
+              author: {
+                name: `${streamer.displayName} is now offline`,
+                icon_url: streamer.profilePictureUrl,
+              },
+              title: "Thanks for watching!",
+              footer: {
+                text: "phasebot.xyz",
+              },
+              timestamp: new Date().toISOString(),
+            },
+          ],
+        })
       }
     }
   }
