@@ -1,10 +1,8 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 
-export const challengeResponse = async (request: NextRequest) => {
-  const json = (await request.json()) as object
-
-  if ("challenge" in json && typeof json.challenge === "string") {
-    return new Response(json.challenge, {
+export const challengeResponse = async (body: object) => {
+  if ("challenge" in body && typeof body.challenge === "string") {
+    return new Response(body.challenge, {
       status: 200,
       headers: { "Content-Type": "text/plain" },
     })

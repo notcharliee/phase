@@ -3,6 +3,8 @@ import { StatusCodes } from "http-status-codes"
 
 import { GuildSchema } from "@repo/schemas"
 
+import { dbConnect } from "@/lib/db"
+
 import { challengeResponse } from "../challengeResponse"
 import { getHmac, getHmacMessage, verifyHmac } from "../verifyHmac"
 
@@ -13,9 +15,11 @@ import { getHmac, getHmacMessage, verifyHmac } from "../verifyHmac"
  * @returns A NextResponse object with the appropriate response based on the request.
  */
 export const POST = async (request: NextRequest) => {
-  const json = (await request.json()) as object
+  await dbConnect()
 
-  const message = getHmacMessage(request.headers, json)
+  const body = (await request.json()) as object
+
+  const message = getHmacMessage(request.headers, body)
   const hmac = getHmac(message)
   const sig = request.headers.get("twitch-eventsub-message-signature")
 
@@ -29,19 +33,19 @@ export const POST = async (request: NextRequest) => {
   const messageType = request.headers.get("twitch-eventsub-message-type")
 
   if (messageType === "webhook_callback_verification") {
-    return challengeResponse(request)
+    return challengeResponse(body)
   }
 
   if (
     !(
-      "subscription" in json &&
-      typeof json.subscription === "object" &&
-      "type" in json.subscription! &&
-      typeof json.subscription.type === "string" &&
-      "condition" in json.subscription &&
-      typeof json.subscription.condition === "object" &&
-      "broadcaster_user_id" in json.subscription.condition! &&
-      typeof json.subscription.condition.broadcaster_user_id === "string"
+      "subscription" in body &&
+      typeof body.subscription === "object" &&
+      "type" in body.subscription! &&
+      typeof body.subscription.type === "string" &&
+      "condition" in body.subscription &&
+      typeof body.subscription.condition === "object" &&
+      "broadcaster_user_id" in body.subscription.condition! &&
+      typeof body.subscription.condition.broadcaster_user_id === "string"
     )
   ) {
     return NextResponse.json(
@@ -51,7 +55,7 @@ export const POST = async (request: NextRequest) => {
   }
 
   if (messageType === "revocation") {
-    const channelId = json.subscription.condition.broadcaster_user_id
+    const channelId = body.subscription.condition.broadcaster_user_id
 
     const guilds = await GuildSchema.find({
       "modules.TwitchNotifications.streamers.$.id": channelId,
@@ -70,10 +74,10 @@ export const POST = async (request: NextRequest) => {
   }
 
   if (messageType === "notification") {
-    const channelId = json.subscription.condition.broadcaster_user_id
+    const channelId = body.subscription.condition.broadcaster_user_id
 
     const guilds = await GuildSchema.find({
-      "modules.TwitchNotifications.streamers.$.id": channelId,
+      "modules.TwitchNotifications.streamers.id": channelId,
     })
 
     for (const guild of guilds) {
@@ -81,15 +85,15 @@ export const POST = async (request: NextRequest) => {
         (streamer) => streamer.id === channelId,
       )!
 
-      if (!("event" in json && typeof json.event === "object")) {
+      if (!("event" in body && typeof body.event === "object")) {
         return NextResponse.json(
           { error: "Invalid body" },
           { status: StatusCodes.BAD_REQUEST },
         )
       }
 
-      if (json.subscription.type === "stream.online") {
-        const event = json.event as {
+      if (body.subscription.type === "stream.online") {
+        const event = body.event as {
           id: "9001"
           broadcaster_user_id: string
           broadcaster_user_login: string
@@ -101,8 +105,8 @@ export const POST = async (request: NextRequest) => {
         console.log("Stream is online", streamer, event)
       }
 
-      if (json.subscription.type === "stream.offline") {
-        const event = json.event as {
+      if (body.subscription.type === "stream.offline") {
+        const event = body.event as {
           broadcaster_user_id: string
           broadcaster_user_login: string
           broadcaster_user_name: string
