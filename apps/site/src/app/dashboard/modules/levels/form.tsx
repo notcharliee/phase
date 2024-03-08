@@ -28,6 +28,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { SelectChannel } from "@/app/dashboard/components/select/channel"
 import { SelectRole } from "@/app/dashboard/components/select/role"
+import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
@@ -39,7 +40,24 @@ const formSchema = z.object({
   channel: z.string().min(1, {
     message: "Channel is required",
   }),
-  message: z.string(),
+  message: z
+    .string()
+    .min(1, {
+      message: "Message is required",
+    })
+    .max(2000, {
+      message: "Message must be less than 2000 characters",
+    }),
+  background: z
+    .string()
+    .url()
+    .max(256, {
+      message: "Background must be less than 256 characters",
+    })
+    .refine((value) => value.match(/\.(jpeg|jpg|png)$/), {
+      message: "Background must be a valid PNG or JPEG image URL",
+    })
+    .optional(),
   mention: z.boolean(),
   roles: z
     .array(
@@ -94,7 +112,7 @@ export const ModuleForm = <Fallback extends boolean>(
           name="message"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Level-Up Message</FormLabel>
+              <FormLabel>Message</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder={`{member} you levelled up to level **{member.level}**! 🎉\nYour new XP target is **{member.target}** XP.`}
@@ -288,6 +306,31 @@ export const ModuleForm = <Fallback extends boolean>(
             </Button>
           )}
         </div>
+        <Separator />
+        <FormField
+          control={form.control}
+          name="background"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Background Image</FormLabel>
+              <FormControl>
+                <Input
+                  type="url"
+                  placeholder="https://example.com/image.png"
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription className="flex items-center gap-[0.5ch]">
+                <p>The background image for the</p>
+                <pre className="text-foreground flex h-5 items-center rounded border px-1 font-mono text-xs">
+                  <code>/level rank</code>
+                </pre>
+                <p>command</p>
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="flex space-x-3">
           <Button type="submit">Save changes</Button>
           <Button

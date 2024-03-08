@@ -47,6 +47,7 @@ export default async function ModulePage() {
     enabled: false,
     channel: "",
     message: "",
+    background: undefined,
     mention: false,
     roles: [],
   }
