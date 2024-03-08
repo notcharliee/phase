@@ -31,6 +31,7 @@ export type GuildCommand = {
 export type GuildModules = {
   AuditLogs: GuildModuleAuditLogs
   AutoRoles: GuildModuleAutoRoles
+  BumpReminders: GuildModuleBumpReminders
   Forms: GuildModuleForms
   JoinToCreates: GuildModuleJoinToCreates
   Levels: GuildModuleLevels
@@ -69,6 +70,13 @@ export type GuildModuleForms = {
     channel: string
     questions: string[]
   }[]
+}
+
+export type GuildModuleBumpReminders = {
+  enabled: boolean
+  time: number // e.g. 7200000 == 2 hours
+  initialMessage: string
+  reminderMessage: string
 }
 
 export type GuildModuleJoinToCreates = {

@@ -59,6 +59,7 @@ type GuildCommand = {
 type GuildModules = {
     AuditLogs: GuildModuleAuditLogs;
     AutoRoles: GuildModuleAutoRoles;
+    BumpReminders: GuildModuleBumpReminders;
     Forms: GuildModuleForms;
     JoinToCreates: GuildModuleJoinToCreates;
     Levels: GuildModuleLevels;
@@ -93,6 +94,12 @@ type GuildModuleForms = {
         channel: string;
         questions: string[];
     }[];
+};
+type GuildModuleBumpReminders = {
+    enabled: boolean;
+    time: number;
+    initialMessage: string;
+    reminderMessage: string;
 };
 type GuildModuleJoinToCreates = {
     enabled: boolean;
@@ -188,4 +195,4 @@ type Tag = {
     }[];
 };
 
-export { type AFK, AFKSchema, type Game, type GameData, type GameDataTictactoe, GameSchema, type Giveaway, GiveawaySchema, type Guild, type GuildCommand, type GuildCommands, type GuildModule, type GuildModuleAuditLogs, type GuildModuleAutoRoles, type GuildModuleForms, type GuildModuleJoinToCreates, type GuildModuleLevels, type GuildModuleReactionRoles, type GuildModuleTickets, type GuildModuleTwitchNotifications, type GuildModuleWarnings, type GuildModuleWelcomeMessages, type GuildModules, GuildSchema, type Level, LevelSchema, type Reminder, ReminderSchema, type Tag, TagSchema };
+export { type AFK, AFKSchema, type Game, type GameData, type GameDataTictactoe, GameSchema, type Giveaway, GiveawaySchema, type Guild, type GuildCommand, type GuildCommands, type GuildModule, type GuildModuleAuditLogs, type GuildModuleAutoRoles, type GuildModuleBumpReminders, type GuildModuleForms, type GuildModuleJoinToCreates, type GuildModuleLevels, type GuildModuleReactionRoles, type GuildModuleTickets, type GuildModuleTwitchNotifications, type GuildModuleWarnings, type GuildModuleWelcomeMessages, type GuildModules, GuildSchema, type Level, LevelSchema, type Reminder, ReminderSchema, type Tag, TagSchema };

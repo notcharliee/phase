@@ -18,6 +18,11 @@ export const modulesConfig = [
     path: "/auto-roles",
   },
   {
+    name: "Bump Reminders",
+    description: "Reminds members to re-bump your server after a set period.",
+    path: "/bump-reminders",
+  },
+  {
     name: "Forms",
     description:
       "Adds dynamic application forms within the bot's direct messages.",
