@@ -177,12 +177,15 @@ declare const ReminderSchema: mongoose.Model<Reminder, {}, {}, {}, mongoose.Docu
 }, any>;
 type Reminder = {
     guild: string;
+    name?: string;
     message: string;
     channel: string;
     time: number;
+    loop?: boolean;
     user?: string;
     role?: string;
     created: Date;
+    unsent?: boolean;
 };
 
 declare const TagSchema: mongoose.Model<Tag, {}, {}, {}, mongoose.Document<unknown, {}, Tag> & Tag & {

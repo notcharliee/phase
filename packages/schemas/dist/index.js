@@ -67,12 +67,15 @@ var LevelSchema = mongoose5.models["Levels"] || mongoose5.model("Levels", schema
 import mongoose6 from "mongoose";
 var ReminderSchema = mongoose6.models["Reminders"] || mongoose6.model("Reminders", new mongoose6.Schema({
   guild: mongoose6.SchemaTypes.String,
+  name: mongoose6.SchemaTypes.String,
   message: mongoose6.SchemaTypes.String,
   channel: mongoose6.SchemaTypes.String,
   time: mongoose6.SchemaTypes.Number,
+  loop: mongoose6.SchemaTypes.Boolean,
   user: mongoose6.SchemaTypes.String,
   role: mongoose6.SchemaTypes.String,
-  created: mongoose6.SchemaTypes.Date
+  created: mongoose6.SchemaTypes.Date,
+  unsent: mongoose6.SchemaTypes.Boolean
 }));
 
 // src/Tags.ts

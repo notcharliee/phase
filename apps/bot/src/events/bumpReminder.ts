@@ -21,9 +21,11 @@ export default botEvent("messageCreate", async (client, message) => {
 
   const reminder = await new ReminderSchema({
     guild: message.guildId,
+    name: "Bump Reminder",
     message: moduleConfig.reminderMessage,
     channel: message.channelId,
     time: moduleConfig.time,
+    loop: false,
     user: message.author.id,
     created: Date.now()
   }).save()
