@@ -63,18 +63,31 @@ var schema4 = new mongoose5.Schema({
 });
 var LevelSchema = mongoose5.models["Levels"] || mongoose5.model("Levels", schema4);
 
-// src/Tags.ts
+// src/Reminders.ts
 import mongoose6 from "mongoose";
-var schema5 = new mongoose6.Schema({
+var ReminderSchema = mongoose6.models["Reminders"] || mongoose6.model("Reminders", new mongoose6.Schema({
+  guild: mongoose6.SchemaTypes.String,
+  message: mongoose6.SchemaTypes.String,
+  channel: mongoose6.SchemaTypes.String,
+  time: mongoose6.SchemaTypes.Number,
+  user: mongoose6.SchemaTypes.String,
+  role: mongoose6.SchemaTypes.String,
+  created: mongoose6.SchemaTypes.Date
+}));
+
+// src/Tags.ts
+import mongoose7 from "mongoose";
+var schema5 = new mongoose7.Schema({
   guild: String,
   tags: Array
 });
-var TagSchema = mongoose6.models["Tags"] || mongoose6.model("Tags", schema5);
+var TagSchema = mongoose7.models["Tags"] || mongoose7.model("Tags", schema5);
 export {
   AFKSchema,
   GameSchema,
   GiveawaySchema,
   GuildSchema,
   LevelSchema,
+  ReminderSchema,
   TagSchema
 };

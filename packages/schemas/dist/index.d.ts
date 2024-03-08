@@ -164,6 +164,19 @@ type Level = {
     xp: number;
 };
 
+declare const ReminderSchema: mongoose.Model<Reminder, {}, {}, {}, mongoose.Document<unknown, {}, Reminder> & Reminder & {
+    _id: mongoose.Types.ObjectId;
+}, any>;
+type Reminder = {
+    guild: string;
+    message: string;
+    channel: string;
+    time: number;
+    user?: string;
+    role?: string;
+    created: Date;
+};
+
 declare const TagSchema: mongoose.Model<Tag, {}, {}, {}, mongoose.Document<unknown, {}, Tag> & Tag & {
     _id: mongoose.Types.ObjectId;
 }, any>;
@@ -175,4 +188,4 @@ type Tag = {
     }[];
 };
 
-export { type AFK, AFKSchema, type Game, type GameData, type GameDataTictactoe, GameSchema, type Giveaway, GiveawaySchema, type Guild, type GuildCommand, type GuildCommands, type GuildModule, type GuildModuleAuditLogs, type GuildModuleAutoRoles, type GuildModuleForms, type GuildModuleJoinToCreates, type GuildModuleLevels, type GuildModuleReactionRoles, type GuildModuleTickets, type GuildModuleTwitchNotifications, type GuildModuleWarnings, type GuildModuleWelcomeMessages, type GuildModules, GuildSchema, type Level, LevelSchema, type Tag, TagSchema };
+export { type AFK, AFKSchema, type Game, type GameData, type GameDataTictactoe, GameSchema, type Giveaway, GiveawaySchema, type Guild, type GuildCommand, type GuildCommands, type GuildModule, type GuildModuleAuditLogs, type GuildModuleAutoRoles, type GuildModuleForms, type GuildModuleJoinToCreates, type GuildModuleLevels, type GuildModuleReactionRoles, type GuildModuleTickets, type GuildModuleTwitchNotifications, type GuildModuleWarnings, type GuildModuleWelcomeMessages, type GuildModules, GuildSchema, type Level, LevelSchema, type Reminder, ReminderSchema, type Tag, TagSchema };
