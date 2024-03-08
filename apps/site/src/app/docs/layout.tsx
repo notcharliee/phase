@@ -1,17 +1,28 @@
-import { HamburgerMenuIcon } from "@radix-ui/react-icons"
+"use client"
 
+import { usePathname } from "next/navigation"
+
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 import { DocsHeader } from "@/components/docs-header"
-import { PathParts } from "@/app/docs/components/path-parts"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { DocsSidebarNav } from "@/app/docs/components/sidebar-nav"
+import { DocsSidebarNav } from "./components/sidebar-nav"
 
 import { docsNavConfig } from "@/config/nav/docs"
+
+import { cn } from "@/lib/utils"
 
 export default function DocsLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const pathname = usePathname()
+
   return (
     <main className="flex min-h-screen w-full flex-col">
       <DocsHeader />
@@ -20,17 +31,38 @@ export default function DocsLayout({
           <DocsSidebarNav items={docsNavConfig.sidebarNav} />
         </aside>
         <div className="w-full py-8">
-          <div className="text-muted-foreground mb-4 flex items-center space-x-1 text-sm">
-            <Sheet>
-              <SheetTrigger>
-                <HamburgerMenuIcon className="mr-2 block h-4 w-4 md:hidden" />
-              </SheetTrigger>
-              <SheetContent side={"left"}>
-                <DocsSidebarNav items={docsNavConfig.sidebarNav} />
-              </SheetContent>
-            </Sheet>
-            <PathParts />
-          </div>
+          <Breadcrumb className="mb-4">
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              {pathname.split("/").map((part, index, parts) => {
+                if (part === "") return null
+
+                const partsLength = parts.length
+                const href = parts.slice(0, index + 1).join("/")
+
+                return (
+                  <>
+                    <BreadcrumbItem key={index}>
+                      <BreadcrumbLink
+                        href={href}
+                        className={cn(
+                          index + 1 === partsLength && "text-foreground",
+                        )}
+                      >
+                        {part
+                          .replaceAll("-", " ")
+                          .replace(/\b\w/g, (match) => match.toUpperCase())}
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    {index + 1 !== partsLength && <BreadcrumbSeparator />}
+                  </>
+                )
+              })}
+            </BreadcrumbList>
+          </Breadcrumb>
           {children}
         </div>
       </div>
