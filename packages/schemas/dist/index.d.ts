@@ -112,6 +112,7 @@ type GuildModuleLevels = {
     channel: string;
     message: string;
     mention: boolean;
+    background?: string;
     roles: {
         level: number;
         role: string;

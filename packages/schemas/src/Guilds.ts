@@ -91,6 +91,7 @@ export type GuildModuleLevels = {
   channel: string // "dm" == dm user; "reply" == reply to msg; id == send to id
   message: string
   mention: boolean
+  background?: string
   roles: {
     level: number
     role: string

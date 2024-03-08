@@ -1,6 +1,11 @@
 import { BotCommandBuilder, botCommand } from "phase.js"
 import { GuildSchema, LevelSchema } from "@repo/schemas"
-import { PhaseColour, missingPermission, moduleNotEnabled } from "~/utils"
+import {
+  PhaseColour,
+  errorMessage,
+  missingPermission,
+  moduleNotEnabled,
+} from "~/utils"
 import {
   AttachmentBuilder,
   PermissionFlagsBits,
@@ -74,24 +79,91 @@ export default botCommand(
         {
           await interaction.deferReply()
 
-          const userId =
-            interaction.options.getUser("user", false)?.id ??
-            interaction.user.id
+          const user =
+            interaction.options.getUser("user", false) ?? interaction.user
 
-          const apiResponse = await fetch(
-            `https://phasebot.xyz/api/image/levels/user.png?user=${userId}&guild=${interaction.guildId}&date=${Date.now()}`,
-          )
+          const username = user.username
+          const avatar = user.displayAvatarURL({ extension: "png", size: 128 })
 
-          if (apiResponse.ok) {
-            const imageArrayBuffer = await apiResponse.arrayBuffer()
-            const imageBuffer = Buffer.from(imageArrayBuffer)
-            const imageAttachment = new AttachmentBuilder(imageBuffer)
+          try {
+            const guildSchema = await GuildSchema.findOne({
+              id: interaction.guildId,
+            })
+
+            if (!guildSchema?.modules?.Levels?.enabled) {
+              return interaction.editReply(moduleNotEnabled("Levels"))
+            }
+
+            const background = guildSchema.modules.Levels.background
+
+            const userLevelData =
+              (await LevelSchema.findOne({
+                guild: interaction.guildId,
+                user: user.id,
+              })) ??
+              (await new LevelSchema({
+                guild: interaction.guildId,
+                user: user.id,
+                level: 0,
+                xp: 0,
+              }).save())
+
+            const userRank =
+              (await LevelSchema.countDocuments({
+                $or: [
+                  {
+                    guild: userLevelData.guild,
+                    level: { $gt: userLevelData.level },
+                  },
+                  {
+                    guild: userLevelData.guild,
+                    level: userLevelData.level,
+                    xp: { $gt: userLevelData.xp },
+                  },
+                ],
+              })) + 1
+
+            const rank = userRank.toString()
+            const level = userLevelData.level.toString()
+            const xp = userLevelData.xp.toString()
+            const target = `${500 * (userLevelData.level + 1)}`
+
+            const rankCardUrl = new URL(
+              `https://phasebot.xyz/api/image/rank.png`,
+            )
+
+            if (background) {
+              rankCardUrl.searchParams.append("background", background)
+            }
+
+            rankCardUrl.searchParams.append("username", username)
+            rankCardUrl.searchParams.append("avatar", avatar)
+            rankCardUrl.searchParams.append("rank", rank)
+            rankCardUrl.searchParams.append("level", level)
+            rankCardUrl.searchParams.append("xp", xp)
+            rankCardUrl.searchParams.append("target", target)
+
+            const rankCard = new AttachmentBuilder(
+              Buffer.from(
+                await fetch(rankCardUrl.toString()).then((res) =>
+                  res.arrayBuffer(),
+                ),
+              ),
+            )
 
             interaction.editReply({
-              files: [imageAttachment],
+              files: [rankCard],
             })
-          } else {
-            return interaction.editReply(moduleNotEnabled("Tickets"))
+          } catch (error) {
+            console.error(error)
+
+            interaction.editReply(
+              errorMessage({
+                title: "An error occurred.",
+                description:
+                  "An error occurred while processing your request. Please try again later.",
+              }),
+            )
           }
         }
         break
@@ -125,9 +197,7 @@ export default botCommand(
       case "set":
         {
           if (
-            !interaction.memberPermissions!.has(
-              PermissionFlagsBits.ManageGuild,
-            )
+            !interaction.memberPermissions!.has(PermissionFlagsBits.ManageGuild)
           )
             return interaction.reply(
               missingPermission(PermissionFlagsBits.ManageGuild),
