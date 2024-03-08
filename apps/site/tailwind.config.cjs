@@ -52,7 +52,8 @@ module.exports = {
         ring: "rgb(216 216 216)",
       },
       fontFamily: {
-        "geist-sans": "var(--font-geist-sans)",
+        "sans": "var(--font-geist-sans)",
+        "mono": "var(--font-geist-mono)",
       },
       keyframes: {
         "accordion-down": {

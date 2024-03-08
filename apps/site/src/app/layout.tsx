@@ -1,6 +1,7 @@
 import "@/styles/globals.css"
 
 import { GeistSans } from "geist/font/sans"
+import { GeistMono } from "geist/font/mono"
 
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
@@ -63,8 +64,9 @@ export default function RootLayout({
     <html lang="en" style={{ colorScheme: "dark" }}>
       <body
         className={cn(
-          "font-geist-sans bg-background text-foreground tracking-tight",
+          "font-sans bg-background text-foreground tracking-tight",
           GeistSans.variable,
+          GeistMono.variable,
         )}
       >
         <TooltipProvider>{children}</TooltipProvider>
