@@ -26,7 +26,7 @@ export default botEvent("messageCreate", async (client, message) => {
     channel: message.channelId,
     time: moduleConfig.time,
     loop: false,
-    user: message.author.id,
+    user: message.interaction.user.id,
     created: Date.now()
   }).save()
 
