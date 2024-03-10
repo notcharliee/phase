@@ -30,6 +30,7 @@ export type GuildCommand = {
 
 export type GuildModules = {
   AuditLogs: GuildModuleAuditLogs
+  AutoMessages: GuildModuleAutoMessages
   AutoRoles: GuildModuleAutoRoles
   BumpReminders: GuildModuleBumpReminders
   Forms: GuildModuleForms
@@ -54,6 +55,17 @@ export type GuildModuleAuditLogs = {
     members: string | null // joins, leaves, role changes, nickname changes
     punishments: string | null // warns, unwarns, bans, tempbans, timeouts
   }
+}
+
+export type GuildModuleAutoMessages = {
+  enabled: boolean
+  messages: {
+    name: string // the name of the message
+    channel: string // the channel to send the message
+    message: string // the message to send
+    mention?: string // the role to mention
+    interval: number // the interval to send the message
+  }[]
 }
 
 export type GuildModuleAutoRoles = {
@@ -125,10 +137,7 @@ export type GuildModuleTwitchNotifications = {
   streamers: {
     id: string // the id of the streamer
     channel: string // the channel to send the notification
-    events: (
-      | "stream.online"
-      | "stream.offline"
-    )[] // the events to listen to
+    events: ("stream.online" | "stream.offline")[] // the events to listen to
     mention?: string // the mention to use
   }[]
 }

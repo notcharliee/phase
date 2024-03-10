@@ -12,6 +12,11 @@ export const modulesConfig = [
     path: "/audit-logs",
   },
   {
+    name: "Auto Messages",
+    description: "Sends a message to a channel at a set interval.",
+    path: "/auto-messages",
+  },
+  {
     name: "Auto Roles",
     description:
       "Automatically assigns roles to new members of your server as soon as they join.",

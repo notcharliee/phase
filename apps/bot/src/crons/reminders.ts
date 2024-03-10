@@ -51,9 +51,13 @@ export default botCronJob("*/5 * * * * *", async (client) => {
             .setTitle(reminder.name ?? "Reminder")
             .setDescription(reminder.message)
             .setColor(PhaseColour.Primary)
-            .setFooter({
-              text: `${reminder.loop ? "Started" : "Created"} ${year}/${month}/${day} ${hours}:${minutes}`,
-            }),
+            .setFooter(
+              !reminder.loop
+                ? {
+                    text: `Created ${year}/${month}/${day} ${hours}:${minutes}`,
+                  }
+                : null,
+            ),
         ],
       })
       .catch(() => null)
