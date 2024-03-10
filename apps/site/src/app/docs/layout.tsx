@@ -1,5 +1,7 @@
 "use client"
 
+import { Fragment } from "react"
+
 import { usePathname } from "next/navigation"
 
 import {
@@ -44,8 +46,8 @@ export default function DocsLayout({
                 const href = parts.slice(0, index + 1).join("/")
 
                 return (
-                  <>
-                    <BreadcrumbItem key={index}>
+                  <Fragment key={index}>
+                    <BreadcrumbItem>
                       <BreadcrumbLink
                         href={href}
                         className={cn(
@@ -58,7 +60,7 @@ export default function DocsLayout({
                       </BreadcrumbLink>
                     </BreadcrumbItem>
                     {index + 1 !== partsLength && <BreadcrumbSeparator />}
-                  </>
+                  </Fragment>
                 )
               })}
             </BreadcrumbList>
