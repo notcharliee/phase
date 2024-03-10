@@ -9,8 +9,6 @@ export default botEvent("guildCreate", async (client, guild) => {
   await new GuildSchema({
     id: guild.id,
     admins: [guild.ownerId],
-    commands: {},
-    modules: {},
     news_channel: null,
   }).save()
 
