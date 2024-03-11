@@ -222,7 +222,7 @@ export const ModuleForm = <Fallback extends boolean>(
                   )}
                 </FormControl>
                 <FormDescription>
-                  Logs for bans, timeouts, and warns
+                  Logs for warns, mutes, kicks, and bans
                 </FormDescription>
                 <FormMessage />
               </FormItem>
