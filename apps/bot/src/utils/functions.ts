@@ -95,7 +95,7 @@ export const memberNotFound = (ephemeral?: boolean): InteractionReplyOptions =>
 export const moduleNotEnabled = (module: keyof GuildModules) =>
   errorMessage({
     title: "Module Not Enabled",
-    description: `The \`${module.replace(/([A-Z])/g, " $1")}\` module is not enabled, which is required to perform this action.`,
+    description: `The \`${module.replace(/([A-Z])/g, " $1").trimStart()}\` module is not enabled, which is required to perform this action.`,
     ephemeral: true,
   })
 
@@ -105,7 +105,7 @@ export const missingPermission = (
 ): InteractionReplyOptions =>
   errorMessage({
     title: "Missing Permission",
-    description: `${!bot ? "You are" : "Phase is"} missing the \`${typeof permission === "bigint" ? getPermissionName(permission).replace(/([A-Z])/g, " $1") : permission}\` permission, which is required to perform this action.`,
+    description: `${!bot ? "You are" : "Phase is"} missing the \`${typeof permission === "bigint" ? getPermissionName(permission).replace(/([A-Z])/g, " $1").trimStart() : permission}\` permission, which is required to perform this action.`,
     ephemeral: true,
   })
 
