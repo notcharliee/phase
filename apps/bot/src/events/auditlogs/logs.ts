@@ -221,18 +221,6 @@ export default botEvent("ready", async (client) => {
     },
   )
 
-  // Message Pinned
-  client.on("messagePinned", (message: Message<true>) => {
-    const embed = new EmbedBuilder()
-      .setTitle("Message Pinned")
-      .setColor("Green")
-      .setDescription(
-        `[Message](${message.url}) has been pinned by \`@${message.author.username}\`.`,
-      )
-
-    return sendlog(message.guild.id, embed)
-  })
-
   // Message Edited
   client.on("messageContentEdited", (message: Message<true>) => {
     const embed = new EmbedBuilder()
