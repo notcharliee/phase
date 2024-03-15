@@ -44,6 +44,6 @@ export const commandsConfig = commands
   .map((command) => ({
     name: command.name,
     description: command.description,
-    path: command.name.replaceAll(" ", "-"),
+    path: "/" + command.name.replaceAll(" ", "-"),
   }))
   .sort((a, b) => a.name.localeCompare(b.name)) satisfies CommandsConfig[]
