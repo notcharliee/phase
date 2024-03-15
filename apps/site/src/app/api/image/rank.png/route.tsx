@@ -98,6 +98,8 @@ export const GET = async (request: NextRequest) => {
                 style={{
                   display: "flex",
                   flexDirection: "column",
+                  alignItems: "flex-end",
+                  textAlign: "right",
                 }}
               >
                 <span style={{ color: "#F8F8F8" }}>Level {level}</span>
