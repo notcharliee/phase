@@ -7,7 +7,18 @@ import { AuditLogEvent, EmbedBuilder, GuildTextBasedChannel } from "discord.js"
 export default botEvent("guildMemberRemove", async (client, member) => {
   const event = await member.guild
     .fetchAuditLogs({ type: AuditLogEvent.MemberKick, limit: 1 })
-    .then((auditLogs) => auditLogs.entries.first())
+    .then((auditLogs) => {
+      const entry = auditLogs.entries.first()
+
+      if (
+        entry?.target?.id === member.id &&
+        entry.createdAt > new Date(Date.now() - 5_000)
+      ) {
+        return entry
+      }
+
+      return null
+    })
     .catch(() => null)
 
   if (!event) return
