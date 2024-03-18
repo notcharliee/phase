@@ -1,4 +1,4 @@
-import { botEvent } from "phase.js"
+import { botEvent } from "phasebot"
 import { errorMessage, PhaseError, PhaseColour } from "~/utils"
 import {
   EmbedBuilder,

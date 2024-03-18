@@ -1,6 +1,6 @@
 import { AFKSchema } from "@repo/schemas"
 import { EmbedBuilder } from "discord.js"
-import { botEvent } from "phase.js"
+import { botEvent } from "phasebot"
 import { PhaseColour } from "~/utils"
 
 export default botEvent("messageCreate", async (client, message) => {

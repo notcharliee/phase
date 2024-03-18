@@ -11,8 +11,8 @@
     "site:dev": "set FORCE_COLOR=1&& turbo run dev --filter=site",
     "site:start": "set FORCE_COLOR=1&& cd apps/site && pnpm run start",
     
-    "phasejs:build": "set FORCE_COLOR=1&& turbo run build --filter=phase.js",
-    "phasejs:dev": "set FORCE_COLOR=1&& turbo run dev --filter=phase.js",
+    "phasebot:build": "set FORCE_COLOR=1&& turbo run build --filter=phasebot",
+    "phasebot:dev": "set FORCE_COLOR=1&& turbo run dev --filter=phasebot",
 
     "schemas:build": "set FORCE_COLOR=1&& turbo run build --filter=@repo/schemas",
     "schemas:dev": "set FORCE_COLOR=1&& turbo run dev --filter=@repo/schemas"

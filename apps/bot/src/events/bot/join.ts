@@ -1,4 +1,4 @@
-import { botEvent } from "phase.js"
+import { botEvent } from "phasebot"
 import { GuildSchema } from "@repo/schemas"
 import { alertDevs } from "~/utils"
 

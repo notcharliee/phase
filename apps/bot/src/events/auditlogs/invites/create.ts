@@ -2,7 +2,7 @@ import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
 
 import { GuildSchema } from "@repo/schemas"
 import { PhaseColour } from "~/utils"
-import { botEvent } from "phase.js"
+import { botEvent } from "phasebot"
 
 export default botEvent("inviteCreate", async (client, invite) => {
   const guildSchema = await GuildSchema.findOne({ id: invite.guild?.id })

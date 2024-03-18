@@ -1,4 +1,4 @@
-import { botEvent } from "phase.js"
+import { botEvent } from "phasebot"
 import { GameSchema } from "@repo/schemas"
 import { errorMessage, PhaseError, PhaseColour, ZeroWidthJoiner } from "~/utils"
 import {

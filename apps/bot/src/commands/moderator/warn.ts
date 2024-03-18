@@ -1,4 +1,4 @@
-import { botCommand, BotCommandBuilder } from "phase.js"
+import { botCommand, BotCommandBuilder } from "phasebot"
 import { GuildSchema } from "@repo/schemas"
 import {
   errorMessage,

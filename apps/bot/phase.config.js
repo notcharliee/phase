@@ -1,7 +1,7 @@
 import { GatewayIntentBits, Partials, ActivityType } from "discord.js"
-import { setConfig } from "phase.js"
+import { setConfig } from "phasebot"
 
-/** @type {import("phase.js").ConfigOptions} */
+/** @type {import("phasebot").ConfigOptions} */
 export default setConfig({
   intents: [
     GatewayIntentBits.DirectMessages,

@@ -1,4 +1,4 @@
-import { botCommand, BotCommandBuilder } from "phase.js"
+import { botCommand, BotCommandBuilder } from "phasebot"
 import { GameSchema } from "@repo/schemas"
 import { ZeroWidthJoiner, PhaseColour, memberNotFound } from "~/utils"
 import {

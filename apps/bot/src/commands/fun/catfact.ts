@@ -1,4 +1,4 @@
-import { botCommand, BotCommandBuilder } from "phase.js"
+import { botCommand, BotCommandBuilder } from "phasebot"
 import facts from "./_data/catfacts.json" assert { type: "json" }
 
 export default botCommand(

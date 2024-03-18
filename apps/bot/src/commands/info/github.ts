@@ -1,4 +1,4 @@
-import { botCommand, BotCommandBuilder } from "phase.js"
+import { botCommand, BotCommandBuilder } from "phasebot"
 import { errorMessage, PhaseColour } from "~/utils"
 import { EmbedBuilder } from "discord.js"
 import { Octokit } from "@octokit/rest"

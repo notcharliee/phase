@@ -1,5 +1,5 @@
 import { GuildSchema } from "@repo/schemas"
-import { botEvent } from "phase.js"
+import { botEvent } from "phasebot"
 
 export default botEvent(
   "messageReactionRemove",

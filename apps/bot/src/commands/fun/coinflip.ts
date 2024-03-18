@@ -1,4 +1,4 @@
-import { botCommand, BotCommandBuilder } from "phase.js"
+import { botCommand, BotCommandBuilder } from "phasebot"
 
 export default botCommand(
   new BotCommandBuilder().setName("coinflip").setDescription("Flip a coin."),

@@ -1,5 +1,5 @@
 import { EmbedBuilder } from "discord.js"
-import { botCommand, BotCommandBuilder } from "phase.js"
+import { botCommand, BotCommandBuilder } from "phasebot"
 import { EmojiRegex, PhaseColour } from "~/utils"
 
 export default botCommand(

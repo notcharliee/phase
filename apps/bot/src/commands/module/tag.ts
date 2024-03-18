@@ -1,4 +1,4 @@
-import { botCommand, BotCommandBuilder } from "phase.js"
+import { botCommand, BotCommandBuilder } from "phasebot"
 import { TagSchema } from "@repo/schemas"
 import { errorMessage, missingPermission, PhaseColour } from "~/utils"
 import { EmbedBuilder, PermissionFlagsBits } from "discord.js"

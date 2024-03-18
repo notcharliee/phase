@@ -1,4 +1,4 @@
-import { botCommand, BotCommandBuilder } from "phase.js"
+import { botCommand, BotCommandBuilder } from "phasebot"
 import { PhaseColour } from "~/utils"
 import { EmbedBuilder } from "discord.js"
 import dogs from "./_data/dogs.json" assert { type: "json" }

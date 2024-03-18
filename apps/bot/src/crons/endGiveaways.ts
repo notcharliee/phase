@@ -1,4 +1,4 @@
-import { botCronJob } from "phase.js"
+import { botCronJob } from "phasebot"
 import { GiveawaySchema } from "@repo/schemas"
 import { PhaseColour } from "~/utils"
 import { GuildTextBasedChannel, EmbedBuilder, User } from "discord.js"

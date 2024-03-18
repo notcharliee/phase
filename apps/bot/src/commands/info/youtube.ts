@@ -1,4 +1,4 @@
-import { BotCommandBuilder, botCommand } from "phase.js"
+import { BotCommandBuilder, botCommand } from "phasebot"
 import { PhaseColour, errorMessage, formatNumber } from "~/utils"
 import { env } from "~/env"
 import { google } from "googleapis"

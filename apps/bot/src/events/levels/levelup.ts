@@ -1,4 +1,4 @@
-import { botEvent } from "phase.js"
+import { botEvent } from "phasebot"
 import { GuildSchema, LevelSchema } from "@repo/schemas"
 import { PhaseColour } from "~/utils"
 import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"

@@ -27,7 +27,7 @@ program
   .command("start")
   .description("Start the bot.")
   .action(async () => {
-    console.log(chalk.bold(chalk.magentaBright(`\n🌕︎ Phase.js v${version}`)))
+    console.log(chalk.bold(chalk.magentaBright(`\n🌕︎ Phasebot v${version}`)))
 
     const config = await getConfig()
     if (config)

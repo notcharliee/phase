@@ -1,5 +1,5 @@
 import { PermissionFlagsBits, GuildChannel, EmbedBuilder } from "discord.js"
-import { BotCommandBuilder, botCommand } from "phase.js"
+import { BotCommandBuilder, botCommand } from "phasebot"
 import { missingPermission, errorMessage, PhaseColour } from "~/utils"
 
 export default botCommand(

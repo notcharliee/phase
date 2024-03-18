@@ -1,4 +1,4 @@
-import { botCommand, BotCommandBuilder } from "phase.js"
+import { botCommand, BotCommandBuilder } from "phasebot"
 import { EmbedBuilder } from "discord.js"
 
 import { PhaseColour } from "~/utils"

@@ -1,4 +1,4 @@
-import { BotCommandBuilder, botCommand } from "phase.js"
+import { BotCommandBuilder, botCommand } from "phasebot"
 import {
   missingPermission,
   PhaseColour,
