@@ -8,6 +8,10 @@
     @apply shadow-black;
   }
 
+  code {
+    font-family: theme("fontFamily.mono");
+  }
+
   .emoji {
     display: inline-block;
     width: auto;
