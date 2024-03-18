@@ -35,6 +35,10 @@
   "include": [
     ".contentlayer/generated",
     ".eslintrc.cjs",
+    "contentlayer.config.js",
+    "next.config.mjs",
+    "postcss.config.cjs",
+    "tailwind.config.cjs",
     "build/types/**/*.ts",
     "next-env.d.ts",
     "src/**/*.ts",
