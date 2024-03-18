@@ -23,7 +23,7 @@ export interface BotCommand {
     execute: (
       client: Client<true>,
       interaction: ChatInputCommandInteraction,
-    ) => any,
+    ) => unknown,
   ): (
     | RESTPostAPIChatInputApplicationCommandsJSONBody
     | APIApplicationCommandSubcommandGroupOption
@@ -31,8 +31,12 @@ export interface BotCommand {
     execute: (
       client: Client<true>,
       interaction: ChatInputCommandInteraction,
-    ) => any
+    ) => unknown
   }
+}
+
+export interface BotCommandMiddleware {
+  (client: Client<true>, interaction: ChatInputCommandInteraction): unknown
 }
 
 export const botCommand: BotCommand = (command, execute) => ({

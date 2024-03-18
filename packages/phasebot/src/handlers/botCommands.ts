@@ -2,7 +2,7 @@ import { existsSync } from "node:fs"
 import { pathToFileURL } from "node:url"
 import { resolve } from "node:path"
 
-import type { BotCommand } from "~/utils/botCommand"
+import type { BotCommand, BotCommandMiddleware } from "~/utils/botCommand"
 import { getAllFiles } from "~/utils/getAllFiles"
 
 import {
@@ -20,14 +20,27 @@ export const handleBotCommands = async (client?: Client<boolean>) => {
   const commands: Record<string, ReturnType<BotCommand>> = {}
   const commandDir = resolve(process.cwd(), "build/commands")
 
+  let middleware: BotCommandMiddleware | null = null
+
   if (!existsSync(pathToFileURL(commandDir))) return commands
 
   for (const commandFile of getAllFiles(commandDir)) {
     try {
-      const commandFunction: ReturnType<BotCommand> = await (
-        await import(pathToFileURL(commandFile).toString())
-      ).default
-      commands[commandFunction.name] = commandFunction
+      if (commandFile.endsWith("middleware.js")) {
+        if (middleware) {
+          throw new Error("There can only be one command middleware file.")
+        }
+
+        middleware = await (
+          await import(pathToFileURL(commandFile).toString())
+        ).default
+      } else {
+        const commandFunction: ReturnType<BotCommand> = await (
+          await import(pathToFileURL(commandFile).toString())
+        ).default
+
+        commands[commandFunction.name] = commandFunction
+      }
     } catch (error) {
       throw error
     }
@@ -49,6 +62,11 @@ export const handleBotCommands = async (client?: Client<boolean>) => {
       if (!command) return
 
       try {
+        if (middleware) {
+          const middlewareRes = await middleware(client as Client<true>, interaction)
+          if (!Boolean(middlewareRes)) return
+        }
+
         await command.execute(client as Client<true>, interaction)
       } catch (error) {
         console.log(error)
