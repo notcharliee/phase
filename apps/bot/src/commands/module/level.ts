@@ -1,16 +1,7 @@
-import { BotCommandBuilder, botCommand } from "phasebot"
 import { GuildSchema, LevelSchema } from "@repo/schemas"
-import {
-  PhaseColour,
-  errorMessage,
-  missingPermission,
-  moduleNotEnabled,
-} from "~/utils"
-import {
-  AttachmentBuilder,
-  PermissionFlagsBits,
-  EmbedBuilder,
-} from "discord.js"
+import { AttachmentBuilder, EmbedBuilder } from "discord.js"
+import { BotCommandBuilder, botCommand } from "phasebot"
+import { PhaseColour, errorMessage, moduleNotEnabled } from "~/utils"
 
 export default botCommand(
   new BotCommandBuilder()
@@ -196,13 +187,6 @@ export default botCommand(
 
       case "set":
         {
-          if (
-            !interaction.memberPermissions!.has(PermissionFlagsBits.ManageGuild)
-          )
-            return interaction.reply(
-              missingPermission(PermissionFlagsBits.ManageGuild),
-            )
-
           const user = interaction.options.getUser("user", true)
           const level = interaction.options.getInteger("level", true)
           const xp = interaction.options.getInteger("xp", true)

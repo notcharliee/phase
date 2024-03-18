@@ -1,17 +1,7 @@
-import { BotCommandBuilder, botCommand } from "phasebot"
 import { GiveawaySchema } from "@repo/schemas"
-import {
-  PhaseColour,
-  errorMessage,
-  getRandomArrayElements,
-  missingPermission,
-} from "~/utils"
-import {
-  PermissionFlagsBits,
-  GuildMember,
-  EmbedBuilder,
-  GuildTextBasedChannel,
-} from "discord.js"
+import { EmbedBuilder, GuildMember, GuildTextBasedChannel } from "discord.js"
+import { BotCommandBuilder, botCommand } from "phasebot"
+import { PhaseColour, errorMessage, getRandomArrayElements } from "~/utils"
 
 export default botCommand(
   new BotCommandBuilder()
@@ -107,11 +97,6 @@ export default botCommand(
         ),
     ),
   async (client, interaction) => {
-    if (!interaction.memberPermissions?.has(PermissionFlagsBits.ManageGuild))
-      return interaction.reply(
-        missingPermission(PermissionFlagsBits.ManageGuild),
-      )
-
     switch (interaction.options.getSubcommand()) {
       case "create":
         {

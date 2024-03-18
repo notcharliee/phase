@@ -1,12 +1,12 @@
-import { BotCommandBuilder, botCommand } from "phasebot"
 import { GuildSchema } from "@repo/schemas"
+import { EmbedBuilder, PermissionFlagsBits } from "discord.js"
+import { BotCommandBuilder, botCommand } from "phasebot"
 import {
   PhaseColour,
   errorMessage,
   missingPermission,
   moduleNotEnabled,
 } from "~/utils"
-import { EmbedBuilder, PermissionFlagsBits } from "discord.js"
 
 export default botCommand(
   new BotCommandBuilder()

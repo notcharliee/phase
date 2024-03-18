@@ -1,7 +1,7 @@
-import { botCommand, BotCommandBuilder } from "phasebot"
 import { TagSchema } from "@repo/schemas"
-import { errorMessage, missingPermission, PhaseColour } from "~/utils"
-import { EmbedBuilder, PermissionFlagsBits } from "discord.js"
+import { EmbedBuilder } from "discord.js"
+import { botCommand, BotCommandBuilder } from "phasebot"
+import { errorMessage, PhaseColour } from "~/utils"
 
 export default botCommand(
   new BotCommandBuilder()
@@ -80,15 +80,6 @@ export default botCommand(
     switch (interaction.options.getSubcommand()) {
       case "add":
         {
-          if (
-            !interaction.memberPermissions?.has(
-              PermissionFlagsBits.ManageMessages,
-            )
-          )
-            return interaction.reply(
-              missingPermission(PermissionFlagsBits.ManageMessages),
-            )
-
           const tagName = interaction.options.getString("name", true)
           const tagValue = interaction.options.getString("value", true)
           const tagIndex = tagSchema.tags.findIndex(
@@ -122,15 +113,6 @@ export default botCommand(
 
       case "edit":
         {
-          if (
-            !interaction.memberPermissions?.has(
-              PermissionFlagsBits.ManageMessages,
-            )
-          )
-            return interaction.reply(
-              missingPermission(PermissionFlagsBits.ManageMessages),
-            )
-
           const tagName = interaction.options.getString("name", true)
           const tagValue = interaction.options.getString("value", true)
           const tagIndex = tagSchema.tags.findIndex(
@@ -207,15 +189,6 @@ export default botCommand(
 
       case "remove":
         {
-          if (
-            !interaction.memberPermissions?.has(
-              PermissionFlagsBits.ManageMessages,
-            )
-          )
-            return interaction.reply(
-              missingPermission(PermissionFlagsBits.ManageMessages),
-            )
-
           const tagName = interaction.options.getString("name", true)
           const tagIndex = tagSchema.tags.findIndex(
             (tag) => tag.name == tagName,

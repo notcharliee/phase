@@ -1,10 +1,6 @@
+import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
 import { BotCommandBuilder, botCommand } from "phasebot"
-import { PhaseColour, errorMessage, missingPermission } from "~/utils"
-import {
-  PermissionFlagsBits,
-  GuildTextBasedChannel,
-  EmbedBuilder,
-} from "discord.js"
+import { PhaseColour, errorMessage } from "~/utils"
 
 export default botCommand(
   new BotCommandBuilder()
@@ -26,11 +22,6 @@ export default botCommand(
         .setRequired(false),
     ),
   async (client, interaction) => {
-    if (!interaction.memberPermissions?.has(PermissionFlagsBits.ManageMessages))
-      return interaction.reply(
-        missingPermission(PermissionFlagsBits.ManageMessages),
-      )
-
     const amount = interaction.options.getInteger("amount", true)
     const author = interaction.options.getUser("author", false)
 

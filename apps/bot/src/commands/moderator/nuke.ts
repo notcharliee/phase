@@ -1,12 +1,11 @@
-import { BotCommandBuilder, botCommand } from "phasebot"
-import { errorMessage, missingPermission } from "~/utils"
 import {
-  PermissionFlagsBits,
-  EmbedBuilder,
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
+  EmbedBuilder,
 } from "discord.js"
+import { BotCommandBuilder, botCommand } from "phasebot"
+import { errorMessage } from "~/utils"
 
 export default botCommand(
   new BotCommandBuilder()
@@ -16,14 +15,7 @@ export default botCommand(
     )
     .setDMPermission(false),
   async (client, interaction) => {
-    if (!interaction.memberPermissions?.has(PermissionFlagsBits.ManageChannels))
-      return interaction.reply(
-        missingPermission(PermissionFlagsBits.ManageChannels),
-      )
-
-    if (!interaction.channel) return
-
-    if (interaction.channel.isThread()) {
+    if (interaction.channel?.isThread()) {
       interaction.reply(
         errorMessage({
           title: "Invalid Channel",

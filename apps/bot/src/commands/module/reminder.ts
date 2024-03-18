@@ -1,12 +1,8 @@
-import { botCommand, BotCommandBuilder } from "phasebot"
-
 import { ReminderSchema } from "@repo/schemas"
-
-import { PhaseColour, errorMessage, missingPermission } from "~/utils"
-
 import { EmbedBuilder, PermissionFlagsBits } from "discord.js"
-
-import ms from "ms"
+import { default as ms } from "ms"
+import { BotCommandBuilder, botCommand } from "phasebot"
+import { PhaseColour, errorMessage, missingPermission } from "~/utils"
 
 export default botCommand(
   new BotCommandBuilder()

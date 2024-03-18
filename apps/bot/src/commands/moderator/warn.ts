@@ -1,14 +1,13 @@
-import { botCommand, BotCommandBuilder } from "phasebot"
 import { GuildSchema } from "@repo/schemas"
+import { EmbedBuilder, GuildMember, GuildTextBasedChannel } from "discord.js"
+import { botCommand, BotCommandBuilder } from "phasebot"
 import {
   errorMessage,
   getOrdinal,
   memberNotFound,
-  missingPermission,
   moduleNotEnabled,
   PhaseColour,
 } from "~/utils"
-import { EmbedBuilder, GuildMember, GuildTextBasedChannel, PermissionFlagsBits } from "discord.js"
 
 export default botCommand(
   new BotCommandBuilder()
@@ -50,13 +49,6 @@ export default botCommand(
         ),
     ),
   async (client, interaction) => {
-    if (
-      !interaction.memberPermissions?.has(PermissionFlagsBits.ModerateMembers)
-    )
-      return interaction.reply(
-        missingPermission(PermissionFlagsBits.ModerateMembers),
-      )
-
     const member = interaction.options.getMember("member") as GuildMember | null
     const reason = interaction.options.getString("reason", false) ?? undefined
 

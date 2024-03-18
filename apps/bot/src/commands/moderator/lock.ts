@@ -1,6 +1,6 @@
-import { PermissionFlagsBits, GuildChannel, EmbedBuilder } from "discord.js"
+import { EmbedBuilder, GuildChannel } from "discord.js"
 import { BotCommandBuilder, botCommand } from "phasebot"
-import { missingPermission, errorMessage, PhaseColour } from "~/utils"
+import { PhaseColour, errorMessage } from "~/utils"
 
 export default botCommand(
   new BotCommandBuilder()
@@ -22,13 +22,6 @@ export default botCommand(
         .setRequired(false),
     ),
   async (client, interaction) => {
-    if (
-      !interaction.memberPermissions?.has(PermissionFlagsBits.ModerateMembers)
-    )
-      return interaction.reply(
-        missingPermission(PermissionFlagsBits.ModerateMembers),
-      )
-
     const channel = interaction.channel as GuildChannel
     const state = interaction.options.getBoolean("state", true)
     const role = interaction.options.getRole("role", false)

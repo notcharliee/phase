@@ -1,12 +1,6 @@
+import { EmbedBuilder } from "discord.js"
 import { BotCommandBuilder, botCommand } from "phasebot"
-import {
-  missingPermission,
-  PhaseColour,
-  alertDevs,
-  PhaseError,
-  errorMessage,
-} from "~/utils"
-import { PermissionFlagsBits, EmbedBuilder } from "discord.js"
+import { PhaseColour, PhaseError, alertDevs, errorMessage } from "~/utils"
 
 export default botCommand(
   new BotCommandBuilder()
@@ -27,13 +21,6 @@ export default botCommand(
         .setRequired(false),
     ),
   async (client, interaction) => {
-    if (
-      !interaction.memberPermissions?.has(PermissionFlagsBits.MentionEveryone)
-    )
-      return interaction.reply(
-        missingPermission(PermissionFlagsBits.MentionEveryone),
-      )
-
     try {
       await interaction.channel?.send({
         embeds: [
