@@ -1,21 +1,22 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "esnext",
     "baseUrl": ".",
     "paths": {
-      "~/*": [
-        "./src/*"
-      ],
+      "~/*": ["./src/*"]
     },
     "moduleResolution": "bundler",
-    "module": "esnext",
+    "module": "esnext"
   },
-  "exclude": [
-    "node_modules",
-    "build",
-  ],
-  "extends": "@repo/tsconfig/base.json",
-  "include": [
-    "src/**/*",
-    "src/**/*",
-  ],
+  "exclude": ["node_modules", "build"],
+  "include": ["src/**/*", "src/**/*"]
 }

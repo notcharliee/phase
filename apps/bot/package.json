@@ -26,7 +26,6 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@repo/tsconfig": "workspace:*",
     "@types/ms": "^0.7.34",
     "@types/node": "^20.5.0",
     "typescript": "^5.1.6"
