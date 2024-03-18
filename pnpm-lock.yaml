@@ -238,6 +238,9 @@ importers:
       http-status-codes:
         specifier: ^2.3.0
         version: 2.3.0
+      input-otp:
+        specifier: ^1.2.0
+        version: 1.2.0(react-dom@18.2.0)(react@18.2.0)
       lucide-react:
         specifier: ^0.303.0
         version: 0.303.0(react@18.2.0)
@@ -6041,6 +6044,16 @@ packages:
 
   /inline-style-parser@0.1.1:
     resolution: {integrity: sha512-7NXolsK4CAS5+xvdj5OMMbI962hU/wvwoxk+LWR9Ek9bVtyuuYScDN6eS0rUm6TxApFpw7CX1o4uJzcd4AyD3Q==}
+    dev: false
+
+  /input-otp@1.2.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-54bYU7SqAYdAKNRpHXHGJZtuiSqSIHEs4iSr7Rte/Yot2IiovUtc3TxEcF7Ak5yeuhtJ0pvr99z5nHpPne5S7w==}
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /internal-slot@1.0.7:

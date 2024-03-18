@@ -62,6 +62,7 @@
     "eslint-config-next": "^14.1.2",
     "geist": "^1.2.1",
     "http-status-codes": "^2.3.0",
+    "input-otp": "^1.2.0",
     "lucide-react": "^0.303.0",
     "mongoose": "^8.1.0",
     "ms": "^2.1.3",

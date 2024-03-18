@@ -5,7 +5,8 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "jiggle": "jiggle 0.2s infinite",
+        "caret-blink": "caret-blink 1.25s ease-out infinite",
+        jiggle: "jiggle 0.2s infinite",
       },
       boxShadow: {
         "glow-sm": `
@@ -52,8 +53,8 @@ module.exports = {
         ring: "rgb(216 216 216)",
       },
       fontFamily: {
-        "sans": "var(--font-geist-sans)",
-        "mono": "var(--font-geist-mono)",
+        sans: "var(--font-geist-sans)",
+        mono: "var(--font-geist-mono)",
       },
       keyframes: {
         "accordion-down": {
@@ -73,7 +74,7 @@ module.exports = {
           },
           "100%": { width: "0px", height: "0px", transform: "rotate(180deg)" },
         },
-        "jiggle": {
+        jiggle: {
           "0%": { transform: "rotate(-1deg)" },
           "50%": { transform: "rotate(1deg)" },
         },
@@ -88,6 +89,10 @@ module.exports = {
         "text-fade-in": {
           from: { opacity: "0%" },
           to: { opacity: "100%" },
+        },
+        "caret-blink": {
+          "0%,70%,100%": { opacity: "1" },
+          "20%,50%": { opacity: "0" },
         },
       },
     },
