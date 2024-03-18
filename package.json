@@ -6,14 +6,11 @@
     "bot:build": "set FORCE_COLOR=1&& turbo run build --filter=bot",
     "bot:dev": "set FORCE_COLOR=1&& turbo run dev --filter=bot",
     "bot:start": "set FORCE_COLOR=1&& cd apps/bot && pnpm run start",
-
     "site:build": "set FORCE_COLOR=1&& turbo run build --filter=site",
     "site:dev": "set FORCE_COLOR=1&& turbo run dev --filter=site",
     "site:start": "set FORCE_COLOR=1&& cd apps/site && pnpm run start",
-    
     "phasebot:build": "set FORCE_COLOR=1&& turbo run build --filter=phasebot",
     "phasebot:dev": "set FORCE_COLOR=1&& turbo run dev --filter=phasebot",
-
     "schemas:build": "set FORCE_COLOR=1&& turbo run build --filter=@repo/schemas",
     "schemas:dev": "set FORCE_COLOR=1&& turbo run dev --filter=@repo/schemas"
   },
@@ -22,6 +19,7 @@
   },
   "devDependencies": {
     "prettier": "^3.1.0",
+    "prettier-plugin-organize-imports": "^3.2.4",
     "prettier-plugin-tailwindcss": "^0.5.7"
   },
   "packageManager": "pnpm@8.15.3"
