@@ -7,7 +7,6 @@ import { StatusCodes } from "http-status-codes"
 import {
   GuildSchema,
   type GuildModules,
-  type GuildCommand,
 } from "@repo/schemas"
 
 import { REST, type RawFile } from "@discordjs/rest"
@@ -17,8 +16,6 @@ import {
   type APIMessage,
   type RESTPostAPIChannelMessageJSONBody,
 } from "@discordjs/core/http-only"
-
-import { dashboardNavConfig } from "@/config/nav/dashboard"
 
 import { dbConnect } from "@/lib/db"
 import { getUser } from "@/lib/auth"
@@ -156,45 +153,6 @@ export const updateReactions = async (
     return StatusCodes.OK
   } catch (error) {
     throw error
-  }
-}
-
-export const updateCommand = async (command: string, data: GuildCommand) => {
-  await dbConnect()
-
-  const guildId = cookies().get("guild")?.value
-  const userId = headers().get("x-user-id")
-  const userToken = headers().get("x-user-token")
-
-  const commands = dashboardNavConfig.sidebarNav[1]!.items.map((item) =>
-    item.title.replace("/", ""),
-  )
-
-  if (!guildId || !userId || !userToken || !commands.includes(command))
-    throw StatusCodes.BAD_REQUEST
-
-  const validUser = await getUser(userId, userToken)
-  if (!validUser) throw StatusCodes.UNAUTHORIZED
-
-  const guildSchema = await GuildSchema.findOne({
-    id: guildId,
-    admins: { $in: userId },
-  })
-
-  if (!guildSchema) throw StatusCodes.UNAUTHORIZED
-
-  if (!guildSchema.commands) guildSchema.commands = {}
-  if (data.permissions == " ") data.permissions = null
-
-  guildSchema.commands[command] = data
-  guildSchema.markModified("commands")
-
-  try {
-    await guildSchema.save()
-    return StatusCodes.OK
-  } catch (error) {
-    console.log(error)
-    throw StatusCodes.INTERNAL_SERVER_ERROR
   }
 }
 
