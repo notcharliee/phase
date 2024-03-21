@@ -1,5 +1,4 @@
 import { GuildModules } from "@repo/schemas"
-import { PhaseColour, PhaseURL } from "~/utils"
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -9,6 +8,7 @@ import {
   PermissionFlagsBits,
   WebhookClient,
 } from "discord.js"
+import { PhaseColour, PhaseURL } from "~/utils"
 
 import { env } from "~/env"
 
@@ -100,12 +100,20 @@ export const moduleNotEnabled = (module: keyof GuildModules) =>
   })
 
 export const missingPermission = (
-  permission: string | bigint,
+  permission?: string | bigint,
   bot?: boolean,
 ): InteractionReplyOptions =>
   errorMessage({
     title: "Missing Permission",
-    description: `${!bot ? "You are" : "Phase is"} missing the \`${typeof permission === "bigint" ? getPermissionName(permission).replace(/([A-Z])/g, " $1").trimStart() : permission}\` permission, which is required to perform this action.`,
+    description: permission
+      ? `${!bot ? "You are" : "Phase is"} missing the \`${
+          typeof permission === "bigint"
+            ? getPermissionName(permission)
+                .replace(/([A-Z])/g, " $1")
+                .trimStart()
+            : permission
+        }\` permission, which is required to perform this action.`
+      : `${!bot ? "You are" : "Phase is"} missing the required permissions to perform this action.`,
     ephemeral: true,
   })
 

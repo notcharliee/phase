@@ -1,8 +1,11 @@
-import { PermissionFlagsBits } from "discord.js"
-import type { BotCommandMiddleware } from "phasebot"
-import { missingPermission } from "~/utils"
+import { GuildSchema } from "@repo/schemas"
+import { GuildMember, PermissionFlagsBits } from "discord.js"
+import { type BotCommandMiddleware } from "phasebot"
+import { errorMessage, missingPermission } from "~/utils"
 
 const middleware: BotCommandMiddleware = async (_, interaction) => {
+  if (!interaction.guild) return true
+
   const commandName = [
     interaction.commandName,
     interaction.options.getSubcommandGroup(false) ?? "",
@@ -12,7 +15,48 @@ const middleware: BotCommandMiddleware = async (_, interaction) => {
     .trim()
     .replaceAll("  ", " ")
 
-  const commands: { [key: string]: bigint | undefined } = {
+  const guild = await GuildSchema.findOne({ id: interaction.guild.id })
+  const command = guild && guild.commands && guild.commands[commandName]
+
+  if (command) {
+    if (command.disabled) {
+      await interaction.reply(
+        errorMessage({
+          title: "Command Disabled",
+          description: `This command has been disabled by the server administrators.`,
+          ephemeral: true,
+        }),
+      )
+
+      return false
+    }
+
+    const userId = `user:${interaction.user.id}`
+    const userRoles = (interaction.member as GuildMember).roles.cache.map(
+      (role) => `role:${role.id}`,
+    )
+
+    const isExplicitlyAllowed = command.allow.some((perm) => {
+      if (perm.startsWith("role:")) return userRoles.includes(perm)
+      if (perm.startsWith("user:")) return perm === userId
+      return false
+    })
+
+    if (isExplicitlyAllowed) return true
+
+    const isExplicitlyDenied = command.deny.some((perm) => {
+      if (perm.startsWith("role:")) return userRoles.includes(perm)
+      if (perm.startsWith("user:")) return perm === userId
+      return false
+    })
+
+    if (isExplicitlyDenied) {
+      await interaction.reply(missingPermission())
+      return false
+    }
+  }
+
+  const defaultPermissions: { [key: string]: bigint | undefined } = {
     announce: PermissionFlagsBits.MentionEveryone,
     "giveaway create": PermissionFlagsBits.ManageGuild,
     "giveaway delete": PermissionFlagsBits.ManageGuild,
@@ -28,16 +72,14 @@ const middleware: BotCommandMiddleware = async (_, interaction) => {
     "tag remove": PermissionFlagsBits.ManageMessages,
   }
 
-  const permCheck = async (perm: bigint | undefined) => {
-    if (perm && !interaction.memberPermissions?.has(perm)) {
-      await interaction.reply(missingPermission(perm))
-      return false
-    }
+  const defaultPerm = defaultPermissions[commandName]
 
-    return true
+  if (defaultPerm && !interaction.memberPermissions?.has(defaultPerm)) {
+    await interaction.reply(missingPermission(defaultPerm))
+    return false
   }
 
-  return await permCheck(commands[commandName])
+  return true
 }
 
 export default middleware
