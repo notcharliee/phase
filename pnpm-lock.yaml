@@ -344,9 +344,6 @@ importers:
       cron:
         specifier: ^3.1.6
         version: 3.1.6
-      discord-api-types:
-        specifier: ^0.37.67
-        version: 0.37.70
       discord.js:
         specifier: ^14.12.1
         version: 14.14.1
