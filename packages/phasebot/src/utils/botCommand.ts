@@ -12,6 +12,9 @@ import {
   SlashCommandSubcommandGroupBuilder,
 } from "discord.js"
 
+/**
+ * @deprecated Use `BotCommandBuilder` instead.
+ */
 export interface BotCommand {
   (
     command:
@@ -35,13 +38,20 @@ export interface BotCommand {
   }
 }
 
+/**
+ * @deprecated Use `BotCommandExecuteFunction` instead.
+ */
 export interface BotCommandMiddleware {
   (client: Client<true>, interaction: ChatInputCommandInteraction): unknown
 }
 
+/**
+ * @deprecated Use `BotCommandBuilder` instead.
+ */
 export const botCommand: BotCommand = (command, execute) => ({
   ...command.toJSON(),
   execute,
 })
+
 
 export class BotCommandBuilder extends SlashCommandBuilder {}

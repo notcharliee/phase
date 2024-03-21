@@ -1,52 +1,194 @@
-import { existsSync } from "node:fs"
+import { join, resolve } from "node:path"
 import { pathToFileURL } from "node:url"
-import { resolve } from "node:path"
-
-import type { BotCommand, BotCommandMiddleware } from "~/utils/botCommand"
-import { getAllFiles } from "~/utils/getAllFiles"
 
 import {
-  type Client,
-  type APIApplicationCommandOption,
-  type ApplicationCommandOption,
-  type APIApplicationCommandSubcommandOption,
+  ApplicationCommand,
   ApplicationCommandOptionType,
-  ApplicationCommandDataResolvable,
+  Collection,
+  RESTPostAPIChatInputApplicationCommandsJSONBody,
+  type ApplicationCommandOption,
+  type Client,
 } from "discord.js"
 
-import type { AddUndefinedToPossiblyUndefinedPropertiesOfInterface } from "node_modules/discord-api-types/utils/internals"
+import {
+  BotCommandBuilder,
+  type BotCommandExecuteFunction,
+  type DeprecatedBotCommandFunction,
+} from "~/builders/BotCommandBuilder"
 
-export const handleBotCommands = async (client?: Client<boolean>) => {
-  const commands: Record<string, ReturnType<BotCommand>> = {}
+import { getAllFiles } from "~/utils/getAllFiles"
+
+export const getBotCommands = async () => {
+  const commandCollection = new Collection<string, BotCommandBuilder>()
   const commandDir = resolve(process.cwd(), "build/commands")
 
-  let middleware: BotCommandMiddleware | null = null
+  for (const commandFilePath of getAllFiles(commandDir)) {
+    if (commandFilePath.endsWith("middleware.js")) continue
 
-  if (!existsSync(pathToFileURL(commandDir))) return commands
+    const command = await import(pathToFileURL(commandFilePath).toString())
+      .then((module) => module.default ?? null)
+      .catch((error) => {
+        throw error
+      })
 
-  for (const commandFile of getAllFiles(commandDir)) {
-    try {
-      if (commandFile.endsWith("middleware.js")) {
-        if (middleware) {
-          throw new Error("There can only be one command middleware file.")
-        }
+    if (command instanceof BotCommandBuilder) {
+      commandCollection.set(command.name, command)
+    } else {
+      const data = command as ReturnType<DeprecatedBotCommandFunction>
 
-        middleware = await (
-          await import(pathToFileURL(commandFile).toString())
-        ).default
-      } else {
-        const commandFunction: ReturnType<BotCommand> = await (
-          await import(pathToFileURL(commandFile).toString())
-        ).default
+      const commandBuilder = new BotCommandBuilder()
+        .setName(data.name)
+        .setDescription(data.description)
 
-        commands[commandFunction.name] = commandFunction
+      if (data.name_localizations) {
+        commandBuilder.setNameLocalizations(data.name_localizations)
       }
-    } catch (error) {
-      throw error
+
+      if (data.description_localizations) {
+        commandBuilder.setDescriptionLocalizations(
+          data.description_localizations,
+        )
+      }
+
+      if (data.options && data.options.length) {
+        commandBuilder.setOptions(data.options)
+      }
+
+      if (data.nsfw) {
+        commandBuilder.setNSFW(data.nsfw)
+      }
+
+      if (data.dm_permission) {
+        commandBuilder.setDMPermission(data.dm_permission)
+      }
+
+      if (data.default_member_permissions) {
+        commandBuilder.setDefaultMemberPermissions(
+          data.default_member_permissions,
+        )
+      }
+
+      if (data.execute) {
+        commandBuilder.setExecute(data.execute)
+      }
+
+      commandCollection.set(commandBuilder.name, commandBuilder)
     }
   }
 
-  if (!client) return commands
+  return commandCollection
+}
+
+export const getBotCommandsMiddleware = async () => {
+  const commandDir = resolve(process.cwd(), "build/commands")
+
+  const commandMiddleware: BotCommandExecuteFunction | null = await import(
+    pathToFileURL(join(commandDir, "middleware.js")).toString()
+  )
+    .then((module) => module.default ?? null)
+    .catch(() => null)
+
+  return commandMiddleware
+}
+
+export const sortBotCommandData = (
+  commands:
+    | RESTPostAPIChatInputApplicationCommandsJSONBody[]
+    | ApplicationCommand[],
+) => {
+  const sortAndReduceKeys = <T extends object>(obj: T) => {
+    return Object.keys(obj)
+      .sort()
+      .reduce(
+        (acc, key) => ({
+          ...acc,
+          [key.replace(/([A-Z])/g, "_$1").toLowerCase()]: obj[key as keyof T],
+        }),
+        {} as T,
+      )
+  }
+
+  const sortOptions = (
+    options: ApplicationCommandOption[],
+  ): ApplicationCommandOption[] => {
+    return options.map((option: ApplicationCommandOption) =>
+      option.type === ApplicationCommandOptionType.Subcommand ||
+      option.type === ApplicationCommandOptionType.SubcommandGroup
+        ? sortAndReduceKeys({
+            ...option,
+            options:
+              option.options && option.options.length
+                ? sortOptions(option.options as ApplicationCommandOption[])
+                : [],
+          })
+        : sortAndReduceKeys(option),
+    ) as ApplicationCommandOption[]
+  }
+
+  const sortedCommands = commands
+    .map((command) => ({
+      name: command.name,
+
+      name_localizations:
+        "name_localizations" in command && command.name_localizations
+          ? command.name_localizations
+          : undefined,
+
+      description: command.description,
+
+      description_localizations:
+        "description_localizations" in command &&
+        command.description_localizations
+          ? command.description_localizations
+          : undefined,
+
+      default_member_permissions:
+        "default_member_permissions" in command &&
+        command.default_member_permissions
+          ? command.default_member_permissions
+          : undefined,
+
+      dm_permission:
+        "dm_permission" in command && command.dm_permission
+          ? command.dm_permission
+          : undefined,
+
+      nsfw: "nsfw" in command && command.nsfw ? command.nsfw : undefined,
+
+      options: command.options
+        ? sortOptions(command.options as ApplicationCommandOption[])
+        : undefined,
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name))
+
+  return sortedCommands as RESTPostAPIChatInputApplicationCommandsJSONBody[]
+}
+
+const updateBotCommands = async (
+  client: Client<true>,
+  newCommands: Collection<string, BotCommandBuilder>,
+) => {
+  const newCommandData = sortBotCommandData(
+    newCommands.map((command) => command.toJSON()),
+  )
+
+  const oldCommandData = sortBotCommandData(
+    Array.from((await client.application.commands.fetch()).values()),
+  )
+
+  if (
+    JSON.stringify(newCommandData, null, 2) !==
+    JSON.stringify(oldCommandData, null, 2)
+  ) {
+    client.application.commands.set(
+      newCommands.map((command) => command.toJSON()),
+    )
+  }
+}
+
+export const handleBotCommands = async (client: Client) => {
+  const commands = await getBotCommands()
+  const middleware = await getBotCommandsMiddleware()
 
   if (client.isReady()) {
     updateBotCommands(client, commands)
@@ -58,112 +200,22 @@ export const handleBotCommands = async (client?: Client<boolean>) => {
 
   client.on("interactionCreate", async (interaction) => {
     if (interaction.isChatInputCommand()) {
-      const command = commands[interaction.commandName]
-      if (!command) return
+      const command = commands.get(interaction.commandName)
+      if (!command || !command.execute) return
 
       try {
         if (middleware) {
-          const middlewareRes = await middleware(client as Client<true>, interaction)
+          const middlewareRes = await middleware(
+            client as Client<true>,
+            interaction,
+          )
           if (!Boolean(middlewareRes)) return
         }
 
-        await command.execute(client as Client<true>, interaction)
+        await command.execute(interaction.client, interaction)
       } catch (error) {
         console.log(error)
       }
     }
   })
-
-  return commands
-}
-
-/**
- * Fetches the existing commands, then checks if any new commands need to be added or existing commands need to be removed. If so, it updates the commands accordingly.
- */
-const updateBotCommands = async (
-  client: Client<true>,
-  newCommands: Record<string, ReturnType<BotCommand>>,
-) => {
-  const newCommandsData = Object.entries(newCommands)
-    .map(([name, command]) => ({
-      name,
-      description: command.description,
-      options: command.options?.map(getOptions) ?? [],
-    }))
-    .sort((a, b) => a.name.localeCompare(b.name))
-
-  const existingCommandsData = (await client.application.commands.fetch())
-    .map((command) => ({
-      name: command.name,
-      description: command.description,
-      options: command.options.map(getOptions),
-    }))
-    .sort((a, b) => a.name.localeCompare(b.name))
-
-  if (
-    JSON.stringify(newCommandsData, null, 2) !==
-    JSON.stringify(existingCommandsData, null, 2)
-  ) {
-    client.application.commands.set(
-      Object.values(newCommands) as ApplicationCommandDataResolvable[],
-    )
-  }
-}
-
-function getOptions(
-  commandOption:
-    | APIApplicationCommandSubcommandOption
-    | ApplicationCommandOption
-    | AddUndefinedToPossiblyUndefinedPropertiesOfInterface<APIApplicationCommandOption>,
-) {
-  const { name, description, type } = commandOption
-
-  if (type === ApplicationCommandOptionType.SubcommandGroup) {
-    return {
-      name,
-      description,
-      type,
-      options:
-        commandOption.options
-          ?.map((subcommandOption) => ({
-            name: subcommandOption.name,
-            description: subcommandOption.description,
-            type: subcommandOption.type,
-            options:
-              subcommandOption.options
-                ?.map((option) => ({
-                  name: option.name,
-                  description: option.description,
-                  type: option.type,
-                  required: option.required,
-                }))
-                .sort((a, b) => a.name.localeCompare(b.name)) || [],
-          }))
-          .sort((a, b) => a.name.localeCompare(b.name)) || [],
-    }
-  }
-
-  if (type === ApplicationCommandOptionType.Subcommand) {
-    return {
-      name,
-      description,
-      type,
-      options:
-        commandOption.options
-          ?.map((option) => ({
-            name: option.name,
-            description: option.description,
-            type: option.type,
-            required: option.required,
-          }))
-          .sort((a, b) => a.name.localeCompare(b.name)) || [],
-    }
-  }
-
-  return {
-    name,
-    description,
-    type,
-    required: commandOption.required,
-  }
 }

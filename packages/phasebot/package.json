@@ -1,13 +1,23 @@
 {
   "private": true,
   "name": "phasebot",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "bin": {
     "phase": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./builders": {
+      "import": "./dist/builders/index.js",
+      "require": "./dist/builders/index.js"
+    }
   },
   "scripts": {
     "build": "tsup ./src --minify --sourcemap --clean --no-splitting --dts --format=esm",

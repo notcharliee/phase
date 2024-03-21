@@ -1,23 +1,42 @@
 #!/usr/bin/env node
 
 import { existsSync, writeFileSync } from "node:fs"
+import { basename } from "node:path"
 
 import { version } from "~/index"
 
-import { handleBotCommands } from "~/handlers/botCommands"
-import { handleBotEvents } from "~/handlers/botEvents"
+import {
+  getBotCommands,
+  handleBotCommands,
+  sortBotCommandData,
+} from "~/handlers/botCommands"
 import { handleCronJobs } from "~/handlers/botCronJobs"
+import { handleBotEvents } from "~/handlers/botEvents"
 
 import { getConfig } from "~/utils/config"
-import { getEnv } from "~/utils/dotenv"
 import { getPrestart } from "~/utils/prestart"
 import { cliSpinner } from "~/utils/spinner"
 
-import { build } from "tsup"
-import { Client } from "discord.js"
-import { Command } from "commander"
 import chalk from "chalk"
-import { resolve } from "node:path"
+import { Command } from "commander"
+import { Client } from "discord.js"
+import { config as dotenv, listFiles as listEnvFiles } from "dotenv-flow"
+import { build } from "tsup"
+
+const env = (() => {
+  dotenv({
+    files: [
+      ".env",
+      ".env.local",
+      `.env.${process.env.NODE_ENV}`, // ".env.development"
+      `.env.${process.env.NODE_ENV}.local`, // ".env.development.local"
+    ],
+  })
+
+  return {
+    files: listEnvFiles().map((path) => basename(path)),
+  }
+})()
 
 export const program = new Command("phase")
   .version(version)
@@ -27,17 +46,19 @@ program
   .command("start")
   .description("Start the bot.")
   .action(async () => {
-    console.log(chalk.bold(chalk.magentaBright(`\n🌕︎ Phasebot v${version}`)))
+    console.log(chalk.bold(chalk.magentaBright(`\n☽︎ Phasebot v${version}`)))
 
     const config = await getConfig()
-    if (config)
+
+    if (config) {
       console.log(
         `-  Config:        ${"phase.config." + config.configPath.split(".").pop()}`,
       )
+    }
 
-    const env = getEnv()
-    if (env.files.length)
+    if (env.files.length) {
       console.log(`-  Environments:  ${env.files.join(" ")}`)
+    }
 
     console.log(" ")
 
@@ -118,17 +139,19 @@ program
   .description("Export commands to a JSON file.")
   .requiredOption("--outFile <PATH>", "Where to create the file file.")
   .action(async ({ outFile }: { outFile: string }) => {
-    if (!outFile.endsWith(".json")) throw Error("outFile path must end in '.json'")
-
-    getEnv()
-    
-    const commands = Object.values(await handleBotCommands().catch(() => undefined) ?? {})
-
-    for (const command of commands) {
-      delete (command as any)["execute"]
+    if (!outFile.endsWith(".json")) {
+      throw Error("outFile path must end in '.json'")
     }
 
-    writeFileSync(outFile, JSON.stringify(commands, null, 2))
+    try {
+      const commands = sortBotCommandData(
+        (await getBotCommands()).map((command) => command.toJSON()),
+      )
+
+      writeFileSync(outFile, JSON.stringify(commands, null, 2))
+    } catch (error) {
+      throw error
+    }
   })
 
 program.parse(process.argv)
