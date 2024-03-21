@@ -16,16 +16,15 @@ export const GuildSchema =
 export type Guild = {
   id: string
   admins: string[]
-  commands: GuildCommands | undefined
+  commands: Record<string, GuildCommand> | undefined
   modules: Partial<GuildModules> | undefined
   news_channel: string | undefined
 }
 
-export type GuildCommands = Record<string, GuildCommand>
-
 export type GuildCommand = {
-  name: string
-  permissions: string | null
+  disabled: boolean // whether the command is disabled
+  allow: (`user:${string}` | `role:${string}`)[] // the users/roles allowed to use the command
+  deny: (`user:${string}` | `role:${string}`)[] // the users/roles denied to use the command
 }
 
 export type GuildModules = {
