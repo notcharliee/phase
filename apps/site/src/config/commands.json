@@ -65,8 +65,7 @@
       }
     ],
     "name": "tictactoe",
-    "description": "Play tic-tac-toe against another user.",
-    "dm_permission": false
+    "description": "Play tic-tac-toe against another user."
   },
   {
     "options": [
@@ -114,8 +113,7 @@
   {
     "options": [],
     "name": "membercount",
-    "description": "Get the server membercount.",
-    "dm_permission": false
+    "description": "Get the server membercount."
   },
   {
     "options": [],
@@ -164,8 +162,7 @@
       }
     ],
     "name": "whois",
-    "description": "Displays member data in an embed.",
-    "dm_permission": false
+    "description": "Displays member data in an embed."
   },
   {
     "options": [
@@ -196,8 +193,7 @@
       }
     ],
     "name": "announce",
-    "description": "Sends an announcement-style message as Phase.",
-    "dm_permission": false
+    "description": "Sends an announcement-style message as Phase."
   },
   {
     "options": [
@@ -297,8 +293,7 @@
       }
     ],
     "name": "giveaway",
-    "description": "giveaway",
-    "dm_permission": false
+    "description": "giveaway"
   },
   {
     "options": [
@@ -316,14 +311,12 @@
       }
     ],
     "name": "lock",
-    "description": "Locks and unlocks a channel.",
-    "dm_permission": false
+    "description": "Locks and unlocks a channel."
   },
   {
     "options": [],
     "name": "nuke",
-    "description": "Deletes the current channel and creates an exact copy with no messages.",
-    "dm_permission": false
+    "description": "Deletes the current channel and creates an exact copy with no messages."
   },
   {
     "options": [
@@ -343,8 +336,7 @@
       }
     ],
     "name": "purge",
-    "description": "Purges up to 100 messages from the channel at a time.",
-    "dm_permission": false
+    "description": "Purges up to 100 messages from the channel at a time."
   },
   {
     "options": [
@@ -388,8 +380,7 @@
       }
     ],
     "name": "warn",
-    "description": "Warn a member.",
-    "dm_permission": false
+    "description": "Warn a member."
   },
   {
     "options": [
@@ -401,8 +392,7 @@
       }
     ],
     "name": "afk",
-    "description": "Set your AFK status.",
-    "dm_permission": false
+    "description": "Set your AFK status."
   },
   {
     "options": [
@@ -468,8 +458,7 @@
       }
     ],
     "name": "level",
-    "description": "level",
-    "dm_permission": false
+    "description": "level"
   },
   {
     "options": [
@@ -493,8 +482,7 @@
       }
     ],
     "name": "reminder",
-    "description": "Set a reminder",
-    "dm_permission": false
+    "description": "Set a reminder"
   },
   {
     "options": [
@@ -570,8 +558,7 @@
       }
     ],
     "name": "tag",
-    "description": "tag",
-    "dm_permission": false
+    "description": "tag"
   },
   {
     "options": [
@@ -595,8 +582,7 @@
       }
     ],
     "name": "ticket",
-    "description": "Lock, unlock, and delete tickets",
-    "dm_permission": false
+    "description": "Lock, unlock, and delete tickets"
   },
   {
     "options": [
