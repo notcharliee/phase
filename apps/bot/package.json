@@ -3,9 +3,10 @@
   "name": "bot",
   "type": "module",
   "scripts": {
-    "build": "phase build && phase commands --outFile=../site/src/config/commands.json",
+    "build": "phase build && pnpm run commands",
     "start": "phase start",
-    "dev": "pnpm run build && pnpm run start"
+    "dev": "pnpm run build && pnpm run start",
+    "commands": "phase commands --outFile=../site/src/config/commands.json"
   },
   "dependencies": {
     "@androz2091/discord-invites-tracker": "^1.2.3",
