@@ -14,11 +14,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { toast } from "sonner"
 
 import { SelectRole } from "../select/role"
-
-import { updateCommand } from "@/lib/actions"
 
 const formSchema = z.object({
   role: z.string().optional().nullable(),
@@ -51,17 +48,7 @@ export const CommandForm = <T extends boolean>(props: CommandFormProps<T>) => {
   })
 
   const onSubmit = (data: FormValues) => {
-    toast.promise(
-      updateCommand(props.data!.command, {
-        name: props.data!.command,
-        permissions: data.role ?? "",
-      }),
-      {
-        loading: "Saving changes...",
-        success: "Changes saved!",
-        error: "An error occured.",
-      },
-    )
+    console.log(data)
   }
 
   return (

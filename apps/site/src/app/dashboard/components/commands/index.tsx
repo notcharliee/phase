@@ -63,9 +63,7 @@ export const Commands = async (props: { fallback?: boolean }) => {
             roles,
           }}
           defaultValues={{
-            role: guild.commands
-              ? guild.commands[command.name]?.permissions ?? ""
-              : "",
+            role: ""
           }}
         />
       </CardContent>
