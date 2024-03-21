@@ -2,9 +2,9 @@ import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 
 import {
-  type GuildCommands,
-  type GuildModules,
   GuildSchema,
+  type GuildCommand,
+  type GuildModules,
 } from "@repo/schemas"
 
 import { dbConnect } from "./db"
@@ -52,7 +52,7 @@ type UserData = {
 type GuildData = {
   id: string
   admins: string[]
-  commands: GuildCommands | undefined
+  commands: Record<string, GuildCommand> | undefined
   modules: Partial<GuildModules> | undefined
   news_channel: string | null | undefined
 }
