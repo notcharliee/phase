@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "phasebot",
   "description": "A simple framework for building and running discord.js applications.",
   "version": "0.1.0",
