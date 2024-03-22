@@ -10,12 +10,12 @@ import {
 } from "@repo/schemas"
 
 import { REST, type RawFile } from "@discordjs/rest"
-import {
-  API,
-  MessageType,
-  type APIMessage,
-  type RESTPostAPIChannelMessageJSONBody,
-} from "@discordjs/core/http-only"
+import { API, MessageType } from "@discordjs/core/http-only"
+
+import type {
+  APIMessage,
+  RESTPostAPIChannelMessageJSONBody,
+} from "discord-api-types/v10"
 
 import { dbConnect } from "@/lib/db"
 import { getUser } from "@/lib/auth"

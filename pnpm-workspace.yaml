@@ -1,5 +1,5 @@
 packages:
   - "apps/*"
-  - "packages/*"
+  - "packages/schemas"
 
-link-workspace-packages: true
+link-workspace-packages: "false"

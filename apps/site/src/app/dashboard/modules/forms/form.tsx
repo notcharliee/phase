@@ -315,7 +315,7 @@ export const ModuleForm = <Fallback extends boolean>(
 }
 
 const FormQuestions = (props: {
-  form: UseFormReturn<FormValues, unknown, FormValues>
+  form: UseFormReturn<FormValues>
   formIndex: number
 }) => {
   const fieldArray = useFieldArray({
