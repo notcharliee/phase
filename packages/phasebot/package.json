@@ -9,7 +9,8 @@
   "typings": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup ./src --minify --clean --dts --format=esm",
-    "dev": "tsup ./src --minify --clean --dts --format=esm --watch"
+    "dev": "tsup ./src --minify --clean --dts --format=esm --watch",
+    "postinstall": "node postinstall.js"
   },
   "bin": {
     "phase": "./dist/cli.js"
