@@ -1,25 +1,40 @@
-import Image from "next/image"
+"use client"
+
 import Link from "next/link"
 
-import DashboardDemo from "public/dashboard-demo.png"
-
-import { buttonVariants } from "@/components/ui/button"
 import { DocsHeader } from "@/components/docs-header"
 import {
-  PageHeading,
-  PageSubheading,
-  PageDescription,
   PageActions,
+  PageDescription,
+  PageHeading,
 } from "@/components/page-heading"
+import { buttonVariants } from "@/components/ui/button"
 
 import { siteConfig } from "@/config/site"
 import { ArrowRightIcon } from "@radix-ui/react-icons"
 
-export default function HomePage() {
+import { useEffect } from "react"
+import { toast } from "sonner"
+
+export default function HomePage({
+  searchParams,
+}: {
+  searchParams: { signedOut: string | undefined }
+}) {
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (searchParams.signedOut === "true") {
+        toast.info("You have been signed out.")
+      }
+    }, 0)
+
+    return () => clearTimeout(timeout)
+  }, [searchParams])
+
   return (
     <main className="flex min-h-screen w-full flex-col">
       <DocsHeader />
-      <div className="mx-auto my-auto grid min-h-[calc(100vh-4rem-1px)] max-w-7xl place-items-center gap-8 p-6 sm:gap-0 sm:px-8 md:px-12">
+      <div className="mx-auto my-auto grid min-h-[calc(100vh-8rem-1px)] max-w-7xl place-items-center gap-8 p-6 sm:gap-0 sm:px-8 md:px-12">
         <section className="flex max-w-[980px] flex-col items-center gap-4 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20">
           <Link
             href="/docs/changelog"
@@ -43,35 +58,9 @@ export default function HomePage() {
             </Link>
           </PageActions>
         </section>
-        <section className="mx-auto flex flex-col items-center gap-8 py-8 md:py-12 md:pb-8 lg:flex-row lg:py-24 lg:pb-20">
-          <Image
-            alt="Dashboard Demo"
-            className="sm:px-8 lg:w-1/2 xl:w-2/3"
-            placeholder="blur"
-            priority
-            src={DashboardDemo}
-          />
-          <div className="flex w-full max-w-[450px] flex-col items-center gap-2 sm:w-auto sm:max-w-none sm:pb-10 lg:pb-0">
-            <PageSubheading className="hidden text-center sm:block lg:text-start">
-              All the tools you need, all in one place.
-            </PageSubheading>
-            <PageDescription className="text-center sm:text-lg lg:text-start">
-              Through the dashboard, you can easily customise every aspect of
-              the bot to meet all of your server&apos;s needs. Sign in once, and
-              you&apos;re done – no need to do it again.
-              <span className="mb-4 block w-full"> </span>
-              Is the bot missing something that you need?{" "}
-              <Link
-                className="font-medium underline underline-offset-4"
-                href={"/redirect/discord"}
-              >
-                Join our Discord
-              </Link>{" "}
-              and let us know! We&apos;ll get it added in no time.
-            </PageDescription>
-          </div>
-        </section>
-        <p className="text-muted-foreground w-full text-center text-sm leading-loose sm:text-base md:text-left">
+      </div>
+      <footer className="sm:border-t sm:h-16 max-sm:py-6 px-8 flex items-center">
+        <p className="text-muted-foreground w-full text-center sm:text-left text-balance text-sm leading-loose">
           Built by{" "}
           <Link
             href={"https://charliee.dev"}
@@ -92,7 +81,7 @@ export default function HomePage() {
           </Link>
           .
         </p>
-      </div>
+      </footer>
     </main>
   )
 }
