@@ -119,9 +119,7 @@ export default botCommand(
             ],
           })
 
-          const expires = new Date(
-            message.createdTimestamp * 1000 + parseInt(duration, 10),
-          ).getTime()
+          const expires = message.createdAt.getTime() + parseInt(duration, 10)
 
           const host = interaction.member as GuildMember
 

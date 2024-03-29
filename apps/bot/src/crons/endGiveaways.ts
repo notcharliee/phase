@@ -5,7 +5,7 @@ import { GuildTextBasedChannel, EmbedBuilder, User } from "discord.js"
 
 export default botCronJob("*/10 * * * * *", async (client) => {
   const expiredGiveaways = await GiveawaySchema.find({
-    expires: { $lt: Date.now() },
+    expires: { $lt: Date.now().toString() },
     expired: false,
   })
 
