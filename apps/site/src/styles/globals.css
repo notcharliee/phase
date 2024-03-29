@@ -5,7 +5,7 @@
 @layer base {
   * {
     @apply border-border;
-    @apply shadow-black;
+    @apply shadow-[rgb(8,8,8)];
   }
 
   code {
