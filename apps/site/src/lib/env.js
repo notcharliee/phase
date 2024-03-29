@@ -19,9 +19,8 @@ export const env = createEnv({
     KV_REST_API_TOKEN: z.string(),
     KV_REST_API_READ_ONLY_TOKEN: z.string(),
 
-    NEXT_MIDDLEWARE_AUTH_ID: z.string().optional(),
     NEXT_MIDDLEWARE_USER_ID: z.string().optional(),
-    NEXT_MIDDLEWARE_USER_TOKEN: z.string().optional(),
+    NEXT_MIDDLEWARE_GUILD_ID: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_BASE_URL: z.string(),
@@ -45,9 +44,8 @@ export const env = createEnv({
 
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
 
-    NEXT_MIDDLEWARE_AUTH_ID: process.env.NEXT_MIDDLEWARE_AUTH_ID,
     NEXT_MIDDLEWARE_USER_ID: process.env.NEXT_MIDDLEWARE_USER_ID,
-    NEXT_MIDDLEWARE_USER_TOKEN: process.env.NEXT_MIDDLEWARE_USER_TOKEN,
+    NEXT_MIDDLEWARE_GUILD_ID: process.env.NEXT_MIDDLEWARE_GUILD_ID,
   },
   skipValidation: false,
   emptyStringAsUndefined: true,
