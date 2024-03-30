@@ -1,18 +1,19 @@
 import "@/styles/globals.css"
 
-import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
+import { GeistSans } from "geist/font/sans"
 
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import { type Metadata, type Viewport } from "next"
 
+import { LoadingBar } from "@/components/loading-bar"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 
-import { cn } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
+import { cn } from "@/lib/utils"
 
 export const metadata = {
   title: { default: siteConfig.name, template: `%s - ${siteConfig.name}` },
@@ -73,6 +74,7 @@ export default function RootLayout({
         <Toaster />
         <Analytics />
         <SpeedInsights />
+        <LoadingBar />
       </body>
     </html>
   )
