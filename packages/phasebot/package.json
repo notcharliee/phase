@@ -1,7 +1,7 @@
 {
   "name": "phasebot",
   "description": "A simple framework for building and running discord.js applications.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -49,6 +49,7 @@
     "dotenv-flow": "^4.1.0",
     "ora": "^8.0.1",
     "react": "18.2.0",
+    "ts-mixer": "^6.0.4",
     "tsup": "^8.0.2"
   },
   "devDependencies": {
