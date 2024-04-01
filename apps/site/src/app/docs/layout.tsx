@@ -12,7 +12,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { DocsHeader } from "@/components/docs-header"
-import { DocsSidebarNav } from "./components/sidebar-nav"
+import { DocsSidebarNav } from "./_components/sidebar-nav"
 
 import { docsNavConfig } from "@/config/nav/docs"
 
