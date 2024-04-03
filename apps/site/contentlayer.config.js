@@ -5,7 +5,7 @@ import remarkGfm from "remark-gfm"
 
 export const Doc = defineDocumentType(() => ({
   name: "Doc",
-  filePathPattern: `./**/*.mdx`,
+  filePathPattern: `_content/**/*.mdx`,
   contentType: "mdx",
   fields: {
     title: {
@@ -30,7 +30,7 @@ export const Doc = defineDocumentType(() => ({
 }))
 
 export default makeSource({
-  contentDirPath: "./src/app/docs/_content",
+  contentDirPath: "./src/app/docs",
   documentTypes: [Doc],
   mdx: {
     remarkPlugins: [remarkGfm],
