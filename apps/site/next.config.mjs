@@ -2,6 +2,9 @@ import { env } from "./src/lib/env.js"
 
 /** @type {import('next').NextConfig} */
 const config = {
+  experimental: {
+    serverComponentsExternalPackages: ["bcryptjs"],
+  },
   async redirects() {
     return [
       {
