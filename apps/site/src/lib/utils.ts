@@ -1,4 +1,4 @@
-import { type ClassValue, clsx } from "clsx"
+import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 import { env } from "./env"
@@ -25,15 +25,4 @@ export const getOrdinal = (number: number): string => {
     number +
     (["th", "st", "nd", "rd"][number % 10] ?? ["th", "st", "nd", "rd"][0]!)
   )
-}
-
-export const timeoutPromise: (ms: number, error: string) => Promise<Error> = (
-  ms,
-  error,
-) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      reject(new Error(error))
-    }, ms)
-  })
 }

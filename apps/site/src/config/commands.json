@@ -135,6 +135,18 @@
     "options": []
   },
   {
+    "name": "dashboard",
+    "description": "dashboard",
+    "options": [
+      {
+        "description": "Login to the dashboard.",
+        "name": "login",
+        "options": [],
+        "type": 1
+      }
+    ]
+  },
+  {
     "name": "dog",
     "description": "Finds a random picture of a dog.",
     "options": []

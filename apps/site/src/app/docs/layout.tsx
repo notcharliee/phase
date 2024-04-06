@@ -1,9 +1,9 @@
 "use client"
 
+import { usePathname } from "next/navigation"
 import { Fragment } from "react"
 
-import { usePathname } from "next/navigation"
-
+import { DocsHeader } from "@/components/docs-header"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,12 +11,12 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { DocsHeader } from "@/components/docs-header"
-import { DocsSidebarNav } from "./_components/sidebar-nav"
 
 import { docsNavConfig } from "@/config/nav/docs"
 
 import { cn } from "@/lib/utils"
+
+import { DocsSidebarNav } from "./_components/sidebar-nav"
 
 export default function DocsLayout({
   children,

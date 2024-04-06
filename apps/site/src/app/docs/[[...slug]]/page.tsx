@@ -2,13 +2,13 @@ import { type Metadata } from "next"
 import { notFound } from "next/navigation"
 
 import { allDocs } from "contentlayer/generated"
-
 import Balancer from "react-wrap-balancer"
 
 import { Mdx } from "@/components/mdx-components"
 import { DocsPager } from "@/components/pager"
 
 import { siteConfig } from "@/config/site"
+
 import { absoluteURL } from "@/lib/utils"
 
 async function getDocFromParams({ params }: { params: { slug: string[] } }) {

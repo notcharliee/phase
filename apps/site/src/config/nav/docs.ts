@@ -2,7 +2,6 @@ import type { MainNavItem, SidebarNavItem } from "@/types/nav"
 
 import { commandsConfig } from "../commands"
 import { modulesConfig } from "../modules"
-
 import { mainNavConfig } from "./main"
 
 interface DocsConfig {

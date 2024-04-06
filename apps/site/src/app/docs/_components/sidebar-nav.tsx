@@ -1,13 +1,13 @@
 "use client"
 
-import { usePathname } from "next/navigation"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 import { ScrollArea } from "@/components/ui/scroll-area"
 
-import { type SidebarNavItem } from "@/types/nav"
-
 import { cn } from "@/lib/utils"
+
+import { type SidebarNavItem } from "@/types/nav"
 
 export interface DocsSidebarNavProps {
   items: SidebarNavItem[]

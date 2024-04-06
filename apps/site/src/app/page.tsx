@@ -1,6 +1,10 @@
 "use client"
 
 import Link from "next/link"
+import { useEffect } from "react"
+
+import { ArrowRightIcon } from "@radix-ui/react-icons"
+import { toast } from "sonner"
 
 import { DocsHeader } from "@/components/docs-header"
 import {
@@ -11,10 +15,6 @@ import {
 import { buttonVariants } from "@/components/ui/button"
 
 import { siteConfig } from "@/config/site"
-import { ArrowRightIcon } from "@radix-ui/react-icons"
-
-import { useEffect } from "react"
-import { toast } from "sonner"
 
 export default function HomePage({
   searchParams,
@@ -59,8 +59,8 @@ export default function HomePage({
           </PageActions>
         </section>
       </div>
-      <footer className="sm:border-t sm:h-16 max-sm:py-6 px-8 flex items-center">
-        <p className="text-muted-foreground w-full text-center sm:text-left text-balance text-sm leading-loose">
+      <footer className="flex items-center px-8 max-sm:py-6 sm:h-16 sm:border-t">
+        <p className="text-muted-foreground w-full text-balance text-center text-sm leading-loose sm:text-left">
           Built by{" "}
           <Link
             href={"https://charliee.dev"}

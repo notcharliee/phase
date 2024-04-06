@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import mongoose from "mongoose"
+
 import { env } from "@/lib/env"
 
 declare global {

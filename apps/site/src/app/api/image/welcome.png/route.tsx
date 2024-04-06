@@ -1,9 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { Fragment } from "react"
-
-import { type NextRequest } from "next/server"
 import { ImageResponse } from "next/og"
+import { type NextRequest } from "next/server"
+import { Fragment } from "react"
 
 import { absoluteURL, getOrdinal } from "@/lib/utils"
 

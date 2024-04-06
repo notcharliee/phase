@@ -1,5 +1,5 @@
-import { type NextRequest, NextResponse } from "next/server"
 import { ImageResponse } from "next/og"
+import { NextResponse, type NextRequest } from "next/server"
 
 import { z } from "zod"
 

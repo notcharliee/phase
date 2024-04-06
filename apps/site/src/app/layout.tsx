@@ -1,18 +1,18 @@
 import "@/styles/globals.css"
 
-import { GeistMono } from "geist/font/mono"
-import { GeistSans } from "geist/font/sans"
+import { type Metadata, type Viewport } from "next"
 
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
-
-import { type Metadata, type Viewport } from "next"
+import { GeistMono } from "geist/font/mono"
+import { GeistSans } from "geist/font/sans"
 
 import { LoadingBar } from "@/components/loading-bar"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 
 import { siteConfig } from "@/config/site"
+
 import { cn } from "@/lib/utils"
 
 export const metadata = {
@@ -65,7 +65,7 @@ export default function RootLayout({
     <html lang="en" style={{ colorScheme: "dark" }}>
       <body
         className={cn(
-          "font-sans bg-background text-foreground tracking-tight",
+          "bg-background text-foreground font-sans tracking-tight",
           GeistSans.variable,
           GeistMono.variable,
         )}
