@@ -10,21 +10,21 @@ const config = {
       {
         source: "/redirect/discord",
         destination: "https://discord.com/invite/mZjRBKS29X",
-        permanent: true,
+        permanent: false,
       },
       {
         source: "/redirect/donate",
         destination: "https://www.buymeacoffee.com/notcharliee",
-        permanent: true,
+        permanent: false,
       },
       {
         source: "/redirect/github",
         destination: "https://github.com/notcharliee/phase",
-        permanent: true,
+        permanent: false,
       },
       {
         source: "/redirect/invite",
-        destination: `https://discord.com/oauth2/authorize?client_id=${env.DISCORD_ID}&response_type=code&scope=guilds%20identify%20bot%20applications.commands&redirect_uri=${env.NEXT_PUBLIC_BASE_URL}/api/auth/callback&permissions=17666911472`,
+        destination: `https://discord.com/oauth2/authorize?client_id=${env.DISCORD_ID}&response_type=code&scope=bot%20applications.commands&permissions=17666911472`,
         permanent: false,
       },
       {

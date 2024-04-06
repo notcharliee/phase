@@ -47,8 +47,8 @@ export default function HomePage({
           <PageHeading>The all-in-one Discord bot</PageHeading>
           <PageDescription>{siteConfig.description}</PageDescription>
           <PageActions>
-            <Link href="/dashboard" className={buttonVariants({ size: "xl" })}>
-              Get Started
+            <Link href="/redirect/invite" className={buttonVariants({ size: "xl" })}>
+              Invite the bot
             </Link>
             <Link
               href="/docs"

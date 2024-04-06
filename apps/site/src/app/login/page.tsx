@@ -2,8 +2,6 @@ import "@/styles/login.css"
 
 import Link from "next/link"
 
-import { CrossCircledIcon } from "@radix-ui/react-icons"
-
 import { Moon } from "@/components/moon"
 import {
   Card,
@@ -22,7 +20,33 @@ export default function LoginPage({
   searchParams: { userId: string | undefined; guildId: string | undefined }
 }) {
   if (!searchParams.userId || !searchParams.guildId) {
-    return <Error reason="Invalid search params" />
+    return (
+      <Card className="animate-in fade-in-5 *:animate-in *:fade-in-20 *:fill-mode-backwards slide-in-from-bottom-10 flex w-full max-w-xs flex-col justify-center py-2 shadow-lg duration-500 *:duration-500">
+        <CardHeader className="flex-row items-center justify-center gap-3">
+          <Moon className="h-9 w-9" />
+          <CardTitle className="text-3xl font-extrabold leading-tight">
+            Phase
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center space-y-3">
+          <CardDescription className="text-balance text-center">
+            This login page is missing the required search params to properly
+            authenticate you.
+            <br />
+            <br />
+            To access the dashboard, you need to run the
+            <span className="text-foreground mx-[0.5ch] h-5 rounded border px-1 font-mono text-xs">
+              /dashboard login
+            </span>
+            command, then click the button in the response embed.
+            <br />
+            <br />
+            The button will redirect you to this page, with the correct search
+            params.
+          </CardDescription>
+        </CardContent>
+      </Card>
+    )
   }
 
   return (
@@ -69,10 +93,3 @@ export default function LoginPage({
     </Card>
   )
 }
-
-const Error = ({ reason }: { reason: string }) => (
-  <Card className="animate-in fade-in-5 *:animate-in *:fade-in-20 *:fill-mode-backwards slide-in-from-bottom-10 flex h-[16rem] w-full max-w-xs flex-col items-center justify-center py-2 shadow-lg duration-500 *:duration-500">
-    <CrossCircledIcon className="h-16 w-16" />
-    <CardTitle className="mt-4 text-lg font-medium">{reason}</CardTitle>
-  </Card>
-)
