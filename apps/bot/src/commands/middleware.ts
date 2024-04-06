@@ -1,9 +1,9 @@
 import { GuildSchema } from "@repo/schemas"
 import { GuildMember, PermissionFlagsBits } from "discord.js"
-import { type BotCommandMiddleware } from "phasebot"
+import { type BotCommandExecuteFunction } from "phasebot/builders"
 import { errorMessage, missingPermission } from "~/utils"
 
-const middleware: BotCommandMiddleware = async (_, interaction) => {
+const middleware: BotCommandExecuteFunction  = async (_, interaction) => {
   if (!interaction.guild) return true
 
   const commandName = [

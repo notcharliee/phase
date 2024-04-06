@@ -1,48 +1,34 @@
-import { cookies } from "next/headers"
+import Link from "next/link"
 
-import { Suspense } from "react"
+import { ExitIcon } from "@radix-ui/react-icons"
 
-import { DashHeader } from "@/components/dash-header"
-import {
-  SelectServerCombobox,
-  SelectServerDialog,
-} from "./components/select/server"
-import { UserAvatar } from "./components/user-avatar"
+import { buttonVariants } from "@/components/ui/button"
+
+import { cn } from "@/lib/utils"
+
+import { DashboardSidebarNav } from "./components/sidebar-nav"
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const selectServerCombobox = (
-    <Suspense fallback={<SelectServerCombobox fallback />}>
-      <SelectServerCombobox />
-    </Suspense>
-  )
-
-  const userAvatar = (
-    <Suspense fallback={<UserAvatar fallback />}>
-      <UserAvatar />
-    </Suspense>
-  )
-
   return (
-    <main className="flex min-h-screen w-full flex-col">
-      <DashHeader
-        selectServerCombobox={selectServerCombobox}
-        userAvatar={userAvatar}
-      />
-      <div className="flex-1">
-        {cookies().has("guild") ? (
-          children
-        ) : (
-          <SelectServerDialog>
-            <Suspense fallback={<SelectServerCombobox fallback />}>
-              <SelectServerCombobox />
-            </Suspense>
-          </SelectServerDialog>
-        )}
-      </div>
+    <main className="bg-primary-foreground absolute top-0 flex h-screen w-screen overflow-hidden">
+      <aside className="hidden h-screen min-w-[20rem] flex-col justify-between border-r bg-neutral-950 p-8 shadow-xl md:flex">
+        <DashboardSidebarNav />
+        <Link
+          href={"/dashboard/signout"}
+          className={cn(
+            buttonVariants({ variant: "outline", size: "xl" }),
+            "bg-background gap-2.5 shadow-lg",
+          )}
+        >
+          <ExitIcon className="h-4 w-4" />
+          Sign Out
+        </Link>
+      </aside>
+      <div className="min-h-screen w-full overflow-auto">{children}</div>
     </main>
   )
 }

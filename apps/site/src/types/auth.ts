@@ -1,7 +1,8 @@
 export type User = {
-  id: string
-  discord_id: string
-  discord_token: string
-  created_timestamp: number
-  expires_timestamp: number
+  /** The user's ID */
+  user_id: string
+  /** The guild's ID */
+  guild_id: string
+  /** The time the user's session expires */
+  expires: number
 }

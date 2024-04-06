@@ -3,47 +3,82 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-import type { SidebarNavItem } from "@/types/nav"
+import {
+  DashboardIcon,
+  GearIcon,
+  InputIcon,
+  RocketIcon,
+} from "@radix-ui/react-icons"
 
-import { buttonVariants } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { Moon } from "@/components/moon"
 
 import { cn } from "@/lib/utils"
 
-export const SidebarNav = (props: { items: SidebarNavItem[] }) => {
+export const DashboardSidebarNav = ({
+  items = [
+    {
+      title: "Overview",
+      href: "/dashboard",
+      icon: <DashboardIcon />,
+    },
+    {
+      title: "Modules",
+      href: "/dashboard/modules",
+      icon: <RocketIcon />,
+    },
+    {
+      title: "Commands",
+      href: "/dashboard/commands",
+      icon: <InputIcon />,
+    },
+    {
+      title: "Settings",
+      href: "/dashboard/settings",
+      icon: <GearIcon />,
+    },
+  ],
+}: {
+  items?: { title: string; href: string; icon: JSX.Element }[]
+}) => {
   const pathname = usePathname()
 
   return (
-    <nav className="sticky top-[5.5rem] h-[calc(100vh-7rem-1px)]">
-      <ScrollArea className="flex h-full w-full flex-col gap-2 rounded-xl border">
-        <div className="border-b p-6">
-          <h4 className="text-base font-semibold">Modules</h4>
-          <p className="text-muted-foreground text-sm">
-            Manage your server&rsquo;s module settings.
-          </p>
-        </div>
-        <div className="flex flex-col gap-2 p-6">
-          {props.items
-            .filter((item) => !item.disabled && item.href)
-            .map((item, index) => (
-              <Link
-                key={index}
-                href={
-                  pathname === item.href ? "/dashboard/modules" : item.href!
-                }
-                className={cn(
-                  buttonVariants({ variant: "ghost" }),
-                  pathname === item.href
-                    ? "bg-muted hover:bg-muted"
-                    : "hover:bg-transparent hover:underline",
-                  "border-muted w-full justify-start border",
-                )}
-              >
-                {item.title}
-              </Link>
-            ))}
-        </div>
-      </ScrollArea>
+    <nav className="space-y-8">
+      <div className="flex items-center gap-3.5">
+        <Link href={"/"}>
+          <Moon className="h-6 w-6" />
+        </Link>
+        <span className="text-xl font-bold">Dashboard</span>
+      </div>
+      <ul className="space-y-2">
+        {items.map((item) => (
+          <li key={item.href}>
+            <AsideLink href={item.href} aria-selected={pathname === item.href}>
+              {item.icon}
+              {item.title}
+            </AsideLink>
+          </li>
+        ))}
+      </ul>
     </nav>
+  )
+}
+
+const AsideLink = ({
+  children,
+  className,
+  ...props
+}: React.ComponentProps<typeof Link>) => {
+  return (
+    <Link
+      aria-selected={props["aria-selected"]}
+      className={cn(
+        "text-muted-foreground aria-selected:text-foreground aria-selected:bg-card aria-selected:border-border flex items-center gap-3 rounded-lg border border-transparent px-4 py-3 text-sm font-medium transition-all aria-selected:shadow-lg",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </Link>
   )
 }

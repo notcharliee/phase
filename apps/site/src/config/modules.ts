@@ -34,7 +34,7 @@ export const modulesConfig = [
     path: "/forms",
   },
   {
-    name: "Join to Create",
+    name: "Join to Creates",
     description:
       "Creates a temporary voice channel, then deletes it once all members have left.",
     path: "/join-to-create",

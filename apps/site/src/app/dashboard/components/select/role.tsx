@@ -1,18 +1,16 @@
 "use client"
 
+import { CheckIcon } from "@radix-ui/react-icons"
+import { type APIRole } from "discord-api-types/v10"
 import { type ControllerRenderProps } from "react-hook-form"
 
-import { CheckIcon } from "@radix-ui/react-icons"
-
-import { type APIRole } from "discord-api-types/v10"
-
+import { Spinner } from "@/components/spinner"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select"
-import { Spinner } from "@/components/spinner"
 
 import { cn } from "@/lib/utils"
 

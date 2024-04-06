@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from "next/server"
+import { type NextRequest, NextResponse } from "next/server"
 
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
@@ -7,8 +7,6 @@ import { LevelSchema } from "@repo/schemas"
 
 import { dbConnect } from "@/lib/db"
 import { env } from "@/lib/env"
-
-import type { ExtractAPIType } from "@/types/api"
 
 import { StatusCodes } from "http-status-codes"
 
@@ -88,4 +86,3 @@ export const GET = async (request: NextRequest) => {
   return NextResponse.json(response)
 }
 
-export type GetLevelsGuildResponse = ExtractAPIType<typeof GET>
