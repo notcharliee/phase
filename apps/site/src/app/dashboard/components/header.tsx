@@ -63,6 +63,7 @@ export const DashboardHeader = (props: {
           >
             <DashboardSidebarNav />
             <Link
+              prefetch={false}
               href={"/dashboard/signout"}
               className={cn(
                 buttonVariants({ variant: "outline", size: "xl" }),

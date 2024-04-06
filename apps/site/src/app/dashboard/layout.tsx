@@ -18,6 +18,7 @@ export default function DashboardLayout({
       <aside className="hidden h-screen min-w-[20rem] flex-col justify-between border-r bg-neutral-950 p-8 shadow-xl md:flex">
         <DashboardSidebarNav />
         <Link
+          prefetch={false}
           href={"/dashboard/signout"}
           className={cn(
             buttonVariants({ variant: "outline", size: "xl" }),
