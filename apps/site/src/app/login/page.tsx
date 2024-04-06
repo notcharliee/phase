@@ -35,9 +35,9 @@ export default function LoginPage({
             <br />
             <br />
             To access the dashboard, you need to run the
-            <span className="text-foreground mx-[0.5ch] h-5 rounded border px-1 font-mono text-xs">
+            <code className="text-foreground bg-muted relative mx-[0.5ch] rounded px-[0.3rem] py-[0.2rem] font-mono text-xs">
               /dashboard login
-            </span>
+            </code>
             command, then click the button in the response embed.
             <br />
             <br />
@@ -60,9 +60,9 @@ export default function LoginPage({
       <CardContent className="flex flex-col items-center">
         <CardDescription className="mb-6 text-balance text-center">
           To access the dashboard, you need to run the
-          <span className="text-foreground mx-[0.5ch] h-5 rounded border px-1 font-mono text-xs">
+          <code className="text-foreground bg-muted relative mx-[0.5ch] rounded px-[0.3rem] py-[0.2rem] font-mono text-xs">
             /dashboard login
-          </span>
+          </code>
           command, then enter the 6 digit code in the box below.
         </CardDescription>
         <OTPForm userId={searchParams.userId} guildId={searchParams.guildId} />

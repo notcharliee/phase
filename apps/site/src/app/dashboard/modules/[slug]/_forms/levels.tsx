@@ -322,12 +322,12 @@ export const Levels = (props: ModuleFormProps<"Levels">) => {
                   {...field}
                 />
               </FormControl>
-              <FormDescription className="flex items-center gap-[0.5ch]">
-                <p>The background image for the</p>
-                <pre className="text-foreground flex h-5 items-center rounded border px-1 font-mono text-xs">
-                  <code>/level rank</code>
-                </pre>
-                <p>command</p>
+              <FormDescription>
+                The background image for the
+                <code className="text-foreground bg-muted relative mx-[0.5ch] rounded px-[0.3rem] py-[0.2rem] font-mono text-xs">
+                  /level rank
+                </code>
+                command
               </FormDescription>
               <FormMessage />
             </FormItem>
