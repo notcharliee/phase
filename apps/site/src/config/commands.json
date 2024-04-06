@@ -143,6 +143,45 @@
         "name": "login",
         "options": [],
         "type": 1
+      },
+      {
+        "description": "admins",
+        "name": "admins",
+        "options": [
+          {
+            "description": "Grant a user dashboard access.",
+            "name": "add",
+            "options": [
+              {
+                "description": "The user to add.",
+                "name": "user",
+                "required": true,
+                "type": 6
+              }
+            ],
+            "type": 1
+          },
+          {
+            "description": "Revoke a user's dashboard access.",
+            "name": "remove",
+            "options": [
+              {
+                "description": "The user to remove.",
+                "name": "user",
+                "required": true,
+                "type": 6
+              }
+            ],
+            "type": 1
+          },
+          {
+            "description": "List the users that have dashboard access.",
+            "name": "list",
+            "options": [],
+            "type": 1
+          }
+        ],
+        "type": 2
       }
     ]
   },
