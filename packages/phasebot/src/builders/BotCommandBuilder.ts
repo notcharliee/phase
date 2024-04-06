@@ -1,7 +1,6 @@
-import { Mixin } from "ts-mixer"
-
 import {
   APIApplicationCommandOption,
+  SharedSlashCommandOptions,
   SlashCommandAssertions,
   SlashCommandBuilder,
   SlashCommandSubcommandBuilder,
@@ -13,6 +12,7 @@ import {
   type SlashCommandOptionsOnlyBuilder,
   type SlashCommandSubcommandsOnlyBuilder,
 } from "discord.js"
+import { Mixin } from "ts-mixer"
 
 export type BotCommandExecuteFunction = (
   client: Client<true>,
@@ -72,6 +72,42 @@ class BotCommandBuilderBase {
 }
 
 /**
+ * An interface specifically for slash command subcommands.
+ */
+interface BotCommandSubcommandsOnlyBuilder
+  extends Omit<
+      SlashCommandBuilder,
+      Exclude<keyof SharedSlashCommandOptions, "options">
+    >,
+    BotCommandBuilderBase {
+  /**
+   * Adds a new subcommand group to this command.
+   *
+   * @param input - A function that returns a subcommand group builder or an already built builder
+   */
+  addSubcommandGroup(
+    input:
+      | SlashCommandSubcommandGroupBuilder
+      | ((
+          subcommandGroup: SlashCommandSubcommandGroupBuilder,
+        ) => SlashCommandSubcommandGroupBuilder),
+  ): BotCommandSubcommandsOnlyBuilder
+
+  /**
+   * Adds a new subcommand to this command.
+   *
+   * @param input - A function that returns a subcommand builder or an already built builder
+   */
+  addSubcommand(
+    input:
+      | SlashCommandSubcommandBuilder
+      | ((
+          subcommandGroup: SlashCommandSubcommandBuilder,
+        ) => SlashCommandSubcommandBuilder),
+  ): BotCommandSubcommandsOnlyBuilder
+}
+
+/**
  * A builder that creates API-compatible JSON data for phasebot slash commands.
  * @extends SlashCommandBuilder
  */
@@ -125,8 +161,7 @@ export class BotCommandBuilder extends Mixin(
     // Push it
     options.push(result)
 
-    return this as unknown as SlashCommandSubcommandsOnlyBuilder &
-      BotCommandBuilderBase
+    return this as unknown as BotCommandSubcommandsOnlyBuilder
   }
 
   /**
@@ -160,7 +195,6 @@ export class BotCommandBuilder extends Mixin(
     // Push it
     options.push(result)
 
-    return this as unknown as SlashCommandSubcommandsOnlyBuilder &
-      BotCommandBuilderBase
+    return this as unknown as BotCommandSubcommandsOnlyBuilder
   }
 }
