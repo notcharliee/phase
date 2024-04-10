@@ -1,24 +1,20 @@
-/* eslint-disable @next/next/no-img-element */
+import { readFileSync } from "fs"
 
-import { ImageResponse } from "next/og"
-import { type NextRequest } from "next/server"
+import { getOrdinal } from "~/utils"
+import { ImageBuilder } from "phasebot/builders"
 
-import { absoluteURL, getOrdinal } from "@/lib/utils"
+interface RankCardProps {
+  background: string | undefined
+  level: string
+  xp: string
+  target: string
+  rank: string
+  username: string
+  avatar: string
+}
 
-export const runtime = "edge"
-export const dynamic = "force-dynamic"
-
-export const GET = async (request: NextRequest) => {
-  const searchParams = request.nextUrl.searchParams
-
-  const username = searchParams.get("username") ?? "username"
-  const avatar = searchParams.get("avatar") ?? absoluteURL("/discord.png")
-  const rank = searchParams.get("rank") ?? "1"
-  const level = searchParams.get("level") ?? "0"
-  const xp = searchParams.get("xp") ?? "1"
-  const target = searchParams.get("target") ?? "500"
-
-  return new ImageResponse(
+export const generateRankCard = (props: RankCardProps) =>
+  new ImageBuilder(
     (
       <main
         style={{
@@ -28,9 +24,9 @@ export const GET = async (request: NextRequest) => {
           background: "rgba(8,8,8,0.25)",
         }}
       >
-        {searchParams.has("background") && (
+        {!!props.background && (
           <img
-            src={searchParams.get("background")!}
+            src={props.background}
             alt=""
             style={{
               position: "absolute",
@@ -56,7 +52,7 @@ export const GET = async (request: NextRequest) => {
           }}
         >
           <img
-            src={avatar}
+            src={props.avatar}
             alt=""
             width={96}
             height={96}
@@ -90,9 +86,9 @@ export const GET = async (request: NextRequest) => {
                 }}
               >
                 <span style={{ color: "#F8F8F8" }}>
-                  {getOrdinal(+rank)} Place
+                  {getOrdinal(+props.rank)} Place
                 </span>
-                <span style={{ color: "#C0C0C0" }}>{username}</span>
+                <span style={{ color: "#C0C0C0" }}>{props.username}</span>
               </div>
               <div
                 style={{
@@ -102,8 +98,8 @@ export const GET = async (request: NextRequest) => {
                   textAlign: "right",
                 }}
               >
-                <span style={{ color: "#F8F8F8" }}>Level {level}</span>
-                <span style={{ color: "#C0C0C0" }}>{xp} XP</span>
+                <span style={{ color: "#F8F8F8" }}>Level {props.level}</span>
+                <span style={{ color: "#C0C0C0" }}>{props.xp} XP</span>
               </div>
             </div>
             <div
@@ -118,7 +114,7 @@ export const GET = async (request: NextRequest) => {
             >
               <div
                 style={{
-                  width: `${(+xp / +target) * 100}%`,
+                  width: `${(+props.xp / +props.target) * 100}%`,
                   height: "18px",
                   borderRadius: "18px",
                   background: "#F8F8F8",
@@ -132,19 +128,14 @@ export const GET = async (request: NextRequest) => {
         </div>
       </main>
     ),
-    {
-      width: 548,
-      height: 192,
-      fonts: [
-        {
-          data: await fetch(absoluteURL("/fonts/Geist-600.otf")).then((res) =>
-            res.arrayBuffer().then((ab) => ab),
-          ),
-          name: "Geist",
-          style: "normal",
-          weight: 600,
-        },
-      ],
-    },
   )
-}
+    .setWidth(548)
+    .setHeight(192)
+    .setFonts([
+      {
+        data: readFileSync("./src/images/fonts/Geist-600.otf"),
+        name: "Geist",
+        style: "normal",
+        weight: 600,
+      },
+    ])

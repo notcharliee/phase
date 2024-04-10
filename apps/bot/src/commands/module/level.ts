@@ -1,70 +1,70 @@
 import { GuildSchema, LevelSchema } from "@repo/schemas"
+import { generateRankCard } from "~/images/rank"
+import { errorMessage, moduleNotEnabled, PhaseColour } from "~/utils"
 import { AttachmentBuilder, EmbedBuilder } from "discord.js"
-import { BotCommandBuilder, botCommand } from "phasebot"
-import { PhaseColour, errorMessage, moduleNotEnabled } from "~/utils"
+import { BotCommandBuilder } from "phasebot/builders"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("level")
-    .setDescription("level")
-    .setDMPermission(false)
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("rank")
-        .setDescription("Generates your server rank card.")
-        .addUserOption((option) =>
-          option
-            .setName("user")
-            .setDescription("Specify a user.")
-            .setRequired(false),
-        ),
-    )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("leaderboard")
-        .setDescription("Generates the server level leaderboard.")
-        .addIntegerOption((option) =>
-          option
-            .setName("rank-start")
-            .setDescription("What rank to start from.")
-            .setMinValue(1)
-            .setRequired(true),
-        )
-        .addIntegerOption((option) =>
-          option
-            .setName("rank-count")
-            .setDescription(
-              "How many ranks to include (maximum of 15 at a time).",
-            )
-            .setMinValue(1)
-            .setMaxValue(15)
-            .setRequired(true),
-        ),
-    )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("set")
-        .setDescription("Sets a users rank data.")
-        .addUserOption((option) =>
-          option
-            .setName("user")
-            .setDescription("Specify a user.")
-            .setRequired(true),
-        )
-        .addIntegerOption((option) =>
-          option
-            .setName("level")
-            .setDescription("Set a new level rank for the user.")
-            .setRequired(true),
-        )
-        .addIntegerOption((option) =>
-          option
-            .setName("xp")
-            .setDescription("Set a new xp rank for the user.")
-            .setRequired(true),
-        ),
-    ),
-  async (client, interaction) => {
+export default new BotCommandBuilder()
+  .setName("level")
+  .setDescription("level")
+  .setDMPermission(false)
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("rank")
+      .setDescription("Generates your server rank card.")
+      .addUserOption((option) =>
+        option
+          .setName("user")
+          .setDescription("Specify a user.")
+          .setRequired(false),
+      ),
+  )
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("leaderboard")
+      .setDescription("Generates the server level leaderboard.")
+      .addIntegerOption((option) =>
+        option
+          .setName("rank-start")
+          .setDescription("What rank to start from.")
+          .setMinValue(1)
+          .setRequired(true),
+      )
+      .addIntegerOption((option) =>
+        option
+          .setName("rank-count")
+          .setDescription(
+            "How many ranks to include (maximum of 15 at a time).",
+          )
+          .setMinValue(1)
+          .setMaxValue(15)
+          .setRequired(true),
+      ),
+  )
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("set")
+      .setDescription("Sets a users rank data.")
+      .addUserOption((option) =>
+        option
+          .setName("user")
+          .setDescription("Specify a user.")
+          .setRequired(true),
+      )
+      .addIntegerOption((option) =>
+        option
+          .setName("level")
+          .setDescription("Set a new level rank for the user.")
+          .setRequired(true),
+      )
+      .addIntegerOption((option) =>
+        option
+          .setName("xp")
+          .setDescription("Set a new xp rank for the user.")
+          .setRequired(true),
+      ),
+  )
+  .setExecute(async (_, interaction) => {
     switch (interaction.options.getSubcommand()) {
       case "rank":
         {
@@ -73,23 +73,18 @@ export default botCommand(
           const user =
             interaction.options.getUser("user", false) ?? interaction.user
 
-          const username = user.username
-          const avatar = user.displayAvatarURL({ extension: "png", size: 128 })
-
           try {
             const guildSchema = await GuildSchema.findOne({
-              id: interaction.guildId,
+              id: interaction.guildId!,
             })
 
             if (!guildSchema?.modules?.Levels?.enabled) {
               return interaction.editReply(moduleNotEnabled("Levels"))
             }
 
-            const background = guildSchema.modules.Levels.background
-
             const userLevelData =
               (await LevelSchema.findOne({
-                guild: interaction.guildId,
+                guild: interaction.guildId!,
                 user: user.id,
               })) ??
               (await new LevelSchema({
@@ -114,33 +109,15 @@ export default botCommand(
                 ],
               })) + 1
 
-            const rank = userRank.toString()
-            const level = userLevelData.level.toString()
-            const xp = userLevelData.xp.toString()
-            const target = `${500 * (userLevelData.level + 1)}`
-
-            const rankCardUrl = new URL(
-              `https://phasebot.xyz/api/image/rank.png`,
-            )
-
-            if (background) {
-              rankCardUrl.searchParams.append("background", background)
-            }
-
-            rankCardUrl.searchParams.append("username", username)
-            rankCardUrl.searchParams.append("avatar", avatar)
-            rankCardUrl.searchParams.append("rank", rank)
-            rankCardUrl.searchParams.append("level", level)
-            rankCardUrl.searchParams.append("xp", xp)
-            rankCardUrl.searchParams.append("target", target)
-
-            const rankCard = new AttachmentBuilder(
-              Buffer.from(
-                await fetch(rankCardUrl.toString()).then((res) =>
-                  res.arrayBuffer(),
-                ),
-              ),
-            )
+            const rankCard = await generateRankCard({
+              background: guildSchema.modules.Levels.background,
+              rank: userRank.toString(),
+              level: userLevelData.level.toString(),
+              xp: userLevelData.xp.toString(),
+              target: `${500 * (userLevelData.level + 1)}`,
+              username: user.username,
+              avatar: user.displayAvatarURL({ extension: "png", size: 128 }),
+            }).toAttachment()
 
             interaction.editReply({
               files: [rankCard],
@@ -192,15 +169,16 @@ export default botCommand(
           const xp = interaction.options.getInteger("xp", true)
 
           const guildSchema = await GuildSchema.findOne({
-            id: interaction.guildId,
-          })
-          const levelSchema = await LevelSchema.findOne({
-            guild: interaction.guildId,
-            user: user.id,
+            id: interaction.guildId!,
           })
 
           if (!guildSchema?.modules?.Levels?.enabled)
             interaction.reply(moduleNotEnabled("Tickets"))
+
+          const levelSchema = await LevelSchema.findOne({
+            guild: interaction.guildId!,
+            user: user.id,
+          })
 
           if (!levelSchema)
             new LevelSchema({
@@ -226,5 +204,4 @@ export default botCommand(
         }
         break
     }
-  },
-)
+  })
