@@ -13,6 +13,7 @@ export default botEvent(
       if (
         // If...
         oldVoice.channel && // User was in a channel before update AND...
+        joinToCreateModule.active && // Active array exists AND...
         joinToCreateModule.active.includes(oldVoice.channel.id) && // The channel was a jtc channel AND...
         (!oldVoice.channel.members.size ||
           oldVoice.channel.members.every((member) => member.user.bot)) // There's no members left OR the only members left are bots...
@@ -42,7 +43,7 @@ export default botEvent(
 
         newVoice.setChannel(newVoiceChannel)
 
-        joinToCreateModule.active.push(newVoiceChannel.id)
+        ;(joinToCreateModule.active ?? []).push(newVoiceChannel.id)
 
         guildSchema.markModified("modules")
         guildSchema.save()

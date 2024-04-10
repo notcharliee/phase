@@ -42,6 +42,7 @@ export const JoinToCreates = (props: ModuleFormProps<"JoinToCreates">) => {
       enabled: false,
       channel: "",
       category: "",
+      active: [],
     },
   })
 
