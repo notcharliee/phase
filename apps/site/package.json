@@ -1,14 +1,13 @@
 {
   "private": true,
   "name": "site",
-  "author": "@notcharliee",
   "type": "module",
   "scripts": {
-    "build": "contentlayer build && next build",
-    "dev": "concurrently \"contentlayer dev\" \"next dev --turbo\"",
-    "start": "next start",
-    "lint": "next lint",
-    "preview": "pnpm build && pnpm start"
+    "build": "bunx contentlayer build && bunx next build",
+    "dev": "bunx concurrently \"bunx contentlayer dev\" \"bunx next dev --turbo\"",
+    "start": "bunx next start",
+    "lint": "bunx next lint",
+    "preview": "bun run build && bun run start"
   },
   "dependencies": {
     "@discordjs/core": "^1.1.1",
@@ -53,7 +52,7 @@
     "concurrently": "^8.2.2",
     "contentlayer": "^0.3.4",
     "date-fns": "^3.6.0",
-    "discord-api-types": "^0.37.61",
+    "discord-api-types": "0.37.61",
     "emoji-mart": "^5.5.2",
     "geist": "^1.2.2",
     "http-status-codes": "^2.3.0",
@@ -100,6 +99,5 @@
   },
   "ct3aMetadata": {
     "initVersion": "7.23.1"
-  },
-  "packageManager": "pnpm@8.9.2"
+  }
 }

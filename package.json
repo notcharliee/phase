@@ -1,18 +1,23 @@
 {
   "private": true,
+  "packageManager": "bun@1.1.3",
   "name": "phase-monorepo",
   "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "bot:build": "set FORCE_COLOR=1&& turbo run build --filter=bot",
-    "bot:dev": "set FORCE_COLOR=1&& turbo run dev --filter=bot",
-    "bot:start": "set FORCE_COLOR=1&& cd apps/bot && pnpm run start",
-    "site:build": "set FORCE_COLOR=1&& turbo run build --filter=site",
-    "site:dev": "set FORCE_COLOR=1&& turbo run dev --filter=site",
-    "site:start": "set FORCE_COLOR=1&& cd apps/site && pnpm run start",
-    "phasebot:build": "set FORCE_COLOR=1&& turbo run build --filter=phasebot",
-    "phasebot:dev": "set FORCE_COLOR=1&& turbo run dev --filter=phasebot",
-    "schemas:build": "set FORCE_COLOR=1&& turbo run build --filter=@repo/schemas",
-    "schemas:dev": "set FORCE_COLOR=1&& turbo run dev --filter=@repo/schemas"
+    "bot:build": "turbo run build --filter=bot --color",
+    "bot:dev": "turbo run dev --filter=bot --color",
+    "bot:start": "cd apps/bot && bun run start",
+    "site:build": "turbo run build --filter=site --color",
+    "site:dev": "turbo run dev --filter=site --color",
+    "site:start": "cd apps/site && bun run start",
+    "phasebot:build": "turbo run build --filter=phasebot --color",
+    "phasebot:dev": "turbo run dev --filter=phasebot --color",
+    "schemas:build": "turbo run build --filter=@repo/schemas --color",
+    "schemas:dev": "turbo run dev --filter=@repo/schemas --color"
   },
   "dependencies": {
     "turbo": "^1.12.2"
@@ -22,5 +27,13 @@
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.12"
   },
-  "packageManager": "pnpm@8.15.3"
+  "trustedDependencies": [
+    "@vercel/speed-insights",
+    "bcrypt",
+    "contentlayer",
+    "esbuild",
+    "phasebot",
+    "protobufjs",
+    "sharp"
+  ]
 }

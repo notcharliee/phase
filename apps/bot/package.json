@@ -3,9 +3,9 @@
   "name": "bot",
   "type": "module",
   "scripts": {
-    "build": "phase build && pnpm run commands",
+    "build": "phase build && bun run commands",
     "start": "phase start",
-    "dev": "pnpm run build && pnpm run start",
+    "dev": "bun run build && bun run start",
     "commands": "phase commands --outFile=../site/src/config/commands.json"
   },
   "dependencies": {

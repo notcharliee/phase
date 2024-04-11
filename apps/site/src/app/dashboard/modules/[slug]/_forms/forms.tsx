@@ -142,7 +142,7 @@ export const Forms = (
                 | APIButtonComponentWithCustomId
                 | undefined
 
-              if (button && button.custom_id.endsWith(formData.id)) return true
+              if (button?.custom_id.endsWith(formData.id)) return true
             })
 
             setTimeout(() => {

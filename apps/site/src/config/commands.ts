@@ -15,8 +15,7 @@ interface CommandsConfig {
 export const commandsConfig = commands
   .flatMap((command: RESTPostAPIChatInputApplicationCommandsJSONBody) => {
     if (
-      command.options &&
-      command.options.every(
+      command.options?.every(
         (option) => option.type === ApplicationCommandOptionType.Subcommand,
       )
     ) {
