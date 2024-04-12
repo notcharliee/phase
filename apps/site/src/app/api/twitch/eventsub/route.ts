@@ -131,7 +131,7 @@ export const POST = async (request: NextRequest) => {
             },
           ],
           image: {
-            url: stream.getThumbnailUrl(400, 225),
+            url: stream.getThumbnailUrl(400, 225) + `?t=${Date.now()}`,
           },
           footer: {
             text: "phasebot.xyz",
