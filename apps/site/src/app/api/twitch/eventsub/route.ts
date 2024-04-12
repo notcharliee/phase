@@ -145,13 +145,12 @@ export const POST = async (request: NextRequest) => {
           })
         ).find(
           (message) =>
-            // bot sent message
+            // if bot sent message
             message.author.id === env.DISCORD_ID &&
-            // was sent in last 10 minutes
-            Date.parse(message.timestamp) <
-              Date.parse(embed.timestamp) - 10000 &&
-            // embed titles match
-            message.embeds?.[0]?.title === embed.title,
+            // and embed titles match
+            message.embeds?.[0]?.title === embed.title &&
+            // and it was sent in last 5 minutes
+            Date.parse(message.timestamp) > Date.now() - 5 * 60 * 1000,
         )
 
         if (messageAlreadySent) continue
@@ -198,13 +197,12 @@ export const POST = async (request: NextRequest) => {
           })
         ).find(
           (message) =>
-            // bot sent message
+            // if bot sent message
             message.author.id === env.DISCORD_ID &&
-            // was sent in last 10 minutes
-            Date.parse(message.timestamp) <
-              Date.parse(embed.timestamp) - 10000 &&
-            // embed titles match
-            message.embeds?.[0]?.title === embed.title,
+            // and embed titles match
+            message.embeds?.[0]?.title === embed.title &&
+            // and it was sent in last 5 minutes
+            Date.parse(message.timestamp) > Date.now() - 5 * 60 * 1000,
         )
 
         if (messageAlreadySent) continue
