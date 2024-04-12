@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server"
 
-import { API } from "@discordjs/core/http-only"
+import { API, type APIEmbed } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 import { GuildSchema } from "@repo/schemas"
 import { ApiClient } from "@twurple/api"
@@ -109,39 +109,56 @@ export const POST = async (request: NextRequest) => {
       ) {
         const stream = (await twitchAPI.streams.getStreamByUserId(streamerId))!
 
-        await discordAPI.channels.createMessage(moduleConfig.channel, {
-          content: moduleConfig.mention && `<@&${moduleConfig.mention}>`,
-          embeds: [
+        const embed = {
+          color: parseInt("f8f8f8", 16),
+          author: {
+            name: `${streamer.displayName} is live on Twitch!`,
+            url: `https://twitch.tv/${streamer.name}`,
+            icon_url: streamer.profilePictureUrl,
+          },
+          title: stream.title,
+          url: `https://twitch.tv/${stream.userName}`,
+          fields: [
             {
-              color: parseInt("f8f8f8", 16),
-              author: {
-                name: `${streamer.displayName} is live on Twitch!`,
-                url: `https://twitch.tv/${streamer.name}`,
-                icon_url: streamer.profilePictureUrl,
-              },
-              title: stream.title,
-              url: `https://twitch.tv/${stream.userName}`,
-              fields: [
-                {
-                  name: "Game",
-                  value: stream.gameName,
-                  inline: true,
-                },
-                {
-                  name: "Viewers",
-                  value: stream.viewers.toString(),
-                  inline: true,
-                },
-              ],
-              image: {
-                url: stream.getThumbnailUrl(400, 225),
-              },
-              footer: {
-                text: "phasebot.xyz",
-              },
-              timestamp: stream.startDate.toISOString(),
+              name: "Game",
+              value: stream.gameName,
+              inline: true,
+            },
+            {
+              name: "Viewers",
+              value: stream.viewers.toString(),
+              inline: true,
             },
           ],
+          image: {
+            url: stream.getThumbnailUrl(400, 225),
+          },
+          footer: {
+            text: "phasebot.xyz",
+          },
+          timestamp: stream.startDate.toISOString(),
+        } satisfies APIEmbed
+
+        const messageAlreadySent = !!(
+          await discordAPI.channels.getMessages(moduleConfig.channel, {
+            limit: 3,
+          })
+        ).find(
+          (message) =>
+            // bot sent message
+            message.author.id === env.DISCORD_ID &&
+            // was sent in last 10 minutes
+            Date.parse(message.timestamp) <
+              Date.parse(embed.timestamp) - 10000 &&
+            // embed titles match
+            message.embeds?.[0]?.title === embed.title,
+        )
+
+        if (messageAlreadySent) continue
+
+        await discordAPI.channels.createMessage(moduleConfig.channel, {
+          content: moduleConfig.mention && `<@&${moduleConfig.mention}>`,
+          embeds: [embed],
           components: [
             {
               type: 1,
@@ -162,21 +179,38 @@ export const POST = async (request: NextRequest) => {
         body.subscription.type === "stream.offline" &&
         moduleConfig.events.includes("stream.offline")
       ) {
+        const embed = {
+          color: parseInt("f8f8f8", 16),
+          author: {
+            name: `${streamer.displayName} is now offline`,
+            icon_url: streamer.profilePictureUrl,
+          },
+          title: "Thanks for watching!",
+          footer: {
+            text: "phasebot.xyz",
+          },
+          timestamp: new Date().toISOString(),
+        } satisfies APIEmbed
+
+        const messageAlreadySent = !!(
+          await discordAPI.channels.getMessages(moduleConfig.channel, {
+            limit: 3,
+          })
+        ).find(
+          (message) =>
+            // bot sent message
+            message.author.id === env.DISCORD_ID &&
+            // was sent in last 10 minutes
+            Date.parse(message.timestamp) <
+              Date.parse(embed.timestamp) - 10000 &&
+            // embed titles match
+            message.embeds?.[0]?.title === embed.title,
+        )
+
+        if (messageAlreadySent) continue
+
         await discordAPI.channels.createMessage(moduleConfig.channel, {
-          embeds: [
-            {
-              color: parseInt("f8f8f8", 16),
-              author: {
-                name: `${streamer.displayName} is now offline`,
-                icon_url: streamer.profilePictureUrl,
-              },
-              title: "Thanks for watching!",
-              footer: {
-                text: "phasebot.xyz",
-              },
-              timestamp: new Date().toISOString(),
-            },
-          ],
+          embeds: [embed],
         })
       }
     }
