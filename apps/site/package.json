@@ -3,10 +3,10 @@
   "name": "site",
   "type": "module",
   "scripts": {
-    "build": "bunx contentlayer build && bunx next build",
-    "dev": "bunx concurrently \"bunx contentlayer dev\" \"bunx next dev --turbo\"",
-    "start": "bunx next start",
-    "lint": "bunx next lint",
+    "build": "contentlayer build && next build",
+    "dev": "conc --raw \"contentlayer dev\" \"next dev --turbo\"",
+    "start": "next start",
+    "lint": "next lint",
     "preview": "bun run build && bun run start"
   },
   "dependencies": {
@@ -60,7 +60,7 @@
     "lucide-react": "^0.303.0",
     "mongoose": "^8.2.3",
     "ms": "^2.1.3",
-    "next": "^14.1.4",
+    "next": "^14.2.1",
     "next-contentlayer": "^0.3.4",
     "next13-progressbar": "^1.2.1",
     "postcss": "8.4.26",
