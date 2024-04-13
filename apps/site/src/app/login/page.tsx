@@ -1,5 +1,3 @@
-import "@/styles/login.css"
-
 import Link from "next/link"
 
 import { Moon } from "@/components/moon"

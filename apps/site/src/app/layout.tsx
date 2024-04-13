@@ -9,7 +9,6 @@ import { GeistSans } from "geist/font/sans"
 
 import { LoadingBar } from "@/components/loading-bar"
 import { Toaster } from "@/components/ui/sonner"
-import { TooltipProvider } from "@/components/ui/tooltip"
 
 import { siteConfig } from "@/config/site"
 
@@ -70,7 +69,7 @@ export default function RootLayout({
           GeistMono.variable,
         )}
       >
-        <TooltipProvider>{children}</TooltipProvider>
+        {children}
         <Toaster />
         <Analytics />
         <SpeedInsights />
