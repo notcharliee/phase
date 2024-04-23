@@ -43,7 +43,9 @@ export default botEvent(
 
         newVoice.setChannel(newVoiceChannel)
 
-        ;(joinToCreateModule.active ?? []).push(newVoiceChannel.id)
+        if (!joinToCreateModule.active) joinToCreateModule.active = []
+        
+        joinToCreateModule.active.push(newVoiceChannel.id)
 
         guildSchema.markModified("modules")
         guildSchema.save()
