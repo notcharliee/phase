@@ -1,28 +1,29 @@
 {
   "name": "phasebot",
-  "description": "A simple framework for building and running discord.js applications.",
-  "version": "0.2.1",
+  "description": "A simple framework for building and running discord bots",
+  "version": "0.3.0",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup ./src --minify --clean --dts --format=esm",
-    "dev": "tsup ./src --minify --clean --dts --format=esm --watch",
-    "postinstall": "node postinstall.js"
+    "build": "bun build.ts",
+    "dev": "bun build.ts"
   },
   "bin": {
-    "phase": "./dist/cli.js"
+    "phase": "./dist/cli/index.js"
   },
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/index.js"
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     },
     "./builders": {
       "import": "./dist/builders/index.js",
-      "require": "./dist/builders/index.js"
+      "require": "./dist/builders/index.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "keywords": [
@@ -31,7 +32,7 @@
     "bot",
     "framework",
     "client",
-    "node"
+    "bun"
   ],
   "files": [
     "dist"
@@ -44,18 +45,19 @@
     "@vercel/og": "^0.6.2",
     "chalk": "^5.3.0",
     "commander": "^12.0.0",
-    "cron": "^3.1.6",
+    "croner": "^8.0.2",
     "discord.js": "^14.12.1",
-    "dotenv-flow": "^4.1.0",
-    "ora": "^8.0.1",
-    "react": "18.2.0",
+    "gradient-string": "^2.0.2",
+    "lodash.clonedeep": "^4.5.0",
     "ts-mixer": "^6.0.4",
-    "tsup": "^8.0.2"
+    "zod": "^3.23.4"
   },
   "devDependencies": {
-    "@types/dotenv-flow": "^3.3.3",
-    "@types/node": "^20.11.19",
-    "@types/react": "^18.2.67",
+    "@schemastore/package": "^0.0.10",
+    "@types/bun": "^1.1.0",
+    "@types/gradient-string": "^1.1.6",
+    "@types/lodash.clonedeep": "^4.5.9",
+    "tsup": "^8.0.2",
     "typescript": "^5.3.3"
   },
   "peerDependencies": {

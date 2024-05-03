@@ -13,7 +13,7 @@ import {
 } from "discord.js"
 
 /**
- * @deprecated Use `BotCommandBuilder` instead.
+ * @deprecated Use `BotCommandBuilder` from "phasebot/builders" instead.
  */
 export interface BotCommand {
   (
@@ -46,12 +46,14 @@ export interface BotCommandMiddleware {
 }
 
 /**
- * @deprecated Use `BotCommandBuilder` instead.
+ * @deprecated Use `BotCommandBuilder` from "phasebot/builders" instead.
  */
 export const botCommand: BotCommand = (command, execute) => ({
   ...command.toJSON(),
   execute,
 })
 
-
+/**
+ * @deprecated Use `BotCommandBuilder` from "phasebot/builders" instead.
+ */
 export class BotCommandBuilder extends SlashCommandBuilder {}

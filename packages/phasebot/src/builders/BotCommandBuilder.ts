@@ -7,17 +7,25 @@ import {
   SlashCommandSubcommandGroupBuilder,
   ToAPIApplicationCommandOptions,
   type ChatInputCommandInteraction,
-  type Client,
   type RESTPostAPIChatInputApplicationCommandsJSONBody,
   type SlashCommandOptionsOnlyBuilder,
   type SlashCommandSubcommandsOnlyBuilder,
 } from "discord.js"
+
 import { Mixin } from "ts-mixer"
 
-export type BotCommandExecuteFunction = (
-  client: Client<true>,
+import { PhaseClient } from "~/cli/client"
+
+export type BotCommandExecute = (
+  client: PhaseClient,
   interaction: ChatInputCommandInteraction,
-) => unknown
+) => PromiseUnion<unknown>
+
+export type BotCommandMiddleware = (
+  client: PhaseClient,
+  interaction: ChatInputCommandInteraction,
+  execute: BotCommandExecute
+) => PromiseUnion<unknown>
 
 export type DeprecatedBotCommandFunction = {
   (
@@ -27,15 +35,9 @@ export type DeprecatedBotCommandFunction = {
       | SlashCommandOptionsOnlyBuilder
       | SlashCommandSubcommandGroupBuilder
       | SlashCommandSubcommandsOnlyBuilder,
-    execute: (
-      client: Client<true>,
-      interaction: ChatInputCommandInteraction,
-    ) => unknown,
+    execute: BotCommandExecute,
   ): RESTPostAPIChatInputApplicationCommandsJSONBody & {
-    execute: (
-      client: Client<true>,
-      interaction: ChatInputCommandInteraction,
-    ) => unknown
+    execute: BotCommandExecute
   }
 }
 
@@ -43,22 +45,24 @@ class BotCommandBuilderBase {
   /**
    * The function to execute when the command is called.
    */
-  public readonly execute: BotCommandExecuteFunction | undefined = undefined
+  public readonly execute!: BotCommandExecute
+
+  /**
+   * The metadata for the command.
+   */
+  public readonly metadata: object = {
+    type: "command",
+  }
 
   /**
    * Set the function to execute when the command is called.
    *
    * @param fn - The function to execute when the command is called.
    */
-  setExecute(fn: BotCommandExecuteFunction) {
+  setExecute(fn: BotCommandExecute) {
     Reflect.set(this, "execute", fn)
     return this
   }
-
-  /**
-   * The metadata for the command.
-   */
-  public readonly metadata: object | undefined = undefined
 
   /**
    * Set the metadata for the command.
@@ -66,7 +70,10 @@ class BotCommandBuilderBase {
    * @param metadata - The metadata for the command.
    */
   setMetadata(metadata: object) {
-    Reflect.set(this, "metadata", metadata)
+    Reflect.set(this, "metadata", {
+      type: "command",
+      ...metadata,
+    })
     return this
   }
 }

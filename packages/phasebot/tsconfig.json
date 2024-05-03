@@ -5,6 +5,7 @@
     "checkJs": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "noUncheckedIndexedAccess": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
@@ -16,14 +17,8 @@
     },
     "outDir": "dist",
     "moduleResolution": "bundler",
-    "module": "esnext",
-    "declaration": true
+    "module": "esnext"
   },
   "exclude": ["node_modules", "dist"],
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.js",
-    "src/**/*.cjs",
-    "src/**/*.mjs",
-  ]
+  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.cjs", "src/**/*.mjs"]
 }
