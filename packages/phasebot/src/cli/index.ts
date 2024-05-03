@@ -89,7 +89,7 @@ program.action(async () => {
     `\n${chalk.greenBright("✓")} Bot is online! ${chalk.grey(`(${(Bun.nanoseconds() / 1e9).toFixed(2)}s)`)}\n`,
   )
 
-  updateCommands(client)
+  // updateCommands(client)
 })
 
 program.parse(process.argv)
