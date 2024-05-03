@@ -8,6 +8,9 @@
         "node"
       ],
       "phases": {
+        "setup": {
+          "nixPkgsArchive": "b5c86f0819fac69a6bb874249c512a0bdc4025e3"
+        },
         "install": {
           "dependsOn": ["setup"],
           "cmds": ["bun install"]
