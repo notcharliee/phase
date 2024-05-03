@@ -6,4 +6,5 @@
   "editor.tabSize": 2,
   "bun.debugTerminal.enabled": true,
   "bun.debugTerminal.stopOnEntry": false,
+  "typescript.tsdk": "node_modules\\typescript\\lib",
 }

@@ -10,8 +10,18 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "main": "./dist/index.js",
+      "module": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "dependencies": {
+    "aws-sdk": "^2.1599.0",
+    "mock-aws-s3": "^4.0.2",
     "mongoose": "^8.1.0",
+    "nock": "^13.5.4",
     "tsup": "^8.0.1"
   },
   "devDependencies": {

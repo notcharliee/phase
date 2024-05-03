@@ -13,11 +13,12 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "@repo/schemas": ["../../node_modules/@repo/schemas/dist"]
     },
     "moduleResolution": "bundler",
     "module": "esnext"
   },
   "exclude": ["node_modules", "build"],
-  "include": ["src/**/*", "src/**/*"]
+  "include": ["src/**/*"]
 }

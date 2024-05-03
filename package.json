@@ -1,15 +1,13 @@
 {
   "private": true,
   "packageManager": "bun@1.1.3",
-  "name": "phase-monorepo",
+  "name": "phase",
   "type": "module",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "scripts": {
-    "bot:build": "turbo run build --filter=bot --color",
-    "bot:dev": "turbo run dev --filter=bot --color",
     "bot:start": "cd apps/bot && bun run start",
     "site:build": "turbo run build --filter=site --color",
     "site:dev": "turbo run dev --filter=site --color",
@@ -29,6 +27,7 @@
   },
   "trustedDependencies": [
     "@vercel/speed-insights",
+    "aws-sdk",
     "bcrypt",
     "contentlayer",
     "esbuild",
