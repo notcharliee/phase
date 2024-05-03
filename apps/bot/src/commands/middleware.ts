@@ -1,10 +1,22 @@
-import { GuildSchema } from "@repo/schemas"
 import { GuildMember, PermissionFlagsBits } from "discord.js"
-import { type BotCommandExecuteFunction } from "phasebot/builders"
+import { type BotCommandMiddleware } from "phasebot/builders"
+
+import { GuildSchema } from "@repo/schemas"
+
 import { errorMessage, missingPermission } from "~/utils"
 
-const middleware: BotCommandExecuteFunction  = async (_, interaction) => {
-  if (!interaction.guild) return true
+const middleware: BotCommandMiddleware = async (
+  client,
+  interaction,
+  execute,
+) => {
+  if (!interaction.guild) {
+    try {
+      return await execute(client, interaction)
+    } catch (error) {
+      return console.error(error)
+    }
+  }
 
   const commandName = [
     interaction.commandName,
@@ -20,15 +32,13 @@ const middleware: BotCommandExecuteFunction  = async (_, interaction) => {
 
   if (command) {
     if (command.disabled) {
-      await interaction.reply(
+      return await interaction.reply(
         errorMessage({
           title: "Command Disabled",
           description: `This command has been disabled by the server administrators.`,
           ephemeral: true,
         }),
       )
-
-      return false
     }
 
     const userId = `user:${interaction.user.id}`
@@ -39,20 +49,25 @@ const middleware: BotCommandExecuteFunction  = async (_, interaction) => {
     const isExplicitlyAllowed = command.allow.some((perm) => {
       if (perm.startsWith("role:")) return userRoles.includes(perm)
       if (perm.startsWith("user:")) return perm === userId
-      return false
+      return
     })
 
-    if (isExplicitlyAllowed) return true
+    if (isExplicitlyAllowed) {
+      try {
+        return await execute(client, interaction)
+      } catch (error) {
+        return console.error(error)
+      }
+    }
 
     const isExplicitlyDenied = command.deny.some((perm) => {
       if (perm.startsWith("role:")) return userRoles.includes(perm)
       if (perm.startsWith("user:")) return perm === userId
-      return false
+      return
     })
 
     if (isExplicitlyDenied) {
-      await interaction.reply(missingPermission())
-      return false
+      return await interaction.reply(missingPermission())
     }
   }
 
@@ -75,11 +90,14 @@ const middleware: BotCommandExecuteFunction  = async (_, interaction) => {
   const defaultPerm = defaultPermissions[commandName]
 
   if (defaultPerm && !interaction.memberPermissions?.has(defaultPerm)) {
-    await interaction.reply(missingPermission(defaultPerm))
-    return false
+    return await interaction.reply(missingPermission(defaultPerm))
   }
 
-  return true
+  try {
+    return await execute(client, interaction)
+  } catch (error) {
+    return console.error(error)
+  }
 }
 
 export default middleware
