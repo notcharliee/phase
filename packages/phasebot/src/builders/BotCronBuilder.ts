@@ -3,6 +3,7 @@ import { isAsyncFunction } from "node:util/types"
 import { Cron } from "croner"
 
 import { PhaseClient } from "~/cli/client"
+import { PromiseUnion } from "~/types"
 
 export type BotCronExecute = (client: PhaseClient) => PromiseUnion<void>
 

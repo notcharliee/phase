@@ -17,21 +17,23 @@ console.log("  Building package ...")
 const packageJson = (await Bun.file("./package.json").json()) as PackageJsonFile
 const externalDeps = Object.keys(packageJson.dependencies!)
 
-const packageBuild = await Bun.build({
+Bun.build({
   entrypoints: ["./src/index.ts", "./src/builders/index.ts", "./src/cli/index.ts"],
   outdir: "./dist",
   target: "bun",
   external: externalDeps,
   minify: true,
+}).then((build) => {
+  if (!build.success) {
+    throw new AggregateError(build.logs, "Build failed")
+  }
+}).catch((error) => {
+  throw error
 })
-
-if (!packageBuild.success) {
-  throw new AggregateError(packageBuild.logs, "Build failed")
-}
 
 console.log("  Building types ...")
 
-await $`tsup-node ./src/index.ts ./src/builders/index.ts --dts --dts-only --minify --format=esm`.quiet()
+await $`tsup ./src/index.ts ./src/builders/index.ts --dts --dts-only --minify --format=esm`.quiet()
 
 console.log("  ")
 console.log(

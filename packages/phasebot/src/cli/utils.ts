@@ -1,11 +1,10 @@
-import readline from "node:readline"
-
 import { type ClientOptions } from "discord.js"
 
-import { version as packageVersion } from "~/../package.json"
 import chalk from "chalk"
 import gradient from "gradient-string"
 import { z } from "zod"
+
+import { version as packageVersion } from "~/../package.json"
 
 /** Configure how phasebot and discord.js will work in your project. */
 export interface PhaseConfig extends ClientOptions {
@@ -168,17 +167,4 @@ export const getConfig = async () => {
     ...(config as PhaseConfig),
     configPath,
   }
-}
-
-export const loadingPromise = async <T> (loading: string, complete: string, fn: () => Promise<T>): Promise<T> => {
-  process.stdout.write(`◌ ${loading}`)
-
-  const result = await fn()
-
-  readline.clearLine(process.stdout, 0)
-  readline.cursorTo(process.stdout, 0)
-
-  process.stdout.write(`${chalk.greenBright("✓")} ${complete}\n`)
-
-  return result
 }

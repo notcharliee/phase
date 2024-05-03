@@ -1,4 +1,4 @@
-import { type BotCommandExecuteFunction } from "~/builders"
+import { type BotCommandExecute } from "~/builders"
 
 export const getMiddleware = async () => {
   const path = Array.from(
@@ -16,7 +16,7 @@ export const getMiddleware = async () => {
   }
 
   if (defaultExport instanceof Function) {
-    return defaultExport as BotCommandExecuteFunction
+    return defaultExport as BotCommandExecute
   } else {
     throw new Error(`Command middleware file must export a function`)
   }

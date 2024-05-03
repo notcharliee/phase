@@ -1,6 +1,7 @@
 import type { ClientEvents } from "discord.js"
 
 import { PhaseClient } from "~/cli/client"
+import { PromiseUnion } from "~/types"
 
 export type BotEventExecute<T extends keyof ClientEvents = keyof ClientEvents> =
   (client: PhaseClient, ...args: ClientEvents[T]) => PromiseUnion<any>

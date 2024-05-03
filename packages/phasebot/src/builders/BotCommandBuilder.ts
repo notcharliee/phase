@@ -15,6 +15,7 @@ import {
 import { Mixin } from "ts-mixer"
 
 import { PhaseClient } from "~/cli/client"
+import { PromiseUnion } from "~/types"
 
 export type BotCommandExecute = (
   client: PhaseClient,
@@ -24,7 +25,7 @@ export type BotCommandExecute = (
 export type BotCommandMiddleware = (
   client: PhaseClient,
   interaction: ChatInputCommandInteraction,
-  execute: BotCommandExecute
+  execute: BotCommandExecute,
 ) => PromiseUnion<unknown>
 
 export type DeprecatedBotCommandFunction = {

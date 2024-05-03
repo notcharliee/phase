@@ -6,6 +6,7 @@ import {
   BotCronBuilder,
   BotEventBuilder,
 } from "~/builders"
+import { ArrayUnion, PromiseUnion } from "~/types"
 
 export type CommandsCollection = Collection<string, BotCommandBuilder>
 export type EventsCollection = Collection<string, ArrayUnion<BotEventBuilder>>
