@@ -63,7 +63,8 @@ program.action(async () => {
 
   clearLine(process.stdout, 0)
   cursorTo(process.stdout, 0)
-  process.stdout.write(`${chalk.greenBright("✓")} Loading required files\n`)
+  process.stdout.write(`${chalk.greenBright("✓")} Loading required files`)
+  console.log("")
 
   if (client.prestart) {
     process.stdout.write(`◌ Executing prestart`)
@@ -74,7 +75,8 @@ program.action(async () => {
 
     clearLine(process.stdout, 0)
     cursorTo(process.stdout, 0)
-    process.stdout.write(`${chalk.greenBright("✓")} Executing prestart\n`)
+    process.stdout.write(`${chalk.greenBright("✓")} Executing prestart`)
+    console.log("")
   }
 
   process.stdout.write(`◌ Establishing connection`)
@@ -83,13 +85,25 @@ program.action(async () => {
 
   clearLine(process.stdout, 0)
   cursorTo(process.stdout, 0)
-  process.stdout.write(`${chalk.greenBright("✓")} Establishing connection\n`)
+  process.stdout.write(`${chalk.greenBright("✓")} Establishing connection`)
+  console.log("")
 
+  console.log("")
   process.stdout.write(
-    `\n${chalk.greenBright("✓")} Bot is online! ${chalk.grey(`(${(Bun.nanoseconds() / 1e9).toFixed(2)}s)`)}\n`,
+    `${chalk.greenBright("✓")} Bot is online! ${chalk.grey(`(${(Bun.nanoseconds() / 1e9).toFixed(2)}s)`)}`,
   )
+  console.log("")
 
-  // updateCommands(client)
+  const commands = await updateCommands(client)
+
+  if (
+    commands.created.length ||
+    commands.deleted.length ||
+    commands.updated.length
+  ) {
+    console.log("")
+    console.log("Commands modified:", commands)
+  }
 })
 
 program.parse(process.argv)

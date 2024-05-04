@@ -126,9 +126,12 @@ export const getCommands = async () => {
 }
 
 export const updateCommands = async (client: PhaseClient) => {
-  const sortAndReduceKeys = <T extends object>(obj: T) => {
+  /**
+   * A function that sorts and renames keys to always be in the same order and type case.
+   */
+  const sortKeys = <T extends object>(obj: T) => {
     return Object.keys(obj)
-      .sort()
+      .sort((a, b) => a.localeCompare(b))
       .reduce(
         (acc, key) => ({
           ...acc,
@@ -138,122 +141,111 @@ export const updateCommands = async (client: PhaseClient) => {
       )
   }
 
+  /**
+   * A function that sorts the options array of a command recursively.
+   */
   const sortOptions = (
-    options: ApplicationCommandOption[],
-  ): ApplicationCommandOption[] => {
-    return options.map((option: ApplicationCommandOption) =>
+    options: APIApplicationCommandOption[],
+  ): APIApplicationCommandOption[] => {
+    return options.map((option: APIApplicationCommandOption) =>
       option.type === ApplicationCommandOptionType.Subcommand ||
       option.type === ApplicationCommandOptionType.SubcommandGroup
-        ? sortAndReduceKeys({
+        ? sortKeys({
             ...option,
             options:
               option.options && option.options.length
-                ? sortOptions(option.options as ApplicationCommandOption[])
+                ? sortOptions(option.options)
                 : [],
           })
-        : sortAndReduceKeys(option),
-    ) as ApplicationCommandOption[]
+        : sortKeys(option),
+    ) as APIApplicationCommandOption[]
   }
 
-  // fetch the commands from the discord api
-  const fetchedCommands = await client.application!.commands.fetch()
+  type ApplicationCommandsJSON =
+    RESTPostAPIChatInputApplicationCommandsJSONBody & {
+      execute: undefined
+      metadata: undefined
+    }
 
-  // do a bunch of stuff to put the commands in a unified format
-  const existingCommands = new Collection(
-    Array.from(fetchedCommands.values())
-      .filter((data) => data.type === ApplicationCommandType.ChatInput)
-      .map((data) => {
-        const commandBuilder = new BotCommandBuilder()
-          .setName(data.name)
-          .setDescription(data.description)
-          .setExecute(() => {})
-          .setMetadata({ type: undefined })
-
-        if (data.nameLocalizations) {
-          commandBuilder.setNameLocalizations(data.nameLocalizations)
-        }
-
-        if (data.descriptionLocalizations) {
-          commandBuilder.setDescriptionLocalizations(
-            data.descriptionLocalizations,
-          )
-        }
-
-        if (data.options && data.options.length) {
-          commandBuilder.setOptions(
-            sortOptions(data.options) as APIApplicationCommandOption[],
-          )
-        }
-
-        if (data.nsfw) {
-          commandBuilder.setNSFW(data.nsfw)
-        }
-
-        if (data.dmPermission === false) {
-          commandBuilder.setDMPermission(data.dmPermission)
-        }
-
-        if (data.defaultMemberPermissions) {
-          commandBuilder.setDefaultMemberPermissions(
-            data.defaultMemberPermissions.toJSON(),
-          )
-        }
-
-        return sortAndReduceKeys(commandBuilder.toJSON())
-      })
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .map((value) => [value.name, value]),
-  ).sort((a, b) => a.name.localeCompare(b.name))
+  const liveCommands = await client.application!.commands.fetch()
 
   const newCommands = cloneDeep(client.commands)
-    .mapValues((data) =>
-      sortAndReduceKeys(
-        data
-          .setExecute(() => {})
-          .setMetadata({ type: undefined })
-          .setOptions(
-            sortOptions(
-              data.options.map((option) => option.toJSON()),
-            ) as APIApplicationCommandOption[],
-          )
-          .toJSON(),
-      ),
+    .map((data) => {
+      data.setOptions(
+        sortOptions(data.options.map((option) => option.toJSON())),
+      )
+
+      return sortKeys({
+        ...data.toJSON(),
+        execute: undefined,
+        metadata: undefined,
+      } satisfies ApplicationCommandsJSON)
+    })
+    .sort((a, b) => a.name.localeCompare(b.name))
+
+  const oldCommands = cloneDeep(liveCommands)
+    .filter((data) => data.type === ApplicationCommandType.ChatInput)
+    .map((data) =>
+      sortKeys({
+        name: data.name,
+        description: data.description,
+        name_localizations: data.nameLocalizations ?? undefined,
+        description_localizations: data.descriptionLocalizations ?? undefined,
+        options: sortOptions(data.options as APIApplicationCommandOption[]),
+        nsfw: data.nsfw === true ? true : undefined,
+        dm_permission: data.dmPermission === false ? false : undefined,
+        default_member_permissions: data.defaultMemberPermissions?.toJSON(),
+        execute: undefined,
+        metadata: undefined,
+      } satisfies ApplicationCommandsJSON),
     )
     .sort((a, b) => a.name.localeCompare(b.name))
 
-  // if no commands have been set, create them all
-  if (!existingCommands?.size) {
-    const commandsToCreate = Array.from(newCommands.values())
-
-    client.application?.commands.set(commandsToCreate)
+  // if no commands have been set, set them all
+  if (!liveCommands?.size) {
+    client.application?.commands.set(newCommands)
 
     return {
-      created: commandsToCreate,
+      created: newCommands,
       deleted: [],
       updated: [],
     }
   }
 
   const commandsToDelete = Array.from(
-    existingCommands
-      .filter((existingCommand) => !newCommands.has(existingCommand.name))
+    oldCommands
+      .filter(
+        (oldCommand) =>
+          !newCommands.find(
+            (newCommand) => newCommand.name === oldCommand.name,
+          ),
+      )
       .values(),
   )
 
   const commandsToCreate = Array.from(
     newCommands
-      .filter((newCommand) => !existingCommands.has(newCommand.name))
+      .filter(
+        (newCommand) =>
+          !oldCommands.find(
+            (oldCommand) => oldCommand.name === newCommand.name,
+          ),
+      )
       .values(),
   )
 
-  const commandsToUpdate: RESTPostAPIChatInputApplicationCommandsJSONBody[] = []
+  const commandsToUpdate: ApplicationCommandsJSON[] = []
 
-  existingCommands.forEach((existingCommand) => {
-    const newCommand = newCommands.get(existingCommand.name)
+  oldCommands.forEach((oldCommand) => {
+    const newCommand = newCommands.find(
+      (newCommand) => newCommand.name === oldCommand.name,
+    )
+
     if (newCommand) {
-      const existingCommandJSON = JSON.stringify(existingCommand, null, 2)
+      const oldCommandJSON = JSON.stringify(oldCommand, null, 2)
       const newCommandJSON = JSON.stringify(newCommand, null, 2)
-      if (existingCommandJSON !== newCommandJSON) {
+
+      if (oldCommandJSON !== newCommandJSON) {
         commandsToUpdate.push(newCommand)
       }
     }
@@ -262,7 +254,7 @@ export const updateCommands = async (client: PhaseClient) => {
   // delete commands
   for (const command of commandsToDelete) {
     await client.application?.commands.delete(
-      fetchedCommands.find((data) => data.name === command.name)!.id,
+      liveCommands.find((data) => data.name === command.name)!.id,
     )
   }
 
@@ -273,7 +265,10 @@ export const updateCommands = async (client: PhaseClient) => {
 
   // update commands
   for (const command of commandsToUpdate) {
-    await client.application?.commands.edit(command.name, command)
+    await client.application?.commands.edit(
+      liveCommands.find((data) => data.name === command.name)!.id,
+      command,
+    )
   }
 
   return {
