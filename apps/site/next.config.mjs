@@ -18,6 +18,11 @@ const config = {
         permanent: false,
       },
       {
+        source: "/redirect/developer",
+        destination: "https://github.com/notcharliee",
+        permanent: false,
+      },
+      {
         source: "/redirect/github",
         destination: "https://github.com/notcharliee/phase",
         permanent: false,
