@@ -47,12 +47,12 @@ export type GuildModule<T extends keyof GuildModules> = GuildModules[T]
 export type GuildModuleAuditLogs = {
   enabled: boolean
   channels: {
-    server: string | null // channels, roles, boosts, emojis, server settings
-    messages: string | null // deletes, edits, mentions
-    voice: string | null // joins, leaves, mutes, deafens
-    invites: string | null // creates, expires, usage
-    members: string | null // joins, leaves, role changes, nickname changes
-    punishments: string | null // warns, unwarns, bans, tempbans, timeouts
+    server?: string // channels, roles, boosts, emojis, server settings
+    messages?: string // deletes, edits, mentions
+    voice?: string // joins, leaves, mutes, deafens
+    invites?: string // creates, expires, usage
+    members?: string // joins, leaves, role changes, nickname changes
+    punishments?: string // warns, unwarns, bans, tempbans, timeouts
   }
 }
 
