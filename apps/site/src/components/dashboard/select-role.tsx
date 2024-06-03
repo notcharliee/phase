@@ -4,15 +4,15 @@ import { CheckIcon } from "@radix-ui/react-icons"
 import { type APIRole } from "discord-api-types/v10"
 import { type ControllerRenderProps } from "react-hook-form"
 
-import { Spinner } from "@/components/spinner"
+import { Spinner } from "~/components/spinner"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-} from "@/components/ui/select"
+} from "~/components/ui/select"
 
-import { cn } from "@/lib/utils"
+import { cn } from "~/lib/utils"
 
 type SelectRoleType = <TFallback extends boolean>(
   props: TFallback extends true

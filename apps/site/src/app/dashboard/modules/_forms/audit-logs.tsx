@@ -1,12 +1,14 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
 
+import { zodResolver } from "@hookform/resolvers/zod"
 import { ChannelType } from "discord-api-types/v10"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
+import { ModuleFormButtons } from "~/components/dashboard/modules"
+import { SelectChannel } from "~/components/dashboard/select-channel"
 import {
   Form,
   FormControl,
@@ -15,42 +17,37 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { toast } from "sonner"
-import { SelectChannel } from "../../../components/select/channel"
+} from "~/components/ui/form"
 
-import { updateModule } from "../actions"
-import { ModuleFormButtons } from "../form-buttons"
-import { type ModuleFormProps } from "../form-props"
+import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-const formSchema = z.object({
-  enabled: z.boolean(),
-  channels: z.object({
-    server: z.string().optional().nullable(),
-    messages: z.string().optional().nullable(),
-    voice: z.string().optional().nullable(),
-    invites: z.string().optional().nullable(),
-    members: z.string().optional().nullable(),
-    punishments: z.string().optional().nullable(),
-  }),
-})
+import type { z } from "zod"
 
-type FormValues = z.infer<typeof formSchema>
+import { updateModule } from "~/app/dashboard/_actions/updateModule"
+import { auditLogsSchema } from "~/validators/modules"
 
-export const AuditLogs = (props: ModuleFormProps<"AuditLogs">) => {
+type FormValues = z.infer<typeof auditLogsSchema>
+
+export const AuditLogs = () => {
+  const dashboard = useDashboardContext()
+
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: props.defaultValues ?? {
-      enabled: false,
-      channels: {
-        server: null,
-        members: null,
-        messages: null,
-        punishments: null,
-        voice: null,
-        invites: null,
-      },
-    },
+    resolver: zodResolver(auditLogsSchema),
+    defaultValues: dashboard.guild.modules?.AuditLogs
+      ? {
+          ...dashboard.guild.modules?.AuditLogs,
+        }
+      : {
+          enabled: false,
+          channels: {
+            server: "",
+            members: "",
+            messages: "",
+            punishments: "",
+            voice: "",
+            invites: "",
+          },
+        },
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -60,37 +57,30 @@ export const AuditLogs = (props: ModuleFormProps<"AuditLogs">) => {
 
     setIsSubmitting(true)
 
-    toast.promise(
-      updateModule("AuditLogs", {
-        ...data,
-        channels: Object.fromEntries(
-          Object.entries(data.channels).map(([k, v]) => [k, v ?? null]),
-        ) as Record<keyof typeof data.channels, string | null>,
-      }),
-      {
-        loading: "Saving changes...",
-        success: () => {
-          setIsSubmitting(false)
-          form.reset(data)
-          return "Changes saved!"
-        },
-        error: () => {
-          setIsSubmitting(false)
-          return "An error occured."
-        },
+    toast.promise(updateModule("AuditLogs", data), {
+      loading: "Saving changes...",
+      error: "An error occured.",
+      success: (updatedModuleData) => {
+        form.reset(data)
+        dashboard.setData((dashboardData) => {
+          if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
+          dashboardData.guild.modules.AuditLogs = updatedModuleData
+          return dashboardData
+        })
+        return "Changes saved!"
       },
-    )
+      finally() {
+        setIsSubmitting(false)
+      },
+    })
   }
 
-  const { channels } = props.data.guild
+  const { channels } = dashboard.guild
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 animate-in fade-in-0 slide-in-from-bottom-10 duration-1000"
-      >
-        <div className="grid gap-4 gap-x-8 lg:grid-cols-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <div className="space-y-4">
           <FormField
             control={form.control}
             name="channels.server"

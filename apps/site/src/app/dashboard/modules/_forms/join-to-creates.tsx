@@ -1,12 +1,14 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
 
+import { zodResolver } from "@hookform/resolvers/zod"
 import { ChannelType } from "discord-api-types/v10"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
+import { ModuleFormButtons } from "~/components/dashboard/modules"
+import { SelectChannel } from "~/components/dashboard/select-channel"
 import {
   Form,
   FormControl,
@@ -15,30 +17,23 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { toast } from "sonner"
-import { SelectChannel } from "../../../components/select/channel"
+} from "~/components/ui/form"
 
-import { updateModule } from "../actions"
-import { ModuleFormButtons } from "../form-buttons"
-import { type ModuleFormProps } from "../form-props"
+import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-const formSchema = z.object({
-  enabled: z.boolean(),
-  channel: z.string().min(1, {
-    message: "Channel is required",
-  }),
-  category: z.string().min(1, {
-    message: "Category is required",
-  }),
-})
+import type { z } from "zod"
 
-type FormValues = z.infer<typeof formSchema>
+import { updateModule } from "~/app/dashboard/_actions/updateModule"
+import { joinToCreatesSchema } from "~/validators/modules"
 
-export const JoinToCreates = (props: ModuleFormProps<"JoinToCreates">) => {
+type FormValues = z.infer<typeof joinToCreatesSchema>
+
+export const JoinToCreates = () => {
+  const dashboard = useDashboardContext()
+
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: props.defaultValues ?? {
+    resolver: zodResolver(joinToCreatesSchema),
+    defaultValues: dashboard.guild.modules?.JoinToCreates ?? {
       enabled: false,
       channel: "",
       category: "",
@@ -55,21 +50,25 @@ export const JoinToCreates = (props: ModuleFormProps<"JoinToCreates">) => {
 
     toast.promise(updateModule("JoinToCreates", data), {
       loading: "Saving changes...",
-      success: () => {
-        setIsSubmitting(false)
+      error: "An error occured.",
+      success: (updatedModuleData) => {
         form.reset(data)
+        dashboard.setData((dashboardData) => {
+          if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
+          dashboardData.guild.modules.JoinToCreates = updatedModuleData
+          return dashboardData
+        })
         return "Changes saved!"
       },
-      error: () => {
+      finally() {
         setIsSubmitting(false)
-        return "An error occured."
       },
     })
 
     form.reset(data)
   }
 
-  const channels = props.data.guild.channels
+  const { channels } = dashboard.guild
 
   return (
     <Form {...form}>

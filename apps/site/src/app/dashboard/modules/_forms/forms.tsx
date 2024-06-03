@@ -1,29 +1,24 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
-import { useFieldArray, useForm, type UseFormReturn } from "react-hook-form"
-import { z } from "zod"
 
+import { ChannelType } from "@discordjs/core/http-only"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { TrashIcon } from "@radix-ui/react-icons"
+import { useFieldArray, useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { v4 as randomUUID } from "uuid"
 
-import {
-  ButtonStyle,
-  ChannelType,
-  type APIButtonComponentWithCustomId,
-  type APIMessage,
-} from "discord-api-types/v10"
-
-import { TrashIcon } from "@radix-ui/react-icons"
-
-import { Button } from "@/components/ui/button"
+import { ModuleFormButtons } from "~/components/dashboard/modules"
+import { SelectChannel } from "~/components/dashboard/select-channel"
+import { Button } from "~/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "~/components/ui/card"
 import {
   Form,
   FormControl,
@@ -32,69 +27,28 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { toast } from "sonner"
-import { SelectChannel } from "../../../components/select/channel"
+} from "~/components/ui/form"
+import { Input } from "~/components/ui/input"
 
-import { updateModule, updateModuleMessage } from "../actions"
-import { ModuleFormButtons } from "../form-buttons"
-import { type ModuleFormProps } from "../form-props"
+import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-const formSchema = z.object({
-  enabled: z.boolean(),
-  channel: z.string().min(1, {
-    message: "You must select a channel",
-  }),
-  forms: z.array(
-    z.object({
-      id: z.string(),
-      name: z
-        .string()
-        .min(1, {
-          message: "Name must be at least 1 character",
-        })
-        .max(32, {
-          message: "Name cannot be longer than 32 characters",
-        }),
-      channel: z.string().min(1, {
-        message: "You must select a channel",
-      }),
-      questions: z
-        .array(
-          z.object({
-            question: z
-              .string()
-              .min(1, {
-                message: "Question must be at least 1 character",
-              })
-              .max(100, {
-                message: "Question cannot be longer than 100 characters",
-              }),
-          }),
-        )
-        .min(1)
-        .max(100),
-    }),
-  ),
-})
+import type { UseFormReturn } from "react-hook-form"
+import type { z } from "zod"
 
-type FormValues = z.infer<typeof formSchema>
+import { updateForms } from "~/app/dashboard/_actions/updateModule"
+import { formsSchema } from "~/validators/modules"
 
-export const Forms = (
-  props: ModuleFormProps<
-    "Forms",
-    {
-      messages: APIMessage[] | undefined
-    }
-  >,
-) => {
+type FormValues = z.infer<typeof formsSchema>
+
+export const Forms = () => {
+  const dashboard = useDashboardContext()
+
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: props.defaultValues
+    resolver: zodResolver(formsSchema),
+    defaultValues: dashboard.guild.modules?.Forms
       ? {
-          ...props.defaultValues,
-          forms: props.defaultValues.forms.map((form) => ({
+          ...dashboard.guild.modules.Forms,
+          forms: dashboard.guild.modules.Forms.forms.map((form) => ({
             ...form,
             questions: form.questions.map((question) => ({ question })),
           })),
@@ -120,94 +74,25 @@ export const Forms = (
 
     setIsSubmitting(true)
 
-    if (!props.data.messages) props.data.messages = []
-
-    toast.promise(
-      updateModule("Forms", {
-        ...data,
-        forms: data.forms.map((form) => ({
-          ...form,
-          questions: form.questions.map((q) => q.question),
-        })),
-      }),
-      {
-        loading: "Saving changes...",
-        success: () => {
-          // eslint-disable-next-line @typescript-eslint/prefer-for-of
-          for (let i = 0; i < data.forms.length; i++) {
-            const formData = data.forms[i]!
-
-            const oldMessage = props.data.messages!.find((message) => {
-              const button = message.components?.at(0)?.components[0] as
-                | APIButtonComponentWithCustomId
-                | undefined
-
-              if (button?.custom_id.endsWith(formData.id)) return true
-            })
-
-            setTimeout(() => {
-              toast.promise(
-                updateModuleMessage(formData.channel, oldMessage, {
-                  components: [
-                    {
-                      components: [
-                        {
-                          custom_id: `form.start.${formData.id}`,
-                          label: formData.name,
-                          style: ButtonStyle.Secondary,
-                          type: 2,
-                        },
-                      ],
-                      type: 1,
-                    },
-                  ],
-                  embeds: [
-                    {
-                      color: parseInt("f8f8f8", 16),
-                      title: `${formData.name}`,
-                      description: `Press the button below to start filling out the form.`,
-                      footer: {
-                        text: `${formData.questions.length} questions in total.`,
-                      },
-                    },
-                  ],
-                }),
-                {
-                  loading: `${oldMessage ? "Resending" : "Sending"} ${formData.name} message...`,
-                  success: (newTicketMessage) => {
-                    if (oldMessage)
-                      props.data.messages![
-                        props.data.messages!.indexOf(oldMessage)
-                      ] = newTicketMessage
-                    else props.data.messages!.push(newTicketMessage)
-
-                    if (i === data.forms.length - 1) {
-                      setIsSubmitting(false)
-                      form.reset(data)
-                    }
-
-                    return `${formData.name} message ${oldMessage ? "resent" : "sent"}!`
-                  },
-                  error: () => {
-                    setIsSubmitting(false)
-                    return "An error occured."
-                  },
-                },
-              )
-            }, 500 * i)
-          }
-
-          return "Changes saved!"
-        },
-        error: () => {
-          setIsSubmitting(false)
-          return "An error occured."
-        },
+    toast.promise(updateForms(data), {
+      loading: "Saving changes...",
+      error: "An error occured.",
+      success: (updatedModuleData) => {
+        form.reset(data)
+        dashboard.setData((dashboardData) => {
+          if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
+          dashboardData.guild.modules.Forms = updatedModuleData
+          return dashboardData
+        })
+        return "Changes saved!"
       },
-    )
+      finally() {
+        setIsSubmitting(false)
+      },
+    })
   }
 
-  const { channels } = props.data.guild
+  const { channels } = dashboard.guild
 
   return (
     <Form {...form}>
@@ -354,7 +239,10 @@ const FormQuestions = (props: {
                   <FormLabel>Question {index + 1}</FormLabel>
                   <FormControl>
                     <div className="flex gap-3">
-                      <Input placeholder="Are you super cool?" {...field} />
+                      <Input
+                        placeholder="Example: Are you super cool?"
+                        {...field}
+                      />
                       <Button
                         variant="outline"
                         size="icon"

@@ -1,15 +1,15 @@
 "use client"
 
 import Link from "next/link"
+import { useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-
 import { ChannelType } from "discord-api-types/v10"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
-import { SelectChannel } from "@/app/dashboard/components/select/channel"
+import { ModuleFormButtons } from "~/components/dashboard/modules"
+import { SelectChannel } from "~/components/dashboard/select-channel"
 import {
   Form,
   FormControl,
@@ -18,48 +18,26 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Switch } from "@/components/ui/switch"
-import { Textarea } from "@/components/ui/textarea"
-import { toast } from "sonner"
+} from "~/components/ui/form"
+import { Input } from "~/components/ui/input"
+import { Switch } from "~/components/ui/switch"
+import { Textarea } from "~/components/ui/textarea"
 
-import { updateModule } from "../actions"
-import { ModuleFormButtons } from "../form-buttons"
-import { type ModuleFormProps } from "../form-props"
+import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-const formSchema = z.object({
-  enabled: z.boolean(),
-  channel: z.string().min(1, {
-    message: "Channel is required",
-  }),
-  message: z.string(),
-  mention: z.boolean(),
-  card: z.object({
-    enabled: z.boolean(),
-    background: z.string().url().optional(),
-  }),
-  // .refine(
-  //   (card) =>
-  //     card.enabled &&
-  //     card.background &&
-  //     (card.background.endsWith(".png") ||
-  //       card.background.endsWith(".jpg") ||
-  //       card.background.endsWith(".jpeg") ||
-  //       card.background.endsWith(".webp")),
-  //   {
-  //     message: "Background image must be either png, jpg, or webp",
-  //     path: ["background"]
-  //   },
-  // ),
-})
+import type { z } from "zod"
 
-type FormValues = z.infer<typeof formSchema>
+import { updateModule } from "~/app/dashboard/_actions/updateModule"
+import { welcomeMessagesSchema } from "~/validators/modules"
 
-export const WelcomeMessages = (props: ModuleFormProps<"WelcomeMessages">) => {
+type FormValues = z.infer<typeof welcomeMessagesSchema>
+
+export const WelcomeMessages = () => {
+  const dashboard = useDashboardContext()
+
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: props.defaultValues ?? {
+    resolver: zodResolver(welcomeMessagesSchema),
+    defaultValues: dashboard.guild.modules?.WelcomeMessages ?? {
       enabled: false,
       channel: "",
       message: "",
@@ -82,19 +60,23 @@ export const WelcomeMessages = (props: ModuleFormProps<"WelcomeMessages">) => {
 
     toast.promise(updateModule("WelcomeMessages", data), {
       loading: "Saving changes...",
-      success: () => {
-        setIsSubmitting(false)
+      error: "An error occured.",
+      success: (updatedModuleData) => {
         form.reset(data)
+        dashboard.setData((dashboardData) => {
+          if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
+          dashboardData.guild.modules.WelcomeMessages = updatedModuleData
+          return dashboardData
+        })
         return "Changes saved!"
       },
-      error: () => {
+      finally() {
         setIsSubmitting(false)
-        return "An error occured."
       },
     })
   }
 
-  const { channels } = props.data.guild
+  const { channels } = dashboard.guild
 
   return (
     <Form {...form}>
@@ -128,7 +110,8 @@ export const WelcomeMessages = (props: ModuleFormProps<"WelcomeMessages">) => {
               <FormLabel>Welcome Message</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder={`Hi **{username}**, welcome to the server! You are member #{membercount}.`}
+                  placeholder={`Example: Hi **{username}**, welcome to the server! You are member #{membercount}.`}
+                  autoResize
                   {...field}
                 />
               </FormControl>

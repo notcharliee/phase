@@ -4,7 +4,7 @@ import { CheckIcon } from "@radix-ui/react-icons"
 import * as DiscordAPITypes from "discord-api-types/v10"
 import { type ControllerRenderProps } from "react-hook-form"
 
-import { Spinner } from "@/components/spinner"
+import { Spinner } from "~/components/spinner"
 import {
   Select,
   SelectContent,
@@ -12,9 +12,9 @@ import {
   SelectItem,
   SelectLabel,
   SelectTrigger,
-} from "@/components/ui/select"
+} from "~/components/ui/select"
 
-import { cn } from "@/lib/utils"
+import { cn } from "~/lib/utils"
 
 type SelectChannelType = <
   TFallback extends boolean,

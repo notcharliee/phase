@@ -1,18 +1,19 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
-import { useFieldArray, useForm } from "react-hook-form"
-import { z } from "zod"
 
-import ms from "ms"
-
-import { ChannelType } from "discord-api-types/v10"
-
+import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
+import { ChannelType } from "discord-api-types/v10"
+import ms from "ms"
+import { useFieldArray, useForm } from "react-hook-form"
+import { toast } from "sonner"
 
-import { EmbedPreview } from "@/components/embed-preview"
-import { Button } from "@/components/ui/button"
+import { ModuleFormButtons } from "~/components/dashboard/modules"
+import { SelectChannel } from "~/components/dashboard/select-channel"
+import { SelectRole } from "~/components/dashboard/select-role"
+import { EmbedPreview } from "~/components/embed-preview"
+import { Button } from "~/components/ui/button"
 import {
   Card,
   CardContent,
@@ -20,7 +21,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "~/components/ui/card"
 import {
   Form,
   FormControl,
@@ -29,53 +30,34 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { toast } from "sonner"
-import { SelectChannel } from "../../../components/select/channel"
-import { SelectRole } from "../../../components/select/role"
+} from "~/components/ui/form"
+import { Input } from "~/components/ui/input"
+import { Textarea } from "~/components/ui/textarea"
 
-import { addAutoMessages } from "../actions"
-import { ModuleFormButtons } from "../form-buttons"
-import { type ModuleFormProps } from "../form-props"
+import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-const formSchema = z.object({
-  enabled: z.boolean(),
-  messages: z.array(
-    z.object({
-      name: z
-        .string()
-        .min(1, "Name is required")
-        .max(100, "Name cannot be longer than 100 characters"),
-      channel: z.string().min(1, "Channel is required"),
-      message: z
-        .string()
-        .min(1, "Message is required")
-        .max(2000, "Message cannot be longer than 2000 characters"),
-      mention: z.string().optional(),
-      interval: z.string().min(2).max(100),
-      startAt: z
-        .date()
-        .min(new Date(), "Date cannot be in the past")
-        .optional(),
-    }),
-  ),
-})
+import type { z } from "zod"
 
-export type FormValues = z.infer<typeof formSchema>
+import { updateAutoMessages } from "~/app/dashboard/_actions/updateModule"
+import { autoMessagesSchema } from "~/validators/modules"
 
-export const AutoMessages = (props: ModuleFormProps<"AutoMessages">) => {
+export type FormValues = z.infer<typeof autoMessagesSchema>
+
+export const AutoMessages = () => {
+  const dashboard = useDashboardContext()
+
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: props.defaultValues
+    resolver: zodResolver(autoMessagesSchema),
+    defaultValues: dashboard.guild.modules?.AutoMessages
       ? {
-          enabled: props.defaultValues.enabled,
-          messages: props.defaultValues.messages.map((message) => ({
-            ...message,
-            interval: ms(message.interval, { long: true }),
-            startAt: new Date(Date.now() + message.interval),
-          })),
+          enabled: dashboard.guild.modules.AutoMessages.enabled,
+          messages: dashboard.guild.modules.AutoMessages.messages.map(
+            (message) => ({
+              ...message,
+              interval: ms(message.interval, { long: true }),
+              startAt: new Date(Date.now() + message.interval),
+            }),
+          ),
         }
       : {
           enabled: false,
@@ -124,29 +106,33 @@ export const AutoMessages = (props: ModuleFormProps<"AutoMessages">) => {
     }
 
     if (intervals.length === data.messages.length) {
-      toast.promise(addAutoMessages(data), {
+      toast.promise(updateAutoMessages(data), {
         loading: "Saving changes...",
-        success: () => {
-          setIsSubmitting(false)
+        error: "An error occured.",
+        success: (updatedModuleData) => {
           form.reset(data)
+          dashboard.setData((dashboardData) => {
+            if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
+            dashboardData.guild.modules.AutoMessages = updatedModuleData
+            return dashboardData
+          })
           return "Changes saved!"
         },
-        error: () => {
+        finally() {
           setIsSubmitting(false)
-          return "An error occured."
         },
       })
     }
   }
 
-  const { channels, roles } = props.data.guild
+  const { channels, roles } = dashboard.guild
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name={`messages`}
+          name="messages"
           render={() => (
             <FormItem className="space-y-4">
               {fieldArray.fields.map((field, index) => (
@@ -196,7 +182,10 @@ export const AutoMessages = (props: ModuleFormProps<"AutoMessages">) => {
                         <FormItem>
                           <FormLabel>Name</FormLabel>
                           <FormControl>
-                            <Input placeholder="Spanish or vanish" {...field} />
+                            <Input
+                              placeholder="Example: Spanish or vanish"
+                              {...field}
+                            />
                           </FormControl>
                           <FormDescription>
                             The name of the message
@@ -234,7 +223,8 @@ export const AutoMessages = (props: ModuleFormProps<"AutoMessages">) => {
                           <FormLabel>Message</FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Do your daily duolingo lesson."
+                              placeholder="Example: Do your daily duolingo lesson."
+                              autoResize
                               {...field}
                             />
                           </FormControl>
@@ -266,7 +256,7 @@ export const AutoMessages = (props: ModuleFormProps<"AutoMessages">) => {
                         <FormItem>
                           <FormLabel>Interval</FormLabel>
                           <FormControl>
-                            <Input placeholder="1 day" {...field} />
+                            <Input placeholder="Example: 1 day" {...field} />
                           </FormControl>
                           <FormDescription>
                             How often to send the message

@@ -1,10 +1,13 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
 
+import { zodResolver } from "@hookform/resolvers/zod"
+import ms from "ms"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+
+import { ModuleFormButtons } from "~/components/dashboard/modules"
 import {
   Form,
   FormControl,
@@ -13,33 +16,28 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { toast } from "sonner"
+} from "~/components/ui/form"
+import { Input } from "~/components/ui/input"
+import { Textarea } from "~/components/ui/textarea"
 
-import { updateModule } from "../actions"
-import { ModuleFormButtons } from "../form-buttons"
-import { type ModuleFormProps } from "../form-props"
+import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import ms from "ms"
+import type { z } from "zod"
 
-const formSchema = z.object({
-  enabled: z.boolean(),
-  time: z.string().min(2).max(100),
-  initialMessage: z.string().min(1).max(2048),
-  reminderMessage: z.string().max(2048),
-})
+import { updateModule } from "~/app/dashboard/_actions/updateModule"
+import { bumpRemindersSchema } from "~/validators/modules"
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = z.infer<typeof bumpRemindersSchema>
 
-export const BumpReminders = (props: ModuleFormProps<"BumpReminders">) => {
+export const BumpReminders = () => {
+  const dashboard = useDashboardContext()
+
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: props.defaultValues
+    resolver: zodResolver(bumpRemindersSchema),
+    defaultValues: dashboard.guild.modules?.BumpReminders
       ? {
-          ...props.defaultValues,
-          time: ms(props.defaultValues.time, { long: true }),
+          ...dashboard.guild.modules.BumpReminders,
+          time: ms(dashboard.guild.modules.BumpReminders.time, { long: true }),
         }
       : {
           enabled: false,
@@ -69,14 +67,18 @@ export const BumpReminders = (props: ModuleFormProps<"BumpReminders">) => {
           }),
           {
             loading: "Saving changes...",
-            success: () => {
-              setIsSubmitting(false)
+            error: "An error occured.",
+            success: (updatedModuleData) => {
               form.reset(data)
+              dashboard.setData((dashboardData) => {
+                if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
+                dashboardData.guild.modules.BumpReminders = updatedModuleData
+                return dashboardData
+              })
               return "Changes saved!"
             },
-            error: () => {
+            finally() {
               setIsSubmitting(false)
-              return "An error occured."
             },
           },
         )
@@ -105,7 +107,7 @@ export const BumpReminders = (props: ModuleFormProps<"BumpReminders">) => {
             <FormItem>
               <FormLabel>Reminder Time</FormLabel>
               <FormControl>
-                <Input placeholder="2 hours" {...field} />
+                <Input placeholder="Example: 2 hours" {...field} />
               </FormControl>
               <FormDescription>
                 How long to wait before reminding members
@@ -122,7 +124,8 @@ export const BumpReminders = (props: ModuleFormProps<"BumpReminders">) => {
               <FormLabel>Initial Message</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Thanks for bumping! I'll remind you to bump again in 2 hours."
+                  placeholder="Example: Thanks for bumping!"
+                  autoResize
                   {...field}
                 />
               </FormControl>
@@ -140,7 +143,11 @@ export const BumpReminders = (props: ModuleFormProps<"BumpReminders">) => {
             <FormItem>
               <FormLabel>Reminder Message</FormLabel>
               <FormControl>
-                <Textarea placeholder="It's time to bump again!" {...field} />
+                <Textarea
+                  placeholder="Example: It's time to bump again!"
+                  autoResize
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
                 What to send when a member is reminded to bump

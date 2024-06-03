@@ -1,50 +1,41 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
-import { useFieldArray, useForm } from "react-hook-form"
-import { z } from "zod"
 
+import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
+import { useFieldArray, useForm } from "react-hook-form"
+import { toast } from "sonner"
 
-import { SelectRole } from "@/app/dashboard/components/select/role"
-import { Button } from "@/components/ui/button"
+import { ModuleFormButtons } from "~/components/dashboard/modules"
+import { SelectRole } from "~/components/dashboard/select-role"
+import { Button } from "~/components/ui/button"
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { toast } from "sonner"
+} from "~/components/ui/form"
 
-import { updateModule } from "../actions"
-import { ModuleFormButtons } from "../form-buttons"
-import { type ModuleFormProps } from "../form-props"
+import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-const formSchema = z.object({
-  enabled: z.boolean(),
-  roles: z
-    .array(
-      z.object({
-        id: z.string().min(1, {
-          message: "Role is required",
-        }),
-      }),
-    )
-    .max(10),
-})
+import type { z } from "zod"
 
-type FormValues = z.infer<typeof formSchema>
+import { updateModule } from "~/app/dashboard/_actions/updateModule"
+import { autoRolesSchema } from "~/validators/modules"
 
-export const AutoRoles = (props: ModuleFormProps<"AutoRoles">) => {
+type FormValues = z.infer<typeof autoRolesSchema>
+
+export const AutoRoles = () => {
+  const dashboard = useDashboardContext()
+
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: props.defaultValues
+    resolver: zodResolver(autoRolesSchema),
+    defaultValues: dashboard.guild.modules?.AutoRoles
       ? {
-          ...props.defaultValues,
-          roles: props.defaultValues.roles.map((roleId) => ({
+          ...dashboard.guild.modules.AutoRoles,
+          roles: dashboard.guild.modules.AutoRoles.roles.map((roleId) => ({
             id: roleId,
           })),
         }
@@ -71,14 +62,18 @@ export const AutoRoles = (props: ModuleFormProps<"AutoRoles">) => {
       }),
       {
         loading: "Saving changes...",
-        success: () => {
-          setIsSubmitting(false)
+        error: "An error occured.",
+        success: (updatedModuleData) => {
           form.reset(data)
+          dashboard.setData((dashboardData) => {
+            if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
+            dashboardData.guild.modules.AutoRoles = updatedModuleData
+            return dashboardData
+          })
           return "Changes saved!"
         },
-        error: () => {
+        finally() {
           setIsSubmitting(false)
-          return "An error occured."
         },
       },
     )
@@ -86,16 +81,13 @@ export const AutoRoles = (props: ModuleFormProps<"AutoRoles">) => {
     form.reset(data)
   }
 
-  const roles = props.data.guild.roles
+  const { roles } = dashboard.guild
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 animate-in fade-in-0 slide-in-from-bottom-10 duration-1000"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="space-y-4">
-          <div className="grid gap-4 gap-x-8 lg:grid-cols-2">
+          <div className="space-y-3">
             {fieldArray.fields.map((field, index) => (
               <FormField
                 key={field.id}
@@ -103,7 +95,6 @@ export const AutoRoles = (props: ModuleFormProps<"AutoRoles">) => {
                 name={`roles.${index}.id`}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Role {index + 1}</FormLabel>
                     <FormControl>
                       <div className="flex gap-3">
                         <SelectRole roles={roles} {...field} />
@@ -116,7 +107,7 @@ export const AutoRoles = (props: ModuleFormProps<"AutoRoles">) => {
                         </Button>
                       </div>
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="mb-2" />
                   </FormItem>
                 )}
               />

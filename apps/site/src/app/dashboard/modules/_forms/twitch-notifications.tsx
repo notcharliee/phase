@@ -1,15 +1,16 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
 
+import { zodResolver } from "@hookform/resolvers/zod"
 import { ChannelType } from "discord-api-types/v10"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
-import { SelectChannel } from "@/app/dashboard/components/select/channel"
-import { SelectRole } from "@/app/dashboard/components/select/role"
-import { Checkbox } from "@/components/ui/checkbox"
+import { ModuleFormButtons } from "~/components/dashboard/modules"
+import { SelectChannel } from "~/components/dashboard/select-channel"
+import { SelectRole } from "~/components/dashboard/select-role"
+import { Checkbox } from "~/components/ui/checkbox"
 import {
   Form,
   FormControl,
@@ -18,59 +19,45 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { toast } from "sonner"
+} from "~/components/ui/form"
+import { Input } from "~/components/ui/input"
 
-import {
-  addChannelSubscription,
-  getTwitchUserByName,
-  updateModule,
-} from "../actions"
-import { ModuleFormButtons } from "../form-buttons"
-import { type ModuleFormProps } from "../form-props"
+import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-const formSchema = z.object({
-  enabled: z.boolean(),
-  streamers: z.array(
-    z.object({
-      id: z
-        .string()
-        .min(4, {
-          message: "The streamer name must be at least 4 characters",
-        })
-        .max(25, {
-          message: "The streamer name must be less than 25 characters",
-        }),
-      channel: z.string().min(1, {
-        message: "You must select a channel",
-      }),
-      events: z.array(
-        z.union([z.literal("stream.online"), z.literal("stream.offline")]),
-      ),
-      mention: z.string().optional(),
-    }),
-  ),
-})
+import type { z } from "zod"
 
-type FormValues = z.infer<typeof formSchema>
+import { updateTwitchNotifications } from "~/app/dashboard/_actions/updateModule"
+import { twitchNotificationsSchema } from "~/validators/modules"
 
-export const TwitchNotifications = (
-  props: ModuleFormProps<"TwitchNotifications">,
-) => {
+type FormValues = z.infer<typeof twitchNotificationsSchema>
+
+export const TwitchNotifications = () => {
+  const dashboard = useDashboardContext()
+
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: props.defaultValues ?? {
-      enabled: false,
-      streamers: [
-        {
-          id: "",
-          channel: "",
-          events: [],
-          mention: undefined,
+    resolver: zodResolver(twitchNotificationsSchema),
+    defaultValues: dashboard.guild.modules?.TwitchNotifications
+      ? {
+          ...dashboard.guild.modules?.TwitchNotifications,
+          streamers: dashboard.guild.modules?.TwitchNotifications.streamers.map(
+            (streamer, index) => ({
+              ...streamer,
+              id: dashboard.guild.modules!.TwitchNotifications!._data
+                .streamerNames[index],
+            }),
+          ),
+        }
+      : {
+          enabled: false,
+          streamers: [
+            {
+              id: "",
+              channel: "",
+              events: [],
+              mention: undefined,
+            },
+          ],
         },
-      ],
-    },
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -80,46 +67,20 @@ export const TwitchNotifications = (
 
     setIsSubmitting(true)
 
-    const promises = data.streamers.map(async (streamer) => {
-      const user = await getTwitchUserByName(streamer.id)
-
-      if (user) {
-        streamer.id = user.id
-        return addChannelSubscription(user.id)
-      } else throw new Error("The streamer was not found")
-    })
-
-    toast.promise(Promise.all(promises), {
-      loading: "Fetching streamers...",
-      success: () => {
-        setTimeout(() => {
-          toast.promise(updateModule("TwitchNotifications", data), {
-            loading: "Saving changes...",
-            success: () => {
-              setIsSubmitting(false)
-              form.reset(data)
-              return "Changes saved!"
-            },
-            error: () => {
-              setIsSubmitting(false)
-              return "An error occured."
-            },
-          })
-        }, 500)
-
-        return "Streamers fetched!"
-      },
-      error: (error) => {
-        console.log(error)
-
-        form.setError("streamers.0.id", {
-          type: "manual",
-          message: "The streamer was not found",
+    toast.promise(updateTwitchNotifications(data), {
+      loading: "Saving changes...",
+      error: "An error occured.",
+      success: (updatedModuleData) => {
+        form.reset(data)
+        dashboard.setData((dashboardData) => {
+          if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
+          dashboardData.guild.modules.TwitchNotifications = updatedModuleData
+          return dashboardData
         })
-
+        return "Changes saved!"
+      },
+      finally() {
         setIsSubmitting(false)
-
-        return "An error occured."
       },
     })
   }
@@ -135,7 +96,7 @@ export const TwitchNotifications = (
     },
   ] as const
 
-  const { roles, channels } = props.data.guild
+  const { roles, channels } = dashboard.guild
 
   return (
     <Form {...form}>
@@ -147,7 +108,7 @@ export const TwitchNotifications = (
             <FormItem>
               <FormLabel>Streamer Name</FormLabel>
               <FormControl>
-                <Input placeholder="Enter streamer name here" {...field} />
+                <Input placeholder="Example: sirrac85" {...field} />
               </FormControl>
               <FormDescription>
                 The name of the Twitch streamer to listen for
