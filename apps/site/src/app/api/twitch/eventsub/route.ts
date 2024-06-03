@@ -1,17 +1,22 @@
-import { NextResponse, type NextRequest } from "next/server"
+import { NextResponse } from "next/server"
 
-import { API, type APIEmbed } from "@discordjs/core/http-only"
+import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 import { GuildSchema } from "@repo/schemas"
-import { ApiClient } from "@twurple/api"
-import { AppTokenAuthProvider } from "@twurple/auth"
 import { StatusCodes } from "http-status-codes"
 
 import { dbConnect } from "@/lib/db"
 import { env } from "@/lib/env"
+import { twitchClient } from "~/lib/twitch"
+
+import type { APIEmbed } from "@discordjs/core/http-only"
+import type { NextRequest } from "next/server"
 
 import { challengeResponse } from "../challengeResponse"
 import { getHmac, getHmacMessage, verifyHmac } from "../verifyHmac"
+
+const discordREST = new REST().setToken(env.DISCORD_TOKEN)
+const discordAPI = new API(discordREST)
 
 /**
  * Handles the POST request for the Twitch EventSub route.
@@ -86,28 +91,19 @@ export const POST = async (request: NextRequest) => {
       "modules.TwitchNotifications.streamers.id": streamerId,
     })
 
-    const discordREST = new REST().setToken(env.DISCORD_TOKEN)
-    const discordAPI = new API(discordREST)
-
-    const twitchAPI = new ApiClient({
-      authProvider: new AppTokenAuthProvider(
-        env.TWITCH_CLIENT_ID,
-        env.TWITCH_CLIENT_SECRET,
-      ),
-    })
-
     for (const guild of guilds) {
       const moduleConfig = guild.modules!.TwitchNotifications!.streamers.find(
         (streamer) => streamer.id === streamerId,
       )!
 
-      const streamer = (await twitchAPI.users.getUserById(streamerId))!
+      const streamer = (await twitchClient.users.getUserById(streamerId))!
 
       if (
         body.subscription.type === "stream.online" &&
         moduleConfig.events.includes("stream.online")
       ) {
-        const stream = (await twitchAPI.streams.getStreamByUserId(streamerId))!
+        const stream =
+          (await twitchClient.streams.getStreamByUserId(streamerId))!
 
         const embed = {
           color: parseInt("f8f8f8", 16),
