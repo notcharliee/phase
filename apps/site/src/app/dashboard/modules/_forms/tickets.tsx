@@ -48,6 +48,7 @@ export const Tickets = () => {
               ?.description ?? "",
         }
       : {
+          enabled: true,
           channel: "",
           message: "",
           max_open: undefined,
