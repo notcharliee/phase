@@ -27,6 +27,7 @@
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {
+      "~/*": ["./src/*"],
       "@/*": ["./src/*"],
       "public/*": ["./public/*"],
       "contentlayer/generated": ["./.contentlayer/generated"]

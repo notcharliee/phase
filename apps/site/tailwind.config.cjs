@@ -32,6 +32,7 @@ module.exports = {
         `,
       },
       colors: {
+        "muted-background": "rgb(0 0 0)",
         background: "rgb(16 16 16)",
         foreground: "rgb(248 248 248)",
         card: "rgb(16 16 16)",
