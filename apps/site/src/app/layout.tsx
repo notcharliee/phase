@@ -64,7 +64,7 @@ export default function RootLayout({
     <html lang="en" style={{ colorScheme: "dark" }}>
       <body
         className={cn(
-          "bg-background text-foreground font-sans tracking-tight",
+          "bg-background text-foreground font-sans tracking-[-0.04em]",
           GeistSans.variable,
           GeistMono.variable,
         )}
