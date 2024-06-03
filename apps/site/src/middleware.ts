@@ -1,12 +1,19 @@
-import { NextResponse, type NextMiddleware } from "next/server"
+import { NextResponse } from "next/server"
 
 import { kv } from "@vercel/kv"
 
 import { env } from "@/lib/env"
 
 import type { User } from "@/types/auth"
+import type { NextMiddleware } from "next/server"
 
 export const middleware: NextMiddleware = async (request) => {
+  // If the user is going to the dashboard, send them to the modules page.
+
+  if (request.nextUrl.pathname === "/dashboard") {
+    return NextResponse.redirect(new URL("/dashboard/modules", request.url))
+  }
+
   // If the user is trying to sign out, delete their session and redirect them to the home page.
 
   if (request.nextUrl.pathname === "/dashboard/signout") {
