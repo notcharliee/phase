@@ -1,10 +1,16 @@
 {
-  "css.lint.unknownAtRules": "ignore",
   "editor.indentSize": "tabSize",
-  "javascript.preferences.quoteStyle": "double",
-  "typescript.preferences.quoteStyle": "double",
   "editor.tabSize": 2,
+
   "bun.debugTerminal.enabled": true,
   "bun.debugTerminal.stopOnEntry": false,
+
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.preferences.quoteStyle": "double",
+
   "typescript.tsdk": "node_modules\\typescript\\lib",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.quoteStyle": "double",
+
+  "css.lint.unknownAtRules": "ignore",
 }
