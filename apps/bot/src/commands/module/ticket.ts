@@ -1,28 +1,29 @@
-import { GuildSchema } from "@repo/schemas"
 import { EmbedBuilder, PermissionFlagsBits } from "discord.js"
-import { BotCommandBuilder, botCommand } from "phasebot"
+import { BotCommandBuilder } from "phasebot/builders"
+
+import { GuildSchema } from "@repo/schemas"
+
 import {
-  PhaseColour,
   errorMessage,
   missingPermission,
   moduleNotEnabled,
+  PhaseColour,
 } from "~/utils"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("ticket")
-    .setDescription("Lock, unlock, and delete tickets")
-    .setDMPermission(false)
-    .addSubcommand((subcommand) =>
-      subcommand.setName("lock").setDescription("Lock the ticket."),
-    )
-    .addSubcommand((subcommand) =>
-      subcommand.setName("unlock").setDescription("Unlock the ticket."),
-    )
-    .addSubcommand((subcommand) =>
-      subcommand.setName("delete").setDescription("Delete the ticket."),
-    ),
-  async (client, interaction) => {
+export default new BotCommandBuilder()
+  .setName("ticket")
+  .setDescription("Lock, unlock, and delete tickets")
+  .setDMPermission(false)
+  .addSubcommand((subcommand) =>
+    subcommand.setName("lock").setDescription("Lock the ticket."),
+  )
+  .addSubcommand((subcommand) =>
+    subcommand.setName("unlock").setDescription("Unlock the ticket."),
+  )
+  .addSubcommand((subcommand) =>
+    subcommand.setName("delete").setDescription("Delete the ticket."),
+  )
+  .setExecute(async (_, interaction) => {
     const guildSchema = await GuildSchema.findOne({ id: interaction.guildId })
     const ticketModule = guildSchema?.modules?.Tickets
 
@@ -64,6 +65,9 @@ export default botCommand(
             )
           }
 
+          await ticket.setName(ticket.name.replace("🎫", "🔒"))
+          await ticket.setLocked(true)
+
           interaction.reply({
             embeds: [
               new EmbedBuilder()
@@ -74,9 +78,6 @@ export default botCommand(
                 .setTitle("Ticket Locked"),
             ],
           })
-
-          ticket.setName(ticket.name.replace("🎫", "🔒"))
-          ticket.setLocked(true)
         }
         break
 
@@ -91,6 +92,9 @@ export default botCommand(
             )
           }
 
+          await ticket.setName(ticket.name.replace("🔒", "🎫"))
+          await ticket.setLocked(false)
+
           interaction.reply({
             embeds: [
               new EmbedBuilder()
@@ -99,9 +103,6 @@ export default botCommand(
                 .setTitle("Ticket Unlocked"),
             ],
           })
-
-          ticket.setName(ticket.name.replace("🔒", "🎫"))
-          ticket.setLocked(false)
         }
         break
 
@@ -121,5 +122,4 @@ export default botCommand(
         }
         break
     }
-  },
-)
+  })
