@@ -20,5 +20,5 @@
     "module": "esnext"
   },
   "exclude": ["node_modules", "build"],
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "phase.config.ts", "phase-env.d.ts"]
 }
