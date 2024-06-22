@@ -1,5 +1,6 @@
-import { ImageResponse } from "@vercel/og"
 import { AttachmentBuilder } from "discord.js"
+
+import { ImageResponse } from "@vercel/og"
 
 type ImageResponseElement = ConstructorParameters<typeof ImageResponse>[0]
 

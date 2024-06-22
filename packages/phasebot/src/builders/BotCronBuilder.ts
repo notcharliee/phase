@@ -2,10 +2,9 @@ import { isAsyncFunction } from "node:util/types"
 
 import { Cron } from "croner"
 
-import { PhaseClient } from "~/cli/client"
-import { PromiseUnion } from "~/types"
+import type { Client } from "discord.js"
 
-export type BotCronExecute = (client: PhaseClient) => PromiseUnion<void>
+export type BotCronExecute = (client: Client<true>) => void | Promise<void>
 
 export class BotCronBuilder {
   private cron: Cron | undefined = undefined
@@ -67,7 +66,7 @@ export class BotCronBuilder {
    *
    * Any cron jobs found in the `src/crons` directory will be started automatically on bot startup.
    */
-  start(client: PhaseClient) {
+  start(client: Client<true>) {
     if (!this.pattern) {
       throw new Error("Pattern not specified.")
     }
