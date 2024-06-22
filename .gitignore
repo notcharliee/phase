@@ -11,6 +11,8 @@ _temp_*
 build
 dist
 next-env.d.ts
+phase-env.d.ts
+.phase
 
 # debug
 npm-debug.log*
