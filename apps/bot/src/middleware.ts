@@ -5,14 +5,13 @@ import { GuildSchema } from "@repo/schemas"
 
 import { errorMessage, missingPermission } from "~/utils"
 
-const middleware: BotCommandMiddleware = async (
-  client,
+export const commands: BotCommandMiddleware = async (
   interaction,
   execute,
 ) => {
   if (!interaction.guild) {
     try {
-      return await execute(client, interaction)
+      return await execute(interaction)
     } catch (error) {
       return console.error(error)
     }
@@ -54,7 +53,7 @@ const middleware: BotCommandMiddleware = async (
 
     if (isExplicitlyAllowed) {
       try {
-        return await execute(client, interaction)
+        return await execute(interaction)
       } catch (error) {
         return console.error(error)
       }
@@ -94,10 +93,8 @@ const middleware: BotCommandMiddleware = async (
   }
 
   try {
-    return await execute(client, interaction)
+    return await execute(interaction)
   } catch (error) {
     return console.error(error)
   }
 }
-
-export default middleware

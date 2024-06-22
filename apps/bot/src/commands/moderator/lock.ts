@@ -1,27 +1,27 @@
 import { EmbedBuilder, GuildChannel } from "discord.js"
-import { BotCommandBuilder, botCommand } from "phasebot"
-import { PhaseColour, errorMessage } from "~/utils"
+import { BotCommandBuilder } from "phasebot/builders"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("lock")
-    .setDescription("Locks and unlocks a channel.")
-    .setDMPermission(false)
-    .addBooleanOption((option) =>
-      option
-        .setName("state")
-        .setDescription("The state of the channel lock.")
-        .setRequired(true),
-    )
-    .addRoleOption((option) =>
-      option
-        .setName("role")
-        .setDescription(
-          "Specify a role to lock access for (defaults to @everyone).",
-        )
-        .setRequired(false),
-    ),
-  async (client, interaction) => {
+import { errorMessage, PhaseColour } from "~/utils"
+
+export default new BotCommandBuilder()
+  .setName("lock")
+  .setDescription("Locks and unlocks a channel.")
+  .setDMPermission(false)
+  .addBooleanOption((option) =>
+    option
+      .setName("state")
+      .setDescription("The state of the channel lock.")
+      .setRequired(true),
+  )
+  .addRoleOption((option) =>
+    option
+      .setName("role")
+      .setDescription(
+        "Specify a role to lock access for (defaults to @everyone).",
+      )
+      .setRequired(false),
+  )
+  .setExecute(async (interaction) => {
     const channel = interaction.channel as GuildChannel
     const state = interaction.options.getBoolean("state", true)
     const role = interaction.options.getRole("role", false)
@@ -76,5 +76,4 @@ export default botCommand(
         ],
       })
     }
-  },
-)
+  })

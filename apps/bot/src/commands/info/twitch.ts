@@ -1,40 +1,38 @@
-import { botCommand, BotCommandBuilder } from "phasebot"
-
-import { AppTokenAuthProvider } from "@twurple/auth"
-import { ApiClient } from "@twurple/api"
-
-import { errorMessage, PhaseColour } from "~/utils"
-import { env } from "~/env"
-
 import { EmbedBuilder } from "discord.js"
+import { BotCommandBuilder } from "phasebot/builders"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("twitch")
-    .setDescription("Get info from Twitch.")
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("user")
-        .setDescription("Get info about a Twitch user.")
-        .addStringOption((option) =>
-          option
-            .setName("username")
-            .setDescription("The user's username.")
-            .setRequired(true),
-        ),
-    )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("stream")
-        .setDescription("Get info about a Twitch stream.")
-        .addStringOption((option) =>
-          option
-            .setName("user")
-            .setDescription("The streamer's username.")
-            .setRequired(true),
-        ),
-    ),
-  async (client, interaction) => {
+import { ApiClient } from "@twurple/api"
+import { AppTokenAuthProvider } from "@twurple/auth"
+
+import { env } from "~/env"
+import { errorMessage, PhaseColour } from "~/utils"
+
+export default new BotCommandBuilder()
+  .setName("twitch")
+  .setDescription("Get info from Twitch.")
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("user")
+      .setDescription("Get info about a Twitch user.")
+      .addStringOption((option) =>
+        option
+          .setName("username")
+          .setDescription("The user's username.")
+          .setRequired(true),
+      ),
+  )
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("stream")
+      .setDescription("Get info about a Twitch stream.")
+      .addStringOption((option) =>
+        option
+          .setName("user")
+          .setDescription("The streamer's username.")
+          .setRequired(true),
+      ),
+  )
+  .setExecute(async (interaction) => {
     await interaction.deferReply()
 
     const twitchAPI = new ApiClient({
@@ -92,7 +90,11 @@ export default botCommand(
                       inline: true,
                     },
                   ])
-                  .setImage(user.offlinePlaceholderUrl.length > 0 ? user.offlinePlaceholderUrl : null)
+                  .setImage(
+                    user.offlinePlaceholderUrl.length > 0
+                      ? user.offlinePlaceholderUrl
+                      : null,
+                  ),
               ],
             })
           } catch {
@@ -182,5 +184,4 @@ export default botCommand(
         })
       }
     }
-  },
-)
+  })

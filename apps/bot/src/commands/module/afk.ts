@@ -1,20 +1,21 @@
-import { AFKSchema } from "@repo/schemas"
 import { EmbedBuilder } from "discord.js"
-import { BotCommandBuilder, botCommand } from "phasebot"
+import { BotCommandBuilder } from "phasebot/builders"
+
+import { AFKSchema } from "@repo/schemas"
+
 import { PhaseColour } from "~/utils"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("afk")
-    .setDescription("Set your AFK status.")
-    .setDMPermission(false)
-    .addStringOption((option) =>
-      option
-        .setName("reason")
-        .setDescription("Give a reason for going AFK.")
-        .setRequired(false),
-    ),
-  async (client, interaction) => {
+export default new BotCommandBuilder()
+  .setName("afk")
+  .setDescription("Set your AFK status.")
+  .setDMPermission(false)
+  .addStringOption((option) =>
+    option
+      .setName("reason")
+      .setDescription("Give a reason for going AFK.")
+      .setRequired(false),
+  )
+  .setExecute(async (interaction) => {
     const reason =
       interaction.options.getString("reason", false) ?? "No reason set."
 
@@ -36,5 +37,4 @@ export default botCommand(
           .setTitle("AFK Status Changed"),
       ],
     })
-  },
-)
+  })

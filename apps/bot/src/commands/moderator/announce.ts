@@ -1,26 +1,26 @@
 import { EmbedBuilder } from "discord.js"
-import { BotCommandBuilder, botCommand } from "phasebot"
-import { PhaseColour, PhaseError, alertDevs, errorMessage } from "~/utils"
+import { BotCommandBuilder } from "phasebot/builders"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("announce")
-    .setDescription("Sends an announcement-style message as Phase.")
-    .setDMPermission(false)
-    .addStringOption((option) =>
-      option
-        .setName("message")
-        .setDescription("The announcement message.")
-        .setMaxLength(4000)
-        .setRequired(true),
-    )
-    .addRoleOption((option) =>
-      option
-        .setName("mention")
-        .setDescription("What role to ping.")
-        .setRequired(false),
-    ),
-  async (client, interaction) => {
+import { alertDevs, errorMessage, PhaseColour, PhaseError } from "~/utils"
+
+export default new BotCommandBuilder()
+  .setName("announce")
+  .setDescription("Sends an embedded announcement message as the bot.")
+  .setDMPermission(false)
+  .addStringOption((option) =>
+    option
+      .setName("message")
+      .setDescription("The announcement message.")
+      .setMaxLength(4000)
+      .setRequired(true),
+  )
+  .addRoleOption((option) =>
+    option
+      .setName("mention")
+      .setDescription("What role to ping.")
+      .setRequired(false),
+  )
+  .setExecute(async (interaction) => {
     try {
       await interaction.channel?.send({
         embeds: [
@@ -62,5 +62,4 @@ export default botCommand(
         }),
       )
     }
-  },
-)
+  })

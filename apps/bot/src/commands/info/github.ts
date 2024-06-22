@@ -1,41 +1,42 @@
-import { botCommand, BotCommandBuilder } from "phasebot"
-import { errorMessage, PhaseColour } from "~/utils"
 import { EmbedBuilder } from "discord.js"
+import { BotCommandBuilder } from "phasebot/builders"
+
 import { Octokit } from "@octokit/rest"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("github")
-    .setDescription("Get info from GitHub.")
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("user")
-        .setDescription("Get info about a GitHub user.")
-        .addStringOption((option) =>
-          option
-            .setName("username")
-            .setDescription("The user or organisation's username.")
-            .setRequired(true),
-        ),
-    )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("repo")
-        .setDescription("Get info about a GitHub repository.")
-        .addStringOption((option) =>
-          option
-            .setName("owner")
-            .setDescription("The repository owner's username.")
-            .setRequired(true),
-        )
-        .addStringOption((option) =>
-          option
-            .setName("repository")
-            .setDescription("The repository name.")
-            .setRequired(true),
-        ),
-    ),
-  async (client, interaction) => {
+import { errorMessage, PhaseColour } from "~/utils"
+
+export default new BotCommandBuilder()
+  .setName("github")
+  .setDescription("Get info from GitHub.")
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("user")
+      .setDescription("Get info about a GitHub user.")
+      .addStringOption((option) =>
+        option
+          .setName("username")
+          .setDescription("The user or organisation's username.")
+          .setRequired(true),
+      ),
+  )
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("repo")
+      .setDescription("Get info about a GitHub repository.")
+      .addStringOption((option) =>
+        option
+          .setName("owner")
+          .setDescription("The repository owner's username.")
+          .setRequired(true),
+      )
+      .addStringOption((option) =>
+        option
+          .setName("repository")
+          .setDescription("The repository name.")
+          .setRequired(true),
+      ),
+  )
+  .setExecute(async (interaction) => {
     const octokit = new Octokit()
 
     switch (
@@ -130,5 +131,4 @@ export default botCommand(
         })
       }
     }
-  },
-)
+  })

@@ -1,13 +1,12 @@
-import { botCommand, BotCommandBuilder } from "phasebot"
-import compliments from "./_data/compliments.json" assert { type: "json" }
+import { BotCommandBuilder } from "phasebot/builders"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("compliment")
-    .setDescription("Gives you a compliment."),
-  (client, interaction) => {
+import compliments from "./_data/compliments.json"
+
+export default new BotCommandBuilder()
+  .setName("compliment")
+  .setDescription("Gives you a compliment.")
+  .setExecute(async (interaction) => {
     interaction.reply(
       compliments[Math.floor(Math.random() * compliments.length)],
     )
-  },
-)
+  })

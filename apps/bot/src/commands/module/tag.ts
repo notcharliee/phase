@@ -1,75 +1,76 @@
-import { TagSchema } from "@repo/schemas"
 import { EmbedBuilder } from "discord.js"
-import { botCommand, BotCommandBuilder } from "phasebot"
+import { BotCommandBuilder } from "phasebot/builders"
+
+import { TagSchema } from "@repo/schemas"
+
 import { errorMessage, PhaseColour } from "~/utils"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("tag")
-    .setDescription("tag")
-    .setDMPermission(false)
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("add")
-        .setDescription("Adds a tag.")
-        .addStringOption((option) =>
-          option
-            .setName("name")
-            .setDescription("The name of the tag.")
-            .setRequired(true),
-        )
-        .addStringOption((option) =>
-          option
-            .setName("value")
-            .setDescription("The value of the tag.")
-            .setRequired(true),
-        ),
-    )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("edit")
-        .setDescription("Edits an existing tag.")
-        .addStringOption((option) =>
-          option
-            .setName("name")
-            .setDescription("The name of the tag.")
-            .setRequired(true),
-        )
-        .addStringOption((option) =>
-          option
-            .setName("value")
-            .setDescription("The new value of the tag.")
-            .setRequired(true),
-        ),
-    )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("get")
-        .setDescription("Gets a tag by name.")
-        .addStringOption((option) =>
-          option
-            .setName("name")
-            .setDescription("The name of the tag.")
-            .setRequired(true),
-        ),
-    )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("list")
-        .setDescription("Lists all the tags in the server."),
-    )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("remove")
-        .setDescription("Removes a tag.")
-        .addStringOption((option) =>
-          option
-            .setName("name")
-            .setDescription("The name of the tag.")
-            .setRequired(true),
-        ),
-    ),
-  async (client, interaction) => {
+export default new BotCommandBuilder()
+  .setName("tag")
+  .setDescription("tag")
+  .setDMPermission(false)
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("add")
+      .setDescription("Adds a tag.")
+      .addStringOption((option) =>
+        option
+          .setName("name")
+          .setDescription("The name of the tag.")
+          .setRequired(true),
+      )
+      .addStringOption((option) =>
+        option
+          .setName("value")
+          .setDescription("The value of the tag.")
+          .setRequired(true),
+      ),
+  )
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("edit")
+      .setDescription("Edits an existing tag.")
+      .addStringOption((option) =>
+        option
+          .setName("name")
+          .setDescription("The name of the tag.")
+          .setRequired(true),
+      )
+      .addStringOption((option) =>
+        option
+          .setName("value")
+          .setDescription("The new value of the tag.")
+          .setRequired(true),
+      ),
+  )
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("get")
+      .setDescription("Gets a tag by name.")
+      .addStringOption((option) =>
+        option
+          .setName("name")
+          .setDescription("The name of the tag.")
+          .setRequired(true),
+      ),
+  )
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("list")
+      .setDescription("Lists all the tags in the server."),
+  )
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("remove")
+      .setDescription("Removes a tag.")
+      .addStringOption((option) =>
+        option
+          .setName("name")
+          .setDescription("The name of the tag.")
+          .setRequired(true),
+      ),
+  )
+  .setExecute(async (interaction) => {
     const tagSchema =
       (await TagSchema.findOne({ guild: interaction.guildId })) ??
       (await new TagSchema({
@@ -215,5 +216,4 @@ export default botCommand(
         }
         break
     }
-  },
-)
+  })

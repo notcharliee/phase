@@ -1,21 +1,29 @@
-import { BotCommandBuilder, botCommand } from "phasebot"
-import { PhaseColour, errorMessage, formatNumber } from "~/utils"
-import { env } from "~/env"
-import { google } from "googleapis"
 import { EmbedBuilder } from "discord.js"
-import axios from "axios"
+import { BotCommandBuilder } from "phasebot/builders"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("youtube")
-    .setDescription("Get info about a YouTube video.")
-    .addStringOption((option) =>
-      option
-        .setName("video")
-        .setDescription("The video URL.")
-        .setRequired(true),
-    ),
-  async (client, interaction) => {
+import axios from "axios"
+import { google } from "googleapis"
+
+import { env } from "~/env"
+import { errorMessage, formatNumber, PhaseColour } from "~/utils"
+
+interface YoutTubeDislikeAPIResponse {
+  id: string
+  dateCreated: string
+  likes: number
+  dislikes: number
+  rating: number
+  viewCount: number
+  deleted: boolean
+}
+
+export default new BotCommandBuilder()
+  .setName("youtube")
+  .setDescription("Get info about a YouTube video.")
+  .addStringOption((option) =>
+    option.setName("video").setDescription("The video URL.").setRequired(true),
+  )
+  .setExecute(async (interaction) => {
     await interaction.deferReply()
 
     const youtube = google.youtube("v3")
@@ -53,7 +61,7 @@ export default botCommand(
       }
 
       const likeData = (
-        await axios.get<YoutTubeDislikeAPI>(
+        await axios.get<YoutTubeDislikeAPIResponse>(
           `https://returnyoutubedislikeapi.com/votes?videoId=${videoId}`,
         )
       ).data
@@ -90,15 +98,4 @@ export default botCommand(
         }),
       )
     }
-  },
-)
-
-type YoutTubeDislikeAPI = {
-  id: string
-  dateCreated: string
-  likes: number
-  dislikes: number
-  rating: number
-  viewCount: number
-  deleted: boolean
-}
+  })

@@ -1,19 +1,17 @@
-import { botCommand, BotCommandBuilder } from "phasebot"
-
 import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
   EmbedBuilder,
 } from "discord.js"
+import { BotCommandBuilder } from "phasebot/builders"
 
 import { PhaseColour, PhaseURL } from "~/utils"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("help")
-    .setDescription("Having trouble? We can help!"),
-  (client, interaction) => {
+export default new BotCommandBuilder()
+  .setName("help")
+  .setDescription("Having trouble? We can help!")
+  .setExecute(async (interaction) => {
     interaction.reply({
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
@@ -36,5 +34,4 @@ export default botCommand(
           .setTitle("Need some help?"),
       ],
     })
-  },
-)
+  })

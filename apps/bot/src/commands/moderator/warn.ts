@@ -1,6 +1,8 @@
-import { GuildSchema } from "@repo/schemas"
 import { EmbedBuilder, GuildMember, GuildTextBasedChannel } from "discord.js"
-import { botCommand, BotCommandBuilder } from "phasebot"
+import { BotCommandBuilder } from "phasebot/builders"
+
+import { GuildSchema } from "@repo/schemas"
+
 import {
   errorMessage,
   getOrdinal,
@@ -9,46 +11,45 @@ import {
   PhaseColour,
 } from "~/utils"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("warn")
-    .setDescription("Warn a member.")
-    .setDMPermission(false)
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("add")
-        .setDescription("Add a warning.")
-        .addUserOption((option) =>
-          option
-            .setName("member")
-            .setDescription("Who to warn.")
-            .setRequired(true),
-        )
-        .addStringOption((option) =>
-          option
-            .setName("reason")
-            .setDescription("Add a reason.")
-            .setRequired(false),
-        ),
-    )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("remove")
-        .setDescription("Remove a warning.")
-        .addUserOption((option) =>
-          option
-            .setName("member")
-            .setDescription("Who to unwarn.")
-            .setRequired(true),
-        )
-        .addStringOption((option) =>
-          option
-            .setName("reason")
-            .setDescription("Add a reason.")
-            .setRequired(false),
-        ),
-    ),
-  async (client, interaction) => {
+export default new BotCommandBuilder()
+  .setName("warn")
+  .setDescription("Warn a member.")
+  .setDMPermission(false)
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("add")
+      .setDescription("Add a warning.")
+      .addUserOption((option) =>
+        option
+          .setName("member")
+          .setDescription("Who to warn.")
+          .setRequired(true),
+      )
+      .addStringOption((option) =>
+        option
+          .setName("reason")
+          .setDescription("Add a reason.")
+          .setRequired(false),
+      ),
+  )
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("remove")
+      .setDescription("Remove a warning.")
+      .addUserOption((option) =>
+        option
+          .setName("member")
+          .setDescription("Who to unwarn.")
+          .setRequired(true),
+      )
+      .addStringOption((option) =>
+        option
+          .setName("reason")
+          .setDescription("Add a reason.")
+          .setRequired(false),
+      ),
+  )
+  .setExecute(async (interaction) => {
     const member = interaction.options.getMember("member") as GuildMember | null
     const reason = interaction.options.getString("reason", false) ?? undefined
 
@@ -99,7 +100,7 @@ export default botCommand(
           })
 
           if (warningsLogChannelId) {
-            const logChannel = client.channels.cache.get(
+            const logChannel = interaction.client.channels.cache.get(
               warningsLogChannelId,
             ) as GuildTextBasedChannel | undefined
 
@@ -154,7 +155,7 @@ export default botCommand(
           })
 
           if (warningsLogChannelId) {
-            const logChannel = client.channels.cache.get(
+            const logChannel = interaction.client.channels.cache.get(
               warningsLogChannelId,
             ) as GuildTextBasedChannel | undefined
 
@@ -174,5 +175,4 @@ export default botCommand(
         }
         break
     }
-  },
-)
+  })

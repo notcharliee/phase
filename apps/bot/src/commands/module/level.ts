@@ -1,8 +1,10 @@
-import { GuildSchema, LevelSchema } from "@repo/schemas"
-import { generateRankCard } from "~/images/rank"
-import { errorMessage, moduleNotEnabled, PhaseColour } from "~/utils"
 import { AttachmentBuilder, EmbedBuilder } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
+
+import { GuildSchema, LevelSchema } from "@repo/schemas"
+
+import { generateRankCard } from "~/images/rank"
+import { errorMessage, moduleNotEnabled, PhaseColour } from "~/utils"
 
 export default new BotCommandBuilder()
   .setName("level")
@@ -64,7 +66,7 @@ export default new BotCommandBuilder()
           .setRequired(true),
       ),
   )
-  .setExecute(async (_, interaction) => {
+  .setExecute(async (interaction) => {
     switch (interaction.options.getSubcommand()) {
       case "rank":
         {

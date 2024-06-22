@@ -1,7 +1,8 @@
-import { readFileSync } from "fs"
+import { ImageBuilder } from "phasebot/builders"
 
 import { getOrdinal } from "~/utils"
-import { ImageBuilder } from "phasebot/builders"
+
+import geist600 from "./fonts/Geist-600.otf"
 
 interface RankCardProps {
   background: string | undefined
@@ -133,7 +134,7 @@ export const generateRankCard = (props: RankCardProps) =>
     .setHeight(192)
     .setFonts([
       {
-        data: readFileSync("./src/images/fonts/Geist-600.otf"),
+        data: geist600,
         name: "Geist",
         style: "normal",
         weight: 600,

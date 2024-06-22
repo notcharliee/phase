@@ -1,102 +1,102 @@
-import { GiveawaySchema } from "@repo/schemas"
 import { EmbedBuilder, GuildMember, GuildTextBasedChannel } from "discord.js"
-import { BotCommandBuilder, botCommand } from "phasebot"
-import { PhaseColour, errorMessage, getRandomArrayElements } from "~/utils"
+import { BotCommandBuilder } from "phasebot/builders"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("giveaway")
-    .setDescription("giveaway")
-    .setDMPermission(false)
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("create")
-        .setDescription("Creates a new giveaway.")
-        .addStringOption((option) =>
-          option
-            .setName("prize")
-            .setDescription("What the winner will get.")
-            .setRequired(true)
-            .setMaxLength(200),
-        )
-        .addIntegerOption((option) =>
-          option
-            .setName("winners")
-            .setDescription("How many members will win.")
-            .setRequired(true)
-            .setMaxValue(15),
-        )
-        .addStringOption((option) =>
-          option
-            .setName("duration")
-            .setDescription("How long the giveaway will last.")
-            .setRequired(true)
-            .addChoices(
-              {
-                name: "1m",
-                value: `${1000 * 60 * 1}`,
-              },
-              {
-                name: "15m",
-                value: `${1000 * 60 * 15}`,
-              },
-              {
-                name: "30m",
-                value: `${1000 * 60 * 30}`,
-              },
-              {
-                name: "1h",
-                value: `${1000 * 60 * 60 * 1}`,
-              },
-              {
-                name: "6h",
-                value: `${1000 * 60 * 60 * 6}`,
-              },
-              {
-                name: "12h",
-                value: `${1000 * 60 * 60 * 12}`,
-              },
-              {
-                name: "1d",
-                value: `${1000 * 60 * 60 * 24 * 1}`,
-              },
-              {
-                name: "7d",
-                value: `${1000 * 60 * 60 * 24 * 7}`,
-              },
-            ),
-        ),
-    )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("delete")
-        .setDescription("Deletes a giveaway.")
-        .addStringOption((option) =>
-          option
-            .setName("id")
-            .setDescription("The ID of the giveaway.")
-            .setRequired(true)
-            .setMaxLength(200),
-        ),
-    )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("reroll")
-        .setDescription("Randomly rerolls a giveaway.")
-        .addStringOption((option) =>
-          option
-            .setName("id")
-            .setDescription("The ID of the giveaway.")
-            .setRequired(true),
-        )
-        .addIntegerOption((option) =>
-          option
-            .setName("amount")
-            .setDescription("How many winners you want to reroll.")
-            .setRequired(false),
-        ),
-    ),
-  async (client, interaction) => {
+import { GiveawaySchema } from "@repo/schemas"
+
+import { errorMessage, getRandomArrayElements, PhaseColour } from "~/utils"
+
+export default new BotCommandBuilder()
+  .setName("giveaway")
+  .setDescription("giveaway")
+  .setDMPermission(false)
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("create")
+      .setDescription("Creates a new giveaway.")
+      .addStringOption((option) =>
+        option
+          .setName("prize")
+          .setDescription("What the winner will get.")
+          .setRequired(true)
+          .setMaxLength(200),
+      )
+      .addIntegerOption((option) =>
+        option
+          .setName("winners")
+          .setDescription("How many members will win.")
+          .setRequired(true)
+          .setMaxValue(15),
+      )
+      .addStringOption((option) =>
+        option
+          .setName("duration")
+          .setDescription("How long the giveaway will last.")
+          .setRequired(true)
+          .addChoices(
+            {
+              name: "1m",
+              value: `${1000 * 60 * 1}`,
+            },
+            {
+              name: "15m",
+              value: `${1000 * 60 * 15}`,
+            },
+            {
+              name: "30m",
+              value: `${1000 * 60 * 30}`,
+            },
+            {
+              name: "1h",
+              value: `${1000 * 60 * 60 * 1}`,
+            },
+            {
+              name: "6h",
+              value: `${1000 * 60 * 60 * 6}`,
+            },
+            {
+              name: "12h",
+              value: `${1000 * 60 * 60 * 12}`,
+            },
+            {
+              name: "1d",
+              value: `${1000 * 60 * 60 * 24 * 1}`,
+            },
+            {
+              name: "7d",
+              value: `${1000 * 60 * 60 * 24 * 7}`,
+            },
+          ),
+      ),
+  )
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("delete")
+      .setDescription("Deletes a giveaway.")
+      .addStringOption((option) =>
+        option
+          .setName("id")
+          .setDescription("The ID of the giveaway.")
+          .setRequired(true),
+      ),
+  )
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("reroll")
+      .setDescription("Rerolls a giveaway.")
+      .addStringOption((option) =>
+        option
+          .setName("id")
+          .setDescription("The ID of the giveaway.")
+          .setRequired(true),
+      )
+      .addIntegerOption((option) =>
+        option
+          .setName("amount")
+          .setDescription("How many winners you want to reroll.")
+          .setRequired(false),
+      ),
+  )
+  .setExecute(async (interaction) => {
     switch (interaction.options.getSubcommand()) {
       case "create":
         {
@@ -187,9 +187,9 @@ export default botCommand(
             )
           }
 
-          const channel = client.channels.cache.get(giveaway.channel) as
-            | GuildTextBasedChannel
-            | undefined
+          const channel = interaction.client.channels.cache.get(
+            giveaway.channel,
+          ) as GuildTextBasedChannel | undefined
 
           try {
             const message = await channel?.messages
@@ -245,7 +245,7 @@ export default botCommand(
             )
           }
 
-          const giveawayChannel = client.channels.cache.get(
+          const giveawayChannel = interaction.client.channels.cache.get(
             giveawaySchema.channel,
           ) as GuildTextBasedChannel | undefined
 
@@ -302,7 +302,9 @@ export default botCommand(
             )
 
             giveawayEntries.splice(
-              giveawayEntries.findIndex((user) => user.id == client.user.id),
+              giveawayEntries.findIndex(
+                (user) => user.id == interaction.client.user.id,
+              ),
               1,
             )
 
@@ -359,5 +361,4 @@ export default botCommand(
         }
         break
     }
-  },
-)
+  })

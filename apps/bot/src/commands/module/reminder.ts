@@ -1,35 +1,36 @@
-import { ReminderSchema } from "@repo/schemas"
 import { EmbedBuilder, PermissionFlagsBits } from "discord.js"
-import { default as ms } from "ms"
-import { BotCommandBuilder, botCommand } from "phasebot"
-import { PhaseColour, errorMessage, missingPermission } from "~/utils"
+import { BotCommandBuilder } from "phasebot/builders"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("reminder")
-    .setDescription("Set a reminder")
-    .setDMPermission(false)
-    .addStringOption((option) =>
-      option
-        .setName("message")
-        .setDescription("The message to remind you of")
-        .setRequired(true),
-    )
-    .addStringOption((option) =>
-      option
-        .setName("time")
-        .setDescription("The time to remind you (e.g. 1d, 1h, 1m, 1s)")
-        .setRequired(true),
-    )
-    .addRoleOption((option) =>
-      option
-        .setName("role")
-        .setDescription(
-          "The role to remind (must have 'Mention Everyone' permission)",
-        )
-        .setRequired(false),
-    ),
-  async (client, interaction) => {
+import { ReminderSchema } from "@repo/schemas"
+import ms from "ms"
+
+import { errorMessage, missingPermission, PhaseColour } from "~/utils"
+
+export default new BotCommandBuilder()
+  .setName("reminder")
+  .setDescription("Set a reminder")
+  .setDMPermission(false)
+  .addStringOption((option) =>
+    option
+      .setName("message")
+      .setDescription("The message to remind you of")
+      .setRequired(true),
+  )
+  .addStringOption((option) =>
+    option
+      .setName("time")
+      .setDescription("The time to remind you (e.g. 1d, 1h, 1m, 1s)")
+      .setRequired(true),
+  )
+  .addRoleOption((option) =>
+    option
+      .setName("role")
+      .setDescription(
+        "The role to remind (must have 'Mention Everyone' permission)",
+      )
+      .setRequired(false),
+  )
+  .setExecute(async (interaction) => {
     const message = interaction.options.getString("message", true)
     const time = interaction.options.getString("time", true)
     const role = interaction.options.getRole("role", false)
@@ -80,5 +81,4 @@ export default botCommand(
         ],
       })
     }
-  },
-)
+  })

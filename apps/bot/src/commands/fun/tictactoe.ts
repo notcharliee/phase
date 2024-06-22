@@ -1,25 +1,26 @@
-import { botCommand, BotCommandBuilder } from "phasebot"
-import { GameSchema } from "@repo/schemas"
-import { ZeroWidthJoiner, PhaseColour, memberNotFound } from "~/utils"
 import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
   EmbedBuilder,
 } from "discord.js"
+import { BotCommandBuilder } from "phasebot/builders"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("tictactoe")
-    .setDescription("Play tic-tac-toe against another user.")
-    .setDMPermission(false)
-    .addUserOption((option) =>
-      option
-        .setName("member")
-        .setDescription("The member you want to select.")
-        .setRequired(true),
-    ),
-  async (client, interaction) => {
+import { GameSchema } from "@repo/schemas"
+
+import { memberNotFound, PhaseColour, ZeroWidthJoiner } from "~/utils"
+
+export default new BotCommandBuilder()
+  .setName("tictactoe")
+  .setDescription("Play tic-tac-toe against another user.")
+  .setDMPermission(false)
+  .addUserOption((option) =>
+    option
+      .setName("member")
+      .setDescription("The member you want to select.")
+      .setRequired(true),
+  )
+  .setExecute(async (interaction) => {
     const member = interaction.options.getUser("member")
 
     if (!member) return interaction.reply(memberNotFound())
@@ -100,5 +101,4 @@ export default botCommand(
       },
       players: [interaction.user.id, member.id],
     }).save()
-  },
-)
+  })

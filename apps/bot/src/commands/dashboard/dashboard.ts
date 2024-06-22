@@ -1,17 +1,18 @@
-import crypto from "crypto"
+import crypto from "node:crypto"
 
-import { GuildSchema, OtpSchema } from "@repo/schemas"
-import { errorMessage, missingPermission, PhaseColour } from "~/utils"
-import bcrypt from "bcrypt"
 import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
   EmbedBuilder,
-  GuildMember,
   Message,
 } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
+
+import { GuildSchema, OtpSchema } from "@repo/schemas"
+import bcrypt from "bcrypt"
+
+import { errorMessage, missingPermission, PhaseColour } from "~/utils"
 
 function generateOTP(): string {
   const randomBytes = crypto.randomBytes(3) // 3 bytes = 24 bits
@@ -58,7 +59,7 @@ export default new BotCommandBuilder()
           .setDescription("List the users that have dashboard access."),
       ),
   )
-  .setExecute(async (_, interaction) => {
+  .setExecute(async (interaction) => {
     await interaction.deferReply({
       ephemeral: true,
     })

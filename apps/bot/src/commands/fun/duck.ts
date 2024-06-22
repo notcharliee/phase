@@ -1,12 +1,12 @@
-import { botCommand, BotCommandBuilder } from "phasebot"
-import { PhaseColour } from "~/utils"
 import { EmbedBuilder } from "discord.js"
+import { BotCommandBuilder } from "phasebot/builders"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("duck")
-    .setDescription("Finds a random picture of a duck."),
-  (client, interaction) => {
+import { PhaseColour } from "~/utils"
+
+export default new BotCommandBuilder()
+  .setName("duck")
+  .setDescription("Finds a random picture of a duck.")
+  .setExecute(async (interaction) => {
     interaction.reply({
       embeds: [
         new EmbedBuilder()
@@ -15,5 +15,4 @@ export default botCommand(
           .setImage("https://random-d.uk/api/randomimg?t=" + Date.now()),
       ],
     })
-  },
-)
+  })

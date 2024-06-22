@@ -1,11 +1,10 @@
-import { botCommand, BotCommandBuilder } from "phasebot"
-import facts from "./_data/catfacts.json" assert { type: "json" }
+import { BotCommandBuilder } from "phasebot/builders"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("catfact")
-    .setDescription("Gives you an interesting fact about cats."),
-  (client, interaction) => {
+import facts from "./_data/catfacts.json"
+
+export default new BotCommandBuilder()
+  .setName("catfact")
+  .setDescription("Gives you an interesting fact about cats.")
+  .setExecute(async (interaction) => {
     interaction.reply(facts[Math.floor(Math.random() * facts.length)])
-  },
-)
+  })

@@ -1,19 +1,19 @@
-import { BotCommandBuilder, botCommand } from "phasebot"
-import { PhaseColour, memberNotFound } from "~/utils"
-import { GuildMember, PermissionResolvable, EmbedBuilder } from "discord.js"
+import { EmbedBuilder, GuildMember, PermissionResolvable } from "discord.js"
+import { BotCommandBuilder } from "phasebot/builders"
 
-export default botCommand(
-  new BotCommandBuilder()
-    .setName("whois")
-    .setDescription("Displays member data in an embed.")
-    .setDMPermission(false)
-    .addUserOption((option) =>
-      option
-        .setName("member")
-        .setDescription("The member you want to select.")
-        .setRequired(true),
-    ),
-  async (client, interaction) => {
+import { memberNotFound, PhaseColour } from "~/utils"
+
+export default new BotCommandBuilder()
+  .setName("whois")
+  .setDescription("Displays member data in an embed.")
+  .setDMPermission(false)
+  .addUserOption((option) =>
+    option
+      .setName("member")
+      .setDescription("The member you want to select.")
+      .setRequired(true),
+  )
+  .setExecute(async (interaction) => {
     const member = interaction.options.getMember("member") as GuildMember | null
     if (!member) return interaction.reply(memberNotFound())
 
@@ -54,6 +54,7 @@ export default botCommand(
             iconURL: member.displayAvatarURL(),
             name: member.displayName,
           })
+          .setThumbnail(member.displayAvatarURL())
           .setColor(PhaseColour.Primary)
           .setDescription(`${member}`)
           .setFields([
@@ -88,7 +89,7 @@ export default botCommand(
               value: permissionsArray.length
                 ? permissionsArray
                     .map((permission) => {
-                      return permission.replace(/([a-z])([A-Z])/g, "$1 $2")
+                      return permission.replace(/([A-Z])/g, " $1").trim()
                     })
                     .toString()
                     .replaceAll(",", ", ")
@@ -97,10 +98,7 @@ export default botCommand(
           ])
           .setFooter({
             text: `ID: ${member.id}`,
-          })
-          .setThumbnail(member.displayAvatarURL())
-          .setTimestamp(),
+          }),
       ],
     })
-  },
-)
+  })

@@ -23,7 +23,7 @@ export default new BotCommandBuilder()
   .addSubcommand((subcommand) =>
     subcommand.setName("delete").setDescription("Delete the ticket."),
   )
-  .setExecute(async (_, interaction) => {
+  .setExecute(async (interaction) => {
     const guildSchema = await GuildSchema.findOne({ id: interaction.guildId })
     const ticketModule = guildSchema?.modules?.Tickets
 
