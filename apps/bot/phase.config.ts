@@ -1,18 +1,18 @@
-import { GatewayIntentBits, Partials, ActivityType } from "discord.js"
+import { ActivityType, Partials } from "discord.js"
 import { setConfig } from "phasebot"
 
 /** @type {import("phasebot").ConfigOptions} */
 export default setConfig({
   intents: [
-    GatewayIntentBits.DirectMessages,
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.GuildModeration,
-    GatewayIntentBits.GuildEmojisAndStickers,
-    GatewayIntentBits.GuildInvites,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.GuildMessageReactions,
-    GatewayIntentBits.GuildVoiceStates,
+    "DirectMessages",
+    "Guilds",
+    "GuildMembers",
+    "GuildModeration",
+    "GuildEmojisAndStickers",
+    "GuildInvites",
+    "GuildMessages",
+    "GuildMessageReactions",
+    "GuildVoiceStates",
   ],
   partials: [
     Partials.Channel,
