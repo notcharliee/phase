@@ -3,6 +3,7 @@
   "tasks": {
     "build": {
       "cache": true,
+      "env": ["*"],
       "dependsOn": ["^build"],
       "outputs": [
         "build/**",
@@ -14,7 +15,8 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "env": ["*"]
     }
   },
   "remoteCache": {
