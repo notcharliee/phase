@@ -40,7 +40,10 @@
   "files": [
     "dist",
     "bunfig.toml",
-    "plugins.ts"
+    "plugins.ts",
+    "package.json",
+    "tsconfig.json",
+    "README.md"
   ],
   "repository": {
     "type": "git",
