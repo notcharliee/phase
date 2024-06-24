@@ -20,7 +20,7 @@
     "schemas:build": "turbo run build --filter=@repo/schemas --color"
   },
   "dependencies": {
-    "turbo": "^1.13.4"
+    "turbo": "^2.0.4"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
