@@ -3,8 +3,9 @@
   "name": "bot",
   "type": "module",
   "scripts": {
-    "start": "phase",
-    "dev": "phase"
+    "build": "phase build",
+    "start": "phase start",
+    "dev": "phase dev"
   },
   "dependencies": {
     "@androz2091/discord-invites-tracker": "^1.2.3",
