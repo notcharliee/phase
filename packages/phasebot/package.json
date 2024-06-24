@@ -39,7 +39,8 @@
   ],
   "files": [
     "dist",
-    "bunfig.toml"
+    "bunfig.toml",
+    "plugins.ts"
   ],
   "repository": {
     "type": "git",

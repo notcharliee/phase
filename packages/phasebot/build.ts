@@ -16,7 +16,6 @@ Bun.build({
   entrypoints: [
     "./src/index.ts",
     "./src/builders/index.ts",
-    "./src/plugins/font.ts",
     "./src/cli/index.ts",
   ],
   outdir: "./dist",

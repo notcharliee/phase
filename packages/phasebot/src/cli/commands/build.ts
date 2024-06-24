@@ -4,6 +4,7 @@ import { basename, extname } from "node:path"
 import { Command } from "commander"
 import dedent from "dedent"
 
+import { font } from "~/../plugins"
 import { getCommandPaths, getCronPaths, getEventPaths } from "~/cli/handlers"
 import {
   cliHeader,
@@ -12,7 +13,6 @@ import {
   getPrestartPath,
   loadingMessage,
 } from "~/cli/utils"
-import { font } from "~/plugins/font"
 
 import type { JSONSchemaForNPMPackageJsonFiles2 as PackageJsonType } from "@schemastore/package"
 import type { BotCommandMiddleware } from "~/builders"

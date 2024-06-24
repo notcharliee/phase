@@ -1,1 +1,1 @@
-preload = ["./dist/plugins/font.js"]
+preload = ["./plugins.ts"]
