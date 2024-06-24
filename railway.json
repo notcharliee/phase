@@ -10,7 +10,7 @@
       "phases": {
         "install": {
           "dependsOn": ["setup"],
-          "cmds": ["bun install"]
+          "cmds": ["bun install --production"]
         }
       }
     }
