@@ -8,8 +8,8 @@
     "packages/*"
   ],
   "scripts": {
-    "bot:dev": "cd apps/bot && bun run dev",
-    "bot:build": "cd apps/bot && bun run build",
+    "bot:dev": "turbo run dev --filter=bot --color",
+    "bot:build": "turbo run build --filter=bot --color",
     "bot:start": "cd apps/bot && bun run start",
     "site:dev": "turbo run dev --filter=site --color",
     "site:build": "turbo run build --filter=site --color",
