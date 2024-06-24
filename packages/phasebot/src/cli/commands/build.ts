@@ -42,8 +42,6 @@ export interface BuildManifest {
 export default new Command("build")
   .description("build the bot for production")
   .action(async () => {
-    process.env.NODE_ENV = "production"
-
     const config = await getConfig()
     console.log(cliHeader(config))
 
