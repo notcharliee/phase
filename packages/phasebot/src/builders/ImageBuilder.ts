@@ -70,7 +70,7 @@ export class ImageBuilder {
   /**
    * Converts the builder to a response object.
    */
-  toResponse(): Response {
+  toResponse() {
     return new ImageResponse(this.element, {
       width: this.width,
       height: this.height,
@@ -81,28 +81,28 @@ export class ImageBuilder {
   /**
    * Converts the builder to a blob.
    */
-  toBlob(): Promise<Blob> {
+  toBlob() {
     return this.toResponse().blob()
   }
 
   /**
    * Converts the builder to an array buffer.
    */
-  toArrayBuffer(): Promise<ArrayBuffer> {
+  toArrayBuffer() {
     return this.toResponse().arrayBuffer()
   }
 
   /**
    * Converts the builder to a buffer.
    */
-  async toBuffer(): Promise<Buffer> {
+  async toBuffer() {
     return await this.toArrayBuffer().then((ab) => Buffer.from(ab))
   }
 
   /**
    * Converts the builder to a discord.js AttachmentBuilder.
    */
-  async toAttachment(): Promise<AttachmentBuilder> {
+  async toAttachment() {
     return await this.toBuffer().then((buffer) => new AttachmentBuilder(buffer))
   }
 }
