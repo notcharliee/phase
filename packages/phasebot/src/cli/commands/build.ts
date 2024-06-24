@@ -55,10 +55,6 @@ export default new Command("build")
       throw new Error("No 'src' directory found.")
     }
 
-    if (!Bun.env.DISCORD_TOKEN) {
-      throw new Error("Missing 'DISCORD_TOKEN' environment variable.")
-    }
-
     await loadingMessage(
       async () => {
         if (existsSync("./.phase")) {
