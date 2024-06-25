@@ -105,24 +105,24 @@ export const DashboardNavigation = () => {
           </span>
         </div>
       </nav>
-      <nav className="bg-muted-background text-muted-foreground fixed bottom-0 z-50 flex w-screen justify-evenly rounded-t-[2rem] py-6 sm:hidden">
+      <nav className="bg-muted-background text-muted-foreground fixed bottom-0 z-50 flex w-screen justify-evenly rounded-t-2xl py-5 sm:hidden">
         <Link
           href={"/dashboard/modules"}
-          className="before:bg-foreground aria-selected:text-foreground relative flex justify-center before:absolute before:-bottom-3.5 before:z-10 before:h-1 before:w-3.5 before:rounded-sm before:opacity-0 aria-selected:before:opacity-100"
+          className="before:bg-foreground aria-selected:text-foreground relative flex justify-center before:absolute before:-bottom-3 before:z-10 before:h-1 before:w-3.5 before:rounded-sm before:opacity-0 aria-selected:before:opacity-100"
           aria-selected={pathname === "modules"}
         >
           <DashboardIcon className="size-7 duration-200" />
         </Link>
         <Link
           href={"/dashboard/commands"}
-          className="before:bg-foreground aria-selected:text-foreground relative flex justify-center before:absolute before:-bottom-3.5 before:z-10 before:h-1 before:w-3.5 before:rounded-sm before:opacity-0 aria-selected:before:opacity-100"
+          className="before:bg-foreground aria-selected:text-foreground relative flex justify-center before:absolute before:-bottom-3 before:z-10 before:h-1 before:w-3.5 before:rounded-sm before:opacity-0 aria-selected:before:opacity-100"
           aria-selected={pathname === "commands"}
         >
           <CommandsIcon className="size-7 duration-200" />
         </Link>
         <Link
           href={"/dashboard/settings"}
-          className="before:bg-foreground aria-selected:text-foreground relative flex justify-center before:absolute before:-bottom-3.5 before:z-10 before:h-1 before:w-3.5 before:rounded-sm before:opacity-0 aria-selected:before:opacity-100"
+          className="before:bg-foreground aria-selected:text-foreground relative flex justify-center before:absolute before:-bottom-3 before:z-10 before:h-1 before:w-3.5 before:rounded-sm before:opacity-0 aria-selected:before:opacity-100"
           aria-selected={pathname === "settings"}
         >
           <GearIcon className="size-7 duration-200" />

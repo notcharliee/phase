@@ -4,7 +4,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <main className="flex h-screen w-screen flex-row">
       <DashboardNavigation />
-      <div className="h-[calc(100%-4.75rem)] sm:h-full w-full overflow-auto px-6 py-4 sm:px-12 sm:py-8">
+      <div className="h-[calc(100%-4.5rem)] sm:h-full w-full overflow-auto px-6 py-4 sm:px-12 sm:py-8">
         {children}
       </div>
     </main>
