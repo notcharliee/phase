@@ -19,6 +19,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog"
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "~/components/ui/drawer"
 import { Switch } from "~/components/ui/switch"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
@@ -26,10 +34,10 @@ import { useMediaQuery } from "~/hooks/use-media-query"
 
 import { modulesConfig } from "~/config/modules"
 
-import type { GuildModules } from "@repo/schemas"
-
 import { updateModule } from "../_actions/updateModule"
 import * as moduleForms from "./_forms"
+
+import type { GuildModules } from "@repo/schemas"
 
 export default function ModulesPage() {
   const dashboard = useDashboardContext()
@@ -70,20 +78,39 @@ export default function ModulesPage() {
               <CardDescription>{description}</CardDescription>
             </CardContent>
             <CardFooter className="h-full">
-              <Dialog>
-                <DialogContent className="max-h-[90%] overflow-auto lg:max-h-[70%]">
-                  <DialogHeader>
-                    <DialogTitle>{name}</DialogTitle>
-                    <DialogDescription>{description}</DialogDescription>
-                  </DialogHeader>
-                  <ModuleForm />
-                </DialogContent>
-                <DialogTrigger asChild>
-                  <Button variant="secondary" className="mt-auto w-full">
-                    {guildModule ? "Edit module" : "Setup module"}
-                  </Button>
-                </DialogTrigger>
-              </Dialog>
+              {isOneColumn ? (
+                // mobile drawer
+                <Drawer>
+                  <DrawerContent>
+                    <DrawerHeader>
+                      <DrawerTitle>{name}</DrawerTitle>
+                      <DrawerDescription>{description}</DrawerDescription>
+                    </DrawerHeader>
+                    <ModuleForm />
+                  </DrawerContent>
+                  <DrawerTrigger asChild>
+                    <Button variant="secondary" className="mt-auto w-full">
+                      {guildModule ? "Edit module" : "Setup module"}
+                    </Button>
+                  </DrawerTrigger>
+                </Drawer>
+              ) : (
+                // desktop dialog
+                <Dialog>
+                  <DialogContent className="max-h-[90%] overflow-auto lg:max-h-[70%]">
+                    <DialogHeader>
+                      <DialogTitle>{name}</DialogTitle>
+                      <DialogDescription>{description}</DialogDescription>
+                    </DialogHeader>
+                    <ModuleForm />
+                  </DialogContent>
+                  <DialogTrigger asChild>
+                    <Button variant="secondary" className="mt-auto w-full">
+                      {guildModule ? "Edit module" : "Setup module"}
+                    </Button>
+                  </DialogTrigger>
+                </Dialog>
+              )}
             </CardFooter>
           </Card>
         )
