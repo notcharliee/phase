@@ -1,0 +1,31 @@
+{
+  "private": true,
+  "name": "@repo/database",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "bun build src/index.ts --outdir=./dist --target=node --external=mongoose --minify --sourcemap=external && tsup src/index.ts --clean --dts-only --format=esm",
+    "dev": "tsup src/index.ts --clean --dts --format=esm --watch"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "main": "./dist/index.js",
+      "module": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1599.0",
+    "mock-aws-s3": "^4.0.2",
+    "mongoose": "^8.1.0",
+    "nock": "^13.5.4",
+    "tsup": "^8.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.9",
+    "typescript": "^5.3.2"
+  }
+}
