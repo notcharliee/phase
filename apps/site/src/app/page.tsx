@@ -6,15 +6,15 @@ import { useEffect } from "react"
 import { ArrowRightIcon } from "@radix-ui/react-icons"
 import { toast } from "sonner"
 
-import { DocsHeader } from "@/components/docs-header"
+import { Header } from "~/components/header"
 import {
   PageActions,
   PageDescription,
   PageHeading,
-} from "@/components/page-heading"
-import { buttonVariants } from "@/components/ui/button"
+} from "~/components/page-heading"
+import { buttonVariants } from "~/components/ui/button"
 
-import { siteConfig } from "@/config/site"
+import { siteConfig } from "~/config/site"
 
 export default function HomePage({
   searchParams,
@@ -33,7 +33,7 @@ export default function HomePage({
 
   return (
     <main className="flex min-h-screen w-full flex-col">
-      <DocsHeader />
+      <Header />
       <div className="mx-auto my-auto grid min-h-[calc(100vh-8rem-1px)] max-w-7xl place-items-center gap-8 p-6 sm:gap-0 sm:px-8 md:px-12">
         <section className="flex max-w-[980px] flex-col items-center gap-4 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20">
           <Link
@@ -47,7 +47,10 @@ export default function HomePage({
           <PageHeading>The all-in-one Discord bot</PageHeading>
           <PageDescription>{siteConfig.description}</PageDescription>
           <PageActions>
-            <Link href="/redirect/invite" className={buttonVariants({ size: "xl" })}>
+            <Link
+              href="/redirect/invite"
+              className={buttonVariants({ size: "xl" })}
+            >
               Invite the bot
             </Link>
             <Link
@@ -59,28 +62,30 @@ export default function HomePage({
           </PageActions>
         </section>
       </div>
-      <footer className="flex items-center px-8 max-sm:py-6 sm:h-16 sm:border-t">
-        <p className="text-muted-foreground w-full text-balance text-center text-sm leading-loose sm:text-left">
-          Built by{" "}
-          <Link
-            href={"https://charliee.dev"}
-            target="_blank"
-            rel="noreferrer"
-            className="font-medium underline underline-offset-4"
-          >
-            notcharliee
-          </Link>
-          . The source code is available on{" "}
-          <Link
-            href={"/redirect/github"}
-            target="_blank"
-            rel="noreferrer"
-            className="font-medium underline underline-offset-4"
-          >
-            GitHub
-          </Link>
-          .
-        </p>
+      <footer className="sm:border-t">
+        <div className="container flex items-center py-6 sm:h-16 sm:py-0">
+          <p className="text-muted-foreground w-full text-balance text-center text-sm leading-loose sm:text-left">
+            Built by{" "}
+            <Link
+              href={"/redirect/developer"}
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium underline underline-offset-4"
+            >
+              mikaela
+            </Link>
+            . The source code is available on{" "}
+            <Link
+              href={"/redirect/github"}
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium underline underline-offset-4"
+            >
+              GitHub
+            </Link>
+            .
+          </p>
+        </div>
       </footer>
     </main>
   )
