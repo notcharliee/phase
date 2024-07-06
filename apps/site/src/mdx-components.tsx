@@ -1,22 +1,24 @@
-"use client"
-
 import Image from "next/image"
 import Link from "next/link"
-
-import { useMDXComponent } from "next-contentlayer/hooks"
 
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { UserHoverCard } from "@/components/user-hover-card"
+} from "~/components/ui/accordion"
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
+import { UserHoverCard } from "~/components/user-hover-card"
+import { Heading, HeadingDescription, HeadingTitle } from "~/components/docs/heading"
 
-import { cn } from "@/lib/utils"
+import { cn } from "~/lib/utils"
 
-const components = {
+import type { MDXComponents } from "mdx/types"
+
+export const useMDXComponents = (components: MDXComponents) => ({
+  Heading,
+  HeadingTitle,
+  HeadingDescription,
   Accordion,
   AccordionContent,
   AccordionItem,
@@ -156,35 +158,11 @@ const components = {
     />
   ),
   Image,
-  Step: ({ className, ...props }: React.ComponentProps<"h3">) => (
-    <h3
-      className={cn(
-        "font-heading mt-8 scroll-m-20 text-xl font-semibold tracking-tight",
-        className,
-      )}
-      {...props}
-    />
-  ),
-  Steps: ({ ...props }) => (
-    <div
-      className="[&>h3]:step steps mb-12 ml-4 border-l pl-8 [counter-reset:step]"
-      {...props}
-    />
-  ),
   Link: ({ className, ...props }: React.ComponentProps<typeof Link>) => (
     <Link
       className={cn("font-medium underline underline-offset-4", className)}
       {...props}
     />
   ),
-}
-
-export function Mdx({ code }: { code: string }) {
-  const Component = useMDXComponent(code)
-
-  return (
-    <div className="mdx">
-      <Component components={components} />
-    </div>
-  )
-}
+  ...components,
+})

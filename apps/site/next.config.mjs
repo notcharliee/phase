@@ -1,9 +1,39 @@
+import createMDX from "@next/mdx"
+import rehypeAutolinkHeadings from "rehype-autolink-headings"
+import rehypeSlug from "rehype-slug"
+import remarkGfm from "remark-gfm"
+
 import { env } from "./src/lib/env.js"
 
 /** @type {import('next').NextConfig} */
 const config = {
+  pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
   experimental: {
     serverComponentsExternalPackages: ["bcryptjs"],
+    mdxRs: true,
+    turbo: {
+      resolveAlias: {
+        "next-mdx-import-source-file": [
+          "private-next-root-dir/src/mdx-components",
+          "private-next-root-dir/mdx-components",
+          "@mdx-js/react",
+        ],
+      },
+      rules: {
+        // @ts-expect-error type error for some reason idk
+        test: /\.mdx$/,
+        use: [
+          {
+            loader: import.meta.resolve(
+              "./node_modules/@next/mdx/mdx-rs-loader.js",
+            ),
+            options: {
+              providerImportSource: "next-mdx-import-source-file",
+            },
+          },
+        ],
+      },
+    },
   },
   async redirects() {
     return [
@@ -47,4 +77,23 @@ const config = {
   distDir: "build",
 }
 
-export default config
+const withMDX = createMDX({
+  options: {
+    // @ts-expect-error type error for some reason idk
+    remarkPlugins: [remarkGfm],
+    rehypePlugins: [
+      rehypeSlug,
+      [
+        rehypeAutolinkHeadings,
+        {
+          properties: {
+            className: ["subheading-anchor"],
+            ariaLabel: "Link to section",
+          },
+        },
+      ],
+    ],
+  },
+})
+
+export default withMDX(config)

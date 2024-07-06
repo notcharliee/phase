@@ -30,22 +30,16 @@
       "~/*": ["./src/*"],
       "@/*": ["./src/*"],
       "public/*": ["./public/*"],
-      "contentlayer/generated": ["./.contentlayer/generated"]
     }
   },
   "exclude": ["node_modules"],
   "include": [
-    ".contentlayer/generated",
     ".eslintrc.cjs",
-    "contentlayer.config.js",
     "next.config.mjs",
     "postcss.config.cjs",
     "tailwind.config.cjs",
     "build/types/**/*.ts",
     "next-env.d.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.cjs",
-    "src/**/*.js"
+    "src/**/*",
   ]
 }
