@@ -1,6 +1,6 @@
 import { type Metadata } from "next"
 
-import { DocsHeader } from "@/components/docs-header"
+import { Header } from "@/components/header"
 import { Moon } from "@/components/moon"
 
 export const metadata: Metadata = {
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <main className="flex min-h-screen w-full flex-col">
-      <DocsHeader />
+      <Header />
       <div className="grid h-[calc(100vh-4rem-1px)]">
         <div className="absolute animate-[text-fade-in_1s_2s_forwards] place-self-center text-center opacity-0">
           <h1 className="text-[9rem] font-black leading-none tracking-tighter">

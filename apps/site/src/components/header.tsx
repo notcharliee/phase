@@ -1,18 +1,17 @@
 "use client"
 
-import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
-
+import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 
 import {
-  CircleIcon,
   FileIcon,
   GitHubLogoIcon,
   GlobeIcon,
   RocketIcon,
 } from "@radix-ui/react-icons"
 
+import { Moon } from "@/components/moon"
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
   CommandDialog,
@@ -23,14 +22,13 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command"
-import { Moon } from "@/components/moon"
 
-import { docsNavConfig } from "@/config/nav/docs"
 import { siteConfig } from "@/config/site"
+import { docsPages, mainPages, splitPagesByCategory } from "~/config/nav"
 
 import { cn } from "@/lib/utils"
 
-export const DocsHeader = () => {
+export const Header = () => {
   const pathname = usePathname()
   const router = useRouter()
 
@@ -64,22 +62,22 @@ export const DocsHeader = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b backdrop-blur-sm">
-      <div className="mx-auto flex h-16 items-center px-8">
+      <div className="container flex h-16 items-center">
         <nav className="mr-8 hidden items-center space-x-4 md:flex lg:space-x-6">
           <Link href={"/"} className="mr-6 flex items-center space-x-2">
             <Moon className="h-5 w-5" />
-            <span className="font-bold leading-tight">Phase Bot</span>
+            <span className="font-bold leading-tight">Phase</span>
           </Link>
-          {docsNavConfig.mainNav.map((item) => (
+          {mainPages.map((item) => (
             <Link
               key={item.href}
-              href={item.href!}
+              href={item.href}
               className={cn(
                 "hover:text-primary text-sm font-medium transition-colors",
                 pathname !== item.href && "text-muted-foreground",
               )}
             >
-              {item.title}
+              {item.label}
             </Link>
           ))}
         </nav>
@@ -87,9 +85,7 @@ export const DocsHeader = () => {
           <div className="w-full flex-1 md:w-auto md:flex-none">
             <Button
               variant="outline"
-              className={cn(
-                "bg-background text-muted-foreground relative h-9 w-full justify-start rounded-[0.5rem] text-sm font-normal shadow-none sm:pr-[52px] md:w-64",
-              )}
+              className="bg-background text-muted-foreground relative h-9 w-full justify-start rounded-[0.5rem] text-sm font-normal shadow-none sm:pr-[52px] md:w-64"
               onClick={() => setOpen(true)}
             >
               <span className="flex items-center gap-2">
@@ -105,63 +101,46 @@ export const DocsHeader = () => {
               <CommandList>
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup heading="Popular Links">
-                  <CommandItem
-                    value={"Homepage"}
-                    onSelect={() => {
-                      runCommand(() => router.push("/"))
-                    }}
-                  >
-                    <FileIcon className="mr-2 h-4 w-4" />
-                    Homepage
-                  </CommandItem>
-                  {docsNavConfig.mainNav
-                    .filter((navitem) => !navitem.external)
-                    .map((navItem) => (
-                      <CommandItem
-                        key={navItem.href}
-                        value={navItem.title}
-                        onSelect={() => {
-                          runCommand(() => router.push(navItem.href!))
-                        }}
-                      >
-                        <FileIcon className="mr-2 h-4 w-4" />
-                        {navItem.title}
-                      </CommandItem>
-                    ))}
-                  {docsNavConfig.mainNav
-                    .filter((navitem) => navitem.external)
-                    .map((navItem) => (
-                      <CommandItem
-                        key={navItem.href}
-                        value={navItem.title}
-                        onSelect={() => {
-                          runCommand(() => router.push(navItem.href!))
-                        }}
-                      >
+                  {mainPages.map((page) => (
+                    <CommandItem
+                      key={page.href}
+                      value={page.label}
+                      onSelect={() => {
+                        runCommand(() => router.push(page.href))
+                      }}
+                    >
+                      {page.external ? (
                         <GlobeIcon className="mr-2 h-4 w-4" />
-                        {navItem.title}
-                      </CommandItem>
-                    ))}
+                      ) : (
+                        <FileIcon className="mr-2 h-4 w-4" />
+                      )}
+                      {page.label}
+                    </CommandItem>
+                  ))}
                 </CommandGroup>
                 <CommandSeparator className="mb-2 mt-1" />
-                {docsNavConfig.sidebarNav.map((group) => (
-                  <CommandGroup key={group.title} heading={group.title}>
-                    {group.items.map((navItem) => (
-                      <CommandItem
-                        key={navItem.href}
-                        value={navItem.title}
-                        onSelect={() => {
-                          runCommand(() => router.push(navItem.href!))
-                        }}
-                      >
-                        <div className="mr-2 flex h-4 w-4 items-center justify-center">
-                          <CircleIcon className="h-3 w-3" />
-                        </div>
-                        {navItem.title}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                ))}
+                {Object.entries(splitPagesByCategory(docsPages)).map(
+                  ([category, pages]) => (
+                    <CommandGroup key={category} heading={category}>
+                      {pages.map((page) => (
+                        <CommandItem
+                          key={page.href}
+                          value={page.label}
+                          onSelect={() => {
+                            runCommand(() => router.push(page.href))
+                          }}
+                        >
+                          {page.external ? (
+                            <GlobeIcon className="mr-2 h-4 w-4" />
+                          ) : (
+                            <FileIcon className="mr-2 h-4 w-4" />
+                          )}
+                          {page.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  ),
+                )}
               </CommandList>
             </CommandDialog>
           </div>
