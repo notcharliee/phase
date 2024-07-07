@@ -28,10 +28,10 @@ export default function HomePage({
   }, [searchParams])
 
   return (
-    <main className="flex min-h-screen w-full flex-col">
+    <main className="grid min-h-screen grid-rows-[4rem_auto_4rem]">
+      <OrbitingDots />
       <Header />
       <div className="container grid h-full place-items-center">
-        <OrbitingDots />
         <section className="flex max-w-[980px] flex-col items-center gap-4 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20">
           <Link
             href="/docs/changelog"
@@ -57,9 +57,9 @@ export default function HomePage({
           </div>
         </section>
       </div>
-      <footer className="sm:border-t sm:backdrop-blur-sm">
-        <div className="container flex items-center py-6 sm:h-16 sm:py-0">
-          <p className="text-muted-foreground w-full text-balance text-center text-sm leading-loose sm:text-left">
+      <footer className="h-16 sm:border-t sm:backdrop-blur-sm">
+        <div className="container flex h-full items-center py-6 sm:py-0">
+          <p className="text-muted-foreground w-full text-balance text-center text-xs sm:text-sm leading-loose sm:text-left">
             Built by{" "}
             <Link
               href={"/redirect/developer"}
