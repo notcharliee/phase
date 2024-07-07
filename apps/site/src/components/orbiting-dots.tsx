@@ -17,7 +17,7 @@ export const OrbitingDots = ({
         xmlns="http://www.w3.org/2000/svg"
         className="fixed animate-spin [animation-duration:60s] lg:w-[70vw] max-h-[87.5%] lg:max-h-none"
       >
-        <g clip-path="url(#clip0_87_3)">
+        <g clipPath="url(#clip0_87_3)">
           <path
             d="M696.001 1392C1080.39 1392 1392 1080.39 1392 696C1392 311.61 1080.39 -0.000244141 696.001 -0.000244141C311.611 -0.000244141 0.0012207 311.61 0.0012207 696C0.0012207 1080.39 311.611 1392 696.001 1392Z"
             stroke="#282828"
