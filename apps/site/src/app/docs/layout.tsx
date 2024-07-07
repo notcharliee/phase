@@ -12,7 +12,7 @@ export default function DocsLayout({
     <main className="flex min-h-screen w-full flex-col">
       <Header />
       <div className="container flex h-full gap-12">
-        <aside className="sticky top-16 h-[calc(100vh-4rem-1px)] w-64 py-8 pr-6 max-md:hidden">
+        <aside className="sticky top-16 h-screen-no-header w-64 py-8 pr-6 max-md:hidden">
           <Sidebar />
         </aside>
         <div className="w-full py-8">

@@ -65,6 +65,18 @@ module.exports = {
         sans: "var(--font-geist-sans)",
         mono: "var(--font-geist-mono)",
       },
+      height: {
+        screen: "100dvh",
+        "screen-no-header": "calc(100dvh - 4rem)",
+      },
+      maxHeight: {
+        screen: "100dvh",
+        "screen-no-header": "calc(100dvh - 4rem)",
+      },
+      minHeight: {
+        screen: "100dvh",
+        "screen-no-header": "calc(100dvh - 4rem)",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

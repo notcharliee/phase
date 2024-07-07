@@ -61,8 +61,8 @@ export const Header = () => {
   }, [])
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b backdrop-blur-sm">
-      <div className="container flex h-16 items-center">
+    <header className="sticky top-0 z-50 h-16 w-full border-b backdrop-blur-sm">
+      <div className="container flex h-full items-center">
         <nav className="mr-8 hidden items-center space-x-4 md:flex lg:space-x-6">
           <Link href={"/"} className="mr-6 flex items-center space-x-2">
             <Moon className="h-5 w-5" />
