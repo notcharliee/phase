@@ -2,14 +2,19 @@ import Image from "next/image"
 import Link from "next/link"
 
 import {
+  Heading,
+  HeadingDescription,
+  HeadingTitle,
+} from "~/components/docs/heading"
+import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion"
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
+import { Codeblock } from "~/components/ui/codeblock"
 import { UserHoverCard } from "~/components/user-hover-card"
-import { Heading, HeadingDescription, HeadingTitle } from "~/components/docs/heading"
 
 import { cn } from "~/lib/utils"
 
@@ -26,6 +31,7 @@ export const useMDXComponents = (components: MDXComponents) => ({
   Alert,
   AlertTitle,
   AlertDescription,
+  Codeblock,
   UserHoverCard,
   h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h1
@@ -148,14 +154,8 @@ export const useMDXComponents = (components: MDXComponents) => ({
       {...props}
     />
   ),
-  code: ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => (
-    <code
-      className={cn(
-        "bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm",
-        className,
-      )}
-      {...props}
-    />
+  code: ({ ...props }: React.HTMLAttributes<HTMLElement>) => (
+    <Codeblock {...props} inline />
   ),
   Image,
   Link: ({ className, ...props }: React.ComponentProps<typeof Link>) => (
