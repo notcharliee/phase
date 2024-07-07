@@ -6,7 +6,7 @@ export const OrbitingDots = ({
 }: React.ComponentPropsWithoutRef<"div">) => {
   return (
     <div
-      className={cn("fixed top-0 left-0 w-screen h-screen -z-10 flex items-center justify-center", className)}
+      className={cn("fixed w-full h-full min-h-screen min-w-[100vw] -z-10 flex items-center justify-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2", className)}
       {...props}
     >
       <svg
@@ -15,7 +15,7 @@ export const OrbitingDots = ({
         viewBox="0 0 1394 1394"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="animate-spin [animation-duration:60s] w-full max-lg:max-h-[87.5%] lg:max-w-[70%]"
+        className="fixed animate-spin [animation-duration:60s] lg:w-[70vw] max-h-[87.5%] lg:max-h-none"
       >
         <g clip-path="url(#clip0_87_3)">
           <path
