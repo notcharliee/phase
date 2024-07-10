@@ -1,12 +1,20 @@
-import { cn } from "@/lib/utils"
+import { cn } from "~/lib/utils"
+
+interface OrbitingDotsProps extends React.ComponentPropsWithoutRef<"div"> {
+  svgClassName?: string
+}
 
 export const OrbitingDots = ({
   className,
+  svgClassName,
   ...props
-}: React.ComponentPropsWithoutRef<"div">) => {
+}: OrbitingDotsProps) => {
   return (
     <div
-      className={cn("fixed w-full h-full min-h-screen min-w-[100vw] -z-10 flex items-center justify-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2", className)}
+      className={cn(
+        "fixed left-1/2 top-1/2 -z-10 flex h-full min-h-screen w-full min-w-[100vw] -translate-x-1/2 -translate-y-1/2 items-center justify-center",
+        className,
+      )}
       {...props}
     >
       <svg
@@ -15,7 +23,10 @@ export const OrbitingDots = ({
         viewBox="0 0 1394 1394"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="fixed animate-spin [animation-duration:60s] lg:w-[70vw] max-h-[87.5%] lg:max-h-none"
+        className={cn(
+          "fixed max-h-[87.5%] animate-spin [animation-duration:60s] lg:max-h-none lg:w-[70vw]",
+          svgClassName,
+        )}
       >
         <g clipPath="url(#clip0_87_3)">
           <path
