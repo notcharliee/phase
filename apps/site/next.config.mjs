@@ -38,39 +38,58 @@ const config = {
   async redirects() {
     return [
       {
+        // discord server
         source: "/redirect/discord",
         destination: "https://discord.com/invite/mZjRBKS29X",
         permanent: false,
       },
       {
-        source: "/redirect/donate",
-        destination: "https://www.buymeacoffee.com/notcharliee",
+        // dashboard oauth
+        source: "/redirect/oauth",
+        destination: `https://discord.com/api/oauth2/authorize?client_id=${env.DISCORD_ID}&response_type=code&scope=identify&redirect_uri=${env.NEXT_PUBLIC_BASE_URL}/auth/login`,
         permanent: false,
       },
       {
-        source: "/redirect/developer",
-        destination: "https://github.com/notcharliee",
-        permanent: false,
-      },
-      {
-        source: "/redirect/github",
-        destination: "https://github.com/notcharliee/phase",
-        permanent: false,
-      },
-      {
+        // bot invite
         source: "/redirect/invite",
         destination: `https://discord.com/oauth2/authorize?client_id=${env.DISCORD_ID}&response_type=code&scope=bot%20applications.commands&permissions=17666911472`,
         permanent: false,
       },
       {
+        // donation page
+        source: "/redirect/donate",
+        destination: "https://www.buymeacoffee.com/notcharliee",
+        permanent: false,
+      },
+      {
+        // developer page
+        source: "/redirect/developer",
+        destination: "https://github.com/notcharliee",
+        permanent: false,
+      },
+      {
+        // github repo
+        source: "/redirect/github",
+        destination: "https://github.com/notcharliee/phase",
+        permanent: false,
+      },
+      {
+        // terms page
         source: "/terms",
         destination: "/docs/terms",
         permanent: true,
       },
       {
+        // privacy page
         source: "/privacy",
         destination: "/docs/privacy",
         permanent: true,
+      },
+      {
+        // dashboard page
+        source: "/dashboard",
+        destination: "/dashboard/modules",
+        permanent: false,
       },
     ]
   },
