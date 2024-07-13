@@ -30,8 +30,6 @@
   "trustedDependencies": [
     "@vercel/speed-insights",
     "aws-sdk",
-    "bcrypt",
-    "contentlayer",
     "esbuild",
     "phasebot",
     "protobufjs",

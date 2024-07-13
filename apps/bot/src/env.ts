@@ -8,6 +8,7 @@ export const env = createEnv({
     DISCORD_TOKEN: z.string(),
     TWITCH_CLIENT_ID: z.string(),
     TWITCH_CLIENT_SECRET: z.string(),
+    AUTH_OTP_SECRET: z.string(),
     WEBHOOK_ALERT: z.string(),
     API_YOUTUBE: z.string(),
   },

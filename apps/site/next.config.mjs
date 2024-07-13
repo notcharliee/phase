@@ -9,7 +9,6 @@ import { env } from "./src/lib/env.js"
 const config = {
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
   experimental: {
-    serverComponentsExternalPackages: ["bcryptjs"],
     mdxRs: true,
     turbo: {
       resolveAlias: {

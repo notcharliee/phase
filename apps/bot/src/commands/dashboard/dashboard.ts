@@ -5,19 +5,35 @@ import {
   ButtonBuilder,
   ButtonStyle,
   EmbedBuilder,
-  Message,
 } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
 import { GuildSchema, OtpSchema } from "@repo/schemas"
-import bcrypt from "bcrypt"
 
-import { errorMessage, missingPermission, PhaseColour } from "~/utils"
+import { env } from "~/env"
+import { missingPermission, PhaseColour } from "~/utils"
 
-function generateOTP(): string {
-  const randomBytes = crypto.randomBytes(3) // 3 bytes = 24 bits
-  const otp = parseInt(randomBytes.toString("hex"), 16) % 1000000 // Ensure it's a 6-digit number
-  return otp.toString().padStart(6, "0") // Ensure leading zeros if necessary
+async function generateOTP() {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+
+  let value = ""
+  for (let i = 0; i < 6; i++) {
+    value += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+
+  const signature = crypto
+    .createHmac("sha256", env.AUTH_OTP_SECRET)
+    .update(value)
+    .digest("hex")
+
+  if (await OtpSchema.findOne({ otp: signature })) {
+    return await generateOTP()
+  }
+
+  return {
+    value,
+    signature,
+  }
 }
 
 export default new BotCommandBuilder()
@@ -84,57 +100,32 @@ export default new BotCommandBuilder()
     switch (commandName) {
       case "login":
         {
-          const otp = generateOTP()
-          const hashedOtp = await bcrypt.hash(otp, 10)
+          const { value, signature } = await generateOTP()
 
-          const dm = await interaction.user
-            .send({
-              embeds: [
-                new EmbedBuilder()
-                  .setTitle("Dashboard Login Code")
-                  .setDescription(
-                    `Your login code is **${otp}**\nThis will expire in <t:${Math.floor(Date.now() / 1000) + 60}:R>`,
-                  )
-                  .setColor(PhaseColour.Primary),
-              ],
-              components: [
-                new ActionRowBuilder<ButtonBuilder>().setComponents(
-                  new ButtonBuilder()
-                    .setLabel("Login page")
-                    .setStyle(ButtonStyle.Link)
-                    .setURL(
-                      `https://phasebot.xyz/login?userId=${interaction.user.id}&guildId=${interaction.guildId}`,
-                    ),
-                ),
-              ],
-            })
-            .catch(() => {
-              interaction.editReply(
-                errorMessage({
-                  title: "Failed to send login code",
-                  description: "Please make sure your DMs are open.",
-                }),
-              )
-
-              return
-            })
-
-          if (!(dm instanceof Message)) return
-
-          await new OtpSchema({
-            userId: interaction.user.id,
-            guildId: interaction.guildId,
-            otp: hashedOtp,
-          }).save()
-
-          await interaction.editReply({
+          void interaction.editReply({
             embeds: [
               new EmbedBuilder()
-                .setTitle("Login Code Sent")
-                .setDescription(`[Click here to open DMs](${dm.url})`)
+                .setTitle("Dashboard Login Code")
+                .setDescription(
+                  `Your login code is **${value}**\nThis will expire in <t:${Math.floor(Date.now() / 1000) + 60}:R>`,
+                )
                 .setColor(PhaseColour.Primary),
             ],
+            components: [
+              new ActionRowBuilder<ButtonBuilder>().setComponents(
+                new ButtonBuilder()
+                  .setLabel("Login page")
+                  .setStyle(ButtonStyle.Link)
+                  .setURL("https://phasebot.xyz/auth/login"),
+              ),
+            ],
           })
+
+          void new OtpSchema({
+            userId: interaction.user.id,
+            guildId: interaction.guildId,
+            otp: signature,
+          }).save()
         }
         break
 
