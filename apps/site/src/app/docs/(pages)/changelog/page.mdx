@@ -8,6 +8,20 @@ export const metadata = {
   <HeadingDescription>{metadata.description}</HeadingDescription>
 </Heading>
 
+## July 2024 - v3.7 release
+
+This release focuses on improving the dashboard load times and login processes.
+
+* From now on, all authentication data is encrypted and then stored within a secure browser cookie, instead of in our database. Since we don't need to go back and forth between the database and the browser, this will make the dashboard load a lot faster.
+
+* You can once again login to the dashboard via Discord OAuth2. This time, since the switch to relying on cookies, access/refresh tokens are only used once to verify your identity and create your cookie, then immediately revoked afterwards.
+
+* Login sessions now last for 7 days (was previously 24 hours).
+
+* There's a new pretty loading spinner :3
+
+With the new login process, I'll be updating the privacy policy in the next day or so to reflect the changes.
+
 ## July 2024 - v3.6 release
 
 * Changed the `/nuke` command name to `/scrub`.
