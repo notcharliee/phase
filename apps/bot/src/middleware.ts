@@ -5,16 +5,23 @@ import { GuildSchema } from "@repo/schemas"
 
 import { errorMessage, missingPermission } from "~/utils"
 
-export const commands: BotCommandMiddleware = async (
-  interaction,
-  execute,
-) => {
+export const commands: BotCommandMiddleware = async (interaction, execute) => {
   if (!interaction.guild) {
     try {
       return await execute(interaction)
     } catch (error) {
       return console.error(error)
     }
+  }
+
+  if (
+    !interaction.guild.channels.cache
+      .get(interaction.channelId)
+      ?.permissionsFor(interaction.guild.members.me!)
+      .has(PermissionFlagsBits.SendMessages)
+  ) {
+    interaction.reply(missingPermission(PermissionFlagsBits.SendMessages, true))
+    return
   }
 
   const commandName = [

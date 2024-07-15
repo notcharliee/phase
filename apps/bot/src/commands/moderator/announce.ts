@@ -1,7 +1,7 @@
 import { EmbedBuilder } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { alertDevs, errorMessage, PhaseColour, PhaseError } from "~/utils"
+import { missingPermission, PhaseColour } from "~/utils"
 
 export default new BotCommandBuilder()
   .setName("announce")
@@ -44,22 +44,7 @@ export default new BotCommandBuilder()
         ],
         ephemeral: true,
       })
-    } catch (error) {
-      alertDevs({
-        title: `Command Failure: /${interaction.commandName}`,
-        description: JSON.stringify(
-          error,
-          Object.getOwnPropertyNames(error),
-          2,
-        ),
-        type: "warning",
-      })
-
-      interaction.reply(
-        errorMessage({
-          title: "Something went wrong",
-          description: PhaseError.Unknown,
-        }),
-      )
+    } catch {
+      interaction.reply(missingPermission(undefined, true))
     }
   })
