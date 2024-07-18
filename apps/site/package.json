@@ -10,6 +10,7 @@
     "preview": "bun run build && bun run start"
   },
   "dependencies": {
+    "@discordjs/builders": "^1.8.2",
     "@discordjs/core": "^1.2.0",
     "@discordjs/rest": "^2.3.0",
     "@emoji-mart/data": "^1.1.2",
