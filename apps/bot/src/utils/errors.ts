@@ -44,14 +44,16 @@ class BotErrorClass {
         .setFooter(this.message.footer ? { text: this.message.footer } : null)
 
       const components = this.message.buttons?.bugReport
-        ? new ActionRowBuilder<ButtonBuilder>().setComponents(
-            new ButtonBuilder()
-              .setURL(this.message.buttons?.bugReport.url)
-              .setLabel("Report a Bug")
-              .setStyle(ButtonStyle.Link)
-              .setEmoji("📩"),
-          )
-        : undefined
+        ? [
+            new ActionRowBuilder<ButtonBuilder>().setComponents(
+              new ButtonBuilder()
+                .setURL(this.message.buttons?.bugReport.url)
+                .setLabel("Report a Bug")
+                .setStyle(ButtonStyle.Link)
+                .setEmoji("📩"),
+            ),
+          ]
+        : []
 
       return {
         embeds: [embed],
@@ -63,53 +65,59 @@ class BotErrorClass {
 }
 
 export const BotError = Object.assign(BotErrorClass, {
-  presets: {
-    userMissingPermission: (permission?: keyof typeof PermissionFlagsBits) =>
-      new BotErrorClass({
-        title: "Missing permissions",
-        description: `You do not have the ${
-          permission
-            ? `permission **\`"${Object.keys(PermissionFlagsBits)
-                .find((key) => key === permission)!
-                .replace(/([A-Z])/g, "_$1")
-                .trimStart()
-                .toUpperCase()}"\`** permission, which is required`
-            : `required permissions`
-        } to do this.`,
-      }),
-    botMissingPermission: (
-      permission?: keyof typeof PermissionFlagsBits,
-      channelSpecific?: boolean,
-    ) =>
-      new BotErrorClass({
-        title: "Missing permissions",
-        description: `I do not have the ${
-          permission
-            ? `**\`"${Object.keys(PermissionFlagsBits)
-                .find((key) => key === permission)!
-                .replace(/([A-Z])/g, "_$1")
-                .trimStart()
-                .toUpperCase()}"\`** permission, which is required`
-            : `required permissions`
-        } to do this ${channelSpecific ? "in this channel" : ""}.`,
-      }),
-    memberNotFound: () =>
-      new BotErrorClass({
-        title: "Member not found",
-        description: "Make sure they are in this server, then try again.",
-      }),
-    unknown: (data: Parameters<typeof generateBugReportURL>[0]) =>
-      new BotErrorClass({
-        title: "Unknown error",
-        description: `Something went wrong, and we don't know why. To make sure this doesn't happen again, please press the button below to send a bug report to the developers.`,
-        footer: `The report has been filled in for you, so all you have to do is send it.`,
-        buttons: {
-          bugReport: {
-            url: generateBugReportURL(data),
-          },
+  userMissingPermission: (permission?: keyof typeof PermissionFlagsBits) =>
+    new BotErrorClass({
+      title: "Missing permissions",
+      description: `You do not have the ${
+        permission
+          ? `permission **\`"${permission
+              .replace(/([A-Z])/g, "_$1")
+              .trimStart()
+              .toUpperCase()}"\`** permission, which is required`
+          : `required permissions`
+      } to do this.`,
+    }),
+  userNotAdmin: () =>
+    new BotErrorClass({
+      title: "Missing permissions",
+      description: `Only dashboard admins can use this command. To become a dashboard admin, ask the server owner to run the \`/dashboard admins add\` command.`,
+    }),
+  userNotOwner: () =>
+    new BotErrorClass({
+      title: "Missing permissions",
+      description: `Only the server owner can use this command.`,
+    }),
+  botMissingPermission: (
+    permission?: keyof typeof PermissionFlagsBits,
+    channelSpecific?: boolean,
+  ) =>
+    new BotErrorClass({
+      title: "Missing permissions",
+      description: `I do not have the ${
+        permission
+          ? `**\`"${permission
+              .replace(/([A-Z])/g, "_$1")
+              .trimStart()
+              .toUpperCase()}"\`** permission, which is required`
+          : `required permissions`
+      } to do this ${channelSpecific ? "in this channel" : ""}.`,
+    }),
+  memberNotFound: () =>
+    new BotErrorClass({
+      title: "Member not found",
+      description: "Make sure they are in this server, then try again.",
+    }),
+  unknown: (data: Parameters<typeof generateBugReportURL>[0]) =>
+    new BotErrorClass({
+      title: "Unknown error",
+      description: `Something went wrong, and we don't know why. To make sure this doesn't happen again, please press the button below to send a bug report to the developers.`,
+      footer: `The report has been filled in for you, so all you have to do is send it.`,
+      buttons: {
+        bugReport: {
+          url: generateBugReportURL(data),
         },
-      }),
-  },
+      },
+    }),
 })
 
 const generateBugReportURL = (data: {
