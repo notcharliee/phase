@@ -8,11 +8,17 @@ export const metadata = {
   <HeadingDescription>{metadata.description}</HeadingDescription>
 </Heading>
 
-## July 2024 - v3.8.1 hotfix
+## July 2024 - v3.9 release
 
-* Fixed an issue with the bot sometimes attempting to run commands in channels it doesn't have access to.
-
-I'm surprised this didn't cause issues until now tbh
+* Created the [Bug Report Form](https://phasebot.xyz/contact/bug-report) for reporting bugs via the site.
+* Renamed the `/dashboard` group to `/bot`.
+* Moved `/ping` and `/help` into the `/bot` group.
+* Added `/bot invite` for adding the bot to another server.
+* Added `/bot report` for reporting bugs.
+* Split `/id` into multiple commands for channels, roles, etc.
+* Split `/avatar` into multiple commands for users, members, and servers.
+* Added a way to cancel incomplete DM forms early.
+* Fixed a bug which allowed server owners to remove their own dashboard access.
 
 ## July 2024 - v3.8 release
 
@@ -22,7 +28,7 @@ I'm surprised this didn't cause issues until now tbh
 * Removed some old unneccesary database code.
 * Rewrote Terms of Service and Privacy Policy.
 
-> Note: Have a go with the updated `/tictactoe` command. It's had a whole visual refresh and looks very pretty! :D
+> Note: A hotfix was required around an hour after the release of v3.8, which fixed an issue with the bot sometimes attempting to run commands in channels it doesn't have access to.
 
 ## July 2024 - v3.7 release
 
