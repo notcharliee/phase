@@ -102,9 +102,7 @@ export default new BotCommandBuilder()
     ]
 
     if (serverOnlyCommands.includes(commandName) && !interaction.guild) {
-      interaction.editReply(
-        new BotError("This command can only be used in servers.").toJSON(),
-      )
+      void interaction.editReply(BotError.serverOnlyCommand().toJSON())
 
       return
     }

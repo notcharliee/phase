@@ -107,6 +107,8 @@ export const BotError = Object.assign(BotErrorClass, {
       title: "Member not found",
       description: "Make sure they are in this server, then try again.",
     }),
+  serverOnlyCommand: () =>
+    new BotError("This command can only be used in servers."),
   unknown: (data: Parameters<typeof generateBugReportURL>[0]) =>
     new BotErrorClass({
       title: "Unknown error",
