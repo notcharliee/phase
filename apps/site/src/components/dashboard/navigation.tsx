@@ -69,7 +69,7 @@ export const DashboardNavigation = () => {
               Feedback
             </Link>
             <Link
-              href={"/redirect/discord"}
+              href={"/contact/bug-report"}
               className="text-muted-foreground hover:text-foreground duration-200"
             >
               Report a Bug
