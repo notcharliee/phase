@@ -71,7 +71,7 @@ export default async function LoginPage(props: LoginPageProps) {
               <p className="text-muted-foreground mt-2 md:text-lg">
                 To access the dashboard, either run the{" "}
                 <Codeblock className="md:text-sm" inline>
-                  /dashboard login
+                  /bot login
                 </Codeblock>{" "}
                 command, or click the button below to login with your Discord
                 account.

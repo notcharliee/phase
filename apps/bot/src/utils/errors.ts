@@ -80,7 +80,7 @@ export const BotError = Object.assign(BotErrorClass, {
   userNotAdmin: () =>
     new BotErrorClass({
       title: "Missing permissions",
-      description: `Only dashboard admins can use this command. To become a dashboard admin, ask the server owner to run the \`/dashboard admins add\` command.`,
+      description: `Only dashboard admins can use this command. To become a dashboard admin, ask the server owner to run the \`/bot admins add\` command.`,
     }),
   userNotOwner: () =>
     new BotErrorClass({
