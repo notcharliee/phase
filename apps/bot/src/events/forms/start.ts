@@ -1,15 +1,16 @@
-import { botEvent } from "phasebot"
-import { GuildSchema } from "@repo/schemas"
-import { PhaseColour, errorMessage, moduleNotEnabled } from "~/utils"
 import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
-  ComponentType,
   EmbedBuilder,
   GuildMember,
   GuildTextBasedChannel,
 } from "discord.js"
+import { botEvent } from "phasebot"
+
+import { GuildSchema } from "@repo/schemas"
+
+import { errorMessage, moduleNotEnabled, PhaseColour } from "~/utils"
 
 export default botEvent("interactionCreate", async (client, interaction) => {
   if (
@@ -97,14 +98,17 @@ export default botEvent("interactionCreate", async (client, interaction) => {
       const questionMessage = await interaction.user.send({
         embeds: [
           new EmbedBuilder()
+            .setColor(PhaseColour.Primary)
+            .setAuthor({
+              iconURL: interaction.guild?.iconURL() ?? undefined,
+              name: `Sent from ${interaction.guild!.name}`,
+            })
             .setTitle(
               `${form.name} - ${questionIndex + 1}/${form.questions.length}`,
             )
             .setDescription(question)
-            .setColor(PhaseColour.Primary)
             .setFooter({
-              iconURL: interaction.guild?.iconURL() ?? undefined,
-              text: `Sent from ${interaction.guild!.name}`,
+              text: `Respond with \`STOP\` to cancel the form.`,
             }),
         ],
       })
@@ -124,6 +128,19 @@ export default botEvent("interactionCreate", async (client, interaction) => {
             description: `You didn't respond in time.\nTo restart, go to <#${form.channel}>`,
           }),
         )
+      }
+
+      if (answerMessage.content === "STOP") {
+        return interaction.user.send({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(PhaseColour.Primary)
+              .setTitle("Form cancelled")
+              .setDescription(
+                "Your form has been cancelled and your answers have been discarded.",
+              ),
+          ],
+        })
       }
 
       questionsAndAnswers[questionIndex][1] = answerMessage.content
@@ -169,18 +186,17 @@ export default botEvent("interactionCreate", async (client, interaction) => {
             .setThumbnail(member.displayAvatarURL()),
         ],
         components: [
-          new ActionRowBuilder<ButtonBuilder>()
-          .setComponents(
+          new ActionRowBuilder<ButtonBuilder>().setComponents(
             new ButtonBuilder()
-            .setCustomId(`form.accept.${form.id}.${member.id}`)
-            .setLabel("Accept")
-            .setStyle(ButtonStyle.Secondary),
+              .setCustomId(`form.accept.${form.id}.${member.id}`)
+              .setLabel("Accept")
+              .setStyle(ButtonStyle.Secondary),
             new ButtonBuilder()
-            .setCustomId(`form.reject.${form.id}.${member.id}`)
-            .setLabel("Reject")
-            .setStyle(ButtonStyle.Secondary),
-          )
-        ]
+              .setCustomId(`form.reject.${form.id}.${member.id}`)
+              .setLabel("Reject")
+              .setStyle(ButtonStyle.Secondary),
+          ),
+        ],
       })
     }
   }
