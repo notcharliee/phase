@@ -13,7 +13,7 @@ export interface Otp {
   otp: string
 }
 
-export const Otps = defineModel(
+export const otps = defineModel(
   "Otps",
   new mongoose.Schema<Otp>({
     createdAt: { type: Date, expires: "1m", required: true, default: Date.now },

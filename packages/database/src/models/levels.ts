@@ -13,7 +13,7 @@ export interface Level {
   xp: number
 }
 
-export const Levels = defineModel(
+export const levels = defineModel(
   "Levels",
   new mongoose.Schema<Level>({
     guild: { type: String, required: true },

@@ -1,21 +1,21 @@
 import mongoose from "mongoose"
 
-import { AFKs } from "./models/afks.js"
-import { Giveaways } from "./models/giveaways.js"
-import { Guilds } from "./models/guilds.js"
-import { Levels } from "./models/levels.js"
-import { Otps } from "./models/otps.js"
-import { Reminders } from "./models/reminders.js"
-import { Tags } from "./models/tags.js"
+import { afks } from "./models/afks.js"
+import { giveaways } from "./models/giveaways.js"
+import { guilds } from "./models/guilds.js"
+import { levels } from "./models/levels.js"
+import { otps } from "./models/otps.js"
+import { reminders } from "./models/reminders.js"
+import { tags } from "./models/tags.js"
 
 interface InitialisedDatabase extends Omit<Database, "init"> {
-  AFKs: typeof AFKs
-  Giveaways: typeof Giveaways
-  Guilds: typeof Guilds
-  Levels: typeof Levels
-  Otps: typeof Otps
-  Reminders: typeof Reminders
-  Tags: typeof Tags
+  afks: typeof afks
+  giveaways: typeof giveaways
+  guilds: typeof guilds
+  levels: typeof levels
+  otps: typeof otps
+  reminders: typeof reminders
+  tags: typeof tags
 }
 
 interface DatabaseConfig {
@@ -65,13 +65,13 @@ export class Database {
     }
 
     Object.assign(this, {
-      AFKs,
-      Giveaways,
-      Guilds,
-      Levels,
-      Otps,
-      Reminders,
-      Tags,
+      afks,
+      giveaways,
+      guilds,
+      levels,
+      otps,
+      reminders,
+      tags,
     })
 
     return this as unknown as InitialisedDatabase

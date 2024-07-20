@@ -14,7 +14,7 @@ export interface Tag {
   }[]
 }
 
-export const Tags = defineModel(
+export const tags = defineModel(
   "Tags",
   new mongoose.Schema<Tag>({
     guild: { type: String, required: true },

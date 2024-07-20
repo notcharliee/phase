@@ -233,7 +233,7 @@ export interface GuildModules {
   }
 }
 
-export const Guilds = defineModel(
+export const guilds = defineModel(
   "Guilds",
   new mongoose.Schema<Guild>({
     id: { type: String, required: true },

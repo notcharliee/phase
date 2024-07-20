@@ -9,7 +9,7 @@ export interface AFK {
   reason?: string
 }
 
-export const AFKs = defineModel(
+export const afks = defineModel(
   "AFKs",
   new mongoose.Schema<AFK>({
     user: { type: String, required: true },

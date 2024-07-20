@@ -23,7 +23,7 @@ export interface Giveaway {
   expired: boolean
 }
 
-export const Giveaways = defineModel(
+export const giveaways = defineModel(
   "Giveaways",
   new mongoose.Schema<Giveaway>({
     id: { type: String, required: true },

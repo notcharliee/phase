@@ -28,7 +28,7 @@ export interface Reminder {
   unsent?: boolean
 }
 
-export const Reminders = defineModel(
+export const reminders = defineModel(
   "Reminders",
   new mongoose.Schema<Reminder>({
     guild: { type: String, required: true },
