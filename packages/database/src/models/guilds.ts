@@ -75,19 +75,12 @@ export interface GuildModules {
   BumpReminders: {
     /** Whether or not the module is enabled. */
     enabled: boolean
-    /** The channel to send form responses to. */
-    channel: string
-    /** The form data. */
-    forms: {
-      /** The ID of the form trigger message. */
-      id: string
-      /** The name of the form. */
-      name: string
-      /** The channel ID of the form trigger message. */
-      channel: string
-      /** The questions in the form. */
-      questions: string[]
-    }[]
+    /** The time to wait before sending the reminder. */
+    time: number
+    /** The message to send when a member bumps. */
+    initialMessage: string
+    /** The message to send when a member is reminded to bump. */
+    reminderMessage: string
   }
 
   /** The Forms module configuration. */
@@ -292,20 +285,9 @@ export const guilds = defineModel(
         BumpReminders: {
           type: new mongoose.Schema<GuildModules["BumpReminders"]>({
             enabled: { type: Boolean, required: true },
-            channel: { type: String, required: true },
-            forms: {
-              type: [
-                new mongoose.Schema<
-                  GuildModules["BumpReminders"]["forms"][number]
-                >({
-                  id: { type: String, required: true },
-                  name: { type: String, required: true },
-                  channel: { type: String, required: true },
-                  questions: { type: [String], required: true },
-                }),
-              ],
-              required: true,
-            },
+            time: { type: Number, required: true },
+            initialMessage: { type: String, required: true },
+            reminderMessage: { type: String, required: true },
           }),
         },
         Forms: {
