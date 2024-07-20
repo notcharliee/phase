@@ -19,6 +19,6 @@
     "moduleResolution": "bundler",
     "module": "esnext"
   },
-  "exclude": ["node_modules", "build"],
+  "exclude": ["node_modules", ".phase"],
   "include": ["src/**/*", "phase.config.ts", "phase-env.d.ts"]
 }
