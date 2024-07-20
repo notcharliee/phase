@@ -13,4 +13,6 @@
   "typescript.preferences.quoteStyle": "double",
 
   "css.lint.unknownAtRules": "ignore",
+
+  "npm.packageManager": "bun",
 }
