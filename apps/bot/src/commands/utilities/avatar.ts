@@ -7,7 +7,7 @@ import {
 } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { BotError } from "~/utils"
+import { BotError } from "~/lib/errors"
 
 const imageSizes = [16, 32, 64, 128, 256, 512, 1024, 2048, 4096]
 

@@ -1,14 +1,13 @@
 import { EmbedBuilder, GuildTextBasedChannel, User } from "discord.js"
 import { BotCronBuilder } from "phasebot/builders"
 
-import { GiveawaySchema } from "@repo/schemas"
-
-import { PhaseColour } from "~/utils"
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
 
 export default new BotCronBuilder()
   .setPattern("*/5 * * * * *")
   .setExecute(async (client) => {
-    const expiredGiveaways = await GiveawaySchema.find({
+    const expiredGiveaways = await db.giveaways.find({
       expires: { $lt: Date.now().toString() },
       expired: false,
     })

@@ -1,11 +1,9 @@
 import { EmbedBuilder } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { ApiClient } from "@twurple/api"
-import { AppTokenAuthProvider } from "@twurple/auth"
-
-import { env } from "~/env"
-import { errorMessage, PhaseColour } from "~/utils"
+import { PhaseColour } from "~/lib/enums"
+import { twitchAPI } from "~/lib/twitch"
+import { errorMessage } from "~/lib/utils"
 
 export default new BotCommandBuilder()
   .setName("twitch")
@@ -34,13 +32,6 @@ export default new BotCommandBuilder()
   )
   .setExecute(async (interaction) => {
     await interaction.deferReply()
-
-    const twitchAPI = new ApiClient({
-      authProvider: new AppTokenAuthProvider(
-        env.TWITCH_CLIENT_ID,
-        env.TWITCH_CLIENT_SECRET,
-      ),
-    })
 
     switch (
       [

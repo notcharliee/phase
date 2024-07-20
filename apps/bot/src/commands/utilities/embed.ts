@@ -6,7 +6,7 @@ import {
 } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { PhaseColour } from "~/utils"
+import { PhaseColour } from "~/lib/enums"
 
 export default new BotCommandBuilder()
   .setName("embed")

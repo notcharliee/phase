@@ -8,7 +8,7 @@ import { BotCommandBuilder } from "phasebot/builders"
 
 import dedent from "dedent"
 
-import { ZeroWidthJoiner } from "~/utils"
+import { ZeroWidthJoiner } from "~/lib/emojis"
 
 import type {
   ButtonInteraction,

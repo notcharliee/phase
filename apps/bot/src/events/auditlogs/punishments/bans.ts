@@ -1,11 +1,11 @@
-import { botEvent } from "phasebot"
-import { GuildSchema } from "@repo/schemas"
-import { PhaseColour } from "~/utils"
-
 import { AuditLogEvent, EmbedBuilder, GuildTextBasedChannel } from "discord.js"
+import { botEvent } from "phasebot"
+
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
 
 export default botEvent("guildBanAdd", async (client, ban) => {
-  const guildSchema = await GuildSchema.findOne({ id: ban.guild.id })
+  const guildSchema = await db.guilds.findOne({ id: ban.guild.id })
   if (!guildSchema) return
 
   if (

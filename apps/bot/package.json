@@ -10,7 +10,7 @@
   "dependencies": {
     "@androz2091/discord-invites-tracker": "^1.2.3",
     "@octokit/rest": "^20.0.2",
-    "@repo/schemas": "workspace:*",
+    "@repo/database": "workspace:*",
     "@t3-oss/env-core": "^0.8.0",
     "@twurple/api": "^7.0.10",
     "@twurple/auth": "^7.0.10",
@@ -20,7 +20,6 @@
     "discord-logs": "^2.2.1",
     "discord.js": "^14.12.1",
     "googleapis": "^127.0.0",
-    "mongoose": "^8.1.0",
     "ms": "^2.1.3",
     "phasebot": "workspace:*",
     "react": "18.2.0",

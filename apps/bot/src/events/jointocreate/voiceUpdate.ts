@@ -1,12 +1,14 @@
 import { ChannelType } from "discord.js"
 import { BotEventBuilder } from "phasebot/builders"
 
-import { GuildModuleJoinToCreates, GuildSchema } from "@repo/schemas"
+import { db } from "~/lib/db"
+
+import type { GuildModules } from "~/lib/db"
 
 export default new BotEventBuilder()
   .setName("voiceStateUpdate")
   .setExecute(async (_, oldVoice, newVoice) => {
-    const guildSchema = await GuildSchema.findOne({ id: oldVoice.guild.id })
+    const guildSchema = await db.guilds.findOne({ id: oldVoice.guild.id })
     const joinToCreateModule = guildSchema?.modules?.JoinToCreates
 
     if (!guildSchema || !joinToCreateModule?.enabled) return
@@ -38,7 +40,7 @@ export default new BotEventBuilder()
       newVoice.setChannel(newVoiceChannel)
 
       if (!("active" in joinToCreateModule)) {
-        ;(joinToCreateModule as GuildModuleJoinToCreates).active = []
+        ;(joinToCreateModule as GuildModules["JoinToCreates"]).active = []
       }
 
       joinToCreateModule.active.push(newVoiceChannel.id)

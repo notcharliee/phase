@@ -1,25 +1,24 @@
-import { botEvent } from "phasebot"
-
-import { GuildSchema, ReminderSchema } from "@repo/schemas"
-
-import { PhaseColour, errorMessage } from "~/utils"
-
 import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
   EmbedBuilder,
 } from "discord.js"
+import { botEvent } from "phasebot"
 
-export default botEvent("messageCreate", async (client, message) => {
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
+import { errorMessage } from "~/lib/utils"
+
+export default botEvent("messageCreate", async (_, message) => {
   if (message.interaction?.commandName !== "bump") return
 
-  const guild = await GuildSchema.findOne({ id: message.guildId })
+  const guild = await db.guilds.findOne({ id: message.guildId })
   if (!guild || !guild.modules?.BumpReminders?.enabled) return
 
   const moduleConfig = guild.modules.BumpReminders
 
-  const reminder = await new ReminderSchema({
+  const reminder = await db.reminders.create({
     guild: message.guildId,
     name: "Bump Reminder",
     message: moduleConfig.reminderMessage,
@@ -27,8 +26,8 @@ export default botEvent("messageCreate", async (client, message) => {
     time: moduleConfig.time,
     loop: false,
     user: message.interaction.user.id,
-    created: Date.now()
-  }).save()
+    created: Date.now(),
+  })
 
   const reply = await message.reply({
     embeds: [
@@ -68,7 +67,7 @@ export default botEvent("messageCreate", async (client, message) => {
           errorMessage({
             title: "Invalid User",
             description: "You cannot cancel someone else's reminder.",
-          })
+          }),
         )
 
         return

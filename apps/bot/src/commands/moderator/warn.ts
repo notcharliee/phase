@@ -1,15 +1,14 @@
 import { EmbedBuilder, GuildMember, GuildTextBasedChannel } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { GuildSchema } from "@repo/schemas"
-
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
 import {
   errorMessage,
   getOrdinal,
   memberNotFound,
   moduleNotEnabled,
-  PhaseColour,
-} from "~/utils"
+} from "~/lib/utils"
 
 export default new BotCommandBuilder()
   .setName("warn")
@@ -57,7 +56,7 @@ export default new BotCommandBuilder()
       return interaction.reply(memberNotFound(true))
     }
 
-    const guildSchema = await GuildSchema.findOne({ id: interaction.guildId })
+    const guildSchema = await db.guilds.findOne({ id: interaction.guildId })
 
     const warningsModule = guildSchema?.modules?.Warnings
 

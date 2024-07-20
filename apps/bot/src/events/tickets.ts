@@ -1,22 +1,20 @@
 import { UUID } from "crypto"
-import { botEvent } from "phasebot"
-import { GuildSchema } from "@repo/schemas"
+
 import {
-  PhaseColour,
-  errorMessage,
-  missingPermission,
-  moduleNotEnabled,
-} from "~/utils"
-import {
-  EmbedBuilder,
   ActionRowBuilder,
+  AnyThreadChannel,
   ButtonBuilder,
   ButtonStyle,
   ChannelType,
-  TextChannel,
-  AnyThreadChannel,
+  EmbedBuilder,
   PermissionFlagsBits,
+  TextChannel,
 } from "discord.js"
+import { botEvent } from "phasebot"
+
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
+import { errorMessage, missingPermission, moduleNotEnabled } from "~/lib/utils"
 
 export default botEvent("interactionCreate", async (client, interaction) => {
   if (
@@ -43,7 +41,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
     const ticketAction = customIdParts[1] as "open" | "lock"
     const ticketId = customIdParts[2] as UUID
 
-    const guildSchema = await GuildSchema.findOne({ id: interaction.guildId })
+    const guildSchema = await db.guilds.findOne({ id: interaction.guildId })
     const ticketModule = guildSchema?.modules?.Tickets
 
     if (!ticketModule?.enabled) {

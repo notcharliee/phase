@@ -1,21 +1,19 @@
-import { botEvent } from "phasebot"
-import { GuildSchema } from "@repo/schemas"
-import { PhaseColour } from "~/utils"
-
 import { AuditLogEvent, EmbedBuilder, GuildTextBasedChannel } from "discord.js"
+import { botEvent } from "phasebot"
+
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
 
 export default botEvent("channelPinsUpdate", async (client, channel) => {
   if (channel.isDMBased()) return
 
-  const guildSchema = await GuildSchema.findOne({ id: channel.guild.id })
+  const guildSchema = await db.guilds.findOne({ id: channel.guild.id })
   if (!guildSchema) return
 
   if (
     !guildSchema.modules?.AuditLogs?.enabled ||
     !guildSchema.modules.AuditLogs.channels.messages ||
-    !client.channels.cache.has(
-      guildSchema.modules.AuditLogs.channels.messages,
-    )
+    !client.channels.cache.has(guildSchema.modules.AuditLogs.channels.messages)
   ) {
     return
   }

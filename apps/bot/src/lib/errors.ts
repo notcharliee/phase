@@ -6,7 +6,7 @@ import {
   PermissionFlagsBits,
 } from "discord.js"
 
-import { env } from "~/env"
+import { env } from "~/lib/env"
 
 type BotErrorMessage =
   | string

@@ -1,11 +1,11 @@
 import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
-
-import { GuildSchema } from "@repo/schemas"
-import { PhaseColour } from "~/utils"
 import { botEvent } from "phasebot"
 
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
+
 export default botEvent("inviteCreate", async (client, invite) => {
-  const guildSchema = await GuildSchema.findOne({ id: invite.guild?.id })
+  const guildSchema = await db.guilds.findOne({ id: invite.guild?.id })
   if (!guildSchema) return
 
   if (

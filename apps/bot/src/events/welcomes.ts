@@ -1,10 +1,11 @@
-import { botEvent } from "phasebot"
-import { PhaseColour } from "~/utils"
-import { GuildSchema } from "@repo/schemas"
 import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
+import { botEvent } from "phasebot"
+
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
 
 export default botEvent("guildMemberAdd", async (client, member) => {
-  const guildSchema = await GuildSchema.findOne({ id: member.guild.id })
+  const guildSchema = await db.guilds.findOne({ id: member.guild.id })
   if (!guildSchema || !guildSchema.modules?.WelcomeMessages?.enabled) return
 
   const moduleData = guildSchema.modules.WelcomeMessages

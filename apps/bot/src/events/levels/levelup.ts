@@ -1,29 +1,31 @@
-import { botEvent } from "phasebot"
-import { GuildSchema, LevelSchema } from "@repo/schemas"
-import { PhaseColour } from "~/utils"
 import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
+import { botEvent } from "phasebot"
+
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
 
 export default botEvent("messageCreate", async (client, message) => {
   if (!message.inGuild() || message.author.bot) return
 
-  const guildSchema = await GuildSchema.findOne({
+  const guildSchema = await db.guilds.findOne({
     id: message.guildId,
   })
   const levelModule = guildSchema?.modules?.Levels
   if (!levelModule?.enabled) return
 
-  let levelSchema = await LevelSchema.findOne({
+  let levelSchema = await db.levels.findOne({
     guild: message.guildId,
     user: message.author.id,
   })
 
-  if (!levelSchema)
-    levelSchema = await new LevelSchema({
+  if (!levelSchema) {
+    levelSchema = await db.levels.create({
       guild: message.guildId,
       user: message.author.id,
       level: 0,
       xp: 0,
-    }).save()
+    })
+  }
 
   const currentLevel = levelSchema.level
   const currentXP = levelSchema.xp
@@ -94,6 +96,7 @@ export default botEvent("messageCreate", async (client, message) => {
           const channel = client.channels.cache.get(
             levelModule.channel,
           ) as GuildTextBasedChannel
+
           if (!channel) return
 
           channel.send({

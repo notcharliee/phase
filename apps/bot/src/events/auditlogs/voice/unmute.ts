@@ -1,15 +1,15 @@
-import { botEvent } from "phasebot"
-import { GuildSchema } from "@repo/schemas"
-import { PhaseColour } from "~/utils"
-
 import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
+import { botEvent } from "phasebot"
+
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
 
 export default botEvent(
   "voiceStateUpdate",
   async (client, oldVoice, newVoice) => {
     if (!(oldVoice.mute && !newVoice.mute)) return
 
-    const guildSchema = await GuildSchema.findOne({ id: newVoice.guild.id })
+    const guildSchema = await db.guilds.findOne({ id: newVoice.guild.id })
     if (!guildSchema) return
 
     if (

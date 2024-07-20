@@ -1,19 +1,16 @@
-import { botEvent } from "phasebot"
-import { GuildSchema } from "@repo/schemas"
-import {
-  PhaseColour,
-  errorMessage,
-  memberNotFound,
-  moduleNotEnabled,
-} from "~/utils"
 import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
   EmbedBuilder,
 } from "discord.js"
+import { botEvent } from "phasebot"
 
-export default botEvent("interactionCreate", async (client, interaction) => {
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
+import { errorMessage, memberNotFound, moduleNotEnabled } from "~/lib/utils"
+
+export default botEvent("interactionCreate", async (_, interaction) => {
   if (
     !interaction.isButton() ||
     !interaction.inGuild() ||
@@ -25,7 +22,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
 
   await interaction.deferReply()
 
-  const guildSchema = await GuildSchema.findOne({ id: interaction.guildId })
+  const guildSchema = await db.guilds.findOne({ id: interaction.guildId })
   const moduleConfig = guildSchema?.modules?.Forms
 
   if (!moduleConfig?.enabled) {

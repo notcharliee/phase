@@ -1,8 +1,9 @@
-import { botEvent } from "phasebot"
-import { GuildSchema } from "@repo/schemas"
-import { PhaseColour } from "~/utils"
 import { EmbedBuilder } from "discord.js"
+import { botEvent } from "phasebot"
+
 import invitesTracker from "@androz2091/discord-invites-tracker"
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
 
 export default botEvent("ready", async (client) => {
   const inviteEvents = invitesTracker.init(client, {
@@ -12,7 +13,7 @@ export default botEvent("ready", async (client) => {
   })
 
   inviteEvents.on("guildMemberAdd", async (member, joinType, invite) => {
-    const guildSchema = await GuildSchema.findOne({ id: member.guild.id })
+    const guildSchema = await db.guilds.findOne({ id: member.guild.id })
     if (!guildSchema) return
 
     if (

@@ -1,7 +1,8 @@
 import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { errorMessage, PhaseColour } from "~/utils"
+import { PhaseColour } from "~/lib/enums"
+import { errorMessage } from "~/lib/utils"
 
 export default new BotCommandBuilder()
   .setName("purge")

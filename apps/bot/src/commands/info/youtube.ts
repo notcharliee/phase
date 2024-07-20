@@ -4,8 +4,9 @@ import { BotCommandBuilder } from "phasebot/builders"
 import axios from "axios"
 import { google } from "googleapis"
 
-import { env } from "~/env"
-import { errorMessage, formatNumber, PhaseColour } from "~/utils"
+import { PhaseColour } from "~/lib/enums"
+import { env } from "~/lib/env"
+import { errorMessage, formatNumber } from "~/lib/utils"
 
 interface YoutTubeDislikeAPIResponse {
   id: string

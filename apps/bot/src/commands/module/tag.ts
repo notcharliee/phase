@@ -1,9 +1,9 @@
 import { EmbedBuilder } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { TagSchema } from "@repo/schemas"
-
-import { errorMessage, PhaseColour } from "~/utils"
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
+import { errorMessage } from "~/lib/utils"
 
 export default new BotCommandBuilder()
   .setName("tag")
@@ -72,11 +72,11 @@ export default new BotCommandBuilder()
   )
   .setExecute(async (interaction) => {
     const tagSchema =
-      (await TagSchema.findOne({ guild: interaction.guildId })) ??
-      (await new TagSchema({
+      (await db.tags.findOne({ guild: interaction.guildId })) ??
+      (await db.tags.create({
         guild: interaction.guildId,
         tags: [],
-      }).save())
+      }))
 
     switch (interaction.options.getSubcommand()) {
       case "add":

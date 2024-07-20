@@ -3,7 +3,8 @@ import { BotCommandBuilder } from "phasebot/builders"
 
 import { Octokit } from "@octokit/rest"
 
-import { errorMessage, PhaseColour } from "~/utils"
+import { PhaseColour } from "~/lib/enums"
+import { errorMessage } from "~/lib/utils"
 
 export default new BotCommandBuilder()
   .setName("github")

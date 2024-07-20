@@ -1,11 +1,11 @@
 import { botEvent } from "phasebot"
 
-import { GuildSchema } from "@repo/schemas"
+import { db } from "~/lib/db"
 
 export default botEvent("messageReactionRemove", async (_, reaction, user) => {
   if (user.bot || !reaction.message.inGuild()) return
 
-  const guildSchema = await GuildSchema.findOne({
+  const guildSchema = await db.guilds.findOne({
     id: reaction.message.guildId,
   })
 

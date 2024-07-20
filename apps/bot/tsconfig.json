@@ -14,7 +14,7 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"],
-      "@repo/schemas": ["../../node_modules/@repo/schemas/dist"]
+      "@repo/database": ["../../node_modules/@repo/database/dist"],
     },
     "moduleResolution": "bundler",
     "module": "esnext"

@@ -8,9 +8,9 @@ import {
 } from "discord.js"
 import { botEvent } from "phasebot"
 
-import { GuildSchema } from "@repo/schemas"
-
-import { errorMessage, moduleNotEnabled, PhaseColour } from "~/utils"
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
+import { errorMessage, moduleNotEnabled } from "~/lib/utils"
 
 export default botEvent("interactionCreate", async (client, interaction) => {
   if (
@@ -23,7 +23,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
 
   await interaction.deferReply({ ephemeral: true })
 
-  const guildSchema = await GuildSchema.findOne({ id: interaction.guildId })
+  const guildSchema = await db.guilds.findOne({ id: interaction.guildId })
   const moduleConfig = guildSchema?.modules?.Forms
 
   if (!moduleConfig?.enabled) {

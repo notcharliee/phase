@@ -1,6 +1,6 @@
 import { ImageBuilder } from "phasebot/builders"
 
-import { getOrdinal } from "~/utils"
+import { getOrdinal } from "~/lib/utils"
 
 import geist600 from "./fonts/Geist-600.otf"
 

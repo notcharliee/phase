@@ -6,7 +6,7 @@ import {
 } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { PhaseColour, PhaseURL } from "~/utils"
+import { PhaseColour, PhaseURL } from "~/lib/enums"
 
 export default new BotCommandBuilder()
   .setName("help")

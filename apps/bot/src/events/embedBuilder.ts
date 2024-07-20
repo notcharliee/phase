@@ -1,5 +1,3 @@
-import { botEvent } from "phasebot"
-import { PhaseError, errorMessage } from "~/utils"
 import {
   ActionRowBuilder,
   EmbedBuilder,
@@ -8,6 +6,10 @@ import {
   TextInputBuilder,
   TextInputStyle,
 } from "discord.js"
+import { botEvent } from "phasebot"
+
+import { PhaseError } from "~/lib/enums"
+import { errorMessage } from "~/lib/utils"
 
 export default botEvent("interactionCreate", async (client, interaction) => {
   if (

@@ -8,10 +8,10 @@ import {
 } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { GuildSchema, OtpSchema } from "@repo/schemas"
-
-import { env } from "~/env"
-import { BotError, PhaseColour, PhaseURL } from "~/utils"
+import { db } from "~/lib/db"
+import { PhaseColour, PhaseURL } from "~/lib/enums"
+import { env } from "~/lib/env"
+import { BotError } from "~/lib/errors"
 
 export default new BotCommandBuilder()
   .setName("bot")
@@ -118,7 +118,7 @@ export default new BotCommandBuilder()
 
           const user = interaction.options.getUser("user", true)
 
-          const guildDoc = (await GuildSchema.findOne({
+          const guildDoc = (await db.guilds.findOne({
             id: interaction.guildId!,
           }))!
 
@@ -167,7 +167,7 @@ export default new BotCommandBuilder()
             return
           }
 
-          const guildDoc = (await GuildSchema.findOne({
+          const guildDoc = (await db.guilds.findOne({
             id: interaction.guildId!,
           }))!
 
@@ -196,7 +196,7 @@ export default new BotCommandBuilder()
             return
           }
 
-          const guildDoc = (await GuildSchema.findOne({
+          const guildDoc = (await db.guilds.findOne({
             id: interaction.guildId!,
           }))!
 
@@ -266,7 +266,7 @@ export default new BotCommandBuilder()
 
       case "login":
         {
-          const guildDoc = await GuildSchema.findOne({
+          const guildDoc = await db.guilds.findOne({
             id: interaction.guildId!,
             admins: { $in: interaction.user.id },
           })
@@ -298,11 +298,11 @@ export default new BotCommandBuilder()
             ],
           })
 
-          void new OtpSchema({
+          void db.otps.create({
             userId: interaction.user.id,
             guildId: interaction.guildId,
             otp: signature,
-          }).save()
+          })
         }
         break
 
@@ -359,7 +359,7 @@ async function generateOTP() {
     .update(value)
     .digest("hex")
 
-  if (await OtpSchema.findOne({ otp: signature })) {
+  if (await db.otps.findOne({ otp: signature })) {
     return await generateOTP()
   }
 

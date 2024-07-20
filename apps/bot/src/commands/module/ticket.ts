@@ -1,14 +1,9 @@
 import { EmbedBuilder, PermissionFlagsBits } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { GuildSchema } from "@repo/schemas"
-
-import {
-  errorMessage,
-  missingPermission,
-  moduleNotEnabled,
-  PhaseColour,
-} from "~/utils"
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
+import { errorMessage, missingPermission, moduleNotEnabled } from "~/lib/utils"
 
 export default new BotCommandBuilder()
   .setName("ticket")
@@ -24,7 +19,7 @@ export default new BotCommandBuilder()
     subcommand.setName("delete").setDescription("Delete the ticket."),
   )
   .setExecute(async (interaction) => {
-    const guildSchema = await GuildSchema.findOne({ id: interaction.guildId })
+    const guildSchema = await db.guilds.findOne({ id: interaction.guildId })
     const ticketModule = guildSchema?.modules?.Tickets
 
     if (!ticketModule?.enabled) {

@@ -1,12 +1,13 @@
-import { AFKSchema } from "@repo/schemas"
 import { EmbedBuilder } from "discord.js"
 import { botEvent } from "phasebot"
-import { PhaseColour } from "~/utils"
 
-export default botEvent("messageCreate", async (client, message) => {
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
+
+export default botEvent("messageCreate", async (_, message) => {
   if (!message.inGuild()) return
 
-  const afkSchema = await AFKSchema.findOne({ user: message.author.id })
+  const afkSchema = await db.afks.findOne({ user: message.author.id })
 
   if (afkSchema) {
     await afkSchema.deleteOne()
@@ -24,7 +25,7 @@ export default botEvent("messageCreate", async (client, message) => {
     if (!mentionedMembers) return
 
     for (const mentionedMember of mentionedMembers) {
-      const mentionAFKSchema = await AFKSchema.findOne({
+      const mentionAFKSchema = await db.afks.findOne({
         user: mentionedMember,
       })
 
@@ -35,7 +36,7 @@ export default botEvent("messageCreate", async (client, message) => {
           embeds: [
             new EmbedBuilder()
               .setColor(PhaseColour.Primary)
-              .setDescription(mentionAFKSchema.reason)
+              .setDescription(mentionAFKSchema.reason ?? null)
               .setTitle(`${memberName.displayName} is currently AFK`),
           ],
         })

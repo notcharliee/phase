@@ -1,10 +1,11 @@
 import { AttachmentBuilder, EmbedBuilder } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { GuildSchema, LevelSchema } from "@repo/schemas"
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
+import { errorMessage, moduleNotEnabled } from "~/lib/utils"
 
 import { generateRankCard } from "~/images/rank"
-import { errorMessage, moduleNotEnabled, PhaseColour } from "~/utils"
 
 export default new BotCommandBuilder()
   .setName("level")
@@ -76,7 +77,7 @@ export default new BotCommandBuilder()
             interaction.options.getUser("user", false) ?? interaction.user
 
           try {
-            const guildSchema = await GuildSchema.findOne({
+            const guildSchema = await db.guilds.findOne({
               id: interaction.guildId!,
             })
 
@@ -85,19 +86,19 @@ export default new BotCommandBuilder()
             }
 
             const userLevelData =
-              (await LevelSchema.findOne({
+              (await db.levels.findOne({
                 guild: interaction.guildId!,
                 user: user.id,
               })) ??
-              (await new LevelSchema({
+              (await db.levels.create({
                 guild: interaction.guildId,
                 user: user.id,
                 level: 0,
                 xp: 0,
-              }).save())
+              }))
 
             const userRank =
-              (await LevelSchema.countDocuments({
+              (await db.levels.countDocuments({
                 $or: [
                   {
                     guild: userLevelData.guild,
@@ -170,25 +171,25 @@ export default new BotCommandBuilder()
           const level = interaction.options.getInteger("level", true)
           const xp = interaction.options.getInteger("xp", true)
 
-          const guildSchema = await GuildSchema.findOne({
+          const guildSchema = await db.guilds.findOne({
             id: interaction.guildId!,
           })
 
           if (!guildSchema?.modules?.Levels?.enabled)
             interaction.reply(moduleNotEnabled("Tickets"))
 
-          const levelSchema = await LevelSchema.findOne({
+          const levelSchema = await db.levels.findOne({
             guild: interaction.guildId!,
             user: user.id,
           })
 
           if (!levelSchema)
-            new LevelSchema({
+            db.levels.create({
               guild: interaction.guildId,
               user: user.id,
               level: level,
               xp: level,
-            }).save()
+            })
           else {
             levelSchema.level = level
             levelSchema.xp = xp

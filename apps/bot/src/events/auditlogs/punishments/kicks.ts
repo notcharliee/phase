@@ -1,8 +1,8 @@
-import { botEvent } from "phasebot"
-import { GuildSchema } from "@repo/schemas"
-import { PhaseColour } from "~/utils"
-
 import { AuditLogEvent, EmbedBuilder, GuildTextBasedChannel } from "discord.js"
+import { botEvent } from "phasebot"
+
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
 
 export default botEvent("guildMemberRemove", async (client, member) => {
   const event = await member.guild
@@ -23,7 +23,7 @@ export default botEvent("guildMemberRemove", async (client, member) => {
 
   if (!event) return
 
-  const guildSchema = await GuildSchema.findOne({ id: member.guild.id })
+  const guildSchema = await db.guilds.findOne({ id: member.guild.id })
   if (!guildSchema) return
 
   if (

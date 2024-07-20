@@ -1,4 +1,3 @@
-import { botEvent } from "phasebot"
 import {
   Channel,
   ChannelType,
@@ -9,8 +8,11 @@ import {
   Message,
   Role,
 } from "discord.js"
-import { GuildSchema } from "@repo/schemas"
+import { botEvent } from "phasebot"
+
 import discordlogs from "discord-logs"
+
+import { db } from "~/lib/db"
 
 export default botEvent("ready", async (client) => {
   await discordlogs(client)
@@ -18,7 +20,7 @@ export default botEvent("ready", async (client) => {
   async function sendlog(guildId: string, embed: EmbedBuilder) {
     embed.setTimestamp()
 
-    const guildSchema = await GuildSchema.findOne({ id: guildId })
+    const guildSchema = await db.guilds.findOne({ id: guildId })
     if (!guildSchema) return
 
     if (

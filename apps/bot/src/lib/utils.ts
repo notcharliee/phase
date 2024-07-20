@@ -1,4 +1,3 @@
-import { GuildModules } from "@repo/schemas"
 import {
   ActionRowBuilder,
   ButtonBuilder,
@@ -8,9 +7,11 @@ import {
   PermissionFlagsBits,
   WebhookClient,
 } from "discord.js"
-import { PhaseColour, PhaseURL } from "~/utils"
 
-import { env } from "~/env"
+import { PhaseColour, PhaseURL } from "~/lib/enums"
+import { env } from "~/lib/env"
+
+import type { GuildModules } from "~/lib/db"
 
 export async function alertDevs(data: {
   title: string

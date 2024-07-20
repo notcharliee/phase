@@ -1,9 +1,8 @@
 import { GuildMember, PermissionFlagsBits } from "discord.js"
 import { type BotCommandMiddleware } from "phasebot/builders"
 
-import { GuildSchema } from "@repo/schemas"
-
-import { errorMessage, missingPermission } from "~/utils"
+import { db } from "~/lib/db"
+import { errorMessage, missingPermission } from "~/lib/utils"
 
 export const commands: BotCommandMiddleware = async (interaction, execute) => {
   if (!interaction.guild) {
@@ -33,7 +32,7 @@ export const commands: BotCommandMiddleware = async (interaction, execute) => {
     .trim()
     .replaceAll("  ", " ")
 
-  const guild = await GuildSchema.findOne({ id: interaction.guild.id })
+  const guild = await db.guilds.findOne({ id: interaction.guild.id })
   const command = guild && guild.commands && guild.commands[commandName]
 
   if (command) {

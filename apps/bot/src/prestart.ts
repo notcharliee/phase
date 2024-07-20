@@ -1,6 +1,4 @@
-import mongoose from "mongoose"
-import { env } from "~/env"
+import "~/lib/env"
+import "~/lib/db"
 
-export default async function prestart () {
-  await mongoose.connect(env.MONGODB_URI)
-}
+export default async function prestart() {}

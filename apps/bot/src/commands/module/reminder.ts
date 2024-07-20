@@ -1,10 +1,11 @@
 import { EmbedBuilder, PermissionFlagsBits } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { ReminderSchema } from "@repo/schemas"
 import ms from "ms"
 
-import { errorMessage, missingPermission, PhaseColour } from "~/utils"
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
+import { errorMessage, missingPermission } from "~/lib/utils"
 
 export default new BotCommandBuilder()
   .setName("reminder")
@@ -60,7 +61,7 @@ export default new BotCommandBuilder()
         )
       }
 
-      await new ReminderSchema({
+      void db.reminders.create({
         guild: interaction.guildId,
         message,
         channel: interaction.channelId,
@@ -68,7 +69,7 @@ export default new BotCommandBuilder()
         user: interaction.user.id,
         role: role?.id,
         created: new Date(),
-      }).save()
+      })
 
       return interaction.reply({
         embeds: [

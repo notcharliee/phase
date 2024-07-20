@@ -1,7 +1,8 @@
 import { EmbedBuilder } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { missingPermission, PhaseColour } from "~/utils"
+import { PhaseColour } from "~/lib/enums"
+import { missingPermission } from "~/lib/utils"
 
 export default new BotCommandBuilder()
   .setName("announce")

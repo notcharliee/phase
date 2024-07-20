@@ -1,12 +1,13 @@
 import { botEvent } from "phasebot"
-import { GuildSchema } from "@repo/schemas"
-import { alertDevs } from "~/utils"
+
+import { db } from "~/lib/db"
+import { alertDevs } from "~/lib/utils"
 
 export default botEvent("guildCreate", async (client, guild) => {
-  const guildSchema = await GuildSchema.findOne({ id: guild.id })
+  const guildSchema = await db.guilds.findOne({ id: guild.id })
   if (guildSchema) return
 
-  await new GuildSchema({
+  await new db.guilds({
     id: guild.id,
     admins: [guild.ownerId],
     news_channel: null,

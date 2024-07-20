@@ -6,7 +6,8 @@ import {
 } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { errorMessage, PhaseColour, PhaseError } from "~/utils"
+import { PhaseColour, PhaseError } from "~/lib/enums"
+import { errorMessage } from "~/lib/utils"
 
 export default new BotCommandBuilder()
   .setName("scrub")

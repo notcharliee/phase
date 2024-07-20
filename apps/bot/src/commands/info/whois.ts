@@ -1,7 +1,8 @@
 import { EmbedBuilder, GuildMember, PermissionResolvable } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { memberNotFound, PhaseColour } from "~/utils"
+import { PhaseColour } from "~/lib/enums"
+import { memberNotFound } from "~/lib/utils"
 
 export default new BotCommandBuilder()
   .setName("whois")

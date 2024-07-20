@@ -1,6 +1,7 @@
-import { botEvent } from "phasebot"
-import { GuildSchema } from "@repo/schemas"
 import { GuildFeature } from "discord.js"
+import { botEvent } from "phasebot"
+
+import { db } from "~/lib/db"
 
 export default botEvent("guildMemberAdd", async (client, member) => {
   if (
@@ -8,9 +9,9 @@ export default botEvent("guildMemberAdd", async (client, member) => {
   )
     return
 
-  const guildSchema = await GuildSchema.findOne({ id: member.guild.id })
+  const guildSchema = await db.guilds.findOne({ id: member.guild.id })
   const autoRolesModule = guildSchema?.modules?.AutoRoles
-  
+
   if (!autoRolesModule?.enabled) return
 
   for (const role of autoRolesModule.roles) {

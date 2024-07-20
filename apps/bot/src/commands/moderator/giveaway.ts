@@ -1,9 +1,9 @@
 import { EmbedBuilder, GuildMember, GuildTextBasedChannel } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { GiveawaySchema } from "@repo/schemas"
-
-import { errorMessage, getRandomArrayElements, PhaseColour } from "~/utils"
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
+import { errorMessage, getRandomArrayElements } from "~/lib/utils"
 
 export default new BotCommandBuilder()
   .setName("giveaway")
@@ -141,7 +141,7 @@ export default new BotCommandBuilder()
 
           await message.react("🎉")
 
-          await new GiveawaySchema({
+          await db.giveaways.create({
             id: message.id,
             channel: message.channelId,
             created: message.createdTimestamp * 1000,
@@ -151,7 +151,7 @@ export default new BotCommandBuilder()
             duration,
             expires,
             expired: false,
-          }).save()
+          })
 
           interaction.editReply({
             embeds: [
@@ -175,7 +175,7 @@ export default new BotCommandBuilder()
 
           const id = interaction.options.getString("id", true)
 
-          const giveaway = await GiveawaySchema.findOne({ id })
+          const giveaway = await db.giveaways.findOne({ id })
 
           if (!giveaway) {
             return interaction.editReply(
@@ -229,7 +229,7 @@ export default new BotCommandBuilder()
           const id = interaction.options.getString("id", true)
           const amount = interaction.options.getInteger("amount", false)
 
-          const giveawaySchema = await GiveawaySchema.findOne({
+          const giveawaySchema = await db.giveaways.findOne({
             guild: interaction.guildId,
             created: id,
             expired: true,

@@ -1,9 +1,8 @@
 import { EmbedBuilder } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { AFKSchema } from "@repo/schemas"
-
-import { PhaseColour } from "~/utils"
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
 
 export default new BotCommandBuilder()
   .setName("afk")
@@ -19,15 +18,17 @@ export default new BotCommandBuilder()
     const reason =
       interaction.options.getString("reason", false) ?? "No reason set."
 
-    const afkSchema =
-      (await AFKSchema.findOne({ user: interaction.user.id })) ??
-      new AFKSchema({
+    const afkSchema = await db.afks.findOne({ user: interaction.user.id })
+
+    if (afkSchema) {
+      afkSchema.reason = reason
+      void afkSchema.save()
+    } else {
+      void db.afks.create({
         user: interaction.user.id,
         reason,
       })
-
-    afkSchema.reason = reason
-    await afkSchema.save()
+    }
 
     interaction.reply({
       embeds: [

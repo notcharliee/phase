@@ -1,15 +1,14 @@
 import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
 import { BotCronBuilder } from "phasebot/builders"
 
-import { ReminderSchema } from "@repo/schemas"
-
-import { PhaseColour } from "~/utils"
+import { db } from "~/lib/db"
+import { PhaseColour } from "~/lib/enums"
 
 export default new BotCronBuilder()
   .setPattern("*/5 * * * * *")
   .setExecute(async (client) => {
     // Fetch reminders that meet the specified conditions
-    const reminders = await ReminderSchema.find({
+    const reminders = await db.reminders.find({
       $or: [
         {
           $expr: {
