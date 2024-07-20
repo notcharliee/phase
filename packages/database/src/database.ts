@@ -1,7 +1,6 @@
 import mongoose from "mongoose"
 
 import { AFKs } from "./models/afks.js"
-import { Games } from "./models/games.js"
 import { Giveaways } from "./models/giveaways.js"
 import { Guilds } from "./models/guilds.js"
 import { Levels } from "./models/levels.js"
@@ -11,7 +10,6 @@ import { Tags } from "./models/tags.js"
 
 interface InitialisedDatabase extends Omit<Database, "init"> {
   AFKs: typeof AFKs
-  Games: typeof Games
   Giveaways: typeof Giveaways
   Guilds: typeof Guilds
   Levels: typeof Levels
@@ -68,7 +66,6 @@ export class Database {
 
     Object.assign(this, {
       AFKs,
-      Games,
       Giveaways,
       Guilds,
       Levels,
