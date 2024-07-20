@@ -2,7 +2,7 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "turbo run build --filter=phasebot --filter=@repo/schemas --filter=bot --color",
+    "buildCommand": "turbo run build --filter=bot",
     "nixpacksPlan": {
       "providers": [
         "node"
@@ -10,7 +10,7 @@
       "phases": {
         "install": {
           "dependsOn": ["setup"],
-          "cmds": ["bun install --production"]
+          "cmds": ["bun install"]
         }
       }
     }
