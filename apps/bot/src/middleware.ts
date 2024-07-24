@@ -2,10 +2,21 @@ import { GuildMember, PermissionFlagsBits } from "discord.js"
 import { type BotCommandMiddleware } from "phasebot/builders"
 
 import { db } from "~/lib/db"
-import { errorMessage, missingPermission } from "~/lib/utils"
+import { missingPermission } from "~/lib/utils"
 
-export const commands: BotCommandMiddleware = async (interaction, execute) => {
+import { BotError } from "./lib/errors"
+
+export const commands: BotCommandMiddleware = async (
+  interaction,
+  execute,
+  metadata,
+) => {
   if (!interaction.guild) {
+    if ("dmPermission" in metadata && metadata.dmPermission === false) {
+      void interaction.reply(BotError.serverOnlyCommand().toJSON())
+      return
+    }
+
     try {
       return await execute(interaction)
     } catch (error) {
@@ -15,11 +26,14 @@ export const commands: BotCommandMiddleware = async (interaction, execute) => {
 
   if (
     !interaction.guild.channels.cache
-      .get(interaction.channelId)
-      ?.permissionsFor(interaction.guild.members.me!)
+      .get(interaction.channelId)!
+      .permissionsFor(interaction.guild.members.me!)
       .has(PermissionFlagsBits.SendMessages)
   ) {
-    interaction.reply(missingPermission(PermissionFlagsBits.SendMessages, true))
+    void interaction.reply(
+      BotError.botMissingPermission("SendMessages", true).toJSON(),
+    )
+
     return
   }
 
@@ -37,13 +51,13 @@ export const commands: BotCommandMiddleware = async (interaction, execute) => {
 
   if (command) {
     if (command.disabled) {
-      return await interaction.reply(
-        errorMessage({
-          title: "Command Disabled",
-          description: `This command has been disabled by the server administrators.`,
-          ephemeral: true,
-        }),
+      void interaction.reply(
+        new BotError(
+          "This command has been disabled by the server admins.",
+        ).toJSON(),
       )
+
+      return
     }
 
     const userId = `user:${interaction.user.id}`

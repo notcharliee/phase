@@ -98,9 +98,9 @@ export const BotError = Object.assign(BotErrorClass, {
           ? `**\`"${permission
               .replace(/([A-Z])/g, "_$1")
               .trimStart()
-              .toUpperCase()}"\`** permission, which is required`
-          : `required permissions`
-      } to do this ${channelSpecific ? "in this channel" : ""}.`,
+              .toUpperCase()}"\`** permission ${channelSpecific ? "in this channel" : ""}, which is required`
+          : `required permissions ${channelSpecific ? "in this channel" : ""}`
+      } to do this.`,
     }),
   memberNotFound: () =>
     new BotErrorClass({
@@ -134,7 +134,7 @@ const generateBugReportURL = (data: {
   )
 
   const message =
-    data.commandName ?? data.moduleName
+    (data.commandName ?? data.moduleName)
       ? `An error occurred while running the ${data.commandName ? `\`/${data.commandName}\` command` : `\`${data.moduleName}\` module`}.`
       : "An error occurred."
 
