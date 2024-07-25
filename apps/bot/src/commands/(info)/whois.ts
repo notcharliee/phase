@@ -6,7 +6,7 @@ import { memberNotFound } from "~/lib/utils"
 
 export default new BotCommandBuilder()
   .setName("whois")
-  .setDescription("Displays member data in an embed.")
+  .setDescription("Gives you info about a member.")
   .setDMPermission(false)
   .addUserOption((option) =>
     option
@@ -48,7 +48,7 @@ export default new BotCommandBuilder()
         memberPermissions[permission as keyof PermissionResolvable],
     )
 
-    interaction.reply({
+    void interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setAuthor({

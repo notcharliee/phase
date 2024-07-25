@@ -2,7 +2,7 @@ import { BotCommandBuilder } from "phasebot/builders"
 
 export default new BotCommandBuilder()
   .setName("rps")
-  .setDescription("Play a game of rock-paper-scissors.")
+  .setDescription("Starts a game of rock-paper-scissors.")
   .addStringOption((option) =>
     option
       .setName("choice")
@@ -21,7 +21,7 @@ export default new BotCommandBuilder()
     const move = Math.floor(Math.random() * 3)
     const outcomeIndex = (choices.indexOf(choice) - move + 3) % 3
 
-    interaction.reply(
+    void interaction.reply(
       `You chose **${choice}** and I chose **${choices[move]}**.\n${outcomes[outcomeIndex]}`,
     )
   })

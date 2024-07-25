@@ -7,7 +7,7 @@ import { PhaseColour } from "~/lib/enums"
 
 export default new BotCommandBuilder()
   .setName("membercount")
-  .setDescription("Get the server membercount.")
+  .setDescription("Gives you the server membercount.")
   .setDMPermission(false)
   .setExecute(async (interaction) => {
     const guild = interaction.guild!
@@ -18,7 +18,7 @@ export default new BotCommandBuilder()
 
     const percentage = (val: number) => `${((val / total) * 100).toFixed(1)}%`
 
-    interaction.reply({
+    void interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setTitle("Member Count")

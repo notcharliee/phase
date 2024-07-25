@@ -6,9 +6,9 @@ import dogs from "./_data/dogs.json"
 
 export default new BotCommandBuilder()
   .setName("dog")
-  .setDescription("Finds a random picture of a dog.")
+  .setDescription("Gives you a random picture of a dog.")
   .setExecute(async (interaction) => {
-    interaction.reply({
+    void interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setTitle("Random Dog")

@@ -6,12 +6,12 @@ import { errorMessage } from "~/lib/utils"
 
 export default new BotCommandBuilder()
   .setName("purge")
-  .setDescription("Purges up to 100 messages from the channel at a time.")
+  .setDescription("Bulk deletes messages from the channel.")
   .setDMPermission(false)
   .addIntegerOption((option) =>
     option
       .setName("amount")
-      .setDescription("The number of messages to purge.")
+      .setDescription("The number of messages to purge (max 100).")
       .setMaxValue(100)
       .setMinValue(1)
       .setRequired(true),

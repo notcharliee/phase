@@ -91,19 +91,19 @@ export const commands: BotCommandMiddleware = async (
   }
 
   const defaultPermissions: { [key: string]: bigint | undefined } = {
-    announce: PermissionFlagsBits.MentionEveryone,
     "giveaway create": PermissionFlagsBits.ManageGuild,
     "giveaway delete": PermissionFlagsBits.ManageGuild,
     "giveaway reroll": PermissionFlagsBits.ManageGuild,
+    "warn add": PermissionFlagsBits.ModerateMembers,
+    "warn remove": PermissionFlagsBits.ModerateMembers,
+    announce: PermissionFlagsBits.MentionEveryone,
     lock: PermissionFlagsBits.ModerateMembers,
     scrub: PermissionFlagsBits.ManageChannels,
     purge: PermissionFlagsBits.ManageMessages,
-    "warn add": PermissionFlagsBits.ModerateMembers,
-    "warn remove": PermissionFlagsBits.ModerateMembers,
     "level set": PermissionFlagsBits.ManageGuild,
-    "tag add": PermissionFlagsBits.ManageMessages,
+    "tag create": PermissionFlagsBits.ManageMessages,
+    "tag delete": PermissionFlagsBits.ManageMessages,
     "tag edit": PermissionFlagsBits.ManageMessages,
-    "tag remove": PermissionFlagsBits.ManageMessages,
   }
 
   const defaultPerm = defaultPermissions[commandName]

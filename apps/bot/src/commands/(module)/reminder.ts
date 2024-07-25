@@ -9,7 +9,7 @@ import { errorMessage, missingPermission } from "~/lib/utils"
 
 export default new BotCommandBuilder()
   .setName("reminder")
-  .setDescription("Set a reminder")
+  .setDescription("Sets a reminder")
   .setDMPermission(false)
   .addStringOption((option) =>
     option

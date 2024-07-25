@@ -6,7 +6,7 @@ import { PhaseColour } from "~/lib/enums"
 
 export default new BotCommandBuilder()
   .setName("afk")
-  .setDescription("Set your AFK status.")
+  .setDescription("Sets your AFK status.")
   .setDMPermission(false)
   .addStringOption((option) =>
     option

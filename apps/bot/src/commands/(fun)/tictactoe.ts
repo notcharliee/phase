@@ -19,7 +19,7 @@ import type {
 
 export default new BotCommandBuilder()
   .setName("tictactoe")
-  .setDescription("Play tic-tac-toe with another member.")
+  .setDescription("Starts a game of tic-tac-toe.")
   .setDMPermission(false)
   .addUserOption((option) =>
     option

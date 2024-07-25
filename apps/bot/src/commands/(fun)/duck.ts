@@ -5,9 +5,9 @@ import { PhaseColour } from "~/lib/enums"
 
 export default new BotCommandBuilder()
   .setName("duck")
-  .setDescription("Finds a random picture of a duck.")
+  .setDescription("Gives you a random picture of a duck.")
   .setExecute(async (interaction) => {
-    interaction.reply({
+    void interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setTitle("Random Duck")
