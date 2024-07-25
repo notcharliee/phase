@@ -28,10 +28,10 @@
     // Some stricter flags
     "forceConsistentCasingInFileNames": true,
     "noUncheckedIndexedAccess": true,
-    "noPropertyAccessFromIndexSignature": true,
+    "noPropertyAccessFromIndexSignature": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
   "exclude": ["node_modules", "dist"],
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "src/declarations.d.ts", "plugins.ts"]
 }

@@ -1,5 +1,5 @@
 import { $ } from "bun"
-import { rmSync } from "node:fs"
+import { existsSync, rmSync } from "node:fs"
 
 import chalk from "chalk"
 
@@ -7,7 +7,7 @@ import type { JSONSchemaForNPMPackageJsonFiles2 as PackageJsonFile } from "@sche
 
 console.log("Build process started ...")
 
-rmSync("./dist", { recursive: true })
+if (existsSync("./dist")) rmSync("./dist", { recursive: true })
 
 const packageJson = (await Bun.file("./package.json").json()) as PackageJsonFile
 const externalDeps = Object.keys(packageJson.dependencies!)
@@ -20,6 +20,7 @@ Bun.build({
   ],
   outdir: "./dist",
   target: "bun",
+  sourcemap: "external",
   external: externalDeps,
   minify: true,
 }).then((build) => {

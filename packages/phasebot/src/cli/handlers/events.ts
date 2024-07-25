@@ -1,8 +1,11 @@
 import { isAsyncFunction } from "node:util/types"
 
-import { Client, ClientEvents, Collection } from "discord.js"
+import { Client, Collection } from "discord.js"
 
-import { BotEventBuilder, BotEventExecute } from "~/builders"
+import { BotEventBuilder } from "~/builders"
+
+import type { BotEventExecute } from "~/builders"
+import type { ClientEvents } from "discord.js"
 
 export type EventsCollection = Collection<string, BotEventBuilder[]>
 

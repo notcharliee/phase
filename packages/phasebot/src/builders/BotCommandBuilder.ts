@@ -1,16 +1,14 @@
-import { SlashCommandBuilder } from "discord.js"
+import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from "discord.js"
 
 import { Mixin } from "ts-mixer"
 
 import type {
-  APIApplicationCommandOption,
   ChannelType,
   ChatInputCommandInteraction,
   SharedNameAndDescription,
   SharedSlashCommand,
   SharedSlashCommandOptions,
   SharedSlashCommandSubcommands,
-  ToAPIApplicationCommandOptions,
 } from "discord.js"
 
 declare module "discord.js" {
@@ -59,6 +57,11 @@ declare module "discord.js" {
       SharedSlashCommandOptions<SlashCommandOptionsOnlyBuilder>,
       SharedSlashCommandSubcommands<SlashCommandSubcommandsOnlyBuilder>,
       SharedSlashCommand {}
+
+  interface SlashCommandSubcommandBuilder
+    extends SharedNameAndDescription,
+      SharedSlashCommandOptions<SlashCommandSubcommandBuilder>,
+      BotCommandBuilderBase {}
 }
 
 export type BotCommandExecute = (
@@ -68,6 +71,7 @@ export type BotCommandExecute = (
 export type BotCommandMiddleware = (
   interaction: ChatInputCommandInteraction,
   execute: BotCommandExecute,
+  metadata: object,
 ) => unknown | Promise<unknown>
 
 class BotCommandBuilderBase {
@@ -115,18 +119,14 @@ export class BotCommandBuilder extends Mixin(
   BotCommandBuilderBase,
   SlashCommandBuilder,
 ) {
-  /**
-   * The options for the command.
-   *
-   * @param options - The options for the command.
-   */
-  setOptions(options: APIApplicationCommandOption[]) {
-    const toAPIApplicationCommandOptions: ToAPIApplicationCommandOptions[] =
-      options.map((option) => ({
-        toJSON: () => option,
-      }))
 
-    Reflect.set(this, "options", toAPIApplicationCommandOptions)
-    return this
-  }
 }
+
+/**
+ * A builder that creates API-compatible JSON data for phasebot slash commands.
+ * @extends SlashCommandBuilder
+ */
+export class BotSubcommandBuilder extends Mixin(
+  BotCommandBuilderBase,
+  SlashCommandSubcommandBuilder,
+) {}

@@ -1,69 +1,186 @@
+import { readdirSync, statSync } from "node:fs"
+import { basename, extname, join } from "node:path"
+
 import {
   ApplicationCommandOptionType,
   ApplicationCommandType,
   Collection,
-  InteractionType,
+  SlashCommandAssertions,
 } from "discord.js"
 
 import chalk from "chalk"
 import cloneDeep from "lodash.clonedeep"
 
-import { BotCommandBuilder } from "~/builders"
+import { BotCommandBuilder, BotSubcommandBuilder } from "~/builders"
 import { getMiddleware, loadingMessage } from "~/cli/utils"
 
-import type { BotCommandMiddleware } from "~/builders"
-import type { APIApplicationCommandOption, Client } from "discord.js"
+import type { BotCommandExecute } from "~/builders"
+import type {
+  APIApplicationCommandOption,
+  APIApplicationCommandSubcommandGroupOption,
+  Client,
+} from "discord.js"
 
 export type CommandsCollection = Collection<string, BotCommandBuilder>
 
-export const getCommandPaths = (dir: string = "src") => {
-  return Array.from(
-    new Bun.Glob(`${dir}/commands/**/*.{js,ts,jsx,tsx}`).scanSync({
-      absolute: true,
-    }),
-  )
+interface CommandFile {
+  name: string
+  path: string
+  parent?: string
+  group?: string
+  command: BotCommandBuilder
 }
 
-export const handleCommands = async (
-  client: Client<false>,
-  commands?: CommandsCollection,
-  middleware?: BotCommandMiddleware,
-) => {
-  // if no commands collection is provided, load all command files
-  if (!commands) {
-    const paths = getCommandPaths()
+interface SubcommandFile extends Omit<CommandFile, "command"> {
+  parent: string
+  command: BotSubcommandBuilder
+}
 
-    commands = new Collection()
+function isSubcommand(
+  file: CommandFile | SubcommandFile,
+): file is SubcommandFile {
+  return typeof file.parent === "string"
+}
 
-    for (const path of paths) {
-      const defaultExport = (await import(path).then(
-        (m) => m.default,
-      )) as unknown
+export const getCommandFiles = async (dir: string = "src/commands") => {
+  const commandFiles: (CommandFile | SubcommandFile)[] = []
 
-      if (!defaultExport) {
-        throw new Error(`Command file '${path}' is missing a default export`)
-      } else if (
-        !(
-          typeof defaultExport === "object" &&
-          "metadata" in defaultExport &&
-          defaultExport.metadata &&
-          typeof defaultExport.metadata === "object" &&
-          "type" in defaultExport.metadata &&
-          defaultExport.metadata.type === "command"
-        )
-      ) {
-        throw new Error(
-          `Command file '${path}' does not export a valid command builder`,
-        )
+  const processDir = async (currentDir: string, prefix: string = "") => {
+    const entries = readdirSync(currentDir)
+
+    for (const entry of entries) {
+      if (entry.startsWith("_")) continue
+
+      const path = join(currentDir, entry)
+      const stats = statSync(path)
+
+      if (stats.isDirectory()) {
+        const group = !!(entry.startsWith("(") && entry.endsWith(")"))
+        await processDir(path, prefix + (group ? "" : entry + "/"))
+      } else if ([".ts", ".tsx", ".js", ".jsx"].includes(extname(entry))) {
+        const file = await import(join(process.cwd(), path))
+        const defaultExport = file.default as unknown
+
+        if (!defaultExport) {
+          throw new Error(`Command file '${path}' is missing a default export`)
+        } else if (
+          !(
+            typeof defaultExport === "object" &&
+            "metadata" in defaultExport &&
+            defaultExport.metadata &&
+            typeof defaultExport.metadata === "object" &&
+            "type" in defaultExport.metadata &&
+            (defaultExport.metadata.type === "command" ||
+              defaultExport.metadata.type === "subcommand")
+          )
+        ) {
+          throw new Error(
+            `Command file '${path}' does not export a valid command builder`,
+          )
+        }
+
+        const command = <(typeof commandFiles)[number]["command"]>defaultExport
+
+        let relativePath = join(prefix, basename(entry, extname(entry)))
+        relativePath = relativePath.replace(/\\/g, "/")
+        relativePath = relativePath
+          .replace(/\/\(/g, "/")
+          .replace(/\)/g, "")
+          .replace(/\//g, " ")
+
+        const commandParts = relativePath.replace(/_/g, " ").split(" ")
+
+        const parent = commandParts.length > 1 ? commandParts[0] : undefined
+        const group = commandParts.length > 2 ? commandParts[1] : undefined
+        const name = [parent, group, command.name].filter(Boolean).join(" ")
+
+        commandFiles.push({
+          name,
+          parent,
+          group,
+          path,
+          command,
+        } as CommandFile | SubcommandFile)
       }
-
-      const command = defaultExport as BotCommandBuilder
-      commands.set(command.name, command)
     }
   }
 
-  // if no middleware is provided, get the middleware function
-  if (!middleware) middleware = await getMiddleware()
+  await processDir(dir)
+
+  return commandFiles
+}
+
+export const handleCommands = async (client: Client<false>) => {
+  const commandFiles = await getCommandFiles()
+
+  // the json commands that will be sent to the API
+  const apiCommands = new Collection<
+    string,
+    ReturnType<BotCommandBuilder["toJSON"]>
+  >()
+
+  // the partial commands that will be used for interaction events
+  const partialCommands = new Collection<
+    string,
+    { name: string; execute: BotCommandExecute; metadata: object }
+  >()
+
+  for (const file of commandFiles) {
+    partialCommands.set(file.name, {
+      name: file.name,
+      metadata: file.command.metadata,
+      execute: file.command.execute,
+    })
+
+    if (isSubcommand(file)) {
+      let existingApiCommand = apiCommands.get(file.parent)
+
+      if (!existingApiCommand) {
+        apiCommands.set(file.parent, {
+          name: file.parent,
+          description: file.parent,
+          options: [],
+        })
+
+        existingApiCommand = apiCommands.get(file.parent)!
+      }
+
+      if (!existingApiCommand.options) existingApiCommand.options = []
+
+      if (file.group) {
+        const existingGroup = existingApiCommand.options.find(
+          (option) =>
+            option.name === file.group &&
+            option.type === ApplicationCommandOptionType.SubcommandGroup,
+        ) as APIApplicationCommandSubcommandGroupOption | undefined
+
+        if (!existingGroup) {
+          SlashCommandAssertions.validateMaxOptionsLength(
+            existingApiCommand.options,
+          )
+
+          existingApiCommand.options.push({
+            name: file.group,
+            description: file.group,
+            type: ApplicationCommandOptionType.SubcommandGroup,
+            options: [file.command.toJSON()],
+          })
+        } else {
+          SlashCommandAssertions.validateMaxOptionsLength(existingGroup.options)
+
+          existingGroup.options.push(file.command.toJSON())
+        }
+      } else {
+        SlashCommandAssertions.validateMaxOptionsLength(
+          existingApiCommand.options,
+        )
+
+        existingApiCommand.options.push(file.command.toJSON())
+      }
+    } else {
+      apiCommands.set(file.command.name, file.command.toJSON())
+    }
+  }
 
   // update commands once client is ready
   client.once("ready", async (readyClient) => {
@@ -108,16 +225,14 @@ export const handleCommands = async (
     }
 
     // clone the local commands, convert them to their json form, and sort them
-    const newCommands = cloneDeep(commands)
+    const newCommands = cloneDeep(apiCommands)
       .map((data) => {
-        const json = data.toJSON()
-
-        if (json.nsfw === undefined) json.nsfw = false
-        if (json.dm_permission === undefined) json.dm_permission = true
+        if (data.nsfw === undefined) data.nsfw = false
+        if (data.dm_permission === undefined) data.dm_permission = true
 
         return sortKeys({
-          ...json,
-          options: json.options?.length ? sortOptions(json.options) : [],
+          ...data,
+          options: data.options?.length ? sortOptions(data.options) : [],
           execute: undefined,
           metadata: undefined,
         })
@@ -142,7 +257,15 @@ export const handleCommands = async (
 
     // if no commands have been set, set them all and return
     if (!oldCommands.length) {
-      await readyClient.application.commands.set(newCommands)
+      await loadingMessage(
+        () => readyClient.application.commands.set(newCommands),
+        {
+          loading: "Setting up slash commands ...",
+          success: "Slash commands set!",
+          error: "An error occurred while setting up slash commands:\n",
+        },
+      )
+
       return
     }
 
@@ -206,22 +329,33 @@ export const handleCommands = async (
     }
   })
 
+  // get the middleware function
+  const middleware = await getMiddleware()
+
   // setup the command interaction handler
   client.on("interactionCreate", async (interaction) => {
-    if (interaction.type !== InteractionType.ApplicationCommand) return
-    if (interaction.commandType !== ApplicationCommandType.ChatInput) return
+    if (!interaction.isChatInputCommand()) return
 
-    const command = commands.get(interaction.commandName)
+    const commandName = [
+      interaction.commandName,
+      interaction.options.getSubcommandGroup(false),
+      interaction.options.getSubcommand(false),
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .trim()
+
+    const command = partialCommands.get(commandName)
     if (!command) return
 
     try {
       if (middleware) {
-        await middleware(interaction, command.execute)
+        await middleware(interaction, command.execute, command.metadata)
       } else {
         await command.execute(interaction)
       }
     } catch (error) {
-      console.error(new Error(`Command '${command.name}' failed:`))
+      console.error(`Command '${command.name}' failed:`)
       console.error(error)
     }
   })

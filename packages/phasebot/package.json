@@ -1,7 +1,7 @@
 {
   "name": "phasebot",
   "description": "A simple framework for building and running discord bots",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -42,7 +42,6 @@
     "bunfig.toml",
     "plugins.ts",
     "package.json",
-    "tsconfig.json",
     "README.md"
   ],
   "repository": {
