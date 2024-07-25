@@ -96,7 +96,7 @@ export const commands: BotCommandMiddleware = async (
     "giveaway delete": PermissionFlagsBits.ManageGuild,
     "giveaway reroll": PermissionFlagsBits.ManageGuild,
     lock: PermissionFlagsBits.ModerateMembers,
-    nuke: PermissionFlagsBits.ManageChannels,
+    scrub: PermissionFlagsBits.ManageChannels,
     purge: PermissionFlagsBits.ManageMessages,
     "warn add": PermissionFlagsBits.ModerateMembers,
     "warn remove": PermissionFlagsBits.ModerateMembers,
