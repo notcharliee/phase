@@ -8,6 +8,8 @@ import {
 
 import { env } from "~/lib/env"
 
+import type { GuildModules } from "~/lib/db"
+
 type BotErrorMessage =
   | string
   | {
@@ -87,6 +89,16 @@ export const BotError = Object.assign(BotErrorClass, {
       title: "Missing permissions",
       description: `Only the server owner can use this command.`,
     }),
+  memberNotFound: () =>
+    new BotErrorClass({
+      title: "Member not found",
+      description: "Make sure they are in this server, then try again.",
+    }),
+  moduleNotEnabled: (module: keyof GuildModules) =>
+    new BotErrorClass({
+      title: "Module not enabled",
+      description: `The \`${module.replace(/([A-Z])/g, " $1").trimStart()}\` module is not enabled, which is required to use this command.`,
+    }),
   botMissingPermission: (
     permission?: keyof typeof PermissionFlagsBits,
     channelSpecific?: boolean,
@@ -102,11 +114,7 @@ export const BotError = Object.assign(BotErrorClass, {
           : `required permissions ${channelSpecific ? "in this channel" : ""}`
       } to do this.`,
     }),
-  memberNotFound: () =>
-    new BotErrorClass({
-      title: "Member not found",
-      description: "Make sure they are in this server, then try again.",
-    }),
+
   serverOnlyCommand: () =>
     new BotError("This command can only be used in servers."),
   unknown: (data: Parameters<typeof generateBugReportURL>[0]) =>
