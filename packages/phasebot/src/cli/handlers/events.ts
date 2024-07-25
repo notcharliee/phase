@@ -9,7 +9,9 @@ import type { ClientEvents } from "discord.js"
 
 export type EventsCollection = Collection<string, BotEventBuilder[]>
 
-export const getEventPaths = (dir: string = "src") => {
+export const getEventPaths = () => {
+  const dir = Bun.env.NODE_ENV !== "production" ? "src" : ".phase"
+
   return Array.from(
     new Bun.Glob(`${dir}/events/**/*.{js,ts,jsx,tsx}`).scanSync({
       absolute: true,

@@ -42,7 +42,9 @@ function isSubcommand(
   return typeof file.parent === "string"
 }
 
-export const getCommandFiles = async (dir: string = "src/commands") => {
+export const getCommandFiles = async () => {
+  const dir = Bun.env.NODE_ENV !== "production" ? "src" : ".phase"
+
   const commandFiles: (CommandFile | SubcommandFile)[] = []
 
   const processDir = async (currentDir: string, prefix: string = "") => {
@@ -105,7 +107,7 @@ export const getCommandFiles = async (dir: string = "src/commands") => {
     }
   }
 
-  await processDir(dir)
+  await processDir(`${dir}/commands`)
 
   return commandFiles
 }
