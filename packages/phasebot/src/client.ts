@@ -36,11 +36,7 @@ export class PhaseClient {
 
     const client = new Client(this.config) as Client<false>
 
-    console.log("test")
-
     const prestart = await getPrestart()
-
-    console.log("test")
 
     if (prestart) {
       await loadingMessage(async () => await prestart(client), {
