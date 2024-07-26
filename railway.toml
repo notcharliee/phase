@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "turbo run build --filter=bot"
+buildCommand = "bun run bot:build"
 nixpacksConfigPath = "nixpacks.toml"
 
 [build.nixpacksPlan.phases.install]
@@ -14,4 +14,4 @@ restartPolicyMaxRetries = 100
 restartPolicyType = "ON_FAILURE"
 runtime = "UNSPECIFIED"
 sleepApplication = false
-startCommand = "cd apps/bot && bun run start"
+startCommand = "bun run bot:start"

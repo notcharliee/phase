@@ -8,16 +8,18 @@
     "packages/*"
   ],
   "scripts": {
-    "bot:dev": "turbo run dev --filter=bot --color",
-    "bot:build": "turbo run build --filter=bot --color",
+    "bot:dev": "cd apps/bot && bun run start",
+    "bot:build": "turbo run build --filter=bot",
     "bot:start": "cd apps/bot && bun run start",
-    "site:dev": "turbo run dev --filter=site --color",
-    "site:build": "turbo run build --filter=site --color",
+    "site:dev": "turbo run dev --filter=site",
+    "site:build": "turbo run build --filter=site",
     "site:start": "cd apps/site && bun run start",
-    "phasebot:dev": "turbo run dev --filter=phasebot --color",
-    "phasebot:build": "turbo run build --filter=phasebot --color",
-    "schemas:dev": "turbo run dev --filter=@repo/schemas --color",
-    "schemas:build": "turbo run build --filter=@repo/schemas --color"
+    "database:dev": "turbo run dev --filter=@repo/database",
+    "database:build": "turbo run build --filter=@repo/database",
+    "phasebot:dev": "turbo run dev --filter=phasebot",
+    "phasebot:build": "turbo run build --filter=phasebot",
+    "schemas:dev": "turbo run dev --filter=@repo/schemas",
+    "schemas:build": "turbo run build --filter=@repo/schemas"
   },
   "dependencies": {
     "turbo": "^2.0.4"
