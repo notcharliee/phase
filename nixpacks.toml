@@ -1,3 +1,3 @@
 [phases.setup]
 # https://github.com/NixOS/nixpkgs/commits/master/pkgs/development/web/bun/default.nix
-nixpkgsArchive = 'ec06e1a58096b364ac4fedba1ca1489b5e66657b' # https://github.com/NixOS/nixpkgs/commit/ec06e1a58096b364ac4fedba1ca1489b5e66657b
+nixpkgsArchive = '7da4ed546d0579f8316ea521bd6e07e574bebd2c' # https://github.com/NixOS/nixpkgs/commit/7da4ed546d0579f8316ea521bd6e07e574bebd2c
