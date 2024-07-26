@@ -53,8 +53,7 @@ export default new BotSubcommandBuilder()
           .setDescription(
             dedent`
               Ticket deleted by ${interaction.member}
-              
-              <t:${Math.floor(Date.now() / 1000)}:R>
+              This channel will be deleted in a few seconds...
             `,
           ),
       ],
