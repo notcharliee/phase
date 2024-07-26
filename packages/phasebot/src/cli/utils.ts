@@ -58,14 +58,10 @@ export const getPrestart = async () => {
   const glob = new Bun.Glob("src/prestart.{js,ts,jsx,tsx}")
   const filePath = (await Array.fromAsync(glob.scan({ absolute: true })))[0]
 
-  console.log(filePath)
-
   if (!filePath) return null
 
   const fileExports = await import(filePath)
   const defaultExport = fileExports.default as unknown
-
-  console.log(!!fileExports)
 
   if (defaultExport) {
     if (defaultExport instanceof Function) {
@@ -75,8 +71,6 @@ export const getPrestart = async () => {
       throw new Error(`Invalid 'default' export in prestart file`)
     }
   }
-
-  console.log("function finished")
 
   return null
 }
