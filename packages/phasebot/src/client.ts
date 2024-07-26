@@ -12,13 +12,16 @@ import type { Config } from "~/config"
 export class PhaseClient {
   private config!: Config & { configPath: string }
   private dev!: boolean
+  private debug!: boolean
 
   constructor(params: {
     config: Config & { configPath: string }
     dev?: boolean
+    debug?: boolean
   }) {
     this.config = params.config
     this.dev = params.dev ?? false
+    this.debug = params.debug ?? false
   }
 
   async init() {
@@ -30,15 +33,25 @@ export class PhaseClient {
       throw new Error("No 'src' directory found.")
     }
 
+    if (this.debug) console.log(1)
+
     if (!Bun.env.DISCORD_TOKEN) {
       throw new Error("Missing 'DISCORD_TOKEN' environment variable.")
     }
 
+    if (this.debug) console.log(2)
+
     const client = new Client(this.config) as Client<false>
+
+    if (this.debug) console.log(3)
 
     const prestart = await getPrestart()
 
+    if (this.debug) console.log(4)
+
     if (prestart) {
+      if (this.debug) console.log(5)
+
       await loadingMessage(async () => await prestart(client), {
         loading: "Executing prestart ...",
         success: "Prestart complete!",

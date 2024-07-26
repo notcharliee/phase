@@ -9,6 +9,7 @@ export default new Command("dev")
     const client = new PhaseClient({
       config: await getConfig(),
       dev: true,
+      debug: true,
     })
 
     await client.init()
