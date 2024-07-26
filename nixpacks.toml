@@ -1,0 +1,13 @@
+[phases.setup]
+nixPkgs = ["bun"]
+providers = ["bun"]
+
+[phases.install]
+cmds = ["bun install"]
+dependsOn = ["setup"]
+
+[phases.build]
+cmds = ["turbo run build --filter=bot"]
+
+[start]
+cmd = "bun run bot:start"
