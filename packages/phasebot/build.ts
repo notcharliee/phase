@@ -20,7 +20,6 @@ Bun.build({
   ],
   outdir: "./dist",
   target: "bun",
-  sourcemap: "external",
   external: externalDeps,
   minify: true,
 }).then((build) => {
