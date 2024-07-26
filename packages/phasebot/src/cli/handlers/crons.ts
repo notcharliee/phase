@@ -5,10 +5,8 @@ import { BotCronBuilder } from "~/builders"
 export type CronsCollection = Collection<string, BotCronBuilder[]>
 
 export const getCronPaths = () => {
-  const dir = Bun.env.NODE_ENV !== "production" ? "src" : ".phase"
-
   return Array.from(
-    new Bun.Glob(`${dir}/crons/**/*.{js,ts,jsx,tsx}`).scanSync({
+    new Bun.Glob("src/crons/**/*.{js,ts,jsx,tsx}").scanSync({
       absolute: true,
     }),
   )

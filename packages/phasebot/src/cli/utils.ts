@@ -44,10 +44,8 @@ export const getConfig = async () => {
 }
 
 export const getMiddlewarePath = () => {
-  const dir = Bun.env.NODE_ENV !== "production" ? "src" : ".phase"
-
   return Array.from(
-    new Bun.Glob(`${dir}/middleware.{js,ts,jsx,tsx}`).scanSync({
+    new Bun.Glob("src/middleware.{js,ts,jsx,tsx}").scanSync({
       absolute: true,
     }),
   )[0]
@@ -71,10 +69,8 @@ export const getMiddleware = async () => {
 }
 
 export const getPrestartPath = () => {
-  const dir = Bun.env.NODE_ENV !== "production" ? "src" : ".phase"
-
   return Array.from(
-    new Bun.Glob(`${dir}/prestart.{js,ts,jsx,tsx}`).scanSync({
+    new Bun.Glob("src/prestart.{js,ts,jsx,tsx}").scanSync({
       absolute: true,
     }),
   )[0]

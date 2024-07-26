@@ -8,8 +8,6 @@
       "outputs": [
         "build/**",
         "!build/cache/**",
-        ".phase/**",
-        ".contentlayer/**",
         "dist/**"
       ]
     },
