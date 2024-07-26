@@ -11,84 +11,68 @@ import type { Config } from "~/config"
 import type { Client } from "discord.js"
 
 export const getConfig = async () => {
-  const configPaths = Array.from(
-    new Bun.Glob("phase.config.{ts,js,cjs,mjs}").scanSync({
-      absolute: true,
-    }),
-  )
+  const glob = new Bun.Glob("phase.config.{js,cjs,mjs,ts}")
+  const filePath = (await Array.fromAsync(glob.scan({ absolute: true })))[0]
 
-  if (configPaths.length > 1) {
+  if (!filePath) {
     throw new Error(
-      `Multiple config files found:\n${configPaths.map((path) => `  - "${path}"`).join("\n")}`,
+      "Config file not found. Please make a 'phase.config.{js,cjs,mjs,ts}' file.",
     )
   }
 
-  const configPath = configPaths[0]
+  const fileExports = await import(filePath)
+  const defaultExport = fileExports.default as unknown
 
-  if (!configPath) {
-    throw new Error(
-      "Config file not found. Please make a 'phase.config.{ts,js,cjs,mjs}' file.",
-    )
+  if (defaultExport) {
+    if (typeof defaultExport === "object") {
+      return { ...(defaultExport as Config), configPath: filePath }
+    } else {
+      throw new Error(`Invalid 'default' export in config file`)
+    }
   }
 
-  const defaultExport = await import(configPath).then((m) => m.default)
-
-  if (!defaultExport) {
-    throw new Error(`Config file is missing a default export.`)
-  }
-
-  return {
-    ...(defaultExport as Config),
-    configPath,
-  }
-}
-
-export const getMiddlewarePath = () => {
-  return Array.from(
-    new Bun.Glob("src/middleware.{js,ts,jsx,tsx}").scanSync({
-      absolute: true,
-    }),
-  )[0]
+  throw new Error(`Config file is missing a default export.`)
 }
 
 export const getMiddleware = async () => {
-  const path = getMiddlewarePath()
-  if (!path) return undefined
+  const glob = new Bun.Glob("src/middleware.{js,ts,jsx,tsx}")
+  const filePath = (await Array.fromAsync(glob.scan({ absolute: true })))[0]
 
-  const middlewares = await import(path).then((m) => ({
-    commands: m.commands as unknown,
-  }))
+  if (!filePath) return null
 
-  if (middlewares.commands) {
-    if (middlewares.commands instanceof Function) {
-      return middlewares.commands as BotCommandMiddleware
+  const fileExports = await import(filePath)
+  const commandsExport = fileExports.commands as unknown
+
+  if (commandsExport) {
+    if (commandsExport instanceof Function) {
+      return commandsExport as BotCommandMiddleware
     } else {
       throw new Error(`Invalid 'commands' export in middleware file`)
     }
   }
-}
 
-export const getPrestartPath = () => {
-  return Array.from(
-    new Bun.Glob("src/prestart.{js,ts,jsx,tsx}").scanSync({
-      absolute: true,
-    }),
-  )[0]
+  return null
 }
 
 export const getPrestart = async () => {
-  const path = getPrestartPath()
-  if (!path) return undefined
+  const glob = new Bun.Glob("src/prestart.{js,ts,jsx,tsx}")
+  const filePath = (await Array.fromAsync(glob.scan({ absolute: true })))[0]
 
-  const prestart = (await import(path).then((m) => m.default)) as unknown
+  if (!filePath) return null
 
-  if (prestart) {
-    if (prestart instanceof Function) {
-      return prestart as (client: Client<false>) => void | Promise<void>
+  const fileExports = await import(filePath)
+  const defaultExport = fileExports.default as unknown
+
+  if (defaultExport) {
+    if (defaultExport instanceof Function) {
+      type PrestartFunction = (client: Client<false>) => void | Promise<void>
+      return defaultExport as PrestartFunction
     } else {
       throw new Error(`Invalid 'default' export in prestart file`)
     }
   }
+
+  return null
 }
 
 export const phaseGradient = gradient(["#DB00FF", "#8000FF"])
