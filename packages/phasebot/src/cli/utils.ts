@@ -55,6 +55,8 @@ export const getMiddleware = async () => {
 }
 
 export const getPrestart = async () => {
+  console.log("test")
+
   const glob = new Bun.Glob("src/prestart.{js,ts,jsx,tsx}")
   const filePath = (await Array.fromAsync(glob.scan({ absolute: true })))[0]
 

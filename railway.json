@@ -15,7 +15,7 @@
   },
   "deploy": {
     "numReplicas": 1,
-    "startCommand": "bun run bot:dev",
+    "startCommand": "bun run bot:start",
     "sleepApplication": false,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 100
