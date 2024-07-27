@@ -1,75 +1,3 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  EmbedBuilder,
-  InteractionReplyOptions,
-  PermissionFlagsBits,
-} from "discord.js"
-
-import { PhaseURL } from "~/lib/enums"
-
-import type { GuildModules } from "~/lib/db"
-
-export const errorMessage = ({
-  title,
-  description,
-  ephemeral,
-}: {
-  title: string
-  description: string
-  ephemeral?: boolean
-}) => ({
-  components: [
-    new ActionRowBuilder<ButtonBuilder>().setComponents(
-      new ButtonBuilder()
-        .setLabel("Report a Bug")
-        .setStyle(ButtonStyle.Link)
-        .setURL(PhaseURL.PhaseSupport),
-    ),
-  ],
-  embeds: [
-    new EmbedBuilder()
-      .setTitle(title)
-      .setDescription(description)
-      .setColor("Red"),
-  ],
-  ephemeral,
-})
-
-export const memberNotFound = (ephemeral?: boolean): InteractionReplyOptions =>
-  errorMessage({
-    title: "Member Not Found",
-    description:
-      "Member not found. Make sure they are in this server, then try again.",
-    ephemeral,
-  })
-
-export const moduleNotEnabled = (module: keyof GuildModules) =>
-  errorMessage({
-    title: "Module Not Enabled",
-    description: `The \`${module.replace(/([A-Z])/g, " $1").trimStart()}\` module is not enabled, which is required to perform this action.`,
-    ephemeral: true,
-  })
-
-export const missingPermission = (
-  permission?: string | bigint,
-  bot?: boolean,
-): InteractionReplyOptions =>
-  errorMessage({
-    title: "Missing Permission",
-    description: permission
-      ? `${!bot ? "You are" : "Phase is"} missing the \`${
-          typeof permission === "bigint"
-            ? getPermissionName(permission)
-                .replace(/([A-Z])/g, " $1")
-                .trimStart()
-            : permission
-        }\` permission, which is required to perform this action.`
-      : `${!bot ? "You are" : "Phase is"} missing the required permissions to perform this action.`,
-    ephemeral: true,
-  })
-
 /**
  *
  * @param array The array to use.
@@ -86,18 +14,6 @@ export function getRandomArrayElements(array: any[], amount: number) {
   }
 
   return shuffledArray.slice(0, amount)
-}
-
-/**
- *
- * @param permission The permission to you want the name of.
- * @returns The name of the permission.
- */
-export function getPermissionName(permission: bigint): string {
-  for (const perm of Object.keys(PermissionFlagsBits))
-    if ((PermissionFlagsBits as any)[perm] == permission) return perm
-
-  return "UnknownPermission"
 }
 
 /**

@@ -8,7 +8,7 @@ import { botEvent } from "phasebot"
 
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
-import { errorMessage } from "~/lib/utils"
+import { BotError } from "~/lib/errors"
 
 export default botEvent("messageCreate", async (_, message) => {
   if (message.interaction?.commandName !== "bump") return
@@ -64,10 +64,7 @@ export default botEvent("messageCreate", async (_, message) => {
 
       if (interaction.user.id !== message.interaction?.user.id) {
         await interaction.editReply(
-          errorMessage({
-            title: "Invalid User",
-            description: "You cannot cancel someone else's reminder.",
-          }),
+          new BotError("You cannot cancel someone else's reminder.").toJSON(),
         )
 
         return

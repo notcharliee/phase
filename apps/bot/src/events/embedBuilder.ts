@@ -8,10 +8,9 @@ import {
 } from "discord.js"
 import { botEvent } from "phasebot"
 
-import { PhaseError } from "~/lib/enums"
-import { errorMessage } from "~/lib/utils"
+import { BotError } from "~/lib/errors"
 
-export default botEvent("interactionCreate", async (client, interaction) => {
+export default botEvent("interactionCreate", async (_, interaction) => {
   if (
     interaction.isModalSubmit() &&
     interaction.isFromMessage() &&
@@ -43,11 +42,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
             interaction.message.embeds[0].footer == null
           ) {
             return interaction.reply(
-              errorMessage({
-                title: "Failed to update embed",
-                description: "You cannot send an empty embed.",
-                ephemeral: true,
-              }),
+              new BotError("You cannot send an empty embed.").toJSON(),
             )
           }
 
@@ -114,11 +109,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
             interaction.message.embeds[0].footer == null
           ) {
             return interaction.reply(
-              errorMessage({
-                title: "Failed to update embed",
-                description: "You cannot send an empty embed.",
-                ephemeral: true,
-              }),
+              new BotError("You cannot send an empty embed.").toJSON(),
             )
           }
 
@@ -167,11 +158,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
             interaction.message.embeds[0].footer == null
           ) {
             return interaction.reply(
-              errorMessage({
-                title: "Failed to update embed",
-                description: "You cannot send an empty embed.",
-                ephemeral: true,
-              }),
+              new BotError("You cannot send an empty embed.").toJSON(),
             )
           }
 
@@ -216,11 +203,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
             footerTextComponentValue == null
           ) {
             return interaction.reply(
-              errorMessage({
-                title: "Failed to update embed",
-                description: "You cannot send an empty embed.",
-                ephemeral: true,
-              }),
+              new BotError("You cannot send an empty embed.").toJSON(),
             )
           }
 
@@ -261,11 +244,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
   ) {
     if (interaction.user.id != interaction.message.interaction?.user.id) {
       return interaction.reply(
-        errorMessage({
-          title: "Access Denied",
-          description: PhaseError.AccessDenied,
-          ephemeral: true,
-        }),
+        new BotError("You cannot edit someone else's embed.").toJSON(),
       )
     }
 

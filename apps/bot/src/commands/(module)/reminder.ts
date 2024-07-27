@@ -5,7 +5,7 @@ import ms from "ms"
 
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
-import { errorMessage, missingPermission } from "~/lib/utils"
+import { BotError } from "~/lib/errors"
 
 export default new BotCommandBuilder()
   .setName("reminder")
@@ -41,7 +41,7 @@ export default new BotCommandBuilder()
       !interaction.memberPermissions?.has(PermissionFlagsBits.MentionEveryone)
     ) {
       return interaction.reply(
-        missingPermission(PermissionFlagsBits.MentionEveryone),
+        BotError.botMissingPermission("MentionEveryone").toJSON(),
       )
     }
 
@@ -54,10 +54,7 @@ export default new BotCommandBuilder()
     } finally {
       if (!msTime) {
         return interaction.reply(
-          errorMessage({
-            title: "Invalid time",
-            description: "The time you provided is invalid.",
-          }),
+          new BotError("The time you provided is invalid.").toJSON(),
         )
       }
 

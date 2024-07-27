@@ -6,8 +6,8 @@ import {
 } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { PhaseColour, PhaseError } from "~/lib/enums"
-import { errorMessage } from "~/lib/utils"
+import { PhaseColour } from "~/lib/enums"
+import { BotError } from "~/lib/errors"
 
 export default new BotCommandBuilder()
   .setName("scrub")
@@ -23,12 +23,11 @@ export default new BotCommandBuilder()
   )
   .setExecute(async (interaction) => {
     if (interaction.channel?.isThread()) {
-      return interaction.reply(
-        errorMessage({
-          title: "Invalid Channel",
-          description: "This command cannot be used in threads.",
-        }),
+      void interaction.reply(
+        new BotError("This command cannot be used in threads.").toJSON(),
       )
+
+      return
     }
 
     const warningMessage = await interaction.reply({
@@ -58,6 +57,7 @@ export default new BotCommandBuilder()
               .setStyle(ButtonStyle.Secondary),
           ),
       ],
+      ephemeral: true,
     })
 
     warningMessage
@@ -74,16 +74,6 @@ export default new BotCommandBuilder()
           return
         }
 
-        if (buttonInteraction.user.id !== interaction.user.id) {
-          return interaction.reply(
-            errorMessage({
-              title: "Access Denied",
-              description: PhaseError.AccessDenied,
-              ephemeral: true,
-            }),
-          )
-        }
-
         if (buttonInteraction.customId === "scrub.abort") {
           await buttonInteraction.deferUpdate()
           await warningMessage.delete()
@@ -96,7 +86,7 @@ export default new BotCommandBuilder()
             reason: `@${interaction.user.username} ran /scrub`,
           })
 
-          await channel.send({
+          void channel.send({
             embeds: [
               new EmbedBuilder()
                 .setColor(PhaseColour.Primary)

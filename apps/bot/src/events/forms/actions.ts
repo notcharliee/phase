@@ -8,7 +8,7 @@ import { botEvent } from "phasebot"
 
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
-import { errorMessage, memberNotFound, moduleNotEnabled } from "~/lib/utils"
+import { BotError } from "~/lib/errors"
 
 export default botEvent("interactionCreate", async (_, interaction) => {
   if (
@@ -26,7 +26,7 @@ export default botEvent("interactionCreate", async (_, interaction) => {
   const moduleConfig = guildSchema?.modules?.Forms
 
   if (!moduleConfig?.enabled) {
-    return interaction.editReply(moduleNotEnabled("Forms"))
+    return interaction.editReply(BotError.moduleNotEnabled("Forms").toJSON())
   }
 
   const form = moduleConfig.forms.find(
@@ -35,12 +35,9 @@ export default botEvent("interactionCreate", async (_, interaction) => {
 
   if (!form) {
     return interaction.editReply(
-      errorMessage({
-        title: "Form not found",
-        description:
-          "Could not find the form associated with this button. It may have been deleted.",
-        ephemeral: true,
-      }),
+      new BotError(
+        "Could not find the form associated with this button. It may have been deleted.",
+      ).toJSON(),
     )
   }
 
@@ -49,7 +46,7 @@ export default botEvent("interactionCreate", async (_, interaction) => {
   )
 
   if (!member) {
-    return interaction.editReply(memberNotFound())
+    return interaction.editReply(BotError.memberNotFound().toJSON())
   }
 
   const action =

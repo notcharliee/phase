@@ -10,7 +10,7 @@ import { botEvent } from "phasebot"
 
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
-import { errorMessage, moduleNotEnabled } from "~/lib/utils"
+import { BotError } from "~/lib/errors"
 
 export default botEvent("interactionCreate", async (client, interaction) => {
   if (
@@ -27,7 +27,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
   const moduleConfig = guildSchema?.modules?.Forms
 
   if (!moduleConfig?.enabled) {
-    return interaction.editReply(moduleNotEnabled("Forms"))
+    return interaction.editReply(BotError.moduleNotEnabled("Forms").toJSON())
   }
 
   const form = moduleConfig.forms.find(
@@ -36,12 +36,9 @@ export default botEvent("interactionCreate", async (client, interaction) => {
 
   if (!form) {
     return interaction.editReply(
-      errorMessage({
-        title: "Form not found",
-        description:
-          "Could not find the form associated with this button. It may have been deleted.",
-        ephemeral: true,
-      }),
+      new BotError(
+        "Could not find the form associated with this button. It may have been deleted.",
+      ).toJSON(),
     )
   }
 
@@ -62,12 +59,9 @@ export default botEvent("interactionCreate", async (client, interaction) => {
     })
   } catch (error) {
     return interaction.editReply(
-      errorMessage({
-        title: "Failed to start",
-        description:
-          "Make sure the bot can DM you, otherwise it can't start the form.",
-        ephemeral: true,
-      }),
+      new BotError(
+        "Make sure the bot can DM you, otherwise it can't start the form.",
+      ).toJSON(),
     )
   }
 
@@ -123,10 +117,9 @@ export default botEvent("interactionCreate", async (client, interaction) => {
 
       if (!answerMessage) {
         return interaction.user.send(
-          errorMessage({
-            title: "Form timed out",
-            description: `You didn't respond in time.\nTo restart, go to <#${form.channel}>`,
-          }),
+          new BotError(
+            "You didn't respond in time.\nTo restart, go to <#123456789012345678>.",
+          ).toJSON(),
         )
       }
 

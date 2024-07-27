@@ -2,7 +2,7 @@ import { EmbedBuilder, GuildMember, PermissionResolvable } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
 import { PhaseColour } from "~/lib/enums"
-import { memberNotFound } from "~/lib/utils"
+import { BotError } from "~/lib/errors"
 
 export default new BotCommandBuilder()
   .setName("whois")
@@ -16,7 +16,7 @@ export default new BotCommandBuilder()
   )
   .setExecute(async (interaction) => {
     const member = interaction.options.getMember("member") as GuildMember | null
-    if (!member) return interaction.reply(memberNotFound())
+    if (!member) return interaction.reply(BotError.memberNotFound().toJSON())
 
     const keyPermissionsArray = [
       "Administrator",

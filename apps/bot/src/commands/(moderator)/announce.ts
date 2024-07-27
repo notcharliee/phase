@@ -2,7 +2,7 @@ import { EmbedBuilder } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
 import { PhaseColour } from "~/lib/enums"
-import { missingPermission } from "~/lib/utils"
+import { BotError } from "~/lib/errors"
 
 export default new BotCommandBuilder()
   .setName("announce")
@@ -36,7 +36,7 @@ export default new BotCommandBuilder()
         ],
       })
 
-      interaction.reply({
+      void interaction.reply({
         embeds: [
           new EmbedBuilder()
             .setColor(PhaseColour.Primary)
@@ -46,6 +46,6 @@ export default new BotCommandBuilder()
         ephemeral: true,
       })
     } catch {
-      interaction.reply(missingPermission(undefined, true))
+      void interaction.reply(BotError.botMissingPermission("SendMessages").toJSON())
     }
   })

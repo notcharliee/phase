@@ -1,8 +1,10 @@
 import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
+import dedent from "dedent"
+
 import { PhaseColour } from "~/lib/enums"
-import { errorMessage } from "~/lib/utils"
+import { BotError } from "~/lib/errors"
 
 export default new BotCommandBuilder()
   .setName("purge")
@@ -39,16 +41,23 @@ export default new BotCommandBuilder()
     const deletedMessages = await channel.bulkDelete(fetchedMessages, true)
 
     if (!deletedMessages.size) {
-      return interaction.reply(
-        errorMessage({
+      const commandMention = `</scrub:${interaction.client.application.commands.cache.find((command) => command.name === "scrub")!.id}>`
+
+      void interaction.reply(
+        new BotError({
           title: "Messages Not Found",
-          description:
-            "No messages were found.\n\n**Developer Note:**\nDiscord doesn't allow bots to purge (bulk delete) messages that older than 14 days. If you need to purge the entire channel, run `/scrub` instead.",
-        }),
+          description: dedent`
+            No messages were found.
+            
+            -# **Note:** Discord doesn't allow bots to bulk delete messages that older than 2 weeks. If you need to purge the entire channel, run ${commandMention} instead.
+          `,
+        }).toJSON(),
       )
+
+      return
     }
 
-    interaction.reply({
+    void interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setColor(PhaseColour.Primary)

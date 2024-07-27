@@ -14,7 +14,7 @@ import { botEvent } from "phasebot"
 
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
-import { errorMessage, missingPermission, moduleNotEnabled } from "~/lib/utils"
+import { BotError } from "~/lib/errors"
 
 export default botEvent("interactionCreate", async (client, interaction) => {
   if (
@@ -27,12 +27,13 @@ export default botEvent("interactionCreate", async (client, interaction) => {
     interaction.channel
   ) {
     if (
-      !(await interaction.guild?.members.fetchMe())!.permissions.has(
+      !(interaction.guild!.members.me ??
+        (await interaction.guild!.members.fetchMe()))!.permissions.has(
         PermissionFlagsBits.ManageThreads,
       )
     ) {
       return interaction.reply(
-        missingPermission(PermissionFlagsBits.ManageThreads, true),
+        BotError.botMissingPermission("ManageThreads").toJSON(),
       )
     }
 
@@ -45,7 +46,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
     const ticketModule = guildSchema?.modules?.Tickets
 
     if (!ticketModule?.enabled) {
-      return interaction.reply(moduleNotEnabled("Tickets"))
+      return interaction.reply(BotError.moduleNotEnabled("Tickets").toJSON())
     }
 
     const ticketData = ticketModule.tickets.find(
@@ -57,7 +58,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
       | undefined
 
     if (!ticketData || !ticketChannel) {
-      return interaction.reply(moduleNotEnabled("Tickets"))
+      return interaction.reply(BotError.moduleNotEnabled("Tickets").toJSON())
     }
 
     switch (ticketAction) {
@@ -75,11 +76,9 @@ export default botEvent("interactionCreate", async (client, interaction) => {
 
           if (ticketModule.max_open && ticketsOpen >= ticketModule.max_open) {
             return interaction.editReply(
-              errorMessage({
-                title: "Failed to open",
-                description: `You are not allowed to open more than ${ticketModule.max_open} ticket${ticketModule.max_open > 1 ? "s" : ""} at a time.`,
-                ephemeral: true,
-              }),
+              new BotError(
+                `You are not allowed to open more than ${ticketModule.max_open} ticket${ticketModule.max_open > 1 ? "s" : ""} at a time.`,
+              ).toJSON(),
             )
           }
 
@@ -121,10 +120,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
 
           if (ticket.locked) {
             return interaction.reply(
-              errorMessage({
-                title: "Failed to lock",
-                description: "Ticket is already locked.",
-              }),
+              new BotError("The ticket is already locked.").toJSON(),
             )
           }
 

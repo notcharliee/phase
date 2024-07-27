@@ -2,7 +2,7 @@ import { EmbedBuilder, GuildChannel } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
 import { PhaseColour } from "~/lib/enums"
-import { errorMessage } from "~/lib/utils"
+import { BotError } from "~/lib/errors"
 
 export default new BotCommandBuilder()
   .setName("lock")
@@ -28,25 +28,27 @@ export default new BotCommandBuilder()
     const role = interaction.options.getRole("role", false)
 
     if (channel.isThread()) {
-      interaction.reply(
-        errorMessage({
-          title: "Invalid Channel",
-          description: "This command cannot be used in threads.",
-        }),
+      void interaction.reply(
+        new BotError("This command cannot be used in threads.").toJSON(),
       )
+
+      return
     }
 
     if (state) {
-      if (channel.isTextBased())
+      if (channel.isTextBased()) {
         channel.permissionOverwrites.edit(role?.id ?? interaction.guildId!, {
           SendMessages: false,
         })
-      if (channel.isVoiceBased())
+      }
+
+      if (channel.isVoiceBased()) {
         channel.permissionOverwrites.edit(role?.id ?? interaction.guildId!, {
           Speak: false,
         })
+      }
 
-      interaction.reply({
+      void interaction.reply({
         embeds: [
           new EmbedBuilder()
             .setColor(PhaseColour.Primary)
@@ -57,16 +59,19 @@ export default new BotCommandBuilder()
         ],
       })
     } else {
-      if (channel.isTextBased())
+      if (channel.isTextBased()) {
         channel.permissionOverwrites.edit(role?.id ?? interaction.guildId!, {
           SendMessages: true,
         })
-      if (channel.isVoiceBased())
+      }
+
+      if (channel.isVoiceBased()) {
         channel.permissionOverwrites.edit(role?.id ?? interaction.guildId!, {
           Speak: true,
         })
+      }
 
-      interaction.reply({
+      void interaction.reply({
         embeds: [
           new EmbedBuilder()
             .setColor(PhaseColour.Primary)
