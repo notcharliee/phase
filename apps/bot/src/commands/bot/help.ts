@@ -6,7 +6,7 @@ import {
 } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { PhaseColour, PhaseURL } from "~/lib/enums"
+import { PhaseColour } from "~/lib/enums"
 
 export default new BotSubcommandBuilder()
   .setName("help")
@@ -26,11 +26,11 @@ export default new BotSubcommandBuilder()
           new ButtonBuilder()
             .setLabel("Documentation")
             .setStyle(ButtonStyle.Link)
-            .setURL(PhaseURL.PhaseDocs),
+            .setURL("https://phasebot.xyz/docs"),
           new ButtonBuilder()
             .setLabel("Support Discord")
             .setStyle(ButtonStyle.Link)
-            .setURL(PhaseURL.PhaseSupport),
+            .setURL("https://discord.gg/338tyqeg82"),
         ),
       ],
     })
