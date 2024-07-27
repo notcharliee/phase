@@ -11,5 +11,5 @@ export default new BotCommandBuilder()
   )
   .setExecute(async (interaction) => {
     const text = interaction.options.getString("text", true)
-    interaction.reply(text)
+    void interaction.reply(text)
   })

@@ -21,37 +21,41 @@ export default new BotSubcommandBuilder()
 
     const username = interaction.options.getString("username", true)
 
-    try {
-      const user = (await octokit.users.getByUsername({ username })).data
+    const user = (
+      await octokit.users.getByUsername({ username }).catch(() => null)
+    )?.data
 
-      void interaction.reply({
-        embeds: [
-          new EmbedBuilder()
-            .setAuthor({
-              iconURL: user.avatar_url,
-              name: user.name ?? username,
-            })
-            .setColor(PhaseColour.Primary)
-            .setDescription(
-              dedent`
-                ${user.bio}
-
-                **Followers:** ${user.followers}
-                **Following:** ${user.following}
-                **Joined:** <t:${Math.floor(Date.parse(user.created_at) / 1000)}:R>
-              `,
-            )
-            .setThumbnail(user.avatar_url)
-            .setFooter({
-              text: `ID: ${user.id}`,
-            }),
-        ],
-      })
-    } catch {
-      interaction.reply(
+    if (!user) {
+      void interaction.reply(
         new BotError(
           `Could not find a user under the name \`${username}\`.`,
         ).toJSON(),
       )
+
+      return
     }
+
+    void interaction.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setAuthor({
+            iconURL: user.avatar_url,
+            name: user.name ?? username,
+          })
+          .setColor(PhaseColour.Primary)
+          .setDescription(
+            dedent`
+              ${user.bio}
+
+              **Followers:** ${user.followers}
+              **Following:** ${user.following}
+              **Joined:** <t:${Math.floor(Date.parse(user.created_at) / 1000)}:R>
+            `,
+          )
+          .setThumbnail(user.avatar_url)
+          .setFooter({
+            text: `ID: ${user.id}`,
+          }),
+      ],
+    })
   })

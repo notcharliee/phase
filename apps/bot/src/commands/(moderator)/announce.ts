@@ -2,7 +2,6 @@ import { EmbedBuilder } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
 
 export default new BotCommandBuilder()
   .setName("announce")
@@ -22,30 +21,21 @@ export default new BotCommandBuilder()
       .setRequired(false),
   )
   .setExecute(async (interaction) => {
-    try {
-      await interaction.channel?.send({
-        embeds: [
-          new EmbedBuilder()
-            .setAuthor({
-              iconURL: interaction.user.displayAvatarURL(),
-              name: interaction.user.displayName,
-            })
-            .setColor(PhaseColour.Primary)
-            .setDescription(interaction.options.getString("message", true))
-            .setTimestamp(),
-        ],
-      })
+    await interaction.channel!.send({
+      embeds: [
+        new EmbedBuilder()
+          .setAuthor({
+            iconURL: interaction.user.displayAvatarURL(),
+            name: interaction.user.displayName,
+          })
+          .setColor(PhaseColour.Primary)
+          .setDescription(interaction.options.getString("message", true))
+          .setTimestamp(),
+      ],
+    })
 
-      void interaction.reply({
-        embeds: [
-          new EmbedBuilder()
-            .setColor(PhaseColour.Primary)
-            .setDescription("Announcement was created successfully.")
-            .setTitle("Announcement Sent"),
-        ],
-        ephemeral: true,
-      })
-    } catch {
-      void interaction.reply(BotError.botMissingPermission("SendMessages").toJSON())
-    }
+    void interaction.reply({
+      content: "Announcement was sent successfully.",
+      ephemeral: true,
+    })
   })

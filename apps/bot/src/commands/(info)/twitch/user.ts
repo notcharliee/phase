@@ -21,11 +21,13 @@ export default new BotSubcommandBuilder()
     const user = await twitchAPI.users.getUserByName(username).catch(() => null)
 
     if (!user) {
-      return interaction.editReply(
+      void interaction.editReply(
         new BotError(
           `Could not find a user under the name \`${username}\`.`,
         ).toJSON(),
       )
+
+      return
     }
 
     const live = await user.getStream().catch(() => null)

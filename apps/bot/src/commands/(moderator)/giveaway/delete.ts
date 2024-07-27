@@ -24,11 +24,13 @@ export default new BotSubcommandBuilder()
     const giveaway = await db.giveaways.findOne({ id })
 
     if (!giveaway) {
-      return interaction.editReply(
+      void interaction.editReply(
         new BotError(
           "No giveaway exists with that ID. Make sure you typed it in correctly and try again.",
         ).toJSON(),
       )
+
+      return
     }
 
     void giveaway.deleteOne()

@@ -16,7 +16,11 @@ export default new BotCommandBuilder()
   )
   .setExecute(async (interaction) => {
     const member = interaction.options.getMember("member") as GuildMember | null
-    if (!member) return interaction.reply(BotError.memberNotFound().toJSON())
+
+    if (!member) {
+      void interaction.reply(BotError.memberNotFound().toJSON())
+      return
+    }
 
     const keyPermissionsArray = [
       "Administrator",

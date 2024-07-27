@@ -12,7 +12,7 @@ export default new BotCommandBuilder()
   .setName("embed")
   .setDescription("Opens the Phase Embed Builder.")
   .setExecute((interaction) => {
-    interaction.reply({
+    void interaction.reply({
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
           new ButtonBuilder()

@@ -30,7 +30,7 @@ export default new BotCommandBuilder()
       })
     }
 
-    interaction.reply({
+    void interaction.reply({
       embeds: [
         new EmbedBuilder()
           .setColor(PhaseColour.Primary)

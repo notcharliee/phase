@@ -97,7 +97,7 @@ export default new BotCommandBuilder()
             ],
           })
 
-          await interaction.channel!.delete(
+          void interaction.channel!.delete(
             `@${interaction.user.username} ran /scrub`,
           )
         }

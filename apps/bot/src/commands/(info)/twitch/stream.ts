@@ -21,21 +21,25 @@ export default new BotSubcommandBuilder()
     const user = await twitchAPI.users.getUserByName(username).catch(() => null)
 
     if (!user) {
-      return interaction.editReply(
+      void interaction.editReply(
         new BotError(
           `Could not find a streamer under the name \`${username}\`.`,
         ).toJSON(),
       )
+
+      return
     }
 
     const stream = await user.getStream().catch(() => null)
 
     if (!stream) {
-      return interaction.editReply(
+      void interaction.editReply(
         new BotError(
           `The streamer \`${username}\` is not currently streaming.`,
         ).toJSON(),
       )
+
+      return
     }
 
     void interaction.editReply({

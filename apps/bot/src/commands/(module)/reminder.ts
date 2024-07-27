@@ -40,22 +40,26 @@ export default new BotCommandBuilder()
       role &&
       !interaction.memberPermissions?.has(PermissionFlagsBits.MentionEveryone)
     ) {
-      return interaction.reply(
+      void interaction.reply(
         BotError.botMissingPermission("MentionEveryone").toJSON(),
       )
+
+      return
     }
 
     let msTime: number | undefined
 
     try {
       msTime = ms(time)
-    } catch (error) {
+    } catch {
       // do nothing
     } finally {
       if (!msTime) {
-        return interaction.reply(
+        void interaction.reply(
           new BotError("The time you provided is invalid.").toJSON(),
         )
+
+        return
       }
 
       void db.reminders.create({
@@ -68,7 +72,7 @@ export default new BotCommandBuilder()
         created: new Date(),
       })
 
-      return interaction.reply({
+      void interaction.reply({
         embeds: [
           new EmbedBuilder()
             .setTitle("Reminder Set")
