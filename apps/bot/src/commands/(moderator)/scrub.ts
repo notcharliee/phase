@@ -43,63 +43,46 @@ export default new BotCommandBuilder()
           }),
       ],
       components: [
-        new ActionRowBuilder<ButtonBuilder>()
-          .addComponents(
-            new ButtonBuilder()
-              .setCustomId(`scrub.proceed`)
-              .setLabel("Scrub")
-              .setStyle(ButtonStyle.Danger),
-          )
-          .addComponents(
-            new ButtonBuilder()
-              .setCustomId(`scrub.abort`)
-              .setLabel("Abort")
-              .setStyle(ButtonStyle.Secondary),
-          ),
+        new ActionRowBuilder<ButtonBuilder>().setComponents(
+          new ButtonBuilder()
+            .setCustomId(`scrub.proceed`)
+            .setLabel("Scrub")
+            .setStyle(ButtonStyle.Danger),
+        ),
       ],
       ephemeral: true,
     })
 
     warningMessage
-      .awaitMessageComponent({
-        filter: (component) => component.customId.startsWith("scrub"),
-        time: 1000 * 60,
-      })
+      .awaitMessageComponent({ time: 1000 * 60 })
       .then(async (buttonInteraction) => {
         if (
           !interaction.channel ||
-          interaction.channel.isDMBased() ||
-          interaction.channel.isThread()
+          interaction.channel!.isThread() ||
+          interaction.channel!.isDMBased()
         ) {
           return
         }
 
-        if (buttonInteraction.customId === "scrub.abort") {
-          await buttonInteraction.deferUpdate()
-          await warningMessage.delete()
-        }
+        await buttonInteraction.deferUpdate()
 
-        if (buttonInteraction.customId === "scrub.proceed") {
-          await buttonInteraction.deferUpdate()
+        const channel = await interaction.channel.clone({
+          reason: `@${interaction.user.username} ran /scrub`,
+        })
 
-          const channel = await interaction.channel.clone({
-            reason: `@${interaction.user.username} ran /scrub`,
-          })
+        void channel.send({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(PhaseColour.Primary)
+              .setTitle("Channel Scrubbed")
+              .setDescription(
+                `This channel was scrubbed by ${interaction.user}`,
+              ),
+          ],
+        })
 
-          void channel.send({
-            embeds: [
-              new EmbedBuilder()
-                .setColor(PhaseColour.Primary)
-                .setTitle("Channel Scrubbed")
-                .setDescription(
-                  `This channel was scrubbed by ${interaction.user}`,
-                ),
-            ],
-          })
-
-          void interaction.channel!.delete(
-            `@${interaction.user.username} ran /scrub`,
-          )
-        }
+        void interaction.channel!.delete(
+          `@${interaction.user.username} ran /scrub`,
+        )
       })
   })
