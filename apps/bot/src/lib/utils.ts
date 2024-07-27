@@ -1,23 +1,5 @@
 /**
  *
- * @param array The array to use.
- * @param amount The number of elements.
- * @returns Array of random elements.
- */
-export function getRandomArrayElements(array: any[], amount: number) {
-  const shuffledArray = [...array]
-
-  for (let i = shuffledArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-
-    ;[shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]
-  }
-
-  return shuffledArray.slice(0, amount)
-}
-
-/**
- *
  * @param number The number to format.
  * @returns Formatted number string.
  */
