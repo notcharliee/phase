@@ -79,16 +79,18 @@ export const BotError = Object.assign(BotErrorClass, {
           : `required permissions`
       } to do this.`,
     }),
-  userNotAdmin: () =>
-    new BotErrorClass({
-      title: "Missing permissions",
-      description: `Only dashboard admins can use this command. To become a dashboard admin, ask the server owner to run the \`/bot admins add\` command.`,
-    }),
-  userNotOwner: () =>
-    new BotErrorClass({
-      title: "Missing permissions",
-      description: `Only the server owner can use this command.`,
-    }),
+  userNotAdmin: (type: "command" | "button" | "action" = "command") =>
+    new BotErrorClass(
+      `Only the server admins can ${type === "action" ? "perform this action" : `use this ${type}`}.`,
+    ),
+  userNotBotAdmin: (type: "command" | "button" | "action" = "command") =>
+    new BotErrorClass(
+      `Only the Phase admins can ${type === "action" ? "perform this action" : `use this ${type}`}.`,
+    ),
+  userNotOwner: (type: "command" | "button" | "action" = "command") =>
+    new BotErrorClass(
+      `Only the server owner can ${type === "action" ? "perform this action" : `use this ${type}`}.`,
+    ),
   memberNotFound: () =>
     new BotErrorClass({
       title: "Member not found",

@@ -5,59 +5,11 @@ import {
   EmbedBuilder,
   InteractionReplyOptions,
   PermissionFlagsBits,
-  WebhookClient,
 } from "discord.js"
 
-import { PhaseColour, PhaseURL } from "~/lib/enums"
-import { env } from "~/lib/env"
+import { PhaseURL } from "~/lib/enums"
 
 import type { GuildModules } from "~/lib/db"
-
-export async function alertDevs(data: {
-  title: string
-  description?: string
-  type: "message" | "warning" | "error"
-}) {
-  if (typeof env.WEBHOOK_ALERT != "string")
-    throw new Error("Alert webhook connection URL not found.")
-
-  const webhookClient = new WebhookClient({
-    url: env.WEBHOOK_ALERT,
-  })
-
-  const webhookAlert = await webhookClient.send({
-    embeds: [
-      new EmbedBuilder()
-        .setTitle(data.title)
-        .setDescription(data.description ?? null)
-        .setColor(
-          data.type == "message"
-            ? PhaseColour.Primary
-            : data.type == "warning"
-              ? PhaseColour.Warning
-              : PhaseColour.Failure,
-        )
-        .setTimestamp()
-        .setFooter({
-          text:
-            env.NODE_ENV == "development"
-              ? "Phase [Alpha]"
-              : "Phase [Production]",
-        }),
-    ],
-  })
-
-  if (data.type === "message" || data.type === "warning")
-    console.log(
-      `[Alert] ${data.title}\n➤ https://discord.com/channels/1078130365421596733/${webhookAlert.channel_id}/${webhookAlert.id}`,
-    )
-  else
-    throw new Error(
-      data.title && data.description
-        ? `${data.title} \n${data.description}`
-        : data.title,
-    )
-}
 
 export const errorMessage = ({
   title,
@@ -166,4 +118,34 @@ export const getOrdinal = (number: number): string => {
     number +
     (["th", "st", "nd", "rd"][number % 10] || ["th", "st", "nd", "rd"][0]!)
   )
+}
+
+/**
+ *
+ * @param date The date to format.
+ * @returns Formatted date string.
+ */
+export function formatDate(date: Date) {
+  const start = new Date(date)
+  const end = new Date()
+  let years = end.getFullYear() - start.getFullYear()
+  let months = end.getMonth() - start.getMonth()
+  let days = end.getDate() - start.getDate()
+
+  if (days < 0) {
+    months--
+    days += new Date(start.getFullYear(), start.getMonth() + 1, 0).getDate()
+  }
+
+  if (months < 0) {
+    years--
+    months += 12
+  }
+
+  const parts = []
+  if (years > 0) parts.push(`${years} year${years > 1 ? "s" : ""}`)
+  if (months > 0) parts.push(`${months} month${months > 1 ? "s" : ""}`)
+  if (days > 0) parts.push(`${days} day${days > 1 ? "s" : ""}`)
+
+  return parts.join(", ")
 }

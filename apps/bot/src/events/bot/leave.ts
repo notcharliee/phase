@@ -1,24 +1,45 @@
-import { botEvent } from "phasebot"
+import { EmbedBuilder } from "discord.js"
+import { BotEventBuilder } from "phasebot/builders"
+
+import dedent from "dedent"
 
 import { db } from "~/lib/db"
-import { alertDevs } from "~/lib/utils"
+import { PhaseColour } from "~/lib/enums"
+import { formatDate } from "~/lib/utils"
+import { alertWebhook } from "~/lib/webhooks/alert"
 
-export default botEvent("guildDelete", async (client, guild) => {
-  const guildSchema = await db.guilds.findOne({ id: guild.id })
-  if (!guildSchema) return
+export default new BotEventBuilder()
+  .setName("guildDelete")
+  .setExecute(async (client, guild) => {
+    const guildDoc = await db.guilds.findOne({ id: guild.id })
 
-  await Promise.all([
-    guildSchema.deleteOne(),
-    db.giveaways.deleteMany({ guild: guild.id }),
-    db.levels.deleteMany({ guild: guild.id }),
-    db.otps.deleteMany({ guildId: guild.id }),
-    db.reminders.deleteMany({ guild: guild.id }),
-    db.tags.deleteMany({ guild: guild.id }),
-  ])
+    const botJoinDate = guildDoc?._id.getTimestamp()
+    const relativeJoinDate = botJoinDate
+      ? formatDate(new Date(botJoinDate))
+      : "unknown"
 
-  alertDevs({
-    title: "Bot kicked from guild",
-    description: `**New Guild Count:** \`${client.guilds.cache.size}\``,
-    type: "message",
+    void alertWebhook.send({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(PhaseColour.Primary)
+          .setTitle("Bot Removed")
+          .setThumbnail(guild.iconURL())
+          .setDescription(
+            dedent`
+              **${guild.name}** \`(${guild.id})\` has removed the bot. It was in the server for **${relativeJoinDate}**.
+
+              This decreases the total server count to **${client.application!.approximateGuildCount}**.
+            `,
+          ),
+      ],
+    })
+
+    void Promise.all([
+      db.guilds.deleteOne({ id: guild.id }),
+      db.giveaways.deleteMany({ guild: guild.id }),
+      db.levels.deleteMany({ guild: guild.id }),
+      db.otps.deleteMany({ guildId: guild.id }),
+      db.reminders.deleteMany({ guild: guild.id }),
+      db.tags.deleteMany({ guild: guild.id }),
+    ])
   })
-})

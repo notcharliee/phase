@@ -1,21 +1,54 @@
-import { botEvent } from "phasebot"
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  EmbedBuilder,
+} from "discord.js"
+import { BotEventBuilder } from "phasebot/builders"
+
+import dedent from "dedent"
 
 import { db } from "~/lib/db"
-import { alertDevs } from "~/lib/utils"
+import { PhaseColour } from "~/lib/enums"
+import { getOrdinal } from "~/lib/utils"
+import { alertWebhook } from "~/lib/webhooks/alert"
 
-export default botEvent("guildCreate", async (client, guild) => {
-  const guildSchema = await db.guilds.findOne({ id: guild.id })
-  if (guildSchema) return
+export default new BotEventBuilder()
+  .setName("guildCreate")
+  .setExecute(async (client, guild) => {
+    const owner = await guild.fetchOwner()
 
-  await new db.guilds({
-    id: guild.id,
-    admins: [guild.ownerId],
-    news_channel: null,
-  }).save()
+    const ownedGuildsCount =
+      (await db.guilds.countDocuments({
+        "admins.0": owner.id,
+      })) + 1
 
-  await alertDevs({
-    title: "New guild",
-    description: `**Name:** \`${guild.name}\`\n**ID:** \`${guild.id}\`\n**Members:** \`${guild.memberCount}\`\n\n**New Guild count:** \`${client.guilds.cache.size}\``,
-    type: "message",
+    void alertWebhook.send({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(PhaseColour.Primary)
+          .setTitle("New Server")
+          .setThumbnail(guild.iconURL())
+          .setDescription(
+            dedent`
+              **${guild.name}** \`(${guild.id})\` was created <t:${Math.floor(guild.createdAt.getTime() / 1000)}:R> by **${owner.user.username}** \`(${owner.user.id})\` and currently has **${guild.memberCount}** members.
+
+              This is the **${getOrdinal(ownedGuildsCount)}** server that **${owner.user.username}** has added Phase to, increasing the total server count to **${client.application!.approximateGuildCount}**.
+            `,
+          ),
+      ],
+      components: [
+        new ActionRowBuilder<ButtonBuilder>().addComponents(
+          new ButtonBuilder()
+            .setStyle(ButtonStyle.Danger)
+            .setCustomId(`phase.guilds.${guild.id}.remove_bot`)
+            .setLabel("Remove Bot"),
+        ),
+      ],
+    })
+
+    void db.guilds.create({
+      id: guild.id,
+      admins: [guild.ownerId],
+    })
   })
-})
