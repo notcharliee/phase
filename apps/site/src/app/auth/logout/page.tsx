@@ -1,5 +1,3 @@
-import Link from "next/link"
-
 import { OrbitingDots } from "~/components/orbiting-dots"
 
 export default function LogoutPage() {
@@ -13,14 +11,7 @@ export default function LogoutPage() {
           </h1>
           <p className="text-muted-foreground mt-2 md:text-lg">
             You've successfully been logged out of the dashboard and your
-            session has been deleted. You can log back in any time{" "}
-            <Link
-              href={"/auth/login"}
-              className="font-medium underline underline-offset-4"
-            >
-              here
-            </Link>
-            .
+            session has been deleted.
           </p>
         </div>
         <span className="text-muted-foreground/75 text-xs sm:text-sm">
