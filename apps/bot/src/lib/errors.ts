@@ -1,10 +1,4 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  EmbedBuilder,
-  PermissionFlagsBits,
-} from "discord.js"
+import { EmbedBuilder, PermissionFlagsBits } from "discord.js"
 
 import { env } from "~/lib/env"
 
@@ -16,11 +10,6 @@ type BotErrorMessage =
       title?: string
       description?: string
       footer?: string
-      buttons?: {
-        bugReport: {
-          url: string
-        }
-      }
     }
 
 class BotErrorClass {
@@ -45,21 +34,8 @@ class BotErrorClass {
         .setDescription(this.message.description ?? null)
         .setFooter(this.message.footer ? { text: this.message.footer } : null)
 
-      const components = this.message.buttons?.bugReport
-        ? [
-            new ActionRowBuilder<ButtonBuilder>().setComponents(
-              new ButtonBuilder()
-                .setURL(this.message.buttons?.bugReport.url)
-                .setLabel("Report a Bug")
-                .setStyle(ButtonStyle.Link)
-                .setEmoji("📩"),
-            ),
-          ]
-        : []
-
       return {
         embeds: [embed],
-        components,
         ephemeral: this.ephemeral,
       }
     }
@@ -122,13 +98,8 @@ export const BotError = Object.assign(BotErrorClass, {
   unknown: (data: Parameters<typeof generateBugReportURL>[0]) =>
     new BotErrorClass({
       title: "Unknown error",
-      description: `Something went wrong, and we don't know why. To make sure this doesn't happen again, please press the button below to send a bug report to the developers.`,
+      description: `Something went wrong, and we don't know why. To make sure this doesn't happen again, please [send this bug report](${generateBugReportURL(data)}).`,
       footer: `The report has been filled in for you, so all you have to do is send it.`,
-      buttons: {
-        bugReport: {
-          url: generateBugReportURL(data),
-        },
-      },
     }),
 })
 
@@ -139,9 +110,7 @@ const generateBugReportURL = (data: {
   guildId?: string
   channelId?: string
 }) => {
-  const url = new URL(
-    `${env.NODE_ENV !== "production" ? "http://localhost:3000" : "https://phasebot.xyz"}/contact/bug-report`,
-  )
+  const url = new URL("https://phasebot.xyz/contact/bug-report")
 
   const message =
     (data.commandName ?? data.moduleName)
