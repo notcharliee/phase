@@ -15,28 +15,29 @@ export default new BotSubcommandBuilder()
   .setExecute(async (interaction) => {
     const user = interaction.options.getUser("user", false) ?? interaction.user
 
+    const guildDoc = await db.guilds.findOne({
+      id: interaction.guildId!,
+    })
+
+    if (!guildDoc?.modules?.Levels?.enabled) {
+      void interaction.reply(BotError.moduleNotEnabled("Levels").toJSON())
+      return
+    }
+
     try {
-      const guildDoc = await db.guilds.findOne({
-        id: interaction.guildId!,
-      })
-
-      if (!guildDoc?.modules?.Levels?.enabled) {
-        void interaction.reply(BotError.moduleNotEnabled("Levels").toJSON())
-        return
-      }
-
       await interaction.deferReply()
 
-      const userLevelData = (await (db.levels.findOne({
-        guild: interaction.guildId!,
-        user: user.id,
-      }) ??
-        db.levels.create({
+      const userLevelData =
+        (await db.levels.findOne({
+          guild: interaction.guildId!,
+          user: user.id,
+        })) ??
+        (await db.levels.create({
           guild: interaction.guildId,
           user: user.id,
           level: 0,
           xp: 0,
-        })))!
+        }))
 
       const userRank =
         (await db.levels.countDocuments({
@@ -53,14 +54,31 @@ export default new BotSubcommandBuilder()
           ],
         })) + 1
 
+      const bannerImage =
+        (guildDoc.modules.Levels.background
+          ? await fetch(guildDoc.modules.Levels.background)
+              .catch(() => undefined)
+              .then((res) =>
+                res?.headers.get("content-type")?.startsWith("image")
+                  ? res
+                      .arrayBuffer()
+                      .catch(() => undefined)
+                      .then((ab) =>
+                        ab ? Buffer.from(ab).toString("base64") : undefined,
+                      )
+                  : undefined,
+              )
+          : undefined) ?? "linear-gradient(to right, #282828, #282828)"
+
       const rankCard = await generateRankCard({
-        background: guildDoc.modules.Levels.background,
-        rank: userRank.toString(),
-        level: userLevelData.level.toString(),
-        xp: userLevelData.xp.toString(),
-        target: `${500 * (userLevelData.level + 1)}`,
         username: user.username,
-        avatar: user.displayAvatarURL({ extension: "png", size: 128 }),
+        displayName: user.displayName,
+        avatarUrl: user.displayAvatarURL({ extension: "png", size: 256 }),
+        rank: userRank,
+        level: userLevelData.level,
+        currentXp: userLevelData.xp,
+        targetXp: 500 * (userLevelData.level + 1),
+        bannerImage,
       }).toAttachment()
 
       void interaction.editReply({
