@@ -64,7 +64,9 @@ export default new BotSubcommandBuilder()
                       .arrayBuffer()
                       .catch(() => undefined)
                       .then((ab) =>
-                        ab ? Buffer.from(ab).toString("base64") : undefined,
+                        ab
+                          ? `url(${Buffer.from(ab).toString("base64")})`
+                          : undefined,
                       )
                   : undefined,
               )
