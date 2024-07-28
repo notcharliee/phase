@@ -65,7 +65,7 @@ export default new BotSubcommandBuilder()
                       .catch(() => undefined)
                       .then((ab) =>
                         ab
-                          ? `url(${Buffer.from(ab).toString("base64")})`
+                          ? `url(data:${res.headers.get("content-type")};base64,${Buffer.from(ab).toString("base64")})`
                           : undefined,
                       )
                   : undefined,
