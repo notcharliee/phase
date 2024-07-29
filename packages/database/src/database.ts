@@ -33,7 +33,7 @@ const globalForDb = globalThis as unknown as {
   conn: mongoose.Mongoose | undefined
 }
 
-export class Database {
+export class Database implements Disposable {
   private _debug: boolean
   private _conn: mongoose.Mongoose | null = null
 
@@ -77,8 +77,8 @@ export class Database {
     return this as unknown as InitialisedDatabase
   }
 
-  async [Symbol.asyncDispose]() {
-    await mongoose.disconnect()
+  [Symbol.dispose]() {
+    mongoose.disconnect()
     if (this._debug) console.log("Disconnected from MongoDB")
   }
 }
