@@ -1,7 +1,0 @@
-export * from "./AFKs.js"
-export * from "./Giveaways.js"
-export * from "./Guilds.js"
-export * from "./Levels.js"
-export * from "./Otps.js"
-export * from "./Reminders.js"
-export * from "./Tags.js"

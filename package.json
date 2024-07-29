@@ -17,9 +17,7 @@
     "database:dev": "turbo run dev --filter=@repo/database",
     "database:build": "turbo run build --filter=@repo/database",
     "phasebot:dev": "turbo run dev --filter=phasebot",
-    "phasebot:build": "turbo run build --filter=phasebot",
-    "schemas:dev": "turbo run dev --filter=@repo/schemas",
-    "schemas:build": "turbo run build --filter=@repo/schemas"
+    "phasebot:build": "turbo run build --filter=phasebot"
   },
   "dependencies": {
     "turbo": "^2.0.4"
