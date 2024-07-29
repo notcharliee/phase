@@ -1,5 +1,10 @@
 /** @type {import("prettier").Config} */
 export default {
+  semi: false,
+  plugins: [
+    "@ianvs/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss",
+  ],
   importOrder: [
     "^(bun/(.*)$)|^(bun$)",
     "<BUILTIN_MODULES>",
@@ -26,9 +31,4 @@ export default {
     "^(@|~)/types/(.*)$",
     "<TYPES>",
   ],
-  plugins: [
-    "@ianvs/prettier-plugin-sort-imports",
-    "prettier-plugin-tailwindcss",
-  ],
-  semi: false,
 }
