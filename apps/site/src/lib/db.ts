@@ -1,40 +1,11 @@
-/* eslint-disable @typescript-eslint/consistent-type-imports */
-import mongoose from "mongoose"
+import { Database, mongoose } from "@repo/database"
 
-import { env } from "@/lib/env"
+import { env } from "~/lib/env"
 
-declare global {
-  // eslint-disable-next-line no-var
-  var mongoose: {
-    conn: null | typeof import("mongoose")
-    promise: null | Promise<typeof import("mongoose")>
-  }
-}
+const database = new Database({
+  cacheConnection: env.NODE_ENV !== "production",
+  debug: false,
+})
 
-let cached = global.mongoose
-
-if (!cached) {
-  cached = global.mongoose = {
-    conn: null,
-    promise: null,
-  }
-}
-
-export async function dbConnect() {
-  if (cached.conn) return cached.conn
-
-  if (!cached.promise) {
-    cached.promise = mongoose.connect(env.MONGODB_URI, {
-      bufferCommands: false,
-    })
-  }
-
-  try {
-    cached.conn = await cached.promise
-  } catch (e) {
-    cached.promise = null
-    throw e
-  }
-
-  return cached.conn
-}
+export { database, mongoose }
+export type * from "@repo/database"

@@ -2,18 +2,17 @@ import { NextResponse } from "next/server"
 
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
-import { GuildSchema } from "@repo/schemas"
 import { StatusCodes } from "http-status-codes"
 
-import { dbConnect } from "@/lib/db"
+import { database } from "@/lib/db"
 import { env } from "@/lib/env"
 import { twitchClient } from "~/lib/twitch"
 
-import type { APIEmbed } from "@discordjs/core/http-only"
-import type { NextRequest } from "next/server"
-
 import { challengeResponse } from "../challengeResponse"
 import { getHmac, getHmacMessage, verifyHmac } from "../verifyHmac"
+
+import type { APIEmbed } from "@discordjs/core/http-only"
+import type { NextRequest } from "next/server"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
@@ -25,7 +24,7 @@ const discordAPI = new API(discordREST)
  * @returns A NextResponse object with the appropriate response based on the request.
  */
 export const POST = async (request: NextRequest) => {
-  await dbConnect()
+  const db = await database.init()
 
   const body = (await request.json()) as object
 
@@ -67,7 +66,7 @@ export const POST = async (request: NextRequest) => {
   if (messageType === "revocation") {
     const channelId = body.subscription.condition.broadcaster_user_id
 
-    const guilds = await GuildSchema.find({
+    const guilds = await db.guilds.find({
       "modules.TwitchNotifications.streamers.$.id": channelId,
     })
 
@@ -86,7 +85,7 @@ export const POST = async (request: NextRequest) => {
   if (messageType === "notification") {
     const streamerId = body.subscription.condition.broadcaster_user_id
 
-    const guilds = await GuildSchema.find({
+    const guilds = await db.guilds.find({
       "modules.TwitchNotifications.enabled": true,
       "modules.TwitchNotifications.streamers.id": streamerId,
     })

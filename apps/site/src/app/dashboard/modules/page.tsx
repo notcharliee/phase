@@ -37,7 +37,7 @@ import { modulesConfig } from "~/config/modules"
 import { updateModule } from "../_actions/updateModule"
 import * as moduleForms from "./_forms"
 
-import type { GuildModules } from "@repo/schemas"
+import type { GuildModules } from "~/lib/db"
 
 export default function ModulesPage() {
   const dashboard = useDashboardContext()

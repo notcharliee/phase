@@ -2,22 +2,21 @@ import { headers as getHeaders } from "next/headers"
 
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
-import { GuildSchema } from "@repo/schemas"
-import cloneDeep from "lodash.clonedeep"
 
 import { DashboardProvider } from "~/components/dashboard/context"
 
-import { dbConnect } from "~/lib/db"
+import { database } from "~/lib/db"
 import { env } from "~/lib/env"
 import { twitchClient } from "~/lib/twitch"
+import { deleteKeyRecursively } from "~/lib/utils"
 
-import type { DashboardData, GuildModulesWithData } from "@/types/dashboard"
 import type {
   APIGuildChannel,
   APIMessage,
   GuildChannelType,
 } from "@discordjs/core/http-only"
-import type { GuildModules } from "@repo/schemas"
+import type { GuildModules } from "~/lib/db"
+import type { DashboardData, GuildModulesWithData } from "~/types/dashboard"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
@@ -34,12 +33,14 @@ export default async function Template({
 
   if (!guildId || !userId) throw new Error("Invalid credentials")
 
-  await dbConnect()
+  const db = await database.init()
 
-  const dbGuild = await GuildSchema.findOne({
-    id: guildId,
-    admins: { $in: userId },
-  }).catch(() => null)
+  const dbGuild = await db.guilds
+    .findOne({
+      id: guildId,
+      admins: { $in: userId },
+    })
+    .catch(() => null)
 
   if (!dbGuild) throw new Error("Guild not found in the database")
 
@@ -55,15 +56,13 @@ export default async function Template({
 
   // Add required data to modules
 
-  const guildModules = (
-    dbGuild.modules ? cloneDeep(dbGuild.modules) : {}
-  ) as GuildModulesWithData
+  const guildModules = deleteKeyRecursively(
+    dbGuild.modules ? (dbGuild.toObject().modules as GuildModulesWithData) : {},
+    "_id",
+  )
 
-  for (const guildModuleKey of Object.keys(
-    guildModules,
-  ) as (keyof GuildModules)[]) {
-    const guildModule = guildModules[guildModuleKey]
-    guildModule!._data = {}
+  for (const key of Object.keys(guildModules)) {
+    guildModules[key as keyof GuildModules]!._data = {}
   }
 
   if (guildModules.Forms) {

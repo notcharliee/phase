@@ -4,20 +4,22 @@ import { NextRequest } from "next/server"
 
 import { API, ButtonStyle, MessageType } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
-import { GuildSchema, ReminderSchema } from "@repo/schemas"
 import { StatusCodes } from "http-status-codes"
 
-import { dbConnect } from "~/lib/db"
+import { database } from "~/lib/db"
 import { env } from "~/lib/env"
 import { twitchClient } from "~/lib/twitch"
 import { absoluteURL } from "~/lib/utils"
+
+import { POST as postTwitchApiRoute } from "~/app/api/twitch/route"
+import { getDasbboardHeaders } from "~/app/dashboard/utils"
 
 import type {
   APIButtonComponentWithCustomId,
   APIMessage,
   RESTPostAPIChannelMessageJSONBody,
 } from "@discordjs/core/http-only"
-import type { GuildModules, Reminder } from "@repo/schemas"
+import type { GuildModules, Reminder } from "~/lib/db"
 import type { GuildModulesWithData } from "~/types/dashboard"
 import type {
   autoMessagesSchema,
@@ -27,9 +29,6 @@ import type {
   twitchNotificationsSchema,
 } from "~/validators/modules"
 import type { z } from "zod"
-
-import { POST as postTwitchApiRoute } from "~/app/api/twitch/route"
-import { getDasbboardHeaders } from "~/app/dashboard/utils"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
@@ -47,9 +46,9 @@ export const updateModule = async <T extends keyof GuildModules>(
 ) => {
   const { guildId, userId } = getDasbboardHeaders()
 
-  await dbConnect()
+  const db = await database.init()
 
-  const guildDoc = await GuildSchema.findOne({
+  const guildDoc = await db.guilds.findOne({
     id: guildId,
     admins: { $in: userId },
   })
@@ -118,12 +117,14 @@ export const updateAutoMessages = async (
     })
   }
 
-  await ReminderSchema.deleteMany({
+  const db = await database.init()
+
+  await db.reminders.deleteMany({
     guild: guildId,
     loop: true,
   })
 
-  await ReminderSchema.insertMany(documents)
+  await db.reminders.insertMany(documents)
 
   return updatedModuleData
 }

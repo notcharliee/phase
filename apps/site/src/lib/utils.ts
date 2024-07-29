@@ -1,7 +1,9 @@
-import { clsx, type ClassValue } from "clsx"
+import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 import { env } from "./env"
+
+import type { ClassValue } from "clsx"
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs))
 
@@ -25,4 +27,21 @@ export const getOrdinal = (number: number): string => {
     number +
     (["th", "st", "nd", "rd"][number % 10] ?? ["th", "st", "nd", "rd"][0]!)
   )
+}
+
+export function deleteKeyRecursively<TObj, TKey extends string>(
+  obj: TObj,
+  keyToDelete: TKey,
+): Omit<TObj, TKey> {
+  typeof obj === "object" &&
+    obj !== null &&
+    (Array.isArray(obj)
+      ? obj.forEach((item) => deleteKeyRecursively(item, keyToDelete))
+      : Object.entries(obj).forEach(([key, value]) =>
+          key === keyToDelete
+            ? delete obj[key as keyof typeof obj]
+            : deleteKeyRecursively(value, keyToDelete),
+        ))
+
+  return obj as Omit<TObj, TKey>
 }

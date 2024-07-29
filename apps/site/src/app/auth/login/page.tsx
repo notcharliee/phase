@@ -8,7 +8,6 @@ import { Suspense } from "react"
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 import { ChatBubbleIcon, ReloadIcon } from "@radix-ui/react-icons"
-import { GuildSchema, OtpSchema } from "@repo/schemas"
 
 import {
   LoginMethods,
@@ -21,7 +20,7 @@ import { Button } from "~/components/ui/button"
 import { Codeblock } from "~/components/ui/codeblock"
 
 import { createCookie } from "~/lib/auth"
-import { dbConnect } from "~/lib/db"
+import { database } from "~/lib/db"
 import { env } from "~/lib/env"
 import { absoluteURL } from "~/lib/utils"
 
@@ -39,13 +38,13 @@ export default async function LoginPage(props: LoginPageProps) {
   const onSubmit = async (value: string) => {
     "use server"
 
-    await dbConnect()
+    const db = await database.init()
 
     const signature = createHmac("sha256", env.AUTH_OTP_SECRET)
       .update(value)
       .digest("hex")
 
-    const optDoc = await OtpSchema.findOneAndDelete({ otp: signature })
+    const optDoc = await db.otps.findOneAndDelete({ otp: signature })
     if (!optDoc) throw new Error("Invalid OTP")
 
     createCookie(cookies(), {
@@ -58,7 +57,7 @@ export default async function LoginPage(props: LoginPageProps) {
     <div className="flex h-screen flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
       <OrbitingDots />
       <div className="mx-auto flex w-full max-w-lg flex-col items-center justify-center space-y-6 md:max-w-xl md:space-y-8">
-        {code ?? accessToken ? (
+        {(code ?? accessToken) ? (
           <Suspense fallback={<Loading />}>
             <LoginCallback code={code} accessToken={accessToken} />
           </Suspense>
@@ -97,7 +96,7 @@ async function LoginCallback(props: LoginCallbackPageProps) {
   const accessToken = props.accessToken
     ? props.accessToken
     : props.code
-      ? (
+      ? ((
           await discordAPI.oauth2
             .tokenExchange({
               client_id: env.DISCORD_ID,
@@ -107,7 +106,7 @@ async function LoginCallback(props: LoginCallbackPageProps) {
               code: props.code,
             })
             .catch(() => null)
-        )?.access_token ?? null
+        )?.access_token ?? null)
       : null
 
   if (!accessToken) return <LoginFailure />
@@ -120,10 +119,10 @@ async function LoginCallback(props: LoginCallbackPageProps) {
 
   if (!user) return <LoginFailure />
 
-  await dbConnect()
+  const db = await database.init()
 
   const guilds = await Promise.all(
-    (await GuildSchema.find({ admins: { $in: user.id } })).flatMap((guild) =>
+    (await db.guilds.find({ admins: { $in: user.id } })).flatMap((guild) =>
       discordAPI.guilds
         .get(guild.id as string, { with_counts: false })
         .then((guild) => ({

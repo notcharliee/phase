@@ -5,7 +5,7 @@ import type {
   GuildChannelType,
   Snowflake,
 } from "@discordjs/core/http-only"
-import type { GuildCommand, GuildModules } from "@repo/schemas"
+import type { GuildCommand, GuildModules } from "~/lib/db"
 
 export type GuildModulesData<T extends keyof GuildModules> = T extends "Forms"
   ? {

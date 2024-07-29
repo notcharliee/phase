@@ -1,14 +1,13 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
-
-import { LevelSchema } from "@repo/schemas"
-
-import { dbConnect } from "@/lib/db"
-import { env } from "@/lib/env"
-
 import { StatusCodes } from "http-status-codes"
+
+import { database } from "~/lib/db"
+import { env } from "~/lib/env"
+
+import type { NextRequest } from "next/server"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
@@ -37,9 +36,10 @@ export const GET = async (request: NextRequest) => {
     return badRequest("'rankStart' cannot be greater than 'rankEnd'")
   if (rankEnd > 15) return badRequest("'rankEnd' cannot be greater than 15.")
 
-  await dbConnect()
+  const db = await database.init()
 
-  const usersData = await LevelSchema.find({ guild: guildId })
+  const usersData = await db.levels
+    .find({ guild: guildId })
     .sort({ level: -1, xp: -1 })
     .skip(rankStart - 1)
     .limit(rankEnd - rankStart + 1)
@@ -85,4 +85,3 @@ export const GET = async (request: NextRequest) => {
 
   return NextResponse.json(response)
 }
-
