@@ -10,60 +10,75 @@ module.exports = {
       },
     },
     extend: {
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-        "caret-blink": "caret-blink 1.25s ease-out infinite",
-        jiggle: "jiggle 0.2s infinite",
-      },
-      boxShadow: {
-        "glow-sm": `
-          0 0 4px 0 var(--tw-shadow-color),
-          0 0 11px 0 var(--tw-shadow-color),
-          0 0 19px 0 var(--tw-shadow-color),
-          0 0 40px 0 var(--tw-shadow-color)
-        `,
-        glow: `
-          0 0 4px 0 var(--tw-shadow-color),
-          0 0 11px 0 var(--tw-shadow-color),
-          0 0 19px 0 var(--tw-shadow-color),
-          0 0 40px 0 var(--tw-shadow-color),
-          0 0 80px 0 var(--tw-shadow-color)
-        `,
-        "glow-lg": `
-          0 0 4px 0 var(--tw-shadow-color),
-          0 0 11px 0 var(--tw-shadow-color),
-          0 0 19px 0 var(--tw-shadow-color),
-          0 0 40px 0 var(--tw-shadow-color),
-          0 0 80px 0 var(--tw-shadow-color),
-          0 0 120px 0 var(--tw-shadow-color)
-        `,
-      },
-      colors: {
-        "muted-background": "rgb(0 0 0)",
-        background: "rgb(16 16 16)",
-        foreground: "rgb(248 248 248)",
-        card: "rgb(16 16 16)",
-        "card-foreground": "rgb(248 248 248)",
-        popover: "rgb(16 16 16)",
-        "popover-foreground": "rgb(248 248 248)",
-        primary: "rgb(248 248 248)",
-        "primary-foreground": "rgb(24 24 24)",
-        secondary: "rgb(40 40 40)",
-        "secondary-foreground": "rgb(248 248 248)",
-        muted: "rgb(40 40 40)",
-        "muted-foreground": "rgb(192 192 192)",
-        accent: "rgb(40 40 40)",
-        "accent-foreground": "rgb(248 248 248)",
-        destructive: "rgb(171 58 58)",
-        "destructive-foreground": "rgb(248 248 248)",
-        border: "rgb(40 40 40)",
-        input: "rgb(40 40 40)",
-        ring: "rgb(216 216 216)",
-      },
       fontFamily: {
         sans: "var(--font-geist-sans)",
         mono: "var(--font-geist-mono)",
+      },
+      colors: {
+        border: "rgb(40 40 40)",
+        input: "rgb(40 40 40)",
+        ring: "rgb(216 216 216)",
+        foreground: "rgb(248 248 248)",
+        background: "rgb(16 16 16)",
+        primary: {
+          DEFAULT: "rgb(248 248 248)",
+          foreground: "rgb(24 24 24)",
+        },
+        secondary: {
+          DEFAULT: "rgb(40 40 40)",
+          foreground: "rgb(248 248 248)",
+        },
+        muted: {
+          DEFAULT: "rgb(40 40 40)",
+          background: "rgb(8 8 8)",
+          foreground: "rgb(192 192 192)",
+        },
+        accent: {
+          DEFAULT: "rgb(40 40 40)",
+          foreground: "rgb(248 248 248)",
+        },
+        destructive: {
+          DEFAULT: "rgb(171 58 58)",
+          foreground: "rgb(248 248 248)",
+        },
+        popover: {
+          DEFAULT: "rgb(16 16 16)",
+          foreground: "rgb(248 248 248)",
+        },
+        card: {
+          DEFAULT: "rgb(16 16 16)",
+          foreground: "rgb(248 248 248)",
+        },
+      },
+      borderRadius: {
+        lg: "0.75rem",
+        md: "calc(0.75rem - 2px)",
+        sm: "calc(0.75rem - 4px)",
+      },
+      boxShadow: {
+        glow: {
+          DEFAULT: `
+            0 0 4px 0 var(--tw-shadow-color),
+            0 0 11px 0 var(--tw-shadow-color),
+            0 0 19px 0 var(--tw-shadow-color),
+            0 0 40px 0 var(--tw-shadow-color)
+          `,
+          sm: `
+            0 0 4px 0 var(--tw-shadow-color),
+            0 0 11px 0 var(--tw-shadow-color),
+            0 0 19px 0 var(--tw-shadow-color),
+            0 0 40px 0 var(--tw-shadow-color),
+            0 0 80px 0 var(--tw-shadow-color)
+          `,
+          lg: `
+            0 0 4px 0 var(--tw-shadow-color),
+            0 0 11px 0 var(--tw-shadow-color),
+            0 0 19px 0 var(--tw-shadow-color),
+            0 0 40px 0 var(--tw-shadow-color),
+            0 0 80px 0 var(--tw-shadow-color),
+            0 0 120px 0 var(--tw-shadow-color)
+          `,
+        },
       },
       height: {
         screen: "100dvh",
@@ -115,6 +130,12 @@ module.exports = {
           "0%,70%,100%": { opacity: "1" },
           "20%,50%": { opacity: "0" },
         },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        "caret-blink": "caret-blink 1.25s ease-out infinite",
+        jiggle: "jiggle 0.2s infinite",
       },
     },
   },
