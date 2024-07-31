@@ -38,7 +38,7 @@
     "next.config.mjs",
     "postcss.config.cjs",
     "tailwind.config.cjs",
-    "build/types/**/*.ts",
+    ".next/types/**/*.ts",
     "next-env.d.ts",
     "src/**/*",
   ]
