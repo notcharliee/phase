@@ -19,7 +19,7 @@ type ImageResponseFonts = {
  */
 export class ImageBuilder {
   /**
-   * The width of the image.
+   * The element to render.
    */
   private element: ImageResponseElement
 
@@ -32,6 +32,11 @@ export class ImageBuilder {
    * The height of the image.
    */
   public readonly height: number = 512
+
+  /**
+   * Whether or not to enable debug mode.
+   */
+  public readonly debug: boolean = false
 
   /**
    * A list of fonts to use.
@@ -60,6 +65,14 @@ export class ImageBuilder {
   }
 
   /**
+   * Set whether or not to enable debug mode.
+   */
+  setDebug(debug: boolean) {
+    Reflect.set(this, "debug", debug)
+    return this
+  }
+
+  /**
    * Set the fonts to use in the image.
    */
   setFonts(fonts: ImageResponseFonts) {
@@ -74,6 +87,7 @@ export class ImageBuilder {
     return new ImageResponse(this.element, {
       width: this.width,
       height: this.height,
+      debug: this.debug,
       fonts: this.fonts,
     })
   }
