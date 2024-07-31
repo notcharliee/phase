@@ -6,8 +6,8 @@
       "env": ["*"],
       "dependsOn": ["^build"],
       "outputs": [
-        "build/**",
-        "!build/cache/**",
+        ".next/**",
+        "!.next/cache/**",
         "dist/**"
       ]
     },

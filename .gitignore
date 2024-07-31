@@ -3,13 +3,16 @@
 # dependencies
 node_modules
 
-# temp
-_temp_*
-*.temp.*
+# vercel
+.vercel
+.turbo
+
 
 # build
-build
+.next
 dist
+
+# development
 next-env.d.ts
 phase-env.d.ts
 
@@ -26,7 +29,3 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
-
-# vercel
-.vercel
-.turbo

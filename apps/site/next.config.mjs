@@ -92,7 +92,6 @@ const config = {
       },
     ]
   },
-  distDir: "build",
 }
 
 const withMDX = createMDX({
