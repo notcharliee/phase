@@ -18,10 +18,14 @@ export const generateRankCard = (props: RankCardProps) => {
   return new ImageBuilder(
     (
       <div
-        tw="w-[900px] h-[565px] flex flex-col font-bold text-[#f8f8f8]"
-        style={{ fontFamily: "Geist", letterSpacing: "-0.04em" }}
+        tw="flex flex-col font-bold text-[#f8f8f8]"
+        style={{
+          fontFamily: "Geist",
+          letterSpacing: "-0.04em",
+          lineHeight: "1.25em",
+        }}
       >
-        <div tw="w-[900px] h-[315px] flex relative">
+        <div tw="w-[900px] h-[315px] flex relative rounded-t-[36px] overflow-hidden">
           {props.bannerImage.startsWith("url(") ? (
             <img
               tw="w-[900px] h-[300px]"
@@ -53,31 +57,31 @@ export const generateRankCard = (props: RankCardProps) => {
           </svg>
           <img
             src={props.avatarUrl}
-            tw="w-[190px] h-[190px] rounded-full absolute bottom-0 left-[60px] border-[15px] border-[#101010] bg-[#101010]"
+            tw="w-[175px] h-[175px] rounded-full absolute bottom-0 left-[56px] border-[16px] border-[#101010] bg-[#101010]"
           />
         </div>
         <div
-          tw="w-[900px] h-[250px] flex flex-col bg-[#101010] px-[75px] pt-[25px] pb-[40px]"
-          style={{ gap: "45px" }}
+          tw="w-[900px] h-[265px] flex flex-col bg-[#101010] px-[72px] pt-6 pb-12 rounded-b-[36px]"
+          style={{ gap: "36px" }}
         >
-          <div tw="w-[750px] h-[70px] flex justify-between">
+          <div tw="w-[756px] h-[85px] flex justify-between">
             <div tw="flex flex-col items-start">
-              <div tw="font-bold text-[32px]">{props.displayName}</div>
-              <div tw="font-medium text-[28px] text-[#C0C0C0]">
+              <div tw="font-bold text-[36px]">{props.displayName}</div>
+              <div tw="font-medium text-[32px] text-[#C0C0C0]">
                 {props.username}
               </div>
             </div>
             <div tw="flex flex-col items-end">
-              <div tw="font-bold text-[32px]">{`Rank #${props.rank}`}</div>
-              <div tw="font-medium text-[28px] text-[#C0C0C0]">
+              <div tw="font-bold text-[36px]">{`Rank #${props.rank}`}</div>
+              <div tw="font-medium text-[32px] text-[#C0C0C0]">
                 {`Level ${props.level}`}
               </div>
             </div>
           </div>
-          <div tw="w-[750px] h-[70px] flex rounded-[35px] relative overflow-hidden border-[3px] border-[#282828]">
+          <div tw="w-[756px] h-[72px] flex rounded-[36px] relative overflow-hidden border-[4px] border-[#282828]">
             {props.bannerImage.startsWith("url(") ? (
               <img
-                tw="h-[300px] absolute top-0 left-0"
+                tw="h-full absolute top-0 left-0"
                 src={props.bannerImage.replace("url(", "").replace(")", "")}
                 style={{
                   width: `${(+props.currentXp / +props.targetXp) * 100}%`,
@@ -87,14 +91,14 @@ export const generateRankCard = (props: RankCardProps) => {
               />
             ) : (
               <div
-                tw="h-[300px] absolute top-0 left-0"
+                tw="h-full absolute top-0 left-0"
                 style={{
                   width: `${(+props.currentXp / +props.targetXp) * 100}%`,
                   backgroundImage: props.bannerImage,
                 }}
               />
             )}
-            <div tw="w-full h-full flex justify-between items-center px-[35px] py-[21px] text-[28px] font-medium">
+            <div tw="w-full h-full flex justify-between items-center px-[36px] py-[20px] text-[32px] leading-none font-medium">
               <div>{`${props.currentXp} XP`}</div>
               <div>{`${props.targetXp} XP`}</div>
             </div>
@@ -104,7 +108,7 @@ export const generateRankCard = (props: RankCardProps) => {
     ),
   )
     .setWidth(900)
-    .setHeight(565)
+    .setHeight(580)
     .setFonts([
       {
         data: geist500,
