@@ -1,3 +1,22 @@
+export function getDayName(day: number, short: boolean = false) {
+  switch (day) {
+    case 0:
+      return short ? "Sun" : "Sunday"
+    case 1:
+      return short ? "Mon" : "Monday"
+    case 2:
+      return short ? "Tue" : "Tuesday"
+    case 3:
+      return short ? "Wed" : "Wednesday"
+    case 4:
+      return short ? "Thu" : "Thursday"
+    case 5:
+      return short ? "Fri" : "Friday"
+    case 6:
+      return short ? "Sat" : "Saturday"
+  }
+}
+
 /**
  *
  * @param number The number to format.
