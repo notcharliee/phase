@@ -63,18 +63,16 @@ export const updateModule = async <T extends keyof GuildModules>(
     delete data._data
   }
 
-  if (!guildDoc.modules) guildDoc.modules = {}
-
-  if (!guildDoc.modules[name]) guildDoc.modules[name] = data
-  else guildDoc.modules[name] = { ...guildDoc.modules[name], ...data }
-
-  guildDoc.markModified("modules")
-
-  await guildDoc.save()
+  await guildDoc.updateOne({
+    modules: {
+      ...(guildDoc.toObject().modules ?? {}),
+      [name]: data,
+    },
+  })
 
   const updatedModuleData = {
     _data: {},
-    ...guildDoc.modules[name],
+    ...data,
   } as Required<GuildModulesWithData>[T]
 
   return updatedModuleData
