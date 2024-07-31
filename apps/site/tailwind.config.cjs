@@ -51,9 +51,13 @@ module.exports = {
         },
       },
       borderRadius: {
-        lg: "0.75rem",
-        md: "calc(0.75rem - 2px)",
-        sm: "calc(0.75rem - 4px)",
+        sm: "0.5rem", // 8px
+        DEFAULT: "0.625rem", // 10px
+        md: "0.75rem", // 12px
+        lg: "0.875rem", // 14px
+        xl: "1.125rem", // 18px
+        "2xl": "1.5rem", // 24px
+        "3xl": "2rem", // 32px
       },
       boxShadow: {
         glow: {
