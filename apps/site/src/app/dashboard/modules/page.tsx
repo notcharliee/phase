@@ -1,7 +1,17 @@
 "use client"
 
+import * as changeCase from "change-case"
 import { toast } from "sonner"
 
+import {
+  Credenza,
+  CredenzaBody,
+  CredenzaContent,
+  CredenzaDescription,
+  CredenzaHeader,
+  CredenzaTitle,
+  CredenzaTrigger,
+} from "~/components/credenza"
 import { Button } from "~/components/ui/button"
 import {
   Card,
@@ -11,22 +21,6 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "~/components/ui/dialog"
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "~/components/ui/drawer"
 import { Switch } from "~/components/ui/switch"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
@@ -34,10 +28,38 @@ import { useMediaQuery } from "~/hooks/use-media-query"
 
 import { modulesConfig } from "~/config/modules"
 
-import { updateModule } from "../_actions/updateModule"
-import * as moduleForms from "./_forms"
+import { updateModule } from "~/app/dashboard/_actions/updateModule"
+import { AuditLogs } from "~/app/dashboard/modules/_forms/audit-logs"
+import { AutoMessages } from "~/app/dashboard/modules/_forms/auto-messages"
+import { AutoRoles } from "~/app/dashboard/modules/_forms/auto-roles"
+import { BumpReminders } from "~/app/dashboard/modules/_forms/bump-reminders"
+import { Forms } from "~/app/dashboard/modules/_forms/forms"
+import { JoinToCreates } from "~/app/dashboard/modules/_forms/join-to-creates"
+import { Levels } from "~/app/dashboard/modules/_forms/levels"
+import { ReactionRoles } from "~/app/dashboard/modules/_forms/reaction-roles"
+import { Tickets } from "~/app/dashboard/modules/_forms/tickets"
+import { TwitchNotifications } from "~/app/dashboard/modules/_forms/twitch-notifications"
+import { Warnings } from "~/app/dashboard/modules/_forms/warnings"
+import { WelcomeMessages } from "~/app/dashboard/modules/_forms/welcome-messages"
 
 import type { GuildModules } from "~/lib/db"
+
+const moduleForms = {
+  AuditLogs,
+  AutoMessages,
+  AutoRoles,
+  BumpReminders,
+  Forms,
+  JoinToCreates,
+  Levels,
+  ReactionRoles,
+  Tickets,
+  TwitchNotifications,
+  Warnings,
+  WelcomeMessages,
+} as const
+
+export { moduleForms }
 
 export default function ModulesPage() {
   const dashboard = useDashboardContext()
@@ -47,70 +69,57 @@ export default function ModulesPage() {
   const columnCount = isOneColumn ? 1 : isTwoColumn ? 2 : 3
 
   return (
-    <div className="grid gap-2 lg:grid-cols-2 lg:gap-4 xl:grid-cols-3">
+    <div className="grid gap-2 [--column_count:1] lg:grid-cols-2 lg:gap-4 lg:[--column_count:2] xl:grid-cols-3 xl:[--column_count:3]">
       {modulesConfig.map((moduleConfig, index) => {
-        const guildModuleKey = moduleConfig.name
-          .replace(/\b\w/g, (c) => c.toUpperCase())
-          .replaceAll(" ", "") as keyof GuildModules
-
-        const ModuleForm: () => JSX.Element = moduleForms[guildModuleKey]
-
-        const guildModule = dashboard.guild.modules?.[guildModuleKey]
         const { name, description } = moduleConfig
+
+        const dashboardModuleKey = changeCase.pascalCase(
+          name,
+        ) as keyof typeof moduleForms
+
+        const dashboardModuleData =
+          dashboard.guild.modules?.[dashboardModuleKey]
+
+        const DashboardModuleForm: () => JSX.Element | undefined =
+          moduleForms[dashboardModuleKey]
+
+        if (!DashboardModuleForm) return null
 
         return (
           <Card
             key={name}
-            className="animate-in slide-in-from-top-2 fade-in flex flex-col duration-700"
+            className="animate-in slide-in-from-top-2 fade-in fill-mode-backwards flex flex-col duration-700"
             style={{
-              animationDelay: `${150 * Math.floor(index / columnCount)}ms`,
-              animationFillMode: "backwards",
+              animationDelay: `calc(150ms * ${Math.floor(index / columnCount)})`,
             }}
           >
             <CardHeader className="flex-row justify-between space-y-0">
               <CardTitle>{name}</CardTitle>
               <ModuleSwitch
-                moduleKey={guildModuleKey}
-                moduleData={guildModule}
+                moduleKey={dashboardModuleKey}
+                moduleData={dashboardModuleData}
               />
             </CardHeader>
             <CardContent>
               <CardDescription>{description}</CardDescription>
             </CardContent>
             <CardFooter className="h-full">
-              {isOneColumn ? (
-                // mobile drawer
-                <Drawer>
-                  <DrawerContent>
-                    <DrawerHeader>
-                      <DrawerTitle>{name}</DrawerTitle>
-                      <DrawerDescription>{description}</DrawerDescription>
-                    </DrawerHeader>
-                    <ModuleForm />
-                  </DrawerContent>
-                  <DrawerTrigger asChild>
-                    <Button variant="secondary" className="mt-auto w-full">
-                      {guildModule ? "Edit module" : "Setup module"}
-                    </Button>
-                  </DrawerTrigger>
-                </Drawer>
-              ) : (
-                // desktop dialog
-                <Dialog>
-                  <DialogContent className="max-h-[90%] overflow-auto lg:max-h-[70%]">
-                    <DialogHeader>
-                      <DialogTitle>{name}</DialogTitle>
-                      <DialogDescription>{description}</DialogDescription>
-                    </DialogHeader>
-                    <ModuleForm />
-                  </DialogContent>
-                  <DialogTrigger asChild>
-                    <Button variant="secondary" className="mt-auto w-full">
-                      {guildModule ? "Edit module" : "Setup module"}
-                    </Button>
-                  </DialogTrigger>
-                </Dialog>
-              )}
+              <Credenza>
+                <CredenzaContent className="max-h-[90%] overflow-auto lg:max-h-[70%]">
+                  <CredenzaHeader>
+                    <CredenzaTitle>{name}</CredenzaTitle>
+                    <CredenzaDescription>{description}</CredenzaDescription>
+                  </CredenzaHeader>
+                  <CredenzaBody>
+                    <DashboardModuleForm />
+                  </CredenzaBody>
+                </CredenzaContent>
+                <CredenzaTrigger asChild>
+                  <Button variant="secondary" className="mt-auto w-full">
+                    {dashboardModuleData ? "Edit module" : "Setup module"}
+                  </Button>
+                </CredenzaTrigger>
+              </Credenza>
             </CardFooter>
           </Card>
         )
