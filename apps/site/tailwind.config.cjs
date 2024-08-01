@@ -60,13 +60,13 @@ module.exports = {
         "3xl": "2rem", // 32px
       },
       boxShadow: {
-        glow: `
+        "glow-sm": `
           0 0 4px 0 var(--tw-shadow-color),
           0 0 11px 0 var(--tw-shadow-color),
           0 0 19px 0 var(--tw-shadow-color),
           0 0 40px 0 var(--tw-shadow-color)
         `,
-        "glow-sm": `
+        glow: `
           0 0 4px 0 var(--tw-shadow-color),
           0 0 11px 0 var(--tw-shadow-color),
           0 0 19px 0 var(--tw-shadow-color),

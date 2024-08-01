@@ -48,7 +48,7 @@ export default function HomePage({
             {siteConfig.description}
           </p>
           <div className="flex w-full items-center justify-center space-x-4 py-4 md:pb-10">
-            <Button size={"xl"} asChild>
+            <Button variant={"glow"} size={"xl"} asChild>
               <Link href="/redirect/invite">Invite the bot</Link>
             </Button>
             <Button variant={"outline"} size={"xl"} asChild>
