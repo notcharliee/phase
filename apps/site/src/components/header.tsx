@@ -85,14 +85,14 @@ export const Header = () => {
           <div className="w-full flex-1 md:w-auto md:flex-none">
             <Button
               variant="outline"
-              className="bg-background text-muted-foreground relative h-9 w-full justify-start rounded-[0.5rem] text-sm font-normal shadow-none sm:pr-[52px] md:w-64"
+              className="bg-background text-muted-foreground relative h-9 w-full justify-start text-sm sm:pr-[52px] md:w-64"
               onClick={() => setOpen(true)}
             >
               <span className="flex items-center gap-2">
                 <RocketIcon className="h-3.5 w-3.5" />
                 Wanna explore?
               </span>
-              <kbd className="bg-muted pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-6 select-none items-center gap-1 rounded border px-2 font-mono text-[10px] font-medium opacity-100 sm:flex">
+              <kbd className="bg-muted pointer-events-none absolute right-[4.333px] top-[4.333] hidden h-[26px] select-none items-center gap-1 rounded-sm px-2.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
                 <span className="text-xs">⌘</span>K
               </kbd>
             </Button>
