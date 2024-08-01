@@ -55,6 +55,28 @@ export const bumpRemindersSchema = z.object({
   reminderMessage: z.string().max(2048),
 })
 
+export const countersSchema = z.object({
+  enabled: z.boolean(),
+  counters: z.array(
+    z.object({
+      name: z.string().min(1, {
+        message: "You must provide a counter name",
+      }),
+      channel: z.string().min(1, {
+        message: "You must select a channel",
+      }),
+      content: z
+        .string()
+        .min(1, {
+          message: "Content must be at least 1 character",
+        })
+        .max(100, {
+          message: "Content cannot be longer than 100 characters",
+        }),
+    }),
+  ),
+})
+
 export const formsSchema = z.object({
   enabled: z.boolean(),
   channel: z.string().min(1, {

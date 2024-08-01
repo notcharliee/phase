@@ -17,6 +17,7 @@ export const docsPages: Page[] = [
   { label: "Changelog", href: "/docs/changelog", category: "Getting Started" },
   { label: "Terms", href: "/docs/terms", category: "Getting Started" },
   { label: "Privacy", href: "/docs/privacy", category: "Getting Started" },
+  { label: "Counters", href: "/docs/modules/counters", category: "Modules" },
 ]
 
 export const splitPagesByCategory = (pages: Page[]): Record<string, Page[]> => {

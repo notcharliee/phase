@@ -83,6 +83,21 @@ export interface GuildModules {
     reminderMessage: string
   }
 
+  /** The Counters module configuration. */
+  Counters: {
+    /** Whether or not the module is enabled. */
+    enabled: boolean
+    /** The channels to update. */
+    counters: {
+      /** The name of the counter. */
+      name: string
+      /** The ID of the counter channel. */
+      channel: string
+      /** The content of the counter. */
+      content: string
+    }[]
+  }
+
   /** The Forms module configuration. */
   Forms: {
     /** Whether or not the module is enabled. */
@@ -288,6 +303,23 @@ export const guilds = defineModel(
             time: { type: Number, required: true },
             initialMessage: { type: String, required: true },
             reminderMessage: { type: String, required: true },
+          }),
+        },
+        Counters: {
+          type: new mongoose.Schema<GuildModules["Counters"]>({
+            enabled: { type: Boolean, required: true },
+            counters: {
+              type: [
+                new mongoose.Schema<
+                  GuildModules["Counters"]["counters"][number]
+                >({
+                  name: { type: String, required: true },
+                  channel: { type: String, required: true },
+                  content: { type: String, required: true },
+                }),
+              ],
+              required: true,
+            },
           }),
         },
         Forms: {

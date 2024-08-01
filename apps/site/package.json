@@ -41,7 +41,6 @@
     "@vercel/kv": "^1.0.1",
     "@vercel/speed-insights": "^1.0.10",
     "autoprefixer": "10.4.14",
-    "change-case": "^5.4.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^0.2.1",

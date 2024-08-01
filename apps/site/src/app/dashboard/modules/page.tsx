@@ -1,6 +1,5 @@
 "use client"
 
-import * as changeCase from "change-case"
 import { toast } from "sonner"
 
 import {
@@ -33,6 +32,7 @@ import { AuditLogs } from "~/app/dashboard/modules/_forms/audit-logs"
 import { AutoMessages } from "~/app/dashboard/modules/_forms/auto-messages"
 import { AutoRoles } from "~/app/dashboard/modules/_forms/auto-roles"
 import { BumpReminders } from "~/app/dashboard/modules/_forms/bump-reminders"
+import { Counters } from "~/app/dashboard/modules/_forms/counters"
 import { Forms } from "~/app/dashboard/modules/_forms/forms"
 import { JoinToCreates } from "~/app/dashboard/modules/_forms/join-to-creates"
 import { Levels } from "~/app/dashboard/modules/_forms/levels"
@@ -49,6 +49,7 @@ const moduleForms = {
   AutoMessages,
   AutoRoles,
   BumpReminders,
+  Counters,
   Forms,
   JoinToCreates,
   Levels,
@@ -70,12 +71,10 @@ export default function ModulesPage() {
 
   return (
     <div className="grid gap-2 [--column_count:1] lg:grid-cols-2 lg:gap-4 lg:[--column_count:2] xl:grid-cols-3 xl:[--column_count:3]">
-      {modulesConfig.map((moduleConfig, index) => {
+      {Object.entries(modulesConfig).map(([key, moduleConfig], index) => {
         const { name, description } = moduleConfig
 
-        const dashboardModuleKey = changeCase.pascalCase(
-          name,
-        ) as keyof typeof moduleForms
+        const dashboardModuleKey = key as keyof GuildModules
 
         const dashboardModuleData =
           dashboard.guild.modules?.[dashboardModuleKey]
