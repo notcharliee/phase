@@ -9,9 +9,27 @@ import { cliHeader, getPrestart, loadingMessage } from "~/cli/utils"
 
 import type { Config } from "~/config"
 
+const globalForClient = globalThis as unknown as {
+  djsClient: Client<true> | undefined
+}
+
+/**
+ * Get the discord.js client instance.
+ *
+ * @throws If the client is not initialised.
+ */
+export function getClient(): Client<true> {
+  if (!globalForClient.djsClient) {
+    throw new Error("Client not initialised")
+  }
+
+  return globalForClient.djsClient
+}
+
 export class PhaseClient {
   private config!: Config & { configPath: string }
   private dev!: boolean
+  private djsClient!: Client<false>
 
   constructor(params: {
     config: Config & { configPath: string }
@@ -19,6 +37,9 @@ export class PhaseClient {
   }) {
     this.config = params.config
     this.dev = params.dev ?? false
+
+    this.djsClient = new Client(this.config) as Client<false>
+    globalForClient.djsClient = this.djsClient as unknown as Client<true>
   }
 
   async init() {
@@ -34,12 +55,10 @@ export class PhaseClient {
       throw new Error("Missing 'DISCORD_TOKEN' environment variable.")
     }
 
-    const client = new Client(this.config) as Client<false>
-
     const prestart = await getPrestart()
 
     if (prestart) {
-      await loadingMessage(async () => await prestart(client), {
+      await loadingMessage(async () => await prestart(this.djsClient), {
         loading: "Executing prestart ...",
         success: "Prestart complete!",
         error: "An error occurred while executing prestart:\n",
@@ -49,9 +68,9 @@ export class PhaseClient {
     await loadingMessage(
       async () => {
         await Promise.all([
-          handleCommands(client),
-          handleCrons(client),
-          handleEvents(client),
+          handleCommands(this.djsClient),
+          handleCrons(this.djsClient),
+          handleEvents(this.djsClient),
         ])
       },
       {
@@ -63,7 +82,7 @@ export class PhaseClient {
 
     await loadingMessage(
       async () => {
-        await client.login()
+        await this.djsClient.login()
       },
       {
         loading: "Connecting to Discord...",
