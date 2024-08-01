@@ -15,7 +15,7 @@ export const Codeblock = forwardRef<HTMLPreElement, CodeblockProps>(
         className={cn(
           "text-foreground bg-muted font-mono",
           inline
-            ? "mx-[0.5ch] inline-block rounded px-[0.3rem] py-[0.2rem] text-xs"
+            ? "mx-[0.5ch] inline-block rounded-sm px-[0.3rem] py-[0.2rem] text-xs"
             : "rounded-xl p-6 text-sm",
           className,
         )}
