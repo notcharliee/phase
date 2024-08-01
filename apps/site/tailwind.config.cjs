@@ -60,29 +60,27 @@ module.exports = {
         "3xl": "2rem", // 32px
       },
       boxShadow: {
-        glow: {
-          DEFAULT: `
-            0 0 4px 0 var(--tw-shadow-color),
-            0 0 11px 0 var(--tw-shadow-color),
-            0 0 19px 0 var(--tw-shadow-color),
-            0 0 40px 0 var(--tw-shadow-color)
-          `,
-          sm: `
-            0 0 4px 0 var(--tw-shadow-color),
-            0 0 11px 0 var(--tw-shadow-color),
-            0 0 19px 0 var(--tw-shadow-color),
-            0 0 40px 0 var(--tw-shadow-color),
-            0 0 80px 0 var(--tw-shadow-color)
-          `,
-          lg: `
-            0 0 4px 0 var(--tw-shadow-color),
-            0 0 11px 0 var(--tw-shadow-color),
-            0 0 19px 0 var(--tw-shadow-color),
-            0 0 40px 0 var(--tw-shadow-color),
-            0 0 80px 0 var(--tw-shadow-color),
-            0 0 120px 0 var(--tw-shadow-color)
-          `,
-        },
+        glow: `
+          0 0 4px 0 var(--tw-shadow-color),
+          0 0 11px 0 var(--tw-shadow-color),
+          0 0 19px 0 var(--tw-shadow-color),
+          0 0 40px 0 var(--tw-shadow-color)
+        `,
+        "glow-sm": `
+          0 0 4px 0 var(--tw-shadow-color),
+          0 0 11px 0 var(--tw-shadow-color),
+          0 0 19px 0 var(--tw-shadow-color),
+          0 0 40px 0 var(--tw-shadow-color),
+          0 0 80px 0 var(--tw-shadow-color)
+        `,
+        "glow-lg": `
+          0 0 4px 0 var(--tw-shadow-color),
+          0 0 11px 0 var(--tw-shadow-color),
+          0 0 19px 0 var(--tw-shadow-color),
+          0 0 40px 0 var(--tw-shadow-color),
+          0 0 80px 0 var(--tw-shadow-color),
+          0 0 120px 0 var(--tw-shadow-color)
+        `,
       },
       height: {
         screen: "100dvh",
