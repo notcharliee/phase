@@ -160,7 +160,7 @@ export const useMDXComponents = (components: MDXComponents) => ({
   Image,
   Link: ({ className, ...props }: React.ComponentProps<typeof Link>) => (
     <Link
-      className={cn("font-medium underline underline-offset-4", className)}
+      className={cn("font-medium underline underline-offset-2", className)}
       {...props}
     />
   ),
