@@ -1,9 +1,9 @@
 import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
+import { twitchAPI } from "~/lib/clients/twitch"
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
-import { twitchAPI } from "~/lib/twitch"
 
 export default new BotSubcommandBuilder()
   .setName("stream")

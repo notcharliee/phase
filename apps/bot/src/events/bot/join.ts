@@ -8,10 +8,10 @@ import { BotEventBuilder } from "phasebot/builders"
 
 import dedent from "dedent"
 
+import { alertWebhook } from "~/lib/clients/webhooks/alert"
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 import { getOrdinal } from "~/lib/utils"
-import { alertWebhook } from "~/lib/webhooks/alert"
 
 export default new BotEventBuilder()
   .setName("guildCreate")
