@@ -47,7 +47,7 @@ const DrawerContent = React.forwardRef<
       </div>
       <div
         ref={ref}
-        className={cn("flex flex-col overflow-auto p-6 pb-8 pt-10", className)}
+        className={cn("flex flex-col overflow-auto p-10", className)}
         {...props}
       >
         {children}
