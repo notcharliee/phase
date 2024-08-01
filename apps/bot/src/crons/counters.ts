@@ -4,7 +4,7 @@ import { BotCronBuilder } from "phasebot/builders"
 import { db } from "~/lib/db"
 
 export default new BotCronBuilder()
-  .setPattern("*/1 * * * *")
+  .setPattern("*/10 * * * *")
   .setExecute(async (client) => {
     const guildDocs = await db.guilds.find({
       "modules.Counters.enabled": true,
