@@ -10,7 +10,7 @@ import {
   CredenzaHeader,
   CredenzaTitle,
   CredenzaTrigger,
-} from "~/components/credenza"
+} from "~/components/ui/credenza"
 import { Button } from "~/components/ui/button"
 import {
   Card,

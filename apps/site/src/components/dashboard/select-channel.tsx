@@ -2,7 +2,6 @@
 
 import { CheckIcon } from "@radix-ui/react-icons"
 import * as DiscordAPITypes from "discord-api-types/v10"
-import { type ControllerRenderProps } from "react-hook-form"
 
 import {
   Select,
@@ -14,6 +13,8 @@ import {
 } from "~/components/ui/select"
 
 import { cn } from "~/lib/utils"
+
+import type { ControllerRenderProps } from "react-hook-form"
 
 interface SelectChannelProps extends ControllerRenderProps {
   channels: DiscordAPITypes.APIGuildChannel<DiscordAPITypes.GuildChannelType>[]
@@ -55,15 +56,13 @@ export function SelectChannel(props: SelectChannelProps) {
     <Select
       disabled={props.disabled}
       name={props.name}
-      onValueChange={(value) => {
-        value === "deselect" ? props.onChange(null) : props.onChange(value)
+      value={selectedChannel && `${props.value}`}
+      onValueChange={(v) => {
+        v === "deselect" ? props.onChange(null) : props.onChange(v)
       }}
-      value={props.value ? `${props.value}` : undefined}
     >
-      <SelectTrigger className="bg-popover">
-        {selectedChannel ? selectedChannel.name : placeholder}
-      </SelectTrigger>
-      <SelectContent className="no-scroll-buttons">
+      <SelectTrigger>{selectedChannel?.name ?? placeholder}</SelectTrigger>
+      <SelectContent>
         <div className="max-h-[30vh] overflow-x-hidden overflow-y-scroll p-1">
           {categoriesWithChannels ? (
             <>
