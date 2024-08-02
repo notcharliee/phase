@@ -66,9 +66,15 @@ export default new BotSubcommandBuilder()
             }),
         ],
       })
-    } catch {
+    } catch (error) {
+      console.error(error)
+
       return void interaction.editReply(
-        new BotError("No results were found for that song name.").toJSON(),
+        BotError.unknown({
+          channelId: channel.id,
+          guildId: channel.guild.id,
+          error: error as Error,
+        }).toJSON(),
       )
     }
   })
