@@ -13,17 +13,21 @@ export default new BotCronBuilder()
     for (const guildDoc of guildDocs) {
       const guild =
         client.guilds.cache.get(guildDoc.id) ??
-        (await client.guilds.fetch({
-          guild: guildDoc.id,
-          cache: true,
-          withCounts: true,
-        }))
+        (await client.guilds
+          .fetch({
+            guild: guildDoc.id,
+            cache: true,
+            withCounts: true,
+          })
+          .catch(() => undefined))
+
+      if (!guild) continue
 
       for (const counter of guildDoc.modules!.Counters!.counters) {
         const channel = (guild.channels.cache.get(counter.channel) ??
-          (await client.channels.fetch(counter.channel))) as
-          | BaseGuildVoiceChannel
-          | undefined
+          (await client.channels
+            .fetch(counter.channel)
+            .catch(() => undefined))) as BaseGuildVoiceChannel | undefined
 
         if (!channel) continue
 
