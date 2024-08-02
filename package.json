@@ -31,8 +31,8 @@
     "@vercel/speed-insights",
     "aws-sdk",
     "esbuild",
-    "phasebot",
     "protobufjs",
+    "sodium-native",
     "sharp"
   ]
 }

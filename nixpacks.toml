@@ -1,4 +1,5 @@
 [phases.setup]
+aptPkgs = ["ffmpeg"]
 nixPkgs = ["bun"]
 providers = ["bun"]
 

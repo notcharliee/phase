@@ -1,6 +1,8 @@
-import { EmbedBuilder, PermissionFlagsBits } from "discord.js"
+import { ChannelType, EmbedBuilder, PermissionFlagsBits } from "discord.js"
 
 import { env } from "~/lib/env"
+
+import { ChannelTypeName } from "~/types/utils"
 
 import type { GuildModules } from "~/lib/db"
 
@@ -95,6 +97,14 @@ export const BotError = Object.assign(BotErrorClass, {
 
   serverOnlyCommand: () =>
     new BotError("This command can only be used in servers."),
+  specificChannelOnlyCommand: (
+    channelType: ChannelTypeName<
+      keyof Omit<typeof ChannelType, "DM" | "GroupDM" | "GuildCategory">
+    >,
+  ) =>
+    new BotError(
+      `This command can only be used ${channelType.endsWith("voice") ? "when you're in a" : "in"} ${channelType + (channelType.endsWith("thread") ? "s" : channelType.endsWith("voice") ? " channel" : " channels")}.`,
+    ),
   unknown: (data: Parameters<typeof generateBugReportURL>[0]) =>
     new BotErrorClass({
       title: "Unknown error",
