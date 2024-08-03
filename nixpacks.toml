@@ -1,5 +1,6 @@
 [phases.setup]
-nixPkgs = ["bun", "ffmpeg"]
+nixPkgs = ["bun", "ffmpeg", "python311"]
+aptPkgs = ["build-essential"]
 providers = ["bun"]
 
 [phases.install]
