@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["bun", "ffmpeg"]
+nixPkgs = ["bun", "ffmpeg", "python3"]
 providers = ["bun"]
 
 [phases.install]
