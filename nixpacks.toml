@@ -1,8 +1,7 @@
 [phases.setup]
-aptPkgs = ["build-essential", "make", "gcc", "g++"]
-nixPkgs = ["bun", "ffmpeg", "python3"]
-providers = ["bun"]
+nixPkgs = ["bun", "ffmpeg"]
+providers = ["bun", "nodejs"]
 
 [phases.install]
-cmds = ["bun install"]
+cmds = ["bun install", "cd ../../node_modules/@discordjs/opus && node-gyp configure --module=./prebuild/node-v102-napi-v3-linux-x64-glibc-2.29/opus.node --module_name=opus --module_path=./prebuild/node-v115-napi-v3-linux-x64-glibc-2.29 --napi_version=9 --node_abi_napi=napi --napi_build_version=3 --node_napi_label=napi-v3"]
 dependsOn = ["setup"]

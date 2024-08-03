@@ -28,10 +28,8 @@
     "prettier-plugin-tailwindcss": "^0.5.14"
   },
   "trustedDependencies": [
-    "@discordjs/opus",
     "@vercel/speed-insights",
     "aws-sdk",
-    "bot",
     "esbuild",
     "protobufjs",
     "sharp",
