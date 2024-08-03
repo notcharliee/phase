@@ -5,6 +5,6 @@ providers = ["bun"]
 [phases.install]
 cmds = [
   "bun install",
-  "/nix/store/ckwisxpv8d8mxpnyga9653wssjk5j8ss-bun-1.1.8/bin/bun /app/node_modules/node-gyp/bin/node-gyp.js configure --module=/app/node_modules/@discordjs/opus/prebuild/node-v111-napi-v3-linux-x64-glibc-2.29/opus.node --module_name=opus --module_path=/app/node_modules/@discordjs/opus/prebuild/node-v111-napi-v3-linux-x64-glibc-2.29 --napi_version=9 --node_abi_napi=napi --napi_build_version=3 --node_napi_label=napi-v3",
+  "cd /app/node_modules/@discordjs/opus && /nix/store/ckwisxpv8d8mxpnyga9653wssjk5j8ss-bun-1.1.8/bin/bun /app/node_modules/node-gyp/bin/node-gyp.js configure --target=19.9.0 --module=/app/node_modules/@discordjs/opus/prebuild/node-v111-napi-v3-linux-x64-glibc-2.29/opus.node --module_name=opus --module_path=/app/node_modules/@discordjs/opus/prebuild/node-v111-napi-v3-linux-x64-glibc-2.29 --napi_version=9 --node_abi_napi=napi --napi_build_version=3 --node_napi_label=napi-v3",
 ]
 dependsOn = ["setup"]
