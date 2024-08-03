@@ -1,6 +1,7 @@
 [phases.setup]
-nixPkgs = ["nodejs_18", "bun", "ffmpeg", "python3"]
-providers = ["node"]
+aptPkgs = ["build-essential"]
+nixPkgs = ["bun", "nodejs", "ffmpeg", "python3"]
+providers = ["bun"]
 
 [phases.install]
 cmds = ["bun install"]
