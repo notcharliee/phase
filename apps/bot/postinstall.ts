@@ -1,6 +1,6 @@
 // a bodge to get @discordjs/opus to work on bun
 
-import { existsSync, readdirSync, cpSync } from "node:fs"
+import { cpSync, existsSync, readdirSync, rmSync } from "node:fs"
 import { resolve } from "node:path"
 
 const dirPath = resolve(
@@ -20,9 +20,11 @@ if (existsSync(dirPath)) {
     } else {
       for (const file of readdirSync(oldPath)) {
         cpSync(`${oldPath}/${file}`, `${newPath}/${file}`)
+        console.log(`Copied "${oldPath}/${file}" into node-v115 prebuild`)
       }
 
-      console.log("Copied opus prebuild successfully")
+      rmSync(oldPath, { recursive: true, force: true })
+      console.log("Removed old opus prebuild")
     }
   } else {
     console.error(`Could not find opus prebuild at path "${oldPath}"`)

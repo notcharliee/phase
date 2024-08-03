@@ -3,8 +3,7 @@
   "name": "bot",
   "type": "module",
   "scripts": {
-    "postinstall": "bun run postinstall.ts",
-    "build": "echo 'No bot build step required'",
+    "build": "bun run postinstall.ts",
     "start": "phase start",
     "dev": "phase dev"
   },
