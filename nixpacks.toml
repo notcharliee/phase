@@ -4,5 +4,5 @@ nixPkgs = ["bun", "nodejs_20", "ffmpeg", "python3"]
 providers = ["bun"]
 
 [phases.install]
-cmds = ["bun install", "cd ../../node_modules/@discordjs/opus && npm run install && echo 'Built @discordjs/opus prebuild'"]
+cmds = ["bun install", "cd node_modules/@discordjs/opus && npm run install && echo 'Built @discordjs/opus prebuild'"]
 dependsOn = ["setup"]
