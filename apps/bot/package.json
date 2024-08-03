@@ -3,7 +3,7 @@
   "name": "bot",
   "type": "module",
   "scripts": {
-    "postinstall": "cd ../../node_modules/@discordjs/opus && npm run install",
+    "postinstall": "bun run postinstall.ts",
     "build": "echo 'No bot build step required'",
     "start": "phase start",
     "dev": "phase dev"
