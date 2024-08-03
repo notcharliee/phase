@@ -1,7 +1,7 @@
 [phases.setup]
 nixPkgs = ["bun", "ffmpeg"]
-providers = ["node"]
+providers = ["bun"]
 
 [phases.install]
-cmds = ["pnpm install"]
+cmds = ["bun install"]
 dependsOn = ["setup"]
