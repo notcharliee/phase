@@ -1,6 +1,6 @@
 [phases.setup]
 nixPkgs = ["bun", "ffmpeg"]
-nixpkgsArchive = "2f1765713f65e84aadc3f87cc0e577c0e5813efd"
+providers = ["node"]
 
 [phases.install]
 cmds = ["bun install"]

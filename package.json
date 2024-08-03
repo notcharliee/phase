@@ -34,5 +34,8 @@
     "protobufjs",
     "sharp",
     "sodium-native"
-  ]
+  ],
+  "engines": {
+    "node": "18.x"
+  }
 }
