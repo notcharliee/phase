@@ -1,7 +1,8 @@
 [phases.setup]
-nixPkgs = ["bun", "nodejs_18", "ffmpeg", "python3"]
+aptPkgs = ["build-essential"]
+nixPkgs = ["bun", "nodejs_20", "ffmpeg", "python3"]
 providers = ["bun"]
 
 [phases.install]
-cmds = ["bun install"]
+cmds = ["bun install", "cd ../../node_modules/@discordjs/opus && npm run install && echo 'Built @discordjs/opus prebuild'"]
 dependsOn = ["setup"]
