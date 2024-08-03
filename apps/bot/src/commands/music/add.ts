@@ -2,6 +2,7 @@ import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import dedent from "dedent"
+import { Playlist } from "distube"
 
 import { distubeClient } from "~/lib/clients/distube"
 import { PhaseColour } from "~/lib/enums"
@@ -33,10 +34,24 @@ export default new BotSubcommandBuilder()
     }
 
     try {
-      await distubeClient.play(channel, songName, { member })
+      const queue =
+        distubeClient.getQueue(channel.guildId) ??
+        (await distubeClient.queues.create(channel))
 
-      const queue = distubeClient.getQueue(channel.guildId)!
-      const song = queue.songs[queue.songs.length - 1]!
+      const songOrPlaylist = await distubeClient.handler.resolve(songName, {
+        member,
+      })
+
+      const songs =
+        songOrPlaylist instanceof Playlist
+          ? songOrPlaylist.songs
+          : [songOrPlaylist]
+
+      const song = songs[0]
+
+      queue.addToQueue(songs)
+
+      if (!queue.playing) await queue.play()
 
       const songStartsPlaying = `<t:${Math.floor(Date.now() / 1000) + (queue.duration - song.duration)}:R>`
       const songFinishesPlaying = `<t:${Math.floor(Date.now() / 1000) + song.duration}:R>`
@@ -57,7 +72,7 @@ export default new BotSubcommandBuilder()
             .setDescription(
               dedent`
               **Duration:** \`${song.formattedDuration}\`
-              **Place in queue:** \`${queue.songs.length - 1}\`
+              **Place in queue:** \`${queue.songs.length}\`
               ${queue.songs.length > 1 ? `**Starts playing:** ${songStartsPlaying}` : `**Finishes playing:** ${songFinishesPlaying}`}
             `,
             )

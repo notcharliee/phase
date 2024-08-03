@@ -24,4 +24,4 @@ export const distubeClient =
 distubeClient.on(Events.FINISH, (queue) => queue.stop())
 distubeClient.on(Events.DISCONNECT, (queue) => queue.stop())
 distubeClient.on(Events.DELETE_QUEUE, (queue) => queue.voice.leave())
-distubeClient.on(Events.ERROR, (...params) => console.error(params))
+distubeClient.on(Events.ERROR, (error) => console.error(error))
