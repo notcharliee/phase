@@ -1,6 +1,7 @@
 // a bodge to get @discordjs/opus to work on bun
 
-import { existsSync, readdirSync, renameSync } from "node:fs"
+import { $ } from "bun"
+import { existsSync, readdirSync } from "node:fs"
 import { resolve } from "node:path"
 
 const dirPath = resolve(
@@ -18,7 +19,7 @@ if (existsSync(dirPath)) {
     if (existsSync(newPath)) {
       console.error("An opus prebuild already exists for node-v115")
     } else {
-      renameSync(oldPath, newPath)
+      await $`mv ${oldPath} ${newPath}`
       console.log("Renamed opus prebuild successfully")
     }
   } else {
