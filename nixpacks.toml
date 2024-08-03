@@ -1,6 +1,6 @@
 [phases.setup]
-nixPkgs = ["bun", "node", "ffmpeg"]
-providers = ["bun"]
+nixPkgs = ["ffmpeg"]
+providers = ["node"]
 
 [phases.install]
 cmds = ["bun install"]
