@@ -1,7 +1,7 @@
 [phases.setup]
-aptPkgs = ["build-essential"]
+aptPkgs = ["build-essential", "make", "gcc", "g++"]
 nixPkgs = ["bun", "ffmpeg", "python3"]
-providers = ["nodejs"]
+providers = ["bun"]
 
 [phases.install]
 cmds = ["bun install"]

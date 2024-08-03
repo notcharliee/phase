@@ -3,7 +3,6 @@
   "name": "bot",
   "type": "module",
   "scripts": {
-    "postinstall": "cd ../../node_modules/@discordjs/opus && node ../node-pre-gyp/bin/node-pre-gyp install --fallback-to-build",
     "build": "echo 'No bot build step required'",
     "start": "phase start",
     "dev": "phase dev"
