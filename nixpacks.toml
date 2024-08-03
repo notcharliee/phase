@@ -3,5 +3,5 @@ nixPkgs = ["bun", "nodejs_18", "ffmpeg", "python3"]
 providers = ["bun"]
 
 [phases.install]
-cmds = ["bun install"]
+cmds = ["bun install", "cd apps/bot && bun run postinstall"]
 dependsOn = ["setup"]

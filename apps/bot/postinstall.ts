@@ -8,18 +8,22 @@ const dirPath = resolve(
   "../../node_modules/@discordjs/opus/prebuild",
 )
 
-const dirContents = readdirSync(dirPath)
+if (existsSync(dirPath)) {
+  const dirContents = readdirSync(dirPath)
 
-const oldPath = `${dirPath}/${dirContents[0]}`
-const newPath = `${dirPath}/${dirContents[0].replace(/(node-v)(?!115)(\d+)/, "$1115")}`
+  const oldPath = `${dirPath}/${dirContents[0]}`
+  const newPath = `${dirPath}/${dirContents[0].replace(/(node-v)(?!115)(\d+)/, "$1115")}`
 
-if (existsSync(oldPath)) {
-  if (existsSync(newPath)) {
-    console.error("An opus prebuild already exists for node-v115")
+  if (existsSync(oldPath)) {
+    if (existsSync(newPath)) {
+      console.error("An opus prebuild already exists for node-v115")
+    } else {
+      renameSync(oldPath, newPath)
+      console.log("Renamed opus prebuild successfully")
+    }
   } else {
-    renameSync(oldPath, newPath)
-    console.log("Renamed opus prebuild successfully")
+    console.error(`Could not find opus prebuild at path "${oldPath}"`)
   }
 } else {
-  console.error(`Could not find opus prebuild at path "${oldPath}"`)
+  console.error("Could not find opus prebuild directory")
 }
