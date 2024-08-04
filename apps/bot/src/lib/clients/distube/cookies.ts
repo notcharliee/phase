@@ -83,12 +83,8 @@ export async function refreshCookies() {
       "#yDmH0d > c-wiz:nth-child(9) > div > div > div > div.L5MEH.Bokche.ypEC4c > div.lq3Znf > div:nth-child(1) > button > span"
     await page.waitForSelector(NotNowSelector, { timeout: 1e4 })
     await page.click(NotNowSelector)
-
-    console.log("Clicked not now button")
   } catch (e) {
     await page.goto("https://www.youtube.com", { waitUntil: "networkidle2" })
-
-    console.log("Failed to click not now button")
   }
 
   const cookies = await page.cookies()
