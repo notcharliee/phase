@@ -33,6 +33,7 @@
     "bot",
     "esbuild",
     "protobufjs",
+    "puppeteer",
     "sharp",
     "sodium-native"
   ]

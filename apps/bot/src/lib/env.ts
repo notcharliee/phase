@@ -11,6 +11,8 @@ export const env = createEnv({
     AUTH_OTP_SECRET: z.string(),
     WEBHOOK_ALERT: z.string(),
     API_YOUTUBE: z.string(),
+    GOOGLE_EMAIL: z.string(),
+    GOOGLE_PASSWORD: z.string(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

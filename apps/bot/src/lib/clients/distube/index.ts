@@ -3,7 +3,9 @@ import { getClient } from "phasebot"
 import { YouTubePlugin } from "@distube/youtube"
 import { DisTube, Events } from "distube"
 
-const discordClient = getClient()
+import { getCookies } from "./cookies"
+
+export { getCookies }
 
 const globalForDistubeClient = globalThis as unknown as {
   distubeClient: DisTube | undefined
@@ -11,9 +13,8 @@ const globalForDistubeClient = globalThis as unknown as {
 
 export const distubeClient =
   globalForDistubeClient.distubeClient ??
-  new DisTube(discordClient, {
-    plugins: [new YouTubePlugin()],
-    ffmpeg: { path: Bun.which("ffmpeg")! },
+  new DisTube(getClient(), {
+    plugins: [new YouTubePlugin({ cookies: await getCookies() })],
     emitAddListWhenCreatingQueue: false,
     emitAddSongWhenCreatingQueue: false,
     emitNewSongOnly: false,
