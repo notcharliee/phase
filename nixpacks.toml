@@ -1,8 +1,11 @@
 [phases.setup]
-providers = ["bun"]
-nixPkgs = ["bun", "nodejs_20", "ffmpeg", "python3"]
+buildImage = "oven/bun:1.1.7"
+nixPkgs = ["nodejs"]
 aptPkgs = [
+  # @discordjs/opus
   "build-essential",
+  "python3",
+  # puppeteer
   "fonts-liberation",
   "libappindicator3-1",
   "libasound2",
@@ -25,5 +28,5 @@ aptPkgs = [
 ]
 
 [phases.install]
-cmds = ["bun install", "cd node_modules/@discordjs/opus && npm run install && echo 'Built @discordjs/opus'"]
+cmds = ["bun install"]
 dependsOn = ["setup"]
