@@ -34,7 +34,6 @@ FROM apt-deps AS node-deps
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && apt-get install -y nodejs
 
 # Copy the entire monorepo source code
-# Since we're in apps/bot, the monorepo root is one directory up.
 COPY ../../ /app
 
 # Install dependencies with Bun for the entire monorepo
@@ -48,7 +47,7 @@ FROM oven/bun:debian AS final
 WORKDIR /app
 
 # Copy only necessary directories and files from the previous stage
-COPY --from=node-deps /app/apps/bot /app
+COPY --from=node-deps /app/package.json /app/package.json
+COPY --from=node-deps /app/apps/bot /app/apps/bot
+COPY --from=node-deps /app/packages /app/packages
 COPY --from=node-deps /app/node_modules /app/node_modules
-COPY --from=node-deps /app/packages/database /app/node_modules/@repo/database
-COPY --from=node-deps /app/packages/phasebot /app/node_modules/phasebot

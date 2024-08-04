@@ -4,6 +4,6 @@
     "dockerfilePath": "apps/bot/Dockerfile"
   },
   "deploy": {
-    "startCommand": "bun run phase start"
+    "startCommand": "bun run bot:start"
   }
 }
