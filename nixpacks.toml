@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["bun", "nodejs_20"]
+nixPkgs = ["nodejs_20"]
 aptPkgs = [
   # @discordjs/opus
   "build-essential",
@@ -27,9 +27,5 @@ aptPkgs = [
 ]
 
 [phases.install]
-cmds = [
-  "bun install",
-  # @discordjs/opus bodge
-  "cd node_modules/@discordjs/opus && node /app/node_modules/node-gyp/bin/node-gyp.js configure --fallback-to-build --module=/app/node_modules/@discordjs/opus/prebuild/node-v115-napi-v3-linux-x64-glibc-2.29/opus.node --module_name=opus --module_path=/app/node_modules/@discordjs/opus/prebuild/node-v115-napi-v3-linux-x64-glibc-2.29 --napi_version=9 --node_abi_napi=napi --napi_build_version=3 --node_napi_label=napi-v3",
-]
 dependsOn = ["setup"]
+cmds = ["npm install --global bun@1.1.8", "bun install"]
