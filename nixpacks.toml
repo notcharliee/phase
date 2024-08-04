@@ -2,7 +2,9 @@
 nixPkgs = ["bun", "nodejs_20"]
 aptPkgs = [
   # @discordjs/opus
+  "automake",
   "build-essential",
+  "libtool",
   "python3",
   # puppeteer
   "fonts-liberation",
