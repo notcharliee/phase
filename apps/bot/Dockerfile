@@ -42,16 +42,10 @@ RUN bun install
 # Build dependencies using Turbo
 RUN bun run bot:build
 
-# [DEBUG] railway build
-RUN echo $PATH
-
 # Convert workspace symlinks to copies
 RUN rm -rf /app/node_modules/@repo/database && cp -rf /app/packages/database /app/node_modules/@repo
 RUN rm -rf /app/node_modules/@repo/config && cp -rf /app/packages/config /app/node_modules/@repo
 RUN rm -rf /app/node_modules/phasebot && cp -rf /app/packages/phasebot /app/node_modules
-
-# [DEBUG] railway build
-RUN echo $PATH
 
 # Prepare the final image
 FROM oven/bun:debian AS final
@@ -62,5 +56,5 @@ COPY --from=node-deps /app/apps/bot /app/apps/bot
 COPY --from=node-deps /app/node_modules /app/node_modules
 COPY --from=node-deps /app/package.json /app/package.json
 
-# [DEBUG] railway build
-RUN echo $PATH
+# Ensure the PATH includes node_modules/.bin
+ENV PATH="/app/node_modules/.bin:${PATH}"
