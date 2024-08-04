@@ -52,6 +52,3 @@ COPY --from=node-deps /app/apps/bot /app
 
 # Copy the node_modules
 COPY --from=node-deps /app/node_modules /app/node_modules
-
-# Set the command to start the bot
-CMD ["bun", "start"]
