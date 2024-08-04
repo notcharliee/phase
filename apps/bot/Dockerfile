@@ -1,5 +1,5 @@
 # Base image with Bun and Debian
-FROM oven/bun:latest-debian AS base
+FROM oven/bun:debian AS base
 WORKDIR /app
 
 # Install apt packages
