@@ -1,6 +1,5 @@
 [phases.setup]
-buildImage = "oven/bun:1.1.7"
-nixPkgs = ["nodejs"]
+nixPkgs = ["bun", "nodejs_20"]
 aptPkgs = [
   # @discordjs/opus
   "build-essential",
