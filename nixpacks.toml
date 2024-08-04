@@ -2,9 +2,7 @@
 nixPkgs = ["bun", "nodejs_20"]
 aptPkgs = [
   # @discordjs/opus
-  "automake",
   "build-essential",
-  "libtool",
   "python3",
   # puppeteer
   "fonts-liberation",
@@ -29,5 +27,5 @@ aptPkgs = [
 ]
 
 [phases.install]
-cmds = ["bun install"]
+cmds = ["bun install", "cd node_modules/@discordjs/opus && npm run install"]
 dependsOn = ["setup"]
