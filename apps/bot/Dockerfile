@@ -44,11 +44,11 @@ RUN bun install
 RUN bun run bot:build
 
 # Prepare the final image
-FROM node-deps AS final
+FROM oven/bun:debian AS final
 WORKDIR /app
 
-# Copy the bot source code to /app
+# Copy only necessary directories and files from the previous stage
 COPY --from=node-deps /app/apps/bot /app
-
-# Copy the node_modules
 COPY --from=node-deps /app/node_modules /app/node_modules
+COPY --from=node-deps /app/packages/database /app/node_modules/@repo/database
+COPY --from=node-deps /app/packages/phasebot /app/node_modules/phasebot
