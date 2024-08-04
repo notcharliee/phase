@@ -1,4 +1,6 @@
 [phases.setup]
+providers = ["bun"]
+nixPkgs = ["bun", "nodejs_20", "ffmpeg", "python3"]
 aptPkgs = [
   "build-essential",
   "fonts-liberation",
@@ -21,12 +23,7 @@ aptPkgs = [
   "libxtst6",
   "xdg-utils",
 ]
-nixPkgs = ["bun", "nodejs_20", "ffmpeg", "python3"]
-providers = ["bun"]
 
 [phases.install]
-cmds = [
-  "bun install",
-  "cd node_modules/@discordjs/opus && npm run install && echo 'Built @discordjs/opus'",
-]
+cmds = ["bun install", "cd node_modules/@discordjs/opus && npm run install && echo 'Built @discordjs/opus'"]
 dependsOn = ["setup"]
