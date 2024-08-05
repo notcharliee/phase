@@ -1,5 +1,5 @@
 # Base image with Bun and Debian
-FROM oven/bun:debian AS base
+FROM oven/bun:1.1.8-debian AS base
 WORKDIR /app
 
 # Install apt packages
@@ -48,7 +48,7 @@ RUN rm -rf /app/node_modules/@repo/config && cp -rf /app/packages/config /app/no
 RUN rm -rf /app/node_modules/phasebot && cp -rf /app/packages/phasebot /app/node_modules
 
 # Prepare the final image
-FROM oven/bun:debian AS final
+FROM oven/bun:1.1.8-debian AS final
 WORKDIR /app
 
 # Copy only necessary directories and files from the previous stage

@@ -8,8 +8,8 @@
     "packages/*"
   ],
   "scripts": {
-    "bot:start": "PATH=/app/node_modules/.bin:$PATH cd apps/bot && bun run start",
-    "bot:dev": "PATH=/app/node_modules/.bin:$PATH cd apps/bot && bun run dev",
+    "bot:start": "cd apps/bot && bun run start",
+    "bot:dev": "cd apps/bot && bun run dev",
     "bot:build": "turbo run build --filter=bot",
     
     "site:start": "cd apps/site && bun run start",
