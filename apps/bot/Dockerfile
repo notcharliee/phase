@@ -3,23 +3,22 @@ WORKDIR /app
 
 # Install build dependencies
 FROM base AS build-env
-RUN apt-get update && apt-get install -y \
+RUN sudo apt-get update && sudo apt-get install -y \
     build-essential \
     python3 \
     fonts-liberation \
     libappindicator3-1 \
     libasound2 \
+    libasound2:i386 \
     libatk-bridge2.0-0 \
     libatk1.0-0 \
     libgbm1 \
     libgtk-3-0 \
+    libgtk-3-dev \
     libnspr4 \
     libnss3 \
-    libnss \
     libnss3-dev \
     libgdk-pixbuf2.0-dev \
-    libgtk-3-dev \
-    libxss-dev \
     libx11-xcb1 \
     libxcomposite1 \
     libxcursor1 \
@@ -28,6 +27,7 @@ RUN apt-get update && apt-get install -y \
     libxi6 \
     libxrandr2 \
     libxss1 \
+    libxss-devsudo \
     libxtst6 \
     xdg-utils \
     && rm -rf /var/lib/apt/lists/*
