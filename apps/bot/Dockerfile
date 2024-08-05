@@ -59,3 +59,6 @@ COPY --from=fix-bodge /app/apps/bot /app/apps/bot
 COPY --from=fix-bodge /app/node_modules /app/node_modules
 COPY --from=fix-bodge /root/.cache/puppeteer /root/.cache/puppeteer
 COPY --from=fix-bodge /app/package.json /app/package.json
+
+# Run the bot
+CMD ["node_modules/.bin/phase", "start"]
