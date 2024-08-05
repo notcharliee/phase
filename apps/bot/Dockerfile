@@ -15,6 +15,11 @@ RUN apt-get update && apt-get install -y \
     libgtk-3-0 \
     libnspr4 \
     libnss3 \
+    libnss \
+    libnss3-dev \
+    libgdk-pixbuf2.0-dev \
+    libgtk-3-dev \
+    libxss-dev \
     libx11-xcb1 \
     libxcomposite1 \
     libxcursor1 \
