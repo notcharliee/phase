@@ -31,6 +31,7 @@
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "react": "18.2.0",
+    "sodium-native": "^4.1.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
