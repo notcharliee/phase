@@ -65,7 +65,7 @@ RUN bun run bot:build
 
 # BODGE: Edit @discordjs/opus prebuild name
 FROM build-deps AS fix-bodge
-RUN cd /app/node_modules/@discordjs/opus/prebuild && mv node-v115-napi-v3-linux-x64-glibc-2.31 node-v115-napi-v3-linux-x64-glibc-2.29
+RUN cd /app/node_modules/@discordjs/opus/prebuild && mv node-v108-napi-v3-linux-x64-glibc-2.31 node-v115-napi-v3-linux-x64-glibc-2.29
 
 # Prepare the final image
 FROM fix-bodge AS final
