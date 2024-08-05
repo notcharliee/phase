@@ -92,7 +92,7 @@ export async function refreshCookies() {
   await browser.close()
 
   if (cookies.length < 10) {
-    throw new Error("Failed to authenticate with Google")
+    console.error("Failed to authenticate with Google")
   }
 
   await Bun.write(".cookies.json", JSON.stringify(cookies))
