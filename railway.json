@@ -4,6 +4,6 @@
     "dockerfilePath": "apps/bot/Dockerfile"
   },
   "deploy": {
-    "startCommand": "PATH=\"/app/node_modules/.bin:$PATH\" bun run bot:start"
+    "startCommand": "bun run bot:start"
   }
 }

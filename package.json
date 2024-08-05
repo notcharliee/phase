@@ -8,14 +8,17 @@
     "packages/*"
   ],
   "scripts": {
-    "bot:dev": "cd apps/bot && bun run dev",
+    "bot:start": "PATH=/app/node_modules/.bin:$PATH cd apps/bot && bun run start",
+    "bot:dev": "PATH=/app/node_modules/.bin:$PATH cd apps/bot && bun run dev",
     "bot:build": "turbo run build --filter=bot",
-    "bot:start": "cd apps/bot && bun run start",
+    
+    "site:start": "cd apps/site && bun run start",
     "site:dev": "turbo run dev --filter=site",
     "site:build": "turbo run build --filter=site",
-    "site:start": "cd apps/site && bun run start",
+
     "database:dev": "turbo run dev --filter=@repo/database",
     "database:build": "turbo run build --filter=@repo/database",
+
     "phasebot:dev": "turbo run dev --filter=phasebot",
     "phasebot:build": "turbo run build --filter=phasebot"
   },
