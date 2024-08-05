@@ -55,8 +55,3 @@ WORKDIR /app
 COPY --from=node-deps /app/apps/bot /app/apps/bot
 COPY --from=node-deps /app/node_modules /app/node_modules
 COPY --from=node-deps /app/package.json /app/package.json
-
-# Ensure the PATH includes node_modules/.bin
-RUN echo $PATH
-ENV PATH="/app/node_modules/.bin:${PATH}"
-RUN echo $PATH
