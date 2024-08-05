@@ -37,17 +37,11 @@ COPY ../../ /app
 
 # Install and build monorepo dependencies
 FROM copy-source AS build-deps
-RUN bun install --no-save
+RUN bun install --frozen-lockfile --no-save
 RUN bun run bot:build
 
-# Convert local dependency symlinks into copies
-FROM build-deps AS copy-deps
-RUN rm -rf /app/node_modules/@repo/database && cp -rf /app/packages/database /app/node_modules/@repo
-RUN rm -rf /app/node_modules/@repo/config && cp -rf /app/packages/config /app/node_modules/@repo
-RUN rm -rf /app/node_modules/phasebot && cp -rf /app/packages/phasebot /app/node_modules
-
 # BODGE: Edit @discordjs/opus prebuild name
-FROM copy-deps AS fix-bodge
+FROM build-deps AS fix-bodge
 RUN cd /app/node_modules/@discordjs/opus/prebuild && mv node-v115-napi-v3-linux-x64-glibc-2.31 node-v115-napi-v3-linux-x64-glibc-2.29
 
 # Prepare the final image
@@ -55,10 +49,12 @@ FROM oven/bun:debian AS final
 WORKDIR /app
 
 # Copy only necessary directories and files from the previous stage
-COPY --from=fix-bodge /app/apps/bot /app/apps/bot
-COPY --from=fix-bodge /app/node_modules /app/node_modules
 COPY --from=fix-bodge /root/.cache/puppeteer /root/.cache/puppeteer
+COPY --from=fix-bodge /app/apps/bot /app/apps/bot
+COPY --from=fix-bodge /app/packages /app/packages
+COPY --from=fix-bodge /app/node_modules /app/node_modules
+COPY --from=fix-bodge /app/package.json /app/package.json
 
 # Run the bot
 WORKDIR /app/apps/bot
-CMD ["bun", "/app/node_modules/.bin/phase", "start"]
+CMD ["bun", "/app/packages/phasebot/dist/cli/index.js", "start"]
