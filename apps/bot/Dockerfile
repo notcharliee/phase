@@ -51,14 +51,14 @@ FROM copy-deps AS fix-bodge
 RUN cd /app/node_modules/@discordjs/opus/prebuild && mv node-v115-napi-v3-linux-x64-glibc-2.31 node-v115-napi-v3-linux-x64-glibc-2.29
 
 # Prepare the final image
-FROM oven/bun:1.1.8-debian AS final
+FROM oven/bun:debian AS final
 WORKDIR /app
 
 # Copy only necessary directories and files from the previous stage
 COPY --from=fix-bodge /app/apps/bot /app/apps/bot
 COPY --from=fix-bodge /app/node_modules /app/node_modules
 COPY --from=fix-bodge /root/.cache/puppeteer /root/.cache/puppeteer
-COPY --from=fix-bodge /app/package.json /app/package.json
 
 # Run the bot
-CMD ["node_modules/.bin/phase", "start"]
+WORKDIR /app/apps/bot
+CMD ["bun", "/app/node_modules/.bin/phase", "start"]
