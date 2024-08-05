@@ -1,9 +1,8 @@
-# Base image with Bun and Debian
 FROM node:lts-bullseye AS base
 WORKDIR /app
 
-# Install apt packages
-FROM base AS apt-deps
+# Install build dependencies
+FROM base AS build-env
 RUN apt-get update && apt-get install -y \
     build-essential \
     python3 \
@@ -29,30 +28,34 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install bun
-FROM apt-deps AS node-deps
+FROM base AS bun-install
 RUN npm i -g bun
 
-# Copy the entire monorepo source code
+# Copy the monorepo into the image
+FROM bun-install AS copy-source
 COPY ../../ /app
 
-# Install dependencies with Bun for the entire monorepo
-RUN bun install
-RUN bun run puppeteer browsers install chrome
-
-# Build dependencies using Turbo
+# Install and build monorepo dependencies
+FROM copy-source AS build-deps
+RUN bun install --no-save
 RUN bun run bot:build
 
-# Convert workspace symlinks to copies
+# Convert local dependency symlinks into copies
+FROM build-deps AS copy-deps
 RUN rm -rf /app/node_modules/@repo/database && cp -rf /app/packages/database /app/node_modules/@repo
 RUN rm -rf /app/node_modules/@repo/config && cp -rf /app/packages/config /app/node_modules/@repo
 RUN rm -rf /app/node_modules/phasebot && cp -rf /app/packages/phasebot /app/node_modules
+
+# BODGE: Edit @discordjs/opus prebuild name
+FROM copy-deps AS fix-bodge
+RUN cd /app/node_modules/@discordjs/opus/prebuild && mv node-v115-napi-v3-linux-x64-glibc-2.31 node-v115-napi-v3-linux-x64-glibc-2.29
 
 # Prepare the final image
 FROM oven/bun:1.1.8-debian AS final
 WORKDIR /app
 
 # Copy only necessary directories and files from the previous stage
-COPY --from=node-deps /app/apps/bot /app/apps/bot
-COPY --from=node-deps /app/node_modules /app/node_modules
-COPY --from=node-deps /root/.cache/puppeteer /root/.cache/puppeteer
-COPY --from=node-deps /app/package.json /app/package.json
+COPY --from=fix-bodge /app/apps/bot /app/apps/bot
+COPY --from=fix-bodge /app/node_modules /app/node_modules
+COPY --from=fix-bodge /root/.cache/puppeteer /root/.cache/puppeteer
+COPY --from=fix-bodge /app/package.json /app/package.json
