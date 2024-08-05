@@ -3,12 +3,29 @@ WORKDIR /app
 
 # Install build dependencies
 FROM base AS build-env
-RUN apt-get update && apt-get install curl gnupg build-essential python3 -y \
-  && curl --location --silent https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-  && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-  && apt-get update \
-  && apt-get install google-chrome-stable -y --no-install-recommends \
-  && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    python3 \
+    fonts-liberation \
+    libappindicator3-1 \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libatk1.0-0 \
+    libgbm1 \
+    libgtk-3-0 \
+    libnspr4 \
+    libnss3 \
+    libx11-xcb1 \
+    libxcomposite1 \
+    libxcursor1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxi6 \
+    libxrandr2 \
+    libxss1 \
+    libxtst6 \
+    xdg-utils \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install bun
 FROM base AS bun-install
@@ -24,7 +41,6 @@ COPY ../../turbo.json /app/turbo.json
 
 # Install and build monorepo dependencies
 FROM copy-source AS build-deps
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 RUN bun install --no-save
 RUN bun run bot:build
 
