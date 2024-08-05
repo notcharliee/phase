@@ -47,6 +47,8 @@ export async function refreshCookies() {
     headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
     ignoreDefaultArgs: ["--disable-extensions"],
+    executablePath:
+      env.NODE_ENV === "production" ? "/usr/bin/google-chrome" : undefined,
   })
 
   const page = await browser.newPage()
