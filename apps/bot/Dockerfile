@@ -1,5 +1,5 @@
 # Base image with Bun and Debian
-FROM oven/bun:1.1.8-debian AS base
+FROM oven/bun:debian AS base
 WORKDIR /app
 
 # Install apt packages
@@ -38,11 +38,7 @@ COPY ../../ /app
 
 # Install dependencies with Bun for the entire monorepo
 RUN bun install
-
-# Get the Puppeteer executable path
-RUN PUPPETEER_EXECUTABLE_PATH=$(bun -e "console.log(require('puppeteer').executablePath())") && \
-    echo "Puppeteer executable path: $PUPPETEER_EXECUTABLE_PATH" && \
-    export PUPPETEER_EXECUTABLE_PATH
+RUN bun run puppeteer browsers install chrome
 
 # Build dependencies using Turbo
 RUN bun run bot:build
@@ -59,5 +55,5 @@ WORKDIR /app
 # Copy only necessary directories and files from the previous stage
 COPY --from=node-deps /app/apps/bot /app/apps/bot
 COPY --from=node-deps /app/node_modules /app/node_modules
-COPY --from=node-deps ${PUPPETEER_EXECUTABLE_PATH} ${PUPPETEER_EXECUTABLE_PATH}
+COPY --from=node-deps /root/.cache/puppeteer /root/.cache/puppeteer
 COPY --from=node-deps /app/package.json /app/package.json
