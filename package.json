@@ -40,5 +40,8 @@
     "puppeteer",
     "sharp",
     "sodium-native"
-  ]
+  ],
+  "overrides": {
+    "@distube/ytdl-core": "latest"
+  }
 }
