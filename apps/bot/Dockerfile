@@ -1,11 +1,10 @@
 # Base image with Bun and Debian
-FROM oven/bun:debian AS base
+FROM node:lts-bullseye AS base
 WORKDIR /app
 
 # Install apt packages
 FROM base AS apt-deps
 RUN apt-get update && apt-get install -y \
-    curl \
     build-essential \
     python3 \
     fonts-liberation \
@@ -29,9 +28,9 @@ RUN apt-get update && apt-get install -y \
     xdg-utils \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js
+# Install bun
 FROM apt-deps AS node-deps
-RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && apt-get install -y nodejs
+RUN npm i -g bun
 
 # Copy the entire monorepo source code
 COPY ../../ /app
