@@ -1,24 +1,11 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../../node_modules/@repo/config/src/typescript/base.json",
+  "include": ["src/**/*", "phase.config.ts", "phase-env.d.ts"],
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "esnext",
-    "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"],
-      "@repo/database": ["../../node_modules/@repo/database/dist"],
-    },
-    "moduleResolution": "bundler",
-    "module": "esnext"
-  },
-  "exclude": ["node_modules", ".phase"],
-  "include": ["src/**/*", "phase.config.ts", "phase-env.d.ts"]
+      "~/*": ["src/*"],
+      "@repo/database": ["../../node_modules/@repo/database/dist"]
+    }
+  }
 }

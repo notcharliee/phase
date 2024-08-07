@@ -1,36 +1,5 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "compilerOptions": {
-    // Enable latest features
-    "lib": ["esnext"],
-    "target": "esnext",
-    "module": "esnext",
-    "moduleDetection": "force",
-    "jsx": "react-jsx",
-    "allowJs": true,
-
-    // Bundler mode
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "noEmit": true,
-
-    // Paths
-    "baseUrl": ".",
-    "paths": { "~/*": ["./src/*"] },
-
-    // Best practices
-    "strict": true,
-    "skipLibCheck": true,
-    "noFallthroughCasesInSwitch": true,
-    "esModuleInterop": true,
-
-    // Some stricter flags
-    "forceConsistentCasingInFileNames": true,
-    "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
-  },
-  "exclude": ["node_modules", "dist"],
-  "include": ["src/**/*", "src/models"]
+  "extends": "../../node_modules/@repo/config/src/typescript/base.json",
+  "include": ["src/**/*"],
+  "compilerOptions": { "baseUrl": "." }
 }

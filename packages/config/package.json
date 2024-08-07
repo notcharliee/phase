@@ -4,24 +4,24 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "tsup src/index.ts --clean --dts --format=esm",
-    "dev": "tsup src/index.ts --clean --dts --format=esm --watch"
+    "build": "",
+    "dev": ""
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "main": "./dist/index.js",
-      "module": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+    "./*": {
+      "import": "./src/*",
+      "require": "./src/*",
+      "types": "./src/*"
     }
   },
   "dependencies": {
-    "tsup": "^8.0.1"
+    "deepmerge-ts": "^7.1.0"
   },
   "devDependencies": {
-    "@types/node": "^20.8.9",
-    "typescript": "^5.3.2"
+    "@types/node": "^20.8.9"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^3.x",
+    "tailwindcss-animate": "^1.x"
   }
 }

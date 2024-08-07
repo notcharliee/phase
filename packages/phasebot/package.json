@@ -49,6 +49,7 @@
     "url": "https://github.com/notcharliee/phase.git"
   },
   "dependencies": {
+    "@repo/config": "workspace:*",
     "@vercel/og": "^0.6.2",
     "chalk": "^5.3.0",
     "commander": "^12.1.0",

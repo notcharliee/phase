@@ -33,6 +33,7 @@
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
+    "@repo/config": "workspace:*",
     "@repo/database": "workspace:*",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@twurple/api": "^7.1.0",
@@ -72,18 +73,20 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@eslint/js": "^9.8.0",
+    "@next/eslint-plugin-next": "^14.2.5",
     "@types/crypto-js": "^4.2.2",
-    "@types/eslint": "^8.56.6",
+    "@types/eslint__js": "^8.42.3",
     "@types/mdx": "^2.0.13",
     "@types/ms": "^0.7.34",
     "@types/node": "^20.11.30",
     "@types/react": "^18.2.67",
     "@types/react-dom": "^18.2.22",
     "@types/uuid": "^9.0.8",
-    "@typescript-eslint/eslint-plugin": "^7.3.1",
-    "@typescript-eslint/parser": "^7.3.1",
-    "eslint": "^8.57.0",
-    "eslint-config-next": "^14.1.4",
-    "typescript": "^5.4.3"
+    "eslint": "^9.8.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.0.1"
   }
 }
