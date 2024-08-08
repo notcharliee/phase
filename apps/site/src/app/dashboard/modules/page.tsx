@@ -40,74 +40,80 @@ export default function ModulesPage() {
 
   return (
     <div className="grid gap-2 [--column_count:1] lg:grid-cols-2 lg:gap-4 lg:[--column_count:2] xl:grid-cols-3 xl:[--column_count:3]">
-      {Object.entries(modules).map(([key, { name, description }], index) => {
-        const moduleKey = Object.keys(ModuleId)[
-          Object.values(ModuleId).indexOf(key as ModuleId)
-        ] as keyof GuildModules
+      {Object.entries(modules).map(
+        ([moduleId, { name, description }], index) => {
+          const moduleData =
+            dashboard.guild.modules?.[moduleId as keyof GuildModules]
 
-        const moduleData = dashboard.guild.modules?.[moduleKey]
+          const moduleKey = Object.keys(ModuleId)[
+            Object.values(ModuleId).indexOf(moduleId as ModuleId)
+          ] as keyof typeof moduleForms
 
-        const ModuleForm = moduleForms[moduleKey]
-        if (!ModuleForm) return null
+          const ModuleForm = moduleForms[moduleKey]
+          if (!ModuleForm) return null
 
-        return (
-          <Card
-            key={name}
-            className="animate-in slide-in-from-top-2 fade-in fill-mode-backwards flex flex-col duration-700"
-            style={{
-              animationDelay: `calc(150ms * ${Math.floor(index / columnCount)})`,
-            }}
-          >
-            <CardHeader className="flex-row justify-between space-y-0">
-              <CardTitle>{name}</CardTitle>
-              <ModuleSwitch moduleKey={moduleKey} moduleData={moduleData} />
-            </CardHeader>
-            <CardContent>
-              <CardDescription>{description}</CardDescription>
-            </CardContent>
-            <CardFooter className="h-full">
-              <Credenza>
-                <CredenzaContent className="max-h-[90%] overflow-auto lg:max-h-[70%]">
-                  <CredenzaHeader>
-                    <CredenzaTitle>{name}</CredenzaTitle>
-                    <CredenzaDescription>{description}</CredenzaDescription>
-                  </CredenzaHeader>
-                  <CredenzaBody>
-                    <ModuleForm />
-                  </CredenzaBody>
-                </CredenzaContent>
-                <CredenzaTrigger asChild>
-                  <Button variant="secondary" className="mt-auto w-full">
-                    {moduleData ? "Edit module" : "Setup module"}
-                  </Button>
-                </CredenzaTrigger>
-              </Credenza>
-            </CardFooter>
-          </Card>
-        )
-      })}
+          return (
+            <Card
+              key={name}
+              className="animate-in slide-in-from-top-2 fade-in fill-mode-backwards flex flex-col duration-700"
+              style={{
+                animationDelay: `calc(150ms * ${Math.floor(index / columnCount)})`,
+              }}
+            >
+              <CardHeader className="flex-row justify-between space-y-0">
+                <CardTitle>{name}</CardTitle>
+                <ModuleSwitch
+                  moduleId={moduleId as keyof GuildModules}
+                  moduleData={moduleData}
+                />
+              </CardHeader>
+              <CardContent>
+                <CardDescription>{description}</CardDescription>
+              </CardContent>
+              <CardFooter className="h-full">
+                <Credenza>
+                  <CredenzaContent className="max-h-[90%] overflow-auto lg:max-h-[70%]">
+                    <CredenzaHeader>
+                      <CredenzaTitle>{name}</CredenzaTitle>
+                      <CredenzaDescription>{description}</CredenzaDescription>
+                    </CredenzaHeader>
+                    <CredenzaBody>
+                      <ModuleForm />
+                    </CredenzaBody>
+                  </CredenzaContent>
+                  <CredenzaTrigger asChild>
+                    <Button variant="secondary" className="mt-auto w-full">
+                      {moduleData ? "Edit module" : "Setup module"}
+                    </Button>
+                  </CredenzaTrigger>
+                </Credenza>
+              </CardFooter>
+            </Card>
+          )
+        },
+      )}
     </div>
   )
 }
 
 const ModuleSwitch = <T extends keyof GuildModules>({
-  moduleKey,
+  moduleId,
   moduleData,
 }: {
-  moduleKey: T
+  moduleId: T
   moduleData: GuildModules[T] | undefined
 }) => {
   const dashboard = useDashboardContext()
 
   const onCheckedChange = async (checked: boolean) => {
     try {
-      const updatedModuleData = await updateModule(moduleKey, {
+      const updatedModuleData = await updateModule(moduleId, {
         enabled: checked,
       } as GuildModules[T])
 
       dashboard.setData((dashboardData) => {
         if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-        dashboardData.guild.modules[moduleKey] = updatedModuleData
+        dashboardData.guild.modules[moduleId] = updatedModuleData
         return dashboardData
       })
     } catch {

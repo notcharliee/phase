@@ -2,6 +2,8 @@ import { EmbedBuilder } from "discord.js"
 import { botEvent } from "phasebot"
 
 import invitesTracker from "@androz2091/discord-invites-tracker"
+import { ModuleId } from "@repo/config/phase/modules.ts"
+
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 
@@ -17,14 +19,16 @@ export default botEvent("ready", async (client) => {
     if (!guildSchema) return
 
     if (
-      !guildSchema.modules?.AuditLogs?.enabled ||
-      !guildSchema.modules.AuditLogs.channels.invites ||
-      !client.channels.cache.has(guildSchema.modules.AuditLogs.channels.invites)
+      !guildSchema.modules?.[ModuleId.AuditLogs]?.enabled ||
+      !guildSchema.modules[ModuleId.AuditLogs].channels.invites ||
+      !client.channels.cache.has(
+        guildSchema.modules[ModuleId.AuditLogs].channels.invites,
+      )
     )
       return
 
     const channel = client.channels.cache.get(
-      guildSchema.modules.AuditLogs.channels.invites,
+      guildSchema.modules[ModuleId.AuditLogs].channels.invites,
     )!
     if (!channel.isTextBased()) return
 

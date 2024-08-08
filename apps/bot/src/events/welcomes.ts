@@ -1,21 +1,24 @@
 import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
 import { botEvent } from "phasebot"
 
+import { ModuleId } from "@repo/config/phase/modules.ts"
+
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 
 export default botEvent("guildMemberAdd", async (client, member) => {
   const guildSchema = await db.guilds.findOne({ id: member.guild.id })
-  if (!guildSchema || !guildSchema.modules?.WelcomeMessages?.enabled) return
+  if (!guildSchema || !guildSchema.modules?.[ModuleId.WelcomeMessages]?.enabled)
+    return
 
-  const moduleData = guildSchema.modules.WelcomeMessages
+  const moduleData = guildSchema.modules[ModuleId.WelcomeMessages]
 
   const channel = client.channels.cache.get(moduleData.channel) as
     | GuildTextBasedChannel
     | undefined
 
   if (!channel) {
-    guildSchema.modules.WelcomeMessages.enabled = false
+    guildSchema.modules[ModuleId.WelcomeMessages].enabled = false
     guildSchema.markModified("modules")
     guildSchema.save()
 
@@ -70,7 +73,7 @@ export default botEvent("guildMemberAdd", async (client, member) => {
       files: [Buffer.from(attachment)],
     })
   } else {
-    guildSchema.modules.WelcomeMessages.enabled = false
+    guildSchema.modules[ModuleId.WelcomeMessages].enabled = false
     guildSchema.markModified("modules")
     guildSchema.save()
 

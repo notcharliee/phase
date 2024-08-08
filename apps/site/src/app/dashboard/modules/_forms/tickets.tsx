@@ -5,6 +5,7 @@ import { useState } from "react"
 import { ChannelType } from "@discordjs/core/http-only"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { v4 as randomUUID } from "uuid"
@@ -32,6 +33,7 @@ import { useDashboardContext } from "~/hooks/use-dashboard-context"
 import { updateTickets } from "~/app/dashboard/_actions/updateModule"
 import { ticketsSchema } from "~/validators/modules"
 
+import type { APIMessage } from "@discordjs/core/http-only"
 import type { z } from "zod"
 
 type FormValues = z.infer<typeof ticketsSchema>
@@ -41,12 +43,15 @@ export const Tickets = () => {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(ticketsSchema),
-    defaultValues: dashboard.guild.modules?.Tickets
+    defaultValues: dashboard.guild.modules?.[ModuleId.Tickets]
       ? {
-          ...dashboard.guild.modules.Tickets,
+          ...dashboard.guild.modules[ModuleId.Tickets],
           message:
-            dashboard.guild.modules.Tickets._data.message?.embeds[0]
-              ?.description ?? "",
+            (
+              dashboard.guild.modules[ModuleId.Tickets]._data.message as
+                | APIMessage
+                | undefined
+            )?.embeds[0]?.description ?? "",
         }
       : {
           enabled: true,
@@ -76,7 +81,7 @@ export const Tickets = () => {
         form.reset(data)
         dashboard.setData((dashboardData) => {
           if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-          dashboardData.guild.modules.Tickets = updatedModuleData
+          dashboardData.guild.modules[ModuleId.Tickets] = updatedModuleData
           return dashboardData
         })
         return "Changes saved!"

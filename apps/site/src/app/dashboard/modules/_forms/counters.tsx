@@ -6,6 +6,7 @@ import { useState } from "react"
 import { ChannelType } from "@discordjs/core/http-only"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -39,7 +40,7 @@ export const Counters = () => {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(countersSchema),
-    defaultValues: dashboard.guild.modules?.Counters ?? {
+    defaultValues: dashboard.guild.modules?.[ModuleId.Counters] ?? {
       enabled: false,
       counters: [
         {
@@ -65,14 +66,14 @@ export const Counters = () => {
 
     setIsSubmitting(true)
 
-    toast.promise(updateModule("Counters", data), {
+    toast.promise(updateModule(ModuleId.Counters, data), {
       loading: "Saving changes...",
       error: "An error occured.",
       success: (updatedModuleData) => {
         form.reset(data)
         dashboard.setData((dashboardData) => {
           if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-          dashboardData.guild.modules.Counters = updatedModuleData
+          dashboardData.guild.modules[ModuleId.Counters] = updatedModuleData
           return dashboardData
         })
         return "Changes saved!"

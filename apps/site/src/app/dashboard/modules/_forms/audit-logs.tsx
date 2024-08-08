@@ -3,6 +3,7 @@
 import { useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import { ChannelType } from "discord-api-types/v10"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -21,10 +22,10 @@ import {
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import type { z } from "zod"
-
 import { updateModule } from "~/app/dashboard/_actions/updateModule"
 import { auditLogsSchema } from "~/validators/modules"
+
+import type { z } from "zod"
 
 type FormValues = z.infer<typeof auditLogsSchema>
 
@@ -33,9 +34,9 @@ export const AuditLogs = () => {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(auditLogsSchema),
-    defaultValues: dashboard.guild.modules?.AuditLogs
+    defaultValues: dashboard.guild.modules?.[ModuleId.AuditLogs]
       ? {
-          ...dashboard.guild.modules?.AuditLogs,
+          ...dashboard.guild.modules?.[ModuleId.AuditLogs],
         }
       : {
           enabled: false,
@@ -57,14 +58,14 @@ export const AuditLogs = () => {
 
     setIsSubmitting(true)
 
-    toast.promise(updateModule("AuditLogs", data), {
+    toast.promise(updateModule(ModuleId.AuditLogs, data), {
       loading: "Saving changes...",
       error: "An error occured.",
       success: (updatedModuleData) => {
         form.reset(data)
         dashboard.setData((dashboardData) => {
           if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-          dashboardData.guild.modules.AuditLogs = updatedModuleData
+          dashboardData.guild.modules[ModuleId.AuditLogs] = updatedModuleData
           return dashboardData
         })
         return "Changes saved!"

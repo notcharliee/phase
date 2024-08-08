@@ -2,6 +2,7 @@ import { headers as getHeaders } from "next/headers"
 
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 
 import { DashboardProvider } from "~/components/dashboard/context"
 
@@ -65,8 +66,8 @@ export default async function Template({
     guildModules[key as keyof GuildModules]!._data = {}
   }
 
-  if (guildModules.Forms) {
-    const guildModule = guildModules.Forms
+  if (guildModules[ModuleId.Forms]) {
+    const guildModule = guildModules[ModuleId.Forms]
 
     guildModule._data.messages = (
       await Promise.all(
@@ -83,24 +84,24 @@ export default async function Template({
     ).filter(Boolean) as APIMessage[]
   }
 
-  if (guildModules.Tickets) {
-    const guildModule = guildModules.Tickets
+  if (guildModules[ModuleId.Tickets]) {
+    const guildModule = guildModules[ModuleId.Tickets]
 
     guildModule._data.message =
       apiChannels.find((c) => c.id === guildModule.channel) &&
-      (await discordAPI.channels.getPins(guildModule.channel)).filter(
+      (await discordAPI.channels.getPins(guildModule.channel)).find(
         (pin) => pin.author.id === env.DISCORD_ID,
-      )[0]
+      )
   }
 
-  if (guildModules.TwitchNotifications) {
-    const guildModule = guildModules.TwitchNotifications
+  if (guildModules[ModuleId.TwitchNotifications]) {
+    const guildModule = guildModules[ModuleId.TwitchNotifications]
 
     guildModule._data.streamerNames = []
 
     for (const streamer of guildModule.streamers) {
       const user = await twitchClient.users.getUserById(streamer.id)
-      if (user) guildModule._data.streamerNames.push(user.name)
+      if (user) (guildModule._data.streamerNames as string[]).push(user.name)
     }
   }
 

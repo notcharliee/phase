@@ -1,6 +1,8 @@
 import { AttachmentBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
+import { ModuleId } from "@repo/config/phase/modules.ts"
+
 import { db } from "~/lib/db"
 import { BotError } from "~/lib/errors"
 
@@ -32,9 +34,10 @@ export default new BotSubcommandBuilder()
       id: interaction.guildId!,
     })
 
-    if (!guildDoc?.modules?.Levels?.enabled) {
-      void interaction.reply(BotError.moduleNotEnabled("Levels").toJSON())
-      return
+    if (!guildDoc?.modules?.[ModuleId.Levels]?.enabled) {
+      return void interaction.reply(
+        BotError.moduleNotEnabled(ModuleId.Levels).toJSON(),
+      )
     }
 
     await interaction.deferReply()

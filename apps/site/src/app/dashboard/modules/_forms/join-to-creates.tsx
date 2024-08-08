@@ -3,6 +3,7 @@
 import { useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import { ChannelType } from "discord-api-types/v10"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -21,10 +22,10 @@ import {
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import type { z } from "zod"
-
 import { updateModule } from "~/app/dashboard/_actions/updateModule"
 import { joinToCreatesSchema } from "~/validators/modules"
+
+import type { z } from "zod"
 
 type FormValues = z.infer<typeof joinToCreatesSchema>
 
@@ -33,7 +34,7 @@ export const JoinToCreates = () => {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(joinToCreatesSchema),
-    defaultValues: dashboard.guild.modules?.JoinToCreates ?? {
+    defaultValues: dashboard.guild.modules?.[ModuleId.JoinToCreates] ?? {
       enabled: false,
       channel: "",
       category: "",
@@ -48,14 +49,15 @@ export const JoinToCreates = () => {
 
     setIsSubmitting(true)
 
-    toast.promise(updateModule("JoinToCreates", data), {
+    toast.promise(updateModule(ModuleId.JoinToCreates, data), {
       loading: "Saving changes...",
       error: "An error occured.",
       success: (updatedModuleData) => {
         form.reset(data)
         dashboard.setData((dashboardData) => {
           if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-          dashboardData.guild.modules.JoinToCreates = updatedModuleData
+          dashboardData.guild.modules[ModuleId.JoinToCreates] =
+            updatedModuleData
           return dashboardData
         })
         return "Changes saved!"

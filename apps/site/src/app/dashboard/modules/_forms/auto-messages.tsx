@@ -4,6 +4,7 @@ import { useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import { ChannelType } from "discord-api-types/v10"
 import { default as ms } from "ms"
 import { useFieldArray, useForm } from "react-hook-form"
@@ -49,10 +50,10 @@ export const AutoMessages = () => {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(autoMessagesSchema),
-    defaultValues: dashboard.guild.modules?.AutoMessages
+    defaultValues: dashboard.guild.modules?.[ModuleId.AutoMessages]
       ? {
-          enabled: dashboard.guild.modules.AutoMessages.enabled,
-          messages: dashboard.guild.modules.AutoMessages.messages.map(
+          enabled: dashboard.guild.modules[ModuleId.AutoMessages].enabled,
+          messages: dashboard.guild.modules[ModuleId.AutoMessages].messages.map(
             (message) => ({
               ...message,
               interval: ms(message.interval, { long: true }),
@@ -122,7 +123,8 @@ export const AutoMessages = () => {
           form.reset(data)
           dashboard.setData((dashboardData) => {
             if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-            dashboardData.guild.modules.AutoMessages = updatedModuleData
+            dashboardData.guild.modules[ModuleId.AutoMessages] =
+              updatedModuleData
             return dashboardData
           })
           return "Changes saved!"

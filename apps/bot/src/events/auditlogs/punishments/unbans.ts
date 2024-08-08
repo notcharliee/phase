@@ -1,6 +1,8 @@
 import { AuditLogEvent, EmbedBuilder, GuildTextBasedChannel } from "discord.js"
 import { botEvent } from "phasebot"
 
+import { ModuleId } from "@repo/config/phase/modules.ts"
+
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 
@@ -9,17 +11,17 @@ export default botEvent("guildBanRemove", async (client, unban) => {
   if (!guildSchema) return
 
   if (
-    !guildSchema.modules?.AuditLogs?.enabled ||
-    !guildSchema.modules.AuditLogs.channels.punishments ||
+    !guildSchema.modules?.[ModuleId.AuditLogs]?.enabled ||
+    !guildSchema.modules[ModuleId.AuditLogs].channels.punishments ||
     !client.channels.cache.has(
-      guildSchema.modules.AuditLogs.channels.punishments,
+      guildSchema.modules[ModuleId.AuditLogs].channels.punishments,
     )
   ) {
     return
   }
 
   const logsChannel = client.channels.cache.get(
-    guildSchema.modules.AuditLogs.channels.punishments,
+    guildSchema.modules[ModuleId.AuditLogs].channels.punishments,
   ) as GuildTextBasedChannel
 
   const member = unban.user

@@ -5,6 +5,7 @@ import { useMemo, useState } from "react"
 import emojiData from "@emoji-mart/data"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -26,10 +27,10 @@ import { Label } from "~/components/ui/label"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import type { z } from "zod"
-
 import { updateReactionRoles } from "~/app/dashboard/_actions/updateModule"
 import { reactionRolesSchema } from "~/validators/modules"
+
+import type { z } from "zod"
 
 type FormValues = z.infer<typeof reactionRolesSchema>
 
@@ -38,10 +39,10 @@ export const ReactionRoles = () => {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(reactionRolesSchema),
-    defaultValues: dashboard.guild.modules?.ReactionRoles
+    defaultValues: dashboard.guild.modules?.[ModuleId.ReactionRoles]
       ? {
-          ...dashboard.guild.modules.ReactionRoles,
-          messageUrl: `https://discord.com/channels/${dashboard.guild.id}/${dashboard.guild.modules.ReactionRoles.channel}/${dashboard.guild.modules.ReactionRoles.message}`,
+          ...dashboard.guild.modules[ModuleId.ReactionRoles],
+          messageUrl: `https://discord.com/channels/${dashboard.guild.id}/${dashboard.guild.modules[ModuleId.ReactionRoles].channel}/${dashboard.guild.modules[ModuleId.ReactionRoles].message}`,
         }
       : {
           enabled: false,
@@ -69,7 +70,8 @@ export const ReactionRoles = () => {
         form.reset(data)
         dashboard.setData((dashboardData) => {
           if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-          dashboardData.guild.modules.ReactionRoles = updatedModuleData
+          dashboardData.guild.modules[ModuleId.ReactionRoles] =
+            updatedModuleData
           return dashboardData
         })
         return "Changes saved!"

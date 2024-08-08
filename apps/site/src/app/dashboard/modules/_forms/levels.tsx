@@ -4,6 +4,7 @@ import { useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import { ChannelType } from "discord-api-types/v10"
 import { useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -30,10 +31,10 @@ import { Textarea } from "~/components/ui/textarea"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import type { z } from "zod"
-
 import { updateModule } from "~/app/dashboard/_actions/updateModule"
 import { levelsSchema } from "~/validators/modules"
+
+import type { z } from "zod"
 
 type FormValues = z.infer<typeof levelsSchema>
 
@@ -42,7 +43,7 @@ export const Levels = () => {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(levelsSchema),
-    defaultValues: dashboard.guild.modules?.Levels ?? {
+    defaultValues: dashboard.guild.modules?.[ModuleId.Levels] ?? {
       enabled: false,
       channel: "",
       message: "",
@@ -64,14 +65,14 @@ export const Levels = () => {
 
     setIsSubmitting(true)
 
-    toast.promise(updateModule("Levels", data), {
+    toast.promise(updateModule(ModuleId.Levels, data), {
       loading: "Saving changes...",
       error: "An error occured.",
       success: (updatedModuleData) => {
         form.reset(data)
         dashboard.setData((dashboardData) => {
           if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-          dashboardData.guild.modules.Levels = updatedModuleData
+          dashboardData.guild.modules[ModuleId.Levels] = updatedModuleData
           return dashboardData
         })
         return "Changes saved!"

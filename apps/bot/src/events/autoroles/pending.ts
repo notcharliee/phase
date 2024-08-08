@@ -1,6 +1,8 @@
 import { GuildFeature } from "discord.js"
 import { botEvent } from "phasebot"
 
+import { ModuleId } from "@repo/config/phase/modules.ts"
+
 import { db } from "~/lib/db"
 
 export default botEvent(
@@ -16,7 +18,7 @@ export default botEvent(
       return
 
     const guildSchema = await db.guilds.findOne({ id: newMember.guild.id })
-    const autoRolesModule = guildSchema?.modules?.AutoRoles
+    const autoRolesModule = guildSchema?.modules?.[ModuleId.AutoRoles]
 
     if (!autoRolesModule?.enabled) return
 

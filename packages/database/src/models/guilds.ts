@@ -1,3 +1,4 @@
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import mongoose from "mongoose"
 
 import { defineModel } from "~/utils"
@@ -8,9 +9,9 @@ export interface Guild {
   /** The user IDs of the guild's admins. */
   admins: string[]
   /** The permission data for the guild's commands. */
-  commands: Record<string, GuildCommand> | undefined
+  commands?: Record<string, GuildCommand>
   /** The module configurations for guild. */
-  modules: Partial<GuildModules> | undefined
+  modules?: Partial<GuildModules>
 }
 
 export interface GuildCommand {
@@ -24,7 +25,7 @@ export interface GuildCommand {
 
 export interface GuildModules {
   /** The Audit Log module configuration. */
-  AuditLogs: {
+  [ModuleId.AuditLogs]: {
     /** Whether or not the module is enabled. */
     enabled: boolean
     /** The channels to send logs to. */
@@ -45,7 +46,7 @@ export interface GuildModules {
   }
 
   /** The Auto Messages module configuration. */
-  AutoMessages: {
+  [ModuleId.AutoMessages]: {
     /** Whether or not the module is enabled. */
     enabled: boolean
     /** The messages to send. */
@@ -64,7 +65,7 @@ export interface GuildModules {
   }
 
   /** The Auto Roles module configuration. */
-  AutoRoles: {
+  [ModuleId.AutoRoles]: {
     /** Whether or not the module is enabled. */
     enabled: boolean
     /** The IDs of the roles to assign. */
@@ -72,7 +73,7 @@ export interface GuildModules {
   }
 
   /** The Bump Reminders module configuration. */
-  BumpReminders: {
+  [ModuleId.BumpReminders]: {
     /** Whether or not the module is enabled. */
     enabled: boolean
     /** The time to wait before sending the reminder. */
@@ -84,7 +85,7 @@ export interface GuildModules {
   }
 
   /** The Counters module configuration. */
-  Counters: {
+  [ModuleId.Counters]: {
     /** Whether or not the module is enabled. */
     enabled: boolean
     /** The channels to update. */
@@ -99,7 +100,7 @@ export interface GuildModules {
   }
 
   /** The Forms module configuration. */
-  Forms: {
+  [ModuleId.Forms]: {
     /** Whether or not the module is enabled. */
     enabled: boolean
     /** The channel to send form responses to. */
@@ -118,7 +119,7 @@ export interface GuildModules {
   }
 
   /** The Join to Create module configuration. */
-  JoinToCreates: {
+  [ModuleId.JoinToCreates]: {
     /** Whether or not the module is enabled. */
     enabled: boolean
     /** The IDs of the active join-to-create channels. */
@@ -130,7 +131,7 @@ export interface GuildModules {
   }
 
   /** The Levels module configuration. */
-  Levels: {
+  [ModuleId.Levels]: {
     /** Whether or not the module is enabled. */
     enabled: boolean
     /** The channel to send level-up messages to.
@@ -156,7 +157,7 @@ export interface GuildModules {
   }
 
   /** The Reaction Roles module configuration. */
-  ReactionRoles: {
+  [ModuleId.ReactionRoles]: {
     /** Whether or not the module is enabled. */
     enabled: boolean
     /** The ID of the channel the reaction role message is in. */
@@ -176,7 +177,7 @@ export interface GuildModules {
   }
 
   /** The Tickets module configuration. */
-  Tickets: {
+  [ModuleId.Tickets]: {
     /** Whether or not the module is enabled. */
     enabled: boolean
     /** The ID of the channel the panel is in. */
@@ -197,7 +198,7 @@ export interface GuildModules {
   }
 
   /** The Twitch Notifications module configuration. */
-  TwitchNotifications: {
+  [ModuleId.TwitchNotifications]: {
     /** Whether or not the module is enabled. */
     enabled: boolean
     /** The streamers to receive notifications for. */
@@ -214,7 +215,7 @@ export interface GuildModules {
   }
 
   /** The Warnings module configuration. */
-  Warnings: {
+  [ModuleId.Warnings]: {
     /** Whether or not the module is enabled. */
     enabled: boolean
     /** The IDs of the warning roles. */
@@ -222,7 +223,7 @@ export interface GuildModules {
   }
 
   /** The Welcome Messages module configuration. */
-  WelcomeMessages: {
+  [ModuleId.WelcomeMessages]: {
     /** Whether or not the module is enabled. */
     enabled: boolean
     /** The ID of the channel to send welcome messages to. */
@@ -256,11 +257,13 @@ export const guilds = defineModel(
     },
     modules: {
       type: new mongoose.Schema<GuildModules>({
-        AuditLogs: {
-          type: new mongoose.Schema<GuildModules["AuditLogs"]>({
+        [ModuleId.AuditLogs]: {
+          type: new mongoose.Schema<GuildModules[ModuleId.AuditLogs]>({
             enabled: { type: Boolean, required: true },
             channels: {
-              type: new mongoose.Schema<GuildModules["AuditLogs"]["channels"]>({
+              type: new mongoose.Schema<
+                GuildModules[ModuleId.AuditLogs]["channels"]
+              >({
                 server: String,
                 messages: String,
                 voice: String,
@@ -272,13 +275,13 @@ export const guilds = defineModel(
             },
           }),
         },
-        AutoMessages: {
-          type: new mongoose.Schema<GuildModules["AutoMessages"]>({
+        [ModuleId.AutoMessages]: {
+          type: new mongoose.Schema<GuildModules[ModuleId.AutoMessages]>({
             enabled: { type: Boolean, required: true },
             messages: {
               type: [
                 new mongoose.Schema<
-                  GuildModules["AutoMessages"]["messages"][number]
+                  GuildModules[ModuleId.AutoMessages]["messages"][number]
                 >({
                   name: { type: String, required: true },
                   channel: { type: String, required: true },
@@ -291,27 +294,27 @@ export const guilds = defineModel(
             },
           }),
         },
-        AutoRoles: {
-          type: new mongoose.Schema<GuildModules["AutoRoles"]>({
+        [ModuleId.AutoRoles]: {
+          type: new mongoose.Schema<GuildModules[ModuleId.AutoRoles]>({
             enabled: { type: Boolean, required: true },
             roles: { type: [String], required: true },
           }),
         },
-        BumpReminders: {
-          type: new mongoose.Schema<GuildModules["BumpReminders"]>({
+        [ModuleId.BumpReminders]: {
+          type: new mongoose.Schema<GuildModules[ModuleId.BumpReminders]>({
             enabled: { type: Boolean, required: true },
             time: { type: Number, required: true },
             initialMessage: { type: String, required: true },
             reminderMessage: { type: String, required: true },
           }),
         },
-        Counters: {
-          type: new mongoose.Schema<GuildModules["Counters"]>({
+        [ModuleId.Counters]: {
+          type: new mongoose.Schema<GuildModules[ModuleId.Counters]>({
             enabled: { type: Boolean, required: true },
             counters: {
               type: [
                 new mongoose.Schema<
-                  GuildModules["Counters"]["counters"][number]
+                  GuildModules[ModuleId.Counters]["counters"][number]
                 >({
                   name: { type: String, required: true },
                   channel: { type: String, required: true },
@@ -322,13 +325,15 @@ export const guilds = defineModel(
             },
           }),
         },
-        Forms: {
-          type: new mongoose.Schema<GuildModules["Forms"]>({
+        [ModuleId.Forms]: {
+          type: new mongoose.Schema<GuildModules[ModuleId.Forms]>({
             enabled: { type: Boolean, required: true },
             channel: { type: String, required: true },
             forms: {
               type: [
-                new mongoose.Schema<GuildModules["Forms"]["forms"][number]>({
+                new mongoose.Schema<
+                  GuildModules[ModuleId.Forms]["forms"][number]
+                >({
                   id: { type: String, required: true },
                   name: { type: String, required: true },
                   channel: { type: String, required: true },
@@ -339,16 +344,16 @@ export const guilds = defineModel(
             },
           }),
         },
-        JoinToCreates: {
-          type: new mongoose.Schema<GuildModules["JoinToCreates"]>({
+        [ModuleId.JoinToCreates]: {
+          type: new mongoose.Schema<GuildModules[ModuleId.JoinToCreates]>({
             enabled: { type: Boolean, required: true },
             active: { type: [String], required: true },
             channel: { type: String, required: true },
             category: { type: String, required: true },
           }),
         },
-        Levels: {
-          type: new mongoose.Schema<GuildModules["Levels"]>({
+        [ModuleId.Levels]: {
+          type: new mongoose.Schema<GuildModules[ModuleId.Levels]>({
             enabled: { type: Boolean, required: true },
             channel: { type: String, required: true },
             message: { type: String, required: true },
@@ -356,7 +361,9 @@ export const guilds = defineModel(
             background: { type: String, required: false },
             roles: {
               type: [
-                new mongoose.Schema<GuildModules["Levels"]["roles"][number]>({
+                new mongoose.Schema<
+                  GuildModules[ModuleId.Levels]["roles"][number]
+                >({
                   level: { type: Number, required: true },
                   role: { type: String, required: true },
                 }),
@@ -365,15 +372,15 @@ export const guilds = defineModel(
             },
           }),
         },
-        ReactionRoles: {
-          type: new mongoose.Schema<GuildModules["ReactionRoles"]>({
+        [ModuleId.ReactionRoles]: {
+          type: new mongoose.Schema<GuildModules[ModuleId.ReactionRoles]>({
             enabled: { type: Boolean, required: true },
             channel: { type: String, required: true },
             message: { type: String, required: true },
             reactions: {
               type: [
                 new mongoose.Schema<
-                  GuildModules["ReactionRoles"]["reactions"][number]
+                  GuildModules[ModuleId.ReactionRoles]["reactions"][number]
                 >({
                   emoji: { type: String, required: true },
                   role: { type: String, required: true },
@@ -383,40 +390,19 @@ export const guilds = defineModel(
             },
           }),
         },
-        Tickets: {
-          type: new mongoose.Schema<GuildModules["Tickets"]>({
+        [ModuleId.Tickets]: {
+          type: new mongoose.Schema<GuildModules[ModuleId.Tickets]>({
             enabled: { type: Boolean, required: true },
             channel: { type: String, required: true },
             max_open: { type: Number, required: true },
             tickets: {
               type: [
-                new mongoose.Schema<GuildModules["Tickets"]["tickets"][number]>(
-                  {
-                    id: { type: String, required: true },
-                    name: { type: String, required: true },
-                    message: { type: String, required: true },
-                    mention: String,
-                  },
-                ),
-              ],
-              required: true,
-            },
-          }),
-        },
-        TwitchNotifications: {
-          type: new mongoose.Schema<GuildModules["TwitchNotifications"]>({
-            enabled: { type: Boolean, required: true },
-            streamers: {
-              type: [
                 new mongoose.Schema<
-                  GuildModules["TwitchNotifications"]["streamers"][number]
+                  GuildModules[ModuleId.Tickets]["tickets"][number]
                 >({
                   id: { type: String, required: true },
-                  channel: { type: String, required: true },
-                  events: {
-                    type: [String],
-                    required: true,
-                  },
+                  name: { type: String, required: true },
+                  message: { type: String, required: true },
                   mention: String,
                 }),
               ],
@@ -424,21 +410,44 @@ export const guilds = defineModel(
             },
           }),
         },
-        Warnings: {
-          type: new mongoose.Schema<GuildModules["Warnings"]>({
+        [ModuleId.TwitchNotifications]: {
+          type: new mongoose.Schema<GuildModules[ModuleId.TwitchNotifications]>(
+            {
+              enabled: { type: Boolean, required: true },
+              streamers: {
+                type: [
+                  new mongoose.Schema<
+                    GuildModules[ModuleId.TwitchNotifications]["streamers"][number]
+                  >({
+                    id: { type: String, required: true },
+                    channel: { type: String, required: true },
+                    events: {
+                      type: [String],
+                      required: true,
+                    },
+                    mention: String,
+                  }),
+                ],
+                required: true,
+              },
+            },
+          ),
+        },
+        [ModuleId.Warnings]: {
+          type: new mongoose.Schema<GuildModules[ModuleId.Warnings]>({
             enabled: { type: Boolean, required: true },
             warnings: { type: [String], required: true },
           }),
         },
-        WelcomeMessages: {
-          type: new mongoose.Schema<GuildModules["WelcomeMessages"]>({
+        [ModuleId.WelcomeMessages]: {
+          type: new mongoose.Schema<GuildModules[ModuleId.WelcomeMessages]>({
             enabled: { type: Boolean, required: true },
             channel: { type: String, required: true },
             message: { type: String, required: true },
             mention: { type: Boolean, required: true },
             card: {
               type: new mongoose.Schema<
-                GuildModules["WelcomeMessages"]["card"]
+                GuildModules[ModuleId.WelcomeMessages]["card"]
               >({
                 enabled: { type: Boolean, required: true },
                 background: { type: String, required: false },

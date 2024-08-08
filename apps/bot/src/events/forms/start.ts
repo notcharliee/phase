@@ -8,6 +8,8 @@ import {
 } from "discord.js"
 import { botEvent } from "phasebot"
 
+import { ModuleId } from "@repo/config/phase/modules.ts"
+
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
@@ -24,10 +26,12 @@ export default botEvent("interactionCreate", async (client, interaction) => {
   await interaction.deferReply({ ephemeral: true })
 
   const guildSchema = await db.guilds.findOne({ id: interaction.guildId })
-  const moduleConfig = guildSchema?.modules?.Forms
+  const moduleConfig = guildSchema?.modules?.[ModuleId.Forms]
 
   if (!moduleConfig?.enabled) {
-    return interaction.editReply(BotError.moduleNotEnabled("Forms").toJSON())
+    return interaction.editReply(
+      BotError.moduleNotEnabled(ModuleId.Forms).toJSON(),
+    )
   }
 
   const form = moduleConfig.forms.find(

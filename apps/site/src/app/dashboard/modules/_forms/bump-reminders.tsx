@@ -3,6 +3,7 @@
 import { useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import ms from "ms"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -22,10 +23,10 @@ import { Textarea } from "~/components/ui/textarea"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import type { z } from "zod"
-
 import { updateModule } from "~/app/dashboard/_actions/updateModule"
 import { bumpRemindersSchema } from "~/validators/modules"
+
+import type { z } from "zod"
 
 type FormValues = z.infer<typeof bumpRemindersSchema>
 
@@ -34,10 +35,12 @@ export const BumpReminders = () => {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(bumpRemindersSchema),
-    defaultValues: dashboard.guild.modules?.BumpReminders
+    defaultValues: dashboard.guild.modules?.[ModuleId.BumpReminders]
       ? {
-          ...dashboard.guild.modules.BumpReminders,
-          time: ms(dashboard.guild.modules.BumpReminders.time, { long: true }),
+          ...dashboard.guild.modules[ModuleId.BumpReminders],
+          time: ms(dashboard.guild.modules[ModuleId.BumpReminders].time, {
+            long: true,
+          }),
         }
       : {
           enabled: false,
@@ -61,7 +64,7 @@ export const BumpReminders = () => {
     } finally {
       if (newTime) {
         toast.promise(
-          updateModule("BumpReminders", {
+          updateModule(ModuleId.BumpReminders, {
             ...data,
             time: newTime,
           }),
@@ -71,8 +74,10 @@ export const BumpReminders = () => {
             success: (updatedModuleData) => {
               form.reset(data)
               dashboard.setData((dashboardData) => {
-                if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-                dashboardData.guild.modules.BumpReminders = updatedModuleData
+                if (!dashboardData.guild.modules)
+                  dashboardData.guild.modules = {}
+                dashboardData.guild.modules[ModuleId.BumpReminders] =
+                  updatedModuleData
                 return dashboardData
               })
               return "Changes saved!"

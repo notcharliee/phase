@@ -1,6 +1,7 @@
 import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import dedent from "dedent"
 
 import { db } from "~/lib/db"
@@ -29,15 +30,16 @@ export default new BotSubcommandBuilder()
     }
 
     const guildSchema = await db.guilds.findOne({ id: interaction.guildId })
-    const warningsModule = guildSchema?.modules?.Warnings
+    const warningsModule = guildSchema?.modules?.[ModuleId.Warnings]
 
     if (!warningsModule?.enabled) {
-      void interaction.reply(BotError.moduleNotEnabled("Warnings").toJSON())
-      return
+      return void interaction.reply(
+        BotError.moduleNotEnabled(ModuleId.Warnings).toJSON(),
+      )
     }
 
     const punishmentLogChannelId =
-      guildSchema!.modules!.AuditLogs?.channels.punishments
+      guildSchema!.modules![ModuleId.AuditLogs]?.channels.punishments
 
     const punishmentLogChannel = punishmentLogChannelId
       ? (interaction.client.channels.cache.get(punishmentLogChannelId) as

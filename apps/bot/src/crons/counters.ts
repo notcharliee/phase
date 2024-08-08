@@ -1,13 +1,16 @@
-import { BaseGuildVoiceChannel } from "discord.js"
 import { BotCronBuilder } from "phasebot/builders"
 
+import { ModuleId } from "@repo/config/phase/modules.ts"
+
 import { db } from "~/lib/db"
+
+import type { BaseGuildVoiceChannel } from "discord.js"
 
 export default new BotCronBuilder()
   .setPattern("*/10 * * * *")
   .setExecute(async (client) => {
     const guildDocs = await db.guilds.find({
-      "modules.Counters.enabled": true,
+      [`modules.${ModuleId.Counters}.enabled`]: true,
     })
 
     for (const guildDoc of guildDocs) {
@@ -23,7 +26,7 @@ export default new BotCronBuilder()
 
       if (!guild) continue
 
-      for (const counter of guildDoc.modules!.Counters!.counters) {
+      for (const counter of guildDoc.modules![ModuleId.Counters]!.counters) {
         const channel = (guild.channels.cache.get(counter.channel) ??
           (await client.channels
             .fetch(counter.channel)

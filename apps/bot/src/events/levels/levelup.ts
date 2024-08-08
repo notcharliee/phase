@@ -1,6 +1,8 @@
 import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
 import { botEvent } from "phasebot"
 
+import { ModuleId } from "@repo/config/phase/modules.ts"
+
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 
@@ -10,7 +12,7 @@ export default botEvent("messageCreate", async (client, message) => {
   const guildSchema = await db.guilds.findOne({
     id: message.guildId,
   })
-  const levelModule = guildSchema?.modules?.Levels
+  const levelModule = guildSchema?.modules?.[ModuleId.Levels]
   if (!levelModule?.enabled) return
 
   let levelSchema = await db.levels.findOne({

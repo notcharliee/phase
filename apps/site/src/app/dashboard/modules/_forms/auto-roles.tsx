@@ -4,6 +4,7 @@ import { useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -20,10 +21,10 @@ import {
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import type { z } from "zod"
-
 import { updateModule } from "~/app/dashboard/_actions/updateModule"
 import { autoRolesSchema } from "~/validators/modules"
+
+import type { z } from "zod"
 
 type FormValues = z.infer<typeof autoRolesSchema>
 
@@ -32,12 +33,14 @@ export const AutoRoles = () => {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(autoRolesSchema),
-    defaultValues: dashboard.guild.modules?.AutoRoles
+    defaultValues: dashboard.guild.modules?.[ModuleId.AutoRoles]
       ? {
-          ...dashboard.guild.modules.AutoRoles,
-          roles: dashboard.guild.modules.AutoRoles.roles.map((roleId) => ({
-            id: roleId,
-          })),
+          ...dashboard.guild.modules[ModuleId.AutoRoles],
+          roles: dashboard.guild.modules[ModuleId.AutoRoles].roles.map(
+            (roleId) => ({
+              id: roleId,
+            }),
+          ),
         }
       : {
           enabled: false,
@@ -56,7 +59,7 @@ export const AutoRoles = () => {
     data.enabled = true
 
     toast.promise(
-      updateModule("AutoRoles", {
+      updateModule(ModuleId.AutoRoles, {
         enabled: data.enabled,
         roles: data.roles.map((role) => role.id),
       }),
@@ -67,7 +70,7 @@ export const AutoRoles = () => {
           form.reset(data)
           dashboard.setData((dashboardData) => {
             if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-            dashboardData.guild.modules.AutoRoles = updatedModuleData
+            dashboardData.guild.modules[ModuleId.AutoRoles] = updatedModuleData
             return dashboardData
           })
           return "Changes saved!"

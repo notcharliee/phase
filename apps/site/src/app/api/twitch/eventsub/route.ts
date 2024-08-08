@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import { StatusCodes } from "http-status-codes"
 
 import { database } from "@/lib/db"
@@ -71,10 +72,9 @@ export const POST = async (request: NextRequest) => {
     })
 
     for (const guild of guilds) {
-      guild.modules!.TwitchNotifications!.streamers =
-        guild.modules!.TwitchNotifications!.streamers.filter(
-          (streamer) => streamer.id !== channelId,
-        )
+      guild.modules![ModuleId.TwitchNotifications]!.streamers = guild.modules![
+        ModuleId.TwitchNotifications
+      ]!.streamers.filter((streamer) => streamer.id !== channelId)
 
       await guild.save()
 
@@ -91,9 +91,9 @@ export const POST = async (request: NextRequest) => {
     })
 
     for (const guild of guilds) {
-      const moduleConfig = guild.modules!.TwitchNotifications!.streamers.find(
-        (streamer) => streamer.id === streamerId,
-      )!
+      const moduleConfig = guild.modules![
+        ModuleId.TwitchNotifications
+      ]!.streamers.find((streamer) => streamer.id === streamerId)!
 
       const streamer = (await twitchClient.users.getUserById(streamerId))!
 

@@ -4,6 +4,7 @@ import { useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -22,10 +23,10 @@ import {
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import type { z } from "zod"
-
 import { updateModule } from "~/app/dashboard/_actions/updateModule"
 import { warningsSchema } from "~/validators/modules"
+
+import type { z } from "zod"
 
 type FormValues = z.infer<typeof warningsSchema>
 
@@ -34,12 +35,14 @@ export const Warnings = () => {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(warningsSchema),
-    defaultValues: dashboard.guild.modules?.Warnings
+    defaultValues: dashboard.guild.modules?.[ModuleId.Warnings]
       ? {
-          ...dashboard.guild.modules.Warnings,
-          warnings: dashboard.guild.modules.Warnings.warnings.map((role) => ({
-            role,
-          })),
+          ...dashboard.guild.modules[ModuleId.Warnings],
+          warnings: dashboard.guild.modules[ModuleId.Warnings].warnings.map(
+            (role) => ({
+              role,
+            }),
+          ),
         }
       : {
           enabled: false,
@@ -60,7 +63,7 @@ export const Warnings = () => {
     setIsSubmitting(true)
 
     toast.promise(
-      updateModule("Warnings", {
+      updateModule(ModuleId.Warnings, {
         enabled: data.enabled,
         warnings: data.warnings.map((role) => role.role),
       }),
@@ -71,7 +74,7 @@ export const Warnings = () => {
           form.reset(data)
           dashboard.setData((dashboardData) => {
             if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-            dashboardData.guild.modules.Warnings = updatedModuleData
+            dashboardData.guild.modules[ModuleId.Warnings] = updatedModuleData
             return dashboardData
           })
           return "Changes saved!"

@@ -6,6 +6,8 @@ import {
 } from "discord.js"
 import { botEvent } from "phasebot"
 
+import { ModuleId } from "@repo/config/phase/modules.ts"
+
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
@@ -14,9 +16,9 @@ export default botEvent("messageCreate", async (_, message) => {
   if (message.interaction?.commandName !== "bump") return
 
   const guild = await db.guilds.findOne({ id: message.guildId })
-  if (!guild || !guild.modules?.BumpReminders?.enabled) return
+  if (!guild || !guild.modules?.[ModuleId.BumpReminders]?.enabled) return
 
-  const moduleConfig = guild.modules.BumpReminders
+  const moduleConfig = guild.modules[ModuleId.BumpReminders]
 
   const reminder = await db.reminders.create({
     guild: message.guildId,

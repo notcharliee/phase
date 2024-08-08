@@ -3,6 +3,7 @@
 import { useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import { ChannelType } from "discord-api-types/v10"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -24,10 +25,10 @@ import { Input } from "~/components/ui/input"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import type { z } from "zod"
-
 import { updateTwitchNotifications } from "~/app/dashboard/_actions/updateModule"
 import { twitchNotificationsSchema } from "~/validators/modules"
+
+import type { z } from "zod"
 
 type FormValues = z.infer<typeof twitchNotificationsSchema>
 
@@ -36,16 +37,18 @@ export const TwitchNotifications = () => {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(twitchNotificationsSchema),
-    defaultValues: dashboard.guild.modules?.TwitchNotifications
+    defaultValues: dashboard.guild.modules?.[ModuleId.TwitchNotifications]
       ? {
-          ...dashboard.guild.modules?.TwitchNotifications,
-          streamers: dashboard.guild.modules?.TwitchNotifications.streamers.map(
-            (streamer, index) => ({
-              ...streamer,
-              id: dashboard.guild.modules!.TwitchNotifications!._data
-                .streamerNames[index],
-            }),
-          ),
+          ...dashboard.guild.modules[ModuleId.TwitchNotifications],
+          streamers: dashboard.guild.modules[
+            ModuleId.TwitchNotifications
+          ]?.streamers.map((streamer, index) => ({
+            ...streamer,
+            id: (
+              dashboard.guild.modules![ModuleId.TwitchNotifications]!._data
+                .streamerNames as string[]
+            )[index],
+          })),
         }
       : {
           enabled: false,
@@ -74,7 +77,8 @@ export const TwitchNotifications = () => {
         form.reset(data)
         dashboard.setData((dashboardData) => {
           if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-          dashboardData.guild.modules.TwitchNotifications = updatedModuleData
+          dashboardData.guild.modules[ModuleId.TwitchNotifications] =
+            updatedModuleData
           return dashboardData
         })
         return "Changes saved!"

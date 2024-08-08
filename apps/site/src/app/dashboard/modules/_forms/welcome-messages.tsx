@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import { ChannelType } from "discord-api-types/v10"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -25,10 +26,10 @@ import { Textarea } from "~/components/ui/textarea"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import type { z } from "zod"
-
 import { updateModule } from "~/app/dashboard/_actions/updateModule"
 import { welcomeMessagesSchema } from "~/validators/modules"
+
+import type { z } from "zod"
 
 type FormValues = z.infer<typeof welcomeMessagesSchema>
 
@@ -37,7 +38,7 @@ export const WelcomeMessages = () => {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(welcomeMessagesSchema),
-    defaultValues: dashboard.guild.modules?.WelcomeMessages ?? {
+    defaultValues: dashboard.guild.modules?.[ModuleId.WelcomeMessages] ?? {
       enabled: false,
       channel: "",
       message: "",
@@ -58,14 +59,15 @@ export const WelcomeMessages = () => {
 
     setIsSubmitting(true)
 
-    toast.promise(updateModule("WelcomeMessages", data), {
+    toast.promise(updateModule(ModuleId.WelcomeMessages, data), {
       loading: "Saving changes...",
       error: "An error occured.",
       success: (updatedModuleData) => {
         form.reset(data)
         dashboard.setData((dashboardData) => {
           if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-          dashboardData.guild.modules.WelcomeMessages = updatedModuleData
+          dashboardData.guild.modules[ModuleId.WelcomeMessages] =
+            updatedModuleData
           return dashboardData
         })
         return "Changes saved!"

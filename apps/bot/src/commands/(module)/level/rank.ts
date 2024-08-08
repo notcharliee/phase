@@ -1,5 +1,7 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
+import { ModuleId } from "@repo/config/phase/modules.ts"
+
 import { db } from "~/lib/db"
 import { BotError } from "~/lib/errors"
 
@@ -19,9 +21,10 @@ export default new BotSubcommandBuilder()
       id: interaction.guildId!,
     })
 
-    if (!guildDoc?.modules?.Levels?.enabled) {
-      void interaction.reply(BotError.moduleNotEnabled("Levels").toJSON())
-      return
+    if (!guildDoc?.modules?.[ModuleId.Levels]?.enabled) {
+      return void interaction.reply(
+        BotError.moduleNotEnabled(ModuleId.Levels).toJSON(),
+      )
     }
 
     try {
@@ -55,8 +58,8 @@ export default new BotSubcommandBuilder()
         })) + 1
 
       const bannerImage =
-        (guildDoc.modules.Levels.background
-          ? await fetch(guildDoc.modules.Levels.background)
+        (guildDoc.modules[ModuleId.Levels].background
+          ? await fetch(guildDoc.modules[ModuleId.Levels].background)
               .catch(() => undefined)
               .then((res) =>
                 res?.headers.get("content-type")?.startsWith("image")

@@ -1,6 +1,8 @@
 import { AuditLogEvent, EmbedBuilder, GuildTextBasedChannel } from "discord.js"
 import { botEvent } from "phasebot"
 
+import { ModuleId } from "@repo/config/phase/modules.ts"
+
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 
@@ -11,15 +13,17 @@ export default botEvent("channelPinsUpdate", async (client, channel) => {
   if (!guildSchema) return
 
   if (
-    !guildSchema.modules?.AuditLogs?.enabled ||
-    !guildSchema.modules.AuditLogs.channels.messages ||
-    !client.channels.cache.has(guildSchema.modules.AuditLogs.channels.messages)
+    !guildSchema.modules?.[ModuleId.AuditLogs]?.enabled ||
+    !guildSchema.modules[ModuleId.AuditLogs].channels.messages ||
+    !client.channels.cache.has(
+      guildSchema.modules[ModuleId.AuditLogs].channels.messages,
+    )
   ) {
     return
   }
 
   const logsChannel = client.channels.cache.get(
-    guildSchema.modules.AuditLogs.channels.messages,
+    guildSchema.modules[ModuleId.AuditLogs].channels.messages,
   ) as GuildTextBasedChannel
 
   const pinEvent = await channel.guild

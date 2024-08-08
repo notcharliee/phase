@@ -5,6 +5,7 @@ import { useState } from "react"
 import { ChannelType } from "@discordjs/core/http-only"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { v4 as randomUUID } from "uuid"
@@ -40,10 +41,10 @@ export const Forms = () => {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formsSchema),
-    defaultValues: dashboard.guild.modules?.Forms
+    defaultValues: dashboard.guild.modules?.[ModuleId.Forms]
       ? {
-          ...dashboard.guild.modules.Forms,
-          forms: dashboard.guild.modules.Forms.forms.map((form) => ({
+          ...dashboard.guild.modules[ModuleId.Forms],
+          forms: dashboard.guild.modules[ModuleId.Forms].forms.map((form) => ({
             ...form,
             questions: form.questions.map((question) => ({ question })),
           })),
@@ -83,7 +84,7 @@ export const Forms = () => {
         form.reset(data)
         dashboard.setData((dashboardData) => {
           if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-          dashboardData.guild.modules.Forms = updatedModuleData
+          dashboardData.guild.modules[ModuleId.Forms] = updatedModuleData
           return dashboardData
         })
         return "Changes saved!"

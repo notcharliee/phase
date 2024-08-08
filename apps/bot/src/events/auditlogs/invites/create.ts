@@ -1,6 +1,8 @@
 import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
 import { botEvent } from "phasebot"
 
+import { ModuleId } from "@repo/config/phase/modules.ts"
+
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 
@@ -9,14 +11,16 @@ export default botEvent("inviteCreate", async (client, invite) => {
   if (!guildSchema) return
 
   if (
-    !guildSchema.modules?.AuditLogs?.enabled ||
-    !guildSchema.modules.AuditLogs.channels.invites ||
-    !client.channels.cache.has(guildSchema.modules.AuditLogs.channels.invites)
+    !guildSchema.modules?.[ModuleId.AuditLogs]?.enabled ||
+    !guildSchema.modules[ModuleId.AuditLogs].channels.invites ||
+    !client.channels.cache.has(
+      guildSchema.modules[ModuleId.AuditLogs].channels.invites,
+    )
   )
     return
 
   const logsChannel = client.channels.cache.get(
-    guildSchema.modules.AuditLogs.channels.invites,
+    guildSchema.modules[ModuleId.AuditLogs].channels.invites,
   ) as GuildTextBasedChannel
 
   const inviter = invite.inviter ?? "`Unknown`"

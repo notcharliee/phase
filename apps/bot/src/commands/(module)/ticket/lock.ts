@@ -1,6 +1,7 @@
 import { EmbedBuilder, PermissionFlagsBits } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import dedent from "dedent"
 
 import { db } from "~/lib/db"
@@ -13,11 +14,12 @@ export default new BotSubcommandBuilder()
   .setMetadata({ dmPermission: false })
   .setExecute(async (interaction) => {
     const guildDoc = await db.guilds.findOne({ id: interaction.guildId })
-    const ticketModule = guildDoc?.modules?.Tickets
+    const ticketModule = guildDoc?.modules?.[ModuleId.Tickets]
 
     if (!ticketModule?.enabled) {
-      void interaction.reply(BotError.moduleNotEnabled("Tickets").toJSON())
-      return
+      return void interaction.reply(
+        BotError.moduleNotEnabled(ModuleId.Tickets).toJSON(),
+      )
     }
 
     const ticket = interaction.channel

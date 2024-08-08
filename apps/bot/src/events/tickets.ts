@@ -12,6 +12,8 @@ import {
 } from "discord.js"
 import { botEvent } from "phasebot"
 
+import { ModuleId } from "@repo/config/phase/modules.ts"
+
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
@@ -43,10 +45,12 @@ export default botEvent("interactionCreate", async (client, interaction) => {
     const ticketId = customIdParts[2] as UUID
 
     const guildSchema = await db.guilds.findOne({ id: interaction.guildId })
-    const ticketModule = guildSchema?.modules?.Tickets
+    const ticketModule = guildSchema?.modules?.[ModuleId.Tickets]
 
     if (!ticketModule?.enabled) {
-      return interaction.reply(BotError.moduleNotEnabled("Tickets").toJSON())
+      return interaction.reply(
+        BotError.moduleNotEnabled(ModuleId.Tickets).toJSON(),
+      )
     }
 
     const ticketData = ticketModule.tickets.find(
@@ -58,7 +62,9 @@ export default botEvent("interactionCreate", async (client, interaction) => {
       | undefined
 
     if (!ticketData || !ticketChannel) {
-      return interaction.reply(BotError.moduleNotEnabled("Tickets").toJSON())
+      return interaction.reply(
+        BotError.moduleNotEnabled(ModuleId.Tickets).toJSON(),
+      )
     }
 
     switch (ticketAction) {

@@ -4,6 +4,7 @@ import { NextRequest } from "next/server"
 
 import { API, ButtonStyle, MessageType } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import { StatusCodes } from "http-status-codes"
 
 import { database } from "~/lib/db"
@@ -36,12 +37,12 @@ const discordAPI = new API(discordREST)
 /**
  * This server action is used to update module data in the database. Make sure this server action is only exposed in dashboard routes so it goes through the right middleware. If the `x-guild-id` and `x-user-id` headers are not found, or if the found member is unauthorised, the action will throw an error.
  *
- * @param name The name of the module
+ * @param id The id of the module
  * @param data The new module data
  * @returns The updated guild document
  */
 export const updateModule = async <T extends keyof GuildModules>(
-  name: T,
+  id: T,
   data: GuildModules[T],
 ) => {
   const { guildId, userId } = getDasbboardHeaders()
@@ -66,7 +67,7 @@ export const updateModule = async <T extends keyof GuildModules>(
   await guildDoc.updateOne({
     modules: {
       ...(guildDoc.toObject().modules ?? {}),
-      [name]: data,
+      [id]: data,
     },
   })
 
@@ -91,7 +92,7 @@ export const updateAutoMessages = async (
     interval: +message.interval,
   }))
 
-  const updatedModuleData = await updateModule("AutoMessages", {
+  const updatedModuleData = await updateModule(ModuleId.AutoMessages, {
     ...formValues,
     messages,
   })
@@ -128,7 +129,7 @@ export const updateAutoMessages = async (
 }
 
 export const updateForms = async (formValues: z.infer<typeof formsSchema>) => {
-  const data: GuildModules["Forms"] = {
+  const data: GuildModules[ModuleId.Forms] = {
     ...formValues,
     forms: formValues.forms.map((form) => ({
       ...form,
@@ -136,7 +137,7 @@ export const updateForms = async (formValues: z.infer<typeof formsSchema>) => {
     })),
   }
 
-  const updatedModuleData = await updateModule("Forms", data)
+  const updatedModuleData = await updateModule(ModuleId.Forms, data)
 
   const existingMessages = (
     await Promise.all(
@@ -238,14 +239,14 @@ export const updateReactionRoles = async (
     .replace("https://discord.com/channels/", "")
     .split("/") as [string, string, string]
 
-  const data: GuildModules["ReactionRoles"] = {
+  const data: GuildModules[ModuleId.ReactionRoles] = {
     enabled: formValues.enabled,
     channel: channelId,
     message: messageId,
     reactions: formValues.reactions,
   }
 
-  const updatedModuleData = await updateModule("ReactionRoles", data)
+  const updatedModuleData = await updateModule(ModuleId.ReactionRoles, data)
 
   await discordAPI.channels.deleteAllMessageReactions(channelId, messageId)
 
@@ -259,15 +260,15 @@ export const updateReactionRoles = async (
 export const updateTickets = async (
   formValues: z.infer<typeof ticketsSchema>,
 ) => {
-  const data: GuildModules["Tickets"] = {
+  const data: GuildModules[ModuleId.Tickets] = {
     ...formValues,
   }
 
-  const updatedModuleData = await updateModule("Tickets", data)
+  const updatedModuleData = await updateModule(ModuleId.Tickets, data)
 
   const existingMessage = (
     await discordAPI.channels.getPins(data.channel).catch(() => [])
-  ).filter((pin) => pin.author.id === env.DISCORD_ID)[0]
+  ).find((pin) => pin.author.id === env.DISCORD_ID)
 
   let updatedMessage: APIMessage | undefined = undefined
 
@@ -335,7 +336,7 @@ export const updateTickets = async (
 export const updateTwitchNotifications = async (
   formValues: z.infer<typeof twitchNotificationsSchema>,
 ) => {
-  const data: GuildModules["TwitchNotifications"] = {
+  const data: GuildModules[ModuleId.TwitchNotifications] = {
     ...formValues,
     streamers: await Promise.all(
       formValues.streamers.map(async (streamer) => {
@@ -349,7 +350,10 @@ export const updateTwitchNotifications = async (
     ),
   }
 
-  const updatedModuleData = await updateModule("TwitchNotifications", data)
+  const updatedModuleData = await updateModule(
+    ModuleId.TwitchNotifications,
+    data,
+  )
 
   for (const { id } of data.streamers) {
     const request = new NextRequest(absoluteURL("/api/twitch"), {

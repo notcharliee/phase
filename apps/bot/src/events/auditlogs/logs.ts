@@ -10,6 +10,7 @@ import {
 } from "discord.js"
 import { botEvent } from "phasebot"
 
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import discordlogs from "discord-logs"
 
 import { db } from "~/lib/db"
@@ -24,14 +25,16 @@ export default botEvent("ready", async (client) => {
     if (!guildSchema) return
 
     if (
-      !guildSchema.modules?.AuditLogs?.enabled ||
-      !guildSchema.modules.AuditLogs.channels.server ||
-      !client.channels.cache.has(guildSchema.modules.AuditLogs.channels.server)
+      !guildSchema.modules?.[ModuleId.AuditLogs]?.enabled ||
+      !guildSchema.modules[ModuleId.AuditLogs].channels.server ||
+      !client.channels.cache.has(
+        guildSchema.modules[ModuleId.AuditLogs].channels.server,
+      )
     )
       return
 
     const channel = client.channels.cache.get(
-      guildSchema.modules.AuditLogs.channels.server,
+      guildSchema.modules[ModuleId.AuditLogs].channels.server,
     )!
     if (!channel.isTextBased()) return
 
