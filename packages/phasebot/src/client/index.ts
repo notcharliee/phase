@@ -92,8 +92,7 @@ export class PhaseClient {
     this.files = params?.files
     this.exports = { ...defaultExports, ...params?.exports }
 
-    if (this.dev) process.env.NODE_ENV = "development"
-    else process.env.NODE_ENV = "production"
+    Bun.env.NODE_ENV = this.dev ? "development" : "production"
   }
 
   async init() {
@@ -110,14 +109,14 @@ export class PhaseClient {
     console.log(dedent`
       ${phaseHeader}
         Config:       ${chalk.grey(basename(this.configPath ?? "N/A"))}
-        Environment:  ${chalk.grey(process.env.NODE_ENV)}\n
+        Environment:  ${chalk.grey(Bun.env.NODE_ENV)}\n
     `)
 
     if (!existsSync("./src")) {
       throw new Error("No 'src' directory found.")
     }
 
-    if (!process.env.DISCORD_TOKEN) {
+    if (!Bun.env.DISCORD_TOKEN) {
       throw new Error("Missing 'DISCORD_TOKEN' environment variable.")
     }
 
