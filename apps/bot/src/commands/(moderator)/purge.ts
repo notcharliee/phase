@@ -30,17 +30,17 @@ export default new BotCommandBuilder()
 
     const channel = interaction.channel as GuildTextBasedChannel
 
-    let fetchedMessages = await channel.messages.fetch({ limit: amount })
+    let fetchedMessages = await channel.messages.fetch({ limit: amount }).catch(() => null)
 
     if (author) {
-      fetchedMessages = fetchedMessages.filter(
+      fetchedMessages = fetchedMessages?.filter(
         (message) => message.author.id == author.id,
-      )
+      ) ?? null
     }
 
-    const deletedMessages = await channel.bulkDelete(fetchedMessages, true)
+    const deletedMessages = fetchedMessages ? await channel.bulkDelete(fetchedMessages, true).catch(() => null) : null
 
-    if (!deletedMessages.size) {
+    if (!deletedMessages?.size) {
       const commandMention = `</scrub:${interaction.client.application.commands.cache.find((command) => command.name === "scrub")!.id}>`
 
       void interaction.reply(
