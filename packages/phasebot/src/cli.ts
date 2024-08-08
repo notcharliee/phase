@@ -26,9 +26,7 @@ new Command("phase")
     new Command("start")
       .description("run the bot in production mode")
       .action(async () => {
-        await new PhaseClient({
-          dev: false,
-        }).init()
+        await new PhaseClient().init()
       }),
   )
   .parse()

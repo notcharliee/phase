@@ -43,18 +43,10 @@ export function getClient(): Client<true> {
 }
 
 interface PhaseClientParams {
-  /** The config for the bot. */
-  config?: BotConfig
   /** Whether or not to run the bot in development mode. */
   dev?: boolean
-  /** What exports to resolve for the bot. */
-  exports?: {
-    commands?: "default" | ((exports: any) => BotCommandBuilder)
-    events?: "default" | ((exports: any) => BotEventBuilder)
-    crons?: "default" | ((exports: any) => BotCronBuilder)
-    middleware?: "default" | ((exports: any) => BotMiddleware)
-    prestart?: "default" | ((exports: any) => BotPrestart)
-  }
+  /** The config for the bot. */
+  config?: BotConfig
   /**
    * The files to pass to the bot handlers.
    *
@@ -67,6 +59,14 @@ interface PhaseClientParams {
     middleware?: Awaited<ReturnType<typeof loadMiddlewareFile>>
     prestart?: Awaited<ReturnType<typeof loadPrestartFile>>
   }
+  /** What exports to resolve for the bot. */
+  exports?: {
+    commands?: "default" | ((exports: any) => BotCommandBuilder)
+    events?: "default" | ((exports: any) => BotEventBuilder)
+    crons?: "default" | ((exports: any) => BotCronBuilder)
+    middleware?: "default" | ((exports: any) => BotMiddleware)
+    prestart?: "default" | ((exports: any) => BotPrestart)
+  }
 }
 
 const defaultExports = {
@@ -78,19 +78,22 @@ const defaultExports = {
 } as const
 
 export class PhaseClient {
-  public config!: BotConfig
-  public dev: PhaseClientParams["dev"] = false
-  public exports: PhaseClientParams["exports"] = defaultExports
-  public files: PhaseClientParams["files"] = undefined
+  public dev: PhaseClientParams["dev"]
+  public config: PhaseClientParams["config"]
+  public files: PhaseClientParams["files"]
+  public exports: PhaseClientParams["exports"]
 
-  private configPath: string | undefined = undefined
+  private configPath: string | undefined
   private djsClient!: Client<false>
 
-  constructor(params: PhaseClientParams) {
-    if (params.config) this.config = params.config
-    if (params.dev) this.dev = params.dev
-    if (params.exports) this.exports = { ...defaultExports, ...params.exports }
-    if (params.files) this.files = params.files
+  constructor(params?: PhaseClientParams) {
+    this.dev = params?.dev
+    this.config = params?.config
+    this.files = params?.files
+    this.exports = { ...defaultExports, ...params?.exports }
+
+    if (this.dev) process.env.NODE_ENV = "development"
+    else process.env.NODE_ENV = "production"
   }
 
   async init() {
@@ -100,8 +103,6 @@ export class PhaseClient {
       this.config = configFile.config
       this.configPath = configFile.path
     }
-
-    process.env.NODE_ENV = this.dev ? "development" : "production"
 
     this.djsClient = new Client(this.config) as Client<false>
     globalForClient.djsClient = this.djsClient as unknown as Client<true>
