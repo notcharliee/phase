@@ -1,7 +1,7 @@
 import type { Client, ClientEvents } from "discord.js"
 
-export { setConfig, type Config } from "./config"
-export { getClient } from "./client"
+export { setConfig, type BotConfig } from "~/client/config"
+export { getClient } from "~/client"
 
 /**
  * @deprecated Use `BotEventBuilder` instead.
@@ -9,8 +9,5 @@ export { getClient } from "./client"
  */
 export const botEvent = <T extends keyof ClientEvents>(
   name: T,
-  execute: (client: Client<true>, ...args: ClientEvents[T]) => any,
-) => ({
-  name,
-  execute,
-})
+  execute: (client: Client<true>, ...args: ClientEvents[T]) => unknown,
+) => ({ name, execute })

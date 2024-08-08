@@ -8,11 +8,11 @@ import {
   SlashCommandAssertions,
 } from "discord.js"
 
-import chalk from "chalk"
 import cloneDeep from "lodash.clonedeep"
 
 import { BotCommandBuilder, BotSubcommandBuilder } from "~/builders"
-import { getMiddleware, loadingMessage } from "~/cli/utils"
+import { loadMiddlewareFile } from "~/client/middleware"
+import { spinner } from "~/utils"
 
 import type { BotCommandExecute } from "~/builders"
 import type {
@@ -257,14 +257,11 @@ export const handleCommands = async (client: Client<false>) => {
 
     // if no commands have been set, set them all and return
     if (!oldCommands.length) {
-      await loadingMessage(
-        () => readyClient.application.commands.set(newCommands),
-        {
-          loading: "Setting up slash commands ...",
-          success: "Slash commands set!",
-          error: "An error occurred while setting up slash commands:\n",
-        },
-      )
+      const cliSpinner = spinner("Setting up slash commands ...").start()
+
+      await readyClient.application.commands.set(newCommands)
+
+      cliSpinner.succeed("Slash commands set!")
 
       return
     }
@@ -299,38 +296,26 @@ export const handleCommands = async (client: Client<false>) => {
       commandsToDelete.length ||
       commandsToUpdate.length
     ) {
-      loadingMessage(
-        () =>
-          Promise.all([
-            ...commandsToCreate.map((cmd) =>
-              readyClient.application.commands.create(cmd),
-            ),
-            ...commandsToDelete.map((cmd) =>
-              readyClient.application.commands.delete(findCommandId(cmd.name)!),
-            ),
-            ...commandsToUpdate.map((cmd) =>
-              readyClient.application.commands.edit(
-                findCommandId(cmd.name)!,
-                cmd,
-              ),
-            ),
-          ]),
-        {
-          loading: chalk.yellow(
-            "Found outdated slash commands. Updating them now ...",
-          ),
-          success: "Slash commands updated!",
-          error: "An error occurred while updating slash commands:\n",
-        },
-        {
-          loading: chalk.yellow("⚠"),
-        },
-      )
+      const cliSpinner = spinner("Updating slash commands ...").start()
+
+      await Promise.all([
+        ...commandsToCreate.map((cmd) =>
+          readyClient.application.commands.create(cmd),
+        ),
+        ...commandsToDelete.map((cmd) =>
+          readyClient.application.commands.delete(findCommandId(cmd.name)!),
+        ),
+        ...commandsToUpdate.map((cmd) =>
+          readyClient.application.commands.edit(findCommandId(cmd.name)!, cmd),
+        ),
+      ])
+
+      cliSpinner.succeed("Slash commands updated!")
     }
   })
 
   // get the middleware function
-  const middleware = await getMiddleware()
+  const middleware = await loadMiddlewareFile()
 
   // setup the command interaction handler
   client.on("interactionCreate", async (interaction) => {
@@ -349,8 +334,12 @@ export const handleCommands = async (client: Client<false>) => {
     if (!command) return
 
     try {
-      if (middleware) {
-        await middleware(interaction, command.execute, command.metadata)
+      if (middleware?.commands) {
+        await middleware.commands(
+          interaction,
+          command.execute,
+          command.metadata,
+        )
       } else {
         await command.execute(interaction)
       }

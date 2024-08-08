@@ -22,9 +22,7 @@ Then create a `phase.config.{ts,js,cjs,mjs}` file in your project root, and copy
 import { ActivityType, Partials } from "discord.js"
 import { setConfig } from "phasebot"
 
-import type { Config } from "phasebot"
-
-const config: Config = {
+export default setConfig({
   intents: [
     // Add your intents here ...
   ],
@@ -40,7 +38,7 @@ const config: Config = {
     ],
     status: "online",
   },
-}
+})
 ```
 
 After that, make a `.env` file in your project root, and add the following:

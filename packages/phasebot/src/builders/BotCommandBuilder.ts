@@ -118,9 +118,7 @@ class BotCommandBuilderBase {
 export class BotCommandBuilder extends Mixin(
   BotCommandBuilderBase,
   SlashCommandBuilder,
-) {
-
-}
+) {}
 
 /**
  * A builder that creates API-compatible JSON data for phasebot slash commands.

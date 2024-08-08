@@ -1,14 +1,9 @@
+import { readdirSync } from "node:fs"
+import { extname, join } from "node:path"
+
 import type { ClientOptions } from "discord.js"
 
-/**
- * Set the config for the bot.
- *
- * @param options - The config to set.
- */
-export const setConfig = (options: Config) => options
-
-/** Configure how phasebot and discord.js will work in your project. */
-export interface Config extends ClientOptions {
+export interface BotConfig extends ClientOptions {
   /** The shard's id to run, or an array of shard ids. If not specified, the client will spawn [shardCount](https://discord.js.org/docs/packages/discord.js/main/ClientOptions:Interface#shardCount) shards. If set to auto, it will fetch the recommended amount of shards from Discord and spawn that amount */
   shards?: ClientOptions["shards"]
 
@@ -50,4 +45,47 @@ export interface Config extends ClientOptions {
 
   /** A function used to transform outgoing json data */
   jsonTransformer?: ClientOptions["jsonTransformer"]
+}
+
+export const setConfig = (options: BotConfig) => options
+
+export async function loadConfigFile() {
+  const allowedFileExtensions = [".js", ".cjs", ".mjs"]
+
+  if ("Bun" in globalThis || "Deno" in globalThis) {
+    allowedFileExtensions.push(".ts", ".cts", ".mts")
+  }
+
+  const configFiles = readdirSync("./").filter(
+    (dirent) =>
+      dirent.startsWith("phase.config") &&
+      allowedFileExtensions.includes(extname(dirent)),
+  )
+
+  if (!configFiles.length) {
+    throw new Error(
+      `No config file found. Please make a 'phase.config.{${allowedFileExtensions.join()}}' file.`,
+    )
+  }
+
+  if (configFiles.length > 1) {
+    throw new Error(
+      `You can only have one config file. Please delete or rename the other files.`,
+    )
+  }
+
+  const filePath = join(process.cwd(), configFiles[0]!)
+
+  const config = await import(filePath)
+    .catch(() => null)
+    .then((m) => m?.default as BotConfig | undefined)
+
+  if (!config) {
+    throw new Error("Config file is missing a default export.")
+  }
+
+  return {
+    config,
+    path: filePath,
+  }
 }

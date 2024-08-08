@@ -1,2 +1,0 @@
-preload = ["./plugins.ts"]
-jsx = "react-jsx"
