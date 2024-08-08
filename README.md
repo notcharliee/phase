@@ -1,9 +1,3 @@
-<div align="center">
-	<a href="https://phasebot.xyz" align="center">
-		<img src="./assets/banner.svg" width="512">
-	</a>
-</div>
-
 # Documentation
 
 Visit [https://phasebot.xyz/docs](https://phasebot.xyz/docs) to view the full documentation.
