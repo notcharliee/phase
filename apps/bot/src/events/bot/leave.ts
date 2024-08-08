@@ -6,29 +6,21 @@ import dedent from "dedent"
 import { alertWebhook } from "~/lib/clients/webhooks/alert"
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
-import { formatDate } from "~/lib/utils"
 
 export default new BotEventBuilder()
   .setName("guildDelete")
-  .setExecute(async (client, guild) => {
-    const guildDoc = await db.guilds.findOne({ id: guild.id })
-
-    const botJoinDate = guildDoc?._id.getTimestamp()
-    const relativeJoinDate = botJoinDate
-      ? formatDate(new Date(botJoinDate))
-      : "unknown"
-
+  .setExecute(async (_, guild) => {
     void alertWebhook.send({
       embeds: [
         new EmbedBuilder()
           .setColor(PhaseColour.Primary)
           .setTitle("Bot Removed")
           .setThumbnail(guild.iconURL())
+          .setTimestamp()
           .setDescription(
             dedent`
-              **${guild.name}** \`(${guild.id})\` has removed the bot. It was in the server for **${relativeJoinDate}**.
-
-              This decreases the total server count to **${client.application!.approximateGuildCount}**.
+              **Name:** \`${guild.name}\`
+              **ID:** \`${guild.id}\`
             `,
           ),
       ],

@@ -11,11 +11,10 @@ import dedent from "dedent"
 import { alertWebhook } from "~/lib/clients/webhooks/alert"
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
-import { getOrdinal } from "~/lib/utils"
 
 export default new BotEventBuilder()
   .setName("guildCreate")
-  .setExecute(async (client, guild) => {
+  .setExecute(async (_, guild) => {
     const owner = await guild.fetchOwner()
 
     const ownedGuildsCount =
@@ -29,11 +28,17 @@ export default new BotEventBuilder()
           .setColor(PhaseColour.Primary)
           .setTitle("New Server")
           .setThumbnail(guild.iconURL())
+          .setTimestamp()
           .setDescription(
             dedent`
-              **${guild.name}** \`(${guild.id})\` was created <t:${Math.floor(guild.createdAt.getTime() / 1000)}:R> by **${owner.user.username}** \`(${owner.user.id})\` and currently has **${guild.memberCount}** members.
+              **Name:** \`${guild.name}\`
+              **Created:** <t:${Math.floor(guild.createdAt.getTime() / 1000)}:R>
+              **Membercount:** \`${guild.memberCount}\`
+              **ID:** \`${guild.id}\`
 
-              This is the **${getOrdinal(ownedGuildsCount)}** server that **${owner.user.username}** has added Phase to, increasing the total server count to **${client.application!.approximateGuildCount}**.
+              **Owner Name:** \`${owner.user.username}\`
+              **Owner ID:** \`${owner.user.id}\`
+              **Owned Phase Servers:** \`${ownedGuildsCount}\`
             `,
           ),
       ],
