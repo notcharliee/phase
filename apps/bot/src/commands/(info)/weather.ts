@@ -1,8 +1,64 @@
+import { BotCommandBuilder } from "phasebot/builders"
+
 import { fetchWeatherApi } from "openmeteo"
+
+import { BotError } from "~/lib/errors"
+
+import { generateWeatherCard } from "~/images/weather"
 
 import type { SnakeToCamel } from "~/types/utils"
 
-export interface LocationData {
+export default new BotCommandBuilder()
+  .setName("weather")
+  .setDescription("Gives you info about the weather.")
+  .setDMPermission(false)
+  .addStringOption((option) =>
+    option
+      .setName("location")
+      .setDescription("The town/city you want to get the weather for.")
+      .setRequired(true),
+  )
+  .addStringOption((option) =>
+    option
+      .setName("units")
+      .setDescription("The units you want to use (defaults to metric).")
+      .setChoices(
+        { name: "Metric", value: "metric" },
+        { name: "Imperial", value: "imperial" },
+      )
+      .setRequired(false),
+  )
+  .setExecute(async (interaction) => {
+    await interaction.deferReply()
+
+    const location = interaction.options.getString("location", true)
+    const units = (interaction.options.getString("units") ?? "metric") as Units
+
+    const locationData = await getLocationData(location)
+
+    if (!locationData) {
+      void interaction.editReply(
+        new BotError(
+          "Could not find a town or city by that name. Make sure you typed it in correctly and try again.",
+        ).toJSON(),
+      )
+
+      return
+    }
+
+    const weatherData = await getWeatherData({
+      locationData: locationData[0]!,
+      units,
+    })
+
+    const weatherCard = await generateWeatherCard(weatherData).toAttachment()
+
+    void interaction.editReply({
+      files: [weatherCard],
+    })
+  })
+
+interface LocationData {
   id: number
   name: string
   latitude: number
@@ -25,9 +81,9 @@ export interface LocationData {
   timezone: string
 }
 
-export type Units = "metric" | "imperial"
+type Units = "metric" | "imperial"
 
-export async function getLocationData(location: string) {
+async function getLocationData(location: string) {
   const url = new URL("https://geocoding-api.open-meteo.com/v1/search")
 
   url.searchParams.set("name", location)
@@ -35,7 +91,7 @@ export async function getLocationData(location: string) {
   url.searchParams.set("language", "en")
   url.searchParams.set("format", "json")
 
-  const response = await fetch(url).catch(() => null)
+  const response = await fetch(url.toString()).catch(() => null)
   const data = (await response?.json().catch(() => null)) as
     | { error: true }
     | { results?: LocationData[] }
@@ -46,7 +102,7 @@ export async function getLocationData(location: string) {
   return data.results
 }
 
-export const getWeatherCodeDescription = (code: number) => {
+const getWeatherCodeDescription = (code: number) => {
   const WeatherCodes = {
     "0": "Clear sky",
     "1": "Mainly clear",
@@ -81,7 +137,7 @@ export const getWeatherCodeDescription = (code: number) => {
   return WeatherCodes[("" + code) as keyof typeof WeatherCodes]
 }
 
-export const getUVIndexDescription = (index: number) => {
+const getUVIndexDescription = (index: number) => {
   index = Math.round(index)
 
   if (index < 2) return "Low"
@@ -92,7 +148,7 @@ export const getUVIndexDescription = (index: number) => {
   return "Extreme"
 }
 
-export const getVisibilityDescription = (distance: number) => {
+const getVisibilityDescription = (distance: number) => {
   if (distance < 1_000) return "Very Poor"
   if (distance < 4_000) return "Poor"
   if (distance < 10_000) return "Moderate"
@@ -138,7 +194,7 @@ export async function getWeatherData({
   )
 
   const dailyWeatherVariables = (() => {
-    const daily = responses[0].daily()!
+    const daily = responses[0]!.daily()!
 
     return Array.from({ length: daily.variablesLength() }).map(
       (_, i) => daily.variables(i)!.valuesArray()!,
@@ -146,7 +202,7 @@ export async function getWeatherData({
   })()
 
   const hourlyWeatherVariables = (() => {
-    const hourly = responses[0].hourly()!
+    const hourly = responses[0]!.hourly()!
 
     return Array.from({ length: hourly.variablesLength() }).map(
       (_, i) => hourly.variables(i)!.valuesArray()!,
@@ -158,8 +214,8 @@ export async function getWeatherData({
       date: new Date(Date.now() + fi * 1000 * 60 * 60 * 24),
       ...(Object.fromEntries(
         params.daily.map((v, vi) => [
-          v.replace(/(_\w)/g, (match) => match[1].toUpperCase()),
-          dailyWeatherVariables[vi][fi],
+          v.replace(/(_\w)/g, (match) => match[1]!.toUpperCase()),
+          dailyWeatherVariables[vi]![fi],
         ]),
       ) as {
         [k in SnakeToCamel<
@@ -171,8 +227,8 @@ export async function getWeatherData({
       date: new Date(Date.now() + fi * 1000 * 60 * 60 * 24),
       ...(Object.fromEntries(
         params.hourly.map((v, vi) => [
-          v.replace(/(_\w)/g, (match) => match[1].toUpperCase()),
-          hourlyWeatherVariables[vi][fi],
+          v.replace(/(_\w)/g, (match) => match[1]!.toUpperCase()),
+          hourlyWeatherVariables[vi]![fi],
         ]),
       ) as {
         [k in SnakeToCamel<
@@ -191,24 +247,26 @@ export async function getWeatherData({
     },
     current: {
       temperature: {
-        actual: Math.round(weatherData.hourly[0].temperature2m),
-        feelsLike: Math.round(weatherData.hourly[0].apparentTemperature),
+        actual: Math.round(weatherData.hourly[0]!.temperature2m),
+        feelsLike: Math.round(weatherData.hourly[0]!.apparentTemperature),
       },
-      humidity: Math.round(weatherData.hourly[0].relativeHumidity2m),
-      dewpoint: Math.round(weatherData.hourly[0].dewPoint2m),
+      humidity: Math.round(weatherData.hourly[0]!.relativeHumidity2m),
+      dewpoint: Math.round(weatherData.hourly[0]!.dewPoint2m),
       precipitation: Math.round(
         weatherData.hourly.reduce((acc, hour) => acc + hour.precipitation, 0),
       ),
       uvRadiation: {
-        index: Math.round(weatherData.daily[0].uvIndexMax),
-        description: getUVIndexDescription(weatherData.daily[0].uvIndexMax),
+        index: Math.round(weatherData.daily[0]!.uvIndexMax),
+        description: getUVIndexDescription(weatherData.daily[0]!.uvIndexMax),
       },
       visibility: {
         distance: Math.floor(
-          weatherData.hourly[0].visibility /
+          weatherData.hourly[0]!.visibility /
             (units === "metric" ? 1000 : 1609.344),
         ),
-        description: getVisibilityDescription(weatherData.hourly[0].visibility),
+        description: getVisibilityDescription(
+          weatherData.hourly[0]!.visibility,
+        ),
       },
     },
     forecast: weatherData.daily.map(
