@@ -1,8 +1,8 @@
-import { modulesConfig } from "~/config/modules"
+import { ModuleId, modules } from "@repo/config/phase/modules.ts"
 
 export const metadata = {
-  title: modulesConfig.Counters.name,
-  description: modulesConfig.Counters.description,
+  title: modules[ModuleId.Counters].name,
+  description: modules[ModuleId.Counters].description,
 }
 
 <Heading>
@@ -18,26 +18,28 @@ Variables are a type of placeholder that you can use in various module configura
 
 Currently, this module supports the following variables:
 
-* `{memberCount}` - The number of members in the server.
-* `{onlineMemberCount}` - The number of online members in the server.
-* `{offlineMemberCount}` - The number of offline members in the server.
+- `{memberCount}` - The number of members in the server.
+- `{onlineMemberCount}` - The number of online members in the server.
+- `{offlineMemberCount}` - The number of offline members in the server.
 
 More variables will be added in the future, but as this module is still new, we're not sure what they will be. If you have any ideas, please let us know in our [Discord server](https://phasebot.xyz/redirect/discord)!
 
 ## How to Set Up Counters
 
 1. **Create a New Voice Channel:**
-    - Create a new voice channel in your server.
-    - Place the channel in a visible location, such as the top of the channel list.
-    - Lock the channel to prevent members from joining and talking in it.
 
-2. **Configure the Module:** 
-    - Go to your dashboard and find the Counters module in the modules list.
-    - Click on the **"Setup module"** button to open the configuration form.
-    - In the form, specify the counters you want to display using the variables from the **Variables** section above.
+   - Create a new voice channel in your server.
+   - Place the channel in a visible location, such as the top of the channel list.
+   - Lock the channel to prevent members from joining and talking in it.
 
-3. **Save Your Changes:** 
-    - Click the **"Save changes"** button at the bottom of the form.
-    - That's it! :)
+2. **Configure the Module:**
 
-Once the changes are saved, the bot will start getting ready to display your server stats. This update happens once every 10 minutes, so it might take a short while for your changes to appear.
+   - Go to your dashboard and find the Counters module in the modules list.
+   - Click on the **"Setup module"** button to open the configuration form.
+   - In the form, specify the counters you want to display using the variables from the **Variables** section above.
+
+3. **Save Your Changes:**
+   - Click the **"Save changes"** button at the bottom of the form.
+   - That's it! :)
+
+Once the changes are saved, the bot will start getting ready to display your server stats. This update happens once every 10 minutes, so it might take a short while for your changes to appear., modules

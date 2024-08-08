@@ -1,16 +1,8 @@
 "use client"
 
+import { ModuleId, modules } from "@repo/config/phase/modules.ts"
 import { toast } from "sonner"
 
-import {
-  Credenza,
-  CredenzaBody,
-  CredenzaContent,
-  CredenzaDescription,
-  CredenzaHeader,
-  CredenzaTitle,
-  CredenzaTrigger,
-} from "~/components/ui/credenza"
 import { Button } from "~/components/ui/button"
 import {
   Card,
@@ -20,12 +12,19 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card"
+import {
+  Credenza,
+  CredenzaBody,
+  CredenzaContent,
+  CredenzaDescription,
+  CredenzaHeader,
+  CredenzaTitle,
+  CredenzaTrigger,
+} from "~/components/ui/credenza"
 import { Switch } from "~/components/ui/switch"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 import { useMediaQuery } from "~/hooks/use-media-query"
-
-import { modulesConfig } from "~/config/modules"
 
 import { updateModule } from "../_actions/updateModule"
 import { moduleForms } from "./forms"
@@ -41,18 +40,15 @@ export default function ModulesPage() {
 
   return (
     <div className="grid gap-2 [--column_count:1] lg:grid-cols-2 lg:gap-4 lg:[--column_count:2] xl:grid-cols-3 xl:[--column_count:3]">
-      {Object.entries(modulesConfig).map(([key, moduleConfig], index) => {
-        const { name, description } = moduleConfig
+      {Object.entries(modules).map(([key, { name, description }], index) => {
+        const moduleKey = Object.keys(ModuleId)[
+          Object.values(ModuleId).indexOf(key as ModuleId)
+        ] as keyof GuildModules
 
-        const dashboardModuleKey = key as keyof GuildModules
+        const moduleData = dashboard.guild.modules?.[moduleKey]
 
-        const dashboardModuleData =
-          dashboard.guild.modules?.[dashboardModuleKey]
-
-        const DashboardModuleForm: () => JSX.Element | undefined =
-          moduleForms[dashboardModuleKey]
-
-        if (!DashboardModuleForm) return null
+        const ModuleForm = moduleForms[moduleKey]
+        if (!ModuleForm) return null
 
         return (
           <Card
@@ -64,10 +60,7 @@ export default function ModulesPage() {
           >
             <CardHeader className="flex-row justify-between space-y-0">
               <CardTitle>{name}</CardTitle>
-              <ModuleSwitch
-                moduleKey={dashboardModuleKey}
-                moduleData={dashboardModuleData}
-              />
+              <ModuleSwitch moduleKey={moduleKey} moduleData={moduleData} />
             </CardHeader>
             <CardContent>
               <CardDescription>{description}</CardDescription>
@@ -80,12 +73,12 @@ export default function ModulesPage() {
                     <CredenzaDescription>{description}</CredenzaDescription>
                   </CredenzaHeader>
                   <CredenzaBody>
-                    <DashboardModuleForm />
+                    <ModuleForm />
                   </CredenzaBody>
                 </CredenzaContent>
                 <CredenzaTrigger asChild>
                   <Button variant="secondary" className="mt-auto w-full">
-                    {dashboardModuleData ? "Edit module" : "Setup module"}
+                    {moduleData ? "Edit module" : "Setup module"}
                   </Button>
                 </CredenzaTrigger>
               </Credenza>
