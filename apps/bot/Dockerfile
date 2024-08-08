@@ -32,4 +32,4 @@ RUN cd /usr/src/app/node_modules/@discordjs/opus/prebuild && mv node-v115-napi-v
 FROM fix-bodge AS final
 WORKDIR /usr/src/app/apps/bot
 
-CMD ["bun", "/usr/src/app/packages/phasebot/dist/cli/index.js", "start"]
+CMD ["bun", "/usr/src/app/packages/phasebot/dist/cli.js", "start"]
