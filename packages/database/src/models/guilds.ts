@@ -353,7 +353,7 @@ export const guilds = defineModel(
             channel: { type: String, required: true },
             message: { type: String, required: true },
             mention: { type: Boolean, required: true },
-            background: { type: String, required: true },
+            background: { type: String, required: false },
             roles: {
               type: [
                 new mongoose.Schema<GuildModules["Levels"]["roles"][number]>({
@@ -441,7 +441,7 @@ export const guilds = defineModel(
                 GuildModules["WelcomeMessages"]["card"]
               >({
                 enabled: { type: Boolean, required: true },
-                background: String,
+                background: { type: String, required: false },
               }),
               required: true,
             },
