@@ -1,9 +1,10 @@
-import { GuildMember, ImageExtension, ImageSize } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { BotError } from "~/lib/errors"
 
 import { extensionOption, sizeOption } from "./_options"
+
+import type { ImageExtension, ImageSize } from "discord.js"
 
 export default new BotSubcommandBuilder()
   .setName("user")

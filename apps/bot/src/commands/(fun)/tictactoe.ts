@@ -52,7 +52,7 @@ export default new BotCommandBuilder()
           [2, 5, 8],
           [0, 4, 8],
           [2, 4, 6],
-        ]
+        ] as const
 
         for (const combo of winningCombinations) {
           const [a, b, c] = combo
@@ -111,7 +111,7 @@ export default new BotCommandBuilder()
 
             return new ButtonBuilder()
               .setStyle(ButtonStyle.Secondary)
-              .setLabel(moves[index])
+              .setLabel(moves[index]!)
               .setCustomId(
                 winner
                   ? `games.tictactoe.${index}`
@@ -140,7 +140,7 @@ export default new BotCommandBuilder()
               })
             } else {
               await buttonInteraction.deferUpdate()
-              makeMove(+buttonInteraction.customId.split(".")[2])
+              makeMove(+buttonInteraction.customId.split(".")[2]!)
             }
 
             createMessage(buttonInteraction)

@@ -47,7 +47,7 @@ export default new BotSubcommandBuilder()
           ? songOrPlaylist.songs
           : [songOrPlaylist]
 
-      const song = songs[0]
+      const song = songs[0]!
 
       queue.addToQueue(songs)
 

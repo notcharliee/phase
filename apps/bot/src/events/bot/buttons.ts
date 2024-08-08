@@ -24,7 +24,7 @@ export default new BotEventBuilder()
 
     if (category === "guilds" && action === "remove_bot") {
       const guild =
-        client.guilds.cache.get(id) ?? (await client.guilds.fetch(id))
+        client.guilds.cache.get(id!) ?? (await client.guilds.fetch(id!))
 
       void guild.leave()
     } else {

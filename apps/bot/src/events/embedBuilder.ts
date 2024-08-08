@@ -33,13 +33,13 @@ export default botEvent("interactionCreate", async (_, interaction) => {
             authorIconComponentValue = undefined
 
           if (
-            interaction.message.embeds[0].title == null &&
-            interaction.message.embeds[0].description == null &&
-            interaction.message.embeds[0].url == null &&
-            interaction.message.embeds[0].image == null &&
-            interaction.message.embeds[0].thumbnail == null &&
+            interaction.message.embeds[0]!.title == null &&
+            interaction.message.embeds[0]!.description == null &&
+            interaction.message.embeds[0]!.url == null &&
+            interaction.message.embeds[0]!.image == null &&
+            interaction.message.embeds[0]!.thumbnail == null &&
             authorTextComponentValue == null &&
-            interaction.message.embeds[0].footer == null
+            interaction.message.embeds[0]!.footer == null
           ) {
             return interaction.reply(
               new BotError("You cannot send an empty embed.").toJSON(),
@@ -59,16 +59,16 @@ export default botEvent("interactionCreate", async (_, interaction) => {
                     : null,
                 )
                 .setColor(
-                  `#${interaction.message.embeds[0].hexColor?.replace("#", "")}`,
+                  `#${interaction.message.embeds[0]!.hexColor?.replace("#", "")}`,
                 )
-                .setDescription(interaction.message.embeds[0].description)
-                .setFooter(interaction.message.embeds[0].footer)
-                .setImage(interaction.message.embeds[0].image?.url ?? null)
+                .setDescription(interaction.message.embeds[0]!.description)
+                .setFooter(interaction.message.embeds[0]!.footer)
+                .setImage(interaction.message.embeds[0]!.image?.url ?? null)
                 .setThumbnail(
-                  interaction.message.embeds[0].thumbnail?.url ?? null,
+                  interaction.message.embeds[0]!.thumbnail?.url ?? null,
                 )
-                .setTitle(interaction.message.embeds[0].title)
-                .setURL(interaction.message.embeds[0].url),
+                .setTitle(interaction.message.embeds[0]!.title)
+                .setURL(interaction.message.embeds[0]!.url),
             ],
           })
 
@@ -103,10 +103,10 @@ export default botEvent("interactionCreate", async (_, interaction) => {
             bodyTitleComponentValue == null &&
             bodyDescriptionComponentValue == null &&
             bodyURLComponentValue == null &&
-            interaction.message.embeds[0].image == null &&
-            interaction.message.embeds[0].thumbnail == null &&
-            interaction.message.embeds[0].author == null &&
-            interaction.message.embeds[0].footer == null
+            interaction.message.embeds[0]!.image == null &&
+            interaction.message.embeds[0]!.thumbnail == null &&
+            interaction.message.embeds[0]!.author == null &&
+            interaction.message.embeds[0]!.footer == null
           ) {
             return interaction.reply(
               new BotError("You cannot send an empty embed.").toJSON(),
@@ -116,17 +116,17 @@ export default botEvent("interactionCreate", async (_, interaction) => {
           interaction.message.edit({
             embeds: [
               new EmbedBuilder()
-                .setAuthor(interaction.message.embeds[0].author)
+                .setAuthor(interaction.message.embeds[0]!.author)
                 .setColor(
                   bodyColourComponentValue
                     ? `#${bodyColourComponentValue.replace("#", "")}`
                     : null,
                 )
                 .setDescription(bodyDescriptionComponentValue)
-                .setFooter(interaction.message.embeds[0].footer)
-                .setImage(interaction.message.embeds[0].image?.url ?? null)
+                .setFooter(interaction.message.embeds[0]!.footer)
+                .setImage(interaction.message.embeds[0]!.image?.url ?? null)
                 .setThumbnail(
-                  interaction.message.embeds[0].thumbnail?.url ?? null,
+                  interaction.message.embeds[0]!.thumbnail?.url ?? null,
                 )
                 .setTitle(bodyTitleComponentValue)
                 .setURL(bodyURLComponentValue),
@@ -149,13 +149,13 @@ export default botEvent("interactionCreate", async (_, interaction) => {
             imageThumbnailComponentValue = null
 
           if (
-            interaction.message.embeds[0].title == null &&
-            interaction.message.embeds[0].description == null &&
-            interaction.message.embeds[0].url == null &&
+            interaction.message.embeds[0]!.title == null &&
+            interaction.message.embeds[0]!.description == null &&
+            interaction.message.embeds[0]!.url == null &&
             imageMainComponentValue == null &&
             imageThumbnailComponentValue == null &&
-            interaction.message.embeds[0].author == null &&
-            interaction.message.embeds[0].footer == null
+            interaction.message.embeds[0]!.author == null &&
+            interaction.message.embeds[0]!.footer == null
           ) {
             return interaction.reply(
               new BotError("You cannot send an empty embed.").toJSON(),
@@ -165,16 +165,16 @@ export default botEvent("interactionCreate", async (_, interaction) => {
           interaction.message.edit({
             embeds: [
               new EmbedBuilder()
-                .setAuthor(interaction.message.embeds[0].author)
+                .setAuthor(interaction.message.embeds[0]!.author)
                 .setColor(
-                  `#${interaction.message.embeds[0].hexColor?.replace("#", "")}`,
+                  `#${interaction.message.embeds[0]!.hexColor?.replace("#", "")}`,
                 )
-                .setDescription(interaction.message.embeds[0].description)
-                .setFooter(interaction.message.embeds[0].footer)
+                .setDescription(interaction.message.embeds[0]!.description)
+                .setFooter(interaction.message.embeds[0]!.footer)
                 .setImage(imageMainComponentValue)
                 .setThumbnail(imageThumbnailComponentValue)
-                .setTitle(interaction.message.embeds[0].title)
-                .setURL(interaction.message.embeds[0].url),
+                .setTitle(interaction.message.embeds[0]!.title)
+                .setURL(interaction.message.embeds[0]!.url),
             ],
           })
 
@@ -194,12 +194,12 @@ export default botEvent("interactionCreate", async (_, interaction) => {
             footerIconComponentValue = undefined
 
           if (
-            interaction.message.embeds[0].title == null &&
-            interaction.message.embeds[0].description == null &&
-            interaction.message.embeds[0].url == null &&
-            interaction.message.embeds[0].image == null &&
-            interaction.message.embeds[0].thumbnail == null &&
-            interaction.message.embeds[0].author == null &&
+            interaction.message.embeds[0]!.title == null &&
+            interaction.message.embeds[0]!.description == null &&
+            interaction.message.embeds[0]!.url == null &&
+            interaction.message.embeds[0]!.image == null &&
+            interaction.message.embeds[0]!.thumbnail == null &&
+            interaction.message.embeds[0]!.author == null &&
             footerTextComponentValue == null
           ) {
             return interaction.reply(
@@ -210,11 +210,11 @@ export default botEvent("interactionCreate", async (_, interaction) => {
           interaction.message.edit({
             embeds: [
               new EmbedBuilder()
-                .setAuthor(interaction.message.embeds[0].author)
+                .setAuthor(interaction.message.embeds[0]!.author)
                 .setColor(
-                  `#${interaction.message.embeds[0].hexColor?.replace("#", "")}`,
+                  `#${interaction.message.embeds[0]!.hexColor?.replace("#", "")}`,
                 )
-                .setDescription(interaction.message.embeds[0].description)
+                .setDescription(interaction.message.embeds[0]!.description)
                 .setFooter(
                   footerTextComponentValue
                     ? {
@@ -223,12 +223,12 @@ export default botEvent("interactionCreate", async (_, interaction) => {
                       }
                     : null,
                 )
-                .setImage(interaction.message.embeds[0].image?.url ?? null)
+                .setImage(interaction.message.embeds[0]!.image?.url ?? null)
                 .setThumbnail(
-                  interaction.message.embeds[0].thumbnail?.url ?? null,
+                  interaction.message.embeds[0]!.thumbnail?.url ?? null,
                 )
-                .setTitle(interaction.message.embeds[0].title)
-                .setURL(interaction.message.embeds[0].url),
+                .setTitle(interaction.message.embeds[0]!.title)
+                .setURL(interaction.message.embeds[0]!.url),
             ],
           })
 
@@ -258,9 +258,9 @@ export default botEvent("interactionCreate", async (_, interaction) => {
             .setRequired(false)
             .setStyle(TextInputStyle.Short)
 
-          if (interaction.message.embeds[0].author?.name)
+          if (interaction.message.embeds[0]!.author?.name)
             authorTextComponent.setValue(
-              interaction.message.embeds[0].author.name,
+              interaction.message.embeds[0]!.author.name,
             )
 
           const authorURLComponent = new TextInputBuilder()
@@ -270,9 +270,9 @@ export default botEvent("interactionCreate", async (_, interaction) => {
             .setRequired(false)
             .setStyle(TextInputStyle.Short)
 
-          if (interaction.message.embeds[0].author?.url)
+          if (interaction.message.embeds[0]!.author?.url)
             authorURLComponent.setValue(
-              interaction.message.embeds[0].author.url,
+              interaction.message.embeds[0]!.author.url,
             )
 
           const authorIconComponent = new TextInputBuilder()
@@ -282,9 +282,9 @@ export default botEvent("interactionCreate", async (_, interaction) => {
             .setRequired(false)
             .setStyle(TextInputStyle.Short)
 
-          if (interaction.message.embeds[0].author?.iconURL)
+          if (interaction.message.embeds[0]!.author?.iconURL)
             authorIconComponent.setValue(
-              interaction.message.embeds[0].author.iconURL,
+              interaction.message.embeds[0]!.author.iconURL,
             )
 
           const modalAuthorText =
@@ -319,8 +319,8 @@ export default botEvent("interactionCreate", async (_, interaction) => {
             .setRequired(false)
             .setStyle(TextInputStyle.Short)
 
-          if (interaction.message.embeds[0].title)
-            bodyTitleComponent.setValue(interaction.message.embeds[0].title)
+          if (interaction.message.embeds[0]!.title)
+            bodyTitleComponent.setValue(interaction.message.embeds[0]!.title)
 
           const bodyDescriptionComponent = new TextInputBuilder()
             .setCustomId("embedbuilder.body.description")
@@ -329,9 +329,9 @@ export default botEvent("interactionCreate", async (_, interaction) => {
             .setRequired(false)
             .setStyle(TextInputStyle.Paragraph)
 
-          if (interaction.message.embeds[0].description)
+          if (interaction.message.embeds[0]!.description)
             bodyDescriptionComponent.setValue(
-              interaction.message.embeds[0].description,
+              interaction.message.embeds[0]!.description,
             )
 
           const bodyURLComponent = new TextInputBuilder()
@@ -341,8 +341,8 @@ export default botEvent("interactionCreate", async (_, interaction) => {
             .setRequired(false)
             .setStyle(TextInputStyle.Short)
 
-          if (interaction.message.embeds[0].url)
-            bodyURLComponent.setValue(interaction.message.embeds[0].url)
+          if (interaction.message.embeds[0]!.url)
+            bodyURLComponent.setValue(interaction.message.embeds[0]!.url)
 
           const bodyColourComponent = new TextInputBuilder()
             .setCustomId("embedbuilder.body.colour")
@@ -353,8 +353,10 @@ export default botEvent("interactionCreate", async (_, interaction) => {
             .setRequired(false)
             .setStyle(TextInputStyle.Short)
 
-          if (interaction.message.embeds[0].hexColor)
-            bodyColourComponent.setValue(interaction.message.embeds[0].hexColor)
+          if (interaction.message.embeds[0]!.hexColor)
+            bodyColourComponent.setValue(
+              interaction.message.embeds[0]!.hexColor,
+            )
 
           const modalBodyTitle =
             new ActionRowBuilder<ModalActionRowComponentBuilder>().setComponents(
@@ -397,8 +399,10 @@ export default botEvent("interactionCreate", async (_, interaction) => {
             .setRequired(false)
             .setStyle(TextInputStyle.Short)
 
-          if (interaction.message.embeds[0].image)
-            imageMainComponent.setValue(interaction.message.embeds[0].image.url)
+          if (interaction.message.embeds[0]!.image)
+            imageMainComponent.setValue(
+              interaction.message.embeds[0]!.image.url,
+            )
 
           const imageThumbnailComponent = new TextInputBuilder()
             .setCustomId("embedbuilder.image.thumbnail")
@@ -407,9 +411,9 @@ export default botEvent("interactionCreate", async (_, interaction) => {
             .setRequired(false)
             .setStyle(TextInputStyle.Short)
 
-          if (interaction.message.embeds[0].thumbnail)
+          if (interaction.message.embeds[0]!.thumbnail)
             imageThumbnailComponent.setValue(
-              interaction.message.embeds[0].thumbnail.url,
+              interaction.message.embeds[0]!.thumbnail.url,
             )
 
           const modalImageMain =
@@ -440,9 +444,9 @@ export default botEvent("interactionCreate", async (_, interaction) => {
             .setRequired(false)
             .setStyle(TextInputStyle.Short)
 
-          if (interaction.message.embeds[0].footer?.text)
+          if (interaction.message.embeds[0]!.footer?.text)
             footerTextComponent.setValue(
-              interaction.message.embeds[0].footer.text,
+              interaction.message.embeds[0]!.footer.text,
             )
 
           const footerIconComponent = new TextInputBuilder()
@@ -452,9 +456,9 @@ export default botEvent("interactionCreate", async (_, interaction) => {
             .setRequired(false)
             .setStyle(TextInputStyle.Short)
 
-          if (interaction.message.embeds[0].footer?.iconURL)
+          if (interaction.message.embeds[0]!.footer?.iconURL)
             footerIconComponent.setValue(
-              interaction.message.embeds[0].footer.iconURL,
+              interaction.message.embeds[0]!.footer.iconURL,
             )
 
           const modalFooterText =
@@ -481,18 +485,18 @@ export default botEvent("interactionCreate", async (_, interaction) => {
           interaction.channel?.send({
             embeds: [
               new EmbedBuilder()
-                .setAuthor(interaction.message.embeds[0].author)
+                .setAuthor(interaction.message.embeds[0]!.author)
                 .setColor(
-                  `#${interaction.message.embeds[0].hexColor?.replace("#", "")}`,
+                  `#${interaction.message.embeds[0]!.hexColor?.replace("#", "")}`,
                 )
-                .setDescription(interaction.message.embeds[0].description)
-                .setFooter(interaction.message.embeds[0].footer)
-                .setImage(interaction.message.embeds[0].image?.url ?? null)
+                .setDescription(interaction.message.embeds[0]!.description)
+                .setFooter(interaction.message.embeds[0]!.footer)
+                .setImage(interaction.message.embeds[0]!.image?.url ?? null)
                 .setThumbnail(
-                  interaction.message.embeds[0].thumbnail?.url ?? null,
+                  interaction.message.embeds[0]!.thumbnail?.url ?? null,
                 )
-                .setTitle(interaction.message.embeds[0].title)
-                .setURL(interaction.message.embeds[0].url),
+                .setTitle(interaction.message.embeds[0]!.title)
+                .setURL(interaction.message.embeds[0]!.url),
             ],
           })
 

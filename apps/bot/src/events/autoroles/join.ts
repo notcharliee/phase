@@ -3,7 +3,7 @@ import { botEvent } from "phasebot"
 
 import { db } from "~/lib/db"
 
-export default botEvent("guildMemberAdd", async (client, member) => {
+export default botEvent("guildMemberAdd", async (_, member) => {
   if (
     member.guild.features.includes(GuildFeature.MemberVerificationGateEnabled)
   )

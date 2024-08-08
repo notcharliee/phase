@@ -32,9 +32,9 @@ export default new BotCommandBuilder()
     let videoId: string = ""
 
     if (videoUrl.includes("v=")) {
-      videoId = videoUrl.split("v=")[1].split("&")[0]
+      videoId = videoUrl.split("v=")[1]!.split("&")[0]!
     } else if (videoUrl.includes(".be/")) {
-      videoId = videoUrl.split(".be/")[1].split("?")[0]
+      videoId = videoUrl.split(".be/")[1]!.split("?")[0]!
     } else {
       void interaction.reply(
         new BotError("Could not find a YouTube video with that URL.").toJSON(),
@@ -51,7 +51,7 @@ export default new BotCommandBuilder()
       })
       .catch(() => null)
 
-    if (!videoResponse?.data.items?.[0].snippet) {
+    if (!videoResponse?.data.items?.[0]!.snippet) {
       void interaction.reply(
         new BotError("Could not find a YouTube video with that URL.").toJSON(),
       )

@@ -57,7 +57,7 @@ export default new BotSubcommandBuilder()
       return
     }
 
-    void member.roles.add(warningsModule.warnings[memberWarnings.size], reason)
+    void member.roles.add(warningsModule.warnings[memberWarnings.size]!, reason)
 
     void interaction.reply({
       embeds: [

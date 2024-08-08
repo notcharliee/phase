@@ -5,6 +5,6 @@ export default new BotCommandBuilder()
   .setDescription("Flips a coin.")
   .setExecute(async (interaction) => {
     void interaction.reply(
-      ["It's **Tails**!", "It's **Heads**!"][Math.floor(Math.random() * 2)],
+      ["It's **Tails**!", "It's **Heads**!"][Math.floor(Math.random() * 2)]!,
     )
   })

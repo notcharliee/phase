@@ -1,7 +1,5 @@
 import { ChannelType, EmbedBuilder, PermissionFlagsBits } from "discord.js"
 
-import { env } from "~/lib/env"
-
 import { ChannelTypeName } from "~/types/utils"
 
 import type { GuildModules } from "~/lib/db"

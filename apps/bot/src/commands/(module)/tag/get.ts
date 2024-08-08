@@ -32,5 +32,5 @@ export default new BotSubcommandBuilder()
       return
     }
 
-    void interaction.reply(tagDoc.tags[tagIndex].value)
+    void interaction.reply(tagDoc.tags[tagIndex]!.value)
   })

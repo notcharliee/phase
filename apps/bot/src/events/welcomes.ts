@@ -27,18 +27,20 @@ export default botEvent("guildMemberAdd", async (client, member) => {
   const membercount = member.guild.memberCount.toString()
   const background = moduleData.card.background
 
-  let card: string | URL | null = moduleData.card.enabled
-    ? new URL("https://phasebot.xyz/api/image/welcome.png")
+  let card: string | null = moduleData.card.enabled
+    ? "https://phasebot.xyz/api/image/welcome.png"
     : null
 
   if (card) {
-    card.searchParams.append("avatar", avatar)
-    card.searchParams.append("username", username)
-    card.searchParams.append("membercount", membercount)
+    const url = new URL(card)
 
-    if (background) card.searchParams.append("background", background)
+    url.searchParams.append("avatar", avatar)
+    url.searchParams.append("username", username)
+    url.searchParams.append("membercount", membercount)
 
-    card = card.toString()
+    if (background) url.searchParams.append("background", background)
+
+    card = url.toString()
   }
 
   const message = moduleData.message

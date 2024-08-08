@@ -135,17 +135,14 @@ export default botEvent("ready", async (client) => {
   )
 
   // Server Boost Level Up
-  client.on(
-    "guildBoostLevelUp",
-    (guild: Guild, oldLevel: number, newLevel: number) => {
-      const embed = new EmbedBuilder()
-        .setTitle("Server Level Up")
-        .setColor("Purple")
-        .setDescription(`This server reached the boost level \`${newLevel}\`.`)
+  client.on("guildBoostLevelUp", (guild: Guild, _, newLevel: number) => {
+    const embed = new EmbedBuilder()
+      .setTitle("Server Level Up")
+      .setColor("Purple")
+      .setDescription(`This server reached the boost level \`${newLevel}\`.`)
 
-      return sendlog(guild.id, embed)
-    },
-  )
+    return sendlog(guild.id, embed)
+  })
 
   // Server Boost Level Down
   client.on(

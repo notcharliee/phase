@@ -86,7 +86,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
     )
 
     const question =
-      questionIndex !== -1 ? questionsAndAnswers[questionIndex][0] : null
+      questionIndex !== -1 ? questionsAndAnswers[questionIndex]![0] : null
 
     if (question) {
       const questionMessage = await interaction.user.send({
@@ -136,7 +136,7 @@ export default botEvent("interactionCreate", async (client, interaction) => {
         })
       }
 
-      questionsAndAnswers[questionIndex][1] = answerMessage.content
+      questionsAndAnswers[questionIndex]![1] = answerMessage.content
 
       askQuestion()
     } else {

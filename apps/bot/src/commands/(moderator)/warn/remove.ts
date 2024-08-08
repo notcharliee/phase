@@ -58,7 +58,7 @@ export default new BotSubcommandBuilder()
     }
 
     void member.roles.remove(
-      warningsModule.warnings[memberWarnings.size - 1],
+      warningsModule.warnings[memberWarnings.size - 1]!,
       reason,
     )
 

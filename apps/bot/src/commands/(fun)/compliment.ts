@@ -7,6 +7,6 @@ export default new BotCommandBuilder()
   .setDescription("Gives you a compliment.")
   .setExecute(async (interaction) => {
     void interaction.reply(
-      compliments[Math.floor(Math.random() * compliments.length)],
+      compliments[Math.floor(Math.random() * compliments.length)]!,
     )
   })

@@ -42,7 +42,7 @@ export default botEvent("interactionCreate", async (_, interaction) => {
   }
 
   const member = await interaction.guild?.members.fetch(
-    interaction.customId.split(".")[3],
+    interaction.customId.split(".")[3]!,
   )
 
   if (!member) {

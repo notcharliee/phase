@@ -5,7 +5,7 @@ import { db } from "~/lib/db"
 
 export default botEvent(
   "guildMemberUpdate",
-  async (client, oldMember, newMember) => {
+  async (_, oldMember, newMember) => {
     if (
       !newMember.guild.features.includes(
         GuildFeature.MemberVerificationGateEnabled,
