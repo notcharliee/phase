@@ -145,7 +145,7 @@ export const levelsSchema = z.object({
     .max(256, {
       message: "Background must be less than 256 characters",
     })
-    .refine((value) => value.match(/\.(jpeg|jpg|png)$/), {
+    .refine((value) => /\.(jpeg|jpg|png)$/.exec(value), {
       message: "Background must be a valid PNG or JPEG image URL",
     })
     .optional(),
