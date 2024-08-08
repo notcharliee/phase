@@ -12,13 +12,7 @@ import { v4 as randomUUID } from "uuid"
 import { ModuleFormButtons } from "~/components/dashboard/modules"
 import { SelectChannel } from "~/components/dashboard/select-channel"
 import { Button } from "~/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import {
   Form,
   FormControl,
@@ -29,14 +23,15 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
+import { Label } from "~/components/ui/label"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import type { UseFormReturn } from "react-hook-form"
-import type { z } from "zod"
-
 import { updateForms } from "~/app/dashboard/_actions/updateModule"
 import { formsSchema } from "~/validators/modules"
+
+import type { UseFormReturn } from "react-hook-form"
+import type { z } from "zod"
 
 type FormValues = z.infer<typeof formsSchema>
 
@@ -56,7 +51,14 @@ export const Forms = () => {
       : {
           enabled: false,
           channel: "",
-          forms: [],
+          forms: [
+            {
+              id: randomUUID(),
+              name: "Form 1",
+              channel: "",
+              questions: [],
+            },
+          ],
         },
   })
 
@@ -125,28 +127,15 @@ export const Forms = () => {
             <FormItem className="space-y-4">
               {fieldArray.fields.map((field, index) => (
                 <Card key={field.id}>
-                  <CardHeader className="flex-row items-center justify-between space-y-0 py-5">
-                    <div className="flex flex-col space-y-1.5">
-                      <CardTitle>{formFields.forms[index]?.name}</CardTitle>
-                      <CardDescription>
-                        {channels.find(
-                          (channel) =>
-                            channel.id === formFields.forms[index]?.channel,
-                        )?.name
-                          ? "# " +
-                            channels.find(
-                              (channel) =>
-                                channel.id === formFields.forms[index]?.channel,
-                            )?.name
-                          : "Select a channel"}
-                      </CardDescription>
-                    </div>
+                  <CardHeader className="flex-row items-center justify-between space-y-0 py-3">
+                    <CardTitle>{formFields.forms[index]?.name}</CardTitle>
                     <Button
-                      variant={"destructive"}
+                      variant={"outline"}
+                      size={"icon"}
                       onClick={() => fieldArray.remove(index)}
                     >
-                      <div className="hidden sm:block">Delete Form</div>
-                      <TrashIcon className="block h-4 w-4 sm:hidden" />
+                      <Label className="sr-only">Delete Counter</Label>
+                      <TrashIcon className="h-4 w-4" />
                     </Button>
                   </CardHeader>
                   <CardContent className="space-y-6 border-t pt-6">

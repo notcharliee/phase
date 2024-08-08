@@ -5,7 +5,7 @@ import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
 import { ChannelType } from "discord-api-types/v10"
-import ms from "ms"
+import { default as ms } from "ms"
 import { useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -32,14 +32,15 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
+import { Label } from "~/components/ui/label"
 import { Textarea } from "~/components/ui/textarea"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import type { z } from "zod"
-
 import { updateAutoMessages } from "~/app/dashboard/_actions/updateModule"
 import { autoMessagesSchema } from "~/validators/modules"
+
+import type { z } from "zod"
 
 export type FormValues = z.infer<typeof autoMessagesSchema>
 
@@ -61,7 +62,15 @@ export const AutoMessages = () => {
         }
       : {
           enabled: false,
-          messages: [],
+          messages: [
+            {
+              channel: "",
+              message: "",
+              mention: undefined,
+              interval: "",
+              startAt: new Date(),
+            },
+          ],
         },
   })
 
@@ -137,40 +146,14 @@ export const AutoMessages = () => {
             <FormItem className="space-y-4">
               {fieldArray.fields.map((field, index) => (
                 <Card key={field.id}>
-                  <CardHeader className="flex-row items-center justify-between space-y-0 py-5">
-                    <div className="flex flex-col">
-                      <CardTitle>
-                        {formFields.messages[index]?.name.length
-                          ? formFields.messages[index]?.name
-                          : `Auto Message ${index + 1}`}
-                      </CardTitle>
-                      <CardDescription>
-                        {channels.find(
-                          (channel) =>
-                            channel.id === formFields.messages[index]?.channel,
-                        )?.name
-                          ? "# " +
-                            channels.find(
-                              (channel) =>
-                                channel.id ===
-                                formFields.messages[index]?.channel,
-                            )?.name
-                          : "Select a channel"}
-                      </CardDescription>
-                    </div>
+                  <CardHeader className="flex-row items-center justify-between space-y-0 py-3">
+                    <CardTitle>{formFields.messages[index]?.name}</CardTitle>
                     <Button
-                      variant={"destructive"}
-                      className="max-sm:hidden"
-                      onClick={() => fieldArray.remove(index)}
-                    >
-                      <div>Delete Message</div>
-                    </Button>
-                    <Button
-                      variant={"destructive"}
+                      variant={"outline"}
                       size={"icon"}
-                      className="sm:hidden"
                       onClick={() => fieldArray.remove(index)}
                     >
+                      <Label className="sr-only">Delete Counter</Label>
                       <TrashIcon className="h-4 w-4" />
                     </Button>
                   </CardHeader>
@@ -278,10 +261,10 @@ export const AutoMessages = () => {
                       mention={
                         formFields.messages[index]?.mention &&
                         formFields.messages[index]?.mention?.length !== 0
-                          ? roles.find(
+                          ? (roles.find(
                               (role) =>
                                 role.id === formFields.messages[index]?.mention,
-                            )?.name ?? "unknown"
+                            )?.name ?? "unknown")
                           : undefined
                       }
                     />

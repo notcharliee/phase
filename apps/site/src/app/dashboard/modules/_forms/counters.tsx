@@ -90,7 +90,8 @@ export const Counters = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="text-muted-foreground space-y-4 text-sm">
           <p>
-            Counter channels are updated once every 10 minutes, so it might take a few moments for the changes to show up in your server.
+            Counter channels are updated once every 10 minutes, so it might take
+            a few moments for the changes to show up in your server.
           </p>
           <p>
             Before you start, make sure to read the{" "}

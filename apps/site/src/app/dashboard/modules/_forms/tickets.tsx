@@ -4,6 +4,7 @@ import { useState } from "react"
 
 import { ChannelType } from "@discordjs/core/http-only"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { TrashIcon } from "@radix-ui/react-icons"
 import { useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { v4 as randomUUID } from "uuid"
@@ -12,7 +13,7 @@ import { ModuleFormButtons } from "~/components/dashboard/modules"
 import { SelectChannel } from "~/components/dashboard/select-channel"
 import { SelectRole } from "~/components/dashboard/select-role"
 import { Button } from "~/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import {
   Form,
   FormControl,
@@ -28,10 +29,10 @@ import { Textarea } from "~/components/ui/textarea"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import type { z } from "zod"
-
 import { updateTickets } from "~/app/dashboard/_actions/updateModule"
 import { ticketsSchema } from "~/validators/modules"
+
+import type { z } from "zod"
 
 type FormValues = z.infer<typeof ticketsSchema>
 
@@ -168,7 +169,18 @@ export const Tickets = () => {
           {!!fieldArray.fields.length &&
             fieldArray.fields.map((fieldArrayfield, index) => (
               <Card key={fieldArrayfield.id}>
-                <CardHeader className="space-y-4">
+                <CardHeader className="flex-row items-center justify-between space-y-0 py-3">
+                  <CardTitle>{fieldArray.fields[index]?.name}</CardTitle>
+                  <Button
+                    variant={"outline"}
+                    size={"icon"}
+                    onClick={() => fieldArray.remove(index)}
+                  >
+                    <Label className="sr-only">Delete Counter</Label>
+                    <TrashIcon className="h-4 w-4" />
+                  </Button>
+                </CardHeader>
+                <CardContent className="space-y-6 border-t pt-6">
                   <FormField
                     control={form.control}
                     name={`tickets.${index}.name`}
@@ -201,8 +213,6 @@ export const Tickets = () => {
                       </FormItem>
                     )}
                   />
-                </CardHeader>
-                <CardContent>
                   <FormField
                     control={form.control}
                     name={`tickets.${index}.message`}
@@ -224,14 +234,6 @@ export const Tickets = () => {
                     )}
                   />
                 </CardContent>
-                <CardFooter>
-                  <Button
-                    variant={"destructive"}
-                    onClick={() => fieldArray.remove(index)}
-                  >
-                    Delete Ticket
-                  </Button>
-                </CardFooter>
               </Card>
             ))}
           {fieldArray.fields.length < 5 && (
