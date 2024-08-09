@@ -1,10 +1,6 @@
-"use client"
-
 import Link from "next/link"
-import { useEffect } from "react"
 
 import { ArrowRightIcon } from "@radix-ui/react-icons"
-import { toast } from "sonner"
 
 import { Header } from "~/components/header"
 import { OrbitingDots } from "~/components/orbiting-dots"
@@ -12,21 +8,7 @@ import { Button } from "~/components/ui/button"
 
 import { siteConfig } from "~/config/site"
 
-export default function HomePage({
-  searchParams,
-}: {
-  searchParams: { signedOut: string | undefined }
-}) {
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (searchParams.signedOut === "true") {
-        toast.info("You have been signed out.")
-      }
-    }, 0)
-
-    return () => clearTimeout(timeout)
-  }, [searchParams])
-
+export default function HomePage() {
   return (
     <main className="grid min-h-screen grid-rows-[4rem_auto_4rem]">
       <OrbitingDots />
@@ -38,7 +20,7 @@ export default function HomePage({
             className="bg-muted inline-flex items-center rounded-lg px-3 py-1 text-sm font-medium"
           >
             <span className="mr-4">🎉</span>
-            <span className="inline">Check out the v3.6 changelog.</span>
+            <span className="inline">Check out the v3.12 changelog.</span>
             <ArrowRightIcon className="ml-2 h-4 w-4" />
           </Link>
           <h1 className="text-center text-4xl font-bold leading-none tracking-tighter md:text-6xl lg:leading-[1.1]">
@@ -59,7 +41,7 @@ export default function HomePage({
       </div>
       <footer className="h-16 sm:border-t sm:backdrop-blur-sm">
         <div className="container flex h-full items-center py-6 sm:py-0">
-          <p className="text-muted-foreground w-full text-balance text-center text-xs sm:text-sm leading-loose sm:text-left">
+          <p className="text-muted-foreground w-full text-balance text-center text-xs leading-loose sm:text-left sm:text-sm">
             Built by{" "}
             <Link
               href={"/redirect/developer"}
