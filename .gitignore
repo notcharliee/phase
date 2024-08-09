@@ -5,7 +5,10 @@ node_modules
 
 # vercel
 .vercel
+
+# cache
 .turbo
+.cache
 
 # build
 .next
