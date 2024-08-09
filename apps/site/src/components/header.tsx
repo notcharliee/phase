@@ -4,12 +4,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 
-import {
-  FileIcon,
-  GitHubLogoIcon,
-  GlobeIcon,
-  RocketIcon,
-} from "@radix-ui/react-icons"
+import { FileIcon, GlobeIcon, RocketIcon } from "@radix-ui/react-icons"
 
 import { Moon } from "@/components/moon"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -23,7 +18,6 @@ import {
   CommandSeparator,
 } from "@/components/ui/command"
 
-import { siteConfig } from "@/config/site"
 import { docsPages, mainPages, splitPagesByCategory } from "~/config/nav"
 
 import { cn } from "@/lib/utils"
@@ -68,18 +62,20 @@ export const Header = () => {
             <Moon className="h-5 w-5" />
             <span className="font-bold leading-tight">Phase</span>
           </Link>
-          {mainPages.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "hover:text-primary text-sm font-medium transition-colors",
-                pathname !== item.href && "text-muted-foreground",
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {mainPages
+            .filter((item) => !item.icon)
+            .map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "hover:text-primary text-sm font-medium transition-colors",
+                  pathname !== item.href && "text-muted-foreground",
+                )}
+              >
+                {item.label}
+              </Link>
+            ))}
         </nav>
         <div className="flex flex-1 items-center justify-between space-x-3 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none">
@@ -144,21 +140,29 @@ export const Header = () => {
               </CommandList>
             </CommandDialog>
           </div>
-          <nav className="flex items-center">
-            <Link
-              href={siteConfig.links.github}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div
-                className={cn(
-                  buttonVariants({ variant: "outline", size: "icon" }),
-                )}
-              >
-                <GitHubLogoIcon className="h-5 w-5" />
-                <span className="sr-only">GitHub</span>
-              </div>
-            </Link>
+          <nav className="flex items-center gap-1.5">
+            {mainPages
+              .filter((item) => item.icon)
+              .map(
+                (item) =>
+                  item.icon && (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <div
+                        className={cn(
+                          buttonVariants({ variant: "outline", size: "icon" }),
+                        )}
+                      >
+                        <item.icon className="h-5 w-5" />
+                        <span className="sr-only">{item.label}</span>
+                      </div>
+                    </Link>
+                  ),
+              )}
           </nav>
         </div>
       </div>

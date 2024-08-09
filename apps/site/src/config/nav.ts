@@ -1,6 +1,9 @@
+import { DiscordLogoIcon, GitHubLogoIcon } from "@radix-ui/react-icons"
+
 interface Page {
   label: string
   href: string
+  icon?: typeof GitHubLogoIcon
   category?: string
   external?: boolean
 }
@@ -8,8 +11,20 @@ interface Page {
 export const mainPages: Page[] = [
   { label: "Home", href: "/" },
   { label: "Docs", href: "/docs" },
+  { label: "Login", href: "/auth/login" },
   { label: "Invite", href: "/redirect/invite", external: true },
-  { label: "Discord", href: "/redirect/discord", external: true },
+  {
+    label: "GitHub",
+    href: "/redirect/github",
+    external: true,
+    icon: GitHubLogoIcon,
+  },
+  {
+    label: "Discord",
+    href: "/redirect/discord",
+    external: true,
+    icon: DiscordLogoIcon,
+  },
 ]
 
 export const docsPages: Page[] = [
