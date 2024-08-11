@@ -3,22 +3,22 @@ import mongoose from "mongoose"
 import { defineModel } from "~/utils"
 
 export interface Otp {
-  /** The date the otp was created */
-  createdAt: Date
+  /** The one time password */
+  otp: string
   /** The user's ID */
   userId: string
   /** The guild's ID */
   guildId: string
-  /** The one time password */
-  otp: string
+  /** The date the otp was created */
+  createdAt: Date
 }
 
 export const otps = defineModel(
   "Otps",
   new mongoose.Schema<Otp>({
-    createdAt: { type: Date, expires: "1m", required: true, default: Date.now },
+    otp: { type: String, required: true },
     userId: { type: String, required: true },
     guildId: { type: String, required: true },
-    otp: { type: String, required: true },
+    createdAt: { type: Date, expires: "1m", required: true, default: Date.now },
   }),
 )

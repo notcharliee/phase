@@ -18,11 +18,15 @@ export const tags = defineModel(
   "Tags",
   new mongoose.Schema<Tag>({
     guild: { type: String, required: true },
-    tags: [
-      {
-        name: { type: String, required: true },
-        value: { type: String, required: true },
-      },
-    ],
+    tags: {
+      type: [
+        new mongoose.Schema<Tag["tags"][number]>({
+          name: { type: String, required: true },
+          value: { type: String, required: true },
+        }),
+      ],
+      default: [],
+      required: true,
+    },
   }),
 )

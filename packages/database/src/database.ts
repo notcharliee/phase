@@ -19,49 +19,51 @@ interface InitialisedDatabase extends Omit<Database, "init"> {
 }
 
 interface DatabaseConfig {
+  /** Automatically create indexes for all models (startup performance may be impacted). */
+  autoIndex?: boolean
+  /** Cache the database connection in global state (useful for HMR). */
+  cacheConnection?: boolean
   /** Enable debug logging. */
-  debug: boolean
-  /** Cache the database connection in development. */
-  cacheConnection: boolean
+  debug?: boolean
 }
 
-/**
- * Cache the database connection in development.
- * This avoids creating a new connection on every HMR update.
- */
 const globalForDb = globalThis as unknown as {
-  conn: mongoose.Mongoose | undefined
+  mongodbConn: mongoose.Mongoose | undefined
 }
 
 export class Database implements Disposable {
-  private _debug: boolean
-  private _conn: mongoose.Mongoose | null = null
+  private _autoIndex: boolean = true
+  private _cacheConnection: boolean = false
+  private _debug: boolean = false
 
-  constructor(config: DatabaseConfig) {
-    this._debug = config.debug
-
-    if (config.cacheConnection) {
-      this._conn = globalForDb.conn ?? null
-    }
+  constructor(config?: DatabaseConfig) {
+    if (config?.autoIndex) this._autoIndex = config.autoIndex
+    if (config?.cacheConnection) this._cacheConnection = config.cacheConnection
+    if (config?.debug) this._debug = config.debug
   }
 
   async init() {
-    if (this._debug) console.log("Initialising database")
+    this.debug("Initialising database")
 
-    if (process.env.MONGODB_URI) {
-      if (this._conn && process.env.NODE_ENV !== "production") {
-        if (this._debug) console.log("Reusing existing connection to MongoDB")
-      } else {
-        if (this._debug) console.log("Connecting to MongoDB")
-
-        const conn = await mongoose.connect(process.env.MONGODB_URI)
-        this._conn = conn
-        globalForDb.conn = conn
-
-        if (this._debug) console.log("Connected to MongoDB")
-      }
-    } else {
+    if (!process.env.MONGODB_URI) {
       throw new Error("'MONGODB_URI' environment variable not set")
+    }
+
+    if (this._cacheConnection && globalForDb.mongodbConn) {
+      this.debug("Reusing existing connection to MongoDB")
+    } else {
+      this.debug("Connecting to MongoDB")
+
+      const conn = await mongoose.connect(process.env.MONGODB_URI, {
+        autoIndex: this._autoIndex,
+      })
+
+      this.debug("Connected to MongoDB")
+
+      if (this._cacheConnection) {
+        globalForDb.mongodbConn = conn
+        this.debug("Cached connection to MongoDB")
+      }
     }
 
     Object.assign(this, {
@@ -77,8 +79,11 @@ export class Database implements Disposable {
     return this as unknown as InitialisedDatabase
   }
 
+  private debug(message: string) {
+    if (this._debug) console.log(message)
+  }
+
   [Symbol.dispose]() {
-    mongoose.disconnect()
-    if (this._debug) console.log("Disconnected from MongoDB")
+    mongoose.disconnect().then(() => this.debug("Disconnected from MongoDB"))
   }
 }

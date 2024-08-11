@@ -2,6 +2,11 @@ import { randomUUID } from "crypto"
 
 import mongoose from "mongoose"
 
+type ModelIndexValue =
+  | true
+  | mongoose.SortOrder
+  | (mongoose.IndexOptions & { sortOrder?: mongoose.SortOrder })
+
 /**
  * Defines a mongoose model with a given name and schema.
  *
@@ -9,7 +14,23 @@ import mongoose from "mongoose"
  * @param schema The schema of the model.
  * @returns The defined model.
  */
-export function defineModel<T>(name: string, schema: mongoose.Schema<T>) {
+export function defineModel<T>(
+  name: string,
+  schema: mongoose.Schema<T>,
+  indexes?: { [key in keyof T]?: ModelIndexValue },
+) {
+  for (const index of Object.entries(indexes ?? {})) {
+    const [key, value] = index as [keyof T, ModelIndexValue]
+
+    if (typeof value === "object") {
+      const { sortOrder, ...options } = value
+      schema.index({ [key]: sortOrder ?? "ascending" }, options)
+    } else {
+      const sortOrder = value === true ? "ascending" : value
+      schema.index({ [key]: sortOrder })
+    }
+  }
+
   return (
     (mongoose.models[name] as mongoose.Model<T>) ??
     mongoose.model<T>(name, schema)

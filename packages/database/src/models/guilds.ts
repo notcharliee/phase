@@ -245,8 +245,14 @@ export interface GuildModules {
 export const guilds = defineModel(
   "Guilds",
   new mongoose.Schema<Guild>({
-    id: { type: String, required: true },
-    admins: { type: [String], required: true },
+    id: {
+      type: String,
+      required: true,
+    },
+    admins: {
+      type: [String],
+      required: true,
+    },
     commands: {
       type: Map,
       of: new mongoose.Schema<GuildCommand>({
@@ -459,4 +465,7 @@ export const guilds = defineModel(
       }),
     },
   }),
+  {
+    id: { unique: true },
+  },
 )

@@ -15,4 +15,7 @@ export const afks = defineModel(
     user: { type: String, required: true },
     reason: { type: String },
   }),
+  {
+    user: { unique: true },
+  },
 )
