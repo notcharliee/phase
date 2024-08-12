@@ -42,19 +42,21 @@ export default botEvent("guildMemberRemove", async (client, member) => {
     guildDoc.modules[ModuleId.AuditLogs].channels.punishments,
   ) as GuildTextBasedChannel
 
-  return void logsChannel.send({
-    embeds: [
-      new EmbedBuilder()
-        .setTitle("Member Kicked")
-        .setThumbnail(member.displayAvatarURL())
-        .setColor(PhaseColour.Primary)
-        .setDescription(
-          `**Offender:** ${member}\n**Reason:** ${event.reason ?? "No reason provided"}\n**Responsible Moderator:** ${event.executor?.username ?? "Unknown"}`,
-        )
-        .setFooter({
-          text: `ID: ${member.id}`,
-        })
-        .setTimestamp(),
-    ],
-  }).catch(() => null)
+  return void logsChannel
+    .send({
+      embeds: [
+        new EmbedBuilder()
+          .setTitle("Member Kicked")
+          .setThumbnail(member.displayAvatarURL())
+          .setColor(PhaseColour.Primary)
+          .setDescription(
+            `**Offender:** ${member}\n**Reason:** ${event.reason ?? "No reason provided"}\n**Responsible Moderator:** ${event.executor?.username ?? "Unknown"}`,
+          )
+          .setFooter({
+            text: `ID: ${member.id}`,
+          })
+          .setTimestamp(),
+      ],
+    })
+    .catch(() => null)
 })

@@ -38,30 +38,34 @@ export default botEvent(
       ) &&
       channel.id === guildDoc.modules[ModuleId.JoinToCreates].channel
     ) {
-      return void logsChannel.send({
-        embeds: [
-          new EmbedBuilder()
-            .setTitle("Join to Create Activated")
-            .setThumbnail(member.displayAvatarURL())
-            .setColor(PhaseColour.Primary)
-            .setDescription(`Creating private voice channel for ${member}`),
-        ],
-      }).catch(() => null)
+      return void logsChannel
+        .send({
+          embeds: [
+            new EmbedBuilder()
+              .setTitle("Join to Create Activated")
+              .setThumbnail(member.displayAvatarURL())
+              .setColor(PhaseColour.Primary)
+              .setDescription(`Creating private voice channel for ${member}`),
+          ],
+        })
+        .catch(() => null)
     }
 
     const users = channel.members.size
     const userLimit = channel.userLimit ? `/${channel.userLimit}` : ""
 
-    return void logsChannel.send({
-      embeds: [
-        new EmbedBuilder()
-          .setTitle("Member Joined Voice")
-          .setThumbnail(member.displayAvatarURL())
-          .setColor(PhaseColour.Primary)
-          .setDescription(
-            `**Member:** ${member}\n**Channel:** ${channel}\n**Users:** ${users}${userLimit}`,
-          ),
-      ],
-    }).catch(() => null)
+    return void logsChannel
+      .send({
+        embeds: [
+          new EmbedBuilder()
+            .setTitle("Member Joined Voice")
+            .setThumbnail(member.displayAvatarURL())
+            .setColor(PhaseColour.Primary)
+            .setDescription(
+              `**Member:** ${member}\n**Channel:** ${channel}\n**Users:** ${users}${userLimit}`,
+            ),
+        ],
+      })
+      .catch(() => null)
   },
 )

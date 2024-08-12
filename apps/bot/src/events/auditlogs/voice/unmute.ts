@@ -30,16 +30,18 @@ export default botEvent(
 
     const member = oldVoice.member!
 
-    return void logsChannel.send({
-      embeds: [
-        new EmbedBuilder()
-          .setTitle("Member Unmuted")
-          .setThumbnail(member.displayAvatarURL())
-          .setColor(PhaseColour.Primary)
-          .setDescription(
-            `**Member:** ${member}\n**Status:** \`Not Muted\`\n**Self Muted:** ${oldVoice.selfMute ? "`true`" : "`false`"}\n**Server Muted:** ${oldVoice.serverMute ? "`true`" : "`false`"}`,
-          ),
-      ],
-    }).catch(() => null)
+    return void logsChannel
+      .send({
+        embeds: [
+          new EmbedBuilder()
+            .setTitle("Member Unmuted")
+            .setThumbnail(member.displayAvatarURL())
+            .setColor(PhaseColour.Primary)
+            .setDescription(
+              `**Member:** ${member}\n**Status:** \`Not Muted\`\n**Self Muted:** ${oldVoice.selfMute ? "`true`" : "`false`"}\n**Server Muted:** ${oldVoice.serverMute ? "`true`" : "`false`"}`,
+            ),
+        ],
+      })
+      .catch(() => null)
   },
 )

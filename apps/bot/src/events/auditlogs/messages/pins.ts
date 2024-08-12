@@ -66,17 +66,19 @@ export default botEvent("channelPinsUpdate", async (client, channel) => {
 
     if (!message) return
 
-    return void logsChannel.send({
-      embeds: [
-        new EmbedBuilder()
-          .setTitle("Message Pinned")
-          .setColor(PhaseColour.Primary)
-          .setDescription(
-            `**Member:** ${member}\n**Message:** [Click here to view](${message.url})`,
-          )
-          .setTimestamp(),
-      ],
-    }).catch(() => null)
+    return void logsChannel
+      .send({
+        embeds: [
+          new EmbedBuilder()
+            .setTitle("Message Pinned")
+            .setColor(PhaseColour.Primary)
+            .setDescription(
+              `**Member:** ${member}\n**Message:** [Click here to view](${message.url})`,
+            )
+            .setTimestamp(),
+        ],
+      })
+      .catch(() => null)
   }
 
   if (unpinEvent && !pinEvent) {
@@ -85,17 +87,19 @@ export default botEvent("channelPinsUpdate", async (client, channel) => {
 
     if (!message) return
 
-    return void logsChannel.send({
-      embeds: [
-        new EmbedBuilder()
-          .setTitle("Message Unpinned")
-          .setColor(PhaseColour.Primary)
-          .setDescription(
-            `**Member:** ${member}\n**Message:** [Click here to view](${message.url})`,
-          )
-          .setTimestamp(),
-      ],
-    }).catch(() => null)
+    return void logsChannel
+      .send({
+        embeds: [
+          new EmbedBuilder()
+            .setTitle("Message Unpinned")
+            .setColor(PhaseColour.Primary)
+            .setDescription(
+              `**Member:** ${member}\n**Message:** [Click here to view](${message.url})`,
+            )
+            .setTimestamp(),
+        ],
+      })
+      .catch(() => null)
   }
 
   return

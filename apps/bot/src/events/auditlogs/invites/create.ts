@@ -31,14 +31,16 @@ export default botEvent("inviteCreate", async (client, invite) => {
   const maxUses = invite.maxUses ?? "N/A"
   const channel = invite.channel ?? "`N/A`"
 
-  void logsChannel.send({
-    embeds: [
-      new EmbedBuilder()
-        .setColor(PhaseColour.Primary)
-        .setDescription(
-          `**Inviter:** ${inviter}\n**Code:** \`${code}\`\n**Expires:** ${expires}\n**Max Uses:** \`${maxUses}\`\n**Channel:** ${channel}`,
-        )
-        .setTitle("Invite Created"),
-    ],
-  }).catch(() => null)
+  void logsChannel
+    .send({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(PhaseColour.Primary)
+          .setDescription(
+            `**Inviter:** ${inviter}\n**Code:** \`${code}\`\n**Expires:** ${expires}\n**Max Uses:** \`${maxUses}\`\n**Channel:** ${channel}`,
+          )
+          .setTitle("Invite Created"),
+      ],
+    })
+    .catch(() => null)
 })

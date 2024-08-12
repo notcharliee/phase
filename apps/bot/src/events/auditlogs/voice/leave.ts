@@ -44,16 +44,18 @@ export default botEvent(
     const users = channel.members.size
     const userLimit = channel.userLimit ? `/${channel.userLimit}` : ""
 
-    return void logsChannel.send({
-      embeds: [
-        new EmbedBuilder()
-          .setTitle("Member Left Voice")
-          .setThumbnail(member.displayAvatarURL())
-          .setColor(PhaseColour.Primary)
-          .setDescription(
-            `**Member:** ${member}\n**Channel:** ${channel}\n**Users:** ${users}${userLimit}`,
-          ),
-      ],
-    }).catch(() => null)
+    return void logsChannel
+      .send({
+        embeds: [
+          new EmbedBuilder()
+            .setTitle("Member Left Voice")
+            .setThumbnail(member.displayAvatarURL())
+            .setColor(PhaseColour.Primary)
+            .setDescription(
+              `**Member:** ${member}\n**Channel:** ${channel}\n**Users:** ${users}${userLimit}`,
+            ),
+        ],
+      })
+      .catch(() => null)
   },
 )

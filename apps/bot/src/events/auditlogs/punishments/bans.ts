@@ -31,19 +31,21 @@ export default botEvent("guildBanAdd", async (client, ban) => {
     .then((auditLogs) => auditLogs.entries.first()?.executor)
     .catch(() => null)
 
-  return void logsChannel.send({
-    embeds: [
-      new EmbedBuilder()
-        .setTitle("Member Banned")
-        .setThumbnail(member.displayAvatarURL())
-        .setColor(PhaseColour.Primary)
-        .setDescription(
-          `**Offender:** ${member}\n**Reason:** ${ban.reason ?? "No reason provided"}\n**Responsible Moderator:** ${responsibleModerator?.username ?? "Unknown"}`,
-        )
-        .setFooter({
-          text: `ID: ${member.id}`,
-        })
-        .setTimestamp(),
-    ],
-  }).catch(() => null)
+  return void logsChannel
+    .send({
+      embeds: [
+        new EmbedBuilder()
+          .setTitle("Member Banned")
+          .setThumbnail(member.displayAvatarURL())
+          .setColor(PhaseColour.Primary)
+          .setDescription(
+            `**Offender:** ${member}\n**Reason:** ${ban.reason ?? "No reason provided"}\n**Responsible Moderator:** ${responsibleModerator?.username ?? "Unknown"}`,
+          )
+          .setFooter({
+            text: `ID: ${member.id}`,
+          })
+          .setTimestamp(),
+      ],
+    })
+    .catch(() => null)
 })
