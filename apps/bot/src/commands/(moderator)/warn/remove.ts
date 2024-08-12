@@ -78,22 +78,24 @@ export default new BotSubcommandBuilder()
     })
 
     if (punishmentLogChannel) {
-      void punishmentLogChannel.send({
-        embeds: [
-          new EmbedBuilder()
-            .setColor(PhaseColour.Primary)
-            .setTitle("Member Unwarned")
-            .setDescription(
-              dedent`
+      void punishmentLogChannel
+        .send({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(PhaseColour.Primary)
+              .setTitle("Member Unwarned")
+              .setDescription(
+                dedent`
                 **Member:** ${member}
                 **Mod:** ${interaction.member}
                 **Warning:** ${memberWarnings.size - 1}/${warningsModule.warnings.length}
                 
                 **Reason:** ${reason ?? "None"}
               `,
-            )
-            .setTimestamp(),
-        ],
-      })
+              )
+              .setTimestamp(),
+          ],
+        })
+        .catch(() => null)
     }
   })

@@ -44,7 +44,7 @@ export default botEvent(
     const users = channel.members.size
     const userLimit = channel.userLimit ? `/${channel.userLimit}` : ""
 
-    return logsChannel.send({
+    return void logsChannel.send({
       embeds: [
         new EmbedBuilder()
           .setTitle("Member Left Voice")
@@ -54,6 +54,6 @@ export default botEvent(
             `**Member:** ${member}\n**Channel:** ${channel}\n**Users:** ${users}${userLimit}`,
           ),
       ],
-    })
+    }).catch(() => null)
   },
 )

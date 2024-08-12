@@ -51,16 +51,18 @@ export default botEvent("guildMemberAdd", async (client, member) => {
     .replaceAll("{membercount}", membercount)
 
   if (message.length) {
-    channel.send({
-      content: moduleData.mention ? `${member}` : undefined,
-      embeds: [
-        new EmbedBuilder()
-          .setAuthor({ name: "New Member", iconURL: avatar })
-          .setDescription(message)
-          .setImage(card)
-          .setColor(PhaseColour.Primary),
-      ],
-    })
+    void channel
+      .send({
+        content: moduleData.mention ? `${member}` : undefined,
+        embeds: [
+          new EmbedBuilder()
+            .setAuthor({ name: "New Member", iconURL: avatar })
+            .setDescription(message)
+            .setImage(card)
+            .setColor(PhaseColour.Primary),
+        ],
+      })
+      .catch(() => null)
   } else if (!message.length && card) {
     await channel.sendTyping()
 
@@ -68,10 +70,12 @@ export default botEvent("guildMemberAdd", async (client, member) => {
       res.arrayBuffer().then((ab) => ab),
     )
 
-    channel.send({
-      content: moduleData.mention ? `${member}` : undefined,
-      files: [Buffer.from(attachment)],
-    })
+    void channel
+      .send({
+        content: moduleData.mention ? `${member}` : undefined,
+        files: [Buffer.from(attachment)],
+      })
+      .catch(() => null)
   } else {
     return void db.guilds.updateOne(
       { id: guildDoc.id },

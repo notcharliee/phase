@@ -31,7 +31,7 @@ export default botEvent("inviteCreate", async (client, invite) => {
   const maxUses = invite.maxUses ?? "N/A"
   const channel = invite.channel ?? "`N/A`"
 
-  logsChannel.send({
+  void logsChannel.send({
     embeds: [
       new EmbedBuilder()
         .setColor(PhaseColour.Primary)
@@ -40,5 +40,5 @@ export default botEvent("inviteCreate", async (client, invite) => {
         )
         .setTitle("Invite Created"),
     ],
-  })
+  }).catch(() => null)
 })

@@ -65,7 +65,7 @@ export default botEvent("messageCreate", async (client, message) => {
     switch (levelModule.channel) {
       case "dm":
         {
-          message.author.send({
+          void message.author.send({
             content: levelModule.mention ? `${message.author}` : undefined,
             embeds: [
               new EmbedBuilder()
@@ -74,7 +74,7 @@ export default botEvent("messageCreate", async (client, message) => {
                 .setFooter({ text: `Sent from ${message.guild!.name}` })
                 .setTitle("You levelled up!"),
             ],
-          })
+          }).catch(() => null)
         }
         break
 
@@ -100,7 +100,7 @@ export default botEvent("messageCreate", async (client, message) => {
 
           if (!channel) return
 
-          channel.send({
+          void channel.send({
             content: levelModule.mention ? `${message.author}` : undefined,
             embeds: [
               new EmbedBuilder()
@@ -108,7 +108,7 @@ export default botEvent("messageCreate", async (client, message) => {
                 .setDescription(levelUpMessage)
                 .setTitle("You levelled up!"),
             ],
-          })
+          }).catch(() => null)
         }
         break
     }

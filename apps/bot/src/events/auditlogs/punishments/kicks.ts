@@ -42,7 +42,7 @@ export default botEvent("guildMemberRemove", async (client, member) => {
     guildDoc.modules[ModuleId.AuditLogs].channels.punishments,
   ) as GuildTextBasedChannel
 
-  return logsChannel.send({
+  return void logsChannel.send({
     embeds: [
       new EmbedBuilder()
         .setTitle("Member Kicked")
@@ -56,5 +56,5 @@ export default botEvent("guildMemberRemove", async (client, member) => {
         })
         .setTimestamp(),
     ],
-  })
+  }).catch(() => null)
 })

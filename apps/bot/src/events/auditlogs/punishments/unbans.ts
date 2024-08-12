@@ -31,7 +31,7 @@ export default botEvent("guildBanRemove", async (client, unban) => {
     .then((auditLogs) => auditLogs.entries.first()?.executor)
     .catch(() => null)
 
-  return logsChannel.send({
+  return void logsChannel.send({
     embeds: [
       new EmbedBuilder()
         .setTitle("Member Unbanned")
@@ -45,5 +45,5 @@ export default botEvent("guildBanRemove", async (client, unban) => {
         })
         .setTimestamp(),
     ],
-  })
+  }).catch(() => null)
 })

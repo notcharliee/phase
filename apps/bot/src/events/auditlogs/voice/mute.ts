@@ -30,7 +30,7 @@ export default botEvent(
 
     const member = oldVoice.member!
 
-    return logsChannel.send({
+    return void logsChannel.send({
       embeds: [
         new EmbedBuilder()
           .setTitle("Member Muted")
@@ -40,6 +40,6 @@ export default botEvent(
             `**Member:** ${member}\n**Status:** \`Muted\`\n**Muted Self:** ${newVoice.selfMute ? "`true`" : "`false`"}\n**Server Muted:** ${newVoice.serverMute ? "`true`" : "`false`"}`,
           ),
       ],
-    })
+    }).catch(() => null)
   },
 )

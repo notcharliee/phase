@@ -30,7 +30,7 @@ export default botEvent(
 
     const member = oldVoice.member!
 
-    return logsChannel.send({
+    return void logsChannel.send({
       embeds: [
         new EmbedBuilder()
           .setTitle("Member Deafened")
@@ -40,6 +40,6 @@ export default botEvent(
             `**Member:** ${member}\n**Status:** \`Deafened\`\n**Deafened Self:** ${newVoice.selfDeaf ? "`true`" : "`false`"}\n**Server Deafened:** ${newVoice.serverDeaf ? "`true`" : "`false`"}`,
           ),
       ],
-    })
+    }).catch(() => null)
   },
 )

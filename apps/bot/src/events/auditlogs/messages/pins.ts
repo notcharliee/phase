@@ -66,7 +66,7 @@ export default botEvent("channelPinsUpdate", async (client, channel) => {
 
     if (!message) return
 
-    return logsChannel.send({
+    return void logsChannel.send({
       embeds: [
         new EmbedBuilder()
           .setTitle("Message Pinned")
@@ -76,7 +76,7 @@ export default botEvent("channelPinsUpdate", async (client, channel) => {
           )
           .setTimestamp(),
       ],
-    })
+    }).catch(() => null)
   }
 
   if (unpinEvent && !pinEvent) {
@@ -85,7 +85,7 @@ export default botEvent("channelPinsUpdate", async (client, channel) => {
 
     if (!message) return
 
-    return logsChannel.send({
+    return void logsChannel.send({
       embeds: [
         new EmbedBuilder()
           .setTitle("Message Unpinned")
@@ -95,7 +95,7 @@ export default botEvent("channelPinsUpdate", async (client, channel) => {
           )
           .setTimestamp(),
       ],
-    })
+    }).catch(() => null)
   }
 
   return

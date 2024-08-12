@@ -38,9 +38,7 @@ export default botEvent("ready", async (client) => {
     )!
     if (!channel.isTextBased()) return
 
-    channel.send({ embeds: [embed] }).catch(() => {
-      return
-    })
+    void channel.send({ embeds: [embed] }).catch(() => null)
   }
 
   // Channel Topic Updating

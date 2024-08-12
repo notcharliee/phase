@@ -31,7 +31,7 @@ export default botEvent("guildBanAdd", async (client, ban) => {
     .then((auditLogs) => auditLogs.entries.first()?.executor)
     .catch(() => null)
 
-  return logsChannel.send({
+  return void logsChannel.send({
     embeds: [
       new EmbedBuilder()
         .setTitle("Member Banned")
@@ -45,5 +45,5 @@ export default botEvent("guildBanAdd", async (client, ban) => {
         })
         .setTimestamp(),
     ],
-  })
+  }).catch(() => null)
 })
