@@ -3,26 +3,26 @@ import { botEvent } from "phasebot"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
+import { cache } from "~/lib/cache"
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 
 export default botEvent("guildMemberAdd", async (client, member) => {
-  const guildSchema = await db.guilds.findOne({ id: member.guild.id })
-  if (!guildSchema || !guildSchema.modules?.[ModuleId.WelcomeMessages]?.enabled)
+  const guildDoc = await cache.guilds.get(member.guild.id)
+  if (!guildDoc || !guildDoc.modules?.[ModuleId.WelcomeMessages]?.enabled)
     return
 
-  const moduleData = guildSchema.modules[ModuleId.WelcomeMessages]
+  const moduleData = guildDoc.modules[ModuleId.WelcomeMessages]
 
   const channel = client.channels.cache.get(moduleData.channel) as
     | GuildTextBasedChannel
     | undefined
 
   if (!channel) {
-    guildSchema.modules[ModuleId.WelcomeMessages].enabled = false
-    guildSchema.markModified("modules")
-    guildSchema.save()
-
-    return
+    return void db.guilds.updateOne(
+      { id: guildDoc.id },
+      { [`modules.${ModuleId.WelcomeMessages}.enabled`]: false },
+    )
   }
 
   const avatar = member.user.displayAvatarURL({ extension: "png", size: 256 })
@@ -73,10 +73,9 @@ export default botEvent("guildMemberAdd", async (client, member) => {
       files: [Buffer.from(attachment)],
     })
   } else {
-    guildSchema.modules[ModuleId.WelcomeMessages].enabled = false
-    guildSchema.markModified("modules")
-    guildSchema.save()
-
-    return
+    return void db.guilds.updateOne(
+      { id: guildDoc.id },
+      { [`modules.${ModuleId.WelcomeMessages}.enabled`]: false },
+    )
   }
 })

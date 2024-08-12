@@ -1,7 +1,7 @@
 import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { db } from "~/lib/db"
+import { cache } from "~/lib/cache"
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
 
@@ -24,9 +24,7 @@ export default new BotSubcommandBuilder()
       return
     }
 
-    const guildDoc = (await db.guilds.findOne({
-      id: interaction.guildId!,
-    }))!
+    const guildDoc = (await cache.guilds.get(interaction.guildId!))!
 
     void interaction.editReply({
       embeds: [

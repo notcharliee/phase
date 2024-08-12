@@ -4,7 +4,7 @@ import { botEvent } from "phasebot"
 import invitesTracker from "@androz2091/discord-invites-tracker"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { db } from "~/lib/db"
+import { cache } from "~/lib/cache"
 import { PhaseColour } from "~/lib/enums"
 
 export default botEvent("ready", async (client) => {
@@ -15,20 +15,20 @@ export default botEvent("ready", async (client) => {
   })
 
   inviteEvents.on("guildMemberAdd", async (member, joinType, invite) => {
-    const guildSchema = await db.guilds.findOne({ id: member.guild.id })
-    if (!guildSchema) return
+    const guildDoc = await cache.guilds.get(member.guild.id)
+    if (!guildDoc) return
 
     if (
-      !guildSchema.modules?.[ModuleId.AuditLogs]?.enabled ||
-      !guildSchema.modules[ModuleId.AuditLogs].channels.invites ||
+      !guildDoc.modules?.[ModuleId.AuditLogs]?.enabled ||
+      !guildDoc.modules[ModuleId.AuditLogs].channels.invites ||
       !client.channels.cache.has(
-        guildSchema.modules[ModuleId.AuditLogs].channels.invites,
+        guildDoc.modules[ModuleId.AuditLogs].channels.invites,
       )
     )
       return
 
     const channel = client.channels.cache.get(
-      guildSchema.modules[ModuleId.AuditLogs].channels.invites,
+      guildDoc.modules[ModuleId.AuditLogs].channels.invites,
     )!
     if (!channel.isTextBased()) return
 

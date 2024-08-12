@@ -8,6 +8,7 @@ import {
 } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
+import { cache } from "~/lib/cache"
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 import { env } from "~/lib/env"
@@ -26,15 +27,10 @@ export default new BotSubcommandBuilder()
       return
     }
 
-    const guildDoc = await db.guilds.findOne({
-      id: interaction.guildId!,
-      admins: { $in: interaction.user.id },
-    })
+    const guildDoc = await cache.guilds.get(interaction.guildId!)
 
-    if (!guildDoc) {
-      void interaction.editReply(BotError.userNotAdmin().toJSON())
-
-      return
+    if (!guildDoc?.admins.includes(interaction.user.id)) {
+      return void interaction.editReply(BotError.userNotAdmin().toJSON())
     }
 
     const { value, signature } = await generateOTP()

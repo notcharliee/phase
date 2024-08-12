@@ -14,7 +14,7 @@ import { botEvent } from "phasebot"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { db } from "~/lib/db"
+import { cache } from "~/lib/cache"
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
 
@@ -44,8 +44,8 @@ export default botEvent("interactionCreate", async (client, interaction) => {
     const ticketAction = customIdParts[1] as "open" | "lock"
     const ticketId = customIdParts[2] as UUID
 
-    const guildSchema = await db.guilds.findOne({ id: interaction.guildId })
-    const ticketModule = guildSchema?.modules?.[ModuleId.Tickets]
+    const guildDoc = await cache.guilds.get(interaction.guildId!)
+    const ticketModule = guildDoc?.modules?.[ModuleId.Tickets]
 
     if (!ticketModule?.enabled) {
       return interaction.reply(

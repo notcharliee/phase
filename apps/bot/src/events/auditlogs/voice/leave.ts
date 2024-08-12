@@ -3,7 +3,7 @@ import { botEvent } from "phasebot"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { db } from "~/lib/db"
+import { cache } from "~/lib/cache"
 import { PhaseColour } from "~/lib/enums"
 
 export default botEvent(
@@ -11,32 +11,32 @@ export default botEvent(
   async (client, oldVoice, newVoice) => {
     if (!(oldVoice.channel && !newVoice.channel)) return
 
-    const guildSchema = await db.guilds.findOne({ id: newVoice.guild.id })
-    if (!guildSchema) return
+    const guildDoc = await cache.guilds.get(newVoice.guild.id)
+    if (!guildDoc) return
 
     if (
-      !guildSchema.modules?.[ModuleId.AuditLogs]?.enabled ||
-      !guildSchema.modules[ModuleId.AuditLogs].channels.voice ||
+      !guildDoc.modules?.[ModuleId.AuditLogs]?.enabled ||
+      !guildDoc.modules[ModuleId.AuditLogs].channels.voice ||
       !client.channels.cache.has(
-        guildSchema.modules[ModuleId.AuditLogs].channels.voice,
+        guildDoc.modules[ModuleId.AuditLogs].channels.voice,
       )
     ) {
       return
     }
 
     const logsChannel = client.channels.cache.get(
-      guildSchema.modules[ModuleId.AuditLogs].channels.voice,
+      guildDoc.modules[ModuleId.AuditLogs].channels.voice,
     ) as GuildTextBasedChannel
 
     const member = oldVoice.member!
     const channel = oldVoice.channel!
 
     if (
-      guildSchema.modules[ModuleId.JoinToCreates]?.enabled &&
+      guildDoc.modules[ModuleId.JoinToCreates]?.enabled &&
       client.channels.cache.has(
-        guildSchema.modules[ModuleId.JoinToCreates].channel,
+        guildDoc.modules[ModuleId.JoinToCreates].channel,
       ) &&
-      channel.id === guildSchema.modules[ModuleId.JoinToCreates].channel
+      channel.id === guildDoc.modules[ModuleId.JoinToCreates].channel
     ) {
       return
     }

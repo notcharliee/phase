@@ -3,7 +3,7 @@ import { botEvent } from "phasebot"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { db } from "~/lib/db"
+import { cache } from "~/lib/cache"
 
 export default botEvent("guildMemberAdd", async (_, member) => {
   if (
@@ -11,8 +11,8 @@ export default botEvent("guildMemberAdd", async (_, member) => {
   )
     return
 
-  const guildSchema = await db.guilds.findOne({ id: member.guild.id })
-  const autoRolesModule = guildSchema?.modules?.[ModuleId.AutoRoles]
+  const guildDoc = await cache.guilds.get(member.guild.id)
+  const autoRolesModule = guildDoc?.modules?.[ModuleId.AutoRoles]
 
   if (!autoRolesModule?.enabled) return
 

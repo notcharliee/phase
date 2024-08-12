@@ -3,7 +3,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { db } from "~/lib/db"
+import { cache } from "~/lib/cache"
 import { BotError } from "~/lib/errors"
 
 export default new BotSubcommandBuilder()
@@ -30,9 +30,7 @@ export default new BotSubcommandBuilder()
     const rankCount = interaction.options.getInteger("rank-count", true)
     const rankEnd = rankStart + (rankCount - 1)
 
-    const guildDoc = await db.guilds.findOne({
-      id: interaction.guildId!,
-    })
+    const guildDoc = await cache.guilds.get(interaction.guildId!)
 
     if (!guildDoc?.modules?.[ModuleId.Levels]?.enabled) {
       return void interaction.reply(

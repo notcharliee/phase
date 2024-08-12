@@ -2,16 +2,16 @@ import { BotCronBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { db } from "~/lib/db"
+import { cache } from "~/lib/cache"
 
 import type { BaseGuildVoiceChannel } from "discord.js"
 
 export default new BotCronBuilder()
   .setPattern("*/10 * * * *")
   .setExecute(async (client) => {
-    const guildDocs = await db.guilds.find({
-      [`modules.${ModuleId.Counters}.enabled`]: true,
-    })
+    const guildDocs = (await cache.guilds.values()).filter(
+      (guildDoc) => guildDoc.modules?.[ModuleId.Counters]?.enabled,
+    )
 
     for (const guildDoc of guildDocs) {
       const guild =

@@ -3,16 +3,15 @@ import { botEvent } from "phasebot"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
+import { cache } from "~/lib/cache"
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 
 export default botEvent("messageCreate", async (client, message) => {
   if (!message.inGuild() || message.author.bot) return
 
-  const guildSchema = await db.guilds.findOne({
-    id: message.guildId,
-  })
-  const levelModule = guildSchema?.modules?.[ModuleId.Levels]
+  const guildDoc = await cache.guilds.get(message.guildId)
+  const levelModule = guildDoc?.modules?.[ModuleId.Levels]
   if (!levelModule?.enabled) return
 
   let levelSchema = await db.levels.findOne({

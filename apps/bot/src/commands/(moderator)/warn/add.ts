@@ -4,7 +4,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 import dedent from "dedent"
 
-import { db } from "~/lib/db"
+import { cache } from "~/lib/cache"
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
 import { getOrdinal } from "~/lib/utils"
@@ -29,8 +29,8 @@ export default new BotSubcommandBuilder()
       return
     }
 
-    const guildSchema = await db.guilds.findOne({ id: interaction.guildId })
-    const warningsModule = guildSchema?.modules?.[ModuleId.Warnings]
+    const guildDoc = await cache.guilds.get(interaction.guildId!)
+    const warningsModule = guildDoc?.modules?.[ModuleId.Warnings]
 
     if (!warningsModule?.enabled) {
       return void interaction.reply(
@@ -39,7 +39,7 @@ export default new BotSubcommandBuilder()
     }
 
     const punishmentLogChannelId =
-      guildSchema!.modules![ModuleId.AuditLogs]?.channels.punishments
+      guildDoc!.modules![ModuleId.AuditLogs]?.channels.punishments
 
     const punishmentLogChannel = punishmentLogChannelId
       ? (interaction.client.channels.cache.get(punishmentLogChannelId) as

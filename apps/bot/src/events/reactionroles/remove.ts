@@ -2,16 +2,13 @@ import { botEvent } from "phasebot"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { db } from "~/lib/db"
+import { cache } from "~/lib/cache"
 
 export default botEvent("messageReactionRemove", async (_, reaction, user) => {
   if (user.bot || !reaction.message.inGuild()) return
 
-  const guildSchema = await db.guilds.findOne({
-    id: reaction.message.guildId,
-  })
-
-  const reactionRolesModule = guildSchema?.modules?.[ModuleId.ReactionRoles]
+  const guildDoc = await cache.guilds.get(reaction.message.guildId)
+  const reactionRolesModule = guildDoc?.modules?.[ModuleId.ReactionRoles]
 
   if (
     !reactionRolesModule?.enabled ||

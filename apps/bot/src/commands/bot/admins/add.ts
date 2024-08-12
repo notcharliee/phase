@@ -1,5 +1,6 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
+import { cache } from "~/lib/cache"
 import { db } from "~/lib/db"
 import { BotError } from "~/lib/errors"
 
@@ -29,9 +30,7 @@ export default new BotSubcommandBuilder()
 
     const user = interaction.options.getUser("user", true)
 
-    const guildDoc = (await db.guilds.findOne({
-      id: interaction.guildId!,
-    }))!
+    const guildDoc = (await cache.guilds.get(interaction.guildId!))!
 
     if (user.bot) {
       void interaction.editReply(
@@ -49,8 +48,12 @@ export default new BotSubcommandBuilder()
       return
     }
 
-    guildDoc.admins.push(user.id)
-    await guildDoc.save()
+    const newAdmins = guildDoc.admins.concat(user.id)
+
+    void db.guilds.updateOne(
+      { id: interaction.guildId! },
+      { admins: newAdmins },
+    )
 
     void interaction.editReply(`${user} has been granted dashboard access.`)
   })

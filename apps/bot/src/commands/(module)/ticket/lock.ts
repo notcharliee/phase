@@ -4,7 +4,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 import dedent from "dedent"
 
-import { db } from "~/lib/db"
+import { cache } from "~/lib/cache"
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
 
@@ -13,7 +13,7 @@ export default new BotSubcommandBuilder()
   .setDescription("Locks a ticket.")
   .setMetadata({ dmPermission: false })
   .setExecute(async (interaction) => {
-    const guildDoc = await db.guilds.findOne({ id: interaction.guildId })
+    const guildDoc = await cache.guilds.get(interaction.guildId!)
     const ticketModule = guildDoc?.modules?.[ModuleId.Tickets]
 
     if (!ticketModule?.enabled) {

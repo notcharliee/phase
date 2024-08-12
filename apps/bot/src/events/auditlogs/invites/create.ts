@@ -3,24 +3,24 @@ import { botEvent } from "phasebot"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { db } from "~/lib/db"
+import { cache } from "~/lib/cache"
 import { PhaseColour } from "~/lib/enums"
 
 export default botEvent("inviteCreate", async (client, invite) => {
-  const guildSchema = await db.guilds.findOne({ id: invite.guild?.id })
-  if (!guildSchema) return
+  const guildDoc = await cache.guilds.get(invite.guild!.id)
+  if (!guildDoc) return
 
   if (
-    !guildSchema.modules?.[ModuleId.AuditLogs]?.enabled ||
-    !guildSchema.modules[ModuleId.AuditLogs].channels.invites ||
+    !guildDoc.modules?.[ModuleId.AuditLogs]?.enabled ||
+    !guildDoc.modules[ModuleId.AuditLogs].channels.invites ||
     !client.channels.cache.has(
-      guildSchema.modules[ModuleId.AuditLogs].channels.invites,
+      guildDoc.modules[ModuleId.AuditLogs].channels.invites,
     )
   )
     return
 
   const logsChannel = client.channels.cache.get(
-    guildSchema.modules[ModuleId.AuditLogs].channels.invites,
+    guildDoc.modules[ModuleId.AuditLogs].channels.invites,
   ) as GuildTextBasedChannel
 
   const inviter = invite.inviter ?? "`Unknown`"

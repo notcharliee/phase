@@ -13,7 +13,7 @@ import { botEvent } from "phasebot"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 import discordlogs from "discord-logs"
 
-import { db } from "~/lib/db"
+import { cache } from "~/lib/cache"
 
 export default botEvent("ready", async (client) => {
   await discordlogs(client)
@@ -21,20 +21,20 @@ export default botEvent("ready", async (client) => {
   async function sendlog(guildId: string, embed: EmbedBuilder) {
     embed.setTimestamp()
 
-    const guildSchema = await db.guilds.findOne({ id: guildId })
-    if (!guildSchema) return
+    const guildDoc = await cache.guilds.get(guildId)
+    if (!guildDoc) return
 
     if (
-      !guildSchema.modules?.[ModuleId.AuditLogs]?.enabled ||
-      !guildSchema.modules[ModuleId.AuditLogs].channels.server ||
+      !guildDoc.modules?.[ModuleId.AuditLogs]?.enabled ||
+      !guildDoc.modules[ModuleId.AuditLogs].channels.server ||
       !client.channels.cache.has(
-        guildSchema.modules[ModuleId.AuditLogs].channels.server,
+        guildDoc.modules[ModuleId.AuditLogs].channels.server,
       )
     )
       return
 
     const channel = client.channels.cache.get(
-      guildSchema.modules[ModuleId.AuditLogs].channels.server,
+      guildDoc.modules[ModuleId.AuditLogs].channels.server,
     )!
     if (!channel.isTextBased()) return
 

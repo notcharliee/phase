@@ -8,7 +8,7 @@ import { botEvent } from "phasebot"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { db } from "~/lib/db"
+import { cache } from "~/lib/cache"
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
 
@@ -24,8 +24,8 @@ export default botEvent("interactionCreate", async (_, interaction) => {
 
   await interaction.deferReply()
 
-  const guildSchema = await db.guilds.findOne({ id: interaction.guildId })
-  const moduleConfig = guildSchema?.modules?.[ModuleId.Forms]
+  const guildDoc = await cache.guilds.get(interaction.guildId!)
+  const moduleConfig = guildDoc?.modules?.[ModuleId.Forms]
 
   if (!moduleConfig?.enabled) {
     return interaction.editReply(

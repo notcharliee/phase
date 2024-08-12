@@ -3,27 +3,27 @@ import { botEvent } from "phasebot"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { db } from "~/lib/db"
+import { cache } from "~/lib/cache"
 import { PhaseColour } from "~/lib/enums"
 
 export default botEvent("channelPinsUpdate", async (client, channel) => {
   if (channel.isDMBased()) return
 
-  const guildSchema = await db.guilds.findOne({ id: channel.guild.id })
-  if (!guildSchema) return
+  const guildDoc = await cache.guilds.get(channel.guild.id)
+  if (!guildDoc) return
 
   if (
-    !guildSchema.modules?.[ModuleId.AuditLogs]?.enabled ||
-    !guildSchema.modules[ModuleId.AuditLogs].channels.messages ||
+    !guildDoc.modules?.[ModuleId.AuditLogs]?.enabled ||
+    !guildDoc.modules[ModuleId.AuditLogs].channels.messages ||
     !client.channels.cache.has(
-      guildSchema.modules[ModuleId.AuditLogs].channels.messages,
+      guildDoc.modules[ModuleId.AuditLogs].channels.messages,
     )
   ) {
     return
   }
 
   const logsChannel = client.channels.cache.get(
-    guildSchema.modules[ModuleId.AuditLogs].channels.messages,
+    guildDoc.modules[ModuleId.AuditLogs].channels.messages,
   ) as GuildTextBasedChannel
 
   const pinEvent = await channel.guild

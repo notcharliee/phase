@@ -1,5 +1,6 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
+import { cache } from "~/lib/cache"
 import { db } from "~/lib/db"
 import { BotError } from "~/lib/errors"
 
@@ -37,9 +38,7 @@ export default new BotSubcommandBuilder()
       return
     }
 
-    const guildDoc = (await db.guilds.findOne({
-      id: interaction.guildId!,
-    }))!
+    const guildDoc = (await cache.guilds.get(interaction.guildId!))!
 
     if (!guildDoc.admins.includes(user.id)) {
       void interaction.editReply(
@@ -49,8 +48,12 @@ export default new BotSubcommandBuilder()
       return
     }
 
-    guildDoc.admins.splice(guildDoc.admins.indexOf(user.id), 1)
-    await guildDoc.save()
+    const newAdmins = guildDoc.admins.filter((admin) => admin !== user.id)
+
+    void db.guilds.updateOne(
+      { id: interaction.guildId! },
+      { admins: newAdmins },
+    )
 
     void interaction.editReply(
       `${user} has had their dashboard access revoked.`,

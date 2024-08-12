@@ -3,17 +3,16 @@ import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
+import { cache } from "~/lib/cache"
 import { db } from "~/lib/db"
-
-import type { GuildModules } from "~/lib/db"
 
 export default new BotEventBuilder()
   .setName("voiceStateUpdate")
   .setExecute(async (_, oldVoice, newVoice) => {
-    const guildSchema = await db.guilds.findOne({ id: oldVoice.guild.id })
-    const joinToCreateModule = guildSchema?.modules?.[ModuleId.JoinToCreates]
+    const guildDoc = await cache.guilds.get(oldVoice.guild.id)
+    const joinToCreateModule = guildDoc?.modules?.[ModuleId.JoinToCreates]
 
-    if (!guildSchema || !joinToCreateModule?.enabled) return
+    if (!guildDoc || !joinToCreateModule?.enabled) return
 
     if (
       oldVoice.channel &&
@@ -21,15 +20,16 @@ export default new BotEventBuilder()
       joinToCreateModule.active.includes(oldVoice.channel.id) &&
       oldVoice.channel.members.filter((member) => !member.user.bot).size === 0
     ) {
-      oldVoice.channel.delete()
+      void oldVoice.channel.delete()
 
-      joinToCreateModule.active.splice(
-        joinToCreateModule.active.indexOf(oldVoice.channel.id),
-        1,
+      const newActive = joinToCreateModule.active.filter(
+        (activeChannelId) => activeChannelId !== oldVoice.channel!.id,
       )
 
-      guildSchema.markModified("modules")
-      guildSchema.save()
+      void db.guilds.updateOne(
+        { id: oldVoice.guild.id },
+        { $set: { [`modules.${ModuleId.JoinToCreates}.active`]: newActive } },
+      )
     }
 
     if (newVoice.channelId === joinToCreateModule.channel) {
@@ -39,16 +39,15 @@ export default new BotEventBuilder()
         parent: joinToCreateModule.category,
       })
 
-      newVoice.setChannel(newVoiceChannel)
+      void newVoice.setChannel(newVoiceChannel)
 
-      if (!("active" in joinToCreateModule)) {
-        ;(joinToCreateModule as GuildModules[ModuleId.JoinToCreates]).active =
-          []
-      }
+      const newActive = !("active" in joinToCreateModule)
+        ? []
+        : joinToCreateModule.active.concat(newVoiceChannel.id)
 
-      joinToCreateModule.active.push(newVoiceChannel.id)
-
-      guildSchema.markModified("modules")
-      guildSchema.save()
+      void db.guilds.updateOne(
+        { id: newVoice.guild.id },
+        { $set: { [`modules.${ModuleId.JoinToCreates}.active`]: newActive } },
+      )
     }
   })
