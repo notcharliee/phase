@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "",
-    "start": "phase start",
+    "start": "NODE_ENV=production phase start",
     "dev": "phase dev"
   },
   "dependencies": {

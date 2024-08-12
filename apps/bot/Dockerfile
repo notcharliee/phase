@@ -31,5 +31,6 @@ RUN cd /usr/src/app/node_modules/@discordjs/opus/prebuild && mv node-v115-napi-v
 # Prepare the final image
 FROM fix-bodge AS final
 WORKDIR /usr/src/app/apps/bot
+ENV NODE_ENV=production
 
 CMD ["bun", "/usr/src/app/packages/phasebot/dist/cli.js", "start"]
