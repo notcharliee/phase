@@ -45,19 +45,21 @@ export default botEvent("ready", async (client) => {
             : `\`${invite.uses}\``
           : "`Unknown`"
 
-    channel.send({
-      embeds: [
-        new EmbedBuilder()
-          .setColor(PhaseColour.Primary)
-          .setTitle("Invite Used")
-          .setDescription(
-            `**Member:** ${member}\n**Inviter:** ${inviter}\n**Code:** ${code}\n**Uses:** \`${uses}\``,
-          )
-          .setFooter({
-            text: `${member.id}`,
-            iconURL: member.displayAvatarURL(),
-          }),
-      ],
-    })
+    void channel
+      .send({
+        embeds: [
+          new EmbedBuilder()
+            .setColor(PhaseColour.Primary)
+            .setTitle("Invite Used")
+            .setDescription(
+              `**Member:** ${member}\n**Inviter:** ${inviter}\n**Code:** ${code}\n**Uses:** \`${uses}\``,
+            )
+            .setFooter({
+              text: `${member.id}`,
+              iconURL: member.displayAvatarURL(),
+            }),
+        ],
+      })
+      .catch(() => null)
   })
 })
