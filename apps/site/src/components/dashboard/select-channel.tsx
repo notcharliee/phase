@@ -58,7 +58,11 @@ export function SelectChannel(props: SelectChannelProps) {
       name={props.name}
       value={selectedChannel && `${props.value}`}
       onValueChange={(v) => {
-        v === "deselect" ? props.onChange(null) : props.onChange(v)
+        if (v === "deselect") {
+          props.onChange(null)
+        } else {
+          props.onChange(v)
+        }
       }}
     >
       <SelectTrigger>{selectedChannel?.name ?? placeholder}</SelectTrigger>
