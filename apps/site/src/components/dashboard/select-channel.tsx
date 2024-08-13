@@ -1,5 +1,7 @@
 "use client"
 
+import { useState } from "react"
+
 import { CheckIcon } from "@radix-ui/react-icons"
 import * as DiscordAPITypes from "discord-api-types/v10"
 
@@ -24,6 +26,8 @@ interface SelectChannelProps extends ControllerRenderProps {
 }
 
 export function SelectChannel(props: SelectChannelProps) {
+  const [key, setKey] = useState(+new Date())
+
   const channels = props.channels
     .filter((channel) => channel.type === props.channelType)
     .sort((a, b) => a.position - b.position)
@@ -54,14 +58,16 @@ export function SelectChannel(props: SelectChannelProps) {
 
   return (
     <Select
+      key={key}
       disabled={props.disabled}
       name={props.name}
       value={selectedChannel && `${props.value}`}
-      onValueChange={(v) => {
-        if (v === "deselect") {
+      onValueChange={(value) => {
+        if (value === "deselect") {
           props.onChange(null)
+          setKey(+new Date())
         } else {
-          props.onChange(v)
+          props.onChange(value)
         }
       }}
     >

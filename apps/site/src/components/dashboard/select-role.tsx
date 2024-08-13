@@ -1,5 +1,7 @@
 "use client"
 
+import { useState } from "react"
+
 import { CheckIcon } from "@radix-ui/react-icons"
 
 import {
@@ -20,6 +22,8 @@ interface SelectRoleProps extends ControllerRenderProps {
 }
 
 export function SelectRole(props: SelectRoleProps) {
+  const [key, setKey] = useState(+new Date())
+
   const roles = props.roles
     .filter((role) => role.name !== "@everyone")
     .sort((a, b) => b.position - a.position)
@@ -30,12 +34,18 @@ export function SelectRole(props: SelectRoleProps) {
 
   return (
     <Select
+      key={key}
       disabled={props.disabled}
       name={props.name}
       value={selectedRole && `${props.value}`}
-      onValueChange={(value) =>
-        props.onChange(value !== "deselect" ? value : null)
-      }
+      onValueChange={(value) => {
+        if (value !== "deselect") {
+          props.onChange(value)
+          setKey(+new Date())
+        } else {
+          props.onChange(null)
+        }
+      }}
     >
       <SelectTrigger>
         <span
