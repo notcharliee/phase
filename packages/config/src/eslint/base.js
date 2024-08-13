@@ -30,6 +30,7 @@ export default tseslint.config(
       "@next/next/no-img-element": "error",
       "@typescript-eslint/array-type": "off",
       "@typescript-eslint/no-empty-interface": "off",
+      "@typescript-eslint/no-empty-object-type": "off",
       "@typescript-eslint/consistent-type-definitions": "off",
       "@typescript-eslint/require-await": "off",
       "@typescript-eslint/consistent-type-imports": [
