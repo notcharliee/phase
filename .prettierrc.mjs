@@ -31,4 +31,6 @@ export default {
     "^(@|~)/types/(.*)$",
     "<TYPES>",
   ],
+  tailwindAttributes: ["class", "className", "tw"],
+  tailwindFunctions: ["clsx", "cn", "cva"],
 }
