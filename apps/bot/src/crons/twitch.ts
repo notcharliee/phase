@@ -6,7 +6,7 @@ import {
 } from "discord.js"
 import { BotCronBuilder } from "phasebot/builders"
 
-import { ModuleId } from "@repo/config/phase/modules.js"
+import { ModuleId } from "@repo/config/phase/modules.ts"
 
 import { cache } from "~/lib/cache"
 import { twitchAPI } from "~/lib/clients/twitch"
