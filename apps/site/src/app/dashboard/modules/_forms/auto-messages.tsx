@@ -140,7 +140,7 @@ export const AutoMessages = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pt-2">
         <FormField
           control={form.control}
           name="messages"
