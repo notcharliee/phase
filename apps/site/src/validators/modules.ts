@@ -216,36 +216,24 @@ export const ticketsSchema = z.object({
 
 export const twitchNotificationsSchema = z.object({
   enabled: z.boolean(),
-  streamers: z.array(
-    z.object({
-      id: z
-        .string()
-        .min(4, {
-          message: "The streamer name must be at least 4 characters",
-        })
-        .max(25, {
-          message: "The streamer name must be less than 25 characters",
-        })
-        .refine(
-          async (streamerName) => {
-            const status = await fetch("/api/twitch/user/" + streamerName).then(
-              (res) => res.status,
-            )
-            if (status === 200) return true
-          },
-          {
-            message: "The streamer could not be found",
-          },
-        ),
-      channel: z.string().min(1, {
-        message: "You must select a channel",
+  streamers: z
+    .array(
+      z.object({
+        id: z
+          .string()
+          .min(4, {
+            message: "The streamer name must be at least 4 characters",
+          })
+          .max(25, {
+            message: "The streamer name must be less than 25 characters",
+          }),
+        channel: z.string().min(1, {
+          message: "You must select a channel",
+        }),
+        mention: z.string().optional(),
       }),
-      events: z.array(
-        z.union([z.literal("stream.online"), z.literal("stream.offline")]),
-      ),
-      mention: z.string().optional(),
-    }),
-  ),
+    )
+    .max(5),
 })
 
 export const warningsSchema = z.object({

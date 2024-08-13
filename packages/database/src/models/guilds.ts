@@ -207,9 +207,7 @@ export interface GuildModules {
       id: string
       /** The ID of the channel to send the notifications to. */
       channel: string
-      /** The events to listen for. */
-      events: ("stream.online" | "stream.offline")[]
-      /** The role to mention when the streamer goes live. */
+      /** Who to mention when the streamer goes live. */
       mention?: string
     }[]
   }
@@ -427,11 +425,7 @@ export const guilds = defineModel(
                   >({
                     id: { type: String, required: true },
                     channel: { type: String, required: true },
-                    events: {
-                      type: [String],
-                      required: true,
-                    },
-                    mention: String,
+                    mention: { type: String },
                   }),
                 ],
                 required: true,

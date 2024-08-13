@@ -3,15 +3,18 @@
 import { useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { TrashIcon } from "@radix-ui/react-icons"
+import { Label } from "@radix-ui/react-label"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 import { ChannelType } from "discord-api-types/v10"
-import { useForm } from "react-hook-form"
+import { useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 import { ModuleFormButtons } from "~/components/dashboard/modules"
 import { SelectChannel } from "~/components/dashboard/select-channel"
-import { SelectRole } from "~/components/dashboard/select-role"
-import { Checkbox } from "~/components/ui/checkbox"
+import { SelectMention } from "~/components/dashboard/select-mention"
+import { Button } from "~/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import {
   Form,
   FormControl,
@@ -34,20 +37,16 @@ type FormValues = z.infer<typeof twitchNotificationsSchema>
 
 export const TwitchNotifications = () => {
   const dashboard = useDashboardContext()
+  const moduleData = dashboard.guild.modules?.[ModuleId.TwitchNotifications]
 
   const form = useForm<FormValues>({
     resolver: zodResolver(twitchNotificationsSchema),
-    defaultValues: dashboard.guild.modules?.[ModuleId.TwitchNotifications]
+    defaultValues: moduleData
       ? {
-          ...dashboard.guild.modules[ModuleId.TwitchNotifications],
-          streamers: dashboard.guild.modules[
-            ModuleId.TwitchNotifications
-          ]?.streamers.map((streamer, index) => ({
+          ...moduleData,
+          streamers: moduleData.streamers.map((streamer, index) => ({
             ...streamer,
-            id: (
-              dashboard.guild.modules![ModuleId.TwitchNotifications]!._data
-                .streamerNames as string[]
-            )[index],
+            id: (moduleData._data.streamerNames as string[])[index],
           })),
         }
       : {
@@ -56,7 +55,6 @@ export const TwitchNotifications = () => {
             {
               id: "",
               channel: "",
-              events: [],
               mention: undefined,
             },
           ],
@@ -72,7 +70,12 @@ export const TwitchNotifications = () => {
 
     toast.promise(updateTwitchNotifications(data), {
       loading: "Saving changes...",
-      error: "An error occured.",
+      error: (error: Error) => (
+        <div className="flex flex-col gap-0.5">
+          <div data-title>An error occured.</div>
+          <div data-description>{error.message}</div>
+        </div>
+      ),
       success: (updatedModuleData) => {
         form.reset(data)
         dashboard.setData((dashboardData) => {
@@ -89,120 +92,112 @@ export const TwitchNotifications = () => {
     })
   }
 
-  const events = [
-    {
-      id: "stream.online",
-      label: "Streamer goes live",
-    },
-    {
-      id: "stream.offline",
-      label: "Streamer goes offline",
-    },
-  ] as const
+  const fieldArray = useFieldArray({
+    control: form.control,
+    name: "streamers",
+  })
+
+  const formFields = form.watch()
 
   const { roles, channels } = dashboard.guild
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pt-2">
         <FormField
           control={form.control}
-          name="streamers.0.id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Streamer Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Example: sirrac85" {...field} />
-              </FormControl>
-              <FormDescription>
-                The name of the Twitch streamer to listen for
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="streamers.0.channel"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notification Channel</FormLabel>
-              <FormControl>
-                <SelectChannel
-                  categories
-                  channelType={ChannelType.GuildText}
-                  channels={channels}
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>
-                The channel to send notifications to
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="streamers.0.mention"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notification Mention</FormLabel>
-              <FormControl>
-                <SelectRole roles={roles} {...field} />
-              </FormControl>
-              <FormDescription>
-                The role to ping when the streamer goes live
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="streamers.0.events"
+          name="streamers"
           render={() => (
-            <FormItem>
-              <div className="mb-4">
-                <FormLabel>Stream Events</FormLabel>
-                <FormDescription>
-                  Select the events you want notifications for
-                </FormDescription>
-              </div>
-              {events.map((event) => (
-                <FormField
-                  key={event.id}
-                  control={form.control}
-                  name="streamers.0.events"
-                  render={({ field }) => {
-                    return (
-                      <FormItem
-                        key={event.id}
-                        className="flex flex-row items-start space-x-3 space-y-0"
-                      >
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value?.includes(event.id)}
-                            onCheckedChange={(checked) => {
-                              return checked
-                                ? field.onChange([...field.value, event.id])
-                                : field.onChange(
-                                    field.value?.filter(
-                                      (value) => value !== event.id,
-                                    ),
-                                  )
-                            }}
-                          />
-                        </FormControl>
-                        <FormLabel className="text-sm font-normal">
-                          {event.label}
-                        </FormLabel>
-                      </FormItem>
-                    )
-                  }}
-                />
+            <FormItem className="space-y-4">
+              {fieldArray.fields.map((field, index) => (
+                <Card key={field.id}>
+                  <CardHeader className="flex-row items-center justify-between space-y-0 py-3">
+                    <CardTitle>
+                      {formFields.streamers[index]?.id ?? "Unknown Streamer"}
+                    </CardTitle>
+                    <Button
+                      variant={"outline"}
+                      size={"icon"}
+                      onClick={() => fieldArray.remove(index)}
+                    >
+                      <Label className="sr-only">Delete Notification</Label>
+                      <TrashIcon className="h-4 w-4" />
+                    </Button>
+                  </CardHeader>
+                  <CardContent className="space-y-6 border-t pt-6">
+                    <FormField
+                      control={form.control}
+                      name={`streamers.${index}.id`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Streamer Name</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Example: sirphase45"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            The username of the streamer
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`streamers.${index}.channel`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Notification Channel</FormLabel>
+                          <FormControl>
+                            <SelectChannel
+                              categories
+                              channelType={ChannelType.GuildText}
+                              channels={channels}
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            The channel to send notifications to
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`streamers.${index}.mention`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Notification Mention</FormLabel>
+                          <FormControl>
+                            <SelectMention roles={roles} {...field} />
+                          </FormControl>
+                          <FormDescription>
+                            Who to ping when the streamer goes live
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </CardContent>
+                </Card>
               ))}
-              <FormMessage />
+              <Button
+                type="button"
+                variant="outline"
+                disabled={fieldArray.fields.length >= 5}
+                onClick={() =>
+                  fieldArray.append({
+                    id: "",
+                    channel: "",
+                    mention: undefined,
+                  })
+                }
+              >
+                Add Notification
+              </Button>
             </FormItem>
           )}
         />

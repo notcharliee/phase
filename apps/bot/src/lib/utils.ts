@@ -1,3 +1,13 @@
+import { SnowflakeUtil } from "discord.js"
+
+export function isSnowflake(id: string) {
+  try {
+    return SnowflakeUtil.deconstruct(id).timestamp > SnowflakeUtil.epoch
+  } catch {
+    return false
+  }
+}
+
 export function getDayName(day: number, short: boolean = false) {
   switch (day) {
     case 0:

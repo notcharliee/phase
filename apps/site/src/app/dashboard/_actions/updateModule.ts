@@ -1,18 +1,13 @@
 "use server"
 
-import { NextRequest } from "next/server"
-
 import { API, ButtonStyle, MessageType } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 import { ModuleId } from "@repo/config/phase/modules.ts"
-import { StatusCodes } from "http-status-codes"
 
 import { database } from "~/lib/db"
 import { env } from "~/lib/env"
 import { twitchClient } from "~/lib/twitch"
-import { absoluteURL } from "~/lib/utils"
 
-import { POST as postTwitchApiRoute } from "~/app/api/twitch/route"
 import { getDasbboardHeaders } from "~/app/dashboard/utils"
 
 import type {
@@ -340,11 +335,19 @@ export const updateTwitchNotifications = async (
     ...formValues,
     streamers: await Promise.all(
       formValues.streamers.map(async (streamer) => {
-        const { id } = (await twitchClient.users.getUserByName(streamer.id))!
+        const user = await twitchClient.users
+          .getUserByName(streamer.id)
+          .catch(() => null)
+
+        if (!user) {
+          throw new Error(
+            `Could not find a user under the name '${streamer.id}'`,
+          )
+        }
 
         return {
           ...streamer,
-          id,
+          id: user.id,
         }
       }),
     ),
@@ -355,27 +358,11 @@ export const updateTwitchNotifications = async (
     data,
   )
 
-  for (const { id } of data.streamers) {
-    const request = new NextRequest(absoluteURL("/api/twitch"), {
-      body: JSON.stringify({ channelId: id }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${env.TWITCH_CLIENT_SECRET}`,
-      },
-      method: "POST",
-    })
-
-    const response = await postTwitchApiRoute(request)
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
-    if (response.status !== StatusCodes.NO_CONTENT) {
-      throw new Error("An error occured")
-    }
+  return {
+    ...updatedModuleData,
+    _data: {
+      ...updatedModuleData._data,
+      streamerNames: formValues.streamers.map((streamer) => streamer.id),
+    },
   }
-
-  updatedModuleData._data.streamerNames = formValues.streamers.map(
-    (streamer) => streamer.id,
-  )
-
-  return updatedModuleData
 }
