@@ -8,34 +8,34 @@ export const metadata = {
   <HeadingDescription>{metadata.description}</HeadingDescription>
 </Heading>
 
-## August 2024 - v3.13 Release
+## August 2024 - v3.13 release
 
-* Huge update for the Twitch Notifications module!!! You can now pick up to **5 streamers** to get notifications for (previously just 1). Plus, I've added `@everyone` and `@here` mention options for those alerts (which is coming to other modules soon).
+- Huge update for the Twitch Notifications module!!! You can now pick up to **5 streamers** to get notifications for (previously just 1). Plus, I've added `@everyone` and `@here` mention options for those alerts (which is coming to other modules soon).
 
-* The `/whois` command is now two separate commands: `/whois user` and `/whois member`. The key difference being `/whois user` will still give you basic info on a user even if they're not in the server where you run the command.
+- The `/whois` command is now two separate commands: `/whois user` and `/whois member`. The key difference being `/whois user` will still give you basic info on a user even if they're not in the server where you run the command.
 
-* The majority of database operations are now properly indexed and cached, meaning much faster bot responses and less strain on the database.
+- The majority of database operations are now properly indexed and cached, meaning much faster bot responses and less strain on the database.
 
-* There's now a link to the dashboard login page in the header of the site.
+- There's now a link to the dashboard login page in the header of the site.
 
-* Lots of little bug fixes and tiny improvements here and there as always.
+- Lots of little bug fixes and tiny improvements here and there as always.
 
 ## August 2024 - v3.12 release
 
 **Music is here!!!** Here are the commands:
 
-* `/music add` - Adds a song to the queue.
-* `/music remove` - Removes a song from the queue.
-* `/music pause` - Pauses the currently playing song.
-* `/music resume` - Resumes the currently paused song.
-* `/music queue` - Lists the songs in the queue.
-* `/music stop` - Clears all songs from the queue.
-* `/music skip` - Skips the current song.
-* `/music seek` - Seeks to a specific time in the current song.
-* `/music shuffle` - Shuffles the songs in the queue.
-* `/music repeat` - Sets the repeat mode of the song or queue.
-* `/music volume` - Sets the volume of the music.
-* `/music filter` - Sets the filter of the music.
+- `/music add` - Adds a song to the queue.
+- `/music remove` - Removes a song from the queue.
+- `/music pause` - Pauses the currently playing song.
+- `/music resume` - Resumes the currently paused song.
+- `/music queue` - Lists the songs in the queue.
+- `/music stop` - Clears all songs from the queue.
+- `/music skip` - Skips the current song.
+- `/music seek` - Seeks to a specific time in the current song.
+- `/music shuffle` - Shuffles the songs in the queue.
+- `/music repeat` - Sets the repeat mode of the song or queue.
+- `/music volume` - Sets the volume of the music.
+- `/music filter` - Sets the filter of the music.
 
 Only YouTube is supported at the moment, but I'm working on adding support for other sources like Soundcloud and Apple Music. All video types will work, including live streams.
 
@@ -43,41 +43,41 @@ If you find any bugs, let me know using the `/bot report` command and I'll fix t
 
 ## August 2024 - v3.11 release
 
-* Added a new **Counters** module.
-* Added a new `/weather` command.
-* Redesigned the `/level rank` card (try it, its pretty).
-* Refactored the way the dashboard loads data.
-* Fixed an issue with the dashboard channel select dropdowns where channels outside of categories wouldn't be selectable.
+- Added a new **Counters** module.
+- Added a new `/weather` command.
+- Redesigned the `/level rank` card (try it, its pretty).
+- Refactored the way the dashboard loads data.
+- Fixed an issue with the dashboard channel select dropdowns where channels outside of categories wouldn't be selectable.
 
 ## July 2024 - v3.10 release
 
-* **PHASE IS NOW A VERIFIED BOT! 🎉🎉🎉**
-* Rewrote some command descriptions and subcommand names.
-* Updated the error handling for the whole bot.
-* Switched many of the bot's responses from embeds to regular messages.
-* Released `phasebot` v0.6.0 (which the bot now runs on).
+- **PHASE IS NOW A VERIFIED BOT! 🎉🎉🎉**
+- Rewrote some command descriptions and subcommand names.
+- Updated the error handling for the whole bot.
+- Switched many of the bot's responses from embeds to regular messages.
+- Released `phasebot` v0.6.0 (which the bot now runs on).
 
 Big updates coming soon! 🤍
 
 ## July 2024 - v3.9 release
 
-* Created the [Bug Report Form](https://phasebot.xyz/contact/bug-report) for reporting bugs via the site.
-* Renamed the `/dashboard` group to `/bot`.
-* Moved `/ping` and `/help` into the `/bot` group.
-* Added `/bot invite` for adding the bot to another server.
-* Added `/bot report` for reporting bugs.
-* Split `/id` into multiple commands for channels, roles, etc.
-* Split `/avatar` into multiple commands for users, members, and servers.
-* Added a way to cancel incomplete DM forms early.
-* Fixed a bug which allowed server owners to remove their own dashboard access.
+- Created the [Bug Report Form](https://phasebot.xyz/contact/bug-report) for reporting bugs via the site.
+- Renamed the `/dashboard` group to `/bot`.
+- Moved `/ping` and `/help` into the `/bot` group.
+- Added `/bot invite` for adding the bot to another server.
+- Added `/bot report` for reporting bugs.
+- Split `/id` into multiple commands for channels, roles, etc.
+- Split `/avatar` into multiple commands for users, members, and servers.
+- Added a way to cancel incomplete DM forms early.
+- Fixed a bug which allowed server owners to remove their own dashboard access.
 
 ## July 2024 - v3.8 release
 
-* Added a new `/id` command for getting user/role IDs.
-* Rewrote the `/tictactoe` command to be speedier.
-* Removed the `/poll` command since Discord added it natively.
-* Removed some old unneccesary database code.
-* Rewrote Terms of Service and Privacy Policy.
+- Added a new `/id` command for getting user/role IDs.
+- Rewrote the `/tictactoe` command to be speedier.
+- Removed the `/poll` command since Discord added it natively.
+- Removed some old unneccesary database code.
+- Rewrote Terms of Service and Privacy Policy.
 
 > Note: A hotfix was required around an hour after the release of v3.8, which fixed an issue with the bot sometimes attempting to run commands in channels it doesn't have access to.
 
@@ -85,77 +85,72 @@ Big updates coming soon! 🤍
 
 This release focuses on improving the dashboard load times and login processes.
 
-* From now on, all authentication data is encrypted and then stored within a secure browser cookie, instead of in our database. Since we don't need to go back and forth between the database and the browser, this will make the dashboard load a lot faster.
-e, then immediately revoked afterwards.
-
-* Login sessions now last for 7 days (was previously 24 hours).
-
-* There's
-* You can once again login to the dashboard via Discord OAuth2. This time, since the switch to relying on cookies, access/refresh tokens are only used once to verify your identity and create your cooki a new pretty loading spinner :3
+- From now on, all authentication data is encrypted and then stored within a secure browser cookie, instead of in our database. Since we don't need to go back and forth between the database and the browser, this will make the dashboard load a lot faster.
+- Login sessions now last for 7 days (was previously 24 hours).
+- You can once again login to the dashboard via Discord OAuth2. This time, since the switch to relying on cookies, access/refresh tokens are only used once to verify your identity and create your cookie, then immediately revoked afterwards.
+- There's a new pretty loading spinner :3
 
 With the new login process, I'll be updating the privacy policy in the next day or so to reflect the changes.
 
 ## July 2024 - v3.6 release
 
-* Changed the `/nuke` command name to `/scrub`.
-* Refactored the command code for optimisation reasons.
-* Updated the mobile dashboard to now use drawers instead of dialogs.
-* Released `phasebot` v0.4.0 (which the bot now runs on).
-* Updated the documentation code to be speedier.
-* Changed the look of the homepage/documentation UI a little bit.
+- Changed the `/nuke` command name to `/scrub`.
+- Refactored the command code for optimisation reasons.
+- Updated the mobile dashboard to now use drawers instead of dialogs.
+- Released `phasebot` v0.4.0 (which the bot now runs on).
+- Updated the documentation code to be speedier.
+- Changed the look of the homepage/documentation UI a little bit.
 
 More updates coming soon! 🤍
 
 ## June 2024 - v3.5 release
 
-* Made rank card generation **4x faster** (other cards will be updated soon).
-* Made the dashboard even faster.
-* Made dashboard inputs autoresize instead of scrolling.
-* Gave the dashboard sidebar a new look.
-* Fixed a bug where Twitch notifications thumbnails would get cached.
-* Fixed a bug where Twitch notifications sometimes sent twice.
-* Fixed a bug where some modules failed to save on the dashboard.
-* Fixed a bug where some Join to Create channels didn't get deleted.
-* Fixed a bug with the `/ticket unlock` command.
+- Made rank card generation **4x faster** (other cards will be updated soon).
+- Made the dashboard even faster.
+- Made dashboard inputs autoresize instead of scrolling.
+- Gave the dashboard sidebar a new look.
+- Fixed a bug where Twitch notifications thumbnails would get cached.
+- Fixed a bug where Twitch notifications sometimes sent twice.
+- Fixed a bug where some modules failed to save on the dashboard.
+- Fixed a bug where some Join to Create channels didn't get deleted.
+- Fixed a bug with the `/ticket unlock` command.
 
 ## April 2024 - v3.4 release
 
-* Many dashboard UI and UX improvements.
-* Added 4 new `/dashboard` commands.
-* OAuth has been replaced by the `/dashboard login` command.
-* Unnecessary API routes have been removed.
-* Added new APIs to `phasebot` in `v0.2.1`.
-* Fixed giveaway commands.
+- Many dashboard UI and UX improvements.
+- Added 4 new `/dashboard` commands.
+- OAuth has been replaced by the `/dashboard login` command.
+- Unnecessary API routes have been removed.
+- Added new APIs to `phasebot` in `v0.2.1`.
+- Fixed giveaway commands.
 
 ## March 2024 - v3.3 release
 
-* Added ban audit logs.
-* Added kick audit logs.
-* Updated welcome card design.
-* Fixed rank card text alignment.
-* Fixed command paths in docs sidebar.
+- Added ban audit logs.
+- Added kick audit logs.
+- Updated welcome card design.
+- Fixed rank card text alignment.
+- Fixed command paths in docs sidebar.
 
 ## March 2024 - v3.2 release
 
-* Added Auto Messages module.
-* Added dashboard settings page.
-* Added custom rank card backgrounds.
-* Gave rank cards a new look.
-* Fixed a bug with Bump Reminders.
-* Fixed a bug with guild join/leave db updates.
-* Fixed some parts of the docs.
+- Added Auto Messages module.
+- Added dashboard settings page.
+- Added custom rank card backgrounds.
+- Gave rank cards a new look.
+- Fixed a bug with Bump Reminders.
+- Fixed a bug with guild join/leave db updates.
+- Fixed some parts of the docs.
 
 ## March 2024 - v3.1 release
 
 I've added 3 new commands and 2 new modules.
 
-* Added Twitch Notifications module.
-* Added Bump Reminders module.
-* Added a new command: /twitch user.
-* Added a new command: /twitch stream.
-* Added a new command: /reminder.
-
-*There were also a few bug fixes and improvements.* :)
+- Added Twitch Notifications module.
+- Added Bump Reminders module.
+- Added a new command: /twitch user.
+- Added a new command: /twitch stream.
+- Added a new command: /reminder.
 
 You can expect some more updates in the next few days.
 If you want to know right as they come out, <Link href="/redirect/discord">join my Discord</Link>!
@@ -164,14 +159,14 @@ If you want to know right as they come out, <Link href="/redirect/discord">join 
 
 Here's a quick overview of what's new:
 
-* The site has been <u>completely</u> recoded.
-* We have actual documentation now!
-* There's a shiny new dashboard.
-* Added some new commands & modules.
-* A couple of bugs were squashed.
-* Bot branding stuff was updated.
-* Terms and Privacy docs got some updates.
-* Website and bot hosters were changed.
-* The bot and site codebases were merged.
+- The site has been <u>completely</u> recoded.
+- We have actual documentation now!
+- There's a shiny new dashboard.
+- Added some new commands & modules.
+- A couple of bugs were squashed.
+- Bot branding stuff was updated.
+- Terms and Privacy docs got some updates.
+- Website and bot hosters were changed.
+- The bot and site codebases were merged.
 
 Hope you all enjoy the new updates! 🤍
