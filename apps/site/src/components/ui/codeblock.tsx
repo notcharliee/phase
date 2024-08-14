@@ -13,10 +13,10 @@ export const Codeblock = forwardRef<HTMLPreElement, CodeblockProps>(
     return (
       <Component
         className={cn(
-          "text-foreground bg-muted font-mono",
+          "text-foreground bg-muted/50 border font-mono text-sm",
           inline
-            ? "mx-[0.5ch] inline-block rounded-sm px-[0.3rem] py-[0.2rem] text-xs"
-            : "rounded-xl p-6 text-sm",
+            ? "mx-[0.25ch] inline-block rounded-[4px] px-1 "
+            : "my-1 rounded px-3 py-2 ",
           className,
         )}
         ref={ref}
