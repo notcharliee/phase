@@ -61,58 +61,68 @@ export default new BotCronBuilder()
       return acc
     }, new Map<string, Streamer>())
 
+    const oldStreamStatuses = await cache.twitchStreamStatuses.entries()
+
     for (const [id, streamer] of streamers.entries()) {
+      const oldStreamStatus = oldStreamStatuses.find(([key]) => key === id)?.[1]
       const stream = await twitchAPI.streams.getStreamByUserId(id)
-      if (!stream) continue
 
-      for (const notification of streamer.notifications) {
-        const channel = client.channels.cache.get(
-          notification.channelId,
-        ) as GuildTextBasedChannel | null
+      if (oldStreamStatus && !stream) {
+        await cache.twitchStreamStatuses.delete(id)
+      } else if (!oldStreamStatus && stream) {
+        await cache.twitchStreamStatuses.set(id, true)
 
-        if (!channel) continue
+        for (const notification of streamer.notifications) {
+          const channel = client.channels.cache.get(
+            notification.channelId,
+          ) as GuildTextBasedChannel | null
 
-        void channel
-          .send({
-            content: notification.mention
-              ? isSnowflake(notification.mention)
-                ? `<@&${notification.mention}>`
-                : notification.mention
-              : undefined,
-            embeds: [
-              new EmbedBuilder()
-                .setColor(PhaseColour.Primary)
-                .setAuthor({
-                  name: `${stream.userDisplayName} is now live on Twitch!`,
-                  url: `https://twitch.tv/${stream.userName}`,
-                })
-                .setTitle(stream.title)
-                .setURL(`https://twitch.tv/${stream.userName}`)
-                .setFields([
-                  {
-                    name: "Category",
-                    value: stream.gameName,
-                    inline: true,
-                  },
-                  {
-                    name: "Viewers",
-                    value: stream.viewers.toLocaleString(),
-                    inline: true,
-                  },
-                ])
-                .setImage(stream.getThumbnailUrl(400, 225) + `?t=${Date.now()}`)
-                .setTimestamp(),
-            ],
-            components: [
-              new ActionRowBuilder<ButtonBuilder>().addComponents([
-                new ButtonBuilder()
-                  .setStyle(ButtonStyle.Link)
-                  .setLabel("Watch Stream")
-                  .setURL(`https://twitch.tv/${stream.userName}`),
-              ]),
-            ],
-          })
-          .catch(() => null)
+          if (!channel) continue
+
+          void channel
+            .send({
+              content: notification.mention
+                ? isSnowflake(notification.mention)
+                  ? `<@&${notification.mention}>`
+                  : notification.mention
+                : undefined,
+              embeds: [
+                new EmbedBuilder()
+                  .setColor(PhaseColour.Primary)
+                  .setAuthor({
+                    name: `${stream.userDisplayName} is now live on Twitch!`,
+                    url: `https://twitch.tv/${stream.userName}`,
+                  })
+                  .setTitle(stream.title)
+                  .setURL(`https://twitch.tv/${stream.userName}`)
+                  .setFields([
+                    {
+                      name: "Category",
+                      value: stream.gameName,
+                      inline: true,
+                    },
+                    {
+                      name: "Viewers",
+                      value: stream.viewers.toLocaleString(),
+                      inline: true,
+                    },
+                  ])
+                  .setImage(
+                    stream.getThumbnailUrl(400, 225) + `?t=${Date.now()}`,
+                  )
+                  .setTimestamp(),
+              ],
+              components: [
+                new ActionRowBuilder<ButtonBuilder>().addComponents([
+                  new ButtonBuilder()
+                    .setStyle(ButtonStyle.Link)
+                    .setLabel("Watch Stream")
+                    .setURL(`https://twitch.tv/${stream.userName}`),
+                ]),
+              ],
+            })
+            .catch(() => null)
+        }
       }
     }
   })
