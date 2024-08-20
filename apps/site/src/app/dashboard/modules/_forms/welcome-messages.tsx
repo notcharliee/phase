@@ -21,8 +21,8 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
+import { RichTextarea } from "~/components/ui/slate"
 import { Switch } from "~/components/ui/switch"
-import { Textarea } from "~/components/ui/textarea"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
@@ -111,9 +111,8 @@ export const WelcomeMessages = () => {
             <FormItem>
               <FormLabel>Welcome Message</FormLabel>
               <FormControl>
-                <Textarea
+                <RichTextarea
                   placeholder={`Example: Hi **{username}**, welcome to the server! You are member #{membercount}.`}
-                  autoResize
                   {...field}
                 />
               </FormControl>

@@ -26,7 +26,7 @@ import {
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
-import { Textarea } from "~/components/ui/textarea"
+import { RichTextarea } from "~/components/ui/slate"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
@@ -125,9 +125,8 @@ export const Tickets = () => {
             <FormItem>
               <FormLabel>Message</FormLabel>
               <FormControl>
-                <Textarea
+                <RichTextarea
                   placeholder="Example: Create a ticket."
-                  autoResize
                   {...field}
                 />
               </FormControl>
@@ -225,9 +224,8 @@ export const Tickets = () => {
                       <FormItem>
                         <FormLabel>Message</FormLabel>
                         <FormControl>
-                          <Textarea
+                          <RichTextarea
                             placeholder="Example: Staff will be with you shortly."
-                            autoResize
                             {...field}
                           />
                         </FormControl>

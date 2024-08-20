@@ -19,7 +19,6 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
-import { Textarea } from "~/components/ui/textarea"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
@@ -27,6 +26,7 @@ import { updateModule } from "~/app/dashboard/_actions/updateModule"
 import { bumpRemindersSchema } from "~/validators/modules"
 
 import type { z } from "zod"
+import { RichTextarea } from "~/components/ui/slate"
 
 type FormValues = z.infer<typeof bumpRemindersSchema>
 
@@ -128,9 +128,8 @@ export const BumpReminders = () => {
             <FormItem>
               <FormLabel>Initial Message</FormLabel>
               <FormControl>
-                <Textarea
+                <RichTextarea
                   placeholder="Example: Thanks for bumping!"
-                  autoResize
                   {...field}
                 />
               </FormControl>
@@ -148,9 +147,8 @@ export const BumpReminders = () => {
             <FormItem>
               <FormLabel>Reminder Message</FormLabel>
               <FormControl>
-                <Textarea
+                <RichTextarea
                   placeholder="Example: It's time to bump again!"
-                  autoResize
                   {...field}
                 />
               </FormControl>

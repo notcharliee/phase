@@ -26,8 +26,8 @@ import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
 import { Separator } from "~/components/ui/separator"
+import { RichTextarea } from "~/components/ui/slate"
 import { Switch } from "~/components/ui/switch"
-import { Textarea } from "~/components/ui/textarea"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
@@ -95,9 +95,8 @@ export const Levels = () => {
             <FormItem>
               <FormLabel>Message</FormLabel>
               <FormControl>
-                <Textarea
+                <RichTextarea
                   placeholder={`Example: {member} you levelled up to level **{member.level}**! 🎉\nYour new XP target is **{member.target}** XP.`}
-                  autoResize
                   {...field}
                 />
               </FormControl>
