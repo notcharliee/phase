@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
 
 import { afks } from "./models/afks.js"
+import { configs } from "./models/configs.js"
 import { giveaways } from "./models/giveaways.js"
 import { guilds } from "./models/guilds.js"
 import { levels } from "./models/levels.js"
@@ -10,6 +11,7 @@ import { tags } from "./models/tags.js"
 
 interface InitialisedDatabase extends Omit<Database, "init"> {
   afks: typeof afks
+  configs: typeof configs
   giveaways: typeof giveaways
   guilds: typeof guilds
   levels: typeof levels
@@ -68,13 +70,14 @@ export class Database implements Disposable {
 
     Object.assign(this, {
       afks,
+      configs,
       giveaways,
       guilds,
       levels,
       otps,
       reminders,
       tags,
-    })
+    } satisfies Omit<InitialisedDatabase, typeof Symbol.dispose>)
 
     return this as unknown as InitialisedDatabase
   }

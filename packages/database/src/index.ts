@@ -1,6 +1,7 @@
 export * as mongoose from "mongoose"
 
 export type * from "./models/afks.js"
+export type * from "./models/configs.js"
 export type * from "./models/giveaways.js"
 export type * from "./models/guilds.js"
 export type * from "./models/levels.js"
