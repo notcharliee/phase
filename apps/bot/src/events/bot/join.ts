@@ -1,59 +1,87 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  EmbedBuilder,
-} from "discord.js"
+import { EmbedBuilder } from "discord.js"
 import { BotEventBuilder } from "phasebot/builders"
 
 import dedent from "dedent"
 
+import { cache } from "~/lib/cache"
 import { alertWebhook } from "~/lib/clients/webhooks/alert"
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 
 export default new BotEventBuilder()
   .setName("guildCreate")
-  .setExecute(async (_, guild) => {
-    const owner = await guild.fetchOwner()
+  .setExecute(async (_, newGuild) => {
+    const config = (await cache.configs.get("bot"))! // always exists
+    const owner = await newGuild.fetchOwner().catch(console.error)
 
-    const ownedGuildsCount =
-      (await db.guilds.countDocuments({
-        "admins.0": owner.id,
-      })) + 1
+    const guildIsBlacklisted = config.blacklist.guilds.find(
+      (guild) => guild.id === newGuild.id,
+    )
 
-    void alertWebhook.send({
-      embeds: [
-        new EmbedBuilder()
-          .setColor(PhaseColour.Primary)
-          .setTitle("New Server")
-          .setThumbnail(guild.iconURL())
-          .setTimestamp()
-          .setDescription(
-            dedent`
-              **Name:** \`${guild.name}\`
-              **Created:** <t:${Math.floor(guild.createdAt.getTime() / 1000)}:R>
-              **Membercount:** \`${guild.memberCount}\`
-              **ID:** \`${guild.id}\`
+    const userIsBlacklisted = config.blacklist.users.find(
+      (user) => user.id === newGuild.ownerId,
+    )
 
-              **Owner Name:** \`${owner.user.username}\`
-              **Owner ID:** \`${owner.user.id}\`
-              **Owned Phase Servers:** \`${ownedGuildsCount}\`
+    if (guildIsBlacklisted || userIsBlacklisted) {
+      await newGuild.leave().catch(console.error)
+
+      const blacklistEntry = guildIsBlacklisted ?? userIsBlacklisted!
+      const blacklistType = guildIsBlacklisted ? "guild" : "user"
+
+      alertWebhook
+        .send({
+          embeds: [
+            new EmbedBuilder()
+              .setColor("Red")
+              .setTitle("Server join prevented")
+              .setFooter({ text: "Guild ID: " + newGuild.id })
+              .setDescription(
+                dedent`
+                The bot was blocked from joining a server because its ${blacklistType === "user" ? "owner" : "ID"} was found on the ${blacklistType} blacklist.
+
+                **Blacklisted ${blacklistType}:**
+                ${blacklistEntry.id}
+
+                **Reason for blacklist:**
+                ${blacklistEntry.reason ?? "No reason provided"}
+              `,
+              ),
+          ],
+        })
+        .catch(console.error)
+    } else {
+      const ownedGuildsCount = owner
+        ? (await db.guilds.countDocuments({
+            "admins.0": owner.id,
+          })) + 1
+        : undefined
+
+      alertWebhook
+        .send({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(PhaseColour.Primary)
+              .setTitle("Bot was added")
+              .setThumbnail(newGuild.iconURL())
+              .setTimestamp()
+              .setDescription(
+                dedent`
+                **Name:** \`${newGuild.name}\`
+                **Created:** <t:${Math.floor(newGuild.createdAt.getTime() / 1000)}:R>
+                **Membercount:** \`${newGuild.memberCount}\`
+                **ID:** \`${newGuild.id}\`
+
+                **Owner Name:** \`${owner?.user.username ?? "unknown"}\`
+                **Owner ID:** \`${owner?.user.id ?? "unknown"}\`
+                **Owned Phase Servers:** \`${ownedGuildsCount ?? "unknown"}\`
             `,
-          ),
-      ],
-      components: [
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder()
-            .setStyle(ButtonStyle.Danger)
-            .setCustomId(`phase.guilds.${guild.id}.remove_bot`)
-            .setLabel("Remove Bot"),
-        ),
-      ],
-    })
+              ),
+          ],
+        })
+        .catch(console.error)
 
-    void db.guilds.create({
-      id: guild.id,
-      admins: [guild.ownerId],
-    })
+      db.guilds
+        .create({ id: newGuild.id, admins: [newGuild.ownerId] })
+        .catch(console.error)
+    }
   })
