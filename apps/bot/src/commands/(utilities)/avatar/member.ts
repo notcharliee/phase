@@ -17,6 +17,7 @@ export default new BotSubcommandBuilder()
   )
   .addStringOption(extensionOption)
   .addNumberOption(sizeOption)
+  .setMetadata({ dmPermission: false })
   .setExecute(async (interaction) => {
     if (!interaction.guild) {
       void interaction.reply(BotError.serverOnlyCommand().toJSON())

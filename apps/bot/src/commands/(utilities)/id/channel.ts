@@ -9,6 +9,7 @@ export default new BotSubcommandBuilder()
       .setDescription("The channel to get the ID of.")
       .setRequired(true),
   )
+  .setMetadata({ dmPermission: false })
   .setExecute((interaction) => {
     const id = interaction.options.getChannel("channel", true).id
 

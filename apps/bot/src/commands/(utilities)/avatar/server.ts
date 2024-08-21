@@ -11,6 +11,7 @@ export default new BotSubcommandBuilder()
   .setDescription("Gets the server's icon.")
   .addStringOption(extensionOption)
   .addNumberOption(sizeOption)
+  .setMetadata({ dmPermission: false })
   .setExecute(async (interaction) => {
     if (!interaction.guild) {
       void interaction.reply(BotError.serverOnlyCommand().toJSON())
