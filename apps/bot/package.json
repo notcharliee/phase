@@ -3,6 +3,8 @@
   "name": "bot",
   "type": "module",
   "scripts": {
+    "docker:build": "docker build -t bot-image -f Dockerfile ../../",
+    "docker:start": "docker run -it --rm bot-image",
     "build": "",
     "start": "NODE_ENV=production phase start",
     "dev": "phase dev"
