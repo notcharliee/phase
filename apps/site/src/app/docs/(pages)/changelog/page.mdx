@@ -8,6 +8,16 @@ export const metadata = {
   <HeadingDescription>{metadata.description}</HeadingDescription>
 </Heading>
 
+## August 2024 - v3.14 release
+
+- All dashboard multiline input boxes now support rich text (**this** _sort_ <u>of</u> ~~thing~~), as well as Discord-specific stuff like `@` mentions and `#` channel shortcuts. Support for guild emojis via `:this:` is coming soon as well.
+
+- We can now dynamically set the status of the bot, letting you know about outages or downtime without the need to be in our Discord server!
+
+- Patched the issue that caused Twitch Notification spam.
+
+- Updated the database caching mechanism to include even more stuff (makes bot speedier).
+
 ## August 2024 - v3.13 release
 
 - Huge update for the Twitch Notifications module!!! You can now pick up to **5 streamers** to get notifications for (previously just 1). Plus, I've added `@everyone` and `@here` mention options for those alerts (which is coming to other modules soon).
