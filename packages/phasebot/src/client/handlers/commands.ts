@@ -8,6 +8,7 @@ import {
   SlashCommandAssertions,
 } from "discord.js"
 
+import chalk from "chalk"
 import cloneDeep from "lodash.clonedeep"
 
 import { BotCommandBuilder, BotSubcommandBuilder } from "~/builders"
@@ -261,7 +262,7 @@ export const handleCommands = async (client: Client<false>) => {
 
       await readyClient.application.commands.set(newCommands)
 
-      cliSpinner.succeed("Slash commands set!")
+      cliSpinner.succeed("Slash commands are live!")
 
       return
     }
@@ -296,7 +297,21 @@ export const handleCommands = async (client: Client<false>) => {
       commandsToDelete.length ||
       commandsToUpdate.length
     ) {
-      const cliSpinner = spinner("Updating slash commands ...").start()
+      const commandNames = new Array<string>().concat(
+        commandsToCreate.map((cmd) =>
+          chalk.grey(`  ${chalk.redBright("+")} /${cmd.name}`),
+        ),
+        commandsToDelete.map((cmd) =>
+          chalk.grey(`  ${chalk.redBright("-")} /${cmd.name}`),
+        ),
+        commandsToUpdate.map((cmd) =>
+          chalk.grey(`  ${chalk.yellowBright("~")} /${cmd.name}`),
+        ),
+      )
+
+      const cliSpinner = spinner(
+        `Updating ${commandNames.length} live slash commands ...`,
+      ).start()
 
       await Promise.all([
         ...commandsToCreate.map((cmd) =>
@@ -310,7 +325,8 @@ export const handleCommands = async (client: Client<false>) => {
         ),
       ])
 
-      cliSpinner.succeed("Slash commands updated!")
+      cliSpinner.succeed("The following live slash commands were updated:")
+      console.log(commandNames.join("\n") + "\n")
     }
   })
 

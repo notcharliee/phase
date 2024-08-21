@@ -149,7 +149,7 @@ export class PhaseClient {
       await this.djsClient.login()
 
       cliSpinner.succeed(
-        `Bot is online! ${chalk.grey(`(${(Bun.nanoseconds() / 1e9).toFixed(2)}s)`)}`,
+        `Bot is online! ${chalk.grey(`(${(Bun.nanoseconds() / 1e9).toFixed(2)}s)`)}\n`,
       )
     }
   }
