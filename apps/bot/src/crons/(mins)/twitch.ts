@@ -16,7 +16,7 @@ import { isSnowflake } from "~/lib/utils"
 import type { GuildTextBasedChannel } from "discord.js"
 
 export default new BotCronBuilder()
-  .setPattern("*/1 * * * *")
+  .setPattern("* * * * *") // every minute
   .setExecute(async (client) => {
     const guildDocs = (await cache.guilds.values()).filter(
       (guildDoc) => guildDoc.modules?.[ModuleId.TwitchNotifications]?.enabled,

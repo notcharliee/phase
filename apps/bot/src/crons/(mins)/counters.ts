@@ -7,7 +7,7 @@ import { cache } from "~/lib/cache"
 import type { BaseGuildVoiceChannel } from "discord.js"
 
 export default new BotCronBuilder()
-  .setPattern("*/10 * * * *")
+  .setPattern("*/10 * * * *") // every 10 minutes
   .setExecute(async (client) => {
     const guildDocs = (await cache.guilds.values()).filter(
       (guildDoc) => guildDoc.modules?.[ModuleId.Counters]?.enabled,

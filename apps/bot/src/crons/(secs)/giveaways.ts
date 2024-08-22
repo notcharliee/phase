@@ -5,7 +5,7 @@ import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 
 export default new BotCronBuilder()
-  .setPattern("*/5 * * * * *")
+  .setPattern("*/5 * * * * *") // every 5 seconds
   .setExecute(async (client) => {
     const expiredGiveaways = await db.giveaways.find({
       expires: { $lt: Date.now().toString() },

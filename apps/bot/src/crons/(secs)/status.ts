@@ -4,7 +4,7 @@ import { BotCronBuilder } from "phasebot/builders"
 import { cache } from "~/lib/cache"
 
 export default new BotCronBuilder()
-  .setPattern("*/30 * * * * *")
+  .setPattern("*/30 * * * * *") // every 30 seconds
   .setExecute(async (client) => {
     const botConfig = (await cache.configs.get("bot"))!
 
