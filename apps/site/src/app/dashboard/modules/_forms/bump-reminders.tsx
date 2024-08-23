@@ -4,7 +4,6 @@ import { useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ModuleId } from "@repo/config/phase/modules.ts"
-import ms from "ms"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -19,28 +18,29 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
+import { RichTextarea } from "~/components/ui/slate"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
+
+import { safeMs } from "~/lib/utils"
 
 import { updateModule } from "~/app/dashboard/_actions/updateModule"
 import { bumpRemindersSchema } from "~/validators/modules"
 
 import type { z } from "zod"
-import { RichTextarea } from "~/components/ui/slate"
 
 type FormValues = z.infer<typeof bumpRemindersSchema>
 
 export const BumpReminders = () => {
   const dashboard = useDashboardContext()
+  const moduleData = dashboard.guild.modules?.[ModuleId.BumpReminders]
 
   const form = useForm<FormValues>({
     resolver: zodResolver(bumpRemindersSchema),
-    defaultValues: dashboard.guild.modules?.[ModuleId.BumpReminders]
+    defaultValues: moduleData
       ? {
-          ...dashboard.guild.modules[ModuleId.BumpReminders],
-          time: ms(dashboard.guild.modules[ModuleId.BumpReminders].time, {
-            long: true,
-          }),
+          ...moduleData,
+          time: safeMs(moduleData.time, { long: true })!,
         }
       : {
           enabled: false,
@@ -57,49 +57,29 @@ export const BumpReminders = () => {
 
     setIsSubmitting(true)
 
-    let newTime: number | undefined
-
-    try {
-      newTime = ms(data.time)
-    } finally {
-      if (newTime) {
-        toast.promise(
-          updateModule(ModuleId.BumpReminders, {
-            ...data,
-            time: newTime,
-          }),
-          {
-            loading: "Saving changes...",
-            error: "An error occured.",
-            success: (updatedModuleData) => {
-              form.reset(data)
-              dashboard.setData((dashboardData) => {
-                if (!dashboardData.guild.modules)
-                  dashboardData.guild.modules = {}
-                dashboardData.guild.modules[ModuleId.BumpReminders] =
-                  updatedModuleData
-                return dashboardData
-              })
-              return "Changes saved!"
-            },
-            finally() {
-              setIsSubmitting(false)
-            },
-          },
-        )
-      } else {
-        form.setError(
-          "time",
-          {
-            type: "manual",
-            message: "Invalid time format",
-          },
-          { shouldFocus: true },
-        )
-
-        setIsSubmitting(false)
-      }
-    }
+    toast.promise(
+      updateModule(ModuleId.BumpReminders, {
+        ...data,
+        time: safeMs(data.time)!,
+      }),
+      {
+        loading: "Saving changes...",
+        error: "An error occured.",
+        success: (updatedModuleData) => {
+          form.reset(data)
+          dashboard.setData((dashboardData) => {
+            if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
+            dashboardData.guild.modules[ModuleId.BumpReminders] =
+              updatedModuleData
+            return dashboardData
+          })
+          return "Changes saved!"
+        },
+        finally() {
+          setIsSubmitting(false)
+        },
+      },
+    )
   }
 
   return (
