@@ -1,79 +1,87 @@
-import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
+import { EmbedBuilder } from "discord.js"
 import { BotCronBuilder } from "phasebot/builders"
 
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 
+import type { mongoose, Reminder } from "~/lib/db"
+import type { GuildTextBasedChannel, MessageCreateOptions } from "discord.js"
+
 export default new BotCronBuilder()
-  .setPattern("*/5 * * * * *") // every 5 seconds
+  .setPattern("*/10 * * * * *") // every 10 seconds
   .setExecute(async (client) => {
-    // Fetch reminders that meet the specified conditions
-    const reminders = await db.reminders.find({
-      $or: [
-        {
-          $expr: {
-            $lt: [{ $add: [{ $toLong: "$created" }, "$time"] }, Date.now()],
-          },
-        },
-        {
-          unsent: true,
-          created: { $lt: new Date(Date.now()) },
-        },
-      ],
+    const now = new Date(Date.now())
+
+    const reminderDocs = await db.reminders.find({
+      scheduledAt: { $lt: now },
     })
 
-    for (const reminder of reminders) {
-      const channel = client.channels.cache.get(
-        reminder.channel,
-      ) as GuildTextBasedChannel
+    const reminderDocWriteOps: mongoose.AnyBulkWriteOperation<Reminder>[] = []
+
+    const reminderMessagesToSend: [
+      GuildTextBasedChannel,
+      MessageCreateOptions,
+    ][] = []
+
+    for (const reminderDoc of reminderDocs) {
+      const channel = client.channels.cache.get(reminderDoc.channel) as
+        | GuildTextBasedChannel
+        | undefined
 
       if (!channel) {
-        // If the channel doesn't exist, delete the reminder and continue to the next one
-        await reminder.deleteOne()
+        reminderDocWriteOps.push({
+          deleteOne: { filter: { _id: reminderDoc._id } },
+        })
+
         continue
       }
 
-      const createdDate = reminder.created
-
-      // Extract date and time components from the created date
-      const year = createdDate.getUTCFullYear()
-      const month = ("0" + (createdDate.getUTCMonth() + 1)).slice(-2)
-      const day = ("0" + createdDate.getUTCDate()).slice(-2)
-      const hours = ("0" + createdDate.getUTCHours()).slice(-2)
-      const minutes = ("0" + createdDate.getUTCMinutes()).slice(-2)
-
-      await channel
-        .send({
-          content: reminder.role
-            ? `<@&${reminder.role}>`
-            : reminder.user
-              ? `<@${reminder.user}>`
-              : undefined,
+      reminderMessagesToSend.push([
+        channel,
+        {
+          content: reminderDoc.mention,
           embeds: [
             new EmbedBuilder()
-              .setTitle(reminder.name ?? "Reminder")
-              .setDescription(reminder.message)
               .setColor(PhaseColour.Primary)
-              .setFooter(
-                !reminder.loop
-                  ? {
-                      text: `Created ${year}/${month}/${day} ${hours}:${minutes}`,
-                    }
-                  : null,
-              ),
+              .setTitle(reminderDoc.name)
+              .setDescription(reminderDoc.content)
+              .setTimestamp(reminderDoc.createdAt),
           ],
+        },
+      ])
+
+      if (reminderDoc.loop) {
+        reminderDocWriteOps.push({
+          updateOne: {
+            filter: { _id: reminderDoc._id },
+            update: {
+              $set: {
+                scheduledAt: new Date(now.getTime() + reminderDoc.delay),
+              },
+            },
+          },
         })
-        .catch(() => null)
-
-      if (reminder.loop) {
-        // If the reminder is set to loop, mark it as sent and update the created date
-        if (reminder.unsent) reminder.unsent = false
-        reminder.created = new Date()
-
-        await reminder.save()
       } else {
-        // If the reminder is not set to loop, delete it
-        await reminder.deleteOne()
+        reminderDocWriteOps.push({
+          deleteOne: { filter: { _id: reminderDoc._id } },
+        })
       }
+    }
+
+    if (reminderMessagesToSend.length) {
+      await Promise.all(
+        reminderMessagesToSend.map(([channel, options]) =>
+          channel.send(options).catch((error) => {
+            console.error(
+              `Failed to send a reminder to channel ${channel.id} in guild ${channel.guildId}:`,
+              error,
+            )
+          }),
+        ),
+      )
+    }
+
+    if (reminderDocWriteOps.length) {
+      await db.reminders.bulkWrite(reminderDocWriteOps)
     }
   })

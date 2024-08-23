@@ -1,86 +1,55 @@
-import { EmbedBuilder, PermissionFlagsBits } from "discord.js"
+import { EmbedBuilder } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
-
-import ms from "ms"
 
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
+import { safeMs } from "~/lib/utils"
 
 export default new BotCommandBuilder()
   .setName("reminder")
-  .setDescription("Sets a reminder")
+  .setDescription("Creates a reminder")
   .setDMPermission(false)
   .addStringOption((option) =>
     option
       .setName("message")
-      .setDescription("The message to remind you of")
+      .setDescription("The content to put in the reminder")
       .setRequired(true),
   )
   .addStringOption((option) =>
     option
-      .setName("time")
-      .setDescription("The time to remind you (e.g. 1d, 1h, 1m, 1s)")
+      .setName("delay")
+      .setDescription("How long to wait before sending the reminder")
       .setRequired(true),
-  )
-  .addRoleOption((option) =>
-    option
-      .setName("role")
-      .setDescription(
-        "The role to remind (must have 'Mention Everyone' permission)",
-      )
-      .setRequired(false),
   )
   .setExecute(async (interaction) => {
     const message = interaction.options.getString("message", true)
-    const time = interaction.options.getString("time", true)
-    const role = interaction.options.getRole("role", false)
+    const delay = interaction.options.getString("delay", true)
 
-    if (
-      role &&
-      !interaction.memberPermissions?.has(PermissionFlagsBits.MentionEveryone)
-    ) {
-      void interaction.reply(
-        BotError.botMissingPermission("MentionEveryone").toJSON(),
+    const msDelay = safeMs(delay)
+
+    if (!msDelay) {
+      return void interaction.reply(
+        new BotError("The time you provided is invalid.").toJSON(),
       )
-
-      return
     }
 
-    let msTime: number | undefined
+    await db.reminders.create({
+      name: "Reminder",
+      guild: interaction.guildId,
+      channel: interaction.channelId,
+      content: message,
+      delay: msDelay,
+      mention: `${interaction.user}`,
+    })
 
-    try {
-      msTime = ms(time)
-    } catch {
-      // do nothing
-    } finally {
-      if (!msTime) {
-        void interaction.reply(
-          new BotError("The time you provided is invalid.").toJSON(),
-        )
-
-        return
-      }
-
-      void db.reminders.create({
-        guild: interaction.guildId,
-        message,
-        channel: interaction.channelId,
-        time: msTime,
-        user: interaction.user.id,
-        role: role?.id,
-        created: new Date(),
-      })
-
-      void interaction.reply({
-        embeds: [
-          new EmbedBuilder()
-            .setTitle("Reminder Set")
-            .setDescription(
-              `I will remind you in ${ms(msTime, { long: true })}.`,
-            )
-            .setColor(PhaseColour.Primary),
-        ],
-      })
-    }
+    void interaction.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(PhaseColour.Primary)
+          .setTitle("Reminder Set")
+          .setDescription("You'll be pinged when the reminder is sent.")
+          .setFooter({ text: `Duration: ${safeMs(msDelay, { long: true })}` }),
+      ],
+    })
   })

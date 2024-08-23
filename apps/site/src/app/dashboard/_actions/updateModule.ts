@@ -7,15 +7,16 @@ import { ModuleId } from "@repo/config/phase/modules.ts"
 import { database } from "~/lib/db"
 import { env } from "~/lib/env"
 import { twitchClient } from "~/lib/twitch"
+import { safeMs } from "~/lib/utils"
 
-import { getDasbboardHeaders } from "~/app/dashboard/utils"
+import { getDashboardHeaders } from "~/app/dashboard/utils"
 
 import type {
   APIButtonComponentWithCustomId,
   APIMessage,
   RESTPostAPIChannelMessageJSONBody,
 } from "@discordjs/core/http-only"
-import type { GuildModules, Reminder } from "~/lib/db"
+import type { GuildModules, mongoose, Reminder } from "~/lib/db"
 import type { GuildModulesWithData } from "~/types/dashboard"
 import type {
   autoMessagesSchema,
@@ -40,7 +41,7 @@ export const updateModule = async <T extends keyof GuildModules>(
   id: T,
   data: GuildModules[T],
 ) => {
-  const { guildId, userId } = getDasbboardHeaders()
+  const { guildId, userId } = getDashboardHeaders()
 
   const db = await database.init()
 
@@ -77,14 +78,14 @@ export const updateModule = async <T extends keyof GuildModules>(
 export const updateAutoMessages = async (
   formValues: z.infer<typeof autoMessagesSchema>,
 ) => {
-  const { guildId, userId } = getDasbboardHeaders()
+  const { guildId } = getDashboardHeaders()
 
   const messages = formValues.messages.map((message) => ({
     name: message.name,
     channel: message.channel,
-    message: message.message,
+    message: message.content,
     mention: message.mention,
-    interval: +message.interval,
+    interval: safeMs(message.interval)!,
   }))
 
   const updatedModuleData = await updateModule(ModuleId.AutoMessages, {
@@ -92,33 +93,28 @@ export const updateAutoMessages = async (
     messages,
   })
 
-  const documents: Reminder[] = []
-
-  for (let i = 0; i < messages.length; i++) {
-    const message = messages[i]!
-
-    documents.push({
-      guild: guildId,
-      name: message.name,
-      message: message.message,
-      channel: message.channel,
-      time: message.interval,
-      loop: true,
-      user: userId,
-      role: message.mention,
-      created: formValues.messages[i]!.startAt ?? new Date(),
-      unsent: true,
-    })
-  }
-
   const db = await database.init()
 
-  await db.reminders.deleteMany({
-    guild: guildId,
-    loop: true,
-  })
+  const docsToInsert: mongoose.Document<unknown, {}, Reminder>[] = []
 
-  await db.reminders.insertMany(documents)
+  for (const message of messages) {
+    docsToInsert.push(
+      new db.reminders({
+        name: message.name,
+        guild: guildId,
+        channel: message.channel,
+        content: message.message,
+        mention: message.mention,
+        delay: message.interval,
+        loop: true,
+      }),
+    )
+  }
+
+  await db.reminders.bulkWrite([
+    { deleteMany: { filter: { guild: guildId, loop: true } } },
+    ...docsToInsert.map((doc) => ({ insertOne: { document: doc } })),
+  ])
 
   return updatedModuleData
 }
