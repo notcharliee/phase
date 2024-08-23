@@ -11,7 +11,6 @@ import { ModuleId } from "@repo/config/phase/modules.ts"
 import { cache } from "~/lib/cache"
 import { twitchAPI } from "~/lib/clients/twitch"
 import { PhaseColour } from "~/lib/enums"
-import { isSnowflake } from "~/lib/utils"
 
 import type { GuildTextBasedChannel } from "discord.js"
 
@@ -81,11 +80,7 @@ export default new BotCronBuilder()
 
           void channel
             .send({
-              content: notification.mention
-                ? isSnowflake(notification.mention)
-                  ? `<@&${notification.mention}>`
-                  : notification.mention
-                : undefined,
+              content: notification.mention,
               embeds: [
                 new EmbedBuilder()
                   .setColor(PhaseColour.Primary)
