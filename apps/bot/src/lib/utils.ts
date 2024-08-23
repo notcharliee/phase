@@ -1,5 +1,7 @@
 import { SnowflakeUtil } from "discord.js"
 
+import unsafeMs from "ms"
+
 export function isSnowflake(id: string) {
   try {
     return SnowflakeUtil.deconstruct(id).timestamp > SnowflakeUtil.epoch
@@ -25,6 +27,30 @@ export function getDayName(day: number, short: boolean = false) {
     case 6:
       return short ? "Sat" : "Saturday"
   }
+}
+
+/**
+ * A safe version of `ms` that returns undefined if the value is invalid.
+ *
+ * @param value The value to parse or format.
+ * @returns The parsed or formatted value.
+ */
+export function safeMs<T extends string | number>(
+  value: T,
+  options?: T extends number ? { long: boolean } : never,
+) {
+  let parsedValue: string | number | undefined
+
+  try {
+    parsedValue =
+      typeof value === "string" ? unsafeMs(value) : unsafeMs(value, options)
+  } catch {
+    parsedValue = undefined
+  }
+
+  return parsedValue as unknown as T extends string
+    ? number | undefined
+    : string | undefined
 }
 
 /**

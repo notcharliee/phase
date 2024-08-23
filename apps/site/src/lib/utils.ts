@@ -1,4 +1,5 @@
 import { clsx } from "clsx"
+import unsafeMs from "ms"
 import { twMerge } from "tailwind-merge"
 
 import { env } from "./env"
@@ -33,6 +34,7 @@ export function deleteKeyRecursively<TObj, TKey extends string>(
   obj: TObj,
   keyToDelete: TKey,
 ): Omit<TObj, TKey> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   typeof obj === "object" &&
     obj !== null &&
     (Array.isArray(obj)
@@ -44,4 +46,28 @@ export function deleteKeyRecursively<TObj, TKey extends string>(
         ))
 
   return obj as Omit<TObj, TKey>
+}
+
+/**
+ * A safe version of `ms` that returns undefined if the value is invalid.
+ *
+ * @param value The value to parse or format.
+ * @returns The parsed or formatted value.
+ */
+export function safeMs<T extends string | number>(
+  value: T,
+  options?: T extends number ? { long: boolean } : never,
+) {
+  let parsedValue: string | number | undefined
+
+  try {
+    parsedValue =
+      typeof value === "string" ? unsafeMs(value) : unsafeMs(value, options)
+  } catch {
+    parsedValue = undefined
+  }
+
+  return parsedValue as unknown as T extends string
+    ? number | undefined
+    : string | undefined
 }
