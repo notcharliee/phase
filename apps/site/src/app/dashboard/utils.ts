@@ -1,6 +1,6 @@
 import { headers as getHeaders } from "next/headers"
 
-export const getDasbboardHeaders = () => {
+export const getDashboardHeaders = () => {
   const headers = getHeaders()
 
   const guildId = headers.get("x-guild-id")
