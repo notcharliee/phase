@@ -1,5 +1,7 @@
 import { z } from "zod"
 
+import { safeMs } from "~/lib/utils"
+
 export const auditLogsSchema = z.object({
   enabled: z.boolean(),
   channels: z.object({
@@ -21,16 +23,16 @@ export const autoMessagesSchema = z.object({
         .min(1, "Name is required")
         .max(100, "Name cannot be longer than 100 characters"),
       channel: z.string().min(1, "Channel is required"),
-      message: z
+      content: z
         .string()
-        .min(1, "Message is required")
-        .max(2000, "Message cannot be longer than 2000 characters"),
+        .min(1, "Content is required")
+        .max(2000, "Content cannot be longer than 2000 characters"),
       mention: z.string().optional(),
-      interval: z.string().min(2).max(100),
-      startAt: z
-        .date()
-        .min(new Date(), "Date cannot be in the past")
-        .optional(),
+      interval: z
+        .string()
+        .min(2, { message: "Interval is required" })
+        .max(100, { message: "Interval cannot be longer than 100 characters" })
+        .refine(safeMs, { message: "Invalid interval format" }),
     }),
   ),
 })
@@ -50,9 +52,23 @@ export const autoRolesSchema = z.object({
 
 export const bumpRemindersSchema = z.object({
   enabled: z.boolean(),
-  time: z.string().min(2).max(100),
-  initialMessage: z.string().min(1).max(2048),
-  reminderMessage: z.string().max(2048),
+  time: z
+    .string()
+    .min(2, { message: "Time is required" })
+    .max(100, { message: "Time cannot be longer than 100 characters" })
+    .refine(safeMs, { message: "Invalid time format" }),
+  initialMessage: z
+    .string()
+    .min(1, { message: "Initial message is required" })
+    .max(2000, {
+      message: "Initial message cannot be longer than 2000 characters",
+    }),
+  reminderMessage: z
+    .string()
+    .min(1, { message: "Reminder message is required" })
+    .max(2000, {
+      message: "Reminder message cannot be longer than 2000 characters",
+    }),
 })
 
 export const countersSchema = z.object({
