@@ -14,5 +14,11 @@
 
   "css.lint.unknownAtRules": "ignore",
 
-  "npm.packageManager": "bun",
+  "tailwindCSS.experimental.classRegex": [
+    "tw`([^`]*)", // tw`...`
+    "tw=\"([^\"]*)", // <div tw="..." />
+    "tw={\"([^\"}]*)" // <div tw={"..."} />
+  ],
+
+  "npm.packageManager": "bun"
 }
