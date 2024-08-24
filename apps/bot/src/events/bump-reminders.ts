@@ -29,7 +29,7 @@ export default new BotEventBuilder()
       channel: message.channelId,
       content: moduleConfig.reminderMessage,
       delay: moduleConfig.time,
-      mention: `${message.author}`,
+      mention: `${message.interaction.user}`,
     })
 
     const reply = await message.reply({
