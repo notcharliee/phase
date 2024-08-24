@@ -8,6 +8,20 @@ export const metadata = {
   <HeadingDescription>{metadata.description}</HeadingDescription>
 </Heading>
 
+## August 2024 - v3.15 release
+
+- Added support for all kinds of pings (not just roles) in auto messages and bump reminders.
+
+- Refactored the way the database stores information for reminders.
+
+- Improved the efficiency and performance of database calls for reminders, bump reminders, auto messages, and join-to-creates.
+
+- Fixed a bug that caused some join-to-create channels to not be deleted once everybody had left.
+
+- Added better error catching and logging for join-to-creates (so the issue above doesn't happen again).
+
+- Made some small stylistic changes to the look of `/level rank` cards.
+
 ## August 2024 - v3.14 release
 
 - All dashboard multiline input boxes now support rich text (**this** _sort_ <u>of</u> ~~thing~~), as well as Discord-specific stuff like `@` mentions and `#` channel shortcuts. Support for guild emojis via `:this:` is coming soon as well.
