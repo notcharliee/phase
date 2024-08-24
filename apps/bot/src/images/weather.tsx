@@ -3,8 +3,8 @@ import { ImageBuilder } from "phasebot/builders"
 import { tw } from "~/lib/tw"
 import { getDayName } from "~/lib/utils"
 
-import geist500 from "./fonts/Geist-500.otf"
-import geist700 from "./fonts/Geist-700.otf"
+import geistBold from "./fonts/geist-bold.otf"
+import geistMedium from "./fonts/geist-medium.otf"
 
 import type { getWeatherData } from "~/commands/(info)/weather"
 
@@ -121,18 +121,8 @@ export function generateWeatherCard(props: WeatherCardProps) {
     .setWidth(730)
     .setHeight(920)
     .setFonts([
-      {
-        data: geist500,
-        name: "Geist",
-        style: "normal",
-        weight: 500,
-      },
-      {
-        data: geist700,
-        name: "Geist",
-        style: "normal",
-        weight: 700,
-      },
+      { name: "Geist", weight: 500, data: geistMedium },
+      { name: "Geist", weight: 700, data: geistBold },
     ])
 }
 
