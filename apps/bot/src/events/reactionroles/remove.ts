@@ -1,38 +1,46 @@
-import { botEvent } from "phasebot"
+import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
 import { cache } from "~/lib/cache"
 
-export default botEvent("messageReactionRemove", async (_, reaction, user) => {
-  if (user.bot || !reaction.message.inGuild()) return
+export default new BotEventBuilder()
+  .setName("messageReactionRemove")
+  .setExecute(async (_, reaction, user) => {
+    if (user.bot || !reaction.message.inGuild()) return
 
-  const guildDoc = await cache.guilds.get(reaction.message.guildId)
-  const reactionRolesModule = guildDoc?.modules?.[ModuleId.ReactionRoles]
+    const guildDoc = await cache.guilds.get(reaction.message.guildId)
+    const moduleData = guildDoc?.modules?.[ModuleId.ReactionRoles]
 
-  if (
-    !reactionRolesModule?.enabled ||
-    reactionRolesModule.channel !== reaction.message.channelId ||
-    reactionRolesModule.message !== reaction.message.id
-  ) {
-    return
-  }
-
-  for (const reactionRoleReaction of reactionRolesModule.reactions) {
     if (
-      reactionRoleReaction.emoji !== reaction.emoji.id &&
-      reactionRoleReaction.emoji !== reaction.emoji.name
+      !moduleData?.enabled ||
+      moduleData.channel !== reaction.message.channelId ||
+      moduleData.message !== reaction.message.id
     ) {
-      continue
+      return
     }
 
-    const role = reaction.message.guild.roles.cache.get(
-      reactionRoleReaction.role,
-    )
-    const member = reaction.message.guild.members.cache.get(user.id)
+    for (const moduleReaction of moduleData.reactions) {
+      if (
+        moduleReaction.emoji !== reaction.emoji.id &&
+        moduleReaction.emoji !== reaction.emoji.name
+      ) {
+        continue
+      }
 
-    if (role && role.editable && member) {
-      member.roles.remove(role)
+      const role = reaction.message.guild.roles.cache.get(moduleReaction.role)
+
+      const member =
+        reaction.message.guild.members.cache.get(user.id) ??
+        (await reaction.message.guild.members.fetch(user.id).catch(() => null))
+
+      if (role && role.editable && member) {
+        member.roles.remove(role).catch((error) => {
+          console.error(
+            `Failed to remove reaction role ${role.id} from member ${member.id} in guild ${reaction.message.guild!.id}:`,
+            error,
+          )
+        })
+      }
     }
-  }
-})
+  })
