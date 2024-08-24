@@ -1,9 +1,11 @@
 import { headers as getHeaders } from "next/headers"
+import { cache } from "react"
 
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
+import { ClientOnly } from "~/components/client-only"
 import { DashboardProvider } from "~/components/dashboard/context"
 
 import { database } from "~/lib/db"
@@ -22,11 +24,7 @@ import type { DashboardData, GuildModulesWithData } from "~/types/dashboard"
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
 
-export default async function Template({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+const getDashboardData = cache(async () => {
   const headers = getHeaders()
 
   const guildId = headers.get("x-guild-id")
@@ -116,5 +114,19 @@ export default async function Template({
     },
   }
 
-  return <DashboardProvider value={dashboardData}>{children}</DashboardProvider>
+  return dashboardData
+})
+
+export default async function Template({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  const dashboardData = await getDashboardData()
+
+  return (
+    <ClientOnly>
+      <DashboardProvider value={dashboardData}>{children}</DashboardProvider>
+    </ClientOnly>
+  )
 }
