@@ -1,5 +1,6 @@
 import { ImageBuilder } from "phasebot/builders"
 
+import { tw } from "~/lib/tw"
 import { getDayName } from "~/lib/utils"
 
 import geist500 from "./fonts/Geist-500.otf"
@@ -9,76 +10,60 @@ import type { getWeatherData } from "~/commands/(info)/weather"
 
 interface WeatherCardProps extends Awaited<ReturnType<typeof getWeatherData>> {}
 
-export const generateWeatherCard = (props: WeatherCardProps) => {
+export function generateWeatherCard(props: WeatherCardProps) {
   return new ImageBuilder(
     (
       <div
-        tw="flex flex-col font-bold text-[#f8f8f8]"
-        style={{
-          fontFamily: "Geist",
-          letterSpacing: "-0.04em",
-          lineHeight: "1.25em",
-        }}
+        style={tw`text-foreground flex flex-col font-['Geist'] font-bold leading-5 tracking-tighter`}
       >
         <div
-          tw="px-12 py-9 flex flex-col justify-center bg-[#282828] rounded-t-[36px]"
-          style={{ gap: "36px" }}
+          style={tw`bg-accent flex flex-col justify-center gap-9 rounded-t-3xl px-12 py-9`}
         >
-          <div tw="flex items-center justify-between" style={{ gap: "36px" }}>
-            <div tw="font-bold text-[128px]">
-              {props.current.temperature.actual + "°"}
+          <div style={tw`flex items-center justify-between gap-9`}>
+            <div style={tw`text-9xl font-bold`}>
+              {degrees(props.current.temperature.actual)}
             </div>
-            <div
-              tw="flex flex-col items-end text-right"
-              style={{ gap: "36px" }}
-            >
-              <div tw="flex flex-col items-end">
-                <div tw="font-bold text-[32px]">{`${props.location.name}, ${props.location.admin}`}</div>
-                <div tw="font-medium text-[28px] text-[#C0C0C0]">
+            <div style={tw`flex items-end gap-9 text-right`}>
+              <div style={tw`flex flex-col items-end`}>
+                <div
+                  style={tw`text-4xl font-bold`}
+                >{`${props.location.name}, ${props.location.admin}`}</div>
+                <div style={tw`text-muted-foreground text-3xl font-medium`}>
                   {props.location.country}
                 </div>
               </div>
-              <div tw="font-bold text-[32px]">
-                {`Feels like ${props.current.temperature.feelsLike}°`}
-              </div>
             </div>
           </div>
-          <div
-            tw="flex items-center justify-between h-[75px]"
-            style={{ gap: "36px" }}
-          >
-            <div tw="flex flex-col">
-              <div tw="font-bold text-[32px]">Humidity</div>
-              <div tw="font-medium text-[28px] text-[#C0C0C0]">
-                {`${props.current.humidity}%, dew point is ${props.current.dewpoint}°`}
+          <div style={tw`flex items-center justify-between gap-9`}>
+            <div style={tw`flex flex-col`}>
+              <div style={tw`text-4xl font-bold`}>Humidity</div>
+              <div style={tw`text-muted-foreground text-3xl font-medium`}>
+                {`${props.current.humidity}%, dew point is ${degrees(props.current.dewpoint)}`}
               </div>
             </div>
-            <div tw="flex flex-col items-end text-right">
-              <div tw="font-bold text-[32px]">Precipitation</div>
-              <div tw="font-medium text-[28px] text-[#C0C0C0]">
+            <div style={tw`flex flex-col items-end text-right`}>
+              <div style={tw`text-4xl font-bold`}>Precipitation</div>
+              <div style={tw`text-muted-foreground text-3xl font-medium`}>
                 {`${props.current.precipitation} ${props.units === "metric" ? "mm" : "inches"} in next 24h`}
               </div>
             </div>
           </div>
-          <div
-            tw="flex items-center justify-between h-[75px]"
-            style={{ gap: "36px" }}
-          >
-            <div tw="flex flex-col">
-              <div tw="font-bold text-[32px]">UV Index</div>
-              <div tw="font-medium text-[28px] text-[#C0C0C0]">
+          <div style={tw`flex items-center justify-between gap-9`}>
+            <div style={tw`flex flex-col`}>
+              <div style={tw`text-4xl font-bold`}>UV Index</div>
+              <div style={tw`text-muted-foreground text-3xl font-medium`}>
                 {`${props.current.uvRadiation.description} (${props.current.uvRadiation.index})`}
               </div>
             </div>
-            <div tw="flex flex-col items-end text-right">
-              <div tw="font-bold text-[32px]">Visibility</div>
-              <div tw="font-medium text-[28px] text-[#C0C0C0]">
+            <div style={tw`flex flex-col items-end text-right`}>
+              <div style={tw`text-4xl font-bold`}>Visibility</div>
+              <div style={tw`text-muted-foreground text-3xl font-medium`}>
                 {`${props.current.visibility.description} (${props.current.visibility.distance} ${props.units === "metric" ? "km" : "miles"})`}
               </div>
             </div>
           </div>
         </div>
-        <div tw="flex bg-[#282828]">
+        <div style={tw`bg-accent flex`}>
           <svg
             width="730"
             height="100"
@@ -93,37 +78,38 @@ export const generateWeatherCard = (props: WeatherCardProps) => {
           </svg>
         </div>
         <div
-          tw="flex items-center bg-[#101010] px-12 py-9 rounded-b-[36px]"
-          style={{ gap: "36px" }}
+          style={tw`bg-background flex items-center gap-9 rounded-b-3xl px-12 py-9`}
         >
-          <div tw="flex flex-col grow" style={{ gap: "12px" }}>
+          <div style={tw`flex grow flex-col gap-3`}>
             {props.forecast.map((forecast, index) => (
               <div
                 key={index}
-                tw="flex items-center justify-between h-[40px]"
-                style={{ gap: "12px" }}
+                style={tw`flex items-center justify-between gap-3`}
               >
-                <div tw="font-bold text-[32px] text-left">
+                <div style={tw`text-left text-4xl font-bold`}>
                   {getDayName(forecast.day)}
                 </div>
-                <div tw="font-medium text-[28px] text-[#C0C0C0] text-right">
+                <div
+                  style={tw`text-muted-foreground text-right text-3xl font-medium`}
+                >
                   {forecast.weather}
                 </div>
               </div>
             ))}
           </div>
-          <div tw="flex flex-col" style={{ gap: "12px" }}>
+          <div style={tw`flex flex-col gap-3`}>
             {props.forecast.map((forecast, index) => (
               <div
                 key={index}
-                tw="flex items-center justify-between h-[40px]"
-                style={{ gap: "12px" }}
+                style={tw`flex items-center justify-between gap-3`}
               >
-                <div tw="font-bold text-[32px] text-left">
-                  {forecast.temperature.max + "°"}
+                <div style={tw`text-4xl font-bold`}>
+                  {degrees(forecast.temperature.max)}
                 </div>
-                <div tw="font-medium text-[32px] text-[#C0C0C0] text-right">
-                  {forecast.temperature.max + "°"}
+                <div
+                  style={tw`text-muted-foreground text-right text-3xl font-medium`}
+                >
+                  {degrees(forecast.temperature.max)}
                 </div>
               </div>
             ))}
@@ -133,7 +119,7 @@ export const generateWeatherCard = (props: WeatherCardProps) => {
     ),
   )
     .setWidth(730)
-    .setHeight(970)
+    .setHeight(920)
     .setFonts([
       {
         data: geist500,
@@ -148,4 +134,8 @@ export const generateWeatherCard = (props: WeatherCardProps) => {
         weight: 700,
       },
     ])
+}
+
+function degrees(degrees: string | number) {
+  return degrees + "°"
 }
