@@ -12,7 +12,9 @@ export const DashboardNavigation = () => {
     <>
       <nav className="hidden h-screen min-w-[20rem] flex-col justify-between border-r p-12 sm:flex">
         <div className="flex flex-col gap-16">
-          <h3 className="text-4xl font-semibold leading-none">Phase</h3>
+          <h3 className="text-4xl font-bold leading-none tracking-tighter">
+            Phase
+          </h3>
           <div className="flex flex-col gap-6">
             <Link
               href={"/dashboard/modules"}
