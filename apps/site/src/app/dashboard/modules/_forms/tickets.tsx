@@ -208,7 +208,7 @@ export const Tickets = () => {
                       <FormItem>
                         <FormLabel>Mention</FormLabel>
                         <FormControl>
-                          <SelectRole roles={roles} {...field} />
+                          <SelectRole {...field} />
                         </FormControl>
                         <FormDescription>
                           The role to mention on ticket create

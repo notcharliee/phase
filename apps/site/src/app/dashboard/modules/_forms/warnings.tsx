@@ -107,7 +107,7 @@ export const Warnings = () => {
                   <FormLabel>Warning {index + 1}</FormLabel>
                   <FormControl>
                     <div className="flex gap-3">
-                      <SelectRole roles={roles} {...field} />
+                      <SelectRole {...field} />
                       <Button
                         variant="outline"
                         size="icon"

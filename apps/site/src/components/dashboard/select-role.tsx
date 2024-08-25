@@ -11,22 +11,27 @@ import {
   SelectTrigger,
 } from "~/components/ui/select"
 
+import { useDashboardContext } from "~/hooks/use-dashboard-context"
+
 import { cn } from "~/lib/utils"
 
 import type { APIRole } from "discord-api-types/v10"
 import type { ControllerRenderProps } from "react-hook-form"
 
 interface SelectRoleProps extends ControllerRenderProps {
-  roles: APIRole[]
+  roles?: APIRole[]
   placeholder?: string
 }
 
 export function SelectRole(props: SelectRoleProps) {
   const [key, setKey] = useState(+new Date())
 
-  const roles = props.roles
-    .filter((role) => role.name !== "@everyone")
-    .sort((a, b) => b.position - a.position)
+  const dashboardData = useDashboardContext()
+
+  const roles = (
+    props.roles ??
+    dashboardData.guild.roles.filter((role) => role.name !== "@everyone")
+  ).sort((a, b) => b.position - a.position)
 
   const selectedRole = roles.find((role) => role.id === props.value)
 
@@ -55,7 +60,7 @@ export function SelectRole(props: SelectRoleProps) {
               : undefined,
           }}
         >
-          {selectedRole?.name ?? placeholder}
+          {selectedRole?.name ? `@${selectedRole.name}` : placeholder}
         </span>
       </SelectTrigger>
       <SelectContent>
@@ -73,7 +78,7 @@ export function SelectRole(props: SelectRoleProps) {
               )}
             >
               <div className="flex items-center justify-between">
-                {role.name}
+                {`@${role.name}`}
                 {props.value === role.id && (
                   <CheckIcon className="ml-auto h-4 w-4" />
                 )}

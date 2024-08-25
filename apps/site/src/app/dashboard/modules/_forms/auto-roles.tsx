@@ -100,7 +100,7 @@ export const AutoRoles = () => {
                   <FormItem>
                     <FormControl>
                       <div className="flex gap-3">
-                        <SelectRole roles={roles} {...field} />
+                        <SelectRole {...field} />
                         <Button
                           variant="outline"
                           size="icon"

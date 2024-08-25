@@ -253,7 +253,7 @@ export const Levels = () => {
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormControl>
-                          <SelectRole roles={roles} {...field} />
+                          <SelectRole {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
