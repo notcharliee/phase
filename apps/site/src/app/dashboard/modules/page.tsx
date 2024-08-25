@@ -1,14 +1,16 @@
 "use client"
 
-import { ModuleId, modules } from "@repo/config/phase/modules.ts"
+// import { PlusIcon } from "@radix-ui/react-icons"
+import { ModuleId, modules, moduleTags } from "@repo/config/phase/modules.ts"
+import { useLocalStorage } from "@uidotdev/usehooks"
 import { toast } from "sonner"
 
-import { Button } from "~/components/ui/button"
+import { Badge } from "~/components/ui/badge"
+// import { Button } from "~/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "~/components/ui/card"
@@ -21,99 +23,265 @@ import {
   CredenzaTitle,
   CredenzaTrigger,
 } from "~/components/ui/credenza"
+// import { Link } from "~/components/ui/link"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select"
 import { Switch } from "~/components/ui/switch"
 
+// import { useMediaQuery } from "~/hooks/use-media-query"
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
-import { useMediaQuery } from "~/hooks/use-media-query"
+
+import { GuildModules } from "~/lib/db"
 
 import { updateModule } from "../_actions/updateModule"
 import { moduleForms } from "./forms"
 
-import type { GuildModules } from "~/lib/db"
+const filterOptions = [
+  { label: "None", value: "none" },
+  { label: "Engagement", value: "engagement" },
+  { label: "Moderation", value: "moderation" },
+  { label: "Utility", value: "utility" },
+  { label: "Notifications", value: "notifications" },
+  { label: "New", value: "new" },
+  { label: "Beta", value: "beta" },
+] as const satisfies {
+  label: (typeof moduleTags)[number] | "None"
+  value: Lowercase<(typeof moduleTags)[number]> | "none"
+}[]
 
-export default function ModulesPage() {
-  const dashboard = useDashboardContext()
+export default function Page() {
+  const dashboardData = useDashboardContext()
 
-  const isOneColumn = useMediaQuery("(max-width: 1024px)")
-  const isTwoColumn = useMediaQuery("(max-width: 1280px)")
-  const columnCount = isOneColumn ? 1 : isTwoColumn ? 2 : 3
+  const [filter, setFilter] = useLocalStorage<
+    (typeof filterOptions)[number]["value"]
+  >("modulesFilter", "none")
+
+  const guildModules = dashboardData.guild.modules ?? {}
+  const guildModuleIds = Object.keys(guildModules) as ModuleId[]
+
+  const guildModulesData = guildModuleIds
+    .map((moduleId) => ({
+      ...modules[moduleId],
+      id: moduleId,
+      enabled: guildModules[moduleId]?.enabled ?? false,
+    }))
+    .filter((moduleInfo) => {
+      if (!filter) return true
+      return moduleInfo.tags.some((tag) =>
+        filterOptions.some(
+          (filterOption) => filterOption.value === tag.toLowerCase(),
+        ),
+      )
+    })
 
   return (
-    <div className="grid gap-2 [--column_count:1] lg:grid-cols-2 lg:gap-4 lg:[--column_count:2] xl:grid-cols-3 xl:[--column_count:3]">
-      {Object.entries(modules).map(
-        ([moduleId, { name, description }], index) => {
-          const moduleData =
-            dashboard.guild.modules?.[moduleId as keyof GuildModules]
-
+    <div className="space-y-8 [--column-count:1] lg:[--column-count:2] xl:[--column-count:3]">
+      <div className="grid w-full grid-cols-[repeat(var(--column-count),minmax(0,1fr))] gap-4">
+        <h1 className="hidden text-3xl font-bold lg:block xl:col-span-2">
+          Modules
+        </h1>
+        <div className="flex items-center space-x-2">
+          <SelectFilter value={filter} onChange={setFilter} />
+          {/* <AddModule variant="button" /> */}
+        </div>
+      </div>
+      <div className="grid grid-cols-[repeat(var(--column-count),minmax(0,1fr))] gap-4">
+        {guildModulesData.map((moduleData) => {
           const moduleKey = Object.keys(ModuleId)[
-            Object.values(ModuleId).indexOf(moduleId as ModuleId)
+            Object.values(ModuleId).indexOf(moduleData.id)
           ] as keyof typeof moduleForms
 
           const ModuleForm = moduleForms[moduleKey]
           if (!ModuleForm) return null
 
           return (
-            <Card
-              key={name}
-              className="animate-in slide-in-from-top-2 fade-in fill-mode-backwards flex flex-col duration-700"
-              style={{
-                animationDelay: `calc(150ms * ${Math.floor(index / columnCount)})`,
-              }}
+            <ModuleCard
+              key={moduleData.name}
+              id={moduleData.id}
+              name={moduleData.name}
+              description={moduleData.description}
+              tags={moduleData.tags}
+              enabled={moduleData.enabled}
             >
-              <CardHeader className="flex-row justify-between space-y-0">
-                <CardTitle>{name}</CardTitle>
-                <ModuleSwitch
-                  moduleId={moduleId as keyof GuildModules}
-                  moduleData={moduleData}
-                />
-              </CardHeader>
-              <CardContent>
-                <CardDescription>{description}</CardDescription>
-              </CardContent>
-              <CardFooter className="h-full">
-                <Credenza>
-                  <CredenzaContent className="max-h-[90%] overflow-auto lg:max-h-[70%]">
-                    <CredenzaHeader>
-                      <CredenzaTitle>{name}</CredenzaTitle>
-                      <CredenzaDescription>{description}</CredenzaDescription>
-                    </CredenzaHeader>
-                    <CredenzaBody>
-                      <ModuleForm />
-                    </CredenzaBody>
-                  </CredenzaContent>
-                  <CredenzaTrigger asChild>
-                    <Button variant="secondary" className="mt-auto w-full">
-                      {moduleData ? "Edit module" : "Setup module"}
-                    </Button>
-                  </CredenzaTrigger>
-                </Credenza>
-              </CardFooter>
-            </Card>
+              <ModuleForm />
+            </ModuleCard>
           )
-        },
-      )}
+        })}
+        {/* <AddModule variant="card" /> */}
+      </div>
     </div>
   )
 }
 
-const ModuleSwitch = <T extends keyof GuildModules>({
-  moduleId,
-  moduleData,
-}: {
+interface SelectFilterProps {
+  value: (typeof filterOptions)[number]["value"]
+  onChange: (value: (typeof filterOptions)[number]["value"]) => void
+}
+
+export function SelectFilter(props: SelectFilterProps) {
+  return (
+    <Select defaultValue={props.value} onValueChange={props.onChange}>
+      <SelectTrigger>
+        <div className="inline-flex space-x-2 font-medium">
+          <span className="text-muted-foreground">Filters:</span>
+          <SelectValue />
+        </div>
+      </SelectTrigger>
+      <SelectContent>
+        {filterOptions.map(({ label, value }) => (
+          <SelectItem value={value} key={value}>
+            {label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  )
+}
+
+// interface AddModuleProps {
+//   variant: "button" | "card"
+// }
+
+// function AddModule(props: AddModuleProps) {
+//   const dashboardData = useDashboardContext()
+//   const isMobile = useMediaQuery("(max-width: 1024px)")
+
+//   const guildModules = dashboardData.guild.modules ?? {}
+//   const guildModuleIds = Object.keys(guildModules) as ModuleId[]
+
+//   const guildModulesInfo = (Object.keys(modules) as ModuleId[])
+//     .filter((key) => !guildModuleIds.includes(key))
+//     .map((moduleId) => ({
+//       ...modules[moduleId],
+//       id: moduleId,
+//       enabled: false,
+//     }))
+
+//   return (
+//     <Credenza>
+//       <CredenzaTrigger asChild>
+//         {props.variant === "button" ? (
+//           isMobile ? (
+//             <Button size={"icon"} className="lg:hidden">
+//               <PlusIcon className="size-5" />
+//             </Button>
+//           ) : (
+//             <Button className="hidden space-x-2 lg:inline-flex">
+//               <PlusIcon className="size-4" />
+//               <span>Add Module</span>
+//             </Button>
+//           )
+//         ) : (
+//           <Button
+//             variant={"outline"}
+//             className="text-muted-foreground hidden h-full space-x-2 rounded-xl border-dashed text-base font-normal lg:flex"
+//           >
+//             <PlusIcon className="size-5" />
+//             <span>Add Module</span>
+//           </Button>
+//         )}
+//       </CredenzaTrigger>
+//       <CredenzaContent>
+//         <CredenzaHeader>
+//           <CredenzaTitle>Add Module</CredenzaTitle>
+//           <CredenzaDescription>
+//             For information about modules, you can either read our{" "}
+//             <Link href="/docs">docs</Link> or ask us directly in our{" "}
+//             <Link href="/redirect/discord">discord server.</Link>
+//           </CredenzaDescription>
+//         </CredenzaHeader>
+//         <CredenzaBody>
+//           <Select>
+//             <SelectTrigger>
+//               <div className="inline-flex space-x-2 font-medium">
+//                 <span className="text-muted-foreground">Select a module:</span>
+//                 <SelectValue />
+//               </div>
+//             </SelectTrigger>
+//             <SelectContent>
+//               {guildModulesInfo.map(({ name, id }) => (
+//                 <SelectItem value={id} key={id}>
+//                   {name}
+//                 </SelectItem>
+//               ))}
+//             </SelectContent>
+//           </Select>
+//         </CredenzaBody>
+//       </CredenzaContent>
+//     </Credenza>
+//   )
+// }
+
+interface ModuleCardProps {
+  id: ModuleId
+  name: string
+  description: string
+  tags: string[]
+  enabled: boolean
+  children: React.ReactNode
+}
+
+function ModuleCard(props: ModuleCardProps) {
+  return (
+    <Credenza>
+      <CredenzaTrigger asChild>
+        <Card className="focus-visible:ring-ring h-full cursor-pointer text-start transition-all focus-visible:outline-none focus-visible:ring-1">
+          <CardHeader className="flex-row justify-between space-y-0">
+            <div className="flex flex-col space-y-1.5">
+              <CardTitle>{props.name}</CardTitle>
+              <div className="inline-flex gap-0.5">
+                {props.tags.map((tag) => (
+                  <Badge variant={"secondary"} key={tag}>
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+            <ModuleSwitch defaultChecked={props.enabled} moduleId={props.id} />
+          </CardHeader>
+          <CardContent>
+            <CardDescription>{props.description}</CardDescription>
+          </CardContent>
+        </Card>
+      </CredenzaTrigger>
+      <CredenzaContent className="max-h-[90%] overflow-auto lg:max-h-[80%]">
+        <CredenzaHeader>
+          <CredenzaTitle>{props.name}</CredenzaTitle>
+          <CredenzaDescription>{props.description}</CredenzaDescription>
+        </CredenzaHeader>
+        <CredenzaBody>{props.children}</CredenzaBody>
+      </CredenzaContent>
+    </Credenza>
+  )
+}
+
+interface ModuleSwitchProps<T extends ModuleId> {
+  defaultChecked: boolean
   moduleId: T
-  moduleData: GuildModules[T] | undefined
-}) => {
-  const dashboard = useDashboardContext()
+}
+
+function ModuleSwitch<T extends ModuleId>(props: ModuleSwitchProps<T>) {
+  const dashboardData = useDashboardContext()
 
   const onCheckedChange = async (checked: boolean) => {
     try {
-      const updatedModuleData = await updateModule(moduleId, {
-        enabled: checked,
-      } as GuildModules[T])
+      const currentModuleData = dashboardData.guild.modules![
+        props.moduleId
+      ]! as GuildModules[T]
 
-      dashboard.setData((dashboardData) => {
+      const updatedModuleData = await updateModule(props.moduleId, {
+        ...currentModuleData,
+        enabled: checked,
+      })
+
+      dashboardData.setData((dashboardData) => {
         if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-        dashboardData.guild.modules[moduleId] = updatedModuleData
+        dashboardData.guild.modules[props.moduleId] = updatedModuleData
         return dashboardData
       })
     } catch {
@@ -124,10 +292,9 @@ const ModuleSwitch = <T extends keyof GuildModules>({
 
   return (
     <Switch
-      defaultChecked={moduleData?.enabled ?? false}
-      onCheckedChange={moduleData ? onCheckedChange : undefined}
-      disabled={!moduleData}
-      title={!moduleData ? "Module not configured" : undefined}
+      defaultChecked={props.defaultChecked}
+      onClick={(event) => event.stopPropagation()}
+      onCheckedChange={onCheckedChange}
     />
   )
 }
