@@ -62,21 +62,16 @@ export default function Page() {
   >("modulesFilter", "none")
 
   const guildModules = dashboardData.guild.modules ?? {}
-  const guildModuleIds = Object.keys(guildModules) as ModuleId[]
 
-  const guildModulesData = guildModuleIds
-    .map((moduleId) => ({
-      ...modules[moduleId],
-      id: moduleId,
-      enabled: guildModules[moduleId]?.enabled ?? false,
+  const guildModulesData = Object.entries(modules)
+    .map(([moduleId, moduleInfo]) => ({
+      ...moduleInfo,
+      id: moduleId as ModuleId,
+      enabled: guildModules[moduleId as ModuleId]?.enabled ?? false,
     }))
     .filter((moduleInfo) => {
-      if (!filter) return true
-      return moduleInfo.tags.some((tag) =>
-        filterOptions.some(
-          (filterOption) => filterOption.value === tag.toLowerCase(),
-        ),
-      )
+      if (filter === "none") return true
+      return moduleInfo.tags.some((tag) => tag.toLowerCase() === filter)
     })
 
   return (
