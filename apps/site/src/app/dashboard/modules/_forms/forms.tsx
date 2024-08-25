@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 
-import { ChannelType } from "@discordjs/core/http-only"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
 import { ModuleId } from "@repo/config/phase/modules.ts"
@@ -95,8 +94,6 @@ export const Forms = () => {
     })
   }
 
-  const { channels } = dashboard.guild
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -107,12 +104,7 @@ export const Forms = () => {
             <FormItem>
               <FormLabel>Channel</FormLabel>
               <FormControl>
-                <SelectChannel
-                  categories
-                  channelType={ChannelType.GuildText}
-                  channels={channels}
-                  {...field}
-                />
+                <SelectChannel {...field} />
               </FormControl>
               <FormDescription>
                 Where to send submitted form responses (keep private)
@@ -163,12 +155,7 @@ export const Forms = () => {
                         <FormItem>
                           <FormLabel>Channel</FormLabel>
                           <FormControl>
-                            <SelectChannel
-                              categories
-                              channelType={ChannelType.GuildText}
-                              channels={channels}
-                              {...field}
-                            />
+                            <SelectChannel {...field} />
                           </FormControl>
                           <FormDescription>
                             Where to send the create form message

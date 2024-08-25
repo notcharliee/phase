@@ -70,8 +70,6 @@ export const JoinToCreates = () => {
     form.reset(data)
   }
 
-  const { channels } = dashboard.guild
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -83,9 +81,7 @@ export const JoinToCreates = () => {
               <FormLabel>Trigger Channel</FormLabel>
               <FormControl>
                 <SelectChannel
-                  categories
                   channelType={ChannelType.GuildVoice}
-                  channels={channels}
                   {...field}
                 />
               </FormControl>
@@ -105,7 +101,6 @@ export const JoinToCreates = () => {
               <FormControl>
                 <SelectChannel
                   channelType={ChannelType.GuildCategory}
-                  channels={channels}
                   {...field}
                 />
               </FormControl>

@@ -4,7 +4,6 @@ import { useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ModuleId } from "@repo/config/phase/modules.ts"
-import { ChannelType } from "discord-api-types/v10"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -76,8 +75,6 @@ export const AuditLogs = () => {
     })
   }
 
-  const { channels } = dashboard.guild
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -89,12 +86,7 @@ export const AuditLogs = () => {
               <FormItem>
                 <FormLabel>Server Logs</FormLabel>
                 <FormControl>
-                  <SelectChannel
-                    categories
-                    channelType={ChannelType.GuildText}
-                    channels={channels}
-                    {...field}
-                  />
+                  <SelectChannel {...field} />
                 </FormControl>
                 <FormDescription>
                   Logs for channels, roles, boosts, and emojis
@@ -110,12 +102,7 @@ export const AuditLogs = () => {
               <FormItem>
                 <FormLabel>Message Logs</FormLabel>
                 <FormControl>
-                  <SelectChannel
-                    categories
-                    channelType={ChannelType.GuildText}
-                    channels={channels}
-                    {...field}
-                  />
+                  <SelectChannel {...field} />
                 </FormControl>
                 <FormDescription>
                   Logs for message deletes and edits
@@ -131,12 +118,7 @@ export const AuditLogs = () => {
               <FormItem>
                 <FormLabel>Member Logs</FormLabel>
                 <FormControl>
-                  <SelectChannel
-                    categories
-                    channelType={ChannelType.GuildText}
-                    channels={channels}
-                    {...field}
-                  />
+                  <SelectChannel {...field} />
                 </FormControl>
                 <FormDescription>
                   Logs for member joins, leaves and edits
@@ -152,12 +134,7 @@ export const AuditLogs = () => {
               <FormItem>
                 <FormLabel>Voice Logs</FormLabel>
                 <FormControl>
-                  <SelectChannel
-                    categories
-                    channelType={ChannelType.GuildText}
-                    channels={channels}
-                    {...field}
-                  />
+                  <SelectChannel {...field} />
                 </FormControl>
                 <FormDescription>
                   Logs for voice channel joins, leaves, mutes, and deafens
@@ -173,12 +150,7 @@ export const AuditLogs = () => {
               <FormItem>
                 <FormLabel>Invite Logs</FormLabel>
                 <FormControl>
-                  <SelectChannel
-                    categories
-                    channelType={ChannelType.GuildText}
-                    channels={channels}
-                    {...field}
-                  />
+                  <SelectChannel {...field} />
                 </FormControl>
                 <FormDescription>
                   Logs for invite creates and usage
@@ -194,12 +166,7 @@ export const AuditLogs = () => {
               <FormItem>
                 <FormLabel>Punishment Logs</FormLabel>
                 <FormControl>
-                  <SelectChannel
-                    categories
-                    channelType={ChannelType.GuildText}
-                    channels={channels}
-                    {...field}
-                  />
+                  <SelectChannel {...field} />
                 </FormControl>
                 <FormDescription>
                   Logs for warns, mutes, kicks, and bans

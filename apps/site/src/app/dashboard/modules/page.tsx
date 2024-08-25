@@ -230,7 +230,10 @@ function ModuleCard(props: ModuleCardProps) {
   return (
     <Credenza>
       <CredenzaTrigger asChild>
-        <Card className="focus-visible:ring-ring h-full cursor-pointer text-start transition-all focus-visible:outline-none focus-visible:ring-1">
+        <Card
+          tabIndex={0}
+          className="focus-visible:ring-ring h-full cursor-pointer text-start transition-all focus-visible:outline-none focus-visible:ring-1"
+        >
           <CardHeader className="flex-row justify-between space-y-0">
             <div className="flex flex-col space-y-1.5">
               <CardTitle>{props.name}</CardTitle>

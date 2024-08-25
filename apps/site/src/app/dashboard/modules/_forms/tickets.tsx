@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 
-import { ChannelType } from "@discordjs/core/http-only"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
 import { ModuleId } from "@repo/config/phase/modules.ts"
@@ -92,8 +91,6 @@ export const Tickets = () => {
     })
   }
 
-  const { roles, channels } = dashboard.guild
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -104,12 +101,7 @@ export const Tickets = () => {
             <FormItem>
               <FormLabel>Channel</FormLabel>
               <FormControl>
-                <SelectChannel
-                  categories
-                  channelType={ChannelType.GuildText}
-                  channels={channels}
-                  {...field}
-                />
+                <SelectChannel {...field} />
               </FormControl>
               <FormDescription>
                 The channel to create tickets from

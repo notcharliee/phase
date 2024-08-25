@@ -84,8 +84,6 @@ export const Counters = () => {
     })
   }
 
-  const { channels } = dashboard.guild
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -132,9 +130,7 @@ export const Counters = () => {
                           <FormLabel>Channel</FormLabel>
                           <FormControl>
                             <SelectChannel
-                              channels={channels}
                               channelType={ChannelType.GuildVoice}
-                              placeholder="Select a voice channel"
                               {...field}
                             />
                           </FormControl>

@@ -5,7 +5,6 @@ import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
 import { ModuleId } from "@repo/config/phase/modules.ts"
-import { ChannelType } from "discord-api-types/v10"
 import { useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -97,8 +96,6 @@ export const AutoMessages = () => {
     })
   }
 
-  const { channels } = dashboard.guild
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pt-2">
@@ -170,12 +167,7 @@ export const AutoMessages = () => {
                         <FormItem>
                           <FormLabel>Channel</FormLabel>
                           <FormControl>
-                            <SelectChannel
-                              categories
-                              channelType={ChannelType.GuildText}
-                              channels={channels}
-                              {...field}
-                            />
+                            <SelectChannel {...field} />
                           </FormControl>
                           <FormDescription>
                             Where to send the message

@@ -5,7 +5,6 @@ import { useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ModuleId } from "@repo/config/phase/modules.ts"
-import { ChannelType } from "discord-api-types/v10"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -78,8 +77,6 @@ export const WelcomeMessages = () => {
     })
   }
 
-  const { channels } = dashboard.guild
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -90,12 +87,7 @@ export const WelcomeMessages = () => {
             <FormItem>
               <FormLabel>Welcome Channel</FormLabel>
               <FormControl>
-                <SelectChannel
-                  categories
-                  channelType={ChannelType.GuildText}
-                  channels={channels}
-                  {...field}
-                />
+                <SelectChannel {...field} />
               </FormControl>
               <FormDescription>
                 The channel to send welcome messages to

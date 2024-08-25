@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
 import { Label } from "@radix-ui/react-label"
 import { ModuleId } from "@repo/config/phase/modules.ts"
-import { ChannelType } from "discord-api-types/v10"
 import { useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -99,8 +98,6 @@ export const TwitchNotifications = () => {
 
   const formFields = form.watch()
 
-  const { channels } = dashboard.guild
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pt-2">
@@ -151,12 +148,7 @@ export const TwitchNotifications = () => {
                         <FormItem>
                           <FormLabel>Notification Channel</FormLabel>
                           <FormControl>
-                            <SelectChannel
-                              categories
-                              channelType={ChannelType.GuildText}
-                              channels={channels}
-                              {...field}
-                            />
+                            <SelectChannel {...field} />
                           </FormControl>
                           <FormDescription>
                             The channel to send notifications to

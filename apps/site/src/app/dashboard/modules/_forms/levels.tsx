@@ -5,7 +5,6 @@ import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
 import { ModuleId } from "@repo/config/phase/modules.ts"
-import { ChannelType } from "discord-api-types/v10"
 import { useFieldArray, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -82,8 +81,6 @@ export const Levels = () => {
       },
     })
   }
-
-  const { channels, roles } = dashboard.guild
 
   return (
     <Form {...form}>
@@ -170,12 +167,7 @@ export const Levels = () => {
                           <div className="border-muted-foreground absolute -top-3 ml-2 h-[30px] w-[19px] rounded-bl-md border-b border-l"></div>
                         </div>
                         <FormControl>
-                          <SelectChannel
-                            categories
-                            channelType={ChannelType.GuildText}
-                            channels={channels}
-                            {...field}
-                          />
+                          <SelectChannel {...field} />
                         </FormControl>
                       </FormItem>
                     )}
