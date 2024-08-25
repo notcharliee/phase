@@ -78,27 +78,25 @@ export function SelectMention(props: SelectMentionProps) {
           {selectedMention?.label ?? props.placeholder ?? "Select a mention"}
         </span>
       </SelectTrigger>
-      <SelectContent>
-        <div className="max-h-[30vh] overflow-x-hidden overflow-y-scroll p-1">
-          {mentions.map((mention) => (
-            <SelectItem
-              key={mention.value}
-              value={mention.value === props.value ? "deselect" : mention.value}
-              style={{ color: mention.colour }}
-              className={cn(
-                mention.value !== props.value && "text-muted-foreground",
-                "pr-2 [&>*:nth-child(2)]:w-full",
+      <SelectContent className="max-h-[30vh] overflow-x-hidden overflow-y-scroll">
+        {mentions.map((mention) => (
+          <SelectItem
+            key={mention.value}
+            value={mention.value === props.value ? "deselect" : mention.value}
+            style={{ color: mention.colour }}
+            className={cn(
+              mention.value !== props.value && "text-muted-foreground",
+              "pr-2 [&>*:nth-child(2)]:w-full",
+            )}
+          >
+            <div className="flex items-center justify-between">
+              {mention.label}
+              {mention.value === props.value && (
+                <CheckIcon className="ml-auto h-4 w-4" />
               )}
-            >
-              <div className="flex items-center justify-between">
-                {mention.label}
-                {mention.value === props.value && (
-                  <CheckIcon className="ml-auto h-4 w-4" />
-                )}
-              </div>
-            </SelectItem>
-          ))}
-        </div>
+            </div>
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   )

@@ -63,29 +63,27 @@ export function SelectRole(props: SelectRoleProps) {
           {selectedRole?.name ? `@${selectedRole.name}` : placeholder}
         </span>
       </SelectTrigger>
-      <SelectContent>
-        <div className="max-h-[30vh] overflow-x-hidden overflow-y-scroll p-1">
-          {roles.map((role) => (
-            <SelectItem
-              value={role.id === props.value ? "deselect" : role.id}
-              key={role.id}
-              style={{
-                color: role.color ? `#${role.color.toString(16)}` : undefined,
-              }}
-              className={cn(
-                props.value !== role.id && "text-muted-foreground",
-                "pr-2 [&>*:nth-child(2)]:w-full",
+      <SelectContent className="max-h-[30vh] overflow-x-hidden overflow-y-scroll">
+        {roles.map((role) => (
+          <SelectItem
+            value={role.id === props.value ? "deselect" : role.id}
+            key={role.id}
+            style={{
+              color: role.color ? `#${role.color.toString(16)}` : undefined,
+            }}
+            className={cn(
+              props.value !== role.id && "text-muted-foreground",
+              "pr-2 [&>*:nth-child(2)]:w-full",
+            )}
+          >
+            <div className="flex items-center justify-between">
+              {`@${role.name}`}
+              {props.value === role.id && (
+                <CheckIcon className="ml-auto h-4 w-4" />
               )}
-            >
-              <div className="flex items-center justify-between">
-                {`@${role.name}`}
-                {props.value === role.id && (
-                  <CheckIcon className="ml-auto h-4 w-4" />
-                )}
-              </div>
-            </SelectItem>
-          ))}
-        </div>
+            </div>
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   )
