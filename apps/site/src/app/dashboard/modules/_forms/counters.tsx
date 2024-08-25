@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { useState } from "react"
 
-import { ChannelType } from "@discordjs/core/http-only"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
 import { ModuleId } from "@repo/config/phase/modules.ts"
@@ -130,7 +129,7 @@ export const Counters = () => {
                           <FormLabel>Channel</FormLabel>
                           <FormControl>
                             <SelectChannel
-                              channelType={ChannelType.GuildVoice}
+                              channelType="GuildVoice"
                               {...field}
                             />
                           </FormControl>

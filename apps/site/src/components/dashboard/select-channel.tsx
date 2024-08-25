@@ -24,15 +24,15 @@ import type { ControllerRenderProps } from "react-hook-form"
 
 interface SelectChannelProps extends ControllerRenderProps {
   channels?: APIGuildChannel<GuildChannelType>[]
-  channelType?: GuildChannelType
+  channelType?: keyof typeof ChannelType
   categories?: boolean
   placeholder?: string
 }
 
 export function SelectChannel({
   channels,
-  channelType = ChannelType.GuildText,
-  placeholder = `Select a ${channelType === ChannelType.GuildCategory ? "category" : "channel"}`,
+  channelType = "GuildText",
+  placeholder = `Select a ${channelType === "GuildCategory" ? "category" : "channel"}`,
   ...props
 }: SelectChannelProps) {
   const [key, setKey] = useState(+new Date())
@@ -42,7 +42,7 @@ export function SelectChannel({
   channels = channels ?? dashboardData.guild.channels
 
   const filteredChannels = channels
-    .filter((channel) => channel.type === channelType)
+    .filter((channel) => channel.type === ChannelType[channelType])
     .sort((a, b) => a.position - b.position)
 
   const categories = channels

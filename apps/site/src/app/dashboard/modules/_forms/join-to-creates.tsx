@@ -4,7 +4,6 @@ import { useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ModuleId } from "@repo/config/phase/modules.ts"
-import { ChannelType } from "discord-api-types/v10"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -80,10 +79,7 @@ export const JoinToCreates = () => {
             <FormItem>
               <FormLabel>Trigger Channel</FormLabel>
               <FormControl>
-                <SelectChannel
-                  channelType={ChannelType.GuildVoice}
-                  {...field}
-                />
+                <SelectChannel channelType="GuildVoice" {...field} />
               </FormControl>
               <FormDescription>
                 The channel that members join to trigger the module
@@ -99,10 +95,7 @@ export const JoinToCreates = () => {
             <FormItem>
               <FormLabel>Category</FormLabel>
               <FormControl>
-                <SelectChannel
-                  channelType={ChannelType.GuildCategory}
-                  {...field}
-                />
+                <SelectChannel channelType="GuildCategory" {...field} />
               </FormControl>
               <FormDescription>
                 The category where temporary channels will be created
