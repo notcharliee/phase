@@ -99,7 +99,7 @@ export const TwitchNotifications = () => {
 
   const formFields = form.watch()
 
-  const { roles, channels } = dashboard.guild
+  const { channels } = dashboard.guild
 
   return (
     <Form {...form}>
@@ -172,7 +172,7 @@ export const TwitchNotifications = () => {
                         <FormItem>
                           <FormLabel>Notification Mention</FormLabel>
                           <FormControl>
-                            <SelectMention roles={roles} {...field} />
+                            <SelectMention {...field} />
                           </FormControl>
                           <FormDescription>
                             Who to ping when the streamer goes live

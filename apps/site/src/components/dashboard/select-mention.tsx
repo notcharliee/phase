@@ -11,18 +11,26 @@ import {
   SelectTrigger,
 } from "~/components/ui/select"
 
+import { useDashboardContext } from "~/hooks/use-dashboard-context"
+
 import { cn } from "~/lib/utils"
 
 import type { APIRole } from "discord-api-types/v10"
 import type { ControllerRenderProps } from "react-hook-form"
 
 interface SelectMentionProps extends ControllerRenderProps {
-  roles: APIRole[]
+  roles?: APIRole[]
   placeholder?: string
 }
 
 export function SelectMention(props: SelectMentionProps) {
   const [key, setKey] = useState(+new Date())
+
+  const dashboardData = useDashboardContext()
+
+  const roles =
+    props.roles ??
+    dashboardData.guild.roles.filter((role) => role.name !== "@everyone")
 
   interface Mention {
     label: string
@@ -39,13 +47,11 @@ export function SelectMention(props: SelectMentionProps) {
       label: "@here",
       value: "@here",
     },
-    ...props.roles
-      .filter((role) => role.name !== "@everyone")
-      .map((role) => ({
-        label: `@${role.name}`,
-        value: `<@&${role.id}>`,
-        colour: `#${role.color.toString(16)}`,
-      })),
+    ...roles.map((role) => ({
+      label: `@${role.name}`,
+      value: `<@&${role.id}>`,
+      colour: `#${role.color.toString(16)}`,
+    })),
   ]
 
   const selectedMention = mentions.find(
