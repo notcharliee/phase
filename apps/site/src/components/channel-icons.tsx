@@ -2,7 +2,16 @@ import { ChannelType } from "discord-api-types/v10"
 
 import { cn } from "~/lib/utils"
 
-import type { AllowedChannelType } from "./nodes"
+export const allowedChannelTypes = [
+  ChannelType.GuildText,
+  ChannelType.GuildAnnouncement,
+  ChannelType.GuildForum,
+  ChannelType.GuildMedia,
+  ChannelType.GuildVoice,
+  ChannelType.GuildStageVoice,
+] as const
+
+export type AllowedChannelType = (typeof allowedChannelTypes)[number]
 
 export function TextChannelIcon({ className }: { className?: string }) {
   return (

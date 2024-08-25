@@ -1,11 +1,10 @@
 "use client"
 
-import { ChannelType } from "discord-api-types/v10"
-
 import { cn } from "~/lib/utils"
 
-import { ChannelIcon } from "./icons"
+import { allowedChannelTypes, ChannelIcon } from "../../channel-icons"
 
+import type { AllowedChannelType } from "../../channel-icons"
 import type {
   RenderElementProps,
   RenderLeafProps,
@@ -134,16 +133,8 @@ export function TextElementNode({
 
 // channel element //
 
-export const allowedChannelTypes = [
-  ChannelType.GuildText,
-  ChannelType.GuildAnnouncement,
-  ChannelType.GuildForum,
-  ChannelType.GuildMedia,
-  ChannelType.GuildVoice,
-  ChannelType.GuildStageVoice,
-] as const
-
-export type AllowedChannelType = (typeof allowedChannelTypes)[number]
+export { allowedChannelTypes }
+export type { AllowedChannelType }
 
 export interface ChannelElement {
   type: "channel"

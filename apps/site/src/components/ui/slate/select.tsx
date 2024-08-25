@@ -12,7 +12,7 @@ import { useElementSize } from "~/hooks/use-element-size"
 import { cn } from "~/lib/utils"
 
 import { Popover, PopoverContent, PopoverTrigger } from "../popover"
-import { ChannelIcon } from "./icons"
+import { ChannelIcon } from "../../channel-icons"
 import { getCurrentWord } from "./utils"
 
 import type { GuildData } from "."
