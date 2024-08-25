@@ -49,15 +49,21 @@ export function SelectChannel({
     .filter((channel) => channel.type === ChannelType.GuildCategory)
     .sort((a, b) => a.position - b.position)
 
-  const categoriesWithChannels: [string, typeof filteredChannels][] =
-    categories.map((category) => [
-      category.name,
-      filteredChannels.filter((channel) => channel.parent_id === category.id),
-    ])
+  const categoriesWithChannels:
+    | [string, typeof filteredChannels][]
+    | undefined =
+    channelType !== "GuildCategory"
+      ? categories.map((category) => [
+          category.name,
+          filteredChannels.filter(
+            (channel) => channel.parent_id === category.id,
+          ),
+        ])
+      : undefined
 
   const orphanedChannels = categoriesWithChannels
     ? filteredChannels.filter((channel) => !channel.parent_id)
-    : undefined
+    : categories
 
   const selectedChannel = filteredChannels.find(
     (channel) => channel.id === props.value,
@@ -80,7 +86,9 @@ export function SelectChannel({
       <SelectTrigger>
         {selectedChannel ? (
           <div className="inline-flex items-center gap-1">
-            <ChannelIcon type={selectedChannel.type as AllowedChannelType} />
+            {channelType !== "GuildCategory" && (
+              <ChannelIcon type={selectedChannel.type as AllowedChannelType} />
+            )}
             <span>{selectedChannel.name}</span>
           </div>
         ) : (
@@ -102,7 +110,9 @@ export function SelectChannel({
               >
                 <div className="flex items-center justify-between">
                   <div className="inline-flex items-center gap-1">
-                    <ChannelIcon type={channel.type as AllowedChannelType} />
+                    {channelType !== "GuildCategory" && (
+                      <ChannelIcon type={channel.type as AllowedChannelType} />
+                    )}
                     <span>{channel.name}</span>
                   </div>
                   {props.value === channel.id && (
@@ -113,34 +123,35 @@ export function SelectChannel({
             ))}
           </SelectGroup>
         )}
-        {categoriesWithChannels.map(([categoryName, channels]) => (
-          <SelectGroup key={categoryName}>
-            <SelectLabel className="inline-flex items-center gap-1">
-              <ChevronDownIcon className="h-4 w-4" />
-              <span>{categoryName}</span>
-            </SelectLabel>
-            {channels.map((channel) => (
-              <SelectItem
-                value={channel.id === props.value ? "deselect" : channel.id}
-                key={channel.id}
-                className={cn(
-                  props.value !== channel.id && "text-muted-foreground",
-                  "pr-2 [&>*:nth-child(2)]:w-full",
-                )}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="inline-flex items-center gap-1">
-                    <ChannelIcon type={channel.type as AllowedChannelType} />
-                    <span>{channel.name}</span>
-                  </div>
-                  {props.value === channel.id && (
-                    <CheckIcon className="ml-auto h-4 w-4" />
+        {categoriesWithChannels &&
+          categoriesWithChannels.map(([categoryName, channels]) => (
+            <SelectGroup key={categoryName}>
+              <SelectLabel className="inline-flex items-center gap-1">
+                <ChevronDownIcon className="h-4 w-4" />
+                <span>{categoryName}</span>
+              </SelectLabel>
+              {channels.map((channel) => (
+                <SelectItem
+                  value={channel.id === props.value ? "deselect" : channel.id}
+                  key={channel.id}
+                  className={cn(
+                    props.value !== channel.id && "text-muted-foreground",
+                    "pr-2 [&>*:nth-child(2)]:w-full",
                   )}
-                </div>
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        ))}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="inline-flex items-center gap-1">
+                      <ChannelIcon type={channel.type as AllowedChannelType} />
+                      <span>{channel.name}</span>
+                    </div>
+                    {props.value === channel.id && (
+                      <CheckIcon className="ml-auto h-4 w-4" />
+                    )}
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          ))}
       </SelectContent>
     </Select>
   )
