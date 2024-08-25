@@ -1,137 +1,131 @@
 "use client"
 
-import Link from "next/link"
+import NextLink from "next/link"
 import { usePathname } from "next/navigation"
 
 import { DashboardIcon, MixerHorizontalIcon } from "@radix-ui/react-icons"
+import { useMediaQuery } from "@uidotdev/usehooks"
 
-export const DashboardNavigation = () => {
-  const pathname = usePathname().replace("/dashboard/", "")
+import { Link } from "~/components/ui/link"
 
-  return (
-    <>
-      <nav className="hidden h-screen min-w-[20rem] flex-col justify-between border-r p-12 sm:flex">
-        <div className="flex flex-col gap-16">
-          <h3 className="text-4xl font-bold leading-none tracking-tighter">
-            Phase
-          </h3>
-          <div className="flex flex-col gap-6">
-            <Link
-              href={"/dashboard/modules"}
-              className="aria-selected:text-muted-background before:bg-foreground flex w-full items-center gap-2.5 before:absolute before:-ml-5  before:h-[2.75rem] before:w-[16.5rem] before:rounded-2xl before:opacity-0 aria-selected:before:opacity-100"
-              aria-selected={pathname === "modules"}
-            >
-              <DashboardIcon className="z-10 size-6" />
-              <span className="z-10 text-lg font-medium leading-none">
-                Modules
-              </span>
-            </Link>
-            <Link
-              href={"/dashboard/commands"}
-              className="aria-selected:text-muted-background before:bg-foreground flex w-full items-center gap-2.5 before:absolute before:-ml-5  before:h-[2.75rem] before:w-[16.5rem] before:rounded-2xl before:opacity-0 aria-selected:before:opacity-100"
-              aria-selected={pathname === "commands"}
-            >
-              <CommandsIcon className="z-10 size-6" />
-              <span className="z-10 text-lg font-medium leading-none">
-                Commands
-              </span>
-            </Link>
-            <Link
-              href={"/dashboard/settings"}
-              className="aria-selected:text-muted-background before:bg-foreground flex w-full items-center gap-2.5 before:absolute before:-ml-5  before:h-[2.75rem] before:w-[16.5rem] before:rounded-2xl before:opacity-0 aria-selected:before:opacity-100"
-              aria-selected={pathname === "settings"}
-            >
-              <MixerHorizontalIcon className="z-10 size-6" />
-              <span className="z-10 text-lg font-medium leading-none">
-                Settings
-              </span>
-            </Link>
-          </div>
-          <div className="flex flex-col">
-            <h4 className="mb-1.5 font-medium uppercase">Resources</h4>
-            <Link
-              href={"/redirect/discord"}
-              className="text-muted-foreground hover:text-foreground"
-            >
-              Support
-            </Link>
-            <Link
-              href={"/docs"}
-              className="text-muted-foreground hover:text-foreground duration-200"
-            >
-              Documentation
-            </Link>
-          </div>
-          <div className="flex flex-col">
-            <h4 className="mb-1.5 font-medium uppercase">Other Links</h4>
-            <Link
-              href={"/redirect/discord"}
-              className="text-muted-foreground hover:text-foreground duration-200"
-            >
-              Feedback
-            </Link>
-            <Link
-              href={"/contact/bug-report"}
-              className="text-muted-foreground hover:text-foreground duration-200"
-            >
-              Report a Bug
-            </Link>
-            <Link
-              href={"/redirect/donate"}
-              className="text-muted-foreground hover:text-foreground duration-200"
-            >
-              Donate
-            </Link>
-          </div>
+import { cn } from "~/lib/utils"
+
+import { Label } from "../ui/label"
+
+export function DashboardNavigation() {
+  const isMobile = useMediaQuery("not all and (min-width: 640px)")
+
+  return isMobile ? (
+    <nav className="bg-background text-muted-foreground before:from-background relative flex w-screen justify-evenly border-t py-5 before:absolute before:top-[-25px] before:h-6 before:w-full before:bg-gradient-to-t before:to-transparent">
+      <NavigationItem
+        label={"Modules"}
+        href={"/dashboard/modules"}
+        icon={DashboardIcon}
+        mobile
+      />
+      <NavigationItem
+        label={"Commands"}
+        href={"/dashboard/commands"}
+        icon={CommandsIcon}
+        mobile
+      />
+      <NavigationItem
+        label={"Settings"}
+        href={"/dashboard/settings"}
+        icon={MixerHorizontalIcon}
+        mobile
+      />
+    </nav>
+  ) : (
+    <nav className="flex h-screen min-w-[20rem] flex-col justify-between border-r p-12">
+      <div className="space-y-12">
+        <h3 className="text-4xl font-bold leading-none tracking-tighter">
+          Phase
+        </h3>
+        <div className="space-y-1.5">
+          <NavigationItem
+            label={"Modules"}
+            href={"/dashboard/modules"}
+            icon={DashboardIcon}
+          />
+          <NavigationItem
+            label={"Commands"}
+            href={"/dashboard/commands"}
+            icon={CommandsIcon}
+          />
+          <NavigationItem
+            label={"Settings"}
+            href={"/dashboard/settings"}
+            icon={MixerHorizontalIcon}
+          />
         </div>
-        <div className="text-muted-foreground before:bg-foreground relative flex flex-col font-mono text-sm saturate-0 before:absolute before:-left-4 before:h-full before:w-1 before:rounded-l-sm">
-          <span>
-            Made with ❤ by{" "}
-            <Link
-              href={"/redirect/developer"}
-              className="underline underline-offset-2"
-            >
-              mikaela
-            </Link>
-            .
-          </span>
-          <span>
-            Source code is on{" "}
-            <Link
-              href={"/redirect/github"}
-              className="underline underline-offset-2"
-            >
-              GitHub
-            </Link>
-            .
-          </span>
+        <div className="flex flex-col">
+          <Label className="mb-1.5 text-base uppercase">Resources</Label>
+          <NavigationItem label={"Support"} href={"/redirect/discord"} />
+          <NavigationItem label={"Documentation"} href={"/docs"} />
         </div>
-      </nav>
-      <nav className="bg-background text-muted-foreground before:from-background relative flex w-screen justify-evenly border-t py-5 before:absolute before:top-[-25px] before:h-6 before:w-full before:bg-gradient-to-t before:to-transparent sm:hidden">
-        <Link
-          href={"/dashboard/modules"}
-          className="before:bg-foreground aria-selected:text-foreground relative flex justify-center before:absolute before:-bottom-3 before:z-10 before:h-1 before:w-3.5 before:rounded-sm before:opacity-0 aria-selected:before:opacity-100"
-          aria-selected={pathname === "modules"}
-        >
-          <DashboardIcon className="size-7 duration-200" />
-        </Link>
-        <Link
-          href={"/dashboard/commands"}
-          className="before:bg-foreground aria-selected:text-foreground relative flex justify-center before:absolute before:-bottom-3 before:z-10 before:h-1 before:w-3.5 before:rounded-sm before:opacity-0 aria-selected:before:opacity-100"
-          aria-selected={pathname === "commands"}
-        >
-          <CommandsIcon className="size-7 duration-200" />
-        </Link>
-        <Link
-          href={"/dashboard/settings"}
-          className="before:bg-foreground aria-selected:text-foreground relative flex justify-center before:absolute before:-bottom-3 before:z-10 before:h-1 before:w-3.5 before:rounded-sm before:opacity-0 aria-selected:before:opacity-100"
-          aria-selected={pathname === "settings"}
-        >
-          <MixerHorizontalIcon className="size-7 duration-200" />
-        </Link>
-      </nav>
-    </>
+        <div className="flex flex-col">
+          <Label className="mb-1.5 text-base uppercase">Other Links</Label>
+          <NavigationItem label={"Feedback"} href={"/redirect/discord"} />
+          <NavigationItem label={"Report a Bug"} href={"/contact/bug-report"} />
+          <NavigationItem label={"Donate"} href={"/redirect/donate"} />
+        </div>
+      </div>
+      <div className="text-muted-foreground before:bg-foreground relative flex flex-col font-mono text-sm saturate-0 before:absolute before:-left-4 before:h-full before:w-1 before:rounded-l-sm">
+        <span>
+          Made with ❤ by <Link href={"/redirect/developer"}>mikaela.</Link>
+        </span>
+        <span>
+          Source code is on <Link href={"/redirect/github"}>GitHub.</Link>
+        </span>
+      </div>
+    </nav>
   )
+}
+
+interface NavigationItemProps {
+  href: string
+  label: string
+  icon?: typeof DashboardIcon | typeof CommandsIcon
+  mobile?: boolean
+}
+
+function NavigationItem(props: NavigationItemProps) {
+  const pathname = usePathname()
+
+  return props.icon ? (
+    <NextLink
+      href={props.href}
+      aria-selected={pathname === props.href}
+      className={cn(
+        "relative flex before:absolute before:opacity-0 aria-selected:before:opacity-100",
+        props.mobile
+          ? "aria-selected:text-foreground justify-center before:-bottom-3 before:z-10 before:h-1 before:w-3.5 before:rounded-sm"
+          : "before:bg-primary aria-selected:text-primary-foreground w-full items-center gap-2.5 py-2.5 before:-left-5 before:h-full before:w-[calc(100%+2.5rem)] before:rounded-full",
+      )}
+    >
+      {props.mobile ? (
+        <>
+          <props.icon className="size-7 duration-200" />
+          <span className="sr-only">{props.label}</span>
+        </>
+      ) : (
+        <>
+          <props.icon className="z-10 size-6" />
+          <span className="relative z-10 text-lg font-medium leading-none">
+            {props.label}
+          </span>
+        </>
+      )}
+    </NextLink>
+  ) : !props.mobile ? (
+    <NextLink
+      href={props.href}
+      className="text-muted-foreground hover:text-foreground"
+    >
+      {props.label}
+    </NextLink>
+  ) : null
 }
 
 const CommandsIcon = (props: React.SVGProps<SVGSVGElement>) => (
