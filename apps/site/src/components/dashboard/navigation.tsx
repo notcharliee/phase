@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-import { DashboardIcon, GearIcon } from "@radix-ui/react-icons"
+import { DashboardIcon, MixerHorizontalIcon } from "@radix-ui/react-icons"
 
 export const DashboardNavigation = () => {
   const pathname = usePathname().replace("/dashboard/", "")
@@ -41,7 +41,7 @@ export const DashboardNavigation = () => {
               className="aria-selected:text-muted-background before:bg-foreground flex w-full items-center gap-2.5 before:absolute before:-ml-5  before:h-[2.75rem] before:w-[16.5rem] before:rounded-2xl before:opacity-0 aria-selected:before:opacity-100"
               aria-selected={pathname === "settings"}
             >
-              <GearIcon className="z-10 size-6" />
+              <MixerHorizontalIcon className="z-10 size-6" />
               <span className="z-10 text-lg font-medium leading-none">
                 Settings
               </span>
@@ -107,7 +107,7 @@ export const DashboardNavigation = () => {
           </span>
         </div>
       </nav>
-      <nav className="bg-muted-background text-muted-foreground fixed bottom-0 z-50 flex w-screen justify-evenly rounded-t-2xl py-5 sm:hidden">
+      <nav className="bg-background text-muted-foreground before:from-background relative flex w-screen justify-evenly border-t py-5 before:absolute before:top-[-25px] before:h-6 before:w-full before:bg-gradient-to-t before:to-transparent sm:hidden">
         <Link
           href={"/dashboard/modules"}
           className="before:bg-foreground aria-selected:text-foreground relative flex justify-center before:absolute before:-bottom-3 before:z-10 before:h-1 before:w-3.5 before:rounded-sm before:opacity-0 aria-selected:before:opacity-100"
@@ -127,7 +127,7 @@ export const DashboardNavigation = () => {
           className="before:bg-foreground aria-selected:text-foreground relative flex justify-center before:absolute before:-bottom-3 before:z-10 before:h-1 before:w-3.5 before:rounded-sm before:opacity-0 aria-selected:before:opacity-100"
           aria-selected={pathname === "settings"}
         >
-          <GearIcon className="size-7 duration-200" />
+          <MixerHorizontalIcon className="size-7 duration-200" />
         </Link>
       </nav>
     </>
