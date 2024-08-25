@@ -83,7 +83,6 @@ export const ReactionRoles = () => {
   }
 
   const emojis = useMemo(() => emojiData, [])
-  const { roles } = dashboard.guild
 
   return (
     <Form {...form}>
