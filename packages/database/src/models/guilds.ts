@@ -53,6 +53,7 @@ export interface GuildModules {
     time: number
     initialMessage: string
     reminderMessage: string
+    mention?: string
   }
   [ModuleId.Counters]: {
     enabled: boolean
@@ -201,6 +202,7 @@ const modulesSchema = new mongoose.Schema<GuildModules>(
         time: { type: Number, required: true },
         initialMessage: { type: String, required: true },
         reminderMessage: { type: String, required: true },
+        mention: { type: String },
       },
       { _id: false },
     ),

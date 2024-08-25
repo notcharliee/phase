@@ -69,6 +69,7 @@ export const bumpRemindersSchema = z.object({
     .max(2000, {
       message: "Reminder message cannot be longer than 2000 characters",
     }),
+  mention: z.string().optional(),
 })
 
 export const countersSchema = z.object({

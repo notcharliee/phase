@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 import { ModuleFormButtons } from "~/components/dashboard/modules"
+import { SelectMention } from "~/components/dashboard/select-mention"
 import {
   Form,
   FormControl,
@@ -133,7 +134,23 @@ export const BumpReminders = () => {
                 />
               </FormControl>
               <FormDescription>
-                What to send when a member is reminded to bump
+                What to send in the reminder message
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="mention"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Reminder Mention</FormLabel>
+              <FormControl>
+                <SelectMention {...field} />
+              </FormControl>
+              <FormDescription>
+                Who to ping in the reminder message (optional)
               </FormDescription>
               <FormMessage />
             </FormItem>
