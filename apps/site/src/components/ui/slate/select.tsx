@@ -11,8 +11,8 @@ import { useElementSize } from "~/hooks/use-element-size"
 
 import { cn } from "~/lib/utils"
 
-import { Popover, PopoverContent, PopoverTrigger } from "../popover"
 import { ChannelIcon } from "../../channel-icons"
+import { Popover, PopoverContent, PopoverTrigger } from "../popover"
 import { getCurrentWord } from "./utils"
 
 import type { GuildData } from "."
@@ -154,11 +154,12 @@ export const SelectElement = function ({
             return (
               <button
                 key={item.id}
+                onClick={() => onPopoverItemSelect(item)}
+                style={"colour" in item ? { color: item.colour } : undefined}
                 className={cn(
                   "text-muted-foreground relative flex w-full cursor-default select-none items-center gap-1 rounded-sm py-1.5 pl-2 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
                   isSelected && "bg-accent text-accent-foreground",
                 )}
-                onClick={() => onPopoverItemSelect(item)}
               >
                 {currentWordType === "channel" && (
                   <ChannelIcon type={item.type as AllowedChannelType} />
@@ -203,7 +204,7 @@ function searchData<T extends "channel" | "mention">(
         results.push({
           id: role.id,
           name: role.name,
-          colour: role.color ? role.color.toString(16) : "#f8f8f8",
+          colour: role.color ? `#${role.color.toString(16)}` : "#f8f8f8",
           type: "role",
         })
       }

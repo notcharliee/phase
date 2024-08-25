@@ -67,7 +67,7 @@ export function deserialise(value: string, guildData: GuildData): Descendant[] {
         createMentionElement({
           id: roleId,
           name: role?.name ?? "unknown",
-          colour: role?.color ? role.color.toString(16) : "#f8f8f8",
+          colour: role?.color ? `#${role.color.toString(16)}` : "#f8f8f8",
           type: "role",
         }),
       )
