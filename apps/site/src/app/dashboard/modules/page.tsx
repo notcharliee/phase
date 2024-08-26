@@ -73,6 +73,7 @@ export default function Page() {
       if (filter === "none") return true
       return moduleInfo.tags.some((tag) => tag.toLowerCase() === filter)
     })
+    .sort((a, b) => a.name.localeCompare(b.name))
 
   return (
     <div className="space-y-8 [--column-count:1] lg:[--column-count:2] xl:[--column-count:3]">
