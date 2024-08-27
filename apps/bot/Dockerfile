@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y build-essential python3 chromium fonts-
 
 # Install bun
 FROM build-env AS bun-install
-RUN npm i -g bun
+RUN npm i -g bun@1.1.26
 
 # Copy the necessary files into the image
 FROM bun-install AS copy-source
@@ -26,7 +26,7 @@ RUN bun run bot:build
 
 # BODGE: Edit @discordjs/opus prebuild name
 FROM build-deps AS fix-bodge
-RUN cd /usr/src/app/node_modules/@discordjs/opus/prebuild && mv node-v115-napi-v3-linux-x64-glibc-2.31 node-v115-napi-v3-linux-x64-glibc-2.29
+RUN cd /usr/src/app/node_modules/@discordjs/opus/prebuild && mv node-v115-napi-v3-linux-x64-glibc-2.31 node-v127-napi-v3-linux-x64-glibc-2.29
 
 # Prepare the final image
 FROM fix-bodge AS final
