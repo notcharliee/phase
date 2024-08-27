@@ -136,12 +136,14 @@ FormControl.displayName = "FormControl"
 
 const FormDescription = React.forwardRef<
   HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => {
+  React.HTMLAttributes<HTMLParagraphElement> & { asChild?: boolean }
+>(({ className, asChild, ...props }, ref) => {
   const { formDescriptionId } = useFormField()
 
+  const Component = asChild ? Slot : "p"
+
   return (
-    <p
+    <Component
       ref={ref}
       id={formDescriptionId}
       className={cn("text-muted-foreground text-sm", className)}
