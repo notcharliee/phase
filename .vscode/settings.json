@@ -6,10 +6,12 @@
   "bun.debugTerminal.stopOnEntry": false,
 
   "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.preferences.importModuleSpecifier": "non-relative",
   "javascript.preferences.quoteStyle": "double",
 
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
   "typescript.preferences.quoteStyle": "double",
 
   "css.lint.unknownAtRules": "ignore",
