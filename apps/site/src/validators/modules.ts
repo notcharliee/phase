@@ -1,3 +1,4 @@
+import { ModuleId } from "@repo/config/phase/modules.ts"
 import { z } from "zod"
 
 import { safeMs } from "~/lib/utils"
@@ -99,37 +100,39 @@ export const formsSchema = z.object({
   channel: z.string().min(1, {
     message: "You must select a channel",
   }),
-  forms: z.array(
-    z.object({
-      id: z.string(),
-      name: z
-        .string()
-        .min(1, {
-          message: "Name must be at least 1 character",
-        })
-        .max(32, {
-          message: "Name cannot be longer than 32 characters",
-        }),
-      channel: z.string().min(1, {
-        message: "You must select a channel",
-      }),
-      questions: z
-        .array(
-          z.object({
-            question: z
-              .string()
-              .min(1, {
-                message: "Question must be at least 1 character",
-              })
-              .max(100, {
-                message: "Question cannot be longer than 100 characters",
-              }),
+  forms: z
+    .array(
+      z.object({
+        id: z.string(),
+        name: z
+          .string()
+          .min(1, {
+            message: "Name must be at least 1 character",
+          })
+          .max(32, {
+            message: "Name cannot be longer than 32 characters",
           }),
-        )
-        .min(1)
-        .max(100),
-    }),
-  ),
+        channel: z.string().min(1, {
+          message: "You must select a channel",
+        }),
+        questions: z
+          .array(
+            z.object({
+              question: z
+                .string()
+                .min(1, {
+                  message: "Question must be at least 1 character",
+                })
+                .max(100, {
+                  message: "Question cannot be longer than 100 characters",
+                }),
+            }),
+          )
+          .min(1)
+          .max(100),
+      }),
+    )
+    .max(10),
 })
 
 export const joinToCreatesSchema = z.object({
@@ -290,4 +293,20 @@ export const welcomeMessagesSchema = z.object({
   //     path: ["background"]
   //   },
   // ),
+})
+
+export const modulesSchema = z.object({
+  [ModuleId.AuditLogs]: auditLogsSchema.optional(),
+  [ModuleId.AutoMessages]: autoMessagesSchema.optional(),
+  [ModuleId.AutoRoles]: autoRolesSchema.optional(),
+  [ModuleId.BumpReminders]: bumpRemindersSchema.optional(),
+  [ModuleId.Counters]: countersSchema.optional(),
+  [ModuleId.Forms]: formsSchema.optional(),
+  [ModuleId.JoinToCreates]: joinToCreatesSchema.optional(),
+  [ModuleId.Levels]: levelsSchema.optional(),
+  [ModuleId.ReactionRoles]: reactionRolesSchema.optional(),
+  [ModuleId.Tickets]: ticketsSchema.optional(),
+  [ModuleId.TwitchNotifications]: twitchNotificationsSchema.optional(),
+  [ModuleId.Warnings]: warningsSchema.optional(),
+  [ModuleId.WelcomeMessages]: welcomeMessagesSchema.optional(),
 })
