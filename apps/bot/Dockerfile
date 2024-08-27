@@ -1,4 +1,4 @@
-FROM node:lts-bullseye AS base
+FROM node:20-bullseye AS base
 WORKDIR /usr/src/app
 
 # Install build dependencies
