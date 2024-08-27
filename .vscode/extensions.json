@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "bradlc.vscode-tailwindcss",
+    "unifiedjs.vscode-mdx",
+    "tamasfe.even-better-toml"
+  ]
+}
