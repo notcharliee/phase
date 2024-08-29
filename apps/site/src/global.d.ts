@@ -1,6 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// adds support for css variables
 
-type Nullable<T> = T | null
+import "react"
 
-type UnionToIntersection<U> = 
-  (U extends any ? (x: U)=>void : never) extends ((x: infer I)=>void) ? I : never
+declare module "react" {
+  // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+  interface CSSProperties {
+    [key: `--${string}`]: string | number
+  }
+}
