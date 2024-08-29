@@ -310,3 +310,5 @@ export const modulesSchema = z.object({
   [ModuleId.Warnings]: warningsSchema.optional(),
   [ModuleId.WelcomeMessages]: welcomeMessagesSchema.optional(),
 })
+
+export const moduleIdSchema = z.nativeEnum(ModuleId)

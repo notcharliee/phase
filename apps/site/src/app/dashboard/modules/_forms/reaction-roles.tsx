@@ -1,23 +1,20 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 
 import emojiData from "@emoji-mart/data"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
 import { ModuleId } from "@repo/config/phase/modules.ts"
-import { useFieldArray, useForm } from "react-hook-form"
-import { toast } from "sonner"
+import { useFieldArray, useFormContext } from "react-hook-form"
 
-import { ModuleFormButtons } from "~/components/dashboard/modules"
 import { SelectRole } from "~/components/dashboard/select-role"
 import { EmojiPicker } from "~/components/emoji-picker"
 import { Button } from "~/components/ui/button"
 import {
-  Form,
   FormControl,
   FormDescription,
   FormField,
+  FormHeader,
   FormItem,
   FormLabel,
   FormMessage,
@@ -25,140 +22,131 @@ import {
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
 
-import { useDashboardContext } from "~/hooks/use-dashboard-context"
-
-import { updateReactionRoles } from "~/app/dashboard/_actions/updateModule"
-import { reactionRolesSchema } from "~/validators/modules"
-
+import type { modulesSchema } from "~/validators/modules"
 import type { z } from "zod"
 
-type FormValues = z.infer<typeof reactionRolesSchema>
-
 export const ReactionRoles = () => {
-  const dashboard = useDashboardContext()
-
-  const form = useForm<FormValues>({
-    resolver: zodResolver(reactionRolesSchema),
-    defaultValues: dashboard.guild.modules?.[ModuleId.ReactionRoles]
-      ? {
-          ...dashboard.guild.modules[ModuleId.ReactionRoles],
-          messageUrl: `https://discord.com/channels/${dashboard.guild.id}/${dashboard.guild.modules[ModuleId.ReactionRoles].channel}/${dashboard.guild.modules[ModuleId.ReactionRoles].message}`,
-        }
-      : {
-          enabled: false,
-          messageUrl: "",
-          reactions: [],
-        },
-  })
-
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const fieldArray = useFieldArray({
+  const form = useFormContext<z.infer<typeof modulesSchema>>()
+  const formFieldArray = useFieldArray({
     control: form.control,
-    name: "reactions",
+    name: `${ModuleId.ReactionRoles}.reactions`,
   })
-
-  const onSubmit = async (data: FormValues) => {
-    data.enabled = true
-
-    setIsSubmitting(true)
-
-    toast.promise(updateReactionRoles(data), {
-      loading: "Saving changes...",
-      error: "An error occured.",
-      success: (updatedModuleData) => {
-        form.reset(data)
-        dashboard.setData((dashboardData) => {
-          if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-          dashboardData.guild.modules[ModuleId.ReactionRoles] =
-            updatedModuleData
-          return dashboardData
-        })
-        return "Changes saved!"
-      },
-      finally() {
-        setIsSubmitting(false)
-      },
-    })
-  }
 
   const emojis = useMemo(() => emojiData, [])
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="messageUrl"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Message URL</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  placeholder="https://discord.com/channels/{guild}/{channel}/{message}"
-                />
-              </FormControl>
+    <FormItem className="space-y-8">
+      <FormField
+        control={form.control}
+        name={`${ModuleId.ReactionRoles}.messageUrl`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Message URL</FormLabel>
+            <FormControl>
+              <Input
+                {...field}
+                placeholder="https://discord.com/channels/{guild}/{channel}/{message}"
+              />
+            </FormControl>
+            <FormDescription>
+              The URL of your reaction role message
+            </FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name={`${ModuleId.ReactionRoles}.reactions`}
+        render={() => (
+          <FormItem className="space-y-4">
+            <FormHeader>
+              <FormLabel>Reactions</FormLabel>
               <FormDescription>
-                The URL of your reaction role message
+                The reactions you want members to be able to react with (max 20)
               </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="space-y-4">
-          {fieldArray.fields.map((field, index) => (
-            <div className="space-y-2" key={field.id}>
-              <Label>Reaction {index + 1}</Label>
-              <div className="flex gap-3">
-                <FormField
-                  key={index}
-                  control={form.control}
-                  name={`reactions.${index}.emoji`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <EmojiPicker emojis={emojis} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  key={field.id}
-                  control={form.control}
-                  name={`reactions.${index}.role`}
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormControl>
-                        <SelectRole {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            </FormHeader>
+            <FormControl>
+              <div className="space-y-4">
+                {formFieldArray.fields.map(({ id }, index) => {
+                  const baseName =
+                    `${ModuleId.ReactionRoles}.reactions.${index}` as const
+
+                  return (
+                    <FormField
+                      key={id}
+                      control={form.control}
+                      name={baseName}
+                      render={() => (
+                        <FormItem className="space-y-0">
+                          <FormLabel className="sr-only">
+                            Reaction {index + 1}
+                          </FormLabel>
+                          <FormControl>
+                            <div className="flex gap-2">
+                              <FormField
+                                control={form.control}
+                                name={`${baseName}.emoji`}
+                                render={({ field }) => (
+                                  <FormItem className="space-y-0">
+                                    <FormLabel className="sr-only">
+                                      Reaction Emoji
+                                    </FormLabel>
+                                    <FormControl>
+                                      <EmojiPicker emojis={emojis} {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name={`${baseName}.role`}
+                                render={({ field }) => (
+                                  <FormItem className="w-full space-y-0">
+                                    <FormLabel className="sr-only">
+                                      Reaction Role
+                                    </FormLabel>
+                                    <FormControl>
+                                      <SelectRole {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={() => formFieldArray.remove(index)}
+                              >
+                                <Label className="sr-only">
+                                  Delete Reaction
+                                </Label>
+                                <TrashIcon className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )
+                })}
                 <Button
+                  type="button"
                   variant="outline"
-                  size="icon"
-                  onClick={() => fieldArray.remove(index)}
+                  disabled={formFieldArray.fields.length >= 20}
+                  onClick={() =>
+                    formFieldArray.append({ emoji: "🌙", role: "" })
+                  }
                 >
-                  <TrashIcon className="h-4 w-4" />
+                  Add Reaction
                 </Button>
               </div>
-            </div>
-          ))}
-          {fieldArray.fields.length < 20 && (
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => fieldArray.append({ emoji: "🌙", role: "" })}
-            >
-              Add Reaction
-            </Button>
-          )}
-        </div>
-        <ModuleFormButtons form={form} isSubmitting={isSubmitting} />
-      </form>
-    </Form>
+            </FormControl>
+          </FormItem>
+        )}
+      />
+    </FormItem>
   )
 }

@@ -3,9 +3,18 @@ import type {
   APIGuildChannel,
   APIMessage,
   GuildChannelType,
-  Snowflake,
 } from "@discordjs/core/http-only"
 import type { GuildCommand, GuildModules } from "~/lib/db"
+import type { modulesSchema } from "~/validators/modules"
+import type { z } from "zod"
+
+export type ModulesFormValues = z.infer<typeof modulesSchema>
+
+export type ModulesFormValuesWithData = Partial<{
+  [K in keyof ModulesFormValues]: ModulesFormValues[K] & {
+    _data: GuildModulesData<K>
+  }
+}>
 
 export type GuildModulesData<T extends keyof GuildModules> = T extends "Forms"
   ? {
@@ -44,7 +53,7 @@ export type DashboardData = {
   _id: string
   guild: APIGuild & {
     channels: APIGuildChannel<GuildChannelType>[]
-    admins: Snowflake[]
+    admins: string[]
     commands: Record<string, GuildCommand> | undefined
     modules: GuildModulesWithData | undefined
   }

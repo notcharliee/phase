@@ -1,3 +1,5 @@
+import { ModuleId } from "@repo/config/phase/modules.ts"
+
 import { AuditLogs } from "~/app/dashboard/modules/_forms/audit-logs"
 import { AutoMessages } from "~/app/dashboard/modules/_forms/auto-messages"
 import { AutoRoles } from "~/app/dashboard/modules/_forms/auto-roles"
@@ -12,18 +14,18 @@ import { TwitchNotifications } from "~/app/dashboard/modules/_forms/twitch-notif
 import { Warnings } from "~/app/dashboard/modules/_forms/warnings"
 import { WelcomeMessages } from "~/app/dashboard/modules/_forms/welcome-messages"
 
-export const moduleForms = {
-  AuditLogs,
-  AutoMessages,
-  AutoRoles,
-  BumpReminders,
-  Counters,
-  Forms,
-  JoinToCreates,
-  Levels,
-  ReactionRoles,
-  Tickets,
-  TwitchNotifications,
-  Warnings,
-  WelcomeMessages,
-} as const
+export const moduleFormItems = {
+  [ModuleId.AuditLogs]: AuditLogs,
+  [ModuleId.AutoMessages]: AutoMessages,
+  [ModuleId.AutoRoles]: AutoRoles,
+  [ModuleId.BumpReminders]: BumpReminders,
+  [ModuleId.Counters]: Counters,
+  [ModuleId.Forms]: Forms,
+  [ModuleId.JoinToCreates]: JoinToCreates,
+  [ModuleId.Levels]: Levels,
+  [ModuleId.ReactionRoles]: ReactionRoles,
+  [ModuleId.Tickets]: Tickets,
+  [ModuleId.TwitchNotifications]: TwitchNotifications,
+  [ModuleId.Warnings]: Warnings,
+  [ModuleId.WelcomeMessages]: WelcomeMessages,
+}

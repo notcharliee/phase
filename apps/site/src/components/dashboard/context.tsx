@@ -1,23 +1,19 @@
 "use client"
 
-import { createContext, useState } from "react"
-import type { Dispatch, SetStateAction } from "react"
+import { DashboardContext } from "~/hooks/use-dashboard-context"
 
 import type { DashboardData } from "~/types/dashboard"
 
-export const DashboardContext = createContext<
-  [DashboardData, Dispatch<SetStateAction<DashboardData>>] | null
->(null)
-
-export const DashboardProvider = (props: {
+export function DashboardProvider({
+  value,
+  children,
+}: {
   value: DashboardData
   children: React.ReactNode
-}) => {
-  const [value, setValue] = useState<DashboardData>(props.value)
-
+}) {
   return (
-    <DashboardContext.Provider value={[value, setValue]}>
-      {props.children}
+    <DashboardContext.Provider value={value}>
+      {children}
     </DashboardContext.Provider>
   )
 }

@@ -9,7 +9,9 @@ export default function Layout({
       <ClientOnly>
         <DashboardNavigation />
       </ClientOnly>
-      <div className="h-full w-full overflow-auto p-6 sm:p-12">{children}</div>
+      <div className="relative h-full w-full overflow-auto p-6 sm:p-12">
+        {children}
+      </div>
     </main>
   )
 }

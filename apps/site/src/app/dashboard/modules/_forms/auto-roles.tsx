@@ -1,131 +1,74 @@
 "use client"
 
-import { useState } from "react"
-
-import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
 import { ModuleId } from "@repo/config/phase/modules.ts"
-import { useFieldArray, useForm } from "react-hook-form"
-import { toast } from "sonner"
+import { useFieldArray, useFormContext } from "react-hook-form"
 
-import { ModuleFormButtons } from "~/components/dashboard/modules"
 import { SelectRole } from "~/components/dashboard/select-role"
 import { Button } from "~/components/ui/button"
 import {
-  Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
 } from "~/components/ui/form"
 
-import { useDashboardContext } from "~/hooks/use-dashboard-context"
-
-import { updateModule } from "~/app/dashboard/_actions/updateModule"
-import { autoRolesSchema } from "~/validators/modules"
-
+import type { modulesSchema } from "~/validators/modules"
 import type { z } from "zod"
 
-type FormValues = z.infer<typeof autoRolesSchema>
-
 export const AutoRoles = () => {
-  const dashboard = useDashboardContext()
-
-  const form = useForm<FormValues>({
-    resolver: zodResolver(autoRolesSchema),
-    defaultValues: dashboard.guild.modules?.[ModuleId.AutoRoles]
-      ? {
-          ...dashboard.guild.modules[ModuleId.AutoRoles],
-          roles: dashboard.guild.modules[ModuleId.AutoRoles].roles.map(
-            (roleId) => ({
-              id: roleId,
-            }),
-          ),
-        }
-      : {
-          enabled: false,
-          roles: [],
-        },
-  })
-
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const fieldArray = useFieldArray({
+  const form = useFormContext<z.infer<typeof modulesSchema>>()
+  const formFieldArray = useFieldArray({
     control: form.control,
-    name: "roles",
+    name: `${ModuleId.AutoRoles}.roles`,
   })
-
-  const onSubmit = (data: FormValues) => {
-    data.enabled = true
-
-    toast.promise(
-      updateModule(ModuleId.AutoRoles, {
-        enabled: data.enabled,
-        roles: data.roles.map((role) => role.id),
-      }),
-      {
-        loading: "Saving changes...",
-        error: "An error occured.",
-        success: (updatedModuleData) => {
-          form.reset(data)
-          dashboard.setData((dashboardData) => {
-            if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-            dashboardData.guild.modules[ModuleId.AutoRoles] = updatedModuleData
-            return dashboardData
-          })
-          return "Changes saved!"
-        },
-        finally() {
-          setIsSubmitting(false)
-        },
-      },
-    )
-
-    form.reset(data)
-  }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="space-y-4">
-          <div className="space-y-3">
-            {fieldArray.fields.map((field, index) => (
-              <FormField
-                key={field.id}
-                control={form.control}
-                name={`roles.${index}.id`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <div className="flex gap-3">
-                        <SelectRole {...field} />
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => fieldArray.remove(index)}
-                        >
-                          <TrashIcon className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </FormControl>
-                    <FormMessage className="mb-2" />
-                  </FormItem>
-                )}
-              />
-            ))}
-          </div>
-          {fieldArray.fields.length < 10 && (
+    <FormItem className="space-y-8">
+      <FormField
+        control={form.control}
+        name={`${ModuleId.AutoRoles}.roles`}
+        render={() => (
+          <FormItem className="space-y-4">
+            {formFieldArray.fields.map((field, index) => {
+              const baseName = `${ModuleId.AutoRoles}.roles.${index}` as const
+
+              return (
+                <FormField
+                  key={field.id}
+                  control={form.control}
+                  name={`${baseName}.id`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="flex gap-3">
+                          <SelectRole {...field} />
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => formFieldArray.remove(index)}
+                          >
+                            <TrashIcon className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <FormMessage className="mb-2" />
+                    </FormItem>
+                  )}
+                />
+              )
+            })}
             <Button
               type="button"
               variant="outline"
-              onClick={() => fieldArray.append({ id: "" })}
+              disabled={formFieldArray.fields.length >= 10}
+              onClick={() => formFieldArray.append({ id: "" })}
             >
               Add Role
             </Button>
-          )}
-        </div>
-        <ModuleFormButtons form={form} isSubmitting={isSubmitting} />
-      </form>
-    </Form>
+          </FormItem>
+        )}
+      />
+    </FormItem>
   )
 }

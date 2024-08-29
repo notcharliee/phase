@@ -1,15 +1,13 @@
-import { useContext } from "react"
+"use client"
 
-import { DashboardContext } from "~/components/dashboard/context"
+import { createContext, useContext } from "react"
 
 import type { DashboardData } from "~/types/dashboard"
 
-interface DashboardContextData extends DashboardData {
-  setData: React.Dispatch<React.SetStateAction<DashboardData>>
-}
+export const DashboardContext = createContext<DashboardData | null>(null)
 
 type UseDashboardContextReturn<T extends boolean | undefined = undefined> =
-  T extends true ? DashboardContextData | undefined : DashboardContextData
+  T extends true ? DashboardData | undefined : DashboardData
 
 export const useDashboardContext = <T extends boolean | undefined = undefined>(
   noThrow?: T,
@@ -24,11 +22,5 @@ export const useDashboardContext = <T extends boolean | undefined = undefined>(
     )
   }
 
-  const data = dashboardContext[0]
-  const setData = dashboardContext[1]
-
-  return {
-    ...data,
-    setData,
-  }
+  return dashboardContext
 }

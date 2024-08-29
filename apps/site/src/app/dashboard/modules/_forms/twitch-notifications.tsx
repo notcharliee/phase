@@ -1,21 +1,15 @@
 "use client"
 
-import { useState } from "react"
-
-import { zodResolver } from "@hookform/resolvers/zod"
 import { TrashIcon } from "@radix-ui/react-icons"
 import { Label } from "@radix-ui/react-label"
 import { ModuleId } from "@repo/config/phase/modules.ts"
-import { useFieldArray, useForm } from "react-hook-form"
-import { toast } from "sonner"
+import { useFieldArray, useFormContext } from "react-hook-form"
 
-import { ModuleFormButtons } from "~/components/dashboard/modules"
 import { SelectChannel } from "~/components/dashboard/select-channel"
 import { SelectMention } from "~/components/dashboard/select-mention"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import {
-  Form,
   FormControl,
   FormDescription,
   FormField,
@@ -25,97 +19,40 @@ import {
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
 
-import { useDashboardContext } from "~/hooks/use-dashboard-context"
-
-import { updateTwitchNotifications } from "~/app/dashboard/_actions/updateModule"
-import { twitchNotificationsSchema } from "~/validators/modules"
-
+import type { modulesSchema } from "~/validators/modules"
 import type { z } from "zod"
 
-type FormValues = z.infer<typeof twitchNotificationsSchema>
-
 export const TwitchNotifications = () => {
-  const dashboard = useDashboardContext()
-  const moduleData = dashboard.guild.modules?.[ModuleId.TwitchNotifications]
-
-  const form = useForm<FormValues>({
-    resolver: zodResolver(twitchNotificationsSchema),
-    defaultValues: moduleData
-      ? {
-          ...moduleData,
-          streamers: moduleData.streamers.map((streamer, index) => ({
-            ...streamer,
-            id: (moduleData._data.streamerNames as string[])[index],
-          })),
-        }
-      : {
-          enabled: false,
-          streamers: [
-            {
-              id: "",
-              channel: "",
-              mention: undefined,
-            },
-          ],
-        },
-  })
-
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const onSubmit = async (data: FormValues) => {
-    data.enabled = true
-
-    setIsSubmitting(true)
-
-    toast.promise(updateTwitchNotifications(data), {
-      loading: "Saving changes...",
-      error: (error: Error) => (
-        <div className="flex flex-col gap-0.5">
-          <div data-title>An error occured.</div>
-          <div data-description>{error.message}</div>
-        </div>
-      ),
-      success: (updatedModuleData) => {
-        form.reset(data)
-        dashboard.setData((dashboardData) => {
-          if (!dashboardData.guild.modules) dashboardData.guild.modules = {}
-          dashboardData.guild.modules[ModuleId.TwitchNotifications] =
-            updatedModuleData
-          return dashboardData
-        })
-        return "Changes saved!"
-      },
-      finally() {
-        setIsSubmitting(false)
-      },
-    })
-  }
-
-  const fieldArray = useFieldArray({
+  const form = useFormContext<z.infer<typeof modulesSchema>>()
+  const formFields = form.watch()[ModuleId.TwitchNotifications]!
+  const formFieldArray = useFieldArray({
     control: form.control,
-    name: "streamers",
+    name: `${ModuleId.TwitchNotifications}.streamers`,
   })
-
-  const formFields = form.watch()
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pt-2">
-        <FormField
-          control={form.control}
-          name="streamers"
-          render={() => (
-            <FormItem className="space-y-4">
-              {fieldArray.fields.map((field, index) => (
+    <FormItem className="space-y-8">
+      <FormField
+        control={form.control}
+        name={`${ModuleId.TwitchNotifications}.streamers`}
+        render={() => (
+          <FormItem className="space-y-4">
+            {formFieldArray.fields.map((field, index) => {
+              const baseName =
+                `${ModuleId.TwitchNotifications}.streamers.${index}` as const
+
+              const streamerName = formFields.streamers[index]?.id.length
+                ? formFields.streamers[index]?.id
+                : "Unknown Streamer"
+
+              return (
                 <Card key={field.id}>
                   <CardHeader className="flex-row items-center justify-between space-y-0 py-3">
-                    <CardTitle>
-                      {formFields.streamers[index]?.id ?? "Unknown Streamer"}
-                    </CardTitle>
+                    <CardTitle>{streamerName}</CardTitle>
                     <Button
                       variant={"outline"}
                       size={"icon"}
-                      onClick={() => fieldArray.remove(index)}
+                      onClick={() => formFieldArray.remove(index)}
                     >
                       <Label className="sr-only">Delete Notification</Label>
                       <TrashIcon className="h-4 w-4" />
@@ -124,7 +61,7 @@ export const TwitchNotifications = () => {
                   <CardContent className="space-y-6 border-t pt-6">
                     <FormField
                       control={form.control}
-                      name={`streamers.${index}.id`}
+                      name={`${baseName}.id`}
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Streamer Name</FormLabel>
@@ -143,7 +80,7 @@ export const TwitchNotifications = () => {
                     />
                     <FormField
                       control={form.control}
-                      name={`streamers.${index}.channel`}
+                      name={`${baseName}.channel`}
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Notification Channel</FormLabel>
@@ -159,7 +96,7 @@ export const TwitchNotifications = () => {
                     />
                     <FormField
                       control={form.control}
-                      name={`streamers.${index}.mention`}
+                      name={`${baseName}.mention`}
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Notification Mention</FormLabel>
@@ -175,26 +112,25 @@ export const TwitchNotifications = () => {
                     />
                   </CardContent>
                 </Card>
-              ))}
-              <Button
-                type="button"
-                variant="outline"
-                disabled={fieldArray.fields.length >= 5}
-                onClick={() =>
-                  fieldArray.append({
-                    id: "",
-                    channel: "",
-                    mention: undefined,
-                  })
-                }
-              >
-                Add Notification
-              </Button>
-            </FormItem>
-          )}
-        />
-        <ModuleFormButtons form={form} isSubmitting={isSubmitting} />
-      </form>
-    </Form>
+              )
+            })}
+            <Button
+              type="button"
+              variant="outline"
+              disabled={formFieldArray.fields.length >= 5}
+              onClick={() =>
+                formFieldArray.append({
+                  id: "",
+                  channel: "",
+                  mention: undefined,
+                })
+              }
+            >
+              Add Notification
+            </Button>
+          </FormItem>
+        )}
+      />
+    </FormItem>
   )
 }
