@@ -59,8 +59,8 @@ export const Tickets = () => {
             <FormLabel>Message</FormLabel>
             <FormControl>
               <RichTextarea
-                placeholder="Example: Create a ticket."
                 {...field}
+                placeholder="Example: Create a ticket."
               />
             </FormControl>
             <FormDescription>

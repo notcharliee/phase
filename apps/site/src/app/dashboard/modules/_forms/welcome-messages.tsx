@@ -105,7 +105,6 @@ export const WelcomeMessages = () => {
                     <FormControl>
                       <Input
                         {...field}
-                        treatEmptyAsUndefined
                         placeholder={`https://placehold.co/1200x448.png`}
                       />
                     </FormControl>

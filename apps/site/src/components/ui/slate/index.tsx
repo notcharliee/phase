@@ -50,12 +50,12 @@ export interface GuildData {
 }
 
 export interface RichTextareaProps {
-  value?: string
+  value?: string | null
   placeholder?: string
   disabled?: boolean
   name?: string
   className?: string
-  onChange?: (value: string) => void
+  onChange?: (value: string | null) => void
   onBlur?: () => void
 }
 
@@ -149,7 +149,16 @@ export const RichTextarea = forwardRef<
       initialValue={deserialise(props.value ?? "", guildData)}
       onValueChange={(descendants) => {
         applyTransformations(editor, guildData)
-        props.onChange?.(serialise(descendants))
+
+        if (props.onChange) {
+          const serialisedValue = serialise(descendants)
+
+          if (!serialisedValue.length) {
+            props.onChange(null)
+          } else {
+            props.onChange(serialisedValue)
+          }
+        }
       }}
     >
       <div className="relative w-full">

@@ -177,7 +177,6 @@ export const Levels = () => {
                             <FormControl>
                               <Input
                                 {...field}
-                                treatEmptyAsUndefined
                                 className="appearance-none"
                                 type="number"
                                 placeholder="Example: 5"
@@ -235,7 +234,6 @@ export const Levels = () => {
             <FormControl>
               <Input
                 {...field}
-                treatEmptyAsUndefined
                 placeholder="https://example.com/image.png"
               />
             </FormControl>
