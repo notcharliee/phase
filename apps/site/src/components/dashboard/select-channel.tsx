@@ -5,7 +5,7 @@ import { useState } from "react"
 import { CheckIcon, ChevronDownIcon } from "@radix-ui/react-icons"
 import { ChannelType } from "discord-api-types/v10"
 
-import { AllowedChannelType, ChannelIcon } from "~/components/channel-icons"
+import { ChannelIcon } from "~/components/channel-icons"
 import {
   Select,
   SelectContent,
@@ -19,6 +19,7 @@ import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
 import { cn } from "~/lib/utils"
 
+import type { AllowedChannelType } from "~/components/channel-icons"
 import type { APIGuildChannel, GuildChannelType } from "discord-api-types/v10"
 import type { ControllerRenderProps } from "react-hook-form"
 
@@ -123,35 +124,34 @@ export function SelectChannel({
             ))}
           </SelectGroup>
         )}
-        {categoriesWithChannels &&
-          categoriesWithChannels.map(([categoryName, channels]) => (
-            <SelectGroup key={categoryName}>
-              <SelectLabel className="inline-flex items-center gap-1">
-                <ChevronDownIcon className="h-4 w-4" />
-                <span>{categoryName}</span>
-              </SelectLabel>
-              {channels.map((channel) => (
-                <SelectItem
-                  value={channel.id === props.value ? "deselect" : channel.id}
-                  key={channel.id}
-                  className={cn(
-                    props.value !== channel.id && "text-muted-foreground",
-                    "pr-2 [&>*:nth-child(2)]:w-full",
-                  )}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="inline-flex items-center gap-1">
-                      <ChannelIcon type={channel.type as AllowedChannelType} />
-                      <span>{channel.name}</span>
-                    </div>
-                    {props.value === channel.id && (
-                      <CheckIcon className="ml-auto h-4 w-4" />
-                    )}
+        {categoriesWithChannels?.map(([categoryName, channels]) => (
+          <SelectGroup key={categoryName}>
+            <SelectLabel className="inline-flex items-center gap-1">
+              <ChevronDownIcon className="h-4 w-4" />
+              <span>{categoryName}</span>
+            </SelectLabel>
+            {channels.map((channel) => (
+              <SelectItem
+                value={channel.id === props.value ? "deselect" : channel.id}
+                key={channel.id}
+                className={cn(
+                  props.value !== channel.id && "text-muted-foreground",
+                  "pr-2 [&>*:nth-child(2)]:w-full",
+                )}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="inline-flex items-center gap-1">
+                    <ChannelIcon type={channel.type as AllowedChannelType} />
+                    <span>{channel.name}</span>
                   </div>
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          ))}
+                  {props.value === channel.id && (
+                    <CheckIcon className="ml-auto h-4 w-4" />
+                  )}
+                </div>
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        ))}
       </SelectContent>
     </Select>
   )
