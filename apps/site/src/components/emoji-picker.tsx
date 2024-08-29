@@ -85,7 +85,7 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
       <PopoverContent className="size-80 space-y-4">
         <Input
           placeholder="Search emojis..."
-          onChange={(e) => search(e.target.value)}
+          onChange={(value) => search(value)}
         />
         <div className="h-[calc(100%-52px)]">
           <ScrollArea className="h-full">
