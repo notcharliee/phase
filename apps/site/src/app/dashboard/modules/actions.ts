@@ -49,17 +49,24 @@ export async function updateModules(
     Record<`modules.${ModuleId}`, GuildModules[ModuleId]>
   > = {}
 
+  const parsedModulesToUnset: Partial<Record<`modules.${ModuleId}`, null>> = {}
+
   for (const moduleId of dirtyFields) {
     const formData = formValues[moduleId]
     const moduleData = await parseModuleData(moduleId, formData)
-    const moduleDataToSet = { [`modules.${moduleId}`]: moduleData[moduleId] }
 
-    Object.assign(parsedModules, moduleData)
-    Object.assign(parsedModulesToSet, moduleDataToSet)
+    if (moduleData === undefined) {
+      parsedModulesToUnset[`modules.${moduleId}`] = null
+    } else {
+      parsedModulesToSet[`modules.${moduleId}`] = moduleData
+    }
+
+    Object.assign(parsedModules, { [moduleId]: moduleData })
   }
 
   await guildDoc.updateOne({
     $set: parsedModulesToSet,
+    $unset: parsedModulesToUnset,
   })
 
   const parsedModulesWithData = Object.entries(parsedModules).reduce(
@@ -142,5 +149,8 @@ export async function updateModules(
     }
   }
 
-  return parsedModulesWithData
+  return {
+    ...guildDoc.toObject().modules,
+    ...parsedModulesWithData,
+  }
 }

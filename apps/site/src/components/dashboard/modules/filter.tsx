@@ -1,3 +1,5 @@
+import { moduleTags } from "@repo/config/phase/modules.ts"
+
 import {
   Select,
   SelectContent,
@@ -6,14 +8,29 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 
-interface SelectFilterProps<T extends { label: string; value: string }> {
-  options: T[]
+export interface FilterOption {
+  label: (typeof moduleTags)[number] | "None"
+  value: Lowercase<(typeof moduleTags)[number]> | "none"
+}
+
+export const filterOptions: FilterOption[] = [
+  {
+    label: "None",
+    value: "none",
+  },
+  ...moduleTags.map((tag) => ({
+    label: tag,
+    value: tag.toLowerCase() as Lowercase<typeof tag>,
+  })),
+]
+
+interface FilterSelectProps<T extends FilterOption> {
   value: T["value"]
   onChange: (value: T["value"]) => void
 }
 
-export function SelectFilter<T extends { label: string; value: string }>(
-  props: SelectFilterProps<T>,
+export function FilterSelect<T extends FilterOption>(
+  props: FilterSelectProps<T>,
 ) {
   return (
     <Select defaultValue={props.value} onValueChange={props.onChange}>
@@ -24,7 +41,7 @@ export function SelectFilter<T extends { label: string; value: string }>(
         </div>
       </SelectTrigger>
       <SelectContent>
-        {props.options.map(({ label, value }) => (
+        {filterOptions.map(({ label, value }) => (
           <SelectItem value={value} key={value}>
             {label}
           </SelectItem>

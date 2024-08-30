@@ -131,7 +131,7 @@ export const defaultValues: Required<FormValues> = {
 }
 
 export const getDirtyFields = <
-  TData extends Record<keyof TDirtyItems, unknown>,
+  TData extends Partial<Record<keyof TDirtyItems, unknown>>,
   TDirtyItems extends Record<string, unknown>,
 >(
   formValues: TData,
@@ -160,16 +160,15 @@ export const getDirtyFields = <
     }
   }, {})
 }
+
 export function getDefaultValues(
   guildId: string,
   modules: Partial<GuildModules>,
-): Required<FormValues> {
-  const parsedValues: Required<FormValues> = defaultValues
+): FormValues {
+  const parsedValues: FormValues = {}
 
   const moduleParsers: {
-    [K in ModuleId]?: (
-      data: Required<GuildModulesWithData>[K],
-    ) => Required<FormValues>[K]
+    [K in ModuleId]?: (data: Required<GuildModulesWithData>[K]) => FormValues[K]
   } = {
     [ModuleId.AutoMessages]: (data) => ({
       ...data,

@@ -21,54 +21,48 @@ const discordAPI = new API(discordREST)
 export async function parseModuleData(
   moduleId: ModuleId,
   formData: ModulesFormValues[ModuleId],
-): Promise<Partial<GuildModules>> {
+): Promise<GuildModules[ModuleId] | undefined> {
   const formDataIs = <T extends ModuleId>(
     id: T,
-    _: ModulesFormValues[keyof ModulesFormValues],
-  ): _ is Required<ModulesFormValues>[T] => id === moduleId
+    data: ModulesFormValues[keyof ModulesFormValues],
+  ): data is Required<ModulesFormValues>[T] => {
+    return id === moduleId && data !== undefined
+  }
 
   if (formDataIs(ModuleId.AutoMessages, formData)) {
     return {
-      [moduleId]: {
-        ...formData,
-        messages: formData.messages.map((message) => ({
-          name: message.name,
-          channel: message.channel,
-          message: message.content,
-          mention: message.mention,
-          interval: safeMs(message.interval)!,
-        })),
-      },
+      ...formData,
+      messages: formData.messages.map((message) => ({
+        name: message.name,
+        channel: message.channel,
+        message: message.content,
+        mention: message.mention,
+        interval: safeMs(message.interval)!,
+      })),
     }
   }
 
   if (formDataIs(ModuleId.AutoRoles, formData)) {
     return {
-      [moduleId]: {
-        ...formData,
-        roles: formData.roles.map((role) => role.id),
-      },
+      ...formData,
+      roles: formData.roles.map((role) => role.id),
     }
   }
 
   if (formDataIs(ModuleId.BumpReminders, formData)) {
     return {
-      [moduleId]: {
-        ...formData,
-        time: safeMs(formData.time)!,
-      },
+      ...formData,
+      time: safeMs(formData.time)!,
     }
   }
 
   if (formDataIs(ModuleId.Forms, formData)) {
     return {
-      [moduleId]: {
-        ...formData,
-        forms: formData.forms.map((form) => ({
-          ...form,
-          questions: form.questions.map((q) => q.question),
-        })),
-      },
+      ...formData,
+      forms: formData.forms.map((form) => ({
+        ...form,
+        questions: form.questions.map((q) => q.question),
+      })),
     }
   }
 
@@ -78,51 +72,45 @@ export async function parseModuleData(
       .split("/") as [string, string, string]
 
     return {
-      [moduleId]: {
-        enabled: formData.enabled,
-        channel: channelId,
-        message: messageId,
-        reactions: formData.reactions,
-      },
+      enabled: formData.enabled,
+      channel: channelId,
+      message: messageId,
+      reactions: formData.reactions,
     }
   }
 
   if (formDataIs(ModuleId.TwitchNotifications, formData)) {
     return {
-      [moduleId]: {
-        ...formData,
-        streamers: await Promise.all(
-          formData.streamers.map(async (streamer) => {
-            const user = await twitchClient.users
-              .getUserByName(streamer.id)
-              .catch(() => null)
+      ...formData,
+      streamers: await Promise.all(
+        formData.streamers.map(async (streamer) => {
+          const user = await twitchClient.users
+            .getUserByName(streamer.id)
+            .catch(() => null)
 
-            if (!user) {
-              throw new Error(
-                `Could not find a user under the name '${streamer.id}'`,
-              )
-            }
+          if (!user) {
+            throw new Error(
+              `Could not find a user under the name '${streamer.id}'`,
+            )
+          }
 
-            return {
-              ...streamer,
-              id: user.id,
-            }
-          }),
-        ),
-      },
+          return {
+            ...streamer,
+            id: user.id,
+          }
+        }),
+      ),
     }
   }
 
   if (formDataIs(ModuleId.Warnings, formData)) {
     return {
-      [moduleId]: {
-        ...formData,
-        warnings: formData.warnings.map((role) => role.role),
-      },
+      ...formData,
+      warnings: formData.warnings.map((role) => role.role),
     }
   }
 
-  return { [moduleId]: formData }
+  return formData
 }
 
 export async function handleAutoMessagesModule(

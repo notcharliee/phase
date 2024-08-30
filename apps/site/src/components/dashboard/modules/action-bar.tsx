@@ -2,21 +2,24 @@
 
 import { useRef } from "react"
 
+import { useFormContext } from "react-hook-form"
+
 import { Button } from "~/components/ui/button"
 
 import { useElementSize } from "~/hooks/use-element-size"
 
-import type { UseFormReturn } from "react-hook-form"
+import { type ModulesFormValues } from "~/types/dashboard"
 
 interface ActionBarProps {
-  form: UseFormReturn
-  dirtyFieldKeys: string[]
-  invalidFieldKeys: string[]
+  dirtyKeys: string[]
+  invalidKeys: string[]
 }
 
 export function ActionBar(props: ActionBarProps) {
-  const isDirty = props.dirtyFieldKeys.length
-  const isInvalid = props.invalidFieldKeys.length
+  const form = useFormContext<ModulesFormValues>()
+
+  const isDirty = props.dirtyKeys.length
+  const isInvalid = props.invalidKeys.length
 
   const actionBarRef = useRef<HTMLDivElement>(null)
   const [actionBarWidth, actionBarHeight] = useElementSize(actionBarRef)
@@ -39,15 +42,11 @@ export function ActionBar(props: ActionBarProps) {
         <div className="text-sm">
           <div className="font-semibold">You have unsaved changes!</div>
           <div className="text-muted-foreground hidden sm:block">
-            {props.dirtyFieldKeys.length} unsaved changes.
+            {props.dirtyKeys.length} unsaved changes.
           </div>
         </div>
         <div className="flex gap-1.5 sm:flex-row-reverse md:flex-row">
-          <Button
-            type="reset"
-            variant={"ghost"}
-            onClick={() => props.form.reset()}
-          >
+          <Button type="reset" variant={"ghost"} onClick={() => form.reset()}>
             Reset
           </Button>
           <Button type="submit">

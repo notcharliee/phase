@@ -1,15 +1,18 @@
 "use client"
 
-import { useMemo } from "react"
+import { useCallback, useMemo, useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { modules, moduleTags } from "@repo/config/phase/modules.ts"
-import { useLocalStorage } from "@uidotdev/usehooks"
+import { modules } from "@repo/config/phase/modules.ts"
 import { useForm } from "react-hook-form"
 
 import { ActionBar } from "~/components/dashboard/modules/action-bar"
-import { ModuleCard } from "~/components/dashboard/modules/card"
-import { SelectFilter } from "~/components/dashboard/modules/filter"
+import {
+  ModuleCard,
+  ModuleCardState,
+} from "~/components/dashboard/modules/card"
+import { FilterSelect } from "~/components/dashboard/modules/filter"
+import { Mode, ModeToggle } from "~/components/dashboard/modules/mode-toggle"
 import { Form } from "~/components/ui/form"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
@@ -20,24 +23,9 @@ import { modulesSchema } from "~/validators/modules"
 import { getDefaultValues, getDirtyFields } from "./_utils/client"
 
 import type { ModuleId } from "@repo/config/phase/modules.ts"
-import type { DashboardData } from "~/types/dashboard"
+import type { FilterOption } from "~/components/dashboard/modules/filter"
+import type { DashboardData, ModulesFormValues } from "~/types/dashboard"
 import type { z } from "zod"
-
-type FilterOption = {
-  label: (typeof moduleTags)[number] | "None"
-  value: Lowercase<(typeof moduleTags)[number]> | "none"
-}
-
-const filterOptions: FilterOption[] = [
-  {
-    label: "None",
-    value: "none",
-  },
-  ...moduleTags.map((tag) => ({
-    label: tag,
-    value: tag.toLowerCase() as Lowercase<typeof tag>,
-  })),
-]
 
 function useGuildModules(
   dashboardData: DashboardData,
@@ -55,15 +43,12 @@ function useGuildModules(
         if (filter === "none") return true
         return moduleInfo.tags.some((tag) => tag.toLowerCase() === filter)
       })
-      .sort((a, b) => a.name.localeCompare(b.name))
   }, [dashboardData, filter])
 }
 
 export default function Page() {
-  const [filter, setFilter] = useLocalStorage<FilterOption["value"]>(
-    "modulesFilter",
-    "none",
-  )
+  const [mode, setMode] = useState<Mode>(Mode.Edit)
+  const [filter, setFilter] = useState<FilterOption["value"]>("none")
 
   const dashboardData = useDashboardContext()
   const guildModulesData = useGuildModules(dashboardData, filter)
@@ -79,30 +64,74 @@ export default function Page() {
     mode: "all",
   })
 
+  const { dirtyFields: boolDirtyFields, errors, isSubmitting } = form.formState
+
   const formFields = form.watch()
+  const dirtyFields = getDirtyFields(formFields, boolDirtyFields)
+  const dirtyKeys = Object.keys(dirtyFields) as ModuleId[]
+  const invalidKeys = Object.keys(errors) as ModuleId[]
 
-  const { dirtyFields, errors, isSubmitting } = form.formState
+  const cards = useMemo(() => {
+    const isAllKeysUndefined = (obj: object | undefined | null) => {
+      if (obj === undefined || obj === null) return true
+      return Object.values(obj).every(
+        (value) => value === undefined || value === null,
+      )
+    }
 
-  const dirtyFieldKeys = Object.keys(
-    getDirtyFields(formFields as Required<typeof formFields>, dirtyFields),
+    return guildModulesData
+      .sort((a, b) => {
+        if (formFields[a.id] === undefined && formFields[b.id] !== undefined)
+          return 1
+        if (formFields[a.id] !== undefined && formFields[b.id] === undefined)
+          return -1
+        return a.name.localeCompare(b.name)
+      })
+      .map(({ id }) => {
+        const ModuleFormItem = moduleFormItems[id]
+
+        const isUndefined = isAllKeysUndefined(formFields[id])
+
+        const isDirty = dirtyKeys.includes(id)
+        const isInvalid = invalidKeys.includes(id)
+
+        const state = isUndefined
+          ? ModuleCardState.Undefined
+          : isDirty
+            ? ModuleCardState.Dirty
+            : isInvalid
+              ? ModuleCardState.Invalid
+              : isSubmitting
+                ? ModuleCardState.Submitting
+                : ModuleCardState.Clean
+
+        return (
+          <ModuleCard key={id} id={id} mode={mode} state={state} form={form}>
+            <ModuleFormItem />
+          </ModuleCard>
+        )
+      })
+  }, [
+    guildModulesData,
+    formFields,
+    dirtyKeys,
+    invalidKeys,
+    isSubmitting,
+    mode,
+    form,
+  ])
+
+  const onSubmit = useCallback(
+    async (data: ModulesFormValues) => {
+      const id = dashboardData.guild.id
+
+      const updatedModules = await updateModules(data, dirtyKeys)
+      const updatedDefaultValues = getDefaultValues(id, updatedModules)
+
+      form.reset(updatedDefaultValues)
+    },
+    [form, dirtyKeys, dashboardData.guild.id],
   )
-
-  const invalidFieldKeys = Object.keys(errors)
-
-  const onSubmit = async (data: z.infer<typeof modulesSchema>) => {
-    const dirtyFieldKeys = Object.keys(
-      getDirtyFields(data as Required<typeof data>, dirtyFields),
-    ) as ModuleId[]
-
-    const updatedModules = await updateModules(data, dirtyFieldKeys)
-
-    const updatedDefaultValues = getDefaultValues(
-      dashboardData.guild.id,
-      updatedModules,
-    )
-
-    form.reset(updatedDefaultValues)
-  }
 
   return (
     <Form {...form}>
@@ -114,44 +143,14 @@ export default function Page() {
           <h1 className="hidden text-3xl font-bold lg:block xl:col-span-2">
             Modules
           </h1>
-          <div>
-            <SelectFilter
-              options={filterOptions}
-              value={filter}
-              onChange={setFilter}
-            />
+          <div className="flex space-x-2">
+            <FilterSelect value={filter} onChange={setFilter} />
+            <ModeToggle value={mode} onChange={setMode} />
           </div>
         </div>
-        <ActionBar
-          form={form}
-          dirtyFieldKeys={dirtyFieldKeys}
-          invalidFieldKeys={invalidFieldKeys}
-        />
+        <ActionBar dirtyKeys={dirtyKeys} invalidKeys={invalidKeys} />
         <div className="grid grid-cols-[repeat(var(--column-count),minmax(0,1fr))] gap-4">
-          {guildModulesData.map((moduleData) => {
-            const ModuleFormItem = moduleFormItems[moduleData.id]
-            if (!ModuleFormItem) return null
-
-            const isDirty = dirtyFieldKeys.includes(moduleData.id)
-            const isInvalid = invalidFieldKeys.includes(moduleData.id)
-
-            return (
-              <ModuleCard
-                key={moduleData.name}
-                id={moduleData.id}
-                name={moduleData.name}
-                description={moduleData.description}
-                tags={moduleData.tags}
-                enabled={moduleData.enabled}
-                control={form.control}
-                isDirty={isDirty}
-                isInvalid={isInvalid}
-                isSubmitting={isSubmitting}
-              >
-                <ModuleFormItem />
-              </ModuleCard>
-            )
-          })}
+          {cards}
         </div>
       </form>
     </Form>
