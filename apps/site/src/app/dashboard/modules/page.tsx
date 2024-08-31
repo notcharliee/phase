@@ -61,7 +61,6 @@ export default function Page() {
   const form = useForm<z.infer<typeof modulesSchema>>({
     resolver: zodResolver(modulesSchema),
     defaultValues,
-    mode: "all",
   })
 
   const { dirtyFields: boolDirtyFields, errors, isSubmitting } = form.formState
