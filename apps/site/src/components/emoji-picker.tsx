@@ -1,137 +1,166 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client"
 
+import { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
+
+import emojiData, {
+  categories,
+  sheet,
+} from "@emoji-mart/data/sets/15/twitter.json"
+import { useDebounce } from "@uidotdev/usehooks"
 import * as emojiMart from "emoji-mart"
 
-import { useState } from "react"
-
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Spinner } from "@/components/spinner"
-import { Twemoji } from "@/components/twemoji"
+import { Spinner } from "~/components/spinner"
+import { Button } from "~/components/ui/button"
+import { Input } from "~/components/ui/input"
+import { Label } from "~/components/ui/label"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "~/components/ui/popover"
+import { ScrollArea } from "~/components/ui/scroll-area"
 
-interface EmojiPickerProps {
-  emojis: any
-  disabled?: boolean
-  fallback?: boolean
-  name?: string
-  onBlur?: React.FocusEventHandler<any>
-  onChange?: (value: string) => void
-  ref?: React.Ref<any>
-  value?: string
+import { cn } from "~/lib/utils"
+
+import type { Emoji as EmojiMartEmoji, Skin } from "@emoji-mart/data"
+
+interface Emoji {
+  id: string
+  name: string
+  skin: Skin
 }
 
-export const EmojiPicker = (props: EmojiPickerProps) => {
-  const [value, setValue] = useState(props.value ?? "🌙")
-  const [searchedEmojis, setSearchedEmojis] = useState<string[]>([])
+interface EmojiPickerProps {
+  disabled?: boolean
+  name?: string
+  value?: string
+  ref?: React.Ref<HTMLButtonElement>
+  onBlur?: React.FocusEventHandler<HTMLButtonElement>
+  onChange?: (value: string) => void
+}
 
+export const EmojiPicker = forwardRef<
+  React.ElementRef<typeof Button>,
+  React.PropsWithoutRef<EmojiPickerProps>
+>(({ onChange, value, ...props }: EmojiPickerProps, ref) => {
   const [open, setOpen] = useState(false)
+  const [loaded, setLoaded] = useState(false)
 
-  if (props.fallback)
+  const [searchTerm, setSearchTerm] = useState("")
+  const debouncedSearchTerm = useDebounce(searchTerm, 300)
+
+  const [searchResults, setSearchResults] = useState<Emoji[]>([])
+
+  const emojis = useMemo(() => {
+    void emojiMart.init({ data: emojiData }).then(() => setLoaded(true))
+    return Object.entries(emojiData.emojis).reduce(
+      (acc, [id, emoji]) => ({
+        ...acc,
+        [id]: { id, name: emoji.name, skin: emoji.skins[0]! },
+      }),
+      {} as { [K in keyof typeof emojiData.emojis]: Emoji },
+    )
+  }, [])
+
+  const [selectedEmoji, setSelectedEmoji] = useState<Emoji>(
+    value
+      ? (Object.values(emojis).find((emoji) => emoji.skin.native === value) ??
+          emojis.waxing_crescent_moon)
+      : emojis.waxing_crescent_moon,
+  )
+
+  const searchEmojis = useCallback(async (query: string) => {
+    const queryResults = query.length
+      ? ((await emojiMart.SearchIndex.search(query)) as EmojiMartEmoji[])
+      : []
+
+    const newSearchResults = queryResults.map((emoji) => {
+      const { id, name, skins } = emoji
+      return { id, name, skin: skins[0]! }
+    })
+    setSearchResults(newSearchResults)
+  }, [])
+
+  useEffect(() => {
+    void searchEmojis(debouncedSearchTerm)
+  }, [searchEmojis, debouncedSearchTerm])
+
+  const updateValue = (emoji: Emoji) => {
+    onChange?.(emoji.skin.native)
+    setSelectedEmoji(emoji)
+    setOpen(false)
+  }
+
+  if (!loaded) {
     return (
       <Button variant="outline" size="icon" disabled={props.disabled}>
         <Spinner className="size-5" />
       </Button>
     )
-
-  void emojiMart.init({ data: props.emojis })
-
-  const natives: [string, string][] = Object.entries(props.emojis.natives)
-  const categories = props.emojis.categories
-
-  const search = async (value: string) => {
-    const emojis: any[] = value.length
-      ? await emojiMart.SearchIndex.search(value)
-      : []
-    const results: string[] = emojis.map((emoji: any) => {
-      return emoji.skins[0].native
-    })
-
-    setSearchedEmojis(results)
-  }
-
-  const updateValue = (value: string) => {
-    if (props.onChange) props.onChange(value)
-    setValue(value)
-    setOpen(false)
   }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
-          disabled={props.disabled}
-          onBlur={props.onBlur}
-          ref={props.ref}
-        >
-          <Twemoji emoji={value} />
+        <Button {...props} variant="outline" size="icon" ref={ref}>
+          <Emoji
+            className="size-5"
+            name={selectedEmoji.name}
+            skin={selectedEmoji.skin}
+            isPlaceholder={onChange && !value}
+          />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="size-80 space-y-4">
+      <PopoverContent sideOffset={8} className="size-80 space-y-4">
         <Input
           placeholder="Search emojis..."
-          onChange={(value) => search(value)}
+          onChange={(value) => setSearchTerm(value ?? "")}
         />
         <div className="h-[calc(100%-52px)]">
           <ScrollArea className="h-full">
             <div className="flex flex-col gap-4">
-              {searchedEmojis.length ? (
+              {searchTerm.length && searchTerm === debouncedSearchTerm ? (
                 <div className="space-y-2">
                   <Label>Search Results</Label>
-                  <div className="grid grid-cols-9 text-xl">
-                    {searchedEmojis.map((emoji: any) => (
-                      <button
-                        aria-label={emoji}
-                        key={emoji}
-                        onClick={(e) => updateValue(e.currentTarget.ariaLabel!)}
-                      >
-                        <Twemoji emoji={emoji} />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                categories.map((category: any) => (
-                  <div className="space-y-2" key={category.id}>
-                    <Label>
-                      {category.id.charAt(0).toUpperCase() +
-                        category.id.slice(1)}
-                    </Label>
-                    <div className="grid grid-cols-9 text-xl">
-                      {category.emojis.map((emoji: any) => (
+                  {searchResults.length ? (
+                    <div className="grid grid-cols-9">
+                      {searchResults.map((emoji) => (
                         <button
-                          aria-label={
-                            natives.find((native) => native[1] === emoji)![0]
-                          }
-                          key={
-                            natives.find((native) => native[1] === emoji)![0]
-                          }
-                          onClick={(e) =>
-                            updateValue(e.currentTarget.ariaLabel!)
-                          }
+                          key={emoji.id}
+                          aria-label={emoji.name}
+                          onClick={() => updateValue(emoji)}
                         >
-                          <Twemoji
-                            emoji={
-                              natives.find((native) => native[1] === emoji)![0]
-                            }
-                          />
+                          <Emoji name={emoji.name} skin={emoji.skin} />
                         </button>
                       ))}
+                    </div>
+                  ) : (
+                    <div className="text-muted-foreground text-sm">
+                      No results found.
+                    </div>
+                  )}
+                </div>
+              ) : (
+                categories.map((category) => (
+                  <div className="space-y-2" key={category.id}>
+                    <Label className="capitalize">{category.id}</Label>
+                    <div className="grid grid-cols-9 text-xl">
+                      {(category.emojis as (keyof typeof emojis)[]).map(
+                        (emojiId) => {
+                          const emoji = emojis[emojiId]
+                          const { id, name, skin } = emoji
+
+                          return (
+                            <button
+                              key={id}
+                              aria-label={name}
+                              onClick={() => updateValue(emoji)}
+                            >
+                              <Emoji name={name} skin={skin} />
+                            </button>
+                          )
+                        },
+                      )}
                     </div>
                   </div>
                 ))
@@ -141,5 +170,35 @@ export const EmojiPicker = (props: EmojiPickerProps) => {
         </div>
       </PopoverContent>
     </Popover>
+  )
+})
+
+interface EmojiProps {
+  name: string
+  skin: Skin
+  className?: string
+  isPlaceholder?: boolean
+}
+
+function Emoji({ name, skin, className, isPlaceholder }: EmojiProps) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <div
+      title={name}
+      aria-label={name}
+      className={cn(
+        "hover:bg-accent grid aspect-square place-items-center rounded-sm",
+        className,
+      )}
+    >
+      <span
+        className={cn("block size-3/4", isPlaceholder && "opacity-50")}
+        style={{
+          backgroundImage: `url("https://cdn.jsdelivr.net/npm/emoji-datasource-twitter@15.0.0/img/twitter/sheets-256/64.png")`,
+          backgroundSize: `${100 * sheet.cols}% ${100 * sheet.rows}%`,
+          backgroundPosition: `${(100 / (sheet.cols - 1)) * skin.x!}% ${(100 / (sheet.rows - 1)) * skin.y!}%`,
+        }}
+      />
+    </div>
   )
 }

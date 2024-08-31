@@ -1,8 +1,5 @@
 "use client"
 
-import { useMemo } from "react"
-
-import emojiData from "@emoji-mart/data"
 import { TrashIcon } from "@radix-ui/react-icons"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFieldArray, useFormContext } from "react-hook-form"
@@ -31,8 +28,6 @@ export const ReactionRoles = () => {
     control: form.control,
     name: `${ModuleId.ReactionRoles}.reactions`,
   })
-
-  const emojis = useMemo(() => emojiData, [])
 
   return (
     <FormItem className="space-y-8">
@@ -93,7 +88,7 @@ export const ReactionRoles = () => {
                                       Reaction Emoji
                                     </FormLabel>
                                     <FormControl>
-                                      <EmojiPicker emojis={emojis} {...field} />
+                                      <EmojiPicker {...field} />
                                     </FormControl>
                                     <FormMessage />
                                   </FormItem>
@@ -137,7 +132,7 @@ export const ReactionRoles = () => {
                   variant="outline"
                   disabled={formFieldArray.fields.length >= 20}
                   onClick={() =>
-                    formFieldArray.append({ emoji: "🌙", role: "" })
+                    formFieldArray.append({ emoji: "🌒", role: "" })
                   }
                 >
                   Add Reaction
