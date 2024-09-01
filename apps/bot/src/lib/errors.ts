@@ -1,8 +1,8 @@
 import { ChannelType, EmbedBuilder, PermissionFlagsBits } from "discord.js"
 
-import { ChannelTypeName } from "~/types/utils"
+import { ModuleId, modules } from "@repo/config/phase/modules.ts"
 
-import type { GuildModules } from "~/lib/db"
+import { ChannelTypeName } from "~/types/utils"
 
 type BotErrorMessage =
   | string
@@ -72,10 +72,10 @@ export const BotError = Object.assign(BotErrorClass, {
       title: "Member not found",
       description: "Make sure they are in this server, then try again.",
     }),
-  moduleNotEnabled: (module: keyof GuildModules) =>
+  moduleNotEnabled: (moduleId: ModuleId) =>
     new BotErrorClass({
       title: "Module not enabled",
-      description: `The \`${module.replace(/([A-Z])/g, " $1").trimStart()}\` module is not enabled, which is required to use this command.`,
+      description: `The \`${modules[moduleId].name.replace(/([A-Z])/g, " $1").trimStart()}\` module is not enabled, which is required to use this command.`,
     }),
   botMissingPermission: (
     permission?: keyof typeof PermissionFlagsBits,
