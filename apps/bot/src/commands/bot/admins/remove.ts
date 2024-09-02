@@ -48,7 +48,7 @@ export default new BotSubcommandBuilder()
       return
     }
 
-    void db.guilds.updateOne(
+    await db.guilds.updateOne(
       { id: interaction.guildId! },
       { $pull: { admins: user.id } },
     )
