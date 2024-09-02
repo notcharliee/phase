@@ -26,7 +26,7 @@ export default botEvent("guildMemberAdd", async (client, member) => {
   }
 
   const avatar = member.user.displayAvatarURL({ extension: "png", size: 256 })
-  const username = member.user.globalName ?? member.user.username
+  const username = member.user.username
   const membercount = member.guild.memberCount.toString()
   const background = moduleData.card.background
 
