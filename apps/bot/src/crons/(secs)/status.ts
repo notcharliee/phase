@@ -16,15 +16,9 @@ export default new BotCronBuilder()
 
     if (botStatusType !== statusType) {
       client.user.setStatus(statusType)
-      console.log(
-        `Bot status type set to '${statusType}' from '${botStatusType}'`,
-      )
     }
 
     if (botStatusText !== statusText) {
       client.user.setActivity(statusText, { type: ActivityType.Custom })
-      console.log(
-        `Bot status text set to '${statusText}' from '${botStatusText}'`,
-      )
     }
   })
