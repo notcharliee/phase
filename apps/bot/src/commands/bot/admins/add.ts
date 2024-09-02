@@ -48,11 +48,9 @@ export default new BotSubcommandBuilder()
       return
     }
 
-    const newAdmins = guildDoc.admins.concat(user.id)
-
-    void db.guilds.updateOne(
+    await db.guilds.updateOne(
       { id: interaction.guildId! },
-      { admins: newAdmins },
+      { $push: { admins: user.id } },
     )
 
     void interaction.editReply(`${user} has been granted dashboard access.`)

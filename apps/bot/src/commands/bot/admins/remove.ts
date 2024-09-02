@@ -48,11 +48,9 @@ export default new BotSubcommandBuilder()
       return
     }
 
-    const newAdmins = guildDoc.admins.filter((admin) => admin !== user.id)
-
     void db.guilds.updateOne(
       { id: interaction.guildId! },
-      { admins: newAdmins },
+      { $pull: { admins: user.id } },
     )
 
     void interaction.editReply(
