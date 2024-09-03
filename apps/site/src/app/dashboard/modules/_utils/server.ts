@@ -42,13 +42,6 @@ export async function parseModuleData(
     }
   }
 
-  if (formDataIs(ModuleId.AutoRoles, formData)) {
-    return {
-      ...formData,
-      roles: formData.roles.map((role) => role.id),
-    }
-  }
-
   if (formDataIs(ModuleId.BumpReminders, formData)) {
     return {
       ...formData,

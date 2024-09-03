@@ -22,7 +22,10 @@ export default botEvent(
 
     if (!autoRolesModule?.enabled) return
 
-    for (const role of autoRolesModule.roles) {
+    for (const stringOrObject of autoRolesModule.roles) {
+      const role =
+        typeof stringOrObject === "string" ? stringOrObject : stringOrObject.id
+
       if (
         newMember.guild.roles.cache.get(role) &&
         !newMember.roles.cache.has(role)

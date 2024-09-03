@@ -180,8 +180,11 @@ export function getDefaultValues(
     }),
     [ModuleId.AutoRoles]: (data) => ({
       ...data,
-      roles: data.roles.map((roleId) => ({
-        id: roleId,
+      roles: data.roles.map((stringOrObject) => ({
+        id:
+          typeof stringOrObject === "string"
+            ? stringOrObject
+            : stringOrObject.id,
       })),
     }),
     [ModuleId.BumpReminders]: (data) => ({

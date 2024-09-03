@@ -16,7 +16,10 @@ export default botEvent("guildMemberAdd", async (_, member) => {
 
   if (!autoRolesModule?.enabled) return
 
-  for (const role of autoRolesModule.roles) {
+  for (const stringOrObject of autoRolesModule.roles) {
+    const role =
+      typeof stringOrObject === "string" ? stringOrObject : stringOrObject.id
+
     if (member.guild.roles.cache.get(role) && !member.roles.cache.has(role))
       member.roles.add(role)
   }

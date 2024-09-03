@@ -46,7 +46,7 @@ export interface GuildModules {
   }
   [ModuleId.AutoRoles]: {
     enabled: boolean
-    roles: string[]
+    roles: (string | { id: string })[]
   }
   [ModuleId.BumpReminders]: {
     enabled: boolean
@@ -191,7 +191,7 @@ const modulesSchema = new mongoose.Schema<GuildModules>(
     [ModuleId.AutoRoles]: new mongoose.Schema(
       {
         enabled: { type: Boolean, required: true },
-        roles: { type: [String], required: true },
+        roles: { type: Array, required: true },
       },
       { _id: false },
     ),
