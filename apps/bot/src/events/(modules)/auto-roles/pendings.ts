@@ -14,23 +14,25 @@ export default botEvent(
       ) ||
       !oldMember.pending ||
       (oldMember.pending && newMember.pending)
-    )
+    ) {
       return
+    }
 
     const guildDoc = await cache.guilds.get(newMember.guild.id)
     const autoRolesModule = guildDoc?.modules?.[ModuleId.AutoRoles]
 
     if (!autoRolesModule?.enabled) return
 
-    for (const stringOrObject of autoRolesModule.roles) {
-      const role =
-        typeof stringOrObject === "string" ? stringOrObject : stringOrObject.id
+    for (const role of autoRolesModule.roles) {
+      if (role.target === "bots" && !newMember.user.bot) continue
+      if (role.target === "members" && newMember.user.bot) continue
 
       if (
-        newMember.guild.roles.cache.get(role) &&
-        !newMember.roles.cache.has(role)
-      )
-        newMember.roles.add(role)
+        newMember.guild.roles.cache.get(role.id) &&
+        !newMember.roles.cache.has(role.id)
+      ) {
+        newMember.roles.add(role.id)
+      }
     }
   },
 )

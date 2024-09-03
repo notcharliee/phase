@@ -178,15 +178,6 @@ export function getDefaultValues(
         content: msg.message,
       })),
     }),
-    [ModuleId.AutoRoles]: (data) => ({
-      ...data,
-      roles: data.roles.map((stringOrObject) => ({
-        id:
-          typeof stringOrObject === "string"
-            ? stringOrObject
-            : stringOrObject.id,
-      })),
-    }),
     [ModuleId.BumpReminders]: (data) => ({
       ...data,
       time: safeMs(data.time, { long: true })!,
