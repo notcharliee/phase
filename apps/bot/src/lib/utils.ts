@@ -93,6 +93,14 @@ export function safeMs<T extends string | number>(
     : string | undefined
 }
 
+export function dateToTimestamp(date: Date, type: "relative" = "relative") {
+  const typeChars = {
+    relative: "R",
+  }
+
+  return `<t:${Math.floor(date.getTime() / 1000)}:${typeChars[type]}>`
+}
+
 /**
  *
  * @param number The number to format.
