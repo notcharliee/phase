@@ -175,21 +175,6 @@ export function getDefaultValues(
       ...data,
       time: safeMs(data.time, { long: true })!,
     }),
-    [ModuleId.Forms]: (data) => ({
-      ...data,
-      forms: data.forms.map((form) => ({
-        ...form,
-        questions: form.questions.map((question) =>
-          typeof question === "string"
-            ? {
-                label: question,
-                type: "string",
-                required: true,
-              }
-            : question,
-        ),
-      })),
-    }),
     [ModuleId.ReactionRoles]: (data) => ({
       ...data,
       messageUrl: `https://discord.com/channels/${guildId}/${data.channel}/${data.message}`,

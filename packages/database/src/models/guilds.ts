@@ -73,14 +73,14 @@ export interface GuildModules {
       id: string
       name: string
       channel: string
-      questions: (string | {
+      questions: {
         label: string
         type: "string" | "number" | "boolean"
         required: boolean
         choices?: string[]
         min?: number
         max?: number
-      })[]
+      }[]
     }[]
   }
   [ModuleId.JoinToCreates]: {
@@ -259,7 +259,22 @@ const modulesSchema = new mongoose.Schema<GuildModules>(
                 id: { type: String, required: true },
                 name: { type: String, required: true },
                 channel: { type: String, required: true },
-                questions: { type: Array, required: true },
+                questions: {
+                  type: [
+                    new mongoose.Schema(
+                      {
+                        label: { type: String, required: true },
+                        type: { type: String, required: true },
+                        required: { type: Boolean, required: true },
+                        choices: { type: [String], required: false },
+                        min: { type: Number, required: false },
+                        max: { type: Number, required: false },
+                      },
+                      { _id: false },
+                    ),
+                  ],
+                  required: true,
+                },
               },
               { _id: false },
             ),
