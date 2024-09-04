@@ -109,7 +109,7 @@ const getDashboardData = cache(async () => {
       ...apiGuild,
       channels: apiChannels,
       admins: dbGuild.admins,
-      commands: dbGuild.commands,
+      commands: Object.fromEntries(dbGuild.commands ?? []),
       modules: guildModules,
     },
   }

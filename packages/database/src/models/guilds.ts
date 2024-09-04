@@ -393,7 +393,7 @@ const modulesSchema = new mongoose.Schema<GuildModules>(
 export interface Guild {
   id: string
   admins: string[]
-  commands?: Record<string, GuildCommand>
+  commands?: Map<string, GuildCommand>
   modules?: Partial<GuildModules>
 }
 
