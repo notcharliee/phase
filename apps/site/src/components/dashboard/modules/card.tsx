@@ -154,7 +154,7 @@ export function ModuleCard({
             </Card>
           </CredenzaTrigger>
           <CredenzaContent className="max-h-[90%] overflow-auto lg:max-h-[80%]">
-            <FormItem className="space-y-8">
+            <FormItem className="md:space-y-8">
               <CredenzaHeader>
                 <FormLabel asChild>
                   <CredenzaTitle>{name}</CredenzaTitle>
