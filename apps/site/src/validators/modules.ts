@@ -117,7 +117,7 @@ export const formsSchema = z.object({
         questions: z
           .array(
             z.object({
-              question: z
+              label: z
                 .string()
                 .min(1, {
                   message: "Question must be at least 1 character",
@@ -125,10 +125,36 @@ export const formsSchema = z.object({
                 .max(100, {
                   message: "Question cannot be longer than 100 characters",
                 }),
+              type: z.enum(["string", "number", "boolean"]),
+              required: z.boolean(),
+              choices: z
+                .string()
+                .min(1, {
+                  message: "Choice must be at least 1 character",
+                })
+                .max(100, {
+                  message: "Choice cannot be longer than 100 characters",
+                })
+                .array()
+                .max(10)
+                .transform((v) => (v.length === 0 ? undefined : v))
+                .optional(),
+              min: z
+                .string()
+                .min(0)
+                .max(256)
+                .transform((v) => Number(v))
+                .optional(),
+              max: z
+                .string()
+                .min(0)
+                .max(256)
+                .transform((v) => Number(v))
+                .optional(),
             }),
           )
           .min(1)
-          .max(100),
+          .max(25),
       }),
     )
     .max(10),

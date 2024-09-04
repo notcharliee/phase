@@ -57,14 +57,7 @@ export const defaultValues: Required<FormValues> = {
   [ModuleId.Forms]: {
     enabled: false,
     channel: "",
-    forms: [
-      {
-        id: randomUUID(),
-        name: "Form 1",
-        channel: "",
-        questions: [],
-      },
-    ],
+    forms: [],
   },
   [ModuleId.JoinToCreates]: {
     enabled: false,
@@ -186,7 +179,15 @@ export function getDefaultValues(
       ...data,
       forms: data.forms.map((form) => ({
         ...form,
-        questions: form.questions.map((question) => ({ question })),
+        questions: form.questions.map((question) =>
+          typeof question === "string"
+            ? {
+                label: question,
+                type: "string",
+                required: true,
+              }
+            : question,
+        ),
       })),
     }),
     [ModuleId.ReactionRoles]: (data) => ({

@@ -49,16 +49,6 @@ export async function parseModuleData(
     }
   }
 
-  if (formDataIs(ModuleId.Forms, formData)) {
-    return {
-      ...formData,
-      forms: formData.forms.map((form) => ({
-        ...form,
-        questions: form.questions.map((q) => q.question),
-      })),
-    }
-  }
-
   if (formDataIs(ModuleId.ReactionRoles, formData)) {
     const [, channelId, messageId] = formData.messageUrl
       .replace("https://discord.com/channels/", "")

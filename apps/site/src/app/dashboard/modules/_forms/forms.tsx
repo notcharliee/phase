@@ -167,7 +167,7 @@ const FormQuestions = (props: FormQuestionsProps) => {
               <FormField
                 key={field.id}
                 control={form.control}
-                name={`${nestedBaseName}.question`}
+                name={`${nestedBaseName}.label`}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Question {index + 1}</FormLabel>
@@ -196,9 +196,12 @@ const FormQuestions = (props: FormQuestionsProps) => {
           <Button
             type="button"
             variant="outline"
+            disabled={formQuestionsFieldArray.fields.length >= 25}
             onClick={() =>
               formQuestionsFieldArray.append({
-                question: "",
+                label: "",
+                type: "string",
+                required: true,
               })
             }
           >

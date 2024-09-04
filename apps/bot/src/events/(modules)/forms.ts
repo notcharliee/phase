@@ -746,11 +746,15 @@ export default new BotEventBuilder()
                 startedAt: new Date().toISOString(),
                 completedAt: null,
               },
-              questions: form.questions.map((question) => ({
-                label: question,
-                type: "string",
-                required: true,
-              })),
+              questions: form.questions.map((question) =>
+                typeof question === "string"
+                  ? {
+                      label: question,
+                      type: "string",
+                      required: true,
+                    }
+                  : question,
+              ),
               responses: [],
             } satisfies FormFile
 
