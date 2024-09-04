@@ -1,12 +1,24 @@
 "use client"
 
 import * as React from "react"
+
 import * as AccordionPrimitive from "@radix-ui/react-accordion"
 import { ChevronDownIcon } from "@radix-ui/react-icons"
 
+import { Button } from "~/components/ui/button"
+
 import { cn } from "@/lib/utils"
 
-const Accordion = AccordionPrimitive.Root
+const Accordion = React.forwardRef<
+  React.ElementRef<typeof AccordionPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>
+>(({ className, ...props }, ref) => (
+  <AccordionPrimitive.Root
+    ref={ref}
+    className={cn(className)}
+    {...props}
+  />
+))
 
 const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
@@ -14,7 +26,7 @@ const AccordionItem = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AccordionPrimitive.Item
     ref={ref}
-    className={cn("border-muted-foreground border-b", className)}
+    className={cn("border-b", className)}
     {...props}
   />
 ))
@@ -28,13 +40,19 @@ const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex flex-1 items-center justify-between py-4 text-sm font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
+        "flex flex-1 items-center justify-between py-1.5 text-sm font-medium underline-offset-2 transition-all hover:underline [&[data-state=open]>button>svg]:rotate-180",
         className,
       )}
       {...props}
     >
       {children}
-      <ChevronDownIcon className="text-muted-foreground h-4 w-4 shrink-0 transition-transform duration-200" />
+      <Button
+        size={"icon"}
+        variant={"ghost"}
+        className="text-muted-foreground hover:text-foreground"
+      >
+        <ChevronDownIcon className="h-4 w-4 transition-transform duration-200" />
+      </Button>
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ))
