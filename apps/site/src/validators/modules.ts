@@ -43,9 +43,8 @@ export const autoRolesSchema = z.object({
   roles: z
     .array(
       z.object({
-        id: z.string().min(1, {
-          message: "Role is required",
-        }),
+        id: z.string().min(1, { message: "Role is required" }),
+        target: z.enum(["everyone", "members", "bots"]),
       }),
     )
     .max(10),
