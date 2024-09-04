@@ -8,6 +8,26 @@ export const metadata = {
   <HeadingDescription>{metadata.description}</HeadingDescription>
 </Heading>
 
+## September 2024 - v3.16 release
+
+TL;DR: Updates for forms, auto roles, and the dashboard.
+
+### Forms Update
+
+The forms module now creates "form threads" (similar to tickets) that keep everything within your server, instead of in members' DMs.
+
+It also supports a wider range of input types: strings, numbers, and booleans, along with input methods like modals, dropdowns, and buttons. Strings and numbers use modals, dropdowns allow for selecting from multiple options, and buttons are used for yes/no questions. You can also now let members skip questions you deem optional.
+
+Lastly, you can now accept or reject form submissions with a reason, using a modal popup.
+
+### Auto Roles Update
+
+You can now pick which auto roles are assigned to which types of users (bots, members, and everyone). Thanks to `@yousif.adel` for suggesting this! 🤍
+
+### Dashboard Update
+
+Only the modules you have enabled will be visible by default; all others are accessible through the "Manage Mode" button. Additionally, the save function for module updates has been moved from individual module configs to the main page. Modules with unsaved changes or errors will be highlighted for easy identification.
+
 ## August 2024 - v3.15 release
 
 - Added support for all kinds of pings (not just roles) in auto messages and bump reminders.
