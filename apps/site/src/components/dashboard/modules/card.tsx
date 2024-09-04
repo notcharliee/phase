@@ -66,9 +66,10 @@ export function ModuleCard({
   const isEditMode = mode === Mode.Edit
   const isManageMode = mode === Mode.Manage
   const isUndefined = state === ModuleCardState.Undefined
-  const isDirty = state === ModuleCardState.Dirty
+  const isSubmitting = state === ModuleCardState.Submitting
   const isInvalid = state === ModuleCardState.Invalid
-  const isDisabled = isEditMode && state === ModuleCardState.Submitting
+  const isDirty = state === ModuleCardState.Dirty
+  const isDisabled = isEditMode && isSubmitting
 
   const handleCardClick = useCallback(
     (

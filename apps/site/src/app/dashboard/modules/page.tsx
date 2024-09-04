@@ -96,12 +96,12 @@ export default function Page() {
 
         const state = isUndefined
           ? ModuleCardState.Undefined
-          : isDirty
-            ? ModuleCardState.Dirty
+          : isSubmitting
+            ? ModuleCardState.Submitting
             : isInvalid
               ? ModuleCardState.Invalid
-              : isSubmitting
-                ? ModuleCardState.Submitting
+              : isDirty
+                ? ModuleCardState.Dirty
                 : ModuleCardState.Clean
 
         return (
