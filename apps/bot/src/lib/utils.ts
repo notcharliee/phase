@@ -102,6 +102,21 @@ export function dateToTimestamp(date: Date, type: "relative" = "relative") {
 }
 
 /**
+ * Truncates a string to a specified length and appends an ellipsis (`...`) at the end,
+ * replacing the last three characters if truncation is necessary.
+ *
+ * @param str The string to be truncated.
+ * @param maxLength The maximum length of the truncated string, including the ellipsis.
+ * @returns The truncated string with an ellipsis, or the original string if no truncation is needed.
+ */
+export function truncateString(str: string, maxLength: number): string {
+  if (str.length <= maxLength) {
+    return str
+  }
+  return str.slice(0, maxLength - 3) + "..."
+}
+
+/**
  *
  * @param number The number to format.
  * @returns Formatted number string.

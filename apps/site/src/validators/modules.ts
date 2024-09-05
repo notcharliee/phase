@@ -122,8 +122,8 @@ export const formsSchema = z.object({
                 .min(1, {
                   message: "Question must be at least 1 character",
                 })
-                .max(100, {
-                  message: "Question cannot be longer than 100 characters",
+                .max(128, {
+                  message: "Question cannot be longer than 128 characters",
                 }),
               type: z.enum(["string", "number", "boolean"]),
               required: z.boolean(),
@@ -139,18 +139,8 @@ export const formsSchema = z.object({
                 .max(10)
                 .transform((v) => (v.length === 0 ? undefined : v))
                 .optional(),
-              min: z
-                .string()
-                .min(0)
-                .max(256)
-                .transform((v) => Number(v))
-                .optional(),
-              max: z
-                .string()
-                .min(0)
-                .max(256)
-                .transform((v) => Number(v))
-                .optional(),
+              min: z.number().min(0).max(1024).optional(),
+              max: z.number().min(0).max(1024).optional(),
             }),
           )
           .min(1)

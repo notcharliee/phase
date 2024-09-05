@@ -26,6 +26,7 @@ import {
   createHiddenContent,
   dateToTimestamp,
   parseHiddenContent,
+  truncateString,
 } from "~/lib/utils"
 
 import type {
@@ -133,7 +134,7 @@ const formFileSchema = z.object({
       label: z.string(),
       type: z.enum(["string", "number", "boolean"]),
       required: z.boolean(),
-      choices: z.string().array().optional(),
+      choices: z.array(z.string()).transform((v) => (v.length ? v : undefined)),
       min: z.number().optional(),
       max: z.number().optional(),
     }),
@@ -239,7 +240,7 @@ function createQuestionMessage(formFile: FormFile, questionIndex: number) {
         .setFooter(footer),
     ],
     components: [
-      currentQuestion.choices?.length
+      currentQuestion.choices
         ? new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
             new StringSelectMenuBuilder()
               .setCustomId(customIds.input_select)
@@ -249,7 +250,7 @@ function createQuestionMessage(formFile: FormFile, questionIndex: number) {
               .setOptions(
                 currentQuestion.choices.map((choice, index) =>
                   new StringSelectMenuOptionBuilder()
-                    .setLabel(choice)
+                    .setLabel(truncateString(choice, 100))
                     .setValue(index.toString()),
                 ),
               ),
@@ -289,7 +290,7 @@ function createQuestionInputModal(question: FormQuestion) {
 
   const modalInput = new TextInputBuilder()
     .setCustomId(customIds.input_modal_value)
-    .setLabel(question.label)
+    .setLabel(truncateString(question.label, 45))
     .setMinLength(question.min ?? 1)
     .setMaxLength(question.max ?? 256)
     .setStyle(modalInputStyle)
@@ -297,7 +298,7 @@ function createQuestionInputModal(question: FormQuestion) {
 
   const modal = new ModalBuilder()
     .setCustomId(customIds.input_modal)
-    .setTitle(question.label)
+    .setTitle(truncateString(question.label, 45))
     .addComponents(
       new ActionRowBuilder<TextInputBuilder>().addComponents(modalInput),
     )
@@ -440,8 +441,8 @@ async function handleInput(
                 const responseText =
                   typeof response === "boolean"
                     ? response
-                      ? "true"
-                      : "false"
+                      ? "Yes"
+                      : "No"
                     : response === null
                       ? "*Skipped*"
                       : response.toString()
