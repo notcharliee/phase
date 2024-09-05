@@ -239,7 +239,7 @@ function createQuestionMessage(formFile: FormFile, questionIndex: number) {
         .setFooter(footer),
     ],
     components: [
-      currentQuestion.choices
+      currentQuestion.choices?.length
         ? new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
             new StringSelectMenuBuilder()
               .setCustomId(customIds.input_select)
