@@ -211,18 +211,22 @@ export const handleCommands = async (client: Client<false>) => {
     const sortOptions = (
       options: APIApplicationCommandOption[],
     ): APIApplicationCommandOption[] => {
-      return options.map((option: APIApplicationCommandOption) =>
-        option.type === ApplicationCommandOptionType.Subcommand ||
-        option.type === ApplicationCommandOptionType.SubcommandGroup
-          ? sortKeys({
-              ...option,
-              options:
-                option.options && option.options.length
-                  ? sortOptions(option.options)
-                  : [],
-            })
-          : sortKeys(option),
-      ) as APIApplicationCommandOption[]
+      return options
+        .map((option: APIApplicationCommandOption) =>
+          option.type === ApplicationCommandOptionType.Subcommand ||
+          option.type === ApplicationCommandOptionType.SubcommandGroup
+            ? sortKeys({
+                ...option,
+                options:
+                  option.options && option.options.length
+                    ? sortOptions(option.options)
+                    : [],
+              })
+            : sortKeys(option),
+        )
+        .sort((a, b) =>
+          a.name.localeCompare(b.name),
+        ) as APIApplicationCommandOption[]
     }
 
     // clone the local commands, convert them to their json form, and sort them
