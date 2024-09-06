@@ -134,7 +134,7 @@ const formFileSchema = z.object({
       label: z.string(),
       type: z.enum(["string", "number", "boolean"]),
       required: z.boolean(),
-      choices: z.array(z.string()).transform((v) => (v.length ? v : undefined)),
+      choices: z.string().array().optional(),
       min: z.number().optional(),
       max: z.number().optional(),
     }),
@@ -747,7 +747,12 @@ export default new BotEventBuilder()
                 startedAt: new Date().toISOString(),
                 completedAt: null,
               },
-              questions: form.questions,
+              questions: form.questions.map((question) => ({
+                ...question,
+                choices: question.choices?.length
+                  ? question.choices
+                  : undefined,
+              })),
               responses: [],
             } satisfies FormFile
 
