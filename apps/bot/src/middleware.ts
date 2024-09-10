@@ -46,7 +46,11 @@ export const commands: BotCommandMiddleware = async (
     .replaceAll("  ", " ")
 
   const guild = await cache.guilds.get(interaction.guild.id)
-  const command = guild && guild.commands && guild.commands[commandName]
+  const command =
+    guild &&
+    guild.commands &&
+    guild.commands instanceof Map &&
+    guild.commands.get(commandName)
 
   if (command) {
     if (command.disabled) {
