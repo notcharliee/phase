@@ -4,7 +4,6 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 import dedent from "dedent"
 import { Playlist } from "distube"
 
-import { distubeClient } from "~/lib/clients/distube"
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
 
@@ -35,12 +34,15 @@ export default new BotSubcommandBuilder()
 
     try {
       const queue =
-        distubeClient.getQueue(channel.guildId) ??
-        (await distubeClient.queues.create(channel))
+        interaction.client.distube.getQueue(channel.guildId) ??
+        (await interaction.client.distube.queues.create(channel))
 
-      const songOrPlaylist = await distubeClient.handler.resolve(songName, {
-        member,
-      })
+      const songOrPlaylist = await interaction.client.distube.handler.resolve(
+        songName,
+        {
+          member,
+        },
+      )
 
       const songs =
         songOrPlaylist instanceof Playlist

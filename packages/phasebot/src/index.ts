@@ -1,7 +1,6 @@
 import type { Client, ClientEvents } from "discord.js"
 
-export { setConfig, type BotConfig } from "~/client/config"
-export { getClient } from "~/client"
+export * from "~/client"
 
 /**
  * @deprecated Use `BotEventBuilder` instead.

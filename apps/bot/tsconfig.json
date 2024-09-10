@@ -1,6 +1,6 @@
 {
   "extends": "../../node_modules/@repo/config/src/typescript/base.json",
-  "include": ["src/**/*", "phase.config.ts", "phase-env.d.ts"],
+  "include": ["src/**/*", "phase-env.d.ts"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

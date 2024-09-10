@@ -6,8 +6,8 @@
     "docker:build": "docker build -t bot-image -f Dockerfile ../../",
     "docker:start": "docker run -it --rm bot-image",
     "build": "",
-    "start": "NODE_ENV=production phase start",
-    "dev": "phase dev"
+    "start": "NODE_ENV=production bun run src/main.ts",
+    "dev": "NODE_ENV=development bun run src/main.ts"
   },
   "dependencies": {
     "@androz2091/discord-invites-tracker": "^1.2.3",

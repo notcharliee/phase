@@ -19,14 +19,14 @@ new Command("phase")
       .action(async () => {
         await new PhaseClient({
           dev: true,
-        }).init()
+        }).start()
       }),
   )
   .addCommand(
     new Command("start")
       .description("run the bot in production mode")
       .action(async () => {
-        await new PhaseClient().init()
+        await new PhaseClient().start()
       }),
   )
   .parse()

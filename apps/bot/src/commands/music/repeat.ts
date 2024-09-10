@@ -1,7 +1,6 @@
 import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { distubeClient } from "~/lib/clients/distube"
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
 
@@ -44,7 +43,7 @@ export default new BotSubcommandBuilder()
       )
     }
 
-    const queue = distubeClient.getQueue(interaction.guildId!)
+    const queue = interaction.client.distube.getQueue(interaction.guildId!)
 
     if (!queue) {
       return void interaction.editReply(

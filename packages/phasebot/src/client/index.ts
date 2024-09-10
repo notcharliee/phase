@@ -6,7 +6,7 @@ import { Client } from "discord.js"
 import chalk from "chalk"
 import dedent from "dedent"
 
-import { loadConfigFile } from "~/client/config"
+import { loadConfigFile, setConfig } from "~/client/config"
 import { handleCommands, handleCrons, handleEvents } from "~/client/handlers"
 import { getPrestartPath, loadPrestartFile } from "~/client/prestart"
 import { phaseHeader, spinner } from "~/utils"
@@ -25,24 +25,10 @@ import type {
 import type { BotMiddleware, loadMiddlewareFile } from "~/client/middleware"
 import type { BotPrestart } from "~/client/prestart"
 
-const globalForClient = globalThis as unknown as {
-  djsClient: Client<true> | undefined
-}
+export { setConfig }
+export type { BotConfig }
 
-/**
- * Get the discord.js client instance.
- *
- * @throws If the client is not initialised.
- */
-export function getClient(): Client<true> {
-  if (!globalForClient.djsClient) {
-    throw new Error("Client not initialised")
-  }
-
-  return globalForClient.djsClient
-}
-
-interface PhaseClientParams {
+export interface PhaseClientParams {
   /** Whether or not to run the bot in development mode. */
   dev?: boolean
   /** The config for the bot. */
@@ -67,6 +53,12 @@ interface PhaseClientParams {
     middleware?: "default" | ((exports: any) => BotMiddleware)
     prestart?: "default" | ((exports: any) => BotPrestart)
   }
+  /**
+   * The plugins to load.
+   *
+   * @remarks Plugins are loaded in the order they are specified.
+   */
+  plugins?: ((client: Client<false>) => Client<false>)[]
 }
 
 const defaultExports = {
@@ -82,6 +74,7 @@ export class PhaseClient {
   public config: PhaseClientParams["config"]
   public files: PhaseClientParams["files"]
   public exports: PhaseClientParams["exports"]
+  public plugins: PhaseClientParams["plugins"]
 
   private configPath: string | undefined
   private djsClient!: Client<false>
@@ -91,11 +84,12 @@ export class PhaseClient {
     this.config = params?.config
     this.files = params?.files
     this.exports = { ...defaultExports, ...params?.exports }
+    this.plugins = params?.plugins
 
     Bun.env.NODE_ENV = this.dev ? "development" : "production"
   }
 
-  async init() {
+  async start() {
     if (!this.config) {
       const configFile = await loadConfigFile()
 
@@ -104,7 +98,12 @@ export class PhaseClient {
     }
 
     this.djsClient = new Client(this.config) as Client<false>
-    globalForClient.djsClient = this.djsClient as unknown as Client<true>
+
+    if (this.plugins) {
+      this.plugins.forEach((plugin) => {
+        this.djsClient = plugin(this.djsClient)
+      })
+    }
 
     console.log(dedent`
       ${phaseHeader}

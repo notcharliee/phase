@@ -3,7 +3,6 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { formatDuration } from "distube"
 
-import { distubeClient } from "~/lib/clients/distube"
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
 
@@ -32,7 +31,7 @@ export default new BotSubcommandBuilder()
       )
     }
 
-    const queue = distubeClient.getQueue(channel.guildId)
+    const queue = interaction.client.distube.getQueue(channel.guildId)
 
     if (!queue) {
       return void interaction.editReply(
@@ -50,7 +49,9 @@ export default new BotSubcommandBuilder()
             name: `Seeked by ${member.displayName}`,
             iconURL: member.displayAvatarURL(),
           })
-          .setDescription(`Seeked to \`${formatDuration(time)}\` in the current song.`),
+          .setDescription(
+            `Seeked to \`${formatDuration(time)}\` in the current song.`,
+          ),
       ],
     })
   })

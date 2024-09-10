@@ -1,4 +1,4 @@
-import { getClient } from "phasebot"
+import { Client } from "discord.js"
 
 import { YouTubePlugin } from "@distube/youtube"
 import { DisTube, Events } from "distube"
@@ -17,7 +17,9 @@ stealth.enabledEvasions.delete("media.codecs")
 
 puppeteer.use(stealth)
 
-export async function getCookies(refresh: boolean = false): Promise<Cookie[]> {
+export async function getYouTubeCookies(
+  refresh: boolean = false,
+): Promise<Cookie[]> {
   const cookiesFile = Bun.file(".cookies.json")
   const cookiesFileExists = await cookiesFile.exists()
 
@@ -88,14 +90,9 @@ export async function getCookies(refresh: boolean = false): Promise<Cookie[]> {
   return cookies
 }
 
-const globalForDistubeClient = globalThis as unknown as {
-  distubeClient: DisTube | undefined
-}
-
-export const distubeClient =
-  globalForDistubeClient.distubeClient ??
-  new DisTube(getClient(), {
-    plugins: [new YouTubePlugin({ cookies: await getCookies() })],
+export function distubePlugin(client: Client<false>): Client<false> {
+  const distubeClient = new DisTube(client, {
+    plugins: [new YouTubePlugin()],
     ffmpeg: { path: ffmpegPath! },
     emitAddListWhenCreatingQueue: false,
     emitAddSongWhenCreatingQueue: false,
@@ -104,7 +101,12 @@ export const distubeClient =
     nsfw: false,
   })
 
-distubeClient.on(Events.FINISH, (queue) => queue.stop())
-distubeClient.on(Events.DISCONNECT, (queue) => queue.stop())
-distubeClient.on(Events.DELETE_QUEUE, (queue) => queue.voice.leave())
-distubeClient.on(Events.ERROR, (error) => console.error(error))
+  distubeClient.on(Events.FINISH, (queue) => queue.stop())
+  distubeClient.on(Events.DISCONNECT, (queue) => queue.stop())
+  distubeClient.on(Events.DELETE_QUEUE, (queue) => queue.voice.leave())
+  distubeClient.on(Events.ERROR, (error) => console.error(error))
+
+  client.distube = distubeClient
+
+  return client
+}
