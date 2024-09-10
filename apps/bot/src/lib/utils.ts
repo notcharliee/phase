@@ -101,6 +101,10 @@ export function dateToTimestamp(date: Date, type: "relative" = "relative") {
   return `<t:${Math.floor(date.getTime() / 1000)}:${typeChars[type]}>`
 }
 
+export function wrapText(text: string, wrapper: string) {
+  return `${wrapper}${text}${wrapper}`
+}
+
 /**
  * Truncates a string to a specified length and appends an ellipsis (`...`) at the end,
  * replacing the last three characters if truncation is necessary.
