@@ -93,12 +93,23 @@ export function safeMs<T extends string | number>(
     : string | undefined
 }
 
-export function dateToTimestamp(date: Date, type: "relative" = "relative") {
-  const typeChars = {
-    relative: "R",
-  }
+const dateToTimestampTypeMap = {
+  shortTime: "t",
+  longTime: "T",
+  shortDate: "d",
+  longDate: "D",
+  shortDateTime: "f",
+  longDateTime: "F",
+  relative: "R",
+}
 
-  return `<t:${Math.floor(date.getTime() / 1000)}:${typeChars[type]}>`
+export function dateToTimestamp(
+  date: Date,
+  type: keyof typeof dateToTimestampTypeMap = "relative",
+) {
+  const timestamp = Math.floor(date.getTime() / 1000)
+  const typeChar = dateToTimestampTypeMap[type]
+  return `<t:${timestamp}:${typeChar}>`
 }
 
 export function wrapText(text: string, wrapper: string) {
