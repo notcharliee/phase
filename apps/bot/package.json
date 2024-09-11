@@ -23,7 +23,6 @@
     "chalk": "^5.3.0",
     "change-case": "^5.4.4",
     "dedent": "^1.5.3",
-    "discord-logs": "^2.2.1",
     "discord.js": "^14.12.1",
     "distube": "^5.0.2",
     "ffmpeg-static": "^5.2.0",
