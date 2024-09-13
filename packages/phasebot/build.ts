@@ -16,6 +16,7 @@ Bun.build({
   entrypoints: ["./src/index.ts", "./src/builders/index.ts", "./src/cli.ts"],
   outdir: "./dist",
   target: "bun",
+  sourcemap: "linked",
   external: externalDeps,
   minify: {
     identifiers: true,
