@@ -1,0 +1,39 @@
+{
+  "private": true,
+  "name": "@repo/music",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsup ./src/index.ts --clean --dts --format=esm --sourcemap=inline",
+    "dev": "tsup ./src/index.ts --clean --dts --format=esm --sourcemap=inline --watch"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "main": "./dist/index.js",
+      "module": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "dependencies": {
+    "@discordjs/opus": "^0.9.0",
+    "@discordjs/voice": "^0.17.0",
+    "@distube/youtube": "^1.0.4",
+    "@repo/config": "workspace:*",
+    "ffmpeg-static": "^5.2.0",
+    "sodium-native": "^4.1.1",
+    "tsup": "^8.0.1"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.9",
+    "typescript": "^5.3.2"
+  },
+  "peerDependencies": {
+    "discord.js": "^14.x.x"
+  },
+  "overrides": {
+    "@distube/ytdl-core": "latest"
+  }
+}

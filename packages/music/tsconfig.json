@@ -1,0 +1,5 @@
+{
+  "extends": "../../node_modules/@repo/config/src/typescript/base.json",
+  "include": ["src/**/*"],
+  "compilerOptions": { "baseUrl": "." }
+}
