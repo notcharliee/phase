@@ -35,12 +35,14 @@ export class Queue {
         oldState.status === AudioPlayerStatus.Playing &&
         newState.status === AudioPlayerStatus.Idle
       ) {
+        if (this.currentSongIndex === undefined) return
         if (this.repeatMode === QueueRepeatMode.Song) {
           this.voice.play(this.currentSong!)
-        } else {
-          if (!this.nextSong) return this.delete()
-          this.currentSongIndex!++
+        } else if (this.nextSong) {
+          if (this.repeatMode !== QueueRepeatMode.Queue) this.currentSongIndex++
           this.voice.play(this.currentSong!)
+        } else {
+          this.delete()
         }
       }
     })
@@ -53,34 +55,23 @@ export class Queue {
   }
 
   public get previousSong(): Song | null {
-    if (!this.currentSong) return null
+    const isFirstSong = this.currentSongIndex === 0
 
-    const previousSongIndex =
-      this.currentSongIndex === 0
-        ? this.repeatMode === QueueRepeatMode.Queue
-          ? this.songs.length - 1
-          : this.currentSongIndex - 1
+    return isFirstSong
+      ? this.repeatMode === QueueRepeatMode.Queue
+        ? this.songs[this.songs.length - 1]!
         : null
-
-    const previousSong =
-      previousSongIndex !== null ? this.songs[previousSongIndex] : null
-
-    return previousSong ?? null
+      : this.songs[this.currentSongIndex! - 1]!
   }
 
   public get nextSong(): Song | null {
-    if (!this.currentSong) return null
+    const isLastSong = this.currentSongIndex === this.songs.length - 1
 
-    const nextSongIndex =
-      this.currentSongIndex === this.songs.length - 1
-        ? this.repeatMode === QueueRepeatMode.Queue
-          ? 0
-          : this.currentSongIndex + 1
+    return isLastSong
+      ? this.repeatMode === QueueRepeatMode.Queue
+        ? this.songs[0]!
         : null
-
-    const nextSong = nextSongIndex !== null ? this.songs[nextSongIndex] : null
-
-    return nextSong ?? null
+      : this.songs[this.currentSongIndex! + 1]!
   }
 
   public get isPaused(): boolean {

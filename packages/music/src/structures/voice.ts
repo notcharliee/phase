@@ -93,8 +93,9 @@ export class Voice {
    * Plays a song. If any audio is already playing, it will be stopped.
    */
   public play(song: Song) {
-    // stops any existing audio
-    this.stop(true)
+    if (this.audioResource) {
+      this.stop(true)
+    }
 
     // prettier-ignore
     const ffmpegArgs = [
