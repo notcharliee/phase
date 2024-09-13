@@ -1,10 +1,12 @@
 import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
+import { QueueRepeatMode } from "@repo/music"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
+import { dateToTimestamp, wrapText } from "~/lib/utils"
 
 import type { GuildMember } from "discord.js"
 
@@ -18,52 +20,69 @@ export default new BotSubcommandBuilder()
     const member = interaction.member as GuildMember
     const channel = member.voice.channel
 
-    if (!channel?.isVoiceBased()) {
+    if (!channel) {
       return void interaction.editReply(
         BotError.specificChannelOnlyCommand("voice").toJSON(),
       )
     }
 
-    const queue = interaction.client.distube.getQueue(channel.guildId)
+    const queue = interaction.client.music.getQueue(channel.guildId)
 
-    if (!queue) {
+    if (!queue || !queue.currentSong) {
       return void interaction.editReply(
         new BotError("No songs were found in the queue.").toJSON(),
       )
     }
 
-    void interaction.editReply({
+    const now = Date.now() / 1000
+
+    return void interaction.editReply({
       embeds: [
         new EmbedBuilder()
           .setColor(PhaseColour.Primary)
           .setTitle(
-            `**${queue.songs.length}** songs in the queue (${queue.formattedDuration})`,
-          )
-          .setDescription(
-            queue.songs
+            `${queue.songs.length} song${queue.songs.length > 1 ? "s" : ""} in the queue`,
+          ).setDescription(dedent`
+            **Songs played:** \`${queue.currentSongIndex!}/${queue.songs.length}\`
+            **Total duration:** \`${queue.formattedDuration}\`
+            **Repeat mode:** \`${QueueRepeatMode[queue.repeatMode]}\`
+
+            ${queue.songs
               .map((song, index) => {
-                const songStartsPlaying = `<t:${Math.floor(
-                  Date.now() / 1000 +
-                    queue.songs
-                      .slice(0, index) // Get all songs before the current one
-                      .reduce(
-                        (prev, curr) => prev + curr.duration,
-                        0, // Start the sum at 0
-                      ) -
-                    queue.currentTime, // Subtract the current time
-                )}:R>`
+                const isPlayed = index < queue.currentSongIndex!
+                const isPlaying = index === queue.currentSongIndex!
 
-                const songFinishesPlaying = `<t:${Math.floor(Date.now() / 1000 + (song.duration - queue.currentTime))}:R>`
+                const songsToBePlayedDurations = queue.songs
+                  .slice(queue.currentSongIndex!, index)
+                  .reduce((prev, curr) => prev + curr.duration, 0)
 
-                return dedent`
-                  ${index + 1}\. **[${song.name} - ${song.uploader.name}](${song.url})**
-                  **Duration:** \`${song.formattedDuration}\`
-                  ${index !== 0 ? `**Starts playing:** ${songStartsPlaying}` : `**Finishes playing:** ${songFinishesPlaying}`}
-                  **Added by:** <@${song.member?.id ?? "unknown"}>
-                `
+                const songStartsPlaying = `<t:${Math.floor(now + songsToBePlayedDurations - queue.currentSong!.playbackDuration)}:R>`
+                const songFinishesPlaying = `<t:${Math.floor(now + (queue.duration - queue.currentSong!.playbackDuration))}:R>`
+
+                const status = wrapText(
+                  isPlayed ? "Played" : isPlaying ? "Playing" : "Queued",
+                  "`",
+                )
+
+                const duration = wrapText(song.formattedDuration, "`")
+                const addedAt = dateToTimestamp(song.submittedAt, "shortTime")
+                const addedBy = `<@${song.submittedBy.id}>`
+
+                return [
+                  `**${index + 1}\\. [${song.name}](${song.url})**`,
+                  `**Status:** ${status}`,
+                  `**Duration:** ${duration}`,
+                  !isPlayed
+                    ? isPlaying
+                      ? `**Finishes playing:** ${songFinishesPlaying}`
+                      : `**Starts playing:** ${songStartsPlaying}`
+                    : "",
+                  `**Added at:** ${addedAt}`,
+                  `**Added by:** ${addedBy}`,
+                ].join("\n")
               })
-              .join("\n\n"),
-          ),
+              .join("\n\n")}
+          `),
       ],
     })
   })

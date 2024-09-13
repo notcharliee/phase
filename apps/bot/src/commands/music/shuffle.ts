@@ -16,13 +16,13 @@ export default new BotSubcommandBuilder()
     const member = interaction.member as GuildMember
     const channel = member.voice.channel
 
-    if (!channel?.isVoiceBased()) {
+    if (!channel) {
       return void interaction.editReply(
         BotError.specificChannelOnlyCommand("voice").toJSON(),
       )
     }
 
-    const queue = interaction.client.distube.getQueue(channel.guildId)
+    const queue = interaction.client.music.getQueue(channel.guildId)
 
     if (!queue) {
       return void interaction.editReply(
@@ -30,7 +30,7 @@ export default new BotSubcommandBuilder()
       )
     }
 
-    void queue.shuffle()
+    queue.shuffleSongs()
 
     void interaction.editReply({
       embeds: [

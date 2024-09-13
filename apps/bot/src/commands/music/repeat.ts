@@ -1,6 +1,8 @@
 import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
+import { QueueRepeatMode } from "@repo/music"
+
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
 
@@ -17,15 +19,15 @@ export default new BotSubcommandBuilder()
       .addChoices(
         {
           name: "Queue",
-          value: "2",
+          value: `${QueueRepeatMode.Queue}`,
         },
         {
           name: "Current song",
-          value: "1",
+          value: `${QueueRepeatMode.Song}`,
         },
         {
           name: "No repeat",
-          value: "0",
+          value: `${QueueRepeatMode.Disabled}`,
         },
       ),
   )
@@ -37,13 +39,13 @@ export default new BotSubcommandBuilder()
     const member = interaction.member as GuildMember
     const channel = member.voice.channel
 
-    if (!channel?.isVoiceBased()) {
+    if (!channel) {
       return void interaction.editReply(
         BotError.specificChannelOnlyCommand("voice").toJSON(),
       )
     }
 
-    const queue = interaction.client.distube.getQueue(interaction.guildId!)
+    const queue = interaction.client.music.getQueue(interaction.guildId!)
 
     if (!queue) {
       return void interaction.editReply(
@@ -57,9 +59,9 @@ export default new BotSubcommandBuilder()
       )
     }
 
-    queue.repeatMode = repeat
+    queue.setRepeatMode(repeat as QueueRepeatMode)
 
-    void interaction.editReply({
+    return void interaction.editReply({
       embeds: [
         new EmbedBuilder()
           .setColor(PhaseColour.Primary)

@@ -1,8 +1,8 @@
 import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
+import { MusicError } from "@repo/music"
 import dedent from "dedent"
-import { Playlist } from "distube"
 
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
@@ -22,43 +22,27 @@ export default new BotSubcommandBuilder()
   .setExecute(async (interaction) => {
     await interaction.deferReply()
 
-    const songName = interaction.options.getString("song", true)
+    const query = interaction.options.getString("song", true)
     const member = interaction.member as GuildMember
     const channel = member.voice.channel
 
-    if (!channel?.isVoiceBased()) {
+    if (!channel) {
       return void interaction.editReply(
         BotError.specificChannelOnlyCommand("voice").toJSON(),
       )
     }
 
     try {
-      const queue =
-        interaction.client.distube.getQueue(channel.guildId) ??
-        (await interaction.client.distube.queues.create(channel))
-
-      const songOrPlaylist = await interaction.client.distube.handler.resolve(
-        songName,
-        {
-          member,
-        },
-      )
-
-      const songs =
-        songOrPlaylist instanceof Playlist
-          ? songOrPlaylist.songs
-          : [songOrPlaylist]
-
-      const song = songs[0]!
-
-      queue.addToQueue(songs)
-
-      if (!queue.playing) await queue.play()
+      const song = await interaction.client.music.play(channel, member, query)
+      const queue = interaction.client.music.getQueue(channel.guildId)!
 
       const songStartsPlaying = `<t:${Math.floor(Date.now() / 1000) + (queue.duration - song.duration)}:R>`
       const songFinishesPlaying = `<t:${Math.floor(Date.now() / 1000) + song.duration}:R>`
 
-      void interaction.editReply({
+      const duration = song.formattedDuration
+      const placeInQueue = queue.songs.slice(0, queue.currentSongIndex!).length
+
+      return void interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setColor(PhaseColour.Primary)
@@ -66,25 +50,31 @@ export default new BotSubcommandBuilder()
               name: `Added by ${member.displayName}`,
               iconURL: member.displayAvatarURL(),
             })
-            .setTitle(
-              `${song.name ?? "Unknown Song"} - ${song.uploader.name ?? "Unknown Artist"}`,
-            )
-            .setURL(song.url ?? null)
-            .setThumbnail(song.thumbnail ?? null)
+            .setTitle(song.name)
+            .setURL(song.url)
+            .setThumbnail(song.thumbnail)
             .setDescription(
               dedent`
-              **Duration:** \`${song.formattedDuration}\`
-              **Place in queue:** \`${queue.songs.length}\`
-              ${queue.songs.length > 1 ? `**Starts playing:** ${songStartsPlaying}` : `**Finishes playing:** ${songFinishesPlaying}`}
-            `,
+                **Duration:** \`${duration}\`
+                **Place in queue:** \`${placeInQueue}\`
+                ${placeInQueue >= 1 ? `**Starts playing:** ${songStartsPlaying}` : `**Finishes playing:** ${songFinishesPlaying}`}
+              `,
             )
-            .setFooter({
-              text: song.url ?? songName,
-            }),
+            .setFooter({ text: song.url }),
         ],
       })
     } catch (error) {
-      console.error(error)
+      if (error instanceof Error) {
+        if (error.message === MusicError.InvalidQuery) {
+          return await interaction.editReply(
+            new BotError("Song not found").toJSON(),
+          )
+        } else if (error.message === MusicError.PlaylistsNotSupported) {
+          return await interaction.editReply(
+            new BotError("Playlists are not supported at this time").toJSON(),
+          )
+        }
+      }
 
       return void interaction.editReply(
         BotError.unknown({

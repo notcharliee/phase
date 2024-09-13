@@ -16,25 +16,23 @@ export default new BotSubcommandBuilder()
     const member = interaction.member as GuildMember
     const channel = member.voice.channel
 
-    if (!channel?.isVoiceBased()) {
+    if (!channel) {
       return void interaction.editReply(
         BotError.specificChannelOnlyCommand("voice").toJSON(),
       )
     }
 
-    const queue = interaction.client.distube.getQueue(channel.guildId)
+    const queue = interaction.client.music.getQueue(channel.guildId)
 
-    if (!queue) {
+    if (!queue || !queue.currentSong) {
       return void interaction.editReply(
         new BotError("No songs were found in the queue.").toJSON(),
       )
     }
 
-    const song = queue.songs[queue.songs.length - 1]!
+    queue.skip()
 
-    void queue.skip()
-
-    void interaction.editReply({
+    return void interaction.editReply({
       embeds: [
         new EmbedBuilder()
           .setColor(PhaseColour.Primary)
@@ -43,8 +41,9 @@ export default new BotSubcommandBuilder()
             iconURL: member.displayAvatarURL(),
           })
           .setDescription(
-            `Skipped **${song.name}** by **${member.displayName}**.`,
-          ),
+            `Skipped **[${queue.currentSong.name}](${queue.currentSong.url})** by **${member.displayName}**.`,
+          )
+          .setFooter({ text: queue.currentSong.url }),
       ],
     })
   })

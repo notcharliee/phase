@@ -3,6 +3,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
+import { wrapText } from "~/lib/utils"
 
 import { createProgressBar } from "./_utils"
 
@@ -18,30 +19,39 @@ export default new BotSubcommandBuilder()
     const member = interaction.member as GuildMember
     const channel = member.voice.channel
 
-    if (!channel?.isVoiceBased()) {
+    if (!channel) {
       return void interaction.editReply(
         BotError.specificChannelOnlyCommand("voice").toJSON(),
       )
     }
 
-    const queue = interaction.client.distube.getQueue(channel.guildId)
+    const queue = interaction.client.music.getQueue(channel.guildId)
 
-    if (!queue) {
+    if (!queue || !queue.currentSong) {
       return void interaction.editReply(
         new BotError("No songs were found in the queue.").toJSON(),
       )
     }
 
-    const song = queue.songs[queue.songs.length - 1]!
+    if (queue.isPaused) {
+      return void interaction.editReply(
+        new BotError("This song is already paused.").toJSON(),
+      )
+    }
 
-    const songProgressBar = createProgressBar(
-      queue.currentTime / queue.duration,
+    queue.pause()
+
+    const song = queue.currentSong
+
+    const progressBar = createProgressBar(
+      song.playbackDuration / song.duration,
       "paused",
     )
 
-    void queue.pause()
+    const duration = wrapText(song.formattedDuration, "`")
+    const playbackDuration = wrapText(song.formattedPlaybackDuration, "`")
 
-    void interaction.editReply({
+    return void interaction.editReply({
       embeds: [
         new EmbedBuilder()
           .setColor(PhaseColour.Primary)
@@ -49,12 +59,9 @@ export default new BotSubcommandBuilder()
             name: `Paused by ${member.displayName}`,
             iconURL: member.displayAvatarURL(),
           })
-          .setDescription(
-            `\`${queue.formattedCurrentTime}\` ${songProgressBar} \`${song.formattedDuration}\``,
-          )
-          .setFooter({
-            text: song.url ?? "Unknown",
-          }),
+          .setTitle(song.name)
+          .setDescription(`${playbackDuration} ${progressBar} ${duration}`)
+          .setFooter({ text: song.url }),
       ],
     })
   })

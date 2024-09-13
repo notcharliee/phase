@@ -1,3 +1,6 @@
+import { Client } from "discord.js"
+
+import { Music } from "@repo/music"
 import puppeteer from "puppeteer-extra"
 import stealthPlugin from "puppeteer-extra-plugin-stealth"
 
@@ -5,16 +8,21 @@ import { env } from "~/lib/env"
 
 import type { Cookie } from "@distube/ytdl-core"
 
-const stealth = stealthPlugin()
-
-stealth.enabledEvasions.delete("iframe.contentWindow")
-stealth.enabledEvasions.delete("media.codecs")
-
-puppeteer.use(stealth)
+export function musicPlugin(client: Client<false>) {
+  client.music = new Music(client)
+  return client
+}
 
 export async function getYouTubeCookies(
   refresh: boolean = false,
 ): Promise<Cookie[]> {
+  const stealth = stealthPlugin()
+
+  stealth.enabledEvasions.delete("iframe.contentWindow")
+  stealth.enabledEvasions.delete("media.codecs")
+
+  puppeteer.use(stealth)
+
   const cookiesFile = Bun.file(".cookies.json")
   const cookiesFileExists = await cookiesFile.exists()
 

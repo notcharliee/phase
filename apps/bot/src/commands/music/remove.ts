@@ -23,13 +23,13 @@ export default new BotSubcommandBuilder()
     const member = interaction.member as GuildMember
     const channel = member.voice.channel
 
-    if (!channel?.isVoiceBased()) {
+    if (!channel) {
       return void interaction.editReply(
         BotError.specificChannelOnlyCommand("voice").toJSON(),
       )
     }
 
-    const queue = interaction.client.distube.getQueue(channel.guildId)
+    const queue = interaction.client.music.getQueue(channel.guildId)
 
     if (!queue) {
       return void interaction.editReply(
@@ -45,9 +45,9 @@ export default new BotSubcommandBuilder()
       )
     }
 
-    queue.songs.splice(position - 1, 1)
+    queue.removeSong(song)
 
-    void interaction.editReply({
+    return void interaction.editReply({
       embeds: [
         new EmbedBuilder()
           .setColor(PhaseColour.Primary)
@@ -57,7 +57,8 @@ export default new BotSubcommandBuilder()
           })
           .setDescription(
             `Removed **[${song.name}](${song.url})** from the queue.`,
-          ),
+          )
+          .setFooter({ text: song.url }),
       ],
     })
   })

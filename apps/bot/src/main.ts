@@ -1,7 +1,7 @@
 import { Partials } from "discord.js"
 import { PhaseClient } from "phasebot"
 
-import { distubePlugin } from "~/lib/distube"
+import { musicPlugin } from "~/lib/music"
 
 const isDev = process.env.NODE_ENV === "development"
 
@@ -34,7 +34,7 @@ const phaseClient = new PhaseClient({
     middleware: "default",
     prestart: "default",
   },
-  plugins: [distubePlugin],
+  plugins: [musicPlugin],
 })
 
 await phaseClient.start()

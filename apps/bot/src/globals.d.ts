@@ -1,9 +1,9 @@
 import { Client as DiscordClient } from "discord.js"
 
-import { DisTube } from "distube"
+import { Music } from "@repo/music"
 
 declare module "discord.js" {
   interface Client extends DiscordClient {
-    distube: DisTube
+    music: Music
   }
 }
