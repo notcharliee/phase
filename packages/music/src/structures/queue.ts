@@ -5,8 +5,8 @@ import { AudioPlayerStatus } from "@discordjs/voice"
 import { formatDuration } from "~/utils"
 
 import type { Music } from "~/structures/music"
+import type { Song } from "~/structures/song"
 import type { Voice } from "~/structures/voice"
-import type { CurrentSong, Song } from "~/types"
 
 export enum QueueRepeatMode {
   Disabled = 0,
@@ -46,19 +46,10 @@ export class Queue {
     })
   }
 
-  public get currentSong(): CurrentSong | null {
-    if (this.currentSongIndex === undefined) return null
-
-    const currentSong = this.songs[this.currentSongIndex]!
-    const playbackDuration = Math.floor(
-      (this.voice.audioResource?.playbackDuration ?? 0) / 1000,
-    )
-
-    return {
-      ...currentSong,
-      playbackDuration,
-      formattedPlaybackDuration: formatDuration(playbackDuration),
-    }
+  public get currentSong() {
+    return this.currentSongIndex !== undefined
+      ? this.songs[this.currentSongIndex]!
+      : null
   }
 
   public get previousSong(): Song | null {
@@ -183,7 +174,7 @@ export class Queue {
    *
    * @returns The new current song if one exists, otherwise `null`.
    */
-  public skip(): CurrentSong | null {
+  public skip(): Song | null {
     if (!this.nextSong) {
       this.delete()
       return null

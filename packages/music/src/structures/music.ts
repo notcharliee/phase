@@ -2,12 +2,12 @@ import { YouTubePlaylist, YouTubePlugin } from "@distube/youtube"
 
 import { QueueManager } from "~/managers/queue"
 import { VoiceManager } from "~/managers/voice"
+import { Song } from "~/structures/song"
 
 import type { Client, GuildMember, VoiceBasedChannel } from "discord.js"
 
 export enum MusicError {
   InvalidQuery = "Invalid query",
-  PlaylistsNotSupported = "Playlists are not supported at this time",
 }
 
 export class Music {
@@ -41,48 +41,85 @@ export class Music {
     })
   }
 
+  /**
+   * Plays a song or playlist.
+   *
+   * @returns An array of songs that were added to the queue.
+   */
   public async play(
     voiceChannel: VoiceBasedChannel,
     submitter: GuildMember,
     query: string,
-  ) {
+  ): Promise<Song[]> {
     const queue = this.queues.has(voiceChannel.guild.id)
       ? this.queues.get(voiceChannel.guild.id)!
       : this.queues.create(voiceChannel)
 
-    const song = this.youtube.validate(query)
+    const youtubeSongOrPlaylist = this.youtube.validate(query)
       ? await this.youtube.resolve(query, {}).catch(() => null)
       : await this.youtube.searchSong(query, {}).catch(() => null)
 
-    if (!song) {
+    if (!youtubeSongOrPlaylist) {
       throw new Error(MusicError.InvalidQuery)
     }
 
-    if (song instanceof YouTubePlaylist) {
-      throw new Error(MusicError.PlaylistsNotSupported)
+    if (youtubeSongOrPlaylist instanceof YouTubePlaylist) {
+      const youtubePlaylist = youtubeSongOrPlaylist
+
+      const newSongs: Song[] = []
+
+      for (const youtubeSong of youtubePlaylist.songs) {
+        const streamUrl = await this.youtube
+          .getStreamURL(youtubeSong)
+          .catch(() => null)
+
+        if (!streamUrl) {
+          throw new Error(MusicError.InvalidQuery)
+        }
+
+        const song = new Song(queue, {
+          name: youtubeSong.name!,
+          thumbnail: youtubeSong.thumbnail!,
+          duration: youtubeSong.duration,
+          url: youtubeSong.url!,
+          streamUrl,
+          submitter,
+        })
+
+        newSongs.push(song)
+        queue.addSong(song)
+      }
+
+      return newSongs
+    } else {
+      const youtubeSong = youtubeSongOrPlaylist
+
+      const streamUrl = await this.youtube
+        .getStreamURL(youtubeSong)
+        .catch(() => null)
+
+      if (!streamUrl) {
+        throw new Error(MusicError.InvalidQuery)
+      }
+
+      const song = new Song(queue, {
+        name: youtubeSong.name!,
+        thumbnail: youtubeSong.thumbnail!,
+        duration: youtubeSong.duration,
+        url: youtubeSong.url!,
+        streamUrl,
+        submitter,
+      })
+
+      queue.addSong(song)
+
+      return [song]
     }
-
-    const streamUrl = await this.youtube.getStreamURL(song)
-
-    if (!streamUrl) {
-      throw new Error(MusicError.InvalidQuery)
-    }
-
-    const addedSong = queue.addSong({
-      url: song.url!,
-      streamUrl: streamUrl,
-      name: song.name!,
-      duration: song.duration,
-      formattedDuration: song.formattedDuration,
-      thumbnail: song.thumbnail!,
-      isLive: song.isLive ?? false,
-      submittedAt: new Date(),
-      submittedBy: submitter,
-    })
-
-    return addedSong
   }
 
+  /**
+   * Gets the queue for a guild.
+   */
   public getQueue(guildId: string) {
     return this.queues.get(guildId)
   }

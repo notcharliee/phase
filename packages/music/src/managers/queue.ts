@@ -1,9 +1,9 @@
 import { VoiceBasedChannel } from "discord.js"
 
 import { BaseManager } from "~/managers/base"
-import { Music } from "~/structures/music"
 import { Queue } from "~/structures/queue"
 
+import type { Music } from "~/structures/music"
 import type { Snowflake } from "discord.js"
 
 export class QueueManager extends BaseManager<Snowflake, Queue> {

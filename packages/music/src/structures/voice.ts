@@ -18,7 +18,7 @@ import type {
   VoiceConnection,
 } from "@discordjs/voice"
 import type { VoiceManager } from "~/managers/voice"
-import type { CurrentSong } from "~/types"
+import type { Song } from "~/structures/song"
 import type { Snowflake, VoiceBasedChannel } from "discord.js"
 
 export class Voice {
@@ -92,7 +92,7 @@ export class Voice {
   /**
    * Plays a song. If any audio is already playing, it will be stopped.
    */
-  public play(song: CurrentSong) {
+  public play(song: Song) {
     // stops any existing audio
     this.stop(true)
 

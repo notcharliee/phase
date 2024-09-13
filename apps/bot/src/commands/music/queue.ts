@@ -1,7 +1,7 @@
 import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { QueueRepeatMode } from "@repo/music"
+import { formatDuration, QueueRepeatMode } from "@repo/music"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
@@ -36,6 +36,15 @@ export default new BotSubcommandBuilder()
 
     const now = Date.now() / 1000
 
+    const totalPlaybackDuration = formatDuration(
+      queue.songs
+        .slice(0, queue.currentSongIndex!)
+        .reduce(
+          (acc, song) => acc + song.duration,
+          queue.currentSong!.playbackDuration,
+        ),
+    )
+
     return void interaction.editReply({
       embeds: [
         new EmbedBuilder()
@@ -44,7 +53,7 @@ export default new BotSubcommandBuilder()
             `${queue.songs.length} song${queue.songs.length > 1 ? "s" : ""} in the queue`,
           ).setDescription(dedent`
             **Songs played:** \`${queue.currentSongIndex!}/${queue.songs.length}\`
-            **Total duration:** \`${queue.formattedDuration}\`
+            **Duration played:** \`${totalPlaybackDuration}/${queue.formattedDuration}\`
             **Repeat mode:** \`${QueueRepeatMode[queue.repeatMode]}\`
 
             ${queue.songs
