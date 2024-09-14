@@ -2,7 +2,7 @@ import { API, ButtonStyle, MessageType } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { database } from "~/lib/db"
+import { db } from "~/lib/db"
 import { env } from "~/lib/env"
 import { twitchClient } from "~/lib/twitch"
 import { safeMs } from "~/lib/utils"
@@ -12,8 +12,8 @@ import type {
   APIMessage,
   RESTPostAPIChannelMessageJSONBody,
 } from "@discordjs/core/http-only"
-import type { GuildModules, mongoose, Reminder } from "~/lib/db"
 import type { ModulesFormValues } from "~/types/dashboard"
+import type { GuildModules, mongoose, Reminder } from "~/types/db"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
@@ -100,8 +100,6 @@ export async function handleAutoMessagesModule(
   guildId: string,
   messages: GuildModules[ModuleId.AutoMessages]["messages"],
 ) {
-  const db = await database.init()
-
   const docsToInsert: mongoose.Document<unknown, {}, Reminder>[] = []
 
   for (const message of messages) {
@@ -117,6 +115,8 @@ export async function handleAutoMessagesModule(
       }),
     )
   }
+
+  await db.connect(env.MONGODB_URI)
 
   await db.reminders.bulkWrite([
     { deleteMany: { filter: { guild: guildId, loop: true } } },

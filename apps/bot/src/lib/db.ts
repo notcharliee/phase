@@ -4,9 +4,8 @@ import { env } from "~/lib/env"
 
 const db = await new Database({
   autoIndex: true,
-  cacheConnection: env.NODE_ENV !== "production",
   debug: false,
-}).init()
+}).connect(env.MONGODB_URI)
 
 export { db, mongoose }
 export type * from "@repo/database"

@@ -1,10 +1,14 @@
-import { Database, mongoose } from "@repo/database"
+import { Database } from "@repo/database"
 
-const database = new Database({
+import { env } from "~/lib/env"
+
+export const db = new Database({
   autoIndex: false,
-  cacheConnection: true,
   debug: false,
 })
 
-export { database, mongoose }
-export type * from "@repo/database"
+export async function connectDB() {
+  await db.connect(env.MONGODB_URI)
+}
+
+export { mongoose } from "@repo/database"

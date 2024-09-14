@@ -2,7 +2,7 @@
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { database } from "~/lib/db"
+import { db } from "~/lib/db"
 
 import {
   handleAutoMessagesModule,
@@ -14,12 +14,13 @@ import {
 import { getDashboardHeaders } from "~/app/dashboard/utils"
 import { moduleIdSchema, modulesSchema } from "~/validators/modules"
 
-import type { GuildModules } from "~/lib/db"
 import type {
   GuildModulesWithData,
   ModulesFormValues,
   ModulesFormValuesWithData,
 } from "~/types/dashboard"
+import type { GuildModules } from "~/types/db"
+import { env } from "~/lib/env"
 
 export async function updateModules(
   unsafeFormValues: ModulesFormValues,
@@ -27,7 +28,7 @@ export async function updateModules(
 ) {
   const { guildId, userId } = getDashboardHeaders()
 
-  const db = await database.init()
+  await db.connect(env.MONGODB_URI)
 
   const guildDoc = await db.guilds.findOne({
     id: guildId,

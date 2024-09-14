@@ -3,8 +3,8 @@ import { v4 as randomUUID } from "uuid"
 
 import { safeMs } from "~/lib/utils"
 
-import type { GuildModules } from "~/lib/db"
 import type { GuildModulesWithData } from "~/types/dashboard"
+import type { GuildModules } from "~/types/db"
 import type { modulesSchema } from "~/validators/modules"
 import type { APIMessage } from "discord-api-types/v10"
 import type { z } from "zod"

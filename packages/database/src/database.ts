@@ -1,92 +1,91 @@
 import mongoose from "mongoose"
 
-import { afks } from "./models/afks.js"
-import { configs } from "./models/configs.js"
-import { giveaways } from "./models/giveaways.js"
-import { guilds } from "./models/guilds.js"
-import { levels } from "./models/levels.js"
-import { otps } from "./models/otps.js"
-import { reminders } from "./models/reminders.js"
-import { tags } from "./models/tags.js"
+import { afks } from "~/models/afks"
+import { configs } from "~/models/configs"
+import { giveaways } from "~/models/giveaways"
+import { guilds } from "~/models/guilds"
+import { levels } from "~/models/levels"
+import { otps } from "~/models/otps"
+import { reminders } from "~/models/reminders"
+import { tags } from "~/models/tags"
 
-interface InitialisedDatabase extends Omit<Database, "init"> {
-  afks: typeof afks
-  configs: typeof configs
-  giveaways: typeof giveaways
-  guilds: typeof guilds
-  levels: typeof levels
-  otps: typeof otps
-  reminders: typeof reminders
-  tags: typeof tags
+class DatabaseModels {
+  readonly afks = afks
+  readonly configs = configs
+  readonly giveaways = giveaways
+  readonly guilds = guilds
+  readonly levels = levels
+  readonly otps = otps
+  readonly reminders = reminders
+  readonly tags = tags
+
+  constructor() {
+    return new Proxy(this, {
+      get: (target, prop) => {
+        const isConnected = mongoose.connection.readyState === 1
+        const isModel = prop in target
+
+        if (!isConnected && isModel) {
+          throw new Error("Database not connected")
+        }
+
+        return target[prop as keyof typeof target]
+      },
+    })
+  }
 }
 
 interface DatabaseConfig {
-  /** Automatically create indexes for all models (startup performance may be impacted). */
   autoIndex?: boolean
-  /** Cache the database connection in global state (useful for HMR). */
-  cacheConnection?: boolean
-  /** Enable debug logging. */
   debug?: boolean
 }
 
-const globalForDb = globalThis as unknown as {
-  mongodbConn: mongoose.Mongoose | undefined
-}
-
-export class Database implements Disposable {
-  private _autoIndex: boolean = true
-  private _cacheConnection: boolean = false
-  private _debug: boolean = false
+export class Database extends DatabaseModels implements Disposable {
+  #options: DatabaseConfig
 
   constructor(config?: DatabaseConfig) {
-    if (config?.autoIndex) this._autoIndex = config.autoIndex
-    if (config?.cacheConnection) this._cacheConnection = config.cacheConnection
-    if (config?.debug) this._debug = config.debug
+    super()
+    this.#options = config ?? {}
   }
 
-  async init() {
-    this.debug("Initialising database")
+  async connect(uri: string) {
+    this.#debug("Initialising database")
 
-    if (!process.env.MONGODB_URI) {
-      throw new Error("'MONGODB_URI' environment variable not set")
-    }
-
-    if (this._cacheConnection && globalForDb.mongodbConn) {
-      this.debug("Reusing existing connection to MongoDB")
+    if (mongoose.connection.readyState === 1) {
+      this.#debug("Reusing existing connection to MongoDB")
     } else {
-      this.debug("Connecting to MongoDB")
+      this.#debug("Connecting to MongoDB")
 
-      const conn = await mongoose.connect(process.env.MONGODB_URI, {
-        autoIndex: this._autoIndex,
-      })
-
-      this.debug("Connected to MongoDB")
-
-      if (this._cacheConnection) {
-        globalForDb.mongodbConn = conn
-        this.debug("Cached connection to MongoDB")
+      try {
+        await mongoose.connect(uri, { autoIndex: this.#options.autoIndex })
+        this.#debug("Connected to MongoDB")
+      } catch (error) {
+        this.#debug(`Failed to connect to MongoDB: ${error}`)
+        throw error
       }
     }
 
-    Object.assign(this, {
-      afks,
-      configs,
-      giveaways,
-      guilds,
-      levels,
-      otps,
-      reminders,
-      tags,
-    } satisfies Omit<InitialisedDatabase, typeof Symbol.dispose>)
-
-    return this as unknown as InitialisedDatabase
+    return this
   }
 
-  private debug(message: string) {
-    if (this._debug) console.log(message)
+  async disconnect() {
+    try {
+      await mongoose.disconnect()
+      this.#debug("Disconnected from MongoDB")
+    } catch (error) {
+      this.#debug(`Failed to disconnect from MongoDB: ${error}`)
+      throw error
+    }
+
+    return this
+  }
+
+  #debug(message: string) {
+    if (!this.#options.debug) return
+    console.debug(message)
   }
 
   [Symbol.dispose]() {
-    mongoose.disconnect().then(() => this.debug("Disconnected from MongoDB"))
+    this.disconnect()
   }
 }

@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "tsup ./src/index.ts --clean --dts --format=esm",
-    "dev": "tsup ./src/index.ts --clean --dts --format=esm --watch"
+    "build": "tsup ./src/index.ts --clean --dts --format=esm --sourcemap=inline",
+    "dev": "tsup ./src/index.ts --clean --dts --format=esm --sourcemap=inline --watch"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -19,10 +19,7 @@
   },
   "dependencies": {
     "@repo/config": "workspace:*",
-    "aws-sdk": "^2.1599.0",
-    "mock-aws-s3": "^4.0.2",
     "mongoose": "^8.1.0",
-    "nock": "^13.5.4",
     "tsup": "^8.0.1"
   },
   "devDependencies": {

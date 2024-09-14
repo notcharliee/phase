@@ -1,3 +1,5 @@
+import "~/lib/env"
+
 import { Partials } from "discord.js"
 import { PhaseClient } from "phasebot"
 

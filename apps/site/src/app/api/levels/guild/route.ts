@@ -4,7 +4,7 @@ import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 import { StatusCodes } from "http-status-codes"
 
-import { database } from "~/lib/db"
+import { db } from "~/lib/db"
 import { env } from "~/lib/env"
 
 import type { NextRequest } from "next/server"
@@ -36,7 +36,7 @@ export const GET = async (request: NextRequest) => {
     return badRequest("'rankStart' cannot be greater than 'rankEnd'")
   if (rankEnd > 15) return badRequest("'rankEnd' cannot be greater than 15.")
 
-  const db = await database.init()
+  await db.connect(env.MONGODB_URI)
 
   const usersData = await db.levels
     .find({ guild: guildId })
@@ -78,7 +78,7 @@ export const GET = async (request: NextRequest) => {
         rank: rankStart + index,
         target: 500 * (data.level + 1),
       })
-    } catch (error) {
+    } catch {
       continue
     }
   }

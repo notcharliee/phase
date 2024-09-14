@@ -8,7 +8,7 @@ import { ModuleId } from "@repo/config/phase/modules.ts"
 import { ClientOnly } from "~/components/client-only"
 import { DashboardProvider } from "~/components/dashboard/context"
 
-import { database } from "~/lib/db"
+import { db } from "~/lib/db"
 import { env } from "~/lib/env"
 import { twitchClient } from "~/lib/twitch"
 import { deleteKeyRecursively } from "~/lib/utils"
@@ -18,8 +18,8 @@ import type {
   APIMessage,
   GuildChannelType,
 } from "@discordjs/core/http-only"
-import type { GuildModules } from "~/lib/db"
 import type { DashboardData, GuildModulesWithData } from "~/types/dashboard"
+import type { GuildModules } from "~/types/db"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
@@ -32,7 +32,7 @@ const getDashboardData = cache(async () => {
 
   if (!guildId || !userId) throw new Error("Invalid credentials")
 
-  const db = await database.init()
+  await db.connect(env.MONGODB_URI)
 
   const dbGuild = await db.guilds
     .findOne({

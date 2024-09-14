@@ -20,7 +20,7 @@ import { Button } from "~/components/ui/button"
 import { Codeblock } from "~/components/ui/codeblock"
 
 import { createCookie } from "~/lib/auth"
-import { database } from "~/lib/db"
+import { db } from "~/lib/db"
 import { env } from "~/lib/env"
 import { absoluteURL } from "~/lib/utils"
 
@@ -38,7 +38,7 @@ export default async function LoginPage(props: LoginPageProps) {
   const onSubmit = async (value: string) => {
     "use server"
 
-    const db = await database.init()
+    await db.connect(env.MONGODB_URI)
 
     const signature = createHmac("sha256", env.AUTH_OTP_SECRET)
       .update(value)
@@ -119,7 +119,7 @@ async function LoginCallback(props: LoginCallbackPageProps) {
 
   if (!user) return <LoginFailure />
 
-  const db = await database.init()
+  await db.connect(env.MONGODB_URI)
 
   const guilds = await Promise.all(
     (await db.guilds.find({ admins: { $in: user.id } })).flatMap((guild) =>

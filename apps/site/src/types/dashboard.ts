@@ -4,7 +4,7 @@ import type {
   APIMessage,
   GuildChannelType,
 } from "@discordjs/core/http-only"
-import type { GuildCommand, GuildModules } from "~/lib/db"
+import type { GuildCommand, GuildModules } from "~/types/db"
 import type { modulesSchema } from "~/validators/modules"
 import type { z } from "zod"
 
