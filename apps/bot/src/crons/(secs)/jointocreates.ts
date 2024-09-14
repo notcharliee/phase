@@ -2,7 +2,6 @@ import { BotCronBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { cache } from "~/lib/cache"
 import { db } from "~/lib/db"
 
 import type { VoiceChannel } from "discord.js"
@@ -10,14 +9,14 @@ import type { VoiceChannel } from "discord.js"
 export default new BotCronBuilder()
   .setPattern("*/5 * * * * *") // every 5 seconds
   .setExecute(async (client) => {
-    const guildDocsWithActiveJTCs = (await cache.guilds.values()).filter(
+    const guildDocsWithActiveJTCs = client.store.guilds.filter(
       (guildDoc) => guildDoc.modules?.[ModuleId.JoinToCreates]?.active.length,
     )
 
     const channelsToDelete: Promise<void>[] = []
     const guildIdsToUpdate: string[] = []
 
-    for (const guildDoc of guildDocsWithActiveJTCs) {
+    for (const guildDoc of guildDocsWithActiveJTCs.values()) {
       const activeJTCChannelIDs =
         guildDoc.modules![ModuleId.JoinToCreates]!.active
 

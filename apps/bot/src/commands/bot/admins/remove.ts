@@ -1,6 +1,5 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { cache } from "~/lib/cache"
 import { db } from "~/lib/db"
 import { BotError } from "~/lib/errors"
 
@@ -38,7 +37,7 @@ export default new BotSubcommandBuilder()
       return
     }
 
-    const guildDoc = (await cache.guilds.get(interaction.guildId!))!
+    const guildDoc = interaction.client.store.guilds.get(interaction.guildId!)!
 
     if (!guildDoc.admins.includes(user.id)) {
       void interaction.editReply(

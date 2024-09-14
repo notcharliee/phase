@@ -3,14 +3,13 @@ import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { cache } from "~/lib/cache"
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 
 export default new BotEventBuilder()
   .setName("guildMemberAdd")
   .setExecute(async (client, member) => {
-    const guildDoc = await cache.guilds.get(member.guild.id)
+    const guildDoc = client.store.guilds.get(member.guild.id)
     const moduleConfig = guildDoc?.modules?.[ModuleId.WelcomeMessages]
 
     if (!guildDoc || !moduleConfig?.enabled) return

@@ -1,9 +1,7 @@
 import { GuildMember, PermissionFlagsBits } from "discord.js"
 import { type BotCommandMiddleware } from "phasebot/builders"
 
-import { cache } from "~/lib/cache"
-
-import { BotError } from "./lib/errors"
+import { BotError } from "~/lib/errors"
 
 export const commands: BotCommandMiddleware = async (
   interaction,
@@ -45,7 +43,7 @@ export const commands: BotCommandMiddleware = async (
     .trim()
     .replaceAll("  ", " ")
 
-  const guild = await cache.guilds.get(interaction.guild.id)
+  const guild = interaction.client.store.guilds.get(interaction.guild.id)
   const command =
     guild &&
     guild.commands &&

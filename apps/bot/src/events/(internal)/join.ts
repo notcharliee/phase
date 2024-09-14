@@ -3,22 +3,20 @@ import { BotEventBuilder } from "phasebot/builders"
 
 import dedent from "dedent"
 
-import { cache } from "~/lib/cache"
 import { alertWebhook } from "~/lib/clients/webhooks/alert"
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 
 export default new BotEventBuilder()
   .setName("guildCreate")
-  .setExecute(async (_, newGuild) => {
-    const config = (await cache.configs.get("bot"))! // always exists
+  .setExecute(async (client, newGuild) => {
     const owner = await newGuild.fetchOwner().catch(console.error)
 
-    const guildIsBlacklisted = config.blacklist.guilds.find(
+    const guildIsBlacklisted = client.store.config.blacklist.guilds.find(
       (guild) => guild.id === newGuild.id,
     )
 
-    const userIsBlacklisted = config.blacklist.users.find(
+    const userIsBlacklisted = client.store.config.blacklist.users.find(
       (user) => user.id === newGuild.ownerId,
     )
 

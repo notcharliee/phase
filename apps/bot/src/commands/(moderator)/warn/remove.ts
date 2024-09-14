@@ -4,7 +4,6 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 import dedent from "dedent"
 
-import { cache } from "~/lib/cache"
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
 import { getOrdinal } from "~/lib/utils"
@@ -29,7 +28,7 @@ export default new BotSubcommandBuilder()
       return
     }
 
-    const guildDoc = await cache.guilds.get(interaction.guildId!)
+    const guildDoc = interaction.client.store.guilds.get(interaction.guildId!)
     const warningsModule = guildDoc?.modules?.[ModuleId.Warnings]
 
     if (!warningsModule?.enabled) {

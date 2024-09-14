@@ -14,7 +14,6 @@ import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { cache } from "~/lib/cache"
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
 
@@ -46,7 +45,7 @@ export default new BotEventBuilder()
       const ticketAction = customIdParts[1] as "open" | "lock"
       const ticketId = customIdParts[2] as UUID
 
-      const guildDoc = await cache.guilds.get(interaction.guildId)
+      const guildDoc = client.store.guilds.get(interaction.guildId)
       const moduleConfig = guildDoc?.modules?.[ModuleId.Tickets]
 
       if (!moduleConfig?.enabled) {

@@ -22,7 +22,6 @@ import { capitalCase } from "change-case"
 import dedent from "dedent"
 import ms from "ms"
 
-import { cache } from "~/lib/cache"
 import { PhaseColour } from "~/lib/enums"
 import { dateToTimestamp, truncateString, wrapText } from "~/lib/utils"
 
@@ -262,7 +261,7 @@ type ExtraFieldTypeMap = {
 export default new BotEventBuilder()
   .setName("guildAuditLogEntryCreate")
   .setExecute(async (client, entry, guild) => {
-    const guildDoc = await cache.guilds.get(guild.id)
+    const guildDoc = client.store.guilds.get(guild.id)
     if (!guildDoc) return
 
     const moduleConfig = guildDoc.modules?.[ModuleId.AuditLogs]

@@ -8,7 +8,6 @@ import { BotCronBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { cache } from "~/lib/cache"
 import { twitchAPI } from "~/lib/clients/twitch"
 import { PhaseColour } from "~/lib/enums"
 
@@ -17,7 +16,7 @@ import type { GuildTextBasedChannel } from "discord.js"
 export default new BotCronBuilder()
   .setPattern("* * * * *") // every minute
   .setExecute(async (client) => {
-    const guildDocs = (await cache.guilds.values()).filter(
+    const guildDocs = client.store.guilds.filter(
       (guildDoc) => guildDoc.modules?.[ModuleId.TwitchNotifications]?.enabled,
     )
 
@@ -60,16 +59,16 @@ export default new BotCronBuilder()
       return acc
     }, new Map<string, Streamer>())
 
-    const oldStreamStatuses = await cache.twitchStreamStatuses.entries()
+    const oldStreamStatuses = Object.entries(client.store.twitchStatuses)
 
     for (const [id, streamer] of streamers.entries()) {
       const oldStreamStatus = oldStreamStatuses.find(([key]) => key === id)?.[1]
       const stream = await twitchAPI.streams.getStreamByUserId(id)
 
       if (oldStreamStatus && !stream) {
-        await cache.twitchStreamStatuses.delete(id)
+        delete client.store.twitchStatuses[id]
       } else if (!oldStreamStatus && stream) {
-        await cache.twitchStreamStatuses.set(id, true)
+        client.store.twitchStatuses[id] = true
 
         for (const notification of streamer.notifications) {
           const channel = client.channels.cache.get(

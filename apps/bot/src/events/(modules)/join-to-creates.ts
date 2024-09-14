@@ -3,15 +3,14 @@ import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { cache } from "~/lib/cache"
 import { db } from "~/lib/db"
 
 export default new BotEventBuilder()
   .setName("voiceStateUpdate")
-  .setExecute(async (_, oldVoice, newVoice) => {
+  .setExecute(async (client, oldVoice, newVoice) => {
     if (!newVoice.channelId) return
 
-    const guildDoc = await cache.guilds.get(oldVoice.guild.id)
+    const guildDoc = client.store.guilds.get(oldVoice.guild.id)
     const joinToCreateModule = guildDoc?.modules?.[ModuleId.JoinToCreates]
 
     if (

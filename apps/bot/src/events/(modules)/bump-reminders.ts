@@ -3,16 +3,15 @@ import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { cache } from "~/lib/cache"
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 
 export default new BotEventBuilder()
   .setName("messageCreate")
-  .setExecute(async (_, message) => {
+  .setExecute(async (client, message) => {
     if (message.interaction?.commandName !== "bump") return
 
-    const guildDoc = await cache.guilds.get(message.guildId!)
+    const guildDoc = client.store.guilds.get(message.guildId!)
     const moduleConfig = guildDoc?.modules?.[ModuleId.BumpReminders]
 
     if (!guildDoc || !moduleConfig?.enabled) return

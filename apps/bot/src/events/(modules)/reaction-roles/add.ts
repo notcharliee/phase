@@ -2,14 +2,12 @@ import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { cache } from "~/lib/cache"
-
 export default new BotEventBuilder()
   .setName("messageReactionAdd")
-  .setExecute(async (_, reaction, user) => {
+  .setExecute(async (client, reaction, user) => {
     if (user.bot || !reaction.message.inGuild()) return
 
-    const guildDoc = await cache.guilds.get(reaction.message.guildId)
+    const guildDoc = client.store.guilds.get(reaction.message.guildId)
     const moduleData = guildDoc?.modules?.[ModuleId.ReactionRoles]
 
     if (

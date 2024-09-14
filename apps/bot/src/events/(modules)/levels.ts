@@ -3,7 +3,6 @@ import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { cache } from "~/lib/cache"
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 
@@ -12,7 +11,7 @@ export default new BotEventBuilder()
   .setExecute(async (client, message) => {
     if (!message.inGuild() || message.author.bot) return
 
-    const guildDoc = await cache.guilds.get(message.guildId)
+    const guildDoc = client.store.guilds.get(message.guildId)
     const moduleConfig = guildDoc?.modules?.[ModuleId.Levels]
 
     if (!moduleConfig?.enabled) return

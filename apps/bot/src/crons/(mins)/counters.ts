@@ -2,16 +2,14 @@ import { BotCronBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { cache } from "~/lib/cache"
-
 import type { BaseGuildVoiceChannel } from "discord.js"
 
 export default new BotCronBuilder()
   .setPattern("*/10 * * * *") // every 10 minutes
   .setExecute(async (client) => {
-    const guildDocs = (await cache.guilds.values()).filter(
-      (guildDoc) => guildDoc.modules?.[ModuleId.Counters]?.enabled,
-    )
+    const guildDocs = client.store.guilds
+      .filter((guildDoc) => guildDoc.modules?.[ModuleId.Counters]?.enabled)
+      .values()
 
     for (const guildDoc of guildDocs) {
       const guild =

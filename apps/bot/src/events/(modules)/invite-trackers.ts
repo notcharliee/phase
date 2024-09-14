@@ -6,7 +6,6 @@ import { BotEventBuilder } from "phasebot/builders"
 import invitesTracker from "@androz2091/discord-invites-tracker"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { cache } from "~/lib/cache"
 import { PhaseColour } from "~/lib/enums"
 import { dateToTimestamp, wrapText } from "~/lib/utils"
 
@@ -24,7 +23,7 @@ export default new BotEventBuilder()
 
       const { guild } = member
 
-      const guildDoc = await cache.guilds.get(guild.id)
+      const guildDoc = client.store.guilds.get(guild.id)
       if (!guildDoc) return
 
       const moduleConfig = guildDoc.modules?.[ModuleId.AuditLogs]

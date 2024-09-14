@@ -19,7 +19,6 @@ import { ModuleId } from "@repo/config/phase/modules.ts"
 import dedent from "dedent"
 import { z } from "zod"
 
-import { cache } from "~/lib/cache"
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
 import {
@@ -614,7 +613,7 @@ async function handleStatusUpdate(
 
 export default new BotEventBuilder()
   .setName("interactionCreate")
-  .setExecute(async (_, interaction) => {
+  .setExecute(async (client, interaction) => {
     if (
       (!interaction.isButton() &&
         !interaction.isModalSubmit() &&
@@ -663,7 +662,7 @@ export default new BotEventBuilder()
 
       // the module config from the database
 
-      const guildDoc = await cache.guilds.get(interaction.guildId!)
+      const guildDoc = client.store.guilds.get(interaction.guildId!)
       const moduleConfig = guildDoc?.modules?.[ModuleId.Forms]
 
       if (!moduleConfig?.enabled) {

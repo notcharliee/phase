@@ -1,6 +1,8 @@
+import "~/lib/env"
 import "~/lib/db"
-import "~/lib/cache"
 
-export default async function prestart() {
-  // do nothing :p
+import type { Client } from "discord.js"
+
+export default async function prestart(client: Client<false>) {
+  await client.store.init()
 }

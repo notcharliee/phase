@@ -2,14 +2,12 @@ import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { cache } from "~/lib/cache"
-
 export default new BotEventBuilder()
   .setName("guildMemberUpdate")
-  .setExecute(async (_, oldMember, newMember) => {
+  .setExecute(async (client, oldMember, newMember) => {
     if (!oldMember.pending || (oldMember.pending && newMember.pending)) return
 
-    const guildDoc = await cache.guilds.get(newMember.guild.id)
+    const guildDoc = client.store.guilds.get(newMember.guild.id)
     const autoRolesModule = guildDoc?.modules?.[ModuleId.AutoRoles]
 
     if (!autoRolesModule?.enabled) return
