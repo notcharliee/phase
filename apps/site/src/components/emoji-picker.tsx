@@ -2,10 +2,7 @@
 
 import { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
 
-import emojiData, {
-  categories,
-  sheet,
-} from "@emoji-mart/data/sets/15/twitter.json"
+import emojiData from "@emoji-mart/data/sets/15/twitter.json"
 import { useDebounce } from "@uidotdev/usehooks"
 import * as emojiMart from "emoji-mart"
 
@@ -141,7 +138,7 @@ export const EmojiPicker = forwardRef<
                   )}
                 </div>
               ) : (
-                categories.map((category) => (
+                emojiData.categories.map((category) => (
                   <div className="space-y-2" key={category.id}>
                     <Label className="capitalize">{category.id}</Label>
                     <div className="grid grid-cols-9 text-xl">
@@ -195,8 +192,8 @@ function Emoji({ name, skin, className, isPlaceholder }: EmojiProps) {
         className={cn("block size-3/4", isPlaceholder && "opacity-50")}
         style={{
           backgroundImage: `url("https://cdn.jsdelivr.net/npm/emoji-datasource-twitter@15.0.0/img/twitter/sheets-256/64.png")`,
-          backgroundSize: `${100 * sheet.cols}% ${100 * sheet.rows}%`,
-          backgroundPosition: `${(100 / (sheet.cols - 1)) * skin.x!}% ${(100 / (sheet.rows - 1)) * skin.y!}%`,
+          backgroundSize: `${100 * emojiData.sheet.cols}% ${100 * emojiData.sheet.rows}%`,
+          backgroundPosition: `${(100 / (emojiData.sheet.cols - 1)) * skin.x!}% ${(100 / (emojiData.sheet.rows - 1)) * skin.y!}%`,
         }}
       />
     </div>
