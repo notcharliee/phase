@@ -20,18 +20,18 @@ class DatabaseModels {
   readonly tags = tags
 
   constructor() {
-    return new Proxy(this, {
-      get: (target, prop) => {
-        const isConnected = mongoose.connection.readyState === 1
-        const isModel = prop in target
+    // return new Proxy(this, {
+    //   get: (target, prop) => {
+    //     const isConnected = mongoose.connection.readyState === 1
+    //     const isModel = prop in target
 
-        if (!isConnected && isModel) {
-          throw new Error("Database not connected")
-        }
+    //     if (!isConnected && isModel) {
+    //       throw new Error("Database not connected")
+    //     }
 
-        return target[prop as keyof typeof target]
-      },
-    })
+    //     return target[prop as keyof typeof target]
+    //   },
+    // })
   }
 }
 
