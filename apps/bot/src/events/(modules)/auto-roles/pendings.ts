@@ -1,22 +1,13 @@
-import { GuildFeature } from "discord.js"
-import { botEvent } from "phasebot"
+import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
 import { cache } from "~/lib/cache"
 
-export default botEvent(
-  "guildMemberUpdate",
-  async (_, oldMember, newMember) => {
-    if (
-      !newMember.guild.features.includes(
-        GuildFeature.MemberVerificationGateEnabled,
-      ) ||
-      !oldMember.pending ||
-      (oldMember.pending && newMember.pending)
-    ) {
-      return
-    }
+export default new BotEventBuilder()
+  .setName("guildMemberUpdate")
+  .setExecute(async (_, oldMember, newMember) => {
+    if (!oldMember.pending || (oldMember.pending && newMember.pending)) return
 
     const guildDoc = await cache.guilds.get(newMember.guild.id)
     const autoRolesModule = guildDoc?.modules?.[ModuleId.AutoRoles]
@@ -34,5 +25,4 @@ export default botEvent(
         newMember.roles.add(role.id)
       }
     }
-  },
-)
+  })
