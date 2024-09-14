@@ -12,7 +12,6 @@
   "dependencies": {
     "@androz2091/discord-invites-tracker": "^1.2.3",
     "@octokit/rest": "^20.0.2",
-    "@repo/cache": "workspace:*",
     "@repo/config": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/music": "workspace:*",

@@ -5,7 +5,6 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"],
-      "@repo/cache": ["../../node_modules/@repo/cache/dist"],
       "@repo/database": ["../../node_modules/@repo/database/dist"],
       "@repo/music": ["../../node_modules/@repo/music/dist"]
     }
