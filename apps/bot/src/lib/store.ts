@@ -10,8 +10,14 @@ export function storePlugin(client: Client<false>) {
   return client
 }
 
+enum StoreState {
+  Uninitialised = 0,
+  Initialising = 1,
+  Initialised = 2,
+}
+
 export class Store {
-  #initialised: 0 | 1 | 2 = 0
+  private state: StoreState = StoreState.Uninitialised
 
   /**
    * Config for the bot
@@ -34,7 +40,7 @@ export class Store {
   constructor() {
     return new Proxy(this, {
       get: (target, prop) => {
-        if (target.#initialised === 0 && prop !== "init") {
+        if (target.state === 0 && prop !== "init") {
           throw new Error("Store not initialised")
         }
         return Reflect.get(target, prop)
@@ -43,12 +49,12 @@ export class Store {
   }
 
   async init() {
-    this.#initialised = 1
+    this.state = StoreState.Initialising
 
     await this.getConfig()
     await this.getGuilds()
 
-    this.#initialised = 2
+    this.state = StoreState.Initialised
   }
 
   private async getConfig() {
