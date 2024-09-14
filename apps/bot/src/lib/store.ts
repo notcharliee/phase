@@ -11,7 +11,7 @@ export function storePlugin(client: Client<false>) {
 }
 
 export class Store {
-  #initialised = false
+  #initialised: 0 | 1 | 2 = 0
 
   /**
    * Config for the bot
@@ -34,17 +34,21 @@ export class Store {
   constructor() {
     return new Proxy(this, {
       get: (target, prop) => {
-        if (!target.#initialised) throw new Error("Store not initialised")
+        if (target.#initialised === 0 && prop !== "init") {
+          throw new Error("Store not initialised")
+        }
         return Reflect.get(target, prop)
       },
     })
   }
 
   async init() {
+    this.#initialised = 1
+
     await this.getConfig()
     await this.getGuilds()
 
-    this.#initialised = true
+    this.#initialised = 2
   }
 
   private async getConfig() {
