@@ -1,10 +1,7 @@
 import { BotCronBuilder } from "phasebot/builders"
 
-import { getYouTubeCookies } from "~/lib/distube"
+import { getYouTubeCookies } from "~/lib/music"
 
-/**
- * Refreshes the youtube cookies every day at midnight so they don't expire.
- */
 export default new BotCronBuilder()
   .setPattern("0 0 * * *")
   .setExecute(async (client) => {

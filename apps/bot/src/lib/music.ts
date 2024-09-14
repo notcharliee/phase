@@ -1,5 +1,3 @@
-import { Client } from "discord.js"
-
 import { Music } from "@repo/music"
 import puppeteer from "puppeteer-extra"
 import stealthPlugin from "puppeteer-extra-plugin-stealth"
@@ -7,6 +5,7 @@ import stealthPlugin from "puppeteer-extra-plugin-stealth"
 import { env } from "~/lib/env"
 
 import type { Cookie } from "@distube/ytdl-core"
+import type { Client } from "discord.js"
 
 export function musicPlugin(client: Client<false>) {
   client.music = new Music(client)
@@ -34,6 +33,8 @@ export async function getYouTubeCookies(
       console.error("Failed to parse cookies JSON:", e)
     }
   }
+
+  console.log("Attempting to refresh YouTube cookies ...")
 
   // refresh cookies if the file doesn't exist or if refresh is requested
   const browser = await puppeteer.launch({
@@ -85,9 +86,7 @@ export async function getYouTubeCookies(
   if (cookies.length >= 10) {
     await Bun.write(".cookies.json", JSON.stringify(cookies))
   } else {
-    console.error(
-      "Failed to authenticate with Google, falling back to guest cookies.\n",
-    )
+    console.log("Failed to refresh YouTube cookies.")
   }
 
   return cookies
