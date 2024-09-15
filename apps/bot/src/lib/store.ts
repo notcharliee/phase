@@ -10,51 +10,16 @@ export function storePlugin(client: Client<false>) {
   return client
 }
 
-enum StoreState {
-  Uninitialised = 0,
-  Initialising = 1,
-  Initialised = 2,
-}
+type WithId<T> = T & { _id: mongoose.Types.ObjectId }
 
 export class Store {
-  private state: StoreState = StoreState.Uninitialised
-
-  /**
-   * Config for the bot
-   */
   readonly config!: Config
-
-  /**
-   * Config for each guild
-   */
-  readonly guilds: Collection<
-    Snowflake,
-    Guild & { _id: mongoose.Types.ObjectId }
-  > = new Collection()
-
-  /**
-   * Twitch streamer live statuses
-   */
-  readonly twitchStatuses: Record<string, boolean> = {}
-
-  constructor() {
-    return new Proxy(this, {
-      get: (target, prop) => {
-        if (target.state === 0 && prop !== "init") {
-          throw new Error("Store not initialised")
-        }
-        return Reflect.get(target, prop)
-      },
-    })
-  }
+  readonly guilds = new Collection<Snowflake, WithId<Guild>>()
+  readonly twitchStatuses = new Collection<string, boolean>()
 
   async init() {
-    this.state = StoreState.Initialising
-
     await this.getConfig()
     await this.getGuilds()
-
-    this.state = StoreState.Initialised
   }
 
   private async getConfig() {
@@ -86,7 +51,11 @@ export class Store {
     const guildDocs = await db.guilds.find({})
     const guildObjs = guildDocs.map((doc) => doc.toObject())
 
-    Reflect.set(this, "guilds", guildObjs)
+    Reflect.set(
+      this,
+      "guilds",
+      new Collection(guildObjs.map((guild) => [guild.id, guild])),
+    )
 
     type GuildObject = (typeof guildObjs)[number]
     type GuildChangeStreamDoc = mongoose.mongo.ChangeStreamDocument<GuildObject>
