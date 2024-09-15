@@ -125,7 +125,7 @@ export interface GuildModules {
       name: string
       channel: string
       content: string
-      methods: (
+      methods:
         | {
             id: string
             type: "reaction"
@@ -134,7 +134,7 @@ export interface GuildModules {
               id: string
               action: "add" | "remove"
             }[]
-          }
+          }[]
         | {
             id: string
             type: "button"
@@ -144,7 +144,7 @@ export interface GuildModules {
               id: string
               action: "add" | "remove"
             }[]
-          }
+          }[]
         | {
             id: string
             type: "dropdown"
@@ -159,8 +159,7 @@ export interface GuildModules {
                 action: "add" | "remove"
               }[]
             }[]
-          }
-      )[]
+          }[]
     }[]
   }
   [ModuleId.Tickets]: {
