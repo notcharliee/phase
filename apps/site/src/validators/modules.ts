@@ -224,6 +224,63 @@ export const reactionRolesSchema = z.object({
     .max(20),
 })
 
+export const selfRolesSchema = z.object({
+  enabled: z.boolean(),
+  messages: z
+    .object({
+      id: z.string(),
+      name: z.string().min(1, { message: "Name is required" }),
+      channel: z.string().min(1, { message: "Channel is required" }),
+      content: z.string().min(1, { message: "Content is required" }),
+      methods: z
+        .union([
+          z.object({
+            id: z.string(),
+            type: z.literal("reaction"),
+            emoji: z.string().min(1, { message: "Emoji is required" }),
+            roles: z
+              .object({ id: z.string(), action: z.enum(["add", "remove"]) })
+              .array()
+              .min(1, { message: "At least one role is required" }),
+          }),
+          z.object({
+            id: z.string(),
+            type: z.literal("button"),
+            label: z.string().min(1, { message: "Label is required" }),
+            emoji: z.string().optional(),
+            roles: z
+              .object({ id: z.string(), action: z.enum(["add", "remove"]) })
+              .array()
+              .min(1, { message: "At least one role is required" }),
+          }),
+          z.object({
+            id: z.string(),
+            type: z.literal("dropdown"),
+            placeholder: z.string().default("Select an option"),
+            multiselect: z.boolean(),
+            options: z
+              .object({
+                id: z.string(),
+                label: z.string().min(1, { message: "Label is required" }),
+                emoji: z.string().optional(),
+                roles: z
+                  .object({ id: z.string(), action: z.enum(["add", "remove"]) })
+                  .array()
+                  .min(1, { message: "At least one role is required" }),
+              })
+              .array()
+              .min(1, { message: "At least one option is required" })
+              .max(25, { message: "Maximum of 25 options allowed" }),
+          }),
+        ])
+        .array()
+        .min(1, { message: "At least one method is required" }),
+    })
+    .array()
+    .min(1)
+    .max(10, { message: "Maximum of 10 messages allowed" }),
+})
+
 export const ticketsSchema = z.object({
   enabled: z.boolean(),
   channel: z.string().min(1, {
@@ -320,6 +377,7 @@ export const modulesSchema = z.object({
   [ModuleId.JoinToCreates]: joinToCreatesSchema.optional(),
   [ModuleId.Levels]: levelsSchema.optional(),
   [ModuleId.ReactionRoles]: reactionRolesSchema.optional(),
+  [ModuleId.SelfRoles]: selfRolesSchema.optional(),
   [ModuleId.Tickets]: ticketsSchema.optional(),
   [ModuleId.TwitchNotifications]: twitchNotificationsSchema.optional(),
   [ModuleId.Warnings]: warningsSchema.optional(),

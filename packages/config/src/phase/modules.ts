@@ -8,6 +8,7 @@ export enum ModuleId {
   JoinToCreates = "67NXpiGedU",
   Levels = "23OmPKCPG0",
   ReactionRoles = "3MOVeYkTa1",
+  SelfRoles = "5pZqVNWucH",
   Tickets = "7i5YEGu2Fj",
   TwitchNotifications = "1q4EDddac2",
   Warnings = "3aqDA1m91r",
@@ -67,6 +68,11 @@ export const modules = {
   [ModuleId.ReactionRoles]: {
     name: "Reaction Roles",
     description: `Lets members self-assign roles by reacting to a message.`,
+    tags: ["Utility"],
+  },
+  [ModuleId.SelfRoles]: {
+    name: "Self Roles",
+    description: `Lets members self-assign roles through buttons, dropdowns, and reactions.`,
     tags: ["Utility"],
   },
   [ModuleId.Tickets]: {

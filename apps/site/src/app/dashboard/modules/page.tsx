@@ -88,6 +88,7 @@ export default function Page() {
       })
       .map(({ id }) => {
         const ModuleFormItem = moduleFormItems[id]
+        if (!ModuleFormItem) return null
 
         const isUndefined = isAllKeysUndefined(formFields[id])
 
