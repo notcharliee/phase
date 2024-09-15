@@ -232,9 +232,9 @@ export const selfRolesSchema = z.object({
       name: z.string().min(1, { message: "Name is required" }),
       channel: z.string().min(1, { message: "Channel is required" }),
       content: z.string().min(1, { message: "Content is required" }),
-      methods: z
-        .union([
-          z.object({
+      methods: z.union([
+        z
+          .object({
             id: z.string(),
             type: z.literal("reaction"),
             emoji: z.string().min(1, { message: "Emoji is required" }),
@@ -242,8 +242,11 @@ export const selfRolesSchema = z.object({
               .object({ id: z.string(), action: z.enum(["add", "remove"]) })
               .array()
               .min(1, { message: "At least one role is required" }),
-          }),
-          z.object({
+          })
+          .array()
+          .max(20, { message: "Maximum of 20 reaction methods allowed" }),
+        z
+          .object({
             id: z.string(),
             type: z.literal("button"),
             label: z.string().min(1, { message: "Label is required" }),
@@ -252,8 +255,11 @@ export const selfRolesSchema = z.object({
               .object({ id: z.string(), action: z.enum(["add", "remove"]) })
               .array()
               .min(1, { message: "At least one role is required" }),
-          }),
-          z.object({
+          })
+          .array()
+          .max(5, { message: "Maximum of 5 button methods allowed" }),
+        z
+          .object({
             id: z.string(),
             type: z.literal("dropdown"),
             placeholder: z.string().default("Select an option"),
@@ -271,10 +277,10 @@ export const selfRolesSchema = z.object({
               .array()
               .min(1, { message: "At least one option is required" })
               .max(25, { message: "Maximum of 25 options allowed" }),
-          }),
-        ])
-        .array()
-        .min(1, { message: "At least one method is required" }),
+          })
+          .array()
+          .max(5, { message: "Maximum of 5 dropdown methods allowed" }),
+      ]),
     })
     .array()
     .min(1)
