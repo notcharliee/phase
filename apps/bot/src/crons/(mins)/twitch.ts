@@ -2,6 +2,7 @@ import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
+  Collection,
   EmbedBuilder,
 } from "discord.js"
 import { BotCronBuilder } from "phasebot/builders"
@@ -57,7 +58,7 @@ export default new BotCronBuilder()
       })
 
       return acc
-    }, new Map<string, Streamer>())
+    }, new Collection<string, Streamer>())
 
     const oldStreamStatuses = Object.entries(client.store.twitchStatuses)
 
@@ -66,9 +67,9 @@ export default new BotCronBuilder()
       const stream = await twitchAPI.streams.getStreamByUserId(id)
 
       if (oldStreamStatus && !stream) {
-        delete client.store.twitchStatuses[id]
+        client.store.twitchStatuses.delete(id)
       } else if (!oldStreamStatus && stream) {
-        client.store.twitchStatuses[id] = true
+        client.store.twitchStatuses.set(id, true)
 
         for (const notification of streamer.notifications) {
           const channel = client.channels.cache.get(
