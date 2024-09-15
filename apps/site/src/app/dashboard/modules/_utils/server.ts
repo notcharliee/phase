@@ -1,15 +1,21 @@
-import { API, ButtonStyle, MessageType } from "@discordjs/core/http-only"
+import {
+  API,
+  ButtonStyle,
+  ComponentType,
+  MessageType,
+} from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
 import { db } from "~/lib/db"
 import { env } from "~/lib/env"
 import { twitchClient } from "~/lib/twitch"
-import { safeMs } from "~/lib/utils"
+import { createHiddenContent, safeMs } from "~/lib/utils"
 
 import type {
   APIButtonComponentWithCustomId,
   APIMessage,
+  APIStringSelectComponent,
   RESTPostAPIChannelMessageJSONBody,
 } from "@discordjs/core/http-only"
 import type { ModulesFormValues } from "~/types/dashboard"
@@ -227,6 +233,154 @@ export async function handleReactionRolesModule(
 
   for (const { emoji } of reactions) {
     await discordAPI.channels.addMessageReaction(channelId, messageId, emoji)
+  }
+}
+
+export async function handleSelfRolesModule(
+  messages: GuildModules[ModuleId.SelfRoles]["messages"],
+) {
+  for (const message of messages) {
+    const existingMessage = (
+      await discordAPI.channels.getPins(message.channel).catch(() => [])
+    ).find((pin) => pin.author.id === env.DISCORD_ID)
+
+    type ReactionBasedMethod = Extract<
+      (typeof message.methods)[number],
+      { type: "reaction" }
+    >
+
+    type InteractionBasedMethod = Extract<
+      (typeof message.methods)[number],
+      { type: "button" | "dropdown" }
+    >
+
+    const isReactionBased = (
+      methods: typeof message.methods,
+    ): methods is ReactionBasedMethod[] =>
+      methods.every((method) => method.type === "reaction")
+
+    const isInteractionBased = (
+      methods: typeof message.methods,
+    ): methods is InteractionBasedMethod[] =>
+      methods.every((method) => method.type !== "reaction")
+
+    const newMessageBody = {
+      content: createHiddenContent(message.id),
+      embeds: [
+        {
+          color: parseInt("f8f8f8", 16),
+          title: message.name,
+          description: message.content,
+        },
+      ],
+      components: isInteractionBased(message.methods)
+        ? [
+            {
+              type: ComponentType.ActionRow,
+              components: message.methods.flatMap((method) =>
+                method.type === "button"
+                  ? ({
+                      type: ComponentType.Button,
+                      style: ButtonStyle.Secondary,
+                      custom_id: `selfroles.${message.id}.button.${method.id}`,
+                      label: method.label,
+                      emoji: method.emoji ? { name: method.emoji } : undefined,
+                    } satisfies APIButtonComponentWithCustomId)
+                  : ({
+                      type: ComponentType.StringSelect,
+                      custom_id: `selfroles.${message.id}.dropdown.${method.id}`,
+                      placeholder: method.placeholder,
+                      max_values: method.multiselect ? 25 : 1,
+                      options: method.options.map((option) => ({
+                        label: option.label,
+                        value: option.id,
+                        emoji: option.emoji
+                          ? { name: option.emoji }
+                          : undefined,
+                      })),
+                    } satisfies APIStringSelectComponent),
+              ),
+            },
+          ]
+        : undefined,
+    } satisfies RESTPostAPIChannelMessageJSONBody
+
+    if (existingMessage) {
+      await discordAPI.channels.editMessage(
+        message.channel,
+        existingMessage.id,
+        newMessageBody,
+      )
+
+      if (isReactionBased(message.methods)) {
+        const existingReactions = existingMessage.reactions ?? []
+        const newReactions = message.methods.map((method) => method.emoji)
+
+        const reactionsToAdd = newReactions.filter(
+          (reaction) =>
+            !existingReactions.find(
+              (existingReaction) => existingReaction.emoji.name === reaction,
+            ),
+        )
+
+        const reactionsToRemove = existingReactions.filter(
+          (reaction) => !newReactions.includes(reaction.emoji.name!),
+        )
+
+        if (reactionsToAdd.length) {
+          for (const reaction of reactionsToAdd) {
+            void discordAPI.channels.addMessageReaction(
+              message.channel,
+              existingMessage.id,
+              reaction,
+            )
+          }
+        }
+
+        if (reactionsToRemove.length) {
+          for (const reaction of reactionsToRemove) {
+            void discordAPI.channels.deleteAllMessageReactionsForEmoji(
+              message.channel,
+              existingMessage.id,
+              reaction.emoji.name!,
+            )
+          }
+        }
+      }
+    } else {
+      const discordMessage = await discordAPI.channels.createMessage(
+        message.channel,
+        newMessageBody,
+      )
+
+      if (isReactionBased(message.methods)) {
+        for (const method of message.methods) {
+          void discordAPI.channels.addMessageReaction(
+            message.channel,
+            discordMessage.id,
+            method.emoji,
+          )
+        }
+      }
+
+      await discordAPI.channels.pinMessage(message.channel, discordMessage.id)
+
+      const pinNotification = (
+        await discordAPI.channels.getMessages(message.channel, {
+          after: discordMessage.id,
+          limit: 1,
+        })
+      ).at(0)
+
+      if (
+        pinNotification &&
+        pinNotification.type === MessageType.ChannelPinnedMessage
+      ) {
+        await discordAPI.channels
+          .deleteMessage(message.channel, pinNotification.id)
+          .catch(() => null)
+      }
+    }
   }
 }
 

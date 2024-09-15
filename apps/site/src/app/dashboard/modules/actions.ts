@@ -3,11 +3,13 @@
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
 import { db } from "~/lib/db"
+import { env } from "~/lib/env"
 
 import {
   handleAutoMessagesModule,
   handleFormsModule,
   handleReactionRolesModule,
+  handleSelfRolesModule,
   handleTicketsModule,
   parseModuleData,
 } from "~/app/dashboard/modules/_utils/server"
@@ -20,7 +22,6 @@ import type {
   ModulesFormValuesWithData,
 } from "~/types/dashboard"
 import type { GuildModules } from "~/types/db"
-import { env } from "~/lib/env"
 
 export async function updateModules(
   unsafeFormValues: ModulesFormValues,
@@ -112,6 +113,14 @@ export async function updateModules(
       parsedModulesWithData[ModuleId.Forms]._data.messages = (unsafeFormValues[
         ModuleId.Forms
       ] as ModulesFormValuesWithData[ModuleId.Forms])!._data.messages
+    }
+  }
+
+  if (parsedModulesWithData[ModuleId.SelfRoles]) {
+    if (dirtyFields.includes(ModuleId.SelfRoles)) {
+      await handleSelfRolesModule(
+        parsedModulesWithData[ModuleId.SelfRoles].messages,
+      )
     }
   }
 
