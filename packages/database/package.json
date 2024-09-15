@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "tsup ./src/index.ts --clean --dts --format=esm --sourcemap=inline",
-    "dev": "tsup ./src/index.ts --clean --dts --format=esm --sourcemap=inline --watch"
+    "dev": "tsup ./src/index.ts --clean --dts --format=esm --sourcemap=inline --watch",
+    "genkey": "bun --print 'require(`src/utils.ts`).generateKey()'"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
