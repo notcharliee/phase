@@ -83,6 +83,18 @@ export const defaultValues: Required<FormValues> = {
       },
     ],
   },
+  [ModuleId.SelfRoles]: {
+    enabled: false,
+    messages: [
+      {
+        id: randomUUID(),
+        name: "Message 1",
+        channel: "",
+        content: "",
+        methods: [],
+      },
+    ],
+  },
   [ModuleId.Tickets]: {
     enabled: false,
     channel: "",
