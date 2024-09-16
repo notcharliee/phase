@@ -28,6 +28,7 @@ interface Emoji {
 }
 
 interface EmojiPickerProps {
+  size?: "default" | "fill"
   disabled?: boolean
   name?: string
   value?: string
@@ -90,8 +91,14 @@ export const EmojiPicker = forwardRef<
 
   if (!loaded) {
     return (
-      <Button variant="outline" size="icon" disabled={props.disabled}>
+      <Button
+        variant="outline"
+        size={props.size === "fill" ? "default" : "icon"}
+        className={cn("gap-2", props.size === "fill" && "w-full")}
+        disabled={props.disabled}
+      >
         <Spinner className="size-5" />
+        {props.size === "fill" && <span>Loading ...</span>}
       </Button>
     )
   }
@@ -99,13 +106,25 @@ export const EmojiPicker = forwardRef<
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button {...props} variant="outline" size="icon" ref={ref}>
+        <Button
+          {...props}
+          variant="outline"
+          size={props.size === "fill" ? "default" : "icon"}
+          className={cn("gap-2.5 justify-start", props.size === "fill" && "w-full")}
+          ref={ref}
+        >
           <Emoji
             className="size-5"
             name={selectedEmoji.name}
             skin={selectedEmoji.skin}
             isPlaceholder={onChange && !value}
           />
+          {props.size === "fill" &&
+            (onChange && !value ? (
+              <span>Pick an emoji</span>
+            ) : (
+              <span>:{selectedEmoji.id}:</span>
+            ))}
         </Button>
       </PopoverTrigger>
       <PopoverContent sideOffset={8} className="size-80 space-y-4">
