@@ -9,7 +9,7 @@ import { Forms } from "~/app/dashboard/modules/_forms/forms"
 import { JoinToCreates } from "~/app/dashboard/modules/_forms/join-to-creates"
 import { Levels } from "~/app/dashboard/modules/_forms/levels"
 import { ReactionRoles } from "~/app/dashboard/modules/_forms/reaction-roles"
-import { SelfRoles } from "~/app/dashboard/modules/_forms/self-roles"
+// import { SelfRoles } from "~/app/dashboard/modules/_forms/self-roles"
 import { Tickets } from "~/app/dashboard/modules/_forms/tickets"
 import { TwitchNotifications } from "~/app/dashboard/modules/_forms/twitch-notifications"
 import { Warnings } from "~/app/dashboard/modules/_forms/warnings"
@@ -25,7 +25,7 @@ export const moduleFormItems = {
   [ModuleId.JoinToCreates]: JoinToCreates,
   [ModuleId.Levels]: Levels,
   [ModuleId.ReactionRoles]: ReactionRoles,
-  [ModuleId.SelfRoles]: SelfRoles,
+  // [ModuleId.SelfRoles]: SelfRoles,
   [ModuleId.Tickets]: Tickets,
   [ModuleId.TwitchNotifications]: TwitchNotifications,
   [ModuleId.Warnings]: Warnings,
