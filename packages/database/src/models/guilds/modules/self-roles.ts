@@ -1,11 +1,15 @@
 import mongoose from "mongoose"
 
-interface SelfRolesReactionMessage {
+interface SelfRolesBaseMessage {
   id: string
-  type: "reaction"
   name: string
   channel: string
   content: string
+  multiselect: boolean
+}
+
+interface SelfRolesReactionMessage extends SelfRolesBaseMessage {
+  type: "reaction"
   methods: {
     id: string
     emoji: string
@@ -16,12 +20,8 @@ interface SelfRolesReactionMessage {
   }[]
 }
 
-interface SelfRolesButtonMessage {
-  id: string
+interface SelfRolesButtonMessage extends SelfRolesBaseMessage {
   type: "button"
-  name: string
-  channel: string
-  content: string
   methods: {
     id: string
     label: string
@@ -33,12 +33,8 @@ interface SelfRolesButtonMessage {
   }[]
 }
 
-interface SelfRolesDropdownMessage {
-  id: string
+interface SelfRolesDropdownMessage extends SelfRolesBaseMessage {
   type: "dropdown"
-  name: string
-  channel: string
-  content: string
   methods: {
     id: string
     label: string
@@ -50,7 +46,7 @@ interface SelfRolesDropdownMessage {
   }[]
 }
 
-export type SelfRolesMessage =
+type SelfRolesMessage =
   | SelfRolesReactionMessage
   | SelfRolesButtonMessage
   | SelfRolesDropdownMessage
@@ -72,6 +68,7 @@ export const selfRolesSchema = new mongoose.Schema<SelfRoles>(
             name: { type: String, required: true },
             channel: { type: String, required: true },
             content: { type: String, required: true },
+            multiselect: { type: Boolean, required: true },
             methods: {
               type: [
                 new mongoose.Schema(

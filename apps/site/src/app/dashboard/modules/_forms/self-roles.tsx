@@ -55,6 +55,7 @@ export function SelfRoles() {
       name: `Message ${capitalCase(type)} ${formFields.messages.length + 1}`,
       channel: "",
       content: "",
+      multiselect: false,
       methods: [],
     } satisfies (typeof formFields.messages)[number])
   }

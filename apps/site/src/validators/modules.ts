@@ -234,6 +234,7 @@ export const selfRolesSchema = z.object({
         name: z.string().min(1, { message: "Name is required" }),
         channel: z.string().min(1, { message: "Channel is required" }),
         content: z.string().min(1, { message: "Content is required" }),
+        multiselect: z.boolean(),
         methods: z
           .object({
             id: z.string().uuid(),
@@ -259,6 +260,7 @@ export const selfRolesSchema = z.object({
         name: z.string().min(1, { message: "Name is required" }),
         channel: z.string().min(1, { message: "Channel is required" }),
         content: z.string().min(1, { message: "Content is required" }),
+        multiselect: z.boolean(),
         methods: z
           .object({
             id: z.string().uuid(),
@@ -288,6 +290,7 @@ export const selfRolesSchema = z.object({
         name: z.string().min(1, { message: "Name is required" }),
         channel: z.string().min(1, { message: "Channel is required" }),
         content: z.string().min(1, { message: "Content is required" }),
+        multiselect: z.boolean(),
         methods: z
           .object({
             id: z.string().uuid(),
