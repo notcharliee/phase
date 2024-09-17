@@ -20,7 +20,7 @@ import type { BotConfig } from "~/client/config"
 import type {
   getCommandFiles,
   getCronPaths,
-  getEventPaths,
+  getEventFiles,
 } from "~/client/handlers"
 import type { BotMiddleware, loadMiddlewareFile } from "~/client/middleware"
 import type { BotPrestart } from "~/client/prestart"
@@ -40,7 +40,7 @@ export interface PhaseClientParams {
    */
   files?: {
     commands: Awaited<ReturnType<typeof getCommandFiles>>
-    events: Awaited<ReturnType<typeof getEventPaths>>
+    events: Awaited<ReturnType<typeof getEventFiles>>
     crons: Awaited<ReturnType<typeof getCronPaths>>
     middleware?: Awaited<ReturnType<typeof loadMiddlewareFile>>
     prestart?: Awaited<ReturnType<typeof loadPrestartFile>>

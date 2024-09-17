@@ -1,71 +1,79 @@
+import { readdirSync, statSync } from "node:fs"
+import { extname, join } from "node:path"
 import { isAsyncFunction } from "node:util/types"
 
 import { Client, Collection } from "discord.js"
 
 import { BotEventBuilder } from "~/builders"
 
-import type { BotEventExecute } from "~/builders"
-import type { ClientEvents } from "discord.js"
-
 export type EventsCollection = Collection<string, BotEventBuilder[]>
 
-export const getEventPaths = () => {
-  return Array.from(
-    new Bun.Glob("src/events/**/*.{js,ts,jsx,tsx}").scanSync({
-      absolute: true,
-    }),
-  )
+interface EventFile {
+  path: string
+  event: BotEventBuilder
+}
+
+export const getEventFiles = async () => {
+  const eventFiles: EventFile[] = []
+
+  const processDir = async (currentDir: string) => {
+    const entries = readdirSync(currentDir)
+
+    for (const entry of entries) {
+      if (entry.startsWith("_")) continue
+
+      const path = join(currentDir, entry)
+      const stats = statSync(path)
+
+      if (stats.isDirectory()) {
+        await processDir(path)
+      } else if ([".ts", ".tsx", ".js", ".jsx"].includes(extname(entry))) {
+        const file = await import(join(process.cwd(), path))
+        const defaultExport = file.default as unknown
+
+        if (!defaultExport) {
+          throw new Error(`Event file '${path}' is missing a default export`)
+        } else if (
+          !(
+            typeof defaultExport === "object" &&
+            "metadata" in defaultExport &&
+            defaultExport.metadata &&
+            typeof defaultExport.metadata === "object" &&
+            "type" in defaultExport.metadata &&
+            defaultExport.metadata.type === "event"
+          )
+        ) {
+          throw new Error(
+            `Event file '${path}' does not export a valid event builder`,
+          )
+        }
+
+        const event = defaultExport as BotEventBuilder
+
+        eventFiles.push({ path, event })
+      }
+    }
+  }
+
+  await processDir("src/events")
+
+  return eventFiles
 }
 
 export const handleEvents = async (
   client: Client<false>,
   events?: EventsCollection,
 ) => {
-  // if no events collection is provided, load all event files
   if (!events) {
-    const paths = getEventPaths()
+    const eventFiles = await getEventFiles()
 
     events = new Collection()
 
-    for (const path of paths) {
-      const defaultExport = (await import(path).then(
-        (m) => m.default,
-      )) as unknown
-
-      if (!defaultExport) {
-        throw new Error(`Event file '${path}' is missing a default export`)
-      }
-
-      let event: BotEventBuilder | undefined
-
-      if (
-        typeof defaultExport === "object" &&
-        "metadata" in defaultExport &&
-        defaultExport.metadata &&
-        typeof defaultExport.metadata === "object" &&
-        "type" in defaultExport.metadata &&
-        defaultExport.metadata.type === "event"
-      ) {
-        event = defaultExport as BotEventBuilder
-      } else if (
-        typeof defaultExport === "object" &&
-        "name" in defaultExport &&
-        typeof defaultExport.name === "string" &&
-        "execute" in defaultExport &&
-        typeof defaultExport.execute === "function"
-      ) {
-        event = new BotEventBuilder()
-          .setName(defaultExport.name as keyof ClientEvents)
-          .setExecute(defaultExport.execute as BotEventExecute)
-      }
-
-      if (!event) {
-        throw new Error(
-          `Event file '${path}' does not export a valid event handler`,
-        )
-      }
-
-      events.set(event.name, [...(events.get(event.name) ?? []), event])
+    for (const file of eventFiles) {
+      events.set(file.event.name, [
+        ...(events.get(file.event.name) ?? []),
+        file.event,
+      ])
     }
   }
 
