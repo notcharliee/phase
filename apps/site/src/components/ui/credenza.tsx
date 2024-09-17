@@ -2,6 +2,8 @@
 
 import * as React from "react"
 
+import { useMediaQuery } from "@uidotdev/usehooks"
+
 import {
   Dialog,
   DialogClose,
@@ -22,8 +24,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "~/components/ui/drawer"
-
-import { useMediaQuery } from "~/hooks/use-media-query"
 
 import { cn } from "~/lib/utils"
 
