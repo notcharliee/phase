@@ -242,13 +242,13 @@ export const selfRolesSchema = z.object({
             rolesToAdd: z
               .string()
               .array()
-              .min(1, { message: "At least one role is required" })
-              .max(10, { message: "Maximum of 10 roles allowed" }),
+              .max(10, { message: "Maximum of 10 roles allowed" })
+              .default([]),
             rolesToRemove: z
               .string()
               .array()
-              .min(1, { message: "At least one role is required" })
-              .max(10, { message: "Maximum of 10 roles allowed" }),
+              .max(10, { message: "Maximum of 10 roles allowed" })
+              .default([]),
           })
           .array()
           .min(1, { message: "At least one method is required" })
@@ -272,13 +272,13 @@ export const selfRolesSchema = z.object({
             rolesToAdd: z
               .string()
               .array()
-              .min(1, { message: "At least one role is required" })
-              .max(10, { message: "Maximum of 10 roles allowed" }),
+              .max(10, { message: "Maximum of 10 roles allowed" })
+              .default([]),
             rolesToRemove: z
               .string()
               .array()
-              .min(1, { message: "At least one role is required" })
-              .max(10, { message: "Maximum of 10 roles allowed" }),
+              .max(10, { message: "Maximum of 10 roles allowed" })
+              .default([]),
           })
           .array()
           .min(1, { message: "At least one method is required" })
