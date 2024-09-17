@@ -26,13 +26,11 @@
     "checkJs": true,
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
     "isolatedModules": true,
     "esModuleInterop": true,
 
     // Some stricter flags
     "forceConsistentCasingInFileNames": true,
-    "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
   }
 }
