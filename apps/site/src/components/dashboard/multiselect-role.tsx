@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { useState } from "react"
 
 import { Cross1Icon } from "@radix-ui/react-icons"
 import { Command as CommandPrimitive } from "cmdk"
@@ -46,23 +45,24 @@ export const MultiselectRole = React.forwardRef<
   if (!placeholder) placeholder = "Select some roles..."
 
   const dashboardData = useDashboardContext()
-  const roleData = roles ?? dashboardData.guild.roles
 
-  const roleSelectables: Selectable[] = React.useMemo(() => {
-    const availableRoles = roleData.filter((role) => role.name !== "@everyone")
-
-    return availableRoles
+  const selectableRoles: Selectable[] = React.useMemo(() => {
+    return (roles ?? dashboardData.guild.roles)
+      .filter((role) => role.name !== "@everyone" && !role.managed)
       .sort((a, b) => b.position - a.position)
       .map((role) => ({
         label: role.name,
         value: role.id,
-        colour: role.color
-          ? `#${role.color.toString(16).padStart(6, "0")}`
-          : undefined,
+        colour:
+          role.color !== 0
+            ? `#${role.color.toString(16).padStart(6, "0")}`
+            : undefined,
       }))
-  }, [roleData])
+  }, [dashboardData.guild.roles])
 
-  const [key, setKey] = useState(+new Date())
+  const selectedRoles = React.useMemo(() => {
+    return selectableRoles.filter((role) => value.includes(role.value))
+  }, [selectableRoles, value])
 
   const inputRef = React.useRef<HTMLInputElement>(null)
   const [inputValue, setInputValue] = React.useState("")
@@ -72,40 +72,24 @@ export const MultiselectRole = React.forwardRef<
   const triggerRef = React.useRef<HTMLDivElement>(null)
   const [triggerWidth] = useElementSize(triggerRef)
 
-  const [selectedValues, setSelectedValues] = React.useState<Selectable[]>(
-    roleSelectables.filter((role) => value.includes(role.value)),
-  )
+  const handleSelect = (selectable: Selectable) => {
+    setInputValue("")
+    onChange([...value, selectable.value])
+  }
 
-  const handleSelect = React.useCallback(
-    (selectable: Selectable) => {
-      setInputValue("")
-      setSelectedValues((prev) => [...prev, selectable])
-      onChange(selectedValues.map((s) => s.value))
-      setKey(+new Date())
-    },
-    [onChange, selectedValues],
-  )
+  const handleDeselect = (selectable: Selectable) => {
+    onChange(value.filter((value) => value !== selectable.value))
+  }
 
-  const handleUnselect = React.useCallback((selectable: Selectable) => {
-    setSelectedValues((prev) =>
-      prev.filter((s) => s.value !== selectable.value),
-    )
-    setKey(+new Date())
-  }, [])
+  const handleKeyDown = ({ key }: React.KeyboardEvent<HTMLDivElement>) => {
+    if (key === "Escape") return inputRef.current?.blur()
+    if ((key === "Delete" || key === "Backspace") && inputValue === "") {
+      return onChange(value.slice(0, -1))
+    }
+  }
 
-  const handleKeyDown = React.useCallback(
-    ({ key }: React.KeyboardEvent<HTMLDivElement>) => {
-      const input = inputRef.current!
-      if (key === "Escape") return input.blur()
-      if ((key === "Delete" || key === "Backspace") && input.value === "") {
-        return setSelectedValues((prev) => prev.slice(0, -1))
-      }
-    },
-    [],
-  )
-
-  const selectables = roleSelectables
-    .filter((selectable) => !selectedValues.includes(selectable))
+  const selectables = selectableRoles
+    .filter((role) => !selectedRoles.includes(role))
     .slice(0, 5)
 
   return (
@@ -121,28 +105,28 @@ export const MultiselectRole = React.forwardRef<
             )}
           >
             <div className="flex flex-wrap gap-1">
-              {selectedValues.map((selectedValue) => {
+              {selectedRoles.map((role) => {
                 return (
                   <Badge
-                    key={selectedValue.value}
+                    key={role.value}
                     variant="secondary"
                     className="gap-1.5"
                   >
                     <button
+                      disabled={disabled}
                       className="ring-offset-background focus:ring-ring rounded-full outline-none focus:ring-2 focus:ring-offset-2"
                       onKeyDown={({ key }) =>
-                        key === "Enter" && handleUnselect(selectedValue)
+                        key === "Enter" && handleDeselect(role)
                       }
                       onClick={(e) => {
-                        e.preventDefault()
                         e.stopPropagation()
-                        handleUnselect(selectedValue)
+                        e.preventDefault()
+                        handleDeselect(role)
                       }}
-                      disabled={disabled}
                     >
                       <Cross1Icon className="text-muted-foreground hover:text-foreground h-3 w-3" />
                     </button>
-                    {selectedValue.label}
+                    {role.label}
                   </Badge>
                 )
               })}
@@ -155,27 +139,22 @@ export const MultiselectRole = React.forwardRef<
                 onValueChange={setInputValue}
                 className={cn(
                   "placeholder:text-muted-foreground inline-block w-min whitespace-nowrap bg-transparent outline-none",
-                  selectedValues.length && "ml-1",
+                  selectedRoles.length && "ml-1",
                 )}
               />
             </div>
           </div>
         </PopoverTrigger>
         <PopoverContent
-          key={key}
-          style={{ width: triggerWidth + "px" }}
           className="p-1"
+          style={{ width: triggerWidth + "px" }}
           onOpenAutoFocus={(e) => e.preventDefault()}
           onCloseAutoFocus={(e) => e.preventDefault()}
-          onFocus={(e) => {
-            e.preventDefault()
-            inputRef.current!.focus()
-          }}
         >
-          {selectables.map((selectable) => {
+          {selectables.map((selectable, index) => {
             return (
               <CommandItem
-                key={selectable.value}
+                key={index + selectable.value}
                 disabled={disabled}
                 onSelect={() => handleSelect(selectable)}
               >
