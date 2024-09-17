@@ -1,8 +1,10 @@
 import { useCallback } from "react"
 
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { modules } from "@repo/config/phase/modules.ts"
 
 import { Mode } from "~/components/dashboard/modules/mode-toggle"
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
 import { Badge } from "~/components/ui/badge"
 import {
   Card,
@@ -155,7 +157,19 @@ export function ModuleCard({
             <CredenzaTitle>{name}</CredenzaTitle>
             <CredenzaDescription>{description}</CredenzaDescription>
           </CredenzaHeader>
-          <CredenzaBody>{children}</CredenzaBody>
+          <CredenzaBody>
+            {(tags as string[]).includes("Beta") && (
+              <Alert variant={"warning"} className="mb-8">
+                <ExclamationTriangleIcon className="h-4 w-4" />
+                <AlertTitle>Beta Module</AlertTitle>
+                <AlertDescription>
+                  This module is still in beta and may not be fully functional
+                  yet. Use at your own risk.
+                </AlertDescription>
+              </Alert>
+            )}
+            {children}
+          </CredenzaBody>
         </FormItem>
       </CredenzaContent>
     </Credenza>

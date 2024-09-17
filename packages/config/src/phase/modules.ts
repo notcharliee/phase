@@ -73,7 +73,7 @@ export const modules = {
   [ModuleId.SelfRoles]: {
     name: "Self Roles",
     description: `Lets members self-assign roles through buttons, dropdowns, and reactions.`,
-    tags: ["Utility"],
+    tags: ["Utility", "Beta"],
   },
   [ModuleId.Tickets]: {
     name: "Tickets",
