@@ -1,6 +1,7 @@
 import { ModuleId } from "@repo/config/phase/modules.ts"
 import mongoose from "mongoose"
 
+import { SelfRoles, selfRolesSchema } from "~/models/guilds/modules/self-roles"
 import { defineModel } from "~/utils"
 
 // commands (subdocument) //
@@ -118,50 +119,7 @@ export interface GuildModules {
       role: string
     }[]
   }
-  [ModuleId.SelfRoles]: {
-    enabled: boolean
-    messages: {
-      id: string
-      name: string
-      channel: string
-      content: string
-      methods:
-        | {
-            id: string
-            type: "reaction"
-            emoji: string
-            roles: {
-              id: string
-              action: "add" | "remove"
-            }[]
-          }[]
-        | {
-            id: string
-            type: "button"
-            label: string
-            emoji?: string
-            roles: {
-              id: string
-              action: "add" | "remove"
-            }[]
-          }[]
-        | {
-            id: string
-            type: "dropdown"
-            placeholder: string
-            multiselect: boolean
-            options: {
-              id: string
-              label: string
-              emoji?: string
-              roles: {
-                id: string
-                action: "add" | "remove"
-              }[]
-            }[]
-          }[]
-    }[]
-  }
+  [ModuleId.SelfRoles]: SelfRoles
   [ModuleId.Tickets]: {
     enabled: boolean
     channel: string
@@ -383,108 +341,7 @@ const modulesSchema = new mongoose.Schema<GuildModules>(
       { _id: false },
     ),
 
-    [ModuleId.SelfRoles]: new mongoose.Schema(
-      {
-        enabled: { type: Boolean, required: true },
-        messages: {
-          type: [
-            new mongoose.Schema(
-              {
-                id: { type: String, required: true },
-                name: { type: String, required: true },
-                channel: { type: String, required: true },
-                content: { type: String, required: true },
-                methods: {
-                  type: [
-                    new mongoose.Schema(
-                      {
-                        id: { type: String, required: true },
-                        type: { type: String, required: true },
-                        emoji: { type: String, required: true },
-                        roles: {
-                          type: [
-                            new mongoose.Schema(
-                              {
-                                id: { type: String, required: true },
-                                action: { type: String, required: true },
-                              },
-                              { _id: false },
-                            ),
-                          ],
-                          required: true,
-                        },
-                      },
-                      { _id: false },
-                    ),
-                    new mongoose.Schema(
-                      {
-                        id: { type: String, required: true },
-                        type: { type: String, required: true },
-                        label: { type: String, required: true },
-                        emoji: { type: String },
-                        roles: {
-                          type: [
-                            new mongoose.Schema(
-                              {
-                                id: { type: String, required: true },
-                                action: { type: String, required: true },
-                              },
-                              { _id: false },
-                            ),
-                          ],
-                          required: true,
-                        },
-                      },
-                      { _id: false },
-                    ),
-                    new mongoose.Schema(
-                      {
-                        id: { type: String, required: true },
-                        type: { type: String, required: true },
-                        placeholder: { type: String, required: true },
-                        multiselect: { type: Boolean, required: true },
-                        options: {
-                          type: [
-                            new mongoose.Schema(
-                              {
-                                id: { type: String, required: true },
-                                label: { type: String, required: true },
-                                emoji: { type: String },
-                                roles: {
-                                  type: [
-                                    new mongoose.Schema(
-                                      {
-                                        id: { type: String, required: true },
-                                        action: {
-                                          type: String,
-                                          required: true,
-                                        },
-                                      },
-                                      { _id: false },
-                                    ),
-                                  ],
-                                  required: true,
-                                },
-                              },
-                              { _id: false },
-                            ),
-                          ],
-                          required: true,
-                        },
-                      },
-                      { _id: false },
-                    ),
-                  ],
-                },
-              },
-              { _id: false },
-            ),
-          ],
-          required: true,
-        },
-      },
-      { _id: false },
-    ),
+    [ModuleId.SelfRoles]: selfRolesSchema,
 
     [ModuleId.Tickets]: new mongoose.Schema(
       {
