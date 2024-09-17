@@ -268,12 +268,11 @@ export async function handleSelfRolesModule(
     ).find((pin) => pin.author.id === env.DISCORD_ID)
 
     const newMessageBody = {
-      content: createHiddenContent(message.id),
       embeds: [
         {
           color: parseInt("f8f8f8", 16),
           title: message.name,
-          description: message.content,
+          description: message.content + " " + createHiddenContent(message.id),
         },
       ],
       components:

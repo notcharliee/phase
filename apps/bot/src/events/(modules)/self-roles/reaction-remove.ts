@@ -22,7 +22,8 @@ export default new BotEventBuilder()
 
     if (!moduleData?.enabled) return
 
-    const messageId = parseHiddenContent(reactionMessage.content)
+    const messageContent = reactionMessage.embeds[0]!.description!
+    const messageId = parseHiddenContent(messageContent)
     const message = moduleData.messages.find(({ id }) => id === messageId)
 
     if (!message) return
