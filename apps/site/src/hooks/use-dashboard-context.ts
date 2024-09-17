@@ -1,10 +1,10 @@
 "use client"
 
-import { createContext, useContext } from "react"
+import * as React from "react"
 
 import type { DashboardData } from "~/types/dashboard"
 
-export const DashboardContext = createContext<DashboardData | null>(null)
+export const DashboardContext = React.createContext<DashboardData | null>(null)
 
 type UseDashboardContextReturn<T extends boolean | undefined = undefined> =
   T extends true ? DashboardData | undefined : DashboardData
@@ -12,7 +12,7 @@ type UseDashboardContextReturn<T extends boolean | undefined = undefined> =
 export const useDashboardContext = <T extends boolean | undefined = undefined>(
   noThrow?: T,
 ): UseDashboardContextReturn<T> => {
-  const dashboardContext = useContext(DashboardContext)
+  const dashboardContext = React.useContext(DashboardContext)
 
   if (!dashboardContext) {
     if (noThrow) return undefined as UseDashboardContextReturn<T>
