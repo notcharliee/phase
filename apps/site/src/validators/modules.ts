@@ -227,61 +227,89 @@ export const reactionRolesSchema = z.object({
 export const selfRolesSchema = z.object({
   enabled: z.boolean(),
   messages: z
-    .object({
-      id: z.string(),
-      name: z.string().min(1, { message: "Name is required" }),
-      channel: z.string().min(1, { message: "Channel is required" }),
-      content: z.string().min(1, { message: "Content is required" }),
-      methods: z.union([
-        z
+    .union([
+      z.object({
+        id: z.string().uuid(),
+        type: z.literal("reaction"),
+        name: z.string().min(1, { message: "Name is required" }),
+        channel: z.string().min(1, { message: "Channel is required" }),
+        content: z.string().min(1, { message: "Content is required" }),
+        methods: z
           .object({
-            id: z.string(),
-            type: z.literal("reaction"),
-            emoji: z.string().min(1, { message: "Emoji is required" }),
-            roles: z
-              .object({ id: z.string(), action: z.enum(["add", "remove"]) })
+            id: z.string().uuid(),
+            emoji: z.string().emoji(),
+            rolesToAdd: z
+              .string()
               .array()
-              .min(1, { message: "At least one role is required" }),
+              .min(1, { message: "At least one role is required" })
+              .max(10, { message: "Maximum of 10 roles allowed" }),
+            rolesToRemove: z
+              .string()
+              .array()
+              .min(1, { message: "At least one role is required" })
+              .max(10, { message: "Maximum of 10 roles allowed" }),
           })
           .array()
-          .max(20, { message: "Maximum of 20 reaction methods allowed" }),
-        z
+          .min(1, { message: "At least one method is required" })
+          .max(20, { message: "Maximum of 20 methods allowed" }),
+      }),
+      z.object({
+        id: z.string().uuid(),
+        type: z.literal("button"),
+        name: z.string().min(1, { message: "Name is required" }),
+        channel: z.string().min(1, { message: "Channel is required" }),
+        content: z.string().min(1, { message: "Content is required" }),
+        methods: z
           .object({
-            id: z.string(),
-            type: z.literal("button"),
-            label: z.string().min(1, { message: "Label is required" }),
-            emoji: z.string().optional(),
-            roles: z
-              .object({ id: z.string(), action: z.enum(["add", "remove"]) })
+            id: z.string().uuid(),
+            emoji: z.string().emoji().optional(),
+            label: z
+              .string()
+              .min(1, { message: "Label is required" })
+              .max(80, { message: "Maximum of 80 characters allowed" }),
+            rolesToAdd: z
+              .string()
               .array()
-              .min(1, { message: "At least one role is required" }),
+              .min(1, { message: "At least one role is required" })
+              .max(10, { message: "Maximum of 10 roles allowed" }),
+            rolesToRemove: z
+              .string()
+              .array()
+              .min(1, { message: "At least one role is required" })
+              .max(10, { message: "Maximum of 10 roles allowed" }),
           })
           .array()
-          .max(5, { message: "Maximum of 5 button methods allowed" }),
-        z
+          .min(1, { message: "At least one method is required" })
+          .max(20, { message: "Maximum of 20 methods allowed" }),
+      }),
+      z.object({
+        id: z.string().uuid(),
+        type: z.literal("dropdown"),
+        name: z.string().min(1, { message: "Name is required" }),
+        channel: z.string().min(1, { message: "Channel is required" }),
+        content: z.string().min(1, { message: "Content is required" }),
+        methods: z
           .object({
-            id: z.string(),
-            type: z.literal("dropdown"),
-            placeholder: z.string().default("Select an option"),
-            multiselect: z.boolean(),
-            options: z
-              .object({
-                id: z.string(),
-                label: z.string().min(1, { message: "Label is required" }),
-                emoji: z.string().optional(),
-                roles: z
-                  .object({ id: z.string(), action: z.enum(["add", "remove"]) })
-                  .array()
-                  .min(1, { message: "At least one role is required" }),
-              })
+            id: z.string().uuid(),
+            emoji: z.string().emoji().optional(),
+            label: z
+              .string()
+              .min(1, { message: "Label is required" })
+              .max(80, { message: "Maximum of 80 characters allowed" }),
+            rolesToAdd: z
+              .string()
               .array()
-              .min(1, { message: "At least one option is required" })
-              .max(25, { message: "Maximum of 25 options allowed" }),
+              .max(10, { message: "Maximum of 10 roles allowed" }),
+            rolesToRemove: z
+              .string()
+              .array()
+              .max(10, { message: "Maximum of 10 roles allowed" }),
           })
           .array()
-          .max(5, { message: "Maximum of 5 dropdown methods allowed" }),
-      ]),
-    })
+          .min(1, { message: "At least one method is required" })
+          .max(20, { message: "Maximum of 20 methods allowed" }),
+      }),
+    ])
     .array()
     .min(1)
     .max(10, { message: "Maximum of 10 messages allowed" }),

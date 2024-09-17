@@ -85,15 +85,7 @@ export const defaultValues: Required<FormValues> = {
   },
   [ModuleId.SelfRoles]: {
     enabled: false,
-    messages: [
-      {
-        id: randomUUID(),
-        name: "Message 1",
-        channel: "",
-        content: "",
-        methods: [],
-      },
-    ],
+    messages: [],
   },
   [ModuleId.Tickets]: {
     enabled: false,
@@ -190,6 +182,21 @@ export function getDefaultValues(
     [ModuleId.ReactionRoles]: (data) => ({
       ...data,
       messageUrl: `https://discord.com/channels/${guildId}/${data.channel}/${data.message}`,
+    }),
+    [ModuleId.SelfRoles]: (data) => ({
+      ...data,
+      messages: data.messages.map((message) => ({
+        ...message,
+        methods: message.methods.map(({ roles, ...method }) => ({
+          ...method,
+          rolesToAdd: roles
+            .filter((role) => role.action === "add")
+            .map(({ id }) => id),
+          rolesToRemove: roles
+            .filter((role) => role.action === "remove")
+            .map(({ id }) => id),
+        })),
+      })) as Required<FormValues>[ModuleId.SelfRoles]["messages"],
     }),
     [ModuleId.Tickets]: (data) => {
       const message = data._data?.message as APIMessage | undefined

@@ -15,7 +15,6 @@ import { createHiddenContent, safeMs } from "~/lib/utils"
 import type {
   APIButtonComponentWithCustomId,
   APIMessage,
-  APIStringSelectComponent,
   RESTPostAPIChannelMessageJSONBody,
 } from "@discordjs/core/http-only"
 import type { ModulesFormValues } from "~/types/dashboard"
@@ -65,6 +64,30 @@ export async function parseModuleData(
       channel: channelId,
       message: messageId,
       reactions: formData.reactions,
+    }
+  }
+
+  if (formDataIs(ModuleId.SelfRoles, formData)) {
+    return {
+      ...formData,
+      messages: formData.messages.map((message) => ({
+        ...message,
+        methods: message.methods.map(
+          ({ rolesToAdd, rolesToRemove, ...method }) => ({
+            ...method,
+            roles: [
+              ...rolesToAdd.map((id) => ({
+                id,
+                action: "add" as const,
+              })),
+              ...rolesToRemove.map((id) => ({
+                id,
+                action: "remove" as const,
+              })),
+            ],
+          }),
+        ),
+      })) as GuildModules[ModuleId.SelfRoles]["messages"],
     }
   }
 
@@ -244,26 +267,6 @@ export async function handleSelfRolesModule(
       await discordAPI.channels.getPins(message.channel).catch(() => [])
     ).find((pin) => pin.author.id === env.DISCORD_ID)
 
-    type ReactionBasedMethod = Extract<
-      (typeof message.methods)[number],
-      { type: "reaction" }
-    >
-
-    type InteractionBasedMethod = Extract<
-      (typeof message.methods)[number],
-      { type: "button" | "dropdown" }
-    >
-
-    const isReactionBased = (
-      methods: typeof message.methods,
-    ): methods is ReactionBasedMethod[] =>
-      methods.every((method) => method.type === "reaction")
-
-    const isInteractionBased = (
-      methods: typeof message.methods,
-    ): methods is InteractionBasedMethod[] =>
-      methods.every((method) => method.type !== "reaction")
-
     const newMessageBody = {
       content: createHiddenContent(message.id),
       embeds: [
@@ -273,36 +276,40 @@ export async function handleSelfRolesModule(
           description: message.content,
         },
       ],
-      components: isInteractionBased(message.methods)
-        ? [
-            {
-              type: ComponentType.ActionRow,
-              components: message.methods.flatMap((method) =>
-                method.type === "button"
-                  ? ({
-                      type: ComponentType.Button,
-                      style: ButtonStyle.Secondary,
-                      custom_id: `selfroles.${message.id}.button.${method.id}`,
-                      label: method.label,
-                      emoji: method.emoji ? { name: method.emoji } : undefined,
-                    } satisfies APIButtonComponentWithCustomId)
-                  : ({
+      components:
+        message.type === "button"
+          ? [
+              {
+                type: ComponentType.ActionRow,
+                components: message.methods.map((method) => ({
+                  type: ComponentType.Button,
+                  style: ButtonStyle.Secondary,
+                  custom_id: `selfroles.${message.id}.button.${method.id}`,
+                  label: method.label,
+                  emoji: method.emoji ? { name: method.emoji } : undefined,
+                })),
+              },
+            ]
+          : message.type === "dropdown"
+            ? [
+                {
+                  type: ComponentType.ActionRow,
+                  components: [
+                    {
                       type: ComponentType.StringSelect,
-                      custom_id: `selfroles.${message.id}.dropdown.${method.id}`,
-                      placeholder: method.placeholder,
-                      max_values: method.multiselect ? 25 : 1,
-                      options: method.options.map((option) => ({
-                        label: option.label,
-                        value: option.id,
-                        emoji: option.emoji
-                          ? { name: option.emoji }
+                      custom_id: `selfroles.${message.id}.dropdown`,
+                      options: message.methods.map((method) => ({
+                        label: method.label,
+                        value: method.id,
+                        emoji: method.emoji
+                          ? { name: method.emoji }
                           : undefined,
                       })),
-                    } satisfies APIStringSelectComponent),
-              ),
-            },
-          ]
-        : undefined,
+                    },
+                  ],
+                },
+              ]
+            : undefined,
     } satisfies RESTPostAPIChannelMessageJSONBody
 
     if (existingMessage) {
@@ -312,7 +319,7 @@ export async function handleSelfRolesModule(
         newMessageBody,
       )
 
-      if (isReactionBased(message.methods)) {
+      if (message.type === "reaction") {
         const existingReactions = existingMessage.reactions ?? []
         const newReactions = message.methods.map((method) => method.emoji)
 
@@ -353,7 +360,7 @@ export async function handleSelfRolesModule(
         newMessageBody,
       )
 
-      if (isReactionBased(message.methods)) {
+      if (message.type === "reaction") {
         for (const method of message.methods) {
           void discordAPI.channels.addMessageReaction(
             message.channel,
