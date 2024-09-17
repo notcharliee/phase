@@ -8,6 +8,14 @@ export const metadata = {
   <HeadingDescription>{metadata.description}</HeadingDescription>
 </Heading>
 
+## September 2024 - v3.19 release
+
+Introducing the **Self Roles** module!
+
+Self Roles let you create messages across your server that can be used by members to add and remove roles. Each message can have up to 20 methods of 3 different types - reactions, buttons, and dropdown menus. Unlike Reaction Roles, you can specify up to 20 roles to add **and** remove per reaction/button/dropdown-option.
+
+Currently, the module is available under the `Beta` tag on the dashboard as some message options (namely custom dropdown placeholders and support for disabling multiselect) are not yet implemented. As always, if you come across a bug let me know and I'll have it fixed in the next release.
+
 ## September 2024 - v3.18 release
 
 - Added support for adding songs from YouTube playlists with `/music add`.
@@ -16,7 +24,7 @@ export const metadata = {
 
 ## September 2024 - v3.17 release
 
-TL;DR: Audit logs are actually good now !!
+Audit logs are actually good now !!
 
 - Recoded from the ground up with speed and maintainability in mind.
 - A new highly-detailed formatting standard for all audit log messages.
