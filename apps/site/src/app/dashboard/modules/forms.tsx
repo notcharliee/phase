@@ -25,7 +25,7 @@ export const moduleFormItems = {
   [ModuleId.JoinToCreates]: JoinToCreates,
   [ModuleId.Levels]: Levels,
   [ModuleId.ReactionRoles]: ReactionRoles,
-  // [ModuleId.SelfRoles]: SelfRoles,
+  [ModuleId.SelfRoles]: null,
   [ModuleId.Tickets]: Tickets,
   [ModuleId.TwitchNotifications]: TwitchNotifications,
   [ModuleId.Warnings]: Warnings,
