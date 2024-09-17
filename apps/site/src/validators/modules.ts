@@ -287,10 +287,16 @@ export const selfRolesSchema = z.object({
       z.object({
         id: z.string().uuid(),
         type: z.literal("dropdown"),
-        name: z.string().min(1, { message: "Name is required" }),
+        name: z
+          .string()
+          .min(1, { message: "Name is required" })
+          .max(256, { message: "Maximum of 256 characters allowed" }),
         channel: z.string().min(1, { message: "Channel is required" }),
-        content: z.string().min(1, { message: "Content is required" }),
-        multiselect: z.boolean(),
+        content: z
+          .string()
+          .min(1, { message: "Content is required" })
+          .max(512, { message: "Maximum of 512 characters allowed" }),
+        multiselect: z.boolean().default(false),
         methods: z
           .object({
             id: z.string().uuid(),
@@ -302,11 +308,13 @@ export const selfRolesSchema = z.object({
             rolesToAdd: z
               .string()
               .array()
-              .max(10, { message: "Maximum of 10 roles allowed" }),
+              .max(10, { message: "Maximum of 10 roles allowed" })
+              .default([]),
             rolesToRemove: z
               .string()
               .array()
-              .max(10, { message: "Maximum of 10 roles allowed" }),
+              .max(10, { message: "Maximum of 10 roles allowed" })
+              .default([]),
           })
           .array()
           .min(1, { message: "At least one method is required" })
