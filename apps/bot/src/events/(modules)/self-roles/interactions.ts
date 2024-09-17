@@ -46,14 +46,14 @@ export default new BotEventBuilder()
         return void interaction.reply(methodNotFoundError)
       }
 
+      void interaction.deferUpdate()
+
       const member =
         interaction.member instanceof GuildMember
           ? interaction.member
           : await interaction.guild!.members.fetch(interaction.user.id)
 
-      updateRoles(member, message, buttonIndex)
-
-      return void interaction.deferUpdate()
+      await updateRoles(member, message, buttonIndex)
     } else if (message?.type === "dropdown") {
       const optionId = customIdParts[3]
       const optionIndex = message?.methods.findIndex(
@@ -64,14 +64,14 @@ export default new BotEventBuilder()
         return void interaction.reply(methodNotFoundError)
       }
 
+      void interaction.deferUpdate()
+
       const member =
         interaction.member instanceof GuildMember
           ? interaction.member
           : await interaction.guild!.members.fetch(interaction.user.id)
 
-      updateRoles(member, message, optionIndex)
-
-      return void interaction.deferUpdate()
+      await updateRoles(member, message, optionIndex)
     } else {
       return void interaction.reply(methodNotFoundError)
     }

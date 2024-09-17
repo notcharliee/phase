@@ -43,5 +43,5 @@ export default new BotEventBuilder()
 
     if (!member) return
 
-    updateRoles(member, message, reactionIndex)
+    await updateRoles(member, message, reactionIndex)
   })

@@ -4,21 +4,26 @@ import type { GuildMember } from "discord.js"
 
 type SelfRolesMessage = GuildModules[ModuleId.SelfRoles]["messages"][number]
 
-export function updateRoles(
+export async function updateRoles(
   member: GuildMember,
   message: SelfRolesMessage,
   methodIndex: number,
 ) {
   const { roles } = message!.methods[methodIndex]!
 
-  const rolesToAdd = roles.filter((role) => role.action === "add")
-  const rolesToRemove = roles.filter((role) => role.action === "remove")
+  const rolesToAdd = roles
+    .filter((role) => role.action === "add")
+    .map(({ id }) => id)
+
+  const rolesToRemove = roles
+    .filter((role) => role.action === "remove")
+    .map(({ id }) => id)
 
   if (rolesToAdd.length) {
-    member.roles.add(rolesToAdd.map(({ id }) => id)).catch(() => null)
+    await member.roles.add(rolesToAdd).catch(() => null)
   }
 
   if (rolesToRemove.length) {
-    member.roles.remove(rolesToRemove.map(({ id }) => id)).catch(() => null)
+    await member.roles.remove(rolesToRemove).catch(() => null)
   }
 }
