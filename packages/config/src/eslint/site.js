@@ -1,4 +1,9 @@
+// @ts-nocheck
+
 import eslint from "@eslint/js"
+import nextPlugin from "@next/eslint-plugin-next"
+import reactPlugin from "eslint-plugin-react"
+import hooksPlugin from "eslint-plugin-react-hooks"
 import tseslint from "typescript-eslint"
 
 export default tseslint.config(
@@ -12,7 +17,18 @@ export default tseslint.config(
         project: true,
       },
     },
+    plugins: {
+      react: reactPlugin,
+      "react-hooks": hooksPlugin,
+      "@next/next": nextPlugin,
+    },
     rules: {
+      ...hooksPlugin.configs.recommended.rules,
+      ...nextPlugin.configs.recommended.rules,
+      ...nextPlugin.configs["core-web-vitals"].rules,
+      ...reactPlugin.configs["jsx-runtime"].rules,
+      "@next/next/no-img-element": "off",
+      "@next/next/no-duplicate-head": "off",
       "@typescript-eslint/array-type": "off",
       "@typescript-eslint/no-empty-interface": "off",
       "@typescript-eslint/no-empty-object-type": "off",
@@ -30,6 +46,7 @@ export default tseslint.config(
         "error",
         { checksVoidReturn: { attributes: false } },
       ],
+      "react/no-unescaped-entities": "off",
     },
   },
 )
