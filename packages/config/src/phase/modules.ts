@@ -48,7 +48,7 @@ export const modules = {
   [ModuleId.Counters]: {
     name: "Counters",
     description: `Displays server statistics directly in your channel names.`,
-    tags: ["Utility", "New"],
+    tags: ["Utility"],
   },
   [ModuleId.Forms]: {
     name: "Forms",
