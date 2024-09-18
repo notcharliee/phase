@@ -1,29 +1,27 @@
-import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { PhaseColour } from "~/lib/enums"
+import { CustomMessageBuilder } from "~/lib/builders/message"
 
 export default new BotSubcommandBuilder()
   .setName("ping")
   .setDescription("Calculates the current bot latency.")
   .setExecute(async (interaction) => {
-    const defferedReply = await interaction.deferReply({
+    const reply = await interaction.deferReply({
       fetchReply: true,
     })
 
-    const commandLatency =
-      defferedReply.createdTimestamp - interaction.createdTimestamp
+    const commandLatency = reply.createdTimestamp - interaction.createdTimestamp
     const apiLatency = interaction.client.ws.ping
     const rebootTimestamp = `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>`
 
-    void interaction.editReply({
-      embeds: [
-        new EmbedBuilder()
-          .setColor(PhaseColour.Primary)
-          .setTitle("Pong! 🏓")
-          .setDescription(
-            `Command Latency: ${commandLatency}ms\nDiscord API Latency: ${apiLatency}ms\n\nLast Reboot: ${rebootTimestamp}`,
-          ),
-      ],
-    })
+    await interaction.editReply(
+      new CustomMessageBuilder().setEmbeds((embed) => {
+        return embed.setColor("Primary").setTitle("Pong! 🏓").setDescription(`
+          Command Latency: ${commandLatency}ms
+          Discord API Latency: ${apiLatency}ms
+          
+          Last Reboot: ${rebootTimestamp}
+        `)
+      }),
+    )
   })
