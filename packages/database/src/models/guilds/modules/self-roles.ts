@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import { Schema } from "mongoose"
 
 interface SelfRolesBaseMessage {
   id: string
@@ -56,32 +56,35 @@ export interface SelfRoles {
   messages: SelfRolesMessage[]
 }
 
-export const selfRolesSchema = new mongoose.Schema<SelfRoles>(
+export const selfRolesSchema = new Schema<SelfRoles>(
   {
-    enabled: { type: Boolean, required: true },
+    enabled: { type: Schema.Types.Boolean, required: true },
     messages: {
       type: [
-        new mongoose.Schema(
+        new Schema(
           {
-            id: { type: String, required: true },
-            type: { type: String, required: true },
-            name: { type: String, required: true },
-            channel: { type: String, required: true },
-            content: { type: String, required: true },
-            multiselect: { type: Boolean, required: true },
+            id: { type: Schema.Types.String, required: true },
+            type: { type: Schema.Types.String, required: true },
+            name: { type: Schema.Types.String, required: true },
+            channel: { type: Schema.Types.String, required: true },
+            content: { type: Schema.Types.String, required: true },
+            multiselect: { type: Schema.Types.Boolean, required: true },
             methods: {
               type: [
-                new mongoose.Schema(
+                new Schema(
                   {
-                    id: { type: String, required: true },
-                    label: { type: String },
-                    emoji: { type: String },
+                    id: { type: Schema.Types.String, required: true },
+                    label: { type: Schema.Types.String },
+                    emoji: { type: Schema.Types.String },
                     roles: {
                       type: [
-                        new mongoose.Schema(
+                        new Schema(
                           {
-                            id: { type: String, required: true },
-                            action: { type: String, required: true },
+                            id: { type: Schema.Types.String, required: true },
+                            action: {
+                              type: Schema.Types.String,
+                              required: true,
+                            },
                           },
                           { _id: false },
                         ),
