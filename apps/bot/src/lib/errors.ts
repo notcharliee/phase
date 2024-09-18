@@ -1,8 +1,10 @@
-import { ChannelType, EmbedBuilder, PermissionFlagsBits } from "discord.js"
+import { EmbedBuilder } from "discord.js"
 
-import { ModuleId, modules } from "@repo/config/phase/modules.ts"
+import { modules } from "@repo/config/phase/modules.ts"
 
-import { ChannelTypeName } from "~/types/utils"
+import type { ModuleId } from "@repo/config/phase/modules.ts"
+import type { ChannelTypeName } from "~/types/utils"
+import type { ChannelType, PermissionFlagsBits } from "discord.js"
 
 type BotErrorMessage =
   | string
@@ -14,7 +16,7 @@ type BotErrorMessage =
 
 class BotErrorClass {
   public message: BotErrorMessage = "An error occurred."
-  public ephemeral: boolean = true
+  public ephemeral = true
 
   constructor(message?: BotErrorMessage, ephemeral?: boolean) {
     if (message) this.message = message

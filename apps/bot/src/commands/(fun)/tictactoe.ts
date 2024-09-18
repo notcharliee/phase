@@ -32,9 +32,9 @@ export default new BotCommandBuilder()
     const opponent = interaction.options.getMember("opponent") as GuildMember
     const players = { "❌": opponent, "⭕": host }
 
-    let moves = Array.from({ length: 9 }).map(() => ZeroWidthJoiner)
+    const moves = Array.from({ length: 9 }).map(() => ZeroWidthJoiner)
     let turn: "❌" | "⭕" = "❌"
-    let tied: boolean = false
+    let tied = false
     let winner: {
       member: GuildMember
       marker: "❌" | "⭕"
@@ -97,10 +97,10 @@ export default new BotCommandBuilder()
         :zap: **${players["❌"].displayName}** vs **${players["⭕"].displayName}** :zap:
         ${
           winner
-            ? `${winner.member} has won! Play again! ${commandMention}`
+            ? `<@${winner.member.id}> has won! Play again! ${commandMention}`
             : tied
               ? `It's a tie. Play again! ${commandMention}`
-              : `${players[turn]} it's your turn, make a move!`
+              : `<@${players[turn].id}> it's your turn, make a move!`
         }
       `
 
@@ -135,7 +135,7 @@ export default new BotCommandBuilder()
           })
           .then(async (buttonInteraction) => {
             if (buttonInteraction.user.id !== players[turn].id) {
-              buttonInteraction.reply({
+              await buttonInteraction.reply({
                 content: "Wait your turn!",
               })
             } else {
@@ -143,10 +143,10 @@ export default new BotCommandBuilder()
               makeMove(+buttonInteraction.customId.split(".")[2]!)
             }
 
-            createMessage(buttonInteraction)
+            await createMessage(buttonInteraction)
           })
           .catch(() => {
-            message.edit({
+            void message.edit({
               content: dedent`
                 ${message.content.split("\n")[0]}
                 Game timed out due to inactivity.
@@ -164,7 +164,7 @@ export default new BotCommandBuilder()
               }),
             })
 
-            message.reply(dedent`
+            void message.reply(dedent`
               Game timed out due to inactivity.
               You can start a new game with ${commandMention}
             `)
@@ -177,7 +177,7 @@ export default new BotCommandBuilder()
           fetchReply: true,
         })
 
-        awaitMessageComponent(gameMessage)
+        await awaitMessageComponent(gameMessage)
       } else {
         const gameMessage = await interaction.channel!.send({
           content,
@@ -185,11 +185,11 @@ export default new BotCommandBuilder()
         })
 
         // Only await the button interaction if the game is not over.
-        if (!winner && !tied) awaitMessageComponent(gameMessage)
+        if (!winner && !tied) await awaitMessageComponent(gameMessage)
 
         void interaction.message.delete()
       }
     }
 
-    createMessage(interaction)
+    await createMessage(interaction)
   })

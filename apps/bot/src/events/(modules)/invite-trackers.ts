@@ -18,7 +18,7 @@ export default new BotEventBuilder()
       fetchAuditLogs: true,
     })
 
-    inviteEvents.on("guildMemberAdd", async (member, _joinType, invite) => {
+    inviteEvents.on("guildMemberAdd", (member, _joinType, invite) => {
       if (member.user.bot) return
 
       const { guild } = member
@@ -27,7 +27,7 @@ export default new BotEventBuilder()
       if (!guildDoc) return
 
       const moduleConfig = guildDoc.modules?.[ModuleId.AuditLogs]
-      if (!moduleConfig || !moduleConfig.enabled) return
+      if (!moduleConfig?.enabled) return
 
       const logsChannelId = moduleConfig.channels.invites
       if (!logsChannelId) return
@@ -40,7 +40,7 @@ export default new BotEventBuilder()
       }
 
       try {
-        await logsChannel.send({
+        void logsChannel.send({
           embeds: [
             new EmbedBuilder()
               .setColor(PhaseColour.Primary)

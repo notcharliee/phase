@@ -41,7 +41,7 @@ export default new BotSubcommandBuilder()
 
     if (channel) {
       const message = await channel.messages
-        .fetch(giveaway.id)
+        .fetch(giveaway.id as string)
         .catch(() => null)
       if (message) void message.delete()
     }

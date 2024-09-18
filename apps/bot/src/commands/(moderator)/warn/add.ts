@@ -66,7 +66,7 @@ export default new BotSubcommandBuilder()
           .setColor(PhaseColour.Primary)
           .setTitle("Member warned")
           .setDescription(
-            `${member} is now on their **${memberWarnings.size + 1 !== warningsModule.warnings.length ? getOrdinal(memberWarnings.size + 1) : "final"}** warning.`,
+            `<@${member.id}> is now on their **${memberWarnings.size + 1 !== warningsModule.warnings.length ? getOrdinal(memberWarnings.size + 1) : "final"}** warning.`,
           ),
       ],
     })

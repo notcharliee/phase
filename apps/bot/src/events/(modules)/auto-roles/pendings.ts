@@ -20,7 +20,7 @@ export default new BotEventBuilder()
         newMember.guild.roles.cache.get(role.id) &&
         !newMember.roles.cache.has(role.id)
       ) {
-        newMember.roles.add(role.id)
+        await newMember.roles.add(role.id).catch(() => null)
       }
     }
   })

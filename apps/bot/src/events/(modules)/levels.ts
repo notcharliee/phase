@@ -1,10 +1,12 @@
-import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
+import { EmbedBuilder } from "discord.js"
 import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
+
+import type { GuildTextBasedChannel } from "discord.js"
 
 export default new BotEventBuilder()
   .setName("messageCreate")
@@ -46,7 +48,7 @@ export default new BotEventBuilder()
 
       levelUpMessage = levelUpMessage.replaceAll(
         "{member}",
-        `${message.author}`,
+        `<@${message.author.id}>`,
       )
       levelUpMessage = levelUpMessage.replaceAll(
         "{member.name}",
@@ -72,12 +74,14 @@ export default new BotEventBuilder()
           {
             void message.author
               .send({
-                content: moduleConfig.mention ? `${message.author}` : undefined,
+                content: moduleConfig.mention
+                  ? `<@${message.author.id}>`
+                  : undefined,
                 embeds: [
                   new EmbedBuilder()
                     .setColor(PhaseColour.Primary)
                     .setDescription(levelUpMessage)
-                    .setFooter({ text: `Sent from ${message.guild!.name}` })
+                    .setFooter({ text: `Sent from ${message.guild.name}` })
                     .setTitle("You levelled up!"),
                 ],
               })
@@ -87,8 +91,10 @@ export default new BotEventBuilder()
 
         case "reply":
           {
-            message.reply({
-              content: moduleConfig.mention ? `${message.author}` : undefined,
+            await message.reply({
+              content: moduleConfig.mention
+                ? `<@${message.author.id}>`
+                : undefined,
               embeds: [
                 new EmbedBuilder()
                   .setColor(PhaseColour.Primary)
@@ -109,7 +115,9 @@ export default new BotEventBuilder()
 
             void channel
               .send({
-                content: moduleConfig.mention ? `${message.author}` : undefined,
+                content: moduleConfig.mention
+                  ? `<@${message.author.id}>`
+                  : undefined,
                 embeds: [
                   new EmbedBuilder()
                     .setColor(PhaseColour.Primary)
@@ -123,12 +131,12 @@ export default new BotEventBuilder()
       }
 
       for (const levelUpRole of moduleConfig.roles.filter(
-        (role) => role.level === levelSchema!.level,
+        (role) => role.level === levelSchema.level,
       )) {
         const role = message.guild.roles.cache.get(levelUpRole.role)
         if (!role) return
 
-        message.guild.members.addRole({
+        await message.guild.members.addRole({
           user: message.author.id,
           role,
         })

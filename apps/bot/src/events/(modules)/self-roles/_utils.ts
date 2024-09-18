@@ -9,7 +9,7 @@ export async function updateRoles(
   message: SelfRolesMessage,
   methodIndex: number,
 ) {
-  const { roles } = message!.methods[methodIndex]!
+  const { roles } = message.methods[methodIndex]!
 
   const rolesToAdd = roles
     .filter((role) => role.action === "add")

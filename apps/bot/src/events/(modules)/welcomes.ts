@@ -1,10 +1,12 @@
-import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
+import { EmbedBuilder } from "discord.js"
 import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
+
+import type { GuildTextBasedChannel } from "discord.js"
 
 export default new BotEventBuilder()
   .setName("guildMemberAdd")
@@ -53,7 +55,7 @@ export default new BotEventBuilder()
     if (message.length) {
       void channel
         .send({
-          content: moduleConfig.mention ? `${member}` : undefined,
+          content: moduleConfig.mention ? `<@${member.id}>` : undefined,
           embeds: [
             new EmbedBuilder()
               .setAuthor({ name: "New Member", iconURL: avatar })
@@ -72,7 +74,7 @@ export default new BotEventBuilder()
 
       void channel
         .send({
-          content: moduleConfig.mention ? `${member}` : undefined,
+          content: moduleConfig.mention ? `<@${member.id}>` : undefined,
           files: [Buffer.from(attachment)],
         })
         .catch(() => null)

@@ -1,8 +1,10 @@
-import { EmbedBuilder, GuildChannel } from "discord.js"
+import { EmbedBuilder } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
+
+import type { GuildChannel } from "discord.js"
 
 export default new BotCommandBuilder()
   .setName("lock")
@@ -28,55 +30,65 @@ export default new BotCommandBuilder()
     const role = interaction.options.getRole("role", false)
 
     if (channel.isThread()) {
-      void interaction.reply(
+      return await interaction.reply(
         new BotError("This command cannot be used in threads.").toJSON(),
       )
-
-      return
     }
 
     if (state) {
       if (channel.isTextBased()) {
-        channel.permissionOverwrites.edit(role?.id ?? interaction.guildId!, {
-          SendMessages: false,
-        })
+        await channel.permissionOverwrites.edit(
+          role?.id ?? interaction.guildId!,
+          {
+            SendMessages: false,
+          },
+        )
       }
 
       if (channel.isVoiceBased()) {
-        channel.permissionOverwrites.edit(role?.id ?? interaction.guildId!, {
-          Speak: false,
-        })
+        await channel.permissionOverwrites.edit(
+          role?.id ?? interaction.guildId!,
+          {
+            Speak: false,
+          },
+        )
       }
 
-      void interaction.reply({
+      await interaction.reply({
         embeds: [
           new EmbedBuilder()
             .setColor(PhaseColour.Primary)
             .setDescription(
-              `Channel has been locked for ${role ?? "@everyone"}.`,
+              `Channel has been locked for ${role ? `<@${role.id}>` : "@everyone"}.`,
             )
             .setTitle("Channel Locked"),
         ],
       })
     } else {
       if (channel.isTextBased()) {
-        channel.permissionOverwrites.edit(role?.id ?? interaction.guildId!, {
-          SendMessages: true,
-        })
+        await channel.permissionOverwrites.edit(
+          role?.id ?? interaction.guildId!,
+          {
+            SendMessages: true,
+          },
+        )
       }
 
       if (channel.isVoiceBased()) {
-        channel.permissionOverwrites.edit(role?.id ?? interaction.guildId!, {
-          Speak: true,
-        })
+        await channel.permissionOverwrites.edit(
+          role?.id ?? interaction.guildId!,
+          {
+            Speak: true,
+          },
+        )
       }
 
-      void interaction.reply({
+      await interaction.reply({
         embeds: [
           new EmbedBuilder()
             .setColor(PhaseColour.Primary)
             .setDescription(
-              `Channel has been unlocked for ${role ?? "@everyone"}.`,
+              `Channel has been unlocked for ${role ? `<@${role.id}>` : "@everyone"}.`,
             )
             .setTitle("Channel Unlocked"),
         ],

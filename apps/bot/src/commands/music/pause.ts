@@ -27,7 +27,7 @@ export default new BotSubcommandBuilder()
 
     const queue = interaction.client.music.getQueue(channel.guildId)
 
-    if (!queue || !queue.currentSong) {
+    if (!queue?.currentSong) {
       return void interaction.editReply(
         new BotError("No songs were found in the queue.").toJSON(),
       )

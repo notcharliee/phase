@@ -12,9 +12,7 @@ export function musicPlugin(client: Client<false>) {
   return client
 }
 
-export async function getYouTubeCookies(
-  refresh: boolean = false,
-): Promise<Cookie[]> {
+export async function getYouTubeCookies(refresh = false): Promise<Cookie[]> {
   const stealth = stealthPlugin()
 
   stealth.enabledEvasions.delete("iframe.contentWindow")
@@ -27,7 +25,7 @@ export async function getYouTubeCookies(
 
   if (cookiesFileExists && !refresh) {
     try {
-      const cookiesJson = await cookiesFile.json()
+      const cookiesJson: unknown = await cookiesFile.json()
       return cookiesJson as Cookie[]
     } catch (e) {
       console.error("Failed to parse cookies JSON:", e)
@@ -51,7 +49,7 @@ export async function getYouTubeCookies(
     await page.click(
       "#topbar > div.top-buttons.style-scope.ytd-consent-bump-v2-lightbox > div:nth-child(2) > ytd-button-renderer > yt-button-shape > a",
     )
-  } catch (e) {
+  } catch {
     // fallback to clicking "sign in" on navbar
     await page.click("#buttons > ytd-button-renderer > yt-button-shape > a")
   }
@@ -67,6 +65,7 @@ export async function getYouTubeCookies(
 
   await page.evaluate(
     // @ts-expect-error because page.click() on '#passwordNext' is not working
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     (selector) => document.querySelector(selector).click(),
     "#passwordNext",
   )

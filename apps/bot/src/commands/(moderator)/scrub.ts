@@ -36,7 +36,7 @@ export default new BotCommandBuilder()
           .setColor("Yellow")
           .setTitle("⚠️ Warning")
           .setDescription(
-            `This command will delete ${interaction.channel}, then create a new channel with the same settings. All message history will be lost forever.\n\nAny bots, webhooks, or third-party applications currently connected to ${interaction.channel} will not be transferred to the new channel. You will need to reconnect them manually.\n\nThis action is irreversible, are you absolutely sure you wish to proceed?`,
+            `This command will delete <@${interaction.channel!.id}>, then create a new channel with the same settings. All message history will be lost forever.\n\nAny bots, webhooks, or third-party applications currently connected to <@${interaction.channel!.id}> will not be transferred to the new channel. You will need to reconnect them manually.\n\nThis action is irreversible, are you absolutely sure you wish to proceed?`,
           )
           .setFooter({
             text: "Buttons will be disabled in 1 minute.",
@@ -53,13 +53,13 @@ export default new BotCommandBuilder()
       ephemeral: true,
     })
 
-    warningMessage
+    void warningMessage
       .awaitMessageComponent({ time: 1000 * 60 })
       .then(async (buttonInteraction) => {
         if (
           !interaction.channel ||
-          interaction.channel!.isThread() ||
-          interaction.channel!.isDMBased()
+          interaction.channel.isThread() ||
+          interaction.channel.isDMBased()
         ) {
           return
         }
@@ -76,12 +76,12 @@ export default new BotCommandBuilder()
               .setColor(PhaseColour.Primary)
               .setTitle("Channel Scrubbed")
               .setDescription(
-                `This channel was scrubbed by ${interaction.user}`,
+                `This channel was scrubbed by <@${interaction.user.id}>`,
               ),
           ],
         })
 
-        void interaction.channel!.delete(
+        void interaction.channel.delete(
           `@${interaction.user.username} ran /scrub`,
         )
       })

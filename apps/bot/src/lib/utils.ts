@@ -10,7 +10,7 @@ export function isSnowflake(id: string) {
   }
 }
 
-export function getDayName(day: number, short: boolean = false) {
+export function getDayName(day: number, short = false) {
   switch (day) {
     case 0:
       return short ? "Sun" : "Sunday"
@@ -147,7 +147,7 @@ export const getOrdinal = (number: number): string => {
   if (number >= 11 && number <= 13) return number + "th"
   return (
     number +
-    (["th", "st", "nd", "rd"][number % 10] || ["th", "st", "nd", "rd"][0]!)
+    (["th", "st", "nd", "rd"][number % 10] ?? ["th", "st", "nd", "rd"][0]!)
   )
 }
 

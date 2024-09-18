@@ -265,7 +265,7 @@ export default new BotEventBuilder()
     if (!guildDoc) return
 
     const moduleConfig = guildDoc.modules?.[ModuleId.AuditLogs]
-    if (!moduleConfig || !moduleConfig.enabled) return
+    if (!moduleConfig?.enabled) return
 
     const categoryName = AuditLogCategories[entry.action]
 
@@ -352,7 +352,10 @@ export default new BotEventBuilder()
       const channelTag =
         actionType !== "Delete"
           ? `<#${channel.id}>`
-          : wrapText(`#${channel.name ?? "unknown"}`, "`")
+          : wrapText(
+              `#${(channel.name as string | undefined) ?? "unknown"}`,
+              "`",
+            )
 
       embed.addFields(
         {
@@ -374,7 +377,10 @@ export default new BotEventBuilder()
       const threadTag =
         actionType !== "Delete"
           ? `<#${thread.id}>`
-          : wrapText(`#${thread?.name ?? "unknown"}`, "`")
+          : wrapText(
+              `#${(thread?.name as string | undefined) ?? "unknown"}`,
+              "`",
+            )
 
       embed.addFields(
         {
@@ -627,7 +633,7 @@ export default new BotEventBuilder()
           case "channel_id": {
             embed.addFields({
               name: "Channel",
-              value: `<#${change.new}>`,
+              value: `<#${change.new as string}>`,
             })
 
             break
@@ -640,11 +646,11 @@ export default new BotEventBuilder()
             const values: string[] = []
 
             if (change.old) {
-              values.push(`**\`-\`** <#${change.old}>`)
+              values.push(`**\`-\`** <#${change.old as string}>`)
             }
 
             if (change.new) {
-              values.push(`**\`+\`** <#${change.new}>`)
+              values.push(`**\`+\`** <#${change.new as string}>`)
             }
 
             embed.addFields({
@@ -747,14 +753,14 @@ export default new BotEventBuilder()
             if (actionType === "Create") {
               embed.addFields({
                 name: "Colour",
-                value: `#${change.new === 0 ? "000000" : change.new!.toString(16)}`,
+                value: `#${change.new === 0 ? "000000" : (change.new as number).toString(16)}`,
               })
             } else {
               embed.addFields({
                 name: "Colour",
                 value: dedent`
-                  **\`-\`** #${change.old === 0 ? "000000" : change.old!.toString(16)} 
-                  **\`+\`** #${change.new === 0 ? "000000" : change.new!.toString(16)}
+                  **\`-\`** #${change.old === 0 ? "000000" : (change.old as number).toString(16)} 
+                  **\`+\`** #${change.new === 0 ? "000000" : (change.new as number).toString(16)}
                 `,
               })
             }
@@ -1027,7 +1033,7 @@ export default new BotEventBuilder()
 
             if (oldEmoji) {
               const emojiData = oldEmoji.emoji_id
-                ? guild.emojis.cache.get(oldEmoji.emoji_id!)!
+                ? guild.emojis.cache.get(oldEmoji.emoji_id)!
                 : oldEmoji.emoji_name!
 
               const emoji =
@@ -1040,7 +1046,7 @@ export default new BotEventBuilder()
 
             if (newEmoji) {
               const emojiData = newEmoji.emoji_id
-                ? guild.emojis.cache.get(newEmoji.emoji_id!)!
+                ? guild.emojis.cache.get(newEmoji.emoji_id)!
                 : newEmoji.emoji_name!
 
               const emoji =
@@ -1083,7 +1089,7 @@ export default new BotEventBuilder()
           case "inviter_id": {
             embed.addFields({
               name: "Created By",
-              value: `<@${change.new}>`,
+              value: `<@${change.new as string}>`,
             })
 
             break
@@ -1093,11 +1099,11 @@ export default new BotEventBuilder()
               const values: string[] = []
 
               if (change.old) {
-                values.push(`**\`-\`** \`${change.old}\``)
+                values.push(`**\`-\`** \`${change.old as string}\``)
               }
 
               if (change.new) {
-                values.push(`**\`+\`** \`${change.new}\``)
+                values.push(`**\`+\`** \`${change.new as string}\``)
               }
 
               embed.addFields({
@@ -1111,7 +1117,7 @@ export default new BotEventBuilder()
           case "temporary": {
             embed.addFields({
               name: "Temporary Membership",
-              value: wrapText(change.new!.toString(), "`"),
+              value: wrapText((change.new as boolean).toString(), "`"),
             })
 
             break
@@ -1133,7 +1139,7 @@ export default new BotEventBuilder()
             if (change.new !== 0) {
               embed.addFields({
                 name: "Max Uses",
-                value: wrapText(change.new!.toString(), "`"),
+                value: wrapText((change.new as number).toString(), "`"),
               })
             }
 
@@ -1184,7 +1190,7 @@ export default new BotEventBuilder()
           case "owner_id": {
             embed.addFields({
               name: "Owner",
-              value: `**\`-\`** <@${change.old}>\n**\`+\`** <@${change.new}>`,
+              value: `**\`-\`** <@${change.old as string}>\n**\`+\`** <@${change.new as string}>`,
             })
 
             break
@@ -1231,14 +1237,20 @@ export default new BotEventBuilder()
 
             const formattedOldValue = change.old?.toString().length
               ? shouldWrapInCode
-                ? wrapText(change.old.toString(), "`")
-                : change.old.toString()
+                ? wrapText(
+                    (change.old as number | string | boolean).toString(),
+                    "`",
+                  )
+                : (change.old as number | string | boolean).toString()
               : null
 
             const formattedNewValue = change.new?.toString().length
               ? shouldWrapInCode
-                ? wrapText(change.new.toString(), "`")
-                : change.new.toString()
+                ? wrapText(
+                    (change.new as number | string | boolean).toString(),
+                    "`",
+                  )
+                : (change.new as number | string | boolean).toString()
               : null
 
             if (actionType === "Create") {

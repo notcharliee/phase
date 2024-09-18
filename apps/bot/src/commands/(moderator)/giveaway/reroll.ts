@@ -66,7 +66,7 @@ export default new BotSubcommandBuilder()
     }
 
     const giveawayMessage = await giveawayChannel.messages
-      .fetch(giveaway.id)
+      .fetch(giveaway.id as string)
       .catch(() => null)
 
     if (!giveawayMessage) {

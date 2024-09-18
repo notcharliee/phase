@@ -29,7 +29,7 @@ export default new BotCommandBuilder()
     const youtube = google.youtube("v3")
 
     const videoUrl = interaction.options.getString("video", true)
-    let videoId: string = ""
+    let videoId = ""
 
     if (videoUrl.includes("v=")) {
       videoId = videoUrl.split("v=")[1]!.split("&")[0]!

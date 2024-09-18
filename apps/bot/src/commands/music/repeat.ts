@@ -53,7 +53,7 @@ export default new BotSubcommandBuilder()
       )
     }
 
-    if (queue.repeatMode === repeat) {
+    if (queue.repeatMode === (repeat as QueueRepeatMode)) {
       return void interaction.editReply(
         new BotError("Repeat mode is already set to that state.").toJSON(),
       )

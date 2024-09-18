@@ -33,7 +33,7 @@ export default new BotSubcommandBuilder()
 
     if (user.bot) {
       void interaction.editReply(
-        new BotError(`${user} is a bot, not a regular user.`).toJSON(),
+        new BotError(`<@${user.id}> is a bot, not a regular user.`).toJSON(),
       )
 
       return
@@ -41,7 +41,7 @@ export default new BotSubcommandBuilder()
 
     if (guildDoc.admins.includes(user.id)) {
       void interaction.editReply(
-        new BotError(`${user} already has dashboard access.`).toJSON(),
+        new BotError(`<@${user.id}> already has dashboard access.`).toJSON(),
       )
 
       return
@@ -52,5 +52,7 @@ export default new BotSubcommandBuilder()
       { $push: { admins: user.id } },
     )
 
-    void interaction.editReply(`${user} has been granted dashboard access.`)
+    void interaction.editReply(
+      `<@${user.id}> has been granted dashboard access.`,
+    )
   })

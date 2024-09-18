@@ -1,14 +1,10 @@
-import { UUID } from "crypto"
-
 import {
   ActionRowBuilder,
-  AnyThreadChannel,
   ButtonBuilder,
   ButtonStyle,
   ChannelType,
   EmbedBuilder,
   PermissionFlagsBits,
-  TextChannel,
 } from "discord.js"
 import { BotEventBuilder } from "phasebot/builders"
 
@@ -16,6 +12,9 @@ import { ModuleId } from "@repo/config/phase/modules.ts"
 
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
+
+import type { UUID } from "crypto"
+import type { AnyThreadChannel, TextChannel } from "discord.js"
 
 export default new BotEventBuilder()
   .setName("interactionCreate")
@@ -30,10 +29,10 @@ export default new BotEventBuilder()
       interaction.channel
     ) {
       if (
-        !(interaction.guild!.members.me ??
-          (await interaction.guild!.members.fetchMe()))!.permissions.has(
-          PermissionFlagsBits.ManageThreads,
-        )
+        !(
+          interaction.guild!.members.me ??
+          (await interaction.guild!.members.fetchMe())
+        ).permissions.has(PermissionFlagsBits.ManageThreads)
       ) {
         return interaction.reply(
           BotError.botMissingPermission("ManageThreads").toJSON(),
@@ -96,7 +95,7 @@ export default new BotEventBuilder()
             })
 
             await ticket.send(
-              `${interaction.member}${ticketData.mention ? `<@&${ticketData.mention}>` : ""}`,
+              `<@${interaction.user.id}>${ticketData.mention ? `<@&${ticketData.mention}>` : ""}`,
             )
 
             await ticket.send({
@@ -117,7 +116,9 @@ export default new BotEventBuilder()
               ],
             })
 
-            interaction.editReply(`Your ticket has been created! ${ticket}`)
+            await interaction.editReply(
+              `Your ticket has been created! <#${ticket.id}>`,
+            )
           }
           break
 
@@ -131,15 +132,15 @@ export default new BotEventBuilder()
               )
             }
 
-            ticket.setLocked(true)
-            ticket.setName(ticket.name.replace("🎫", "🔒"))
+            await ticket.setLocked(true)
+            await ticket.setName(ticket.name.replace("🎫", "🔒"))
 
-            interaction.reply({
+            await interaction.reply({
               embeds: [
                 new EmbedBuilder()
                   .setColor(PhaseColour.Primary)
                   .setDescription(
-                    `Ticket locked by ${interaction.member}\n\nModerators can unlock this ticket using \`/ticket unlock\`.`,
+                    `Ticket locked by <@${interaction.user.id}>\n\nModerators can unlock this ticket using \`/ticket unlock\`.`,
                   )
                   .setTitle("Ticket Locked"),
               ],

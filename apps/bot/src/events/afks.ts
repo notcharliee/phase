@@ -14,7 +14,7 @@ export default new BotEventBuilder()
     if (afkDoc) {
       await afkDoc.deleteOne()
 
-      message.reply({
+      await message.reply({
         embeds: [
           new EmbedBuilder()
             .setColor(PhaseColour.Primary)
@@ -34,7 +34,7 @@ export default new BotEventBuilder()
         if (mentionAFKSchema) {
           const memberName = await message.guild.members.fetch(mentionedMember)
 
-          message.reply({
+          await message.reply({
             embeds: [
               new EmbedBuilder()
                 .setColor(PhaseColour.Primary)

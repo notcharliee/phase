@@ -70,8 +70,8 @@ export default new BotSubcommandBuilder()
           .setTitle("Member unwarned")
           .setDescription(
             memberWarnings.size - 1 !== 0
-              ? `${member} is now on their **${getOrdinal(memberWarnings.size - 1)}** warning.`
-              : `${member} now has no warnings.`,
+              ? `<@${member.id}> is now on their **${getOrdinal(memberWarnings.size - 1)}** warning.`
+              : `<@${member.id}> now has no warnings.`,
           ),
       ],
     })

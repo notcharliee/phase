@@ -32,9 +32,7 @@ export class Store {
       .watch([], { fullDocument: "updateLookup" })
       .on(
         "change",
-        async (
-          change: mongoose.mongo.ChangeStreamDocument<typeof configObj>,
-        ) => {
+        (change: mongoose.mongo.ChangeStreamDocument<typeof configObj>) => {
           if (!("documentKey" in change)) return
 
           if (change.operationType === "delete") {
@@ -62,7 +60,7 @@ export class Store {
 
     db.guilds
       .watch([], { fullDocument: "updateLookup" })
-      .on("change", async (change: GuildChangeStreamDoc) => {
+      .on("change", (change: GuildChangeStreamDoc) => {
         if (!("documentKey" in change)) return
 
         if (change.operationType === "delete") {

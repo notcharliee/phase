@@ -41,7 +41,7 @@ export default new BotSubcommandBuilder()
 
     if (!guildDoc.admins.includes(user.id)) {
       void interaction.editReply(
-        new BotError(`${user} does not have dashboard access.`).toJSON(),
+        new BotError(`<@${user.id}> does not have dashboard access.`).toJSON(),
       )
 
       return
@@ -53,6 +53,6 @@ export default new BotSubcommandBuilder()
     )
 
     void interaction.editReply(
-      `${user} has had their dashboard access revoked.`,
+      `<@${user.id}> has had their dashboard access revoked.`,
     )
   })

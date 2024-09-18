@@ -60,5 +60,7 @@ export default new BotSubcommandBuilder()
       ],
     })
 
-    setTimeout(() => ticket.delete().catch(() => null), 3_000)
+    setTimeout(() => {
+      ticket.delete().catch(() => null)
+    }, 3_000)
   })

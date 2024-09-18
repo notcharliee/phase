@@ -152,7 +152,7 @@ type FormQuestion = FormFile["questions"][number]
  */
 async function getInitialFormMessage(message: Message) {
   const threadChannel = message.channel
-  const initialMessageId = parseHiddenContent(message.content)
+  const initialMessageId = parseHiddenContent(message.content)!
 
   const initialFormMessage =
     threadChannel?.messages.cache.get(initialMessageId) ??
@@ -230,7 +230,7 @@ function createQuestionMessage(formFile: FormFile, questionIndex: number) {
     .setStyle(ButtonStyle.Secondary)
 
   return {
-    content: createHiddenContent(formFile.metadata.initialMessageId!),
+    content: createHiddenContent(formFile.metadata.initialMessageId),
     embeds: [
       new EmbedBuilder()
         .setColor(PhaseColour.Primary)
@@ -546,7 +546,7 @@ async function handleStatusUpdate(
         .setColor(PhaseColour.Primary)
         .setTitle("Submission Updated")
         .setDescription(
-          `Your form submission has been **${newStatus}** by ${interaction.user} ${reason ? `for the following reason:\n\n*${reason}*` : ""}`,
+          `Your form submission has been **${newStatus}** by <@${interaction.user.id}> ${reason ? `for the following reason:\n\n*${reason}*` : ""}`,
         )
         .setTimestamp(),
     ],
@@ -558,7 +558,7 @@ async function handleStatusUpdate(
       : formThread.send(submissionStatusUpdateMessage)
   ).catch((error) => {
     console.error(
-      `Failed to send form submission status update to form thread ${formThread!.id} of parent channel ${formThread!.parentId} in guild ${interaction.guildId}:`,
+      `Failed to send form submission status update to form thread ${formThread.id} of parent channel ${formThread.parentId} in guild ${interaction.guildId}:`,
       error,
     )
   })
@@ -594,7 +594,7 @@ async function handleStatusUpdate(
           .setColor(PhaseColour.Primary)
           .setTitle("Submission Updated")
           .setDescription(
-            `Submission was **${newStatus}** by ${interaction.user} ${reason ? `for the following reason:\n\n*${reason}*` : ""}`,
+            `Submission was **${newStatus}** by <@${interaction.user.id}> ${reason ? `for the following reason:\n\n*${reason}*` : ""}`,
           )
           .setTimestamp(),
       ],
@@ -630,7 +630,7 @@ export default new BotEventBuilder()
 
     if ((Object.values(FormAction) as string[]).includes(formActionOrInput)) {
       const formAction = formActionOrInput as FormAction
-      const formId = customIdParts[2] as string
+      const formId = customIdParts[2]!
       const formThreadId = customIdParts[3]
 
       if (
@@ -662,7 +662,7 @@ export default new BotEventBuilder()
 
       // the module config from the database
 
-      const guildDoc = client.store.guilds.get(interaction.guildId!)
+      const guildDoc = client.store.guilds.get(interaction.guildId)
       const moduleConfig = guildDoc?.modules?.[ModuleId.Forms]
 
       if (!moduleConfig?.enabled) {
@@ -732,7 +732,7 @@ export default new BotEventBuilder()
             })
 
             const initialFormMessage = await threadChannel.send({
-              content: `${interaction.user} getting your form ready ...`,
+              content: `<@${interaction.user.id}> getting your form ready ...`,
             })
 
             const formFile: FormFile = {

@@ -34,7 +34,9 @@ export default new BotCronBuilder()
           channelsToDelete.push(
             activeJTCChannel
               .delete()
-              .then(() => {})
+              .then(() => {
+                return
+              })
               .catch((err) => {
                 console.error(
                   `Failed to delete an active JTC channel ${activeJTCChannel.id}:`,

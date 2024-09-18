@@ -1,7 +1,8 @@
-import { GuildMember, PermissionFlagsBits } from "discord.js"
+import { PermissionFlagsBits } from "discord.js"
 
 import { BotError } from "~/lib/errors"
 
+import type { GuildMember } from "discord.js"
 import type { BotCommandMiddleware } from "phasebot/builders"
 
 export const commands: BotCommandMiddleware = async (
@@ -92,7 +93,7 @@ export const commands: BotCommandMiddleware = async (
     }
   }
 
-  const defaultPermissions: { [key: string]: bigint | undefined } = {
+  const defaultPermissions: Record<string, bigint | undefined> = {
     "giveaway create": PermissionFlagsBits.ManageGuild,
     "giveaway delete": PermissionFlagsBits.ManageGuild,
     "giveaway reroll": PermissionFlagsBits.ManageGuild,

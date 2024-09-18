@@ -35,7 +35,7 @@ export default new BotCronBuilder()
         guildDoc.modules![ModuleId.TwitchNotifications]!.streamers
 
       streamers.forEach((streamer) => {
-        let existingStreamer = acc.get(streamer.id)
+        const existingStreamer = acc.get(streamer.id)
 
         if (existingStreamer) {
           existingStreamer.notifications.push({
@@ -63,7 +63,10 @@ export default new BotCronBuilder()
     const oldStreamStatuses = Object.entries(client.store.twitchStatuses)
 
     for (const [id, streamer] of streamers.entries()) {
-      const oldStreamStatus = oldStreamStatuses.find(([key]) => key === id)?.[1]
+      const oldStreamStatus = oldStreamStatuses.find(
+        ([key]) => key === id,
+      )?.[1] as boolean | undefined
+      
       const stream = await twitchAPI.streams.getStreamByUserId(id)
 
       if (oldStreamStatus && !stream) {

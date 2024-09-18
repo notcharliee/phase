@@ -67,7 +67,7 @@ export default new BotSubcommandBuilder()
       })
     } catch (error) {
       if (error instanceof Error) {
-        if (error.message === MusicError.InvalidQuery) {
+        if (error.message === (MusicError.InvalidQuery as string)) {
           return await interaction.editReply(
             new BotError("Song not found").toJSON(),
           )

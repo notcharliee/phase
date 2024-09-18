@@ -40,7 +40,7 @@ export default new BotCommandBuilder()
       channel: interaction.channelId,
       content: message,
       delay: msDelay,
-      mention: `${interaction.user}`,
+      mention: `<@${interaction.user.id}>`,
     })
 
     void interaction.reply({

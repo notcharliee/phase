@@ -1,10 +1,12 @@
-import { EmbedBuilder, GuildMember, PermissionFlagsBits } from "discord.js"
+import { EmbedBuilder, PermissionFlagsBits } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
 
 import { formatDate } from "./_utils"
+
+import type { GuildMember } from "discord.js"
 
 export default new BotSubcommandBuilder()
   .setName("member")

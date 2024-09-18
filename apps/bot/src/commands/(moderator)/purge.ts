@@ -1,10 +1,12 @@
-import { EmbedBuilder, GuildTextBasedChannel } from "discord.js"
+import { EmbedBuilder } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
 import { BotError } from "~/lib/errors"
+
+import type { GuildTextBasedChannel } from "discord.js"
 
 export default new BotCommandBuilder()
   .setName("purge")
@@ -30,15 +32,19 @@ export default new BotCommandBuilder()
 
     const channel = interaction.channel as GuildTextBasedChannel
 
-    let fetchedMessages = await channel.messages.fetch({ limit: amount }).catch(() => null)
+    let fetchedMessages = await channel.messages
+      .fetch({ limit: amount })
+      .catch(() => null)
 
     if (author) {
-      fetchedMessages = fetchedMessages?.filter(
-        (message) => message.author.id == author.id,
-      ) ?? null
+      fetchedMessages =
+        fetchedMessages?.filter((message) => message.author.id == author.id) ??
+        null
     }
 
-    const deletedMessages = fetchedMessages ? await channel.bulkDelete(fetchedMessages, true).catch(() => null) : null
+    const deletedMessages = fetchedMessages
+      ? await channel.bulkDelete(fetchedMessages, true).catch(() => null)
+      : null
 
     if (!deletedMessages?.size) {
       const commandMention = `</scrub:${interaction.client.application.commands.cache.find((command) => command.name === "scrub")!.id}>`
@@ -63,7 +69,7 @@ export default new BotCommandBuilder()
           .setColor(PhaseColour.Primary)
           .setDescription(
             `Purged **${deletedMessages.size}** messages in total` +
-              `${author ? ` sent by ${author}` : "."}`,
+              `${author ? ` sent by <@${author.id}>` : "."}`,
           )
           .setTitle("Messages Purged"),
       ],

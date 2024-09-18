@@ -28,7 +28,7 @@ export default new BotSubcommandBuilder()
 
     const queue = interaction.client.music.getQueue(channel.guildId)
 
-    if (!queue || !queue.currentSong) {
+    if (!queue?.currentSong) {
       return void interaction.editReply(
         new BotError("No songs were found in the queue.").toJSON(),
       )
@@ -38,10 +38,10 @@ export default new BotSubcommandBuilder()
 
     const totalPlaybackDuration = formatDuration(
       queue.songs
-        .slice(0, queue.currentSongIndex!)
+        .slice(0, queue.currentSongIndex)
         .reduce(
           (acc, song) => acc + song.duration,
-          queue.currentSong!.playbackDuration,
+          queue.currentSong.playbackDuration,
         ),
     )
 
@@ -62,7 +62,7 @@ export default new BotSubcommandBuilder()
                 const isPlaying = index === queue.currentSongIndex!
 
                 const songsToBePlayedDurations = queue.songs
-                  .slice(queue.currentSongIndex!, index)
+                  .slice(queue.currentSongIndex, index)
                   .reduce((prev, curr) => prev + curr.duration, 0)
 
                 const songStartsPlaying = `<t:${Math.floor(now + songsToBePlayedDurations - queue.currentSong!.playbackDuration)}:R>`

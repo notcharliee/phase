@@ -1,7 +1,6 @@
 import {
   ActionRowBuilder,
   EmbedBuilder,
-  ModalActionRowComponentBuilder,
   ModalBuilder,
   TextInputBuilder,
   TextInputStyle,
@@ -9,6 +8,8 @@ import {
 import { BotEventBuilder } from "phasebot/builders"
 
 import { BotError } from "~/lib/errors"
+
+import type { ModalActionRowComponentBuilder } from "discord.js"
 
 export default new BotEventBuilder()
   .setName("interactionCreate")
@@ -49,7 +50,7 @@ export default new BotEventBuilder()
               )
             }
 
-            interaction.message.edit({
+            void interaction.message.edit({
               embeds: [
                 new EmbedBuilder()
                   .setAuthor(
@@ -75,7 +76,7 @@ export default new BotEventBuilder()
               ],
             })
 
-            interaction.deferUpdate()
+            void interaction.deferUpdate()
           }
           break
 
@@ -118,7 +119,7 @@ export default new BotEventBuilder()
               )
             }
 
-            interaction.message.edit({
+            void interaction.message.edit({
               embeds: [
                 new EmbedBuilder()
                   .setAuthor(interaction.message.embeds[0]!.author)
@@ -138,7 +139,7 @@ export default new BotEventBuilder()
               ],
             })
 
-            interaction.deferUpdate()
+            void interaction.deferUpdate()
           }
           break
 
@@ -169,7 +170,7 @@ export default new BotEventBuilder()
               )
             }
 
-            interaction.message.edit({
+            void interaction.message.edit({
               embeds: [
                 new EmbedBuilder()
                   .setAuthor(interaction.message.embeds[0]!.author)
@@ -185,7 +186,7 @@ export default new BotEventBuilder()
               ],
             })
 
-            interaction.deferUpdate()
+            void interaction.deferUpdate()
           }
           break
 
@@ -215,7 +216,7 @@ export default new BotEventBuilder()
               )
             }
 
-            interaction.message.edit({
+            void interaction.message.edit({
               embeds: [
                 new EmbedBuilder()
                   .setAuthor(interaction.message.embeds[0]!.author)
@@ -240,7 +241,7 @@ export default new BotEventBuilder()
               ],
             })
 
-            interaction.deferUpdate()
+            void interaction.deferUpdate()
           }
           break
       }
@@ -313,8 +314,7 @@ export default new BotEventBuilder()
               .setCustomId(`embedbuilder.author`)
               .setTitle("Embed Builder")
 
-            const showModal = await interaction.showModal(modal)
-            Promise.resolve(showModal)
+            await interaction.showModal(modal)
           }
           break
 
@@ -393,8 +393,7 @@ export default new BotEventBuilder()
               .setCustomId(`embedbuilder.body`)
               .setTitle("Embed Builder")
 
-            const showModal = await interaction.showModal(modal)
-            Promise.resolve(showModal)
+            await interaction.showModal(modal)
           }
           break
 
@@ -438,8 +437,7 @@ export default new BotEventBuilder()
               .setCustomId(`embedbuilder.image`)
               .setTitle("Embed Builder")
 
-            const showModal = await interaction.showModal(modal)
-            Promise.resolve(showModal)
+            await interaction.showModal(modal)
           }
           break
 
@@ -483,14 +481,13 @@ export default new BotEventBuilder()
               .setCustomId(`embedbuilder.footer`)
               .setTitle("Embed Builder")
 
-            const showModal = await interaction.showModal(modal)
-            Promise.resolve(showModal)
+            await interaction.showModal(modal)
           }
           break
 
         case "embedbuilder.send":
           {
-            interaction.channel?.send({
+            void interaction.channel?.send({
               embeds: [
                 new EmbedBuilder()
                   .setAuthor(interaction.message.embeds[0]!.author)
@@ -508,7 +505,7 @@ export default new BotEventBuilder()
               ],
             })
 
-            await interaction.message.delete()
+            void interaction.message.delete()
           }
           break
       }
