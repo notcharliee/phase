@@ -10,7 +10,7 @@ import { ModuleId } from "@repo/config/phase/modules.ts"
 import { db } from "~/lib/db"
 import { env } from "~/lib/env"
 import { twitchClient } from "~/lib/twitch"
-import { createHiddenContent, safeMs } from "~/lib/utils"
+import { createHiddenContent, parseHiddenContent, safeMs } from "~/lib/utils"
 
 import type {
   APIButtonComponentWithCustomId,
@@ -265,7 +265,12 @@ export async function handleSelfRolesModule(
   for (const message of messages) {
     const existingMessage = (
       await discordAPI.channels.getPins(message.channel).catch(() => [])
-    ).find((pin) => pin.author.id === env.DISCORD_ID)
+    ).find(
+      (pin) =>
+        pin.author.id === env.DISCORD_ID &&
+        pin.embeds[0]?.description &&
+        parseHiddenContent(pin.embeds[0].description) === message.id,
+    )
 
     const newMessageBody = {
       embeds: [
