@@ -4,9 +4,12 @@ import { useRef } from "react"
 
 import { useFormContext } from "react-hook-form"
 
+import { Spinner } from "~/components/spinner"
 import { Button } from "~/components/ui/button"
 
 import { useElementSize } from "~/hooks/use-element-size"
+
+import { cn } from "~/lib/utils"
 
 import { type ModulesFormValues } from "~/types/dashboard"
 
@@ -20,6 +23,7 @@ export function ActionBar(props: ActionBarProps) {
 
   const isDirty = props.dirtyKeys.length
   const isInvalid = props.invalidKeys.length
+  const isSubmitting = form.formState.isSubmitting
 
   const actionBarRef = useRef<HTMLDivElement>(null)
   const [actionBarWidth, actionBarHeight] = useElementSize(actionBarRef)
@@ -49,9 +53,26 @@ export function ActionBar(props: ActionBarProps) {
           <Button type="reset" variant={"ghost"} onClick={() => form.reset()}>
             Reset
           </Button>
-          <Button type="submit">
-            <span className="sm:hidden">Save</span>
-            <span className="hidden sm:inline">Save changes</span>
+          <Button type="submit" className="relative">
+            <span
+              className={cn(
+                "animate-in fade-in-0 sm:hidden",
+                isSubmitting && "animate-out fade-out-0 fill-mode-forwards",
+              )}
+            >
+              Save
+            </span>
+            <span
+              className={cn(
+                "animate-in fade-in-0 hidden sm:inline",
+                isSubmitting && "animate-out fade-out-0 fill-mode-forwards",
+              )}
+            >
+              Save changes
+            </span>
+            {isSubmitting && (
+              <Spinner className="animate-in fade-in-0 absolute h-5 w-5" />
+            )}
           </Button>
         </div>
       </div>
