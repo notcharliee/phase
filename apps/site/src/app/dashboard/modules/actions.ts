@@ -45,7 +45,7 @@ export async function updateModules(
   const formValues = modulesSchema.parse(unsafeFormValues)
   const dirtyFields = moduleIdSchema.array().parse(unsafeDirtyFields)
 
-  const parsedModules: Partial<GuildModules> = {}
+  const parsedModules: Partial<Record<ModuleId, GuildModules[ModuleId]>> = {}
 
   const parsedModulesToSet: Partial<
     Record<`modules.${ModuleId}`, GuildModules[ModuleId]>
@@ -61,9 +61,8 @@ export async function updateModules(
       parsedModulesToUnset[`modules.${moduleId}`] = null
     } else {
       parsedModulesToSet[`modules.${moduleId}`] = moduleData
+      parsedModules[moduleId] = moduleData
     }
-
-    Object.assign(parsedModules, { [moduleId]: moduleData })
   }
 
   await guildDoc.updateOne({
