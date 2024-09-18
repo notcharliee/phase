@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { Cross1Icon } from "@radix-ui/react-icons"
+import { Cross2Icon } from "@radix-ui/react-icons"
 import { Command as CommandPrimitive } from "cmdk"
 
 import { Badge } from "~/components/ui/badge"
@@ -88,10 +88,6 @@ export const MultiselectRole = React.forwardRef<
     }
   }
 
-  const selectables = selectableRoles
-    .filter((role) => !selectedRoles.includes(role))
-    .slice(0, 5)
-
   return (
     <Command onKeyDown={handleKeyDown}>
       <Popover>
@@ -111,10 +107,16 @@ export const MultiselectRole = React.forwardRef<
                     key={role.value}
                     variant="secondary"
                     className="gap-1.5"
+                    style={{
+                      color: role.colour,
+                      backgroundColor: role.colour
+                        ? role.colour + "40"
+                        : undefined,
+                    }}
                   >
                     <button
                       disabled={disabled}
-                      className="ring-offset-background focus:ring-ring rounded-full outline-none focus:ring-2 focus:ring-offset-2"
+                      className="ring-offset-background focus:ring-ring hover:bg-primary/25 rounded-full outline-none transition-colors focus:ring-2 focus:ring-offset-2"
                       onKeyDown={({ key }) =>
                         key === "Enter" && handleDeselect(role)
                       }
@@ -124,9 +126,9 @@ export const MultiselectRole = React.forwardRef<
                         handleDeselect(role)
                       }}
                     >
-                      <Cross1Icon className="text-muted-foreground hover:text-foreground h-3 w-3" />
+                      <Cross2Icon className="h-3 w-3 text-[currentColor]" />
                     </button>
-                    {role.label}
+                    <span>{role.label}</span>
                   </Badge>
                 )
               })}
@@ -146,22 +148,26 @@ export const MultiselectRole = React.forwardRef<
           </div>
         </PopoverTrigger>
         <PopoverContent
-          className="p-1"
+          className="max-h-[170px] overflow-y-auto p-1"
           style={{ width: triggerWidth + "px" }}
           onOpenAutoFocus={(e) => e.preventDefault()}
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          {selectables.map((selectable, index) => {
-            return (
-              <CommandItem
-                key={index + selectable.value}
-                disabled={disabled}
-                onSelect={() => handleSelect(selectable)}
-              >
-                {selectable.label}
-              </CommandItem>
-            )
-          })}
+          {selectableRoles
+            .filter((role) => !selectedRoles.includes(role))
+            .map((role, index) => {
+              return (
+                <CommandItem
+                  className="text-sm"
+                  style={{ color: role.colour }}
+                  key={index + role.value}
+                  disabled={disabled}
+                  onSelect={() => handleSelect(role)}
+                >
+                  @{role.label}
+                </CommandItem>
+              )
+            })}
         </PopoverContent>
       </Popover>
     </Command>
