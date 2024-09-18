@@ -21,8 +21,8 @@ interface ActionBarProps {
 export function ActionBar(props: ActionBarProps) {
   const form = useFormContext<ModulesFormValues>()
 
-  const isDirty = props.dirtyKeys.length
-  const isInvalid = props.invalidKeys.length
+  const isDirty = !!props.dirtyKeys.length
+  const isInvalid = !!props.invalidKeys.length
   const isSubmitting = form.formState.isSubmitting
 
   const actionBarRef = useRef<HTMLDivElement>(null)
@@ -35,7 +35,7 @@ export function ActionBar(props: ActionBarProps) {
 
   return (
     <div
-      aria-hidden={!!(!isDirty || isInvalid)}
+      aria-hidden={!isDirty}
       style={actionBarParentStyles}
       className="group sticky top-0 z-10 mb-8 h-[--actionbar-height] transition-all duration-500 aria-hidden:pointer-events-none aria-hidden:mb-0 aria-hidden:h-0 md:fixed md:bottom-6 md:left-[calc((50%-(var(--actionbar-width)/2))+10rem)] md:top-auto md:mb-0 md:w-[--actionbar-width]"
     >
@@ -46,14 +46,25 @@ export function ActionBar(props: ActionBarProps) {
         <div className="text-sm">
           <div className="font-semibold">You have unsaved changes!</div>
           <div className="text-muted-foreground hidden sm:block">
-            {props.dirtyKeys.length} unsaved changes.
+            {isInvalid
+              ? "Fix any errors before saving"
+              : `${props.dirtyKeys.length} unsaved changes.`}
           </div>
         </div>
         <div className="flex gap-1.5 sm:flex-row-reverse md:flex-row">
-          <Button type="reset" variant={"ghost"} onClick={() => form.reset()}>
+          <Button
+            disabled={isSubmitting}
+            type="reset"
+            variant={"ghost"}
+            onClick={() => form.reset()}
+          >
             Reset
           </Button>
-          <Button type="submit" className="relative">
+          <Button
+            disabled={isInvalid || isSubmitting}
+            type="submit"
+            className="relative"
+          >
             <span
               className={cn(
                 "animate-in fade-in-0 sm:hidden",
