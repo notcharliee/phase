@@ -1,3 +1,4 @@
+import { ChannelType } from "discord.js"
 import { BotCronBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
@@ -13,48 +14,45 @@ export default new BotCronBuilder()
       (guildDoc) => guildDoc.modules?.[ModuleId.JoinToCreates]?.active.length,
     )
 
-    const channelsToDelete: Promise<void>[] = []
-    const guildIdsToUpdate: string[] = []
+    const guildsToUpdate: { id: string; channels: VoiceChannel[] }[] = []
 
-    for (const guildDoc of guildDocsWithActiveJTCs.values()) {
+    for (const [guildId, guildDoc] of guildDocsWithActiveJTCs) {
       const activeJTCChannelIDs =
         guildDoc.modules![ModuleId.JoinToCreates]!.active
 
-      const activeJTCChannels = client.channels.cache.filter(
+      const emptyJTCChannels = client.channels.cache.filter(
         (channel): channel is VoiceChannel =>
-          activeJTCChannelIDs.includes(channel.id),
+          activeJTCChannelIDs.includes(channel.id) &&
+          channel.type === ChannelType.GuildVoice &&
+          channel.members.size === 0,
       )
 
-      for (const [, activeJTCChannel] of activeJTCChannels) {
-        const activeJTCChannelMembers = activeJTCChannel.members.filter(
-          (member) => !member.user.bot,
-        )
+      guildsToUpdate.push({
+        id: guildId,
+        channels: emptyJTCChannels.toJSON(),
+      })
+    }
 
-        if (activeJTCChannelMembers.size === 0) {
-          channelsToDelete.push(
-            activeJTCChannel
-              .delete()
-              .then(() => {
-                return
-              })
-              .catch((err) => {
-                console.error(
-                  `Failed to delete an active JTC channel ${activeJTCChannel.id}:`,
-                  err,
-                )
-              }),
-          )
-        }
+    if (guildsToUpdate.length > 0) {
+      const guildIdsToUpdate: string[] = []
+
+      for (const { id, channels } of guildsToUpdate) {
+        guildIdsToUpdate.push(id)
+
+        await Promise.all(
+          channels.map(async (channel) => {
+            try {
+              return await channel.delete()
+            } catch (error) {
+              console.error(
+                `Failed to delete an active JTC channel ${channel.id} in guild ${id}:`,
+                error,
+              )
+            }
+          }),
+        )
       }
 
-      guildIdsToUpdate.push(guildDoc.id)
-    }
-
-    if (channelsToDelete.length > 0) {
-      await Promise.all(channelsToDelete)
-    }
-
-    if (guildIdsToUpdate.length > 0) {
       await db.guilds.updateMany(
         { id: { $in: guildIdsToUpdate } },
         { $set: { [`modules.${ModuleId.JoinToCreates}.active`]: [] } },
