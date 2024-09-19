@@ -1,7 +1,5 @@
 #!/usr/bin/env bun
 
-import "~/plugins"
-
 import { Command } from "commander"
 
 import { PhaseClient } from "~/client"

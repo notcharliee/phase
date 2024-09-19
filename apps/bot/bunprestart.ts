@@ -20,6 +20,4 @@ const pluginOptions: BunPlugin = {
   },
 }
 
-export const font = () => pluginOptions
-
-plugin(pluginOptions)
+await plugin(pluginOptions)
