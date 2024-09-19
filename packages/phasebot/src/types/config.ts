@@ -1,6 +1,3 @@
-import { readdirSync } from "node:fs"
-import { extname, join } from "node:path"
-
 import type { ClientOptions } from "discord.js"
 
 export interface BotConfig extends ClientOptions {
@@ -45,47 +42,4 @@ export interface BotConfig extends ClientOptions {
 
   /** A function used to transform outgoing json data */
   jsonTransformer?: ClientOptions["jsonTransformer"]
-}
-
-export const setConfig = (options: BotConfig) => options
-
-export async function loadConfigFile() {
-  const allowedFileExtensions = [".js", ".cjs", ".mjs"]
-
-  if ("Bun" in globalThis || "Deno" in globalThis) {
-    allowedFileExtensions.push(".ts", ".cts", ".mts")
-  }
-
-  const configFiles = readdirSync("./").filter(
-    (dirent) =>
-      dirent.startsWith("phase.config") &&
-      allowedFileExtensions.includes(extname(dirent)),
-  )
-
-  if (!configFiles.length) {
-    throw new Error(
-      `No config file found. Please make a 'phase.config.{${allowedFileExtensions.join()}}' file.`,
-    )
-  }
-
-  if (configFiles.length > 1) {
-    throw new Error(
-      `You can only have one config file. Please delete or rename the other files.`,
-    )
-  }
-
-  const filePath = join(process.cwd(), configFiles[0]!)
-
-  const config = await import(filePath)
-    .catch(() => null)
-    .then((m) => m?.default as BotConfig | undefined)
-
-  if (!config) {
-    throw new Error("Config file is missing a default export.")
-  }
-
-  return {
-    config,
-    path: filePath,
-  }
 }

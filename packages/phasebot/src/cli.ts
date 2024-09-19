@@ -1,5 +1,4 @@
 #!/usr/bin/env bun
-
 import { Command } from "commander"
 
 import { PhaseClient } from "~/client"
@@ -15,9 +14,7 @@ new Command("phase")
     new Command("dev")
       .description("run the bot in development mode")
       .action(async () => {
-        await new PhaseClient({
-          dev: true,
-        }).start()
+        await new PhaseClient({ dev: true }).start()
       }),
   )
   .addCommand(
@@ -26,5 +23,10 @@ new Command("phase")
       .action(async () => {
         await new PhaseClient().start()
       }),
+  )
+  .addCommand(
+    new Command("build").description("build the bot").action(async () => {
+      console.log("Not implemented yet. Please use the CLI.")
+    }),
   )
   .parse()
