@@ -1,24 +1,22 @@
-import mongoose from "mongoose"
+import { Schema } from "mongoose"
 
 import { defineModel } from "~/utils"
 
 export interface Level {
-  /** The guild's ID. */
   guild: string
-  /** The user's ID. */
   user: string
-  /** The user's level. */
   level: number
-  /** The user's xp. */
   xp: number
 }
 
-export const levels = defineModel(
-  "Levels",
-  new mongoose.Schema<Level>({
-    guild: { type: String, required: true },
-    user: { type: String, required: true },
-    level: { type: Number, required: true },
-    xp: { type: Number, required: true },
-  }),
-)
+const levelsSchema = new Schema<Level>({
+  guild: { type: Schema.Types.String, required: true },
+  user: { type: Schema.Types.String, required: true },
+  level: { type: Schema.Types.Number, required: true },
+  xp: { type: Schema.Types.Number, required: true },
+})
+
+levelsSchema.index({ guild: 1, level: -1, xp: -1 })
+levelsSchema.index({ guild: 1, user: 1 })
+
+export const levels = defineModel("Levels", levelsSchema)
