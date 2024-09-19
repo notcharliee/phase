@@ -24,9 +24,6 @@
       "import": "./dist/builders/index.js",
       "require": "./dist/builders/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./declarations": {
-      "types": "./dist/declarations.d.ts"
     }
   },
   "keywords": [
