@@ -222,13 +222,13 @@ export const handleCommands = async (
     ) {
       const commandNames = new Array<string>().concat(
         commandsToCreate.map((cmd) =>
-          chalk.grey(`  ${chalk.redBright("+")} /${cmd.name}`),
+          chalk.grey(`  ${chalk.greenBright("+")} /${cmd.name}`),
         ),
         commandsToDelete.map((cmd) =>
           chalk.grey(`  ${chalk.redBright("-")} /${cmd.name}`),
         ),
         commandsToUpdate.map((cmd) =>
-          chalk.grey(`  ${chalk.yellowBright("~")} /${cmd.name}`),
+          chalk.grey(`  ${chalk.cyanBright("↑")} /${cmd.name}`),
         ),
       )
 
