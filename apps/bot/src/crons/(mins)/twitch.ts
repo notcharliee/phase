@@ -60,13 +60,8 @@ export default new BotCronBuilder()
       return acc
     }, new Collection<string, Streamer>())
 
-    const oldStreamStatuses = Object.entries(client.store.twitchStatuses)
-
     for (const [id, streamer] of streamers.entries()) {
-      const oldStreamStatus = oldStreamStatuses.find(
-        ([key]) => key === id,
-      )?.[1] as boolean | undefined
-      
+      const oldStreamStatus = client.store.twitchStatuses.get(id)
       const stream = await twitchAPI.streams.getStreamByUserId(id)
 
       if (oldStreamStatus && !stream) {
