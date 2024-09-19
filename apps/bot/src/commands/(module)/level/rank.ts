@@ -42,16 +42,10 @@ export default new BotSubcommandBuilder()
 
       const userRank =
         (await db.levels.countDocuments({
+          guild: userLevelData.guild,
           $or: [
-            {
-              guild: userLevelData.guild,
-              level: { $gt: userLevelData.level },
-            },
-            {
-              guild: userLevelData.guild,
-              level: userLevelData.level,
-              xp: { $gt: userLevelData.xp },
-            },
+            { level: { $gt: userLevelData.level } },
+            { level: userLevelData.level, xp: { $gt: userLevelData.xp } },
           ],
         })) + 1
 
