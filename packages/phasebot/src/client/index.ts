@@ -56,6 +56,8 @@ export class PhaseClient {
   }
 
   async loadConfig(): Promise<BotConfig> {
+    if (this.config) return this.config
+
     const configFiles = readdirSync("./").filter(
       (dirent) =>
         dirent.startsWith("phase.config") &&
@@ -88,6 +90,8 @@ export class PhaseClient {
   }
 
   async loadPrestart(): Promise<BotPrestart | undefined> {
+    if (this.files?.prestart) return this.files.prestart
+
     const prestartFiles = readdirSync("./src").filter(
       (dirent) =>
         dirent.startsWith("prestart") &&
@@ -118,6 +122,8 @@ export class PhaseClient {
   }
 
   async loadMiddleware(): Promise<BotMiddleware | undefined> {
+    if (this.files?.middleware) return this.files.middleware
+
     const middlewareFiles = readdirSync("./src").filter(
       (dirent) =>
         dirent.startsWith("middleware") &&
@@ -144,6 +150,8 @@ export class PhaseClient {
   }
 
   async loadCommands(): Promise<CommandFile[]> {
+    if (this.files?.commands) return this.files.commands
+
     const commandFiles: CommandFile[] = []
 
     const processDir = async (currentDir: string, prefix: string = "") => {
@@ -199,13 +207,21 @@ export class PhaseClient {
           const group = commandParts.length > 2 ? commandParts[1] : undefined
           const name = [parent, group, command.name].filter(Boolean).join(" ")
 
-          commandFiles.push({
-            name,
-            parent,
-            group,
-            path,
-            command,
-          } as CommandFile)
+          if (parent) {
+            commandFiles.push({
+              name,
+              parent,
+              group,
+              path,
+              command,
+            } as CommandFile)
+          } else {
+            commandFiles.push({
+              name,
+              path,
+              command,
+            } as CommandFile)
+          }
         }
       }
     }
@@ -216,6 +232,8 @@ export class PhaseClient {
   }
 
   async loadCrons(): Promise<CronFile[]> {
+    if (this.files?.crons) return this.files.crons
+
     const cronFiles: CronFile[] = []
 
     const processDir = async (currentDir: string) => {
@@ -263,6 +281,8 @@ export class PhaseClient {
   }
 
   async loadEvents(): Promise<EventFile[]> {
+    if (this.files?.events) return this.files.events
+
     const eventFiles: EventFile[] = []
 
     const processDir = async (currentDir: string) => {
@@ -310,12 +330,8 @@ export class PhaseClient {
   }
 
   async start() {
-    if (!this.config) {
-      const configFile = await this.loadConfig()
-      this.config = configFile
-    }
-
-    this.djsClient = new Client(this.config) as Client<false>
+    this.config = await this.loadConfig()
+    this.djsClient = new Client(this.config)
 
     if (this.plugins) {
       this.plugins.forEach((plugin) => {
