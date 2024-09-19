@@ -1,11 +1,10 @@
-import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import dedent from "dedent"
 import ms from "ms"
 
+import { CustomMessageBuilder } from "~/lib/builders/message"
 import { db } from "~/lib/db"
-import { PhaseColour } from "~/lib/enums"
+import { dateToTimestamp } from "~/lib/utils"
 
 import type { GuildMember } from "discord.js"
 
@@ -39,31 +38,31 @@ export default new BotSubcommandBuilder()
     const prize = interaction.options.getString("prize", true)
     const winners = interaction.options.getInteger("winners", true)
     const duration = ms(interaction.options.getString("duration", true))
-    const expires = message.createdAt.getTime() + duration
     const host = interaction.member as GuildMember
+    const expires = new Date(Date.now() + duration)
 
-    void interaction.editReply({
-      embeds: [
-        new EmbedBuilder()
+    await interaction.editReply(
+      new CustomMessageBuilder().setEmbeds((embed) => {
+        return embed
           .setAuthor({
             iconURL: host.displayAvatarURL(),
             name: `Hosted by ${host.displayName}`,
           })
-          .setColor(PhaseColour.Primary)
+          .setColor("Primary")
           .setTitle(`${prize}`)
           .setDescription(
-            dedent`
+            `
               React with 🎉 to enter!
-              Giveaway ends: <t:${Math.floor(expires / 1000)}:R>
+              Giveaway ends: ${dateToTimestamp(expires)}
             `,
           )
-          .setFooter({ text: `ID: ${message.id}` }),
-      ],
-    })
+          .setFooter({ text: `ID: ${message.id}` })
+      }),
+    )
 
-    void message.react("🎉")
+    await message.react("🎉")
 
-    void db.giveaways.create({
+    await db.giveaways.create({
       id: message.id,
       channel: message.channelId,
       created: message.createdTimestamp * 1000,
@@ -71,7 +70,7 @@ export default new BotSubcommandBuilder()
       winners,
       prize,
       duration,
-      expires,
+      expires: expires.getTime(),
       expired: false,
     })
   })
