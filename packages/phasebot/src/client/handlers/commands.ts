@@ -139,7 +139,12 @@ export const handleCommands = async (
             : sortKeys(option),
         )
         .sort((a, b) =>
-          a.name.localeCompare(b.name),
+          (a.type === ApplicationCommandOptionType.Subcommand ||
+            a.type === ApplicationCommandOptionType.SubcommandGroup) &&
+          (b.type === ApplicationCommandOptionType.Subcommand ||
+            b.type === ApplicationCommandOptionType.SubcommandGroup)
+            ? a.name.localeCompare(b.name)
+            : 0,
         ) as APIApplicationCommandOption[]
     }
 
