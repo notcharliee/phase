@@ -1,8 +1,7 @@
-import { EmbedBuilder } from "discord.js"
 import { BotCronBuilder } from "phasebot/builders"
 
+import { CustomMessageBuilder } from "~/lib/builders/message"
 import { db } from "~/lib/db"
-import { PhaseColour } from "~/lib/enums"
 
 import type { GuildTextBasedChannel, User } from "discord.js"
 
@@ -32,35 +31,38 @@ export default new BotCronBuilder()
         const filter = (user: User) => user.id !== client.user.id
 
         if (!entries?.filter(filter).size) {
-          await message.delete()
           await giveaway.deleteOne()
           return
         }
 
-        await message
-          .reply({
-            content: entries.filter(filter).random(giveaway.winners).join(""),
-            embeds: [
-              new EmbedBuilder()
-                .setAuthor({
-                  iconURL: host.displayAvatarURL(),
-                  name: `Hosted by ${host.displayName}`,
-                })
-                .setTitle(giveaway.prize)
-                .setDescription(`Congratulations, you won the giveaway!`)
-                .setColor(PhaseColour.Primary)
-                .setFooter({
-                  text: `ID: ${giveaway.id}`,
-                }),
-            ],
-          })
-          .catch(() => null)
+        try {
+          await message.reply(
+            new CustomMessageBuilder()
+              .setContent(
+                entries.filter(filter).random(giveaway.winners).join(""),
+              )
+              .setEmbeds((embed) => {
+                return embed
+                  .setColor("Primary")
+                  .setAuthor({
+                    iconURL: host.displayAvatarURL(),
+                    name: `Hosted by ${host.displayName}`,
+                  })
+                  .setTitle(giveaway.prize)
+                  .setDescription(`Congratulations, you won the giveaway!`)
+                  .setFooter({ text: `ID: ${giveaway.id}` })
+              }),
+          )
+        } catch (error) {
+          console.error(
+            `Failed to send giveaway message to channel ${message.channel.id} in guild ${message.guild.id}:`,
+            error,
+          )
+        }
 
-        giveaway.expired = true
-
-        await giveaway.save()
+        await giveaway.updateOne({ $set: { expired: true } })
       } catch {
-        await giveaway.deleteOne()
+        giveaway.deleteOne()
       }
     }
   })
