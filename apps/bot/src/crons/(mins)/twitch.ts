@@ -15,7 +15,7 @@ import { PhaseColour } from "~/lib/enums"
 import type { GuildTextBasedChannel } from "discord.js"
 
 export default new BotCronBuilder()
-  .setPattern("* * * * *") // every minute
+  .setPattern("* * * * *")
   .setExecute(async (client) => {
     const guildDocs = client.store.guilds.filter(
       (guildDoc) => guildDoc.modules?.[ModuleId.TwitchNotifications]?.enabled,
@@ -61,12 +61,14 @@ export default new BotCronBuilder()
     }, new Collection<string, Streamer>())
 
     for (const [id, streamer] of streamers.entries()) {
-      const oldStreamStatus = client.store.twitchStatuses.get(id)
       const stream = await twitchAPI.streams.getStreamByUserId(id)
 
-      if (oldStreamStatus && !stream) {
+      const isLiveNow = !!stream
+      const wasLiveBefore = client.store.twitchStatuses.has(id)
+
+      if (!isLiveNow && wasLiveBefore) {
         client.store.twitchStatuses.delete(id)
-      } else if (!oldStreamStatus && stream) {
+      } else if (!wasLiveBefore && isLiveNow) {
         client.store.twitchStatuses.set(id, true)
 
         for (const notification of streamer.notifications) {
