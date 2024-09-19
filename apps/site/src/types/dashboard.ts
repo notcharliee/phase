@@ -4,53 +4,50 @@ import type {
   APIMessage,
   GuildChannelType,
 } from "@discordjs/core/http-only"
+import type { ModuleId } from "@repo/config/phase/modules.ts"
 import type { GuildCommand, GuildModules } from "~/types/db"
 import type { modulesSchema } from "~/validators/modules"
 import type { z } from "zod"
+
+export interface ModulesDataFields {
+  [ModuleId.Forms]: {
+    messages: APIMessage[]
+  }
+  [ModuleId.Levels]: {
+    leaderboard: {
+      id: string
+      username: string
+      global_name: string
+      avatar: string
+      level: number
+      xp: number
+      rank: number
+      target: number
+    }[]
+  }
+  [ModuleId.Tickets]: {
+    message: APIMessage | undefined
+  }
+  [ModuleId.TwitchNotifications]: {
+    streamerNames: string[]
+  }
+}
 
 export type ModulesFormValues = z.infer<typeof modulesSchema>
 
 export type ModulesFormValuesWithData = Partial<{
   [K in keyof ModulesFormValues]: ModulesFormValues[K] & {
-    _data: GuildModulesData<K>
+    _data: K extends keyof ModulesDataFields ? ModulesDataFields[K] : unknown
   }
 }>
-
-export type GuildModulesData<T extends keyof GuildModules> = T extends "Forms"
-  ? {
-      messages: APIMessage[]
-    }
-  : T extends "Levels"
-    ? {
-        leaderboard: {
-          id: string
-          username: string
-          global_name: string
-          avatar: string
-          level: number
-          xp: number
-          rank: number
-          target: number
-        }[]
-      }
-    : T extends "Tickets"
-      ? {
-          message: APIMessage | undefined
-        }
-      : T extends "TwitchNotifications"
-        ? {
-            streamerNames: string[]
-          }
-        : Record<string, unknown>
 
 export type GuildModulesWithData = Partial<{
   [K in keyof GuildModules]: GuildModules[K] & {
-    _data: GuildModulesData<K>
+    _data: K extends keyof ModulesDataFields ? ModulesDataFields[K] : unknown
   }
 }>
 
-export type DashboardData = {
-  _id: string
+export interface DashboardData {
   guild: APIGuild & {
     channels: APIGuildChannel<GuildChannelType>[]
     admins: string[]
