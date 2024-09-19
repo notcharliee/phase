@@ -19,7 +19,7 @@ import type {
 import type { BotConfig } from "~/client/config"
 import type {
   getCommandFiles,
-  getCronPaths,
+  getCronFiles,
   getEventFiles,
 } from "~/client/handlers"
 import type { BotMiddleware, loadMiddlewareFile } from "~/client/middleware"
@@ -29,30 +29,42 @@ export { setConfig }
 export type { BotConfig }
 
 export interface PhaseClientParams {
-  /** Whether or not to run the bot in development mode. */
+  /**
+   * Whether or not to run the bot in development mode.
+   * 
+   * @remarks This will override the `NODE_ENV` environment variable.
+   */
   dev?: boolean
-  /** The config for the bot. */
+
+  /**
+   * The discord.js client options.
+   */
   config?: BotConfig
+
   /**
    * The files to pass to the bot handlers.
    *
-   * @remarks This is used for production builds to avoid loading the command files at runtime. Do not use this in development.
+   * @remarks This is used for production builds to avoid loading the command files at runtime.
    */
   files?: {
     commands: Awaited<ReturnType<typeof getCommandFiles>>
+    crons: Awaited<ReturnType<typeof getCronFiles>>
     events: Awaited<ReturnType<typeof getEventFiles>>
-    crons: Awaited<ReturnType<typeof getCronPaths>>
     middleware?: Awaited<ReturnType<typeof loadMiddlewareFile>>
     prestart?: Awaited<ReturnType<typeof loadPrestartFile>>
   }
-  /** What exports to resolve for the bot. */
+
+  /**
+   * What exports to use in bot files.
+   */
   exports?: {
-    commands?: "default" | ((exports: any) => BotCommandBuilder)
-    events?: "default" | ((exports: any) => BotEventBuilder)
-    crons?: "default" | ((exports: any) => BotCronBuilder)
-    middleware?: "default" | ((exports: any) => BotMiddleware)
-    prestart?: "default" | ((exports: any) => BotPrestart)
+    commands?: "default" | ((exports: unknown) => BotCommandBuilder)
+    crons?: "default" | ((exports: unknown) => BotCronBuilder)
+    events?: "default" | ((exports: unknown) => BotEventBuilder)
+    middleware?: "default" | ((exports: unknown) => BotMiddleware)
+    prestart?: "default" | ((exports: unknown) => BotPrestart)
   }
+
   /**
    * The plugins to load.
    *
@@ -63,8 +75,8 @@ export interface PhaseClientParams {
 
 const defaultExports = {
   commands: "default",
-  events: "default",
   crons: "default",
+  events: "default",
   middleware: "default",
   prestart: "default",
 } as const
@@ -86,7 +98,7 @@ export class PhaseClient {
     this.exports = { ...defaultExports, ...params?.exports }
     this.plugins = params?.plugins
 
-    Bun.env.NODE_ENV = this.dev ? "development" : "production"
+    process.env.NODE_ENV = this.dev ? "development" : "production"
   }
 
   async start() {
@@ -108,14 +120,14 @@ export class PhaseClient {
     console.log(dedent`
       ${phaseHeader}
         Config:       ${chalk.grey(basename(this.configPath ?? "N/A"))}
-        Environment:  ${chalk.grey(Bun.env.NODE_ENV)}\n
+        Environment:  ${chalk.grey(process.env.NODE_ENV)}\n
     `)
 
     if (!existsSync("./src")) {
       throw new Error("No 'src' directory found.")
     }
 
-    if (!Bun.env.DISCORD_TOKEN) {
+    if (!process.env.DISCORD_TOKEN) {
       throw new Error("Missing 'DISCORD_TOKEN' environment variable.")
     }
 
