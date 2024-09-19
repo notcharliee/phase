@@ -34,6 +34,8 @@
     "discord.js": "^14.x.x"
   },
   "overrides": {
-    "@distube/ytdl-core": "latest"
+    "@distube/youtube": {
+      "@distube/ytdl-core": "latest"
+    }
   }
 }
