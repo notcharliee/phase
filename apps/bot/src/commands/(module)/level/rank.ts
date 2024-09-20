@@ -78,9 +78,9 @@ export default new BotSubcommandBuilder()
         bannerImage,
       }).toAttachment()
 
-      void interaction.editReply({
-        files: [rankCard],
-      })
+      rankCard.setName(`rank-card-${user.id}.png`)
+
+      await interaction.editReply({ files: [rankCard] })
     } catch (error) {
       console.error(error)
 
