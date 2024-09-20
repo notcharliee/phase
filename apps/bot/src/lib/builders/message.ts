@@ -78,11 +78,19 @@ export class CustomMessageBuilder {
 
     for (const builder of normalisedBuilders) {
       if (builder instanceof AttachmentBuilder) {
-        attachments.push(builder.toJSON() as AttachmentPayload)
+        attachments.push({
+          name: builder.name ?? undefined,
+          description: builder.description ?? undefined,
+          attachment: builder.attachment,
+        })
       } else {
         const emptyBuffer = Buffer.alloc(0)
         const attachmentBuilder = builder(new AttachmentBuilder(emptyBuffer))
-        attachments.push(attachmentBuilder.toJSON() as AttachmentPayload)
+        attachments.push({
+          name: attachmentBuilder.name ?? undefined,
+          description: attachmentBuilder.description ?? undefined,
+          attachment: attachmentBuilder.attachment,
+        })
       }
     }
 
