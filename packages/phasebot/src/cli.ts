@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 import { Command } from "commander"
 
-import { PhaseClient } from "~/client"
+import { PhaseClient } from "~/index"
 import { phaseFooter, phaseHeader } from "~/utils"
 import { version } from "../package.json"
 

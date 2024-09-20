@@ -1,4 +1,12 @@
-import type { BotCommandBuilder, BotSubcommandBuilder } from "~/builders"
+import type {
+  BotCommandBuilder,
+  BotSubcommandBuilder,
+} from "~/structures/builders/BotCommandBuilder"
+import type { ChatInputCommandInteraction } from "discord.js"
+
+export type BotCommandExecute = (
+  interaction: ChatInputCommandInteraction,
+) => unknown | Promise<unknown>
 
 export interface BaseCommandFile {
   name: string

@@ -1,4 +1,4 @@
-import type { BotCommandExecute } from "~/builders"
+import type { BotCommandExecute } from "~/types/commands"
 import type { ChatInputCommandInteraction } from "discord.js"
 
 export type BotCommandMiddleware = (

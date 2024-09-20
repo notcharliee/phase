@@ -1,5 +1,8 @@
-import type { BotConfig } from "~/types/config"
+export * from "~/structures/PhaseClient"
 
-export const setConfig = (options: BotConfig) => options
-
-export * from "~/client"
+export * from "~/types/client"
+export * from "~/types/commands"
+export * from "~/types/crons"
+export * from "~/types/events"
+export * from "~/types/middleware"
+export * from "~/types/prestart"

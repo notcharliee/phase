@@ -2,7 +2,7 @@ import type {
   BotCommandBuilder,
   BotCronBuilder,
   BotEventBuilder,
-} from "~/builders"
+} from "~/structures/builders"
 import type { CommandFile } from "~/types/commands"
 import type { BotConfig } from "~/types/config"
 import type { CronFile } from "~/types/crons"

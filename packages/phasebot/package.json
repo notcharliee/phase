@@ -1,15 +1,15 @@
 {
   "name": "phasebot",
   "description": "A simple framework for building and running discord bots",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup ./src/index.ts ./src/builders/* --clean --dts --format=esm --no-splitting --sourcemap",
-    "dev": "tsup ./src/index.ts ./src/builders/* --clean --dts --format=esm --no-splitting --sourcemap --watch"
+    "build": "tsup ./src/index.ts ./src/structures/builders/* --clean --dts --format=esm --no-splitting --sourcemap",
+    "dev": "tsup ./src/index.ts ./src/structures/builders/* --clean --dts --format=esm --no-splitting --sourcemap --watch"
   },
   "bin": {
     "phase": "dist/cli.js"
@@ -21,9 +21,9 @@
       "types": "./dist/index.d.ts"
     },
     "./builders": {
-      "import": "./dist/builders/index.js",
-      "require": "./dist/builders/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/structures/builders/index.js",
+      "require": "./dist/structures/builders/index.js",
+      "types": "./dist/structures/builders/index.d.ts"
     }
   },
   "keywords": [

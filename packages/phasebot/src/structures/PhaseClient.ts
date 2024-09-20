@@ -6,10 +6,13 @@ import { Client } from "discord.js"
 import chalk from "chalk"
 import dedent from "dedent"
 
-import { handleCommands, handleCrons, handleEvents } from "~/client/handlers"
+import { CommandManager } from "~/managers/CommandManager"
+import { CronManager } from "~/managers/CronManager"
+import { EventManager } from "~/managers/EventManager"
 import { phaseHeader, spinner } from "~/utils"
 
-import type { BotCronBuilder, BotEventBuilder } from "~/builders"
+import type { BotCronBuilder } from "~/structures/builders/BotCronBuilder"
+import type { BotEventBuilder } from "~/structures/builders/BotEventBuilder"
 import type { PhaseClientParams } from "~/types/client"
 import type { CommandFile } from "~/types/commands"
 import type { BotConfig } from "~/types/config"
@@ -18,31 +21,36 @@ import type { EventFile } from "~/types/events"
 import type { BotMiddleware } from "~/types/middleware"
 import type { BotPrestart } from "~/types/prestart"
 
+const defaultConfig = {
+  intents: [],
+} satisfies PhaseClientParams["config"]
+
 const defaultExports = {
   commands: "default",
   crons: "default",
   events: "default",
   middleware: "default",
   prestart: "default",
-} as const
+} satisfies PhaseClientParams["exports"]
 
 export class PhaseClient {
   public dev: PhaseClientParams["dev"]
   public config: PhaseClientParams["config"]
-  public files: PhaseClientParams["files"]
   public exports: PhaseClientParams["exports"]
+  public files: PhaseClientParams["files"]
   public plugins: PhaseClientParams["plugins"]
 
-  private djsClient!: Client<false>
+  public client!: Client<false>
+  public commands!: CommandManager
+  public crons!: CronManager
+  public events!: EventManager
 
   constructor(params?: PhaseClientParams) {
     this.dev = params?.dev
-    this.config = params?.config
-    this.files = params?.files
+    this.config = { ...defaultConfig, ...params?.config }
     this.exports = { ...defaultExports, ...params?.exports }
+    this.files = params?.files
     this.plugins = params?.plugins
-
-    process.env.NODE_ENV = this.dev ? "development" : "production"
   }
 
   private get allowedFileExtensions() {
@@ -53,6 +61,88 @@ export class PhaseClient {
     }
 
     return allowedFileExtensions
+  }
+
+  public async start() {
+    process.env.NODE_ENV = this.dev ? "development" : "production"
+
+    console.log(dedent`
+      ${phaseHeader}
+        Environment:  ${chalk.grey(process.env.NODE_ENV)}\n
+    `)
+
+    this.config = await this.loadConfig()
+    this.client = new Client(this.config)
+
+    if (this.plugins) {
+      this.plugins.forEach((plugin) => {
+        this.client = plugin(this.client)
+      })
+    }
+
+    if (!existsSync("./src")) {
+      throw new Error("No 'src' directory found.")
+    }
+
+    if (!process.env.DISCORD_TOKEN) {
+      throw new Error("Missing 'DISCORD_TOKEN' environment variable.")
+    }
+
+    const cliSpinner = spinner()
+
+    const prestartFunction = await this.loadPrestart()
+
+    if (prestartFunction) {
+      cliSpinner.start("Executing prestart ...")
+
+      await new Promise<void>((resolve) => {
+        setImmediate(async () => {
+          await prestartFunction(this.client)
+          resolve()
+        })
+      })
+
+      cliSpinner.text = "Loading your code ..."
+    } else {
+      cliSpinner.start("Loading your code ...")
+    }
+
+    await new Promise<void>((resolve) => {
+      setImmediate(async () => {
+        const [commandFiles, cronFiles, eventFiles, middlewareFile] =
+          await Promise.all([
+            this.loadCommands(),
+            this.loadCrons(),
+            this.loadEvents(),
+            this.loadMiddleware(),
+          ])
+
+        this.commands = new CommandManager(
+          this.client,
+          commandFiles,
+          middlewareFile?.commands,
+        )
+
+        this.crons = new CronManager(this.client, cronFiles)
+
+        this.events = new EventManager(this.client, eventFiles)
+
+        resolve()
+      })
+    })
+
+    cliSpinner.text = "Connecting to Discord ..."
+
+    await new Promise<void>((resolve) => {
+      setImmediate(async () => {
+        await this.client.login()
+        resolve()
+      })
+    })
+
+    cliSpinner.succeed(
+      `Bot is online! ${chalk.grey(`(${(Bun.nanoseconds() / 1e9).toFixed(2)}s)`)}\n`,
+    )
   }
 
   async loadConfig(): Promise<BotConfig> {
@@ -327,83 +417,5 @@ export class PhaseClient {
     await processDir("src/events")
 
     return eventFiles
-  }
-
-  async start() {
-    this.config = await this.loadConfig()
-    this.djsClient = new Client(this.config)
-
-    if (this.plugins) {
-      this.plugins.forEach((plugin) => {
-        this.djsClient = plugin(this.djsClient)
-      })
-    }
-
-    console.log(dedent`
-      ${phaseHeader}
-        Environment:  ${chalk.grey(process.env.NODE_ENV)}\n
-    `)
-
-    if (!existsSync("./src")) {
-      throw new Error("No 'src' directory found.")
-    }
-
-    if (!process.env.DISCORD_TOKEN) {
-      throw new Error("Missing 'DISCORD_TOKEN' environment variable.")
-    }
-
-    const cliSpinner = spinner()
-
-    const prestartFunction = this.files?.prestart ?? (await this.loadPrestart())
-
-    if (prestartFunction) {
-      cliSpinner.start("Executing prestart ...")
-
-      await new Promise<void>((resolve) => {
-        setImmediate(async () => {
-          await prestartFunction(this.djsClient)
-          resolve()
-        })
-      })
-
-      cliSpinner.text = "Loading your code ..."
-    } else {
-      cliSpinner.start("Loading your code ...")
-    }
-
-    await new Promise<void>((resolve) => {
-      setImmediate(async () => {
-        const [commandFiles, cronFiles, eventFiles, middlewareFile] =
-          await Promise.all([
-            this.loadCommands(),
-            this.loadCrons(),
-            this.loadEvents(),
-            this.loadMiddleware(),
-          ])
-
-        const commandMiddleware = middlewareFile?.commands
-
-        await Promise.all([
-          handleCommands(this.djsClient, commandFiles, commandMiddleware),
-          handleCrons(this.djsClient, cronFiles),
-          handleEvents(this.djsClient, eventFiles),
-        ])
-
-        resolve()
-      })
-    })
-
-    cliSpinner.text = "Connecting to Discord ..."
-
-    await new Promise<void>((resolve) => {
-      setImmediate(async () => {
-        await this.djsClient.login()
-        resolve()
-      })
-    })
-
-    cliSpinner.succeed(
-      `Bot is online! ${chalk.grey(`(${(Bun.nanoseconds() / 1e9).toFixed(2)}s)`)}\n`,
-    )
   }
 }

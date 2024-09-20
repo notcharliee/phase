@@ -1,10 +1,7 @@
-import { isAsyncFunction } from "node:util/types"
-
 import { Cron } from "croner"
 
+import type { BotCronExecute } from "~/types/crons"
 import type { Client } from "discord.js"
-
-export type BotCronExecute = (client: Client<true>) => void | Promise<void>
 
 export class BotCronBuilder {
   private cron: Cron | undefined = undefined
@@ -75,14 +72,7 @@ export class BotCronBuilder {
       throw new Error("Execute not specified.")
     }
 
-    const isAsync = isAsyncFunction(this.execute)
-
-    const job = new Cron(
-      this.pattern,
-      isAsync
-        ? async () => await this.execute(client)
-        : () => this.execute(client),
-    )
+    const job = new Cron(this.pattern, () => this.execute(client))
 
     this.cron = job
 

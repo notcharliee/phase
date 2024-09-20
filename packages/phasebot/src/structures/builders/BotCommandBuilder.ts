@@ -1,15 +1,22 @@
-import { SlashCommandBuilder, SlashCommandSubcommandBuilder } from "discord.js"
+import {
+  ApplicationCommandType,
+  SlashCommandBuilder,
+  SlashCommandSubcommandBuilder,
+} from "discord.js"
 
 import { Mixin } from "ts-mixer"
 
+import { BotCommandExecute } from "~/types/commands"
+
 import type {
   ChannelType,
-  ChatInputCommandInteraction,
+  RESTPostAPIChatInputApplicationCommandsJSONBody,
   SharedNameAndDescription,
   SharedSlashCommand,
   SharedSlashCommandOptions,
   SharedSlashCommandSubcommands,
 } from "discord.js"
+import { CommandManager } from "~/managers"
 
 declare module "discord.js" {
   /**
@@ -64,16 +71,6 @@ declare module "discord.js" {
       BotCommandBuilderBase {}
 }
 
-export type BotCommandExecute = (
-  interaction: ChatInputCommandInteraction,
-) => unknown | Promise<unknown>
-
-export type BotCommandMiddleware = (
-  interaction: ChatInputCommandInteraction,
-  execute: BotCommandExecute,
-  metadata: object,
-) => unknown | Promise<unknown>
-
 class BotCommandBuilderBase {
   /**
    * The function to execute when the command is called.
@@ -112,19 +109,47 @@ class BotCommandBuilderBase {
 }
 
 /**
- * A builder that creates API-compatible JSON data for phasebot slash commands.
+ * A builder that creates API-compatible JSON data for slash commands.
+ *
  * @extends SlashCommandBuilder
  */
 export class BotCommandBuilder extends Mixin(
   BotCommandBuilderBase,
   SlashCommandBuilder,
-) {}
+) {
+  toJSON(): RESTPostAPIChatInputApplicationCommandsJSONBody {
+    const data = super.toJSON()
+
+    return CommandManager.sortCommandKeys({
+      name: data.name,
+      name_localizations: data.name_localizations ?? null,
+      description: data.description,
+      nsfw: data.nsfw === undefined ? false : data.nsfw,
+      description_localizations: data.description_localizations ?? null,
+      type: data.type ?? ApplicationCommandType.ChatInput,
+      options: data.options ?? [],
+      default_member_permissions: data.default_member_permissions ?? null,
+      dm_permission:
+        data.dm_permission === undefined ? true : data.dm_permission,
+    })
+  }
+}
 
 /**
- * A builder that creates API-compatible JSON data for phasebot slash commands.
+ * A builder that creates API-compatible JSON data for slash commands.
+ *
  * @extends SlashCommandBuilder
  */
 export class BotSubcommandBuilder extends Mixin(
   BotCommandBuilderBase,
   SlashCommandSubcommandBuilder,
-) {}
+) {
+  toJSON() {
+    const data = super.toJSON()
+
+    delete (data as { metadata?: unknown }).metadata
+    delete (data as { execute?: unknown }).execute
+
+    return data
+  }
+}
