@@ -1,4 +1,4 @@
-import { EmbedBuilder } from "discord.js"
+import { AttachmentBuilder, EmbedBuilder } from "discord.js"
 
 import dedent from "dedent"
 
@@ -28,5 +28,13 @@ export class CustomEmbedBuilder extends EmbedBuilder {
 
   setDescription(description: string | null) {
     return super.setDescription(dedent(description ?? ""))
+  }
+
+  setImage(url: string | AttachmentBuilder | null) {
+    if (url instanceof AttachmentBuilder) {
+      return super.setImage(`attachment://${url.name}`)
+    } else {
+      return super.setImage(url)
+    }
   }
 }
