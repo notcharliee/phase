@@ -6,7 +6,7 @@ import { getDayName } from "~/lib/utils"
 import geistBold from "./fonts/geist-bold.otf"
 import geistMedium from "./fonts/geist-medium.otf"
 
-import type { getWeatherData } from "~/commands/(info)/weather"
+import type { getWeatherData } from "~/app/commands/(info)/weather"
 
 interface WeatherCardProps extends Awaited<ReturnType<typeof getWeatherData>> {}
 
