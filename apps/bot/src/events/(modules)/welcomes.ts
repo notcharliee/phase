@@ -1,12 +1,16 @@
-import { EmbedBuilder } from "discord.js"
+import { DiscordAPIError } from "discord.js"
 import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
+import { moduleVariables } from "@repo/config/phase/variables.ts"
 
+import { CustomMessageBuilder } from "~/lib/builders/message"
 import { db } from "~/lib/db"
-import { PhaseColour } from "~/lib/enums"
 
-import type { GuildTextBasedChannel } from "discord.js"
+import { generateWelcomeCard } from "~/images/welcome"
+
+import type { Variable } from "@repo/config/phase/variables.ts"
+import type { GuildMember, GuildTextBasedChannel } from "discord.js"
 
 export default new BotEventBuilder()
   .setName("guildMemberAdd")
@@ -27,61 +31,80 @@ export default new BotEventBuilder()
       )
     }
 
-    const avatar = member.user.displayAvatarURL({ extension: "png", size: 256 })
-    const username = member.user.username
-    const membercount = member.guild.memberCount.toString()
-    const background = moduleConfig.card.background
+    await channel.sendTyping()
 
-    let card: string | null = moduleConfig.card.enabled
-      ? "https://phasebot.xyz/api/image/welcome.png"
+    let description = moduleConfig.message
+
+    const variables = moduleVariables[ModuleId.WelcomeMessages].filter(
+      (variable) => description.includes(`{${variable.name}}`),
+    )
+
+    for (const variable of variables) {
+      description = replaceVariable(description, variable, member)
+    }
+
+    const welcomeCard = moduleConfig.card.enabled
+      ? await (await generateWelcomeCard({ client, member })).toAttachment()
       : null
 
-    if (card) {
-      const url = new URL(card)
+    const message = new CustomMessageBuilder()
 
-      url.searchParams.append("avatar", avatar)
-      url.searchParams.append("username", username)
-      url.searchParams.append("membercount", membercount)
-
-      if (background) url.searchParams.append("background", background)
-
-      card = url.toString()
+    if (moduleConfig.mention) {
+      message.setContent(`<@${member.id}>`)
     }
 
-    const message = moduleConfig.message
-      .replaceAll("{username}", username)
-      .replaceAll("{membercount}", membercount)
+    if (welcomeCard) {
+      welcomeCard.setName(`welcome-card-${member.id}.png`)
+      message.setFiles(welcomeCard)
+    }
 
-    if (message.length) {
-      void channel
-        .send({
-          content: moduleConfig.mention ? `<@${member.id}>` : undefined,
-          embeds: [
-            new EmbedBuilder()
-              .setAuthor({ name: "New Member", iconURL: avatar })
-              .setDescription(message)
-              .setImage(card)
-              .setColor(PhaseColour.Primary),
-          ],
+    message.setEmbeds((embed) => {
+      return embed
+        .setColor("Primary")
+        .setAuthor({
+          name: "New Member",
+          iconURL: member.displayAvatarURL(),
         })
-        .catch(() => null)
-    } else if (!message.length && card) {
-      await channel.sendTyping()
+        .setDescription(description.length ? description : null)
+        .setImage(welcomeCard)
+    })
 
-      const attachment = await fetch(card).then((res) =>
-        res.arrayBuffer().then((ab) => ab),
-      )
-
-      void channel
-        .send({
-          content: moduleConfig.mention ? `<@${member.id}>` : undefined,
-          files: [Buffer.from(attachment)],
-        })
-        .catch(() => null)
-    } else {
-      return void db.guilds.updateOne(
-        { id: guildDoc.id },
-        { [`modules.${ModuleId.WelcomeMessages}.enabled`]: false },
-      )
+    try {
+      await channel.send(message)
+    } catch (error) {
+      if (error instanceof DiscordAPIError && error.code === 50001) {
+        return void db.guilds.updateOne(
+          { id: guildDoc.id },
+          { [`modules.${ModuleId.WelcomeMessages}.enabled`]: false },
+        )
+      } else {
+        console.error(
+          `Failed to send welcome message to channel ${channel.id} in guild ${guildDoc.id}:`,
+        )
+        console.error(error)
+      }
     }
   })
+
+function replaceVariable(
+  newDescription: string,
+  variable: Variable,
+  member: GuildMember,
+) {
+  switch (variable.name) {
+    case "memberCount":
+      return newDescription.replaceAll(
+        `{${variable.name}}`,
+        member.guild.memberCount + "",
+      )
+
+    case "username":
+      return newDescription.replaceAll(
+        `{${variable.name}}`,
+        member.user.username,
+      )
+
+    default:
+      return newDescription
+  }
+}

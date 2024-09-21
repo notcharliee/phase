@@ -38,6 +38,16 @@ export const moduleVariables = {
     {
       name: "roleCount",
       description: "The number of roles in the server.",
-    }
+    },
+  ],
+  [ModuleId.WelcomeMessages]: [
+    {
+      name: "memberCount",
+      description: "The number of members in the server.",
+    },
+    {
+      name: "username",
+      description: "The username of the member.",
+    },
   ],
 } satisfies Partial<Record<ModuleId, Variable[]>>
