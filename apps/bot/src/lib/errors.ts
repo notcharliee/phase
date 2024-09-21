@@ -79,6 +79,11 @@ export const BotError = Object.assign(BotErrorClass, {
       title: "Module not enabled",
       description: `The \`${modules[moduleId].name.replace(/([A-Z])/g, " $1").trimStart()}\` module is not enabled, which is required to use this command.`,
     }),
+  moduleNotConfigured: (moduleId: ModuleId) =>
+    new BotErrorClass({
+      title: "Module not configured",
+      description: `The \`${modules[moduleId].name.replace(/([A-Z])/g, " $1").trimStart()}\` module is not configured.`,
+    }),
   botMissingPermission: (
     permission?: keyof typeof PermissionFlagsBits,
     channelSpecific?: boolean,
