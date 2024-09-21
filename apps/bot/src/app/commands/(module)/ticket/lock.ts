@@ -5,7 +5,7 @@ import { ModuleId } from "@repo/config/phase/modules.ts"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
   .setName("lock")
@@ -17,7 +17,7 @@ export default new BotSubcommandBuilder()
 
     if (!ticketModule?.enabled) {
       return void interaction.reply(
-        BotError.moduleNotEnabled(ModuleId.Tickets).toJSON(),
+        BotErrorMessage.moduleNotEnabled(ModuleId.Tickets).toJSON(),
       )
     }
 
@@ -25,7 +25,7 @@ export default new BotSubcommandBuilder()
 
     if (!ticket?.isThread() || ticket.parentId !== ticketModule.channel) {
       void interaction.reply(
-        new BotError(
+        new BotErrorMessage(
           "You cannot use this command outside of a ticket.",
         ).toJSON(),
       )
@@ -40,14 +40,14 @@ export default new BotSubcommandBuilder()
       )
     ) {
       void interaction.reply(
-        BotError.botMissingPermission("ManageThreads").toJSON(),
+        BotErrorMessage.botMissingPermission("ManageThreads").toJSON(),
       )
 
       return
     }
 
     if (ticket.locked) {
-      void interaction.reply(new BotError("Ticket is already locked.").toJSON())
+      void interaction.reply(new BotErrorMessage("Ticket is already locked.").toJSON())
 
       return
     }

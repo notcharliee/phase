@@ -3,7 +3,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 import type { GuildMember, GuildTextBasedChannel } from "discord.js"
 
@@ -38,7 +38,7 @@ export default new BotSubcommandBuilder()
 
     if (!giveaway) {
       void interaction.editReply(
-        new BotError(
+        new BotErrorMessage(
           "No giveaway exists with that ID. Make sure you typed it in correctly and try again.",
         ).toJSON(),
       )
@@ -57,7 +57,7 @@ export default new BotSubcommandBuilder()
       const commandMention = `</giveaway delete:${interaction.id}>`
 
       void interaction.editReply(
-        new BotError(
+        new BotErrorMessage(
           `The channel this giveaway was in no longer exists, so no message data can be retrieved. You can delete the giveaway using the ${commandMention} command.`,
         ).toJSON(),
       )
@@ -73,7 +73,7 @@ export default new BotSubcommandBuilder()
       const commandMention = `</giveaway delete:${interaction.id}>`
 
       void interaction.editReply(
-        new BotError(
+        new BotErrorMessage(
           `The message this giveaway was in no longer exists, so no data can be retrieved. You can delete the giveaway using the ${commandMention} command.`,
         ).toJSON(),
       )
@@ -85,7 +85,7 @@ export default new BotSubcommandBuilder()
 
     if (!giveawayReaction) {
       void interaction.editReply(
-        new BotError(
+        new BotErrorMessage(
           "The `🎉` reaction was not found in the giveaway message, which is required to track the giveaway entries and subsequently reroll the winners.",
         ).toJSON(),
       )
@@ -95,7 +95,7 @@ export default new BotSubcommandBuilder()
 
     if (amount > giveawayReaction.count - 1) {
       void interaction.editReply(
-        new BotError(
+        new BotErrorMessage(
           "You cannot reroll more winners than there are members entered in the giveaway.",
         ).toJSON(),
       )

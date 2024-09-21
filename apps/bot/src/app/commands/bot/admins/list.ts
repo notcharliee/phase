@@ -2,7 +2,7 @@ import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
   .setName("list")
@@ -13,12 +13,12 @@ export default new BotSubcommandBuilder()
     })
 
     if (!interaction.guild) {
-      void interaction.editReply(BotError.serverOnlyCommand().toJSON())
+      void interaction.editReply(BotErrorMessage.serverOnlyCommand().toJSON())
       return
     }
 
     if (interaction.guild.ownerId !== interaction.user.id) {
-      void interaction.editReply(BotError.userNotOwner().toJSON())
+      void interaction.editReply(BotErrorMessage.userNotOwner().toJSON())
 
       return
     }

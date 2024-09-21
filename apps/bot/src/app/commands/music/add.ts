@@ -5,7 +5,7 @@ import { MusicError } from "@repo/music"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 import type { GuildMember } from "discord.js"
 
@@ -28,7 +28,7 @@ export default new BotSubcommandBuilder()
 
     if (!channel) {
       return void interaction.editReply(
-        BotError.specificChannelOnlyCommand("voice").toJSON(),
+        BotErrorMessage.specificChannelOnlyCommand("voice").toJSON(),
       )
     }
 
@@ -69,13 +69,13 @@ export default new BotSubcommandBuilder()
       if (error instanceof Error) {
         if (error.message === (MusicError.InvalidQuery as string)) {
           return await interaction.editReply(
-            new BotError("Song not found").toJSON(),
+            new BotErrorMessage("Song not found").toJSON(),
           )
         }
       }
 
       return void interaction.editReply(
-        BotError.unknown({
+        BotErrorMessage.unknown({
           channelId: channel.id,
           guildId: channel.guild.id,
           error: error as Error,

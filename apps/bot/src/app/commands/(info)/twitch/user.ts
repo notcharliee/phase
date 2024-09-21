@@ -3,7 +3,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { twitchAPI } from "~/lib/clients/twitch"
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
   .setName("user")
@@ -22,7 +22,7 @@ export default new BotSubcommandBuilder()
 
     if (!user) {
       void interaction.editReply(
-        new BotError(
+        new BotErrorMessage(
           `Could not find a user under the name \`${username}\`.`,
         ).toJSON(),
       )

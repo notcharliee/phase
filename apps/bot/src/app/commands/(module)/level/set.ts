@@ -3,7 +3,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
 import { db } from "~/lib/db"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
   .setName("set")
@@ -33,7 +33,7 @@ export default new BotSubcommandBuilder()
 
     if (!guildDoc?.modules?.[ModuleId.Levels]?.enabled) {
       return void interaction.reply(
-        BotError.moduleNotEnabled(ModuleId.Levels).toJSON(),
+        BotErrorMessage.moduleNotEnabled(ModuleId.Levels).toJSON(),
       )
     }
 

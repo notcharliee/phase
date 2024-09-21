@@ -1,7 +1,7 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { db } from "~/lib/db"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
   .setName("add")
@@ -18,12 +18,12 @@ export default new BotSubcommandBuilder()
     })
 
     if (!interaction.guild) {
-      void interaction.editReply(BotError.serverOnlyCommand().toJSON())
+      void interaction.editReply(BotErrorMessage.serverOnlyCommand().toJSON())
       return
     }
 
     if (interaction.guild.ownerId !== interaction.user.id) {
-      void interaction.editReply(BotError.userNotOwner().toJSON())
+      void interaction.editReply(BotErrorMessage.userNotOwner().toJSON())
       return
     }
 
@@ -33,7 +33,7 @@ export default new BotSubcommandBuilder()
 
     if (user.bot) {
       void interaction.editReply(
-        new BotError(`<@${user.id}> is a bot, not a regular user.`).toJSON(),
+        new BotErrorMessage(`<@${user.id}> is a bot, not a regular user.`).toJSON(),
       )
 
       return
@@ -41,7 +41,7 @@ export default new BotSubcommandBuilder()
 
     if (guildDoc.admins.includes(user.id)) {
       void interaction.editReply(
-        new BotError(`<@${user.id}> already has dashboard access.`).toJSON(),
+        new BotErrorMessage(`<@${user.id}> already has dashboard access.`).toJSON(),
       )
 
       return

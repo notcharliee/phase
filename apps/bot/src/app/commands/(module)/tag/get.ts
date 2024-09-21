@@ -1,7 +1,7 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { db } from "~/lib/db"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
   .setName("get")
@@ -24,7 +24,7 @@ export default new BotSubcommandBuilder()
 
     if (tagIndex == -1) {
       void interaction.reply(
-        new BotError(
+        new BotErrorMessage(
           "Could not find a tag by that name. Make sure you typed it in correctly and try again.",
         ).toJSON(),
       )

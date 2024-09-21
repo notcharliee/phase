@@ -1,130 +1,139 @@
-import { EmbedBuilder } from "discord.js"
-
 import { modules } from "@repo/config/phase/modules.ts"
+import { constantCase } from "change-case"
+
+import { CustomMessageBuilder } from "~/lib/builders/message"
 
 import type { ModuleId } from "@repo/config/phase/modules.ts"
 import type { ChannelTypeName } from "~/types/utils"
-import type { ChannelType, PermissionFlagsBits } from "discord.js"
+import type { APIEmbed, ChannelType, PermissionFlagsBits } from "discord.js"
 
-type BotErrorMessage =
-  | string
-  | {
-      title?: string
-      description?: string
-      footer?: string
-    }
+export class BotErrorMessage extends CustomMessageBuilder {
+  readonly ephemeral: boolean
 
-class BotErrorClass {
-  public message: BotErrorMessage = "An error occurred."
-  public ephemeral = true
+  constructor(
+    message?: string | Pick<APIEmbed, "title" | "description" | "footer">,
+    ephemeral = true,
+  ) {
+    super()
 
-  constructor(message?: BotErrorMessage, ephemeral?: boolean) {
-    if (message) this.message = message
-    if (ephemeral) this.ephemeral = ephemeral
-  }
-
-  toJSON() {
-    if (typeof this.message === "string") {
-      return {
-        content: this.message,
-        ephemeral: this.ephemeral,
-      }
-    } else {
-      const embed = new EmbedBuilder()
-        .setColor("Red")
-        .setTitle(this.message.title ?? null)
-        .setDescription(this.message.description ?? null)
-        .setFooter(this.message.footer ? { text: this.message.footer } : null)
-
-      return {
-        embeds: [embed],
-        ephemeral: this.ephemeral,
+    if (message) {
+      if (typeof message === "string") {
+        this.setContent(message)
+      } else {
+        this.setEmbeds((embed) => {
+          return embed
+            .setColor("Red")
+            .setTitle(message.title ?? null)
+            .setDescription(message.description ?? null)
+            .setFooter(message.footer ?? null)
+        })
       }
     }
-  }
-}
 
-export const BotError = Object.assign(BotErrorClass, {
-  userMissingPermission: (permission?: keyof typeof PermissionFlagsBits) =>
-    new BotErrorClass({
+    this.ephemeral = ephemeral
+  }
+
+  setEphemeral(ephemeral: boolean) {
+    Reflect.set(this, "ephemeral", ephemeral)
+    return this
+  }
+
+  static userMissingPermission(permission?: keyof typeof PermissionFlagsBits) {
+    return new this({
       title: "Missing permissions",
       description: `You do not have the ${
         permission
-          ? `permission **\`"${permission
-              .replace(/([A-Z])/g, "_$1")
-              .trimStart()
-              .toUpperCase()}"\`** permission, which is required`
+          ? `permission **\`"${constantCase(permission)}"\`** permission, which is required`
           : `required permissions`
       } to do this.`,
-    }),
-  userNotAdmin: (type: "command" | "button" | "action" = "command") =>
-    new BotErrorClass(
+    })
+  }
+
+  static userNotAdmin(type: "command" | "button" | "action" = "command") {
+    return new this(
       `Only the server admins can ${type === "action" ? "perform this action" : `use this ${type}`}.`,
-    ),
-  userNotBotAdmin: (type: "command" | "button" | "action" = "command") =>
-    new BotErrorClass(
+    )
+  }
+
+  static userNotBotAdmin(type: "command" | "button" | "action" = "command") {
+    return new this(
       `Only the Phase admins can ${type === "action" ? "perform this action" : `use this ${type}`}.`,
-    ),
-  userNotOwner: (type: "command" | "button" | "action" = "command") =>
-    new BotErrorClass(
+    )
+  }
+
+  static userNotOwner(type: "command" | "button" | "action" = "command") {
+    return new this(
       `Only the server owner can ${type === "action" ? "perform this action" : `use this ${type}`}.`,
-    ),
-  memberNotFound: () =>
-    new BotErrorClass({
+    )
+  }
+
+  static memberNotFound() {
+    return new this({
       title: "Member not found",
       description: "Make sure they are in this server, then try again.",
-    }),
-  moduleNotEnabled: (moduleId: ModuleId) =>
-    new BotErrorClass({
+    })
+  }
+
+  static moduleNotEnabled(moduleId: ModuleId) {
+    return new this({
       title: "Module not enabled",
       description: `The \`${modules[moduleId].name.replace(/([A-Z])/g, " $1").trimStart()}\` module is not enabled, which is required to use this command.`,
-    }),
-  moduleNotConfigured: (moduleId: ModuleId) =>
-    new BotErrorClass({
+    })
+  }
+
+  static moduleNotConfigured(moduleId: ModuleId) {
+    return new this({
       title: "Module not configured",
       description: `The \`${modules[moduleId].name.replace(/([A-Z])/g, " $1").trimStart()}\` module is not configured.`,
-    }),
-  botMissingPermission: (
+    })
+  }
+
+  static botMissingPermission(
     permission?: keyof typeof PermissionFlagsBits,
     channelSpecific?: boolean,
-  ) =>
-    new BotErrorClass({
+  ) {
+    return new this({
       title: "Missing permissions",
       description: `I do not have the ${
         permission
-          ? `**\`"${permission
-              .replace(/([A-Z])/g, "_$1")
-              .trimStart()
-              .toUpperCase()}"\`** permission ${channelSpecific ? "in this channel" : ""}, which is required`
+          ? `**\`"${constantCase(permission)}"\`** permission ${channelSpecific ? "in this channel" : ""}, which is required`
           : `required permissions ${channelSpecific ? "in this channel" : ""}`
       } to do this.`,
-    }),
+    })
+  }
 
-  serverOnlyCommand: () =>
-    new BotError("This command can only be used in servers."),
-  specificChannelOnlyCommand: (
+  static serverOnlyCommand() {
+    return new this("This command can only be used in servers.")
+  }
+
+  static specificChannelOnlyCommand(
     channelType: ChannelTypeName<
       keyof Omit<typeof ChannelType, "DM" | "GroupDM" | "GuildCategory">
     >,
-  ) =>
-    new BotError(
+  ) {
+    return new this(
       `This command can only be used ${channelType.endsWith("voice") ? "when you're in a" : "in"} ${channelType + (channelType.endsWith("thread") ? "s" : channelType.endsWith("voice") ? " channel" : " channels")}.`,
-    ),
-  unknown: (data: Parameters<typeof generateBugReportURL>[0]) =>
-    new BotErrorClass({
+    )
+  }
+
+  static unknown(data: Parameters<typeof generateBugReportURL>[0]) {
+    return new this({
       title: "Unknown error",
       description: `Something went wrong, and we don't know why. To make sure this doesn't happen again, please [send this bug report](${generateBugReportURL(data)}).`,
-      footer: `The report has been filled in for you, so all you have to do is send it.`,
-    }),
-})
+      footer: {
+        text: `The report has been filled in for you, so all you have to do is send it.`,
+      },
+    })
+  }
+}
 
-const generateBugReportURL = (data: {
+function generateBugReportURL(data: {
   error: Error
   commandName?: string
   moduleName?: string
   guildId?: string
   channelId?: string
-}) => {
+}) {
   const url = new URL("https://phasebot.xyz/contact/bug-report")
 
   const message =

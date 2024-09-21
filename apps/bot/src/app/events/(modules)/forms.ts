@@ -20,7 +20,7 @@ import dedent from "dedent"
 import { z } from "zod"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 import {
   createHiddenContent,
   dateToTimestamp,
@@ -86,33 +86,33 @@ const customIds = {
 }
 
 const errors = {
-  formNotFound: new BotError(
+  formNotFound: new BotErrorMessage(
     "The form associated with this button no longer exists.",
   ).toJSON(),
-  formChannelNotFound: new BotError(
+  formChannelNotFound: new BotErrorMessage(
     "The form channel associated with this button no longer exists.",
   ).toJSON(),
-  formThreadNotFound: new BotError(
+  formThreadNotFound: new BotErrorMessage(
     "The form thread associated with this button no longer exists.",
   ).toJSON(),
   submissionsChannelNotFound: (embed?: boolean) =>
     embed
-      ? new BotError({
+      ? new BotErrorMessage({
           title: "Form submission failed",
           description:
             "The submissions channel associated with this form no longer exists.",
         }).toJSON()
-      : new BotError(
+      : new BotErrorMessage(
           "The submissions channel associated with this form no longer exists.",
         ).toJSON(),
   missingSubmitPermissions: (embed?: boolean) =>
     embed
-      ? new BotError({
+      ? new BotErrorMessage({
           title: "Form submission failed",
           description:
             "I do not have the `SEND_MESSAGES` permission in the form submissions channel, which is required to perform this action.",
         }).toJSON()
-      : new BotError(
+      : new BotErrorMessage(
           "I do not have the `SEND_MESSAGES` permission in the form submissions channel, which is required to perform this action.",
         ).toJSON(),
 }
@@ -667,7 +667,7 @@ export default new BotEventBuilder()
 
       if (!moduleConfig?.enabled) {
         return await interaction.editReply(
-          BotError.moduleNotEnabled(ModuleId.Forms).toJSON(),
+          BotErrorMessage.moduleNotEnabled(ModuleId.Forms).toJSON(),
         )
       }
 
@@ -905,7 +905,7 @@ export default new BotEventBuilder()
         )
 
         if (!success) {
-          return await interaction.reply(new BotError(error.message).toJSON())
+          return await interaction.reply(new BotErrorMessage(error.message).toJSON())
         }
 
         return await handleInput(

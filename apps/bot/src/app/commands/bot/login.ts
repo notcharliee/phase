@@ -11,7 +11,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
 import { env } from "~/lib/env"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
   .setName("login")
@@ -22,14 +22,14 @@ export default new BotSubcommandBuilder()
     })
 
     if (!interaction.guild) {
-      void interaction.editReply(BotError.serverOnlyCommand().toJSON())
+      void interaction.editReply(BotErrorMessage.serverOnlyCommand().toJSON())
       return
     }
 
     const guildDoc = interaction.client.store.guilds.get(interaction.guildId!)
 
     if (!guildDoc?.admins.includes(interaction.user.id)) {
-      return void interaction.editReply(BotError.userNotAdmin().toJSON())
+      return void interaction.editReply(BotErrorMessage.userNotAdmin().toJSON())
     }
 
     const { value, signature } = await generateOTP()

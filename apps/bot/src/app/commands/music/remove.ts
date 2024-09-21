@@ -2,7 +2,7 @@ import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 import type { GuildMember } from "discord.js"
 
@@ -25,7 +25,7 @@ export default new BotSubcommandBuilder()
 
     if (!channel) {
       return void interaction.editReply(
-        BotError.specificChannelOnlyCommand("voice").toJSON(),
+        BotErrorMessage.specificChannelOnlyCommand("voice").toJSON(),
       )
     }
 
@@ -33,7 +33,7 @@ export default new BotSubcommandBuilder()
 
     if (!queue) {
       return void interaction.editReply(
-        new BotError("No songs were found in the queue.").toJSON(),
+        new BotErrorMessage("No songs were found in the queue.").toJSON(),
       )
     }
 
@@ -41,7 +41,7 @@ export default new BotSubcommandBuilder()
 
     if (!song) {
       return void interaction.editReply(
-        new BotError("No song at that position.").toJSON(),
+        new BotErrorMessage("No song at that position.").toJSON(),
       )
     }
 

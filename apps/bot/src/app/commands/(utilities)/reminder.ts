@@ -3,7 +3,7 @@ import { BotCommandBuilder } from "phasebot/builders"
 
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 import { safeMs } from "~/lib/utils"
 
 export default new BotCommandBuilder()
@@ -30,7 +30,7 @@ export default new BotCommandBuilder()
 
     if (!msDelay) {
       return void interaction.reply(
-        new BotError("The time you provided is invalid.").toJSON(),
+        new BotErrorMessage("The time you provided is invalid.").toJSON(),
       )
     }
 

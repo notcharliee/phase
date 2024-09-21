@@ -6,7 +6,7 @@ import { google } from "googleapis"
 
 import { PhaseColour } from "~/lib/enums"
 import { env } from "~/lib/env"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 import { formatNumber } from "~/lib/utils"
 
 interface YoutTubeDislikeAPIResponse {
@@ -37,7 +37,7 @@ export default new BotCommandBuilder()
       videoId = videoUrl.split(".be/")[1]!.split("?")[0]!
     } else {
       void interaction.reply(
-        new BotError("Could not find a YouTube video with that URL.").toJSON(),
+        new BotErrorMessage("Could not find a YouTube video with that URL.").toJSON(),
       )
 
       return
@@ -53,7 +53,7 @@ export default new BotCommandBuilder()
 
     if (!videoResponse?.data.items?.[0]!.snippet) {
       void interaction.reply(
-        new BotError("Could not find a YouTube video with that URL.").toJSON(),
+        new BotErrorMessage("Could not find a YouTube video with that URL.").toJSON(),
       )
 
       return

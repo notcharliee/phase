@@ -1,7 +1,7 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { db } from "~/lib/db"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
   .setName("remove")
@@ -18,12 +18,12 @@ export default new BotSubcommandBuilder()
     })
 
     if (!interaction.guild) {
-      void interaction.editReply(BotError.serverOnlyCommand().toJSON())
+      void interaction.editReply(BotErrorMessage.serverOnlyCommand().toJSON())
       return
     }
 
     if (interaction.guild.ownerId !== interaction.user.id) {
-      void interaction.editReply(BotError.userNotOwner().toJSON())
+      void interaction.editReply(BotErrorMessage.userNotOwner().toJSON())
       return
     }
 
@@ -31,7 +31,7 @@ export default new BotSubcommandBuilder()
 
     if (user.id === interaction.user.id) {
       void interaction.editReply(
-        new BotError("You can't remove yourself from the dashboard.").toJSON(),
+        new BotErrorMessage("You can't remove yourself from the dashboard.").toJSON(),
       )
 
       return
@@ -41,7 +41,7 @@ export default new BotSubcommandBuilder()
 
     if (!guildDoc.admins.includes(user.id)) {
       void interaction.editReply(
-        new BotError(`<@${user.id}> does not have dashboard access.`).toJSON(),
+        new BotErrorMessage(`<@${user.id}> does not have dashboard access.`).toJSON(),
       )
 
       return

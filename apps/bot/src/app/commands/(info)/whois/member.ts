@@ -2,7 +2,7 @@ import { EmbedBuilder, PermissionFlagsBits } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 import { formatDate } from "./_utils"
 
@@ -22,7 +22,7 @@ export default new BotSubcommandBuilder()
     const member = interaction.options.getMember("member") as GuildMember | null
 
     if (!member) {
-      void interaction.reply(BotError.memberNotFound().toJSON())
+      void interaction.reply(BotErrorMessage.memberNotFound().toJSON())
       return
     }
 

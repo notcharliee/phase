@@ -3,7 +3,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
 import { db } from "~/lib/db"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 import { generateRankCard } from "~/images/rank"
 
@@ -21,7 +21,7 @@ export default new BotSubcommandBuilder()
 
     if (!guildDoc?.modules?.[ModuleId.Levels]?.enabled) {
       return void interaction.reply(
-        BotError.moduleNotEnabled(ModuleId.Levels).toJSON(),
+        BotErrorMessage.moduleNotEnabled(ModuleId.Levels).toJSON(),
       )
     }
 
@@ -85,7 +85,7 @@ export default new BotSubcommandBuilder()
       console.error(error)
 
       void interaction.editReply(
-        BotError.unknown({
+        BotErrorMessage.unknown({
           error: error as Error,
           commandName: "level rank",
           channelId: interaction.channelId,

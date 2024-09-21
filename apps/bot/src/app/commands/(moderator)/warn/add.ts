@@ -5,7 +5,7 @@ import { ModuleId } from "@repo/config/phase/modules.ts"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 import { getOrdinal } from "~/lib/utils"
 
 import type { GuildMember, GuildTextBasedChannel } from "discord.js"
@@ -24,7 +24,7 @@ export default new BotSubcommandBuilder()
     const reason = interaction.options.getString("reason", false) ?? undefined
 
     if (!member) {
-      void interaction.reply(BotError.memberNotFound().toJSON())
+      void interaction.reply(BotErrorMessage.memberNotFound().toJSON())
       return
     }
 
@@ -33,7 +33,7 @@ export default new BotSubcommandBuilder()
 
     if (!warningsModule?.enabled) {
       return void interaction.reply(
-        BotError.moduleNotEnabled(ModuleId.Warnings).toJSON(),
+        BotErrorMessage.moduleNotEnabled(ModuleId.Warnings).toJSON(),
       )
     }
 
@@ -52,7 +52,7 @@ export default new BotSubcommandBuilder()
 
     if (memberWarnings.size === warningsModule.warnings.length) {
       void interaction.reply(
-        new BotError("This member is already on their final warning.").toJSON(),
+        new BotErrorMessage("This member is already on their final warning.").toJSON(),
       )
 
       return

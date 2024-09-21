@@ -3,7 +3,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
   .setName("leaderboard")
@@ -33,7 +33,7 @@ export default new BotSubcommandBuilder()
 
     if (!guildDoc?.modules?.[ModuleId.Levels]?.enabled) {
       return void interaction.reply(
-        BotError.moduleNotEnabled(ModuleId.Levels).toJSON(),
+        BotErrorMessage.moduleNotEnabled(ModuleId.Levels).toJSON(),
       )
     }
 
@@ -53,7 +53,7 @@ export default new BotSubcommandBuilder()
       })
     } else {
       void interaction.editReply(
-        BotError.unknown({
+        BotErrorMessage.unknown({
           error: new Error(apiResponse.statusText),
           commandName: "level leaderboard",
           channelId: interaction.channelId,

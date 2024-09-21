@@ -5,7 +5,7 @@ import { Octokit } from "@octokit/rest"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
   .setName("user")
@@ -27,7 +27,7 @@ export default new BotSubcommandBuilder()
 
     if (!user) {
       void interaction.reply(
-        new BotError(
+        new BotErrorMessage(
           `Could not find a user under the name \`${username}\`.`,
         ).toJSON(),
       )

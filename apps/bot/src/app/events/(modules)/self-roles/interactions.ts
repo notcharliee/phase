@@ -3,13 +3,13 @@ import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 import { updateRoles } from "./_utils"
 
 import type { UUID } from "node:crypto"
 
-const methodNotFoundError = new BotError(
+const methodNotFoundError = new BotErrorMessage(
   "The self role method associated with this component no longer exists.",
 ).toJSON()
 
@@ -25,7 +25,7 @@ export default new BotEventBuilder()
 
     if (!moduleConfig?.enabled) {
       return void interaction.reply(
-        BotError.moduleNotEnabled(ModuleId.SelfRoles).toJSON(),
+        BotErrorMessage.moduleNotEnabled(ModuleId.SelfRoles).toJSON(),
       )
     }
 

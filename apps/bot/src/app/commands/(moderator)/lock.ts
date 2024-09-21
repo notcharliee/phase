@@ -2,7 +2,7 @@ import { EmbedBuilder } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 import type { GuildChannel } from "discord.js"
 
@@ -31,7 +31,7 @@ export default new BotCommandBuilder()
 
     if (channel.isThread()) {
       return await interaction.reply(
-        new BotError("This command cannot be used in threads.").toJSON(),
+        new BotErrorMessage("This command cannot be used in threads.").toJSON(),
       )
     }
 

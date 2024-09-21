@@ -5,7 +5,7 @@ import { formatDuration, QueueRepeatMode } from "@repo/music"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 import { dateToTimestamp, wrapText } from "~/lib/utils"
 
 import type { GuildMember } from "discord.js"
@@ -22,7 +22,7 @@ export default new BotSubcommandBuilder()
 
     if (!channel) {
       return void interaction.editReply(
-        BotError.specificChannelOnlyCommand("voice").toJSON(),
+        BotErrorMessage.specificChannelOnlyCommand("voice").toJSON(),
       )
     }
 
@@ -30,7 +30,7 @@ export default new BotSubcommandBuilder()
 
     if (!queue?.currentSong) {
       return void interaction.editReply(
-        new BotError("No songs were found in the queue.").toJSON(),
+        new BotErrorMessage("No songs were found in the queue.").toJSON(),
       )
     }
 

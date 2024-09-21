@@ -4,7 +4,7 @@ import { BotCommandBuilder } from "phasebot/builders"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 import type { GuildTextBasedChannel } from "discord.js"
 
@@ -50,7 +50,7 @@ export default new BotCommandBuilder()
       const commandMention = `</scrub:${interaction.client.application.commands.cache.find((command) => command.name === "scrub")!.id}>`
 
       void interaction.reply(
-        new BotError({
+        new BotErrorMessage({
           title: "Messages Not Found",
           description: dedent`
             No messages were found.

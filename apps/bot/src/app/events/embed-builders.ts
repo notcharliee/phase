@@ -7,7 +7,7 @@ import {
 } from "discord.js"
 import { BotEventBuilder } from "phasebot/builders"
 
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 import type {
   GuildTextBasedChannel,
@@ -49,7 +49,7 @@ export default new BotEventBuilder()
               interaction.message.embeds[0]!.footer == null
             ) {
               return interaction.reply(
-                new BotError("You cannot send an empty embed.").toJSON(),
+                new BotErrorMessage("You cannot send an empty embed.").toJSON(),
               )
             }
 
@@ -118,7 +118,7 @@ export default new BotEventBuilder()
               interaction.message.embeds[0]!.footer == null
             ) {
               return interaction.reply(
-                new BotError("You cannot send an empty embed.").toJSON(),
+                new BotErrorMessage("You cannot send an empty embed.").toJSON(),
               )
             }
 
@@ -169,7 +169,7 @@ export default new BotEventBuilder()
               interaction.message.embeds[0]!.footer == null
             ) {
               return interaction.reply(
-                new BotError("You cannot send an empty embed.").toJSON(),
+                new BotErrorMessage("You cannot send an empty embed.").toJSON(),
               )
             }
 
@@ -215,7 +215,7 @@ export default new BotEventBuilder()
               footerTextComponentValue == null
             ) {
               return interaction.reply(
-                new BotError("You cannot send an empty embed.").toJSON(),
+                new BotErrorMessage("You cannot send an empty embed.").toJSON(),
               )
             }
 
@@ -258,7 +258,7 @@ export default new BotEventBuilder()
         interaction.user.id != interaction.message.interactionMetadata?.user.id
       ) {
         return interaction.reply(
-          new BotError("You cannot edit someone else's embed.").toJSON(),
+          new BotErrorMessage("You cannot edit someone else's embed.").toJSON(),
         )
       }
 

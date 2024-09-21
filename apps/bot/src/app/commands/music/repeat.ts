@@ -4,7 +4,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 import { QueueRepeatMode } from "@repo/music"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 import type { GuildMember } from "discord.js"
 
@@ -41,7 +41,7 @@ export default new BotSubcommandBuilder()
 
     if (!channel) {
       return void interaction.editReply(
-        BotError.specificChannelOnlyCommand("voice").toJSON(),
+        BotErrorMessage.specificChannelOnlyCommand("voice").toJSON(),
       )
     }
 
@@ -49,13 +49,13 @@ export default new BotSubcommandBuilder()
 
     if (!queue) {
       return void interaction.editReply(
-        new BotError("No songs were found in the queue.").toJSON(),
+        new BotErrorMessage("No songs were found in the queue.").toJSON(),
       )
     }
 
     if (queue.repeatMode === (repeat as QueueRepeatMode)) {
       return void interaction.editReply(
-        new BotError("Repeat mode is already set to that state.").toJSON(),
+        new BotErrorMessage("Repeat mode is already set to that state.").toJSON(),
       )
     }
 

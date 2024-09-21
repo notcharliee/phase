@@ -11,7 +11,7 @@ import { BotEventBuilder } from "phasebot/builders"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 import type { UUID } from "crypto"
 import type { AnyThreadChannel, TextChannel } from "discord.js"
@@ -35,7 +35,7 @@ export default new BotEventBuilder()
         ).permissions.has(PermissionFlagsBits.ManageThreads)
       ) {
         return interaction.reply(
-          BotError.botMissingPermission("ManageThreads").toJSON(),
+          BotErrorMessage.botMissingPermission("ManageThreads").toJSON(),
         )
       }
 
@@ -49,7 +49,7 @@ export default new BotEventBuilder()
 
       if (!moduleConfig?.enabled) {
         return interaction.reply(
-          BotError.moduleNotEnabled(ModuleId.Tickets).toJSON(),
+          BotErrorMessage.moduleNotEnabled(ModuleId.Tickets).toJSON(),
         )
       }
 
@@ -63,7 +63,7 @@ export default new BotEventBuilder()
 
       if (!ticketData || !ticketChannel) {
         return interaction.reply(
-          BotError.moduleNotEnabled(ModuleId.Tickets).toJSON(),
+          BotErrorMessage.moduleNotEnabled(ModuleId.Tickets).toJSON(),
         )
       }
 
@@ -82,7 +82,7 @@ export default new BotEventBuilder()
 
             if (moduleConfig.max_open && ticketsOpen >= moduleConfig.max_open) {
               return interaction.editReply(
-                new BotError(
+                new BotErrorMessage(
                   `You are not allowed to open more than ${moduleConfig.max_open} ticket${moduleConfig.max_open > 1 ? "s" : ""} at a time.`,
                 ).toJSON(),
               )
@@ -128,7 +128,7 @@ export default new BotEventBuilder()
 
             if (ticket.locked) {
               return interaction.reply(
-                new BotError("The ticket is already locked.").toJSON(),
+                new BotErrorMessage("The ticket is already locked.").toJSON(),
               )
             }
 

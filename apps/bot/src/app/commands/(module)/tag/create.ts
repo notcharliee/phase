@@ -1,7 +1,7 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { db } from "~/lib/db"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
   .setName("create")
@@ -32,7 +32,7 @@ export default new BotSubcommandBuilder()
 
     if (tagAlreadyExists) {
       void interaction.reply(
-        new BotError(
+        new BotErrorMessage(
           `A tag already exists with that name. Use </tag edit:${interaction.id}> instead.`,
         ).toJSON(),
       )

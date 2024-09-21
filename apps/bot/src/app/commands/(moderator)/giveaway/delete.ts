@@ -1,7 +1,7 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { db } from "~/lib/db"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 import type { GuildTextBasedChannel } from "discord.js"
 
@@ -25,7 +25,7 @@ export default new BotSubcommandBuilder()
 
     if (!giveaway) {
       void interaction.editReply(
-        new BotError(
+        new BotErrorMessage(
           "No giveaway exists with that ID. Make sure you typed it in correctly and try again.",
         ).toJSON(),
       )

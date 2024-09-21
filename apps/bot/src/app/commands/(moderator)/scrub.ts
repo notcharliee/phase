@@ -7,7 +7,7 @@ import {
 import { BotCommandBuilder } from "phasebot/builders"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotCommandBuilder()
   .setName("scrub")
@@ -24,7 +24,7 @@ export default new BotCommandBuilder()
   .setExecute(async (interaction) => {
     if (interaction.channel?.isThread()) {
       void interaction.reply(
-        new BotError("This command cannot be used in threads.").toJSON(),
+        new BotErrorMessage("This command cannot be used in threads.").toJSON(),
       )
 
       return

@@ -1,6 +1,6 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { BotError } from "~/lib/errors"
+import { BotErrorMessage } from "~/structures/BotError"
 
 import { extensionOption, sizeOption } from "./_options"
 
@@ -14,7 +14,7 @@ export default new BotSubcommandBuilder()
   .setMetadata({ dmPermission: false })
   .setExecute(async (interaction) => {
     if (!interaction.guild) {
-      void interaction.reply(BotError.serverOnlyCommand().toJSON())
+      void interaction.reply(BotErrorMessage.serverOnlyCommand().toJSON())
       return
     }
 
@@ -28,7 +28,7 @@ export default new BotSubcommandBuilder()
       }) ?? undefined
 
     if (!url) {
-      void interaction.reply(new BotError("No icon URL found.").toJSON())
+      void interaction.reply(new BotErrorMessage("No icon URL found.").toJSON())
       return
     }
 
