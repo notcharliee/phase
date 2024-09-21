@@ -9,10 +9,24 @@ interface Page {
 }
 
 export const mainPages: Page[] = [
-  { label: "Home", href: "/" },
-  { label: "Docs", href: "/docs" },
-  { label: "Login", href: "/auth/login" },
-  { label: "Invite", href: "/redirect/invite", external: true },
+  {
+    label: "Home",
+    href: "/",
+  },
+  {
+    label: "Docs",
+    href: "/docs",
+  },
+  {
+    label: "Dashboard",
+    href: "/dashboard",
+  },
+  {
+    label: "Invite",
+    href: "/redirect/invite",
+    external: true,
+  },
+  // icons
   {
     label: "GitHub",
     href: "/redirect/github",
