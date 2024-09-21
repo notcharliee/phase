@@ -29,7 +29,6 @@ import type { GuildModules } from "~/lib/db"
 import type {
   APIEmbedField,
   APIOverwrite,
-  APIRole,
   AuditLogOptionsType,
   AuditLogRuleTriggerType,
   GuildAuditLogsActionType,
@@ -209,7 +208,7 @@ function formatOverwrites(acc: string[], overwrite: APIOverwrite) {
   const allowedPermissions = serializePermissions(allowBitfield)
   const deniedPermissions = serializePermissions(denyBitfield)
 
-  acc.push(dedent`
+  acc.push(dedent.withOptions({ escapeSpecialCharacters: false })`
     **\`•\`** <@${roleOrUserId}>
     **\`│\`** *${allowedPermissions.length} new allowed permissions*
     **\`└\`** *${deniedPermissions.length} new denied permissions*
@@ -719,8 +718,8 @@ export default new BotEventBuilder()
             break
           }
           case "exempt_channels": {
-            const oldChannelIds = change.old as string[] | undefined
-            const newChannelIds = change.new as string[] | undefined
+            const oldChannelIds = change.old
+            const newChannelIds = change.new
 
             const removedChannels = oldChannelIds
               ?.filter((channelId) => !newChannelIds?.includes(channelId))
@@ -765,8 +764,8 @@ export default new BotEventBuilder()
             break
           }
           case "$add": {
-            const oldRoles = change.old as APIRole[] | undefined
-            const newRoles = change.new as APIRole[] | undefined
+            const oldRoles = change.old
+            const newRoles = change.new
 
             const addedRoles = newRoles
               ?.filter((role) => !oldRoles?.includes(role))
@@ -780,8 +779,8 @@ export default new BotEventBuilder()
             break
           }
           case "$remove": {
-            const oldRoles = change.old as APIRole[] | undefined
-            const newRoles = change.new as APIRole[] | undefined
+            const oldRoles = change.old
+            const newRoles = change.new
 
             const removedRoles = newRoles
               ?.filter((role) => !oldRoles?.includes(role))
@@ -795,8 +794,8 @@ export default new BotEventBuilder()
             break
           }
           case "exempt_roles": {
-            const oldRoleIds = change.old as string[] | undefined
-            const newRoleIds = change.new as string[] | undefined
+            const oldRoleIds = change.old
+            const newRoleIds = change.new
 
             const removedRoles = oldRoleIds
               ?.filter((roleId) => !newRoleIds?.includes(roleId))
@@ -865,18 +864,12 @@ export default new BotEventBuilder()
               values.push(
                 `**\`-\`** ${capitalCase(
                   change.key === "mfa_level"
-                    ? GuildMFALevel[change.old as GuildMFALevel]
+                    ? GuildMFALevel[change.old]
                     : change.key === "verification_level"
-                      ? GuildVerificationLevel[
-                          change.old as GuildVerificationLevel
-                        ]
+                      ? GuildVerificationLevel[change.old]
                       : change.key === "explicit_content_filter"
-                        ? GuildExplicitContentFilter[
-                            change.old as GuildExplicitContentFilter
-                          ]
-                        : GuildDefaultMessageNotifications[
-                            change.old as GuildDefaultMessageNotifications
-                          ],
+                        ? GuildExplicitContentFilter[change.old]
+                        : GuildDefaultMessageNotifications[change.old],
                 )}`,
               )
             }
@@ -885,18 +878,12 @@ export default new BotEventBuilder()
               values.push(
                 `**\`+\`** ${capitalCase(
                   change.key === "mfa_level"
-                    ? GuildMFALevel[change.new as GuildMFALevel]
+                    ? GuildMFALevel[change.new]
                     : change.key === "verification_level"
-                      ? GuildVerificationLevel[
-                          change.new as GuildVerificationLevel
-                        ]
+                      ? GuildVerificationLevel[change.new]
                       : change.key === "explicit_content_filter"
-                        ? GuildExplicitContentFilter[
-                            change.new as GuildExplicitContentFilter
-                          ]
-                        : GuildDefaultMessageNotifications[
-                            change.new as GuildDefaultMessageNotifications
-                          ],
+                        ? GuildExplicitContentFilter[change.new]
+                        : GuildDefaultMessageNotifications[change.new],
                 )}`,
               )
             }
@@ -993,7 +980,6 @@ export default new BotEventBuilder()
           // Emoji and sticker related cases
           case "default_reaction_emoji": {
             const oldEmoji = change.old
-
             const newEmoji = change.new
 
             const values: string[] = []
@@ -1248,7 +1234,7 @@ export default new BotEventBuilder()
     } catch (error) {
       console.error(
         `Failed to send audit log entry to channel ${logsChannel.id} in guild ${guild.id}:`,
-        error,
       )
+      console.error(error)
     }
   })
