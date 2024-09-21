@@ -14,6 +14,7 @@ import type {
   ButtonInteraction,
   ChatInputCommandInteraction,
   GuildMember,
+  GuildTextBasedChannel,
   Message,
 } from "discord.js"
 
@@ -179,7 +180,9 @@ export default new BotCommandBuilder()
 
         await awaitMessageComponent(gameMessage)
       } else {
-        const gameMessage = await interaction.channel!.send({
+        const gameMessage = await (
+          interaction.channel as GuildTextBasedChannel
+        ).send({
           content,
           components,
         })

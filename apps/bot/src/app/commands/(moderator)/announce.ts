@@ -3,6 +3,8 @@ import { BotCommandBuilder } from "phasebot/builders"
 
 import { PhaseColour } from "~/lib/enums"
 
+import type { GuildTextBasedChannel } from "discord.js"
+
 export default new BotCommandBuilder()
   .setName("announce")
   .setDescription("Sends an embedded announcement message as the bot.")
@@ -21,7 +23,7 @@ export default new BotCommandBuilder()
       .setRequired(false),
   )
   .setExecute(async (interaction) => {
-    await interaction.channel!.send({
+    await (interaction.channel as GuildTextBasedChannel).send({
       embeds: [
         new EmbedBuilder()
           .setAuthor({

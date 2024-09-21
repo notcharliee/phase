@@ -124,7 +124,7 @@ export default new BotEventBuilder()
 
         case "lock":
           {
-            const ticket = interaction.channel as AnyThreadChannel<boolean>
+            const ticket = interaction.channel as AnyThreadChannel
 
             if (ticket.locked) {
               return interaction.reply(
