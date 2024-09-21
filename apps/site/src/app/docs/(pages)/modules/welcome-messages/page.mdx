@@ -3,8 +3,8 @@ import { ModuleId, modules } from "@repo/config/phase/modules.ts"
 import { ModuleVariables } from "~/components/docs/module-variables"
 
 export const metadata = {
-  title: modules[ModuleId.Counters].name,
-  description: modules[ModuleId.Counters].description,
+  title: modules[ModuleId.WelcomeMessages].name,
+  description: modules[ModuleId.WelcomeMessages].description,
 }
 
 <Heading>
@@ -12,7 +12,7 @@ export const metadata = {
   <HeadingDescription>{metadata.description}</HeadingDescription>
 </Heading>
 
-Counters allow you to dynamically showcase your server statistics within your channel names. Whether you want to highlight the total number of members, track online activity, or monitor other key metrics, Counters give you the flexibility to present this data in a visually appealing and easily accessible manner.
+Welcome Messages allow you to customise the welcome message that members receive when they join your server. These messages show up as embeds in the channel you specify, and can include personalised welcome cards that give your server a bit more flair.
 
 ## Variables
 
@@ -20,15 +20,15 @@ Variables are a type of placeholder that you can use in various module configura
 
 Currently, this module supports the following variables:
 
-<ModuleVariables moduleId={ModuleId.Counters} />
+<ModuleVariables moduleId={ModuleId.WelcomeMessages} />
 
 If you have any ideas for new variables, please let us know in our [Discord server](https://phasebot.xyz/redirect/discord)!
 
-## How to Set Up Counters
+## How to Set Up Welcome Messages
 
-#### Step 1: Create a New Voice Channel
+#### Step 1: Create the channel
 
-Create a new voice channel in your server and place it in a visible location, such as the top of the channel list. Then, lock the channel to prevent members from joining and talking in it.
+Create a new text channel in your server for the bot to send messages to. Make sure you give the bot the right permissions to view and send messages to this channel.
 
 #### Step 2: Configure the Module
 
@@ -36,4 +36,4 @@ Go to the dashboard and add the module via **Manage Mode**. Then, go back to **E
 
 #### Step 3: Save Your Changes
 
-Once configured, exit the modal and press the **Save changes** button. Counters are updated every 10 minutes, so it might take a short while for your changes to appear.
+Once configured, exit the modal and press the **Save changes** button.
