@@ -1,6 +1,3 @@
-import Image from "next/image"
-import Link from "next/link"
-
 import {
   Heading,
   HeadingDescription,
@@ -12,8 +9,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion"
-import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
 import { Codeblock } from "~/components/ui/codeblock"
+import { Link } from "~/components/ui/link"
 import { UserHoverCard } from "~/components/user-hover-card"
 
 import { cn } from "~/lib/utils"
@@ -21,18 +18,21 @@ import { cn } from "~/lib/utils"
 import type { MDXComponents } from "mdx/types"
 
 export const useMDXComponents = (components: MDXComponents) => ({
-  Heading,
-  HeadingTitle,
-  HeadingDescription,
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-  Alert,
-  AlertTitle,
-  AlertDescription,
   Codeblock,
+  Heading,
+  HeadingTitle,
+  HeadingDescription,
   UserHoverCard,
+  Link: ({ className, ...props }: React.ComponentProps<typeof Link>) => (
+    <Link
+      className={cn("font-medium underline underline-offset-2", className)}
+      {...props}
+    />
+  ),
   h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h1
       className={cn(
@@ -110,7 +110,7 @@ export const useMDXComponents = (components: MDXComponents) => ({
   ),
   blockquote: ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => (
     <blockquote
-      className={cn("mt-6 border-l-2 pl-6 text-muted-foreground", className)}
+      className={cn("text-muted-foreground mt-6 border-l-2 pl-6", className)}
       {...props}
     />
   ),
@@ -119,7 +119,6 @@ export const useMDXComponents = (components: MDXComponents) => ({
     alt,
     ...props
   }: React.ImgHTMLAttributes<HTMLImageElement>) => (
-    // eslint-disable-next-line @next/next/no-img-element
     <img className={cn("rounded-md", className)} alt={alt} {...props} />
   ),
   hr: ({ ...props }: React.HTMLAttributes<HTMLHRElement>) => (
@@ -156,13 +155,6 @@ export const useMDXComponents = (components: MDXComponents) => ({
   ),
   code: ({ ...props }: React.HTMLAttributes<HTMLElement>) => (
     <Codeblock {...props} inline />
-  ),
-  Image,
-  Link: ({ className, ...props }: React.ComponentProps<typeof Link>) => (
-    <Link
-      className={cn("font-medium underline underline-offset-2", className)}
-      {...props}
-    />
   ),
   ...components,
 })
