@@ -9,7 +9,10 @@ import { BotEventBuilder } from "phasebot/builders"
 
 import { BotError } from "~/lib/errors"
 
-import type { ModalActionRowComponentBuilder } from "discord.js"
+import type {
+  GuildTextBasedChannel,
+  ModalActionRowComponentBuilder,
+} from "discord.js"
 
 export default new BotEventBuilder()
   .setName("interactionCreate")
@@ -251,7 +254,9 @@ export default new BotEventBuilder()
       interaction.isButton() &&
       /embedbuilder\.(author|body|image|footer|send)/.test(interaction.customId)
     ) {
-      if (interaction.user.id != interaction.message.interaction?.user.id) {
+      if (
+        interaction.user.id != interaction.message.interactionMetadata?.user.id
+      ) {
         return interaction.reply(
           new BotError("You cannot edit someone else's embed.").toJSON(),
         )
@@ -487,7 +492,7 @@ export default new BotEventBuilder()
 
         case "embedbuilder.send":
           {
-            void interaction.channel?.send({
+            void (interaction.channel as GuildTextBasedChannel).send({
               embeds: [
                 new EmbedBuilder()
                   .setAuthor(interaction.message.embeds[0]!.author)
