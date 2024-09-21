@@ -34,7 +34,6 @@ import type {
   AuditLogRuleTriggerType,
   GuildAuditLogsActionType,
   GuildAuditLogsEntryTargetField,
-  GuildAuditLogsTargetType,
   GuildEmoji,
   GuildMember,
   GuildTextBasedChannel,
@@ -111,6 +110,8 @@ const AuditLogCategories: Record<
   [AuditLogEvent.OnboardingPromptDelete]: "server",
   [AuditLogEvent.OnboardingCreate]: "server",
   [AuditLogEvent.OnboardingUpdate]: "server",
+  [AuditLogEvent.HomeSettingsCreate]: "server",
+  [AuditLogEvent.HomeSettingsUpdate]: "server",
 }
 
 /**
@@ -179,6 +180,8 @@ const AuditLogTitles: Record<AuditLogEvent, string> = {
   [AuditLogEvent.OnboardingPromptDelete]: "Onboarding Prompt Deleted",
   [AuditLogEvent.OnboardingCreate]: "Onboarding Created",
   [AuditLogEvent.OnboardingUpdate]: "Onboarding Updated",
+  [AuditLogEvent.HomeSettingsCreate]: "Home Settings Created",
+  [AuditLogEvent.HomeSettingsUpdate]: "Home Settings Updated",
 }
 
 /**
@@ -299,7 +302,7 @@ export default new BotEventBuilder()
       })
     }
 
-    const checkTargetType = <T extends GuildAuditLogsTargetType>(
+    const checkTargetType = <T extends keyof TargetFieldTypeMap>(
       _target: unknown,
       expectedType: T,
     ): _target is TargetFieldTypeMap[T] => entry.targetType === expectedType
@@ -672,15 +675,11 @@ export default new BotEventBuilder()
           case "default_thread_rate_limit_per_user": {
             const values: string[] = []
             if (change.old) {
-              values.push(
-                `**\`-\`** ${ms((change.old) * 1000, { long: true })}`,
-              )
+              values.push(`**\`-\`** ${ms(change.old * 1000, { long: true })}`)
             }
 
             if (change.new) {
-              values.push(
-                `**\`+\`** ${ms((change.new) * 1000, { long: true })}`,
-              )
+              values.push(`**\`+\`** ${ms(change.new * 1000, { long: true })}`)
             }
 
             embed.addFields({
@@ -751,14 +750,14 @@ export default new BotEventBuilder()
             if (actionType === "Create") {
               embed.addFields({
                 name: "Colour",
-                value: `#${change.new === 0 ? "000000" : (change.new!).toString(16)}`,
+                value: `#${change.new === 0 ? "000000" : change.new!.toString(16)}`,
               })
             } else {
               embed.addFields({
                 name: "Colour",
                 value: dedent`
-                  **\`-\`** #${change.old === 0 ? "000000" : (change.old!).toString(16)} 
-                  **\`+\`** #${change.new === 0 ? "000000" : (change.new!).toString(16)}
+                  **\`-\`** #${change.old === 0 ? "000000" : change.old!.toString(16)} 
+                  **\`+\`** #${change.new === 0 ? "000000" : change.new!.toString(16)}
                 `,
               })
             }
@@ -922,16 +921,10 @@ export default new BotEventBuilder()
                 name: capitalCase(change.key),
                 value: capitalCase(
                   change.key === "event_type"
-                    ? AutoModerationRuleEventType[
-                        change.new!
-                      ]
+                    ? AutoModerationRuleEventType[change.new!]
                     : change.key === "entity_type"
-                      ? GuildScheduledEventEntityType[
-                          change.new!
-                        ]
-                      : GuildScheduledEventStatus[
-                          change.new!
-                        ],
+                      ? GuildScheduledEventEntityType[change.new!]
+                      : GuildScheduledEventStatus[change.new!],
                 ),
               })
             } else {
@@ -940,29 +933,17 @@ export default new BotEventBuilder()
                 value: dedent`
                   **\`-\`** ${capitalCase(
                     change.key === "event_type"
-                      ? AutoModerationRuleEventType[
-                          change.old!
-                        ]
+                      ? AutoModerationRuleEventType[change.old!]
                       : change.key === "entity_type"
-                        ? GuildScheduledEventEntityType[
-                            change.old!
-                          ]
-                        : GuildScheduledEventStatus[
-                            change.old!
-                          ],
+                        ? GuildScheduledEventEntityType[change.old!]
+                        : GuildScheduledEventStatus[change.old!],
                   )}
                   **\`+\`** ${capitalCase(
                     change.key === "event_type"
-                      ? AutoModerationRuleEventType[
-                          change.new!
-                        ]
+                      ? AutoModerationRuleEventType[change.new!]
                       : change.key === "entity_type"
-                        ? GuildScheduledEventEntityType[
-                            change.new!
-                          ]
-                        : GuildScheduledEventStatus[
-                            change.new!
-                          ],
+                        ? GuildScheduledEventEntityType[change.new!]
+                        : GuildScheduledEventStatus[change.new!],
                   )}
                 `,
               })
@@ -976,11 +957,7 @@ export default new BotEventBuilder()
             if (actionType === "Create") {
               embed.addFields({
                 name: "Trigger Type",
-                value: capitalCase(
-                  AutoModerationRuleTriggerType[
-                    change.new!
-                  ],
-                ),
+                value: capitalCase(AutoModerationRuleTriggerType[change.new!]),
               })
             } else {
               embed.addFields({
@@ -998,15 +975,11 @@ export default new BotEventBuilder()
             const values: string[] = []
 
             if (change.old) {
-              values.push(
-                `**\`-\`** ${dateToTimestamp(new Date(change.old))}`,
-              )
+              values.push(`**\`-\`** ${dateToTimestamp(new Date(change.old))}`)
             }
 
             if (change.new) {
-              values.push(
-                `**\`+\`** ${dateToTimestamp(new Date(change.new))}`,
-              )
+              values.push(`**\`+\`** ${dateToTimestamp(new Date(change.new))}`)
             }
 
             embed.addFields({
@@ -1062,9 +1035,7 @@ export default new BotEventBuilder()
             if (actionType === "Create") {
               embed.addFields({
                 name: "Format Type",
-                value: capitalCase(
-                  StickerFormatType[change.new!],
-                ),
+                value: capitalCase(StickerFormatType[change.new!]),
               })
             } else {
               embed.addFields({
@@ -1111,7 +1082,7 @@ export default new BotEventBuilder()
           case "temporary": {
             embed.addFields({
               name: "Temporary Membership",
-              value: wrapText((change.new!).toString(), "`"),
+              value: wrapText(change.new!.toString(), "`"),
             })
 
             break
@@ -1122,9 +1093,7 @@ export default new BotEventBuilder()
               value:
                 change.new === undefined
                   ? wrapText("false", "`")
-                  : dateToTimestamp(
-                      new Date(Date.now() + (change.new) * 1000),
-                    ),
+                  : dateToTimestamp(new Date(Date.now() + change.new * 1000)),
             })
 
             break
@@ -1133,7 +1102,7 @@ export default new BotEventBuilder()
             if (change.new !== 0) {
               embed.addFields({
                 name: "Max Uses",
-                value: wrapText((change.new!).toString(), "`"),
+                value: wrapText(change.new!.toString(), "`"),
               })
             }
 
@@ -1172,11 +1141,7 @@ export default new BotEventBuilder()
           case "expire_behavior": {
             embed.addFields({
               name: "Expire Behavior",
-              value: capitalCase(
-                IntegrationExpireBehavior[
-                  change.new!
-                ],
-              ),
+              value: capitalCase(IntegrationExpireBehavior[change.new!]),
             })
 
             break
@@ -1193,11 +1158,7 @@ export default new BotEventBuilder()
             if (actionType === "Create") {
               embed.addFields({
                 name: "Privacy Level",
-                value: capitalCase(
-                  StageInstancePrivacyLevel[
-                    change.new!
-                  ],
-                ),
+                value: capitalCase(StageInstancePrivacyLevel[change.new!]),
               })
             } else {
               embed.addFields({
