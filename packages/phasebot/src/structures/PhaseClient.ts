@@ -34,6 +34,9 @@ const defaultExports = {
 } satisfies PhaseClientParams["exports"]
 
 export class PhaseClient {
+  private srcDir: string = join(process.cwd(), "src")
+  private appDir: string = join(this.srcDir, "app")
+
   public dev: PhaseClientParams["dev"]
   public config: PhaseClientParams["config"]
   public exports: PhaseClientParams["exports"]
@@ -80,8 +83,8 @@ export class PhaseClient {
       })
     }
 
-    if (!existsSync("./src")) {
-      throw new Error("No 'src' directory found.")
+    if (!existsSync(this.srcDir)) {
+      throw new Error("No source directory found.")
     }
 
     if (!process.env.DISCORD_TOKEN) {
@@ -182,7 +185,7 @@ export class PhaseClient {
   async loadPrestart(): Promise<BotPrestart | undefined> {
     if (this.files?.prestart) return this.files.prestart
 
-    const prestartFiles = readdirSync("./src").filter(
+    const prestartFiles = readdirSync(this.srcDir).filter(
       (dirent) =>
         dirent.startsWith("prestart") &&
         this.allowedFileExtensions.includes(extname(dirent)),
@@ -198,7 +201,7 @@ export class PhaseClient {
       )
     }
 
-    const filePath = join(process.cwd(), "src", prestartFiles[0]!)
+    const filePath = join(this.srcDir, prestartFiles[0]!)
 
     const prestart = await import(filePath)
       .catch(() => null)
@@ -214,7 +217,7 @@ export class PhaseClient {
   async loadMiddleware(): Promise<BotMiddleware | undefined> {
     if (this.files?.middleware) return this.files.middleware
 
-    const middlewareFiles = readdirSync("./src").filter(
+    const middlewareFiles = readdirSync(this.srcDir).filter(
       (dirent) =>
         dirent.startsWith("middleware") &&
         this.allowedFileExtensions.includes(extname(dirent)),
@@ -230,7 +233,7 @@ export class PhaseClient {
       )
     }
 
-    const filePath = join(process.cwd(), "src", middlewareFiles[0]!)
+    const filePath = join(this.srcDir, middlewareFiles[0]!)
 
     const middleware = await import(filePath)
       .catch(() => null)
@@ -257,7 +260,7 @@ export class PhaseClient {
           const group = !!(entry.startsWith("(") && entry.endsWith(")"))
           await processDir(path, prefix + (group ? "" : entry + "/"))
         } else if (this.allowedFileExtensions.includes(extname(entry))) {
-          const file = await import(join(process.cwd(), path))
+          const file = await import(path)
           const defaultExport = file.default as unknown
 
           if (!defaultExport) {
@@ -316,7 +319,7 @@ export class PhaseClient {
       }
     }
 
-    await processDir("src/commands")
+    await processDir(join(this.appDir, "commands"))
 
     return commandFiles
   }
@@ -338,7 +341,7 @@ export class PhaseClient {
         if (stats.isDirectory()) {
           await processDir(path)
         } else if (this.allowedFileExtensions.includes(extname(entry))) {
-          const file = await import(join(process.cwd(), path))
+          const file = await import(path)
           const defaultExport = file.default as unknown
 
           if (!defaultExport) {
@@ -365,7 +368,7 @@ export class PhaseClient {
       }
     }
 
-    await processDir("src/crons")
+    await processDir(join(this.appDir, "crons"))
 
     return cronFiles
   }
@@ -387,7 +390,7 @@ export class PhaseClient {
         if (stats.isDirectory()) {
           await processDir(path)
         } else if (this.allowedFileExtensions.includes(extname(entry))) {
-          const file = await import(join(process.cwd(), path))
+          const file = await import(path)
           const defaultExport = file.default as unknown
 
           if (!defaultExport) {
@@ -414,7 +417,7 @@ export class PhaseClient {
       }
     }
 
-    await processDir("src/events")
+    await processDir(join(this.appDir, "events"))
 
     return eventFiles
   }
