@@ -2,15 +2,15 @@ import { Emojis } from "~/lib/emojis"
 
 import type { Client, Snowflake, User } from "discord.js"
 
-const Markers = {
+export const Markers = {
   Empty: Emojis.Connect4_Empty,
   Player1: Emojis.Connect4_Player1,
   Player2: Emojis.Connect4_Player2,
 }
 
-type Marker = (typeof Markers)[keyof typeof Markers]
+export type Marker = (typeof Markers)[keyof typeof Markers]
 
-type Board = [
+export type Board = [
   [Marker, Marker, Marker, Marker, Marker, Marker, Marker],
   [Marker, Marker, Marker, Marker, Marker, Marker, Marker],
   [Marker, Marker, Marker, Marker, Marker, Marker, Marker],
@@ -19,7 +19,7 @@ type Board = [
   [Marker, Marker, Marker, Marker, Marker, Marker, Marker],
 ]
 
-type BoardColumnIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6
+export type BoardColumnIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
 class Player {
   readonly connect4: Connect4
@@ -29,9 +29,10 @@ class Player {
   constructor(connect4: Connect4, user: User) {
     this.connect4 = connect4
     this.id = user.id
-
-    const isPlayer1 = connect4.players.length % 2 === 0
-    this.marker = isPlayer1 ? Markers.Player1 : Markers.Player2
+    this.marker =
+      (connect4.players.length ?? 0) % 2 === 0
+        ? Markers.Player1
+        : Markers.Player2
   }
 
   get user() {
@@ -46,14 +47,18 @@ export class Connect4 {
 
   constructor(
     client: Client,
-    players: [User, User],
+    users: [User, User],
     board: Board = Array.from({ length: 6 }, () =>
       Array<Marker>(7).fill(Markers.Empty),
     ) as Board,
   ) {
     this.client = client
-    this.players = [new Player(this, players[0]), new Player(this, players[1])]
+    this.players = [] as unknown as [Player, Player]
     this.board = board
+
+    for (const user of users) {
+      this.players.push(new Player(this, user))
+    }
   }
 
   public get availableColumns(): BoardColumnIndex[] {
