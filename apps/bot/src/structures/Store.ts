@@ -5,17 +5,17 @@ import { db } from "~/lib/db"
 import type { Config, Guild, mongoose } from "~/lib/db"
 import type { Client, Snowflake } from "discord.js"
 
-export function storePlugin(client: Client<false>) {
-  client.store = new Store()
-  return client
-}
-
 type WithId<T> = T & { _id: mongoose.Types.ObjectId }
 
 export class Store {
+  readonly client: Client<false>
   readonly config!: Config
   readonly guilds = new Collection<Snowflake, WithId<Guild>>()
   readonly twitchStatuses = new Collection<string, boolean>()
+
+  constructor(client: Client<false>) {
+    this.client = client
+  }
 
   async init() {
     await this.getConfig()
@@ -78,5 +78,10 @@ export class Store {
           this.guilds.set(guildId, fullDocument)
         }
       })
+  }
+
+  static plugin(this: void, client: Client<false>) {
+    Object.assign(client, { store: new Store(client) })
+    return client
   }
 }
