@@ -8,7 +8,7 @@ import { BotCommandBuilder } from "phasebot/builders"
 
 import dedent from "dedent"
 
-import { ZeroWidthJoiner } from "~/lib/emojis"
+import { Emojis } from "~/lib/emojis"
 
 import type {
   ButtonInteraction,
@@ -33,7 +33,7 @@ export default new BotCommandBuilder()
     const opponent = interaction.options.getMember("opponent") as GuildMember
     const players = { "❌": opponent, "⭕": host }
 
-    const moves = Array.from({ length: 9 }).map(() => ZeroWidthJoiner)
+    const moves = Array.from({ length: 9 }).map(() => Emojis.ZeroWidthJoiner)
     let turn: "❌" | "⭕" = "❌"
     let tied = false
     let winner: {
@@ -67,9 +67,9 @@ export default new BotCommandBuilder()
       }
 
       const checkTie = () =>
-        !winner && moves.every((move) => move !== ZeroWidthJoiner)
+        !winner && moves.every((move) => move !== Emojis.ZeroWidthJoiner)
 
-      if (moves[move] === ZeroWidthJoiner) {
+      if (moves[move] === Emojis.ZeroWidthJoiner) {
         moves[move] = turn
 
         const isWinner = checkWinner()
