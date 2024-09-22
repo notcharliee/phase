@@ -4,7 +4,7 @@ import {
   ButtonStyle,
   ComponentType,
 } from "discord.js"
-import { BotCommandBuilder } from "phasebot/builders"
+import { BotSubcommandBuilder } from "phasebot/builders"
 
 import dedent from "dedent"
 
@@ -18,16 +18,16 @@ import type {
   Message,
 } from "discord.js"
 
-export default new BotCommandBuilder()
+export default new BotSubcommandBuilder()
   .setName("tictactoe")
   .setDescription("Starts a game of tic-tac-toe.")
-  .setDMPermission(false)
   .addUserOption((option) =>
     option
       .setName("opponent")
       .setDescription("The opponent you want to select.")
       .setRequired(true),
   )
+  .setMetadata({ dmPermission: false })
   .setExecute(async (interaction) => {
     const host = interaction.member as GuildMember
     const opponent = interaction.options.getMember("opponent") as GuildMember
@@ -92,15 +92,13 @@ export default new BotCommandBuilder()
     const createMessage = async (
       interaction: ButtonInteraction | ChatInputCommandInteraction,
     ) => {
-      const commandMention = `</tictactoe:${interaction.isChatInputCommand() ? interaction.id : interaction.client.application.commands.cache.find((command) => command.name === "tictactoe")!.id}>`
-
       const content = dedent`
         :zap: **${players["❌"].displayName}** vs **${players["⭕"].displayName}** :zap:
         ${
           winner
-            ? `<@${winner.member.id}> has won! Play again! ${commandMention}`
+            ? `<@${winner.member.id}> has won!`
             : tied
-              ? `It's a tie. Play again! ${commandMention}`
+              ? `It's a tie!`
               : `<@${players[turn].id}> it's your turn, make a move!`
         }
       `
@@ -167,7 +165,6 @@ export default new BotCommandBuilder()
 
             void message.reply(dedent`
               Game timed out due to inactivity.
-              You can start a new game with ${commandMention}
             `)
           })
 

@@ -1,6 +1,6 @@
-import { BotCommandBuilder } from "phasebot/builders"
+import { BotSubcommandBuilder } from "phasebot/builders"
 
-export default new BotCommandBuilder()
+export default new BotSubcommandBuilder()
   .setName("rps")
   .setDescription("Starts a game of rock-paper-scissors.")
   .addStringOption((option) =>
