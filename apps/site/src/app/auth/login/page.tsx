@@ -143,32 +143,16 @@ async function LoginCallback(props: LoginCallbackPageProps) {
       guildId,
     })
 
-    const headers = new Headers()
-    headers.append("Content-Type", "application/x-www-form-urlencoded")
-    headers.append(
-      "Authorization",
-      "Basic " + btoa(`${env.DISCORD_ID}:${env.DISCORD_SECRET}`),
-    )
-
-    const body = new URLSearchParams({
-      token: accessToken,
-      token_type_hint: "access_token",
-    })
-
-    const response = await fetch(
-      "https://discord.com/api/oauth2/token/revoke",
-      {
-        method: "POST",
-        headers: headers,
-        body: body,
-      },
-    ).catch(() => null)
-
-    if (response?.ok) {
-      redirect(absoluteURL("/dashboard/modules"))
-    } else {
+    try {
+      await discordAPI.oauth2.revokeToken(env.DISCORD_ID, env.DISCORD_SECRET, {
+        token: accessToken,
+        token_type_hint: "access_token",
+      })
+    } catch {
       throw new Error("Failed to revoke access token")
     }
+
+    redirect(absoluteURL("/dashboard/modules"))
   }
 
   return (
