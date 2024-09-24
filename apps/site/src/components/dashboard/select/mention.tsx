@@ -88,7 +88,7 @@ export const SelectMention = React.forwardRef<
         },
         ...sortedRoles.map((role) => ({
           name: `@${role.name}`,
-          value: `<@${role.id}>`,
+          value: `<@&${role.id}>`,
           hexColour:
             role.color !== 0
               ? "#" + role.color.toString(16).padStart(6, "0")
