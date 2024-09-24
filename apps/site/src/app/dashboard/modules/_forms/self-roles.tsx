@@ -4,8 +4,8 @@ import { capitalCase } from "change-case"
 import { useFieldArray, useFormContext } from "react-hook-form"
 import { v4 as randomUUID } from "uuid"
 
-import { MultiselectRole } from "~/components/dashboard/multiselect-role"
-import { SelectChannel } from "~/components/dashboard/select-channel"
+import { SelectChannel } from "~/components/dashboard/select/channel"
+import { SelectRole } from "~/components/dashboard/select/role"
 import { EmojiPicker } from "~/components/emoji-picker"
 import {
   Accordion,
@@ -295,7 +295,7 @@ function MessageMethods({ index }: { index: number }) {
                         <FormItem>
                           <FormLabel>Roles to Add</FormLabel>
                           <FormControl>
-                            <MultiselectRole {...field} />
+                            <SelectRole multiselect {...field} />
                           </FormControl>
                           <FormDescription>
                             The roles to assign when the button is pressed
@@ -311,7 +311,7 @@ function MessageMethods({ index }: { index: number }) {
                         <FormItem>
                           <FormLabel>Roles to Remove</FormLabel>
                           <FormControl>
-                            <MultiselectRole {...field} />
+                            <SelectRole multiselect {...field} />
                           </FormControl>
                           <FormDescription>
                             The roles to remove when the button is pressed
@@ -346,7 +346,7 @@ function MessageMethods({ index }: { index: number }) {
                         <FormItem>
                           <FormLabel>Roles to Add</FormLabel>
                           <FormControl>
-                            <MultiselectRole {...field} />
+                            <SelectRole multiselect {...field} />
                           </FormControl>
                           <FormDescription>
                             The roles to assign when the button is pressed
@@ -362,7 +362,7 @@ function MessageMethods({ index }: { index: number }) {
                         <FormItem>
                           <FormLabel>Roles to Remove</FormLabel>
                           <FormControl>
-                            <MultiselectRole {...field} />
+                            <SelectRole multiselect {...field} />
                           </FormControl>
                           <FormDescription>
                             The roles to remove when the button is pressed

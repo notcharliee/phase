@@ -5,8 +5,8 @@ import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFieldArray, useFormContext } from "react-hook-form"
 import { v4 as randomUUID } from "uuid"
 
-import { SelectChannel } from "~/components/dashboard/select-channel"
-import { SelectRole } from "~/components/dashboard/select-role"
+import { SelectChannel } from "~/components/dashboard/select/channel"
+import { SelectRole } from "~/components/dashboard/select/role"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import {

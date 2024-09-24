@@ -5,8 +5,8 @@ import { Label } from "@radix-ui/react-label"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFieldArray, useFormContext } from "react-hook-form"
 
-import { SelectChannel } from "~/components/dashboard/select-channel"
-import { SelectMention } from "~/components/dashboard/select-mention"
+import { SelectChannel } from "~/components/dashboard/select/channel"
+import { SelectMention } from "~/components/dashboard/select/mention"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import {

@@ -3,7 +3,7 @@
 import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFormContext } from "react-hook-form"
 
-import { SelectMention } from "~/components/dashboard/select-mention"
+import { SelectMention } from "~/components/dashboard/select/mention"
 import {
   FormControl,
   FormDescription,

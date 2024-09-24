@@ -4,7 +4,7 @@ import { TrashIcon } from "@radix-ui/react-icons"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFieldArray, useFormContext } from "react-hook-form"
 
-import { SelectRole } from "~/components/dashboard/select-role"
+import { SelectRole } from "~/components/dashboard/select/role"
 import { EmojiPicker } from "~/components/emoji-picker"
 import { Button } from "~/components/ui/button"
 import {

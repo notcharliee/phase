@@ -4,7 +4,7 @@ import { TrashIcon } from "@radix-ui/react-icons"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFieldArray, useFormContext } from "react-hook-form"
 
-import { SelectChannel } from "~/components/dashboard/select-channel"
+import { SelectChannel } from "~/components/dashboard/select/channel"
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import {

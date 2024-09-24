@@ -3,7 +3,7 @@
 import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFormContext } from "react-hook-form"
 
-import { SelectChannel } from "~/components/dashboard/select-channel"
+import { SelectChannel } from "~/components/dashboard/select/channel"
 import {
   FormControl,
   FormDescription,

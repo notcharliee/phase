@@ -5,7 +5,7 @@ import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFieldArray, useFormContext } from "react-hook-form"
 import { v4 as randomUUID } from "uuid"
 
-import { SelectChannel } from "~/components/dashboard/select-channel"
+import { SelectChannel } from "~/components/dashboard/select/channel"
 import {
   Accordion,
   AccordionContent,

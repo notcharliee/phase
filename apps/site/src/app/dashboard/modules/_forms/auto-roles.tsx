@@ -9,7 +9,7 @@ import {
 import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFieldArray, useFormContext } from "react-hook-form"
 
-import { SelectRole } from "~/components/dashboard/select-role"
+import { SelectRole } from "~/components/dashboard/select/role"
 import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,

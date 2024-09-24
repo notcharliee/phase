@@ -4,8 +4,8 @@ import { TrashIcon } from "@radix-ui/react-icons"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFieldArray, useFormContext } from "react-hook-form"
 
-import { SelectChannel } from "~/components/dashboard/select-channel"
-import { SelectRole } from "~/components/dashboard/select-role"
+import { SelectChannel } from "~/components/dashboard/select/channel"
+import { SelectRole } from "~/components/dashboard/select/role"
 import { Button } from "~/components/ui/button"
 import { Codeblock } from "~/components/ui/codeblock"
 import {
