@@ -105,7 +105,8 @@ function ServerCombobox(props: ServerComboboxProps) {
 }
 
 interface ServerSelectProps extends Pick<ServerComboboxProps, "guilds"> {
-  onSubmit: (value: string) => Promise<void>
+  accessToken: string
+  onLoginCallbackSubmit: (accessToken: string, guildId: string) => Promise<void>
 }
 
 export function ServerSelect(props: ServerSelectProps) {
@@ -116,7 +117,10 @@ export function ServerSelect(props: ServerSelectProps) {
     if (!value) return
 
     setState("loading")
-    props.onSubmit(value.id).catch(() => setState("error"))
+
+    props
+      .onLoginCallbackSubmit(props.accessToken, value.id)
+      .catch(() => setState("error"))
   }
 
   const disabled = value ? state === "loading" : false

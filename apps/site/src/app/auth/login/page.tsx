@@ -9,11 +9,7 @@ import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 import { ChatBubbleIcon, ReloadIcon } from "@radix-ui/react-icons"
 
-import {
-  LoginMethods,
-  ServerSelect,
-  SetSearchParams,
-} from "~/components/auth/login"
+import { LoginMethods, ServerSelect } from "~/components/auth/login"
 import { Loading } from "~/components/loading"
 import { OrbitingDots } from "~/components/orbiting-dots"
 import { Button } from "~/components/ui/button"
@@ -33,7 +29,6 @@ interface LoginPageProps {
 
 export default async function LoginPage(props: LoginPageProps) {
   const code = props.searchParams.code
-  const accessToken = props.searchParams.access_token
 
   const onSubmit = async (value: string) => {
     "use server"
@@ -57,9 +52,9 @@ export default async function LoginPage(props: LoginPageProps) {
     <div className="flex h-screen flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
       <OrbitingDots />
       <div className="mx-auto flex w-full max-w-lg flex-col items-center justify-center space-y-6 md:max-w-xl md:space-y-8">
-        {(code ?? accessToken) ? (
+        {code ? (
           <Suspense fallback={<Loading />}>
-            <LoginCallback code={code} accessToken={accessToken} />
+            <LoginCallback code={code} />
           </Suspense>
         ) : (
           <>
@@ -84,30 +79,51 @@ export default async function LoginPage(props: LoginPageProps) {
   )
 }
 
-interface LoginCallbackPageProps {
-  code?: string
-  accessToken?: string
-}
+const onLoginCallbackSubmit = async (accessToken: string, guildId: string) => {
+  "use server"
 
-async function LoginCallback(props: LoginCallbackPageProps) {
   const discordREST = new REST().setToken(env.DISCORD_TOKEN)
   const discordAPI = new API(discordREST)
 
-  const accessToken = props.accessToken
-    ? props.accessToken
-    : props.code
-      ? ((
-          await discordAPI.oauth2
-            .tokenExchange({
-              client_id: env.DISCORD_ID,
-              client_secret: env.DISCORD_SECRET,
-              grant_type: "authorization_code",
-              redirect_uri: env.NEXT_PUBLIC_BASE_URL + "/auth/login",
-              code: props.code,
-            })
-            .catch(() => null)
-        )?.access_token ?? null)
-      : null
+  const userREST = new REST({ authPrefix: "Bearer" }).setToken(accessToken)
+  const userAPI = new API(userREST)
+
+  const user = await userAPI.users.getCurrent().catch(() => null)
+  const userId = user?.id
+
+  if (!userId) {
+    throw new Error("User not found")
+  }
+
+  await discordAPI.oauth2.revokeToken(env.DISCORD_ID, env.DISCORD_SECRET, {
+    token: accessToken,
+    token_type_hint: "access_token",
+  })
+
+  createCookie(cookies(), {
+    userId,
+    guildId,
+  })
+
+  redirect(absoluteURL("/dashboard/modules"))
+}
+
+async function LoginCallback({ code }: { code: string }) {
+  const discordREST = new REST().setToken(env.DISCORD_TOKEN)
+  const discordAPI = new API(discordREST)
+
+  const accessToken =
+    (
+      await discordAPI.oauth2
+        .tokenExchange({
+          client_id: env.DISCORD_ID,
+          client_secret: env.DISCORD_SECRET,
+          grant_type: "authorization_code",
+          redirect_uri: env.NEXT_PUBLIC_BASE_URL + "/auth/login",
+          code,
+        })
+        .catch(() => null)
+    )?.access_token ?? null
 
   if (!accessToken) return <LoginFailure />
 
@@ -135,26 +151,6 @@ async function LoginCallback(props: LoginCallbackPageProps) {
     ),
   )
 
-  const onSubmit = async (guildId: string) => {
-    "use server"
-
-    createCookie(cookies(), {
-      userId: user.id,
-      guildId,
-    })
-
-    try {
-      await discordAPI.oauth2.revokeToken(env.DISCORD_ID, env.DISCORD_SECRET, {
-        token: accessToken,
-        token_type_hint: "access_token",
-      })
-    } catch {
-      throw new Error("Failed to revoke access token")
-    }
-
-    redirect(absoluteURL("/dashboard/modules"))
-  }
-
   return (
     <>
       <div className="text-balance text-center">
@@ -166,8 +162,11 @@ async function LoginCallback(props: LoginCallbackPageProps) {
           enter the dashboard.
         </p>
       </div>
-      <ServerSelect guilds={guilds} onSubmit={onSubmit} />
-      <SetSearchParams accessToken={accessToken} />
+      <ServerSelect
+        guilds={guilds}
+        accessToken={accessToken}
+        onLoginCallbackSubmit={onLoginCallbackSubmit}
+      />
     </>
   )
 }
