@@ -41,7 +41,7 @@ export const TwitchNotifications = () => {
               const baseName =
                 `${ModuleId.TwitchNotifications}.streamers.${index}` as const
 
-              const streamerName = formFields.streamers[index]?.id.length
+              const streamerName = formFields.streamers[index]?.id?.length
                 ? formFields.streamers[index]?.id
                 : "Unknown Streamer"
 
