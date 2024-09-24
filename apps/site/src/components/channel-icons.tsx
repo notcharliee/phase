@@ -59,9 +59,13 @@ export function ChannelIcon({
   type,
   className,
 }: {
-  type: AllowedChannelType
+  type: ChannelType
   className?: string
 }) {
+  if (!allowedChannelTypes.includes(type as AllowedChannelType)) {
+    return null
+  }
+
   switch (type) {
     case ChannelType.GuildVoice:
       return <VoiceChannelIcon className={cn(className)} />
