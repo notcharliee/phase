@@ -20,63 +20,22 @@ import { db } from "~/lib/db"
 import { env } from "~/lib/env"
 import { absoluteURL } from "~/lib/utils"
 
-interface LoginPageProps {
-  searchParams: {
-    code: string | undefined
-    access_token: string | undefined
-  }
-}
+const onOTPSubmit = async (value: string) => {
+  "use server"
 
-export default async function LoginPage(props: LoginPageProps) {
-  const code = props.searchParams.code
+  await db.connect(env.MONGODB_URI)
 
-  const onSubmit = async (value: string) => {
-    "use server"
+  const signature = createHmac("sha256", env.AUTH_OTP_SECRET)
+    .update(value)
+    .digest("hex")
 
-    await db.connect(env.MONGODB_URI)
+  const optDoc = await db.otps.findOneAndDelete({ otp: signature })
+  if (!optDoc) throw new Error("Invalid OTP")
 
-    const signature = createHmac("sha256", env.AUTH_OTP_SECRET)
-      .update(value)
-      .digest("hex")
-
-    const optDoc = await db.otps.findOneAndDelete({ otp: signature })
-    if (!optDoc) throw new Error("Invalid OTP")
-
-    createCookie(cookies(), {
-      userId: optDoc.userId,
-      guildId: optDoc.guildId,
-    })
-  }
-
-  return (
-    <div className="flex h-screen flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
-      <OrbitingDots />
-      <div className="mx-auto flex w-full max-w-lg flex-col items-center justify-center space-y-6 md:max-w-xl md:space-y-8">
-        {code ? (
-          <Suspense fallback={<Loading />}>
-            <LoginCallback code={code} />
-          </Suspense>
-        ) : (
-          <>
-            <div className="text-balance text-center">
-              <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
-                Welcome back!
-              </h1>
-              <p className="text-muted-foreground mt-2 md:text-lg">
-                To access the dashboard, either run the{" "}
-                <Codeblock className="md:text-sm" inline>
-                  /bot login
-                </Codeblock>{" "}
-                command, or click the button below to login with your Discord
-                account.
-              </p>
-            </div>
-            <LoginMethods onSubmit={onSubmit} />
-          </>
-        )}
-      </div>
-    </div>
-  )
+  createCookie(cookies(), {
+    userId: optDoc.userId,
+    guildId: optDoc.guildId,
+  })
 }
 
 const onLoginCallbackSubmit = async (accessToken: string, guildId: string) => {
@@ -106,6 +65,47 @@ const onLoginCallbackSubmit = async (accessToken: string, guildId: string) => {
   })
 
   redirect(absoluteURL("/dashboard/modules"))
+}
+
+interface LoginPageProps {
+  searchParams: {
+    code: string | undefined
+    access_token: string | undefined
+  }
+}
+
+export default async function LoginPage(props: LoginPageProps) {
+  const code = props.searchParams.code
+
+  return (
+    <div className="flex h-screen flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+      <OrbitingDots />
+      <div className="mx-auto flex w-full max-w-lg flex-col items-center justify-center space-y-6 md:max-w-xl md:space-y-8">
+        {code ? (
+          <Suspense fallback={<Loading />}>
+            <LoginCallback code={code} />
+          </Suspense>
+        ) : (
+          <>
+            <div className="text-balance text-center">
+              <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+                Welcome back!
+              </h1>
+              <p className="text-muted-foreground mt-2 md:text-lg">
+                To access the dashboard, either run the{" "}
+                <Codeblock className="md:text-sm" inline>
+                  /bot login
+                </Codeblock>{" "}
+                command, or click the button below to login with your Discord
+                account.
+              </p>
+            </div>
+            <LoginMethods onSubmit={onOTPSubmit} />
+          </>
+        )}
+      </div>
+    </div>
+  )
 }
 
 async function LoginCallback({ code }: { code: string }) {

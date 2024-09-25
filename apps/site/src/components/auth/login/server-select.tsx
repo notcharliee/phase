@@ -12,6 +12,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from "~/components/ui/command"
 import {
   Popover,
@@ -27,84 +28,8 @@ interface Guild {
   icon_url: string | null
 }
 
-interface ServerComboboxProps {
-  onChange?: (value?: Guild) => void
-  disabled?: boolean
-  value?: Guild
+interface ServerSelectProps {
   guilds: Guild[]
-}
-
-function ServerCombobox(props: ServerComboboxProps) {
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState(props.value)
-
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger disabled={props.disabled} asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-full justify-between"
-        >
-          {value ? (
-            <div className="flex items-center">
-              <Avatar className="mr-2 h-5 w-5">
-                <AvatarImage src={value.icon_url ?? "/discord.png"} />
-                <AvatarFallback>{getInitials(value.name)}</AvatarFallback>
-              </Avatar>
-              {value.name}
-            </div>
-          ) : (
-            "Select a server..."
-          )}
-          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-72 p-0 md:w-[336px]">
-        <Command>
-          <CommandInput placeholder="Search servers..." />
-          <CommandEmpty>No server found.</CommandEmpty>
-          <CommandGroup>
-            {props.guilds.map((guild) => (
-              <CommandItem
-                key={guild.id}
-                value={guild.name}
-                disabled={props.disabled}
-                onSelect={(currentValue) => {
-                  const guild = props.guilds.find(
-                    (guild) => guild.name.toLowerCase() === currentValue,
-                  )
-
-                  const newValue = guild?.id === value?.id ? undefined : guild
-
-                  setValue(newValue)
-                  setOpen(false)
-
-                  if (props.onChange) props.onChange(newValue)
-                }}
-              >
-                <Avatar className="mr-2 h-5 w-5">
-                  <AvatarImage src={guild.icon_url ?? "/discord.png"} />
-                  <AvatarFallback>{getInitials(guild.name)}</AvatarFallback>
-                </Avatar>
-                {guild.name}
-                <CheckIcon
-                  className={cn(
-                    "ml-auto h-4 w-4",
-                    value?.id === guild.id ? "opacity-100" : "opacity-0",
-                  )}
-                />
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
-    </Popover>
-  )
-}
-
-interface ServerSelectProps extends Pick<ServerComboboxProps, "guilds"> {
   accessToken: string
   onLoginCallbackSubmit: (accessToken: string, guildId: string) => Promise<void>
 }
@@ -146,5 +71,84 @@ export function ServerSelect(props: ServerSelectProps) {
             : "Enter the dashboard"}
       </Button>
     </div>
+  )
+}
+
+interface ServerComboboxProps {
+  guilds: Guild[]
+  value?: Guild
+  disabled?: boolean
+  onChange?: (value?: Guild) => void
+}
+
+function ServerCombobox(props: ServerComboboxProps) {
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState(props.value)
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger disabled={props.disabled} asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-full justify-between"
+        >
+          {value ? (
+            <div className="flex items-center">
+              <Avatar className="mr-2 h-5 w-5">
+                <AvatarImage src={value.icon_url ?? "/discord.png"} />
+                <AvatarFallback>{getInitials(value.name)}</AvatarFallback>
+              </Avatar>
+              {value.name}
+            </div>
+          ) : (
+            "Select a server..."
+          )}
+          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-72 p-0 md:w-[336px]">
+        <Command>
+          <CommandInput placeholder="Search servers..." />
+          <CommandList>
+            <CommandEmpty>No server found.</CommandEmpty>
+            <CommandGroup>
+              {props.guilds.map((guild) => (
+                <CommandItem
+                  key={guild.id}
+                  value={guild.name}
+                  disabled={props.disabled}
+                  onSelect={(currentValue) => {
+                    const guild = props.guilds.find(
+                      (guild) => guild.name.toLowerCase() === currentValue,
+                    )
+
+                    const newValue = guild?.id === value?.id ? undefined : guild
+
+                    setValue(newValue)
+                    setOpen(false)
+
+                    if (props.onChange) props.onChange(newValue)
+                  }}
+                >
+                  <Avatar className="mr-2 h-5 w-5">
+                    <AvatarImage src={guild.icon_url ?? "/discord.png"} />
+                    <AvatarFallback>{getInitials(guild.name)}</AvatarFallback>
+                  </Avatar>
+                  {guild.name}
+                  <CheckIcon
+                    className={cn(
+                      "ml-auto h-4 w-4",
+                      value?.id === guild.id ? "opacity-100" : "opacity-0",
+                    )}
+                  />
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   )
 }
