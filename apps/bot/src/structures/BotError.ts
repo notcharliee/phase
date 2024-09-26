@@ -43,7 +43,7 @@ export class BotErrorMessage extends CustomMessageBuilder {
       title: "Missing permissions",
       description: `You do not have the ${
         permission
-          ? `permission **\`"${constantCase(permission)}"\`** permission, which is required`
+          ? `**\`"${constantCase(permission)}"\`** permission, which is required`
           : `required permissions`
       } to do this.`,
     })
