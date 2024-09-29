@@ -9,6 +9,7 @@ export const db = new Database({
 
 export async function connectDB() {
   await db.connect(env.MONGODB_URI)
+  return db
 }
 
 export { mongoose } from "@repo/database"
