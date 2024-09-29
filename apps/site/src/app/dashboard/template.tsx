@@ -1,36 +1,24 @@
-import { headers as getHeaders } from "next/headers"
-
 import { ClientOnly } from "~/components/client-only"
 import { DashboardProvider } from "~/components/dashboard/context"
 
-import { getGuildData } from "~/app/dashboard/_cache/guild"
+import { getGuildData } from "~/app/dashboard/cache"
+import { auth } from "~/auth"
 
-import type { DashboardData } from "~/types/dashboard"
+import type { LayoutProps } from "~/types/props"
 
-export default async function Template({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
-  const headers = getHeaders()
+export default async function Template({ children }: LayoutProps) {
+  const session = (await auth())!
 
-  const guildId = headers.get("x-guild-id")
-  const userId = headers.get("x-user-id")
+  const userId = session.user.id
+  const guildId = session.guild.id
 
-  if (!guildId || !userId) throw new Error("Invalid credentials")
-
-  const guildData = await getGuildData({
-    guildId,
-    userId,
-  })
-
-  const dashboardData: DashboardData = {
-    guild: guildData,
-  }
+  const guildData = (await getGuildData({ guildId, userId }))!
 
   return (
     <ClientOnly>
-      <DashboardProvider value={dashboardData}>{children}</DashboardProvider>
+      <DashboardProvider value={{ guild: guildData }}>
+        {children}
+      </DashboardProvider>
     </ClientOnly>
   )
 }

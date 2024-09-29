@@ -13,7 +13,7 @@ import {
   handleTicketsModule,
   parseModuleData,
 } from "~/app/dashboard/modules/_utils/server"
-import { getDashboardHeaders } from "~/app/dashboard/utils"
+import { auth } from "~/auth"
 import { moduleIdSchema, modulesSchema } from "~/validators/modules"
 
 import type {
@@ -27,7 +27,10 @@ export async function updateModules(
   unsafeFormValues: ModulesFormValues,
   unsafeDirtyFields: ModuleId[],
 ) {
-  const { guildId, userId } = getDashboardHeaders()
+  const session = (await auth())!
+
+  const userId = session.user.id
+  const guildId = session.guild.id
 
   await db.connect(env.MONGODB_URI)
 

@@ -4,17 +4,18 @@ import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { db } from "~/lib/db"
+import { connectDB } from "~/lib/db"
 import { env } from "~/lib/env"
 import { twitchClient } from "~/lib/twitch"
 import { deleteKeyRecursively } from "~/lib/utils"
 
-import type { APIGuildChannelResolvable } from "@discordjs/core/http-only"
+import type { RESTAPIGuildChannelResolvable } from "@discordjs/core/http-only"
 import type {
   DashboardData,
   GuildModulesWithData,
   ModulesDataFields,
 } from "~/types/dashboard"
+import { signOut } from "~/auth"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
@@ -27,7 +28,7 @@ interface GuildDataParams {
 export const getGuildData = cache(async (params: GuildDataParams) => {
   const { guildId, userId } = params
 
-  await db.connect(env.MONGODB_URI)
+  const db = await connectDB()
 
   const dbGuild = await db.guilds.findOne({
     id: guildId,
@@ -35,18 +36,22 @@ export const getGuildData = cache(async (params: GuildDataParams) => {
   })
 
   if (!dbGuild) {
-    throw new Error("Guild not found in the database")
+    await signOut()
+    return null
   }
 
   const apiGuild = await discordAPI.guilds
     .get(guildId, { with_counts: false })
     .catch(() => null)
 
-  if (!apiGuild) throw new Error("Guild not found")
+  if (!apiGuild) {
+    await signOut()
+    return null
+  }
 
   const apiChannels = (await discordAPI.guilds.getChannels(
     guildId,
-  )) as APIGuildChannelResolvable[]
+  )) as RESTAPIGuildChannelResolvable[]
 
   // add required `_data` values to modules
 
