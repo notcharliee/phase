@@ -28,7 +28,7 @@ import {
 import { cn } from "~/lib/utils"
 
 interface BaseProps {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 interface RootCredenzaProps extends BaseProps {
