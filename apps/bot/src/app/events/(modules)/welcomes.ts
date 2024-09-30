@@ -10,7 +10,7 @@ import { db } from "~/lib/db"
 import { generateWelcomeCard } from "~/images/welcome"
 
 import type { Variable } from "@repo/config/phase/variables.ts"
-import type { GuildMember, GuildTextBasedChannel } from "discord.js"
+import type { GuildMember } from "discord.js"
 
 export default new BotEventBuilder()
   .setName("guildMemberAdd")
@@ -20,18 +20,21 @@ export default new BotEventBuilder()
 
     if (!guildDoc || !moduleConfig?.enabled) return
 
-    const channel = client.channels.cache.get(moduleConfig.channel) as
-      | GuildTextBasedChannel
-      | undefined
+    const channel = member.guild.channels.cache.get(moduleConfig.channel)
 
-    if (!channel) {
+    if (
+      !channel?.isSendable() ||
+      !channel
+        .permissionsFor(client.user!)
+        ?.has(["ViewChannel", "SendMessages"])
+    ) {
       return void db.guilds.updateOne(
         { id: guildDoc.id },
         { [`modules.${ModuleId.WelcomeMessages}.enabled`]: false },
       )
     }
 
-    await channel.sendTyping()
+    await channel.sendTyping().catch(() => null)
 
     let description = moduleConfig.message
 
