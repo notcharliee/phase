@@ -30,6 +30,16 @@ export const getOrdinal = (number: number): string => {
   )
 }
 
+/** `Object.keys` but with better typing. */
+export function keys<T extends object>(obj: T): (keyof T)[] {
+  return Object.keys(obj) as (keyof T)[]
+}
+
+/** `Object.entries` but with better typing. */
+export function entries<T extends object>(obj: T): [keyof T, T[keyof T]][] {
+  return Object.entries(obj) as [keyof T, T[keyof T]][]
+}
+
 export function deleteKeyRecursively<TObj, TKey extends string>(
   obj: TObj,
   keyToDelete: TKey,
