@@ -23,16 +23,11 @@ export const useMDXComponents = (components: MDXComponents) => ({
   AccordionItem,
   AccordionTrigger,
   Codeblock,
+  Link,
   Heading,
   HeadingTitle,
   HeadingDescription,
   UserHoverCard,
-  Link: ({ className, ...props }: React.ComponentProps<typeof Link>) => (
-    <Link
-      className={cn("font-medium underline underline-offset-2", className)}
-      {...props}
-    />
-  ),
   h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h1
       className={cn(
