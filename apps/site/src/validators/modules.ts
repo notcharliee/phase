@@ -183,7 +183,8 @@ export const levelsSchema = z.object({
     .refine((value) => /\.(jpeg|jpg|png)$/.exec(value), {
       message: "Background must be a valid PNG or JPEG image URL",
     })
-    .optional(),
+    .optional()
+    .transform((str) => (str?.length ? str : undefined)),
   mention: z.boolean(),
   roles: z
     .array(
@@ -334,7 +335,11 @@ export const ticketsSchema = z.object({
   message: z.string().min(1, {
     message: "Message is required",
   }),
-  max_open: z.number().int().optional(),
+  max_open: z
+    .number()
+    .int()
+    .optional()
+    .transform((num) => (num === Infinity ? undefined : num)),
   tickets: z
     .array(
       z.object({
@@ -367,7 +372,10 @@ export const twitchNotificationsSchema = z.object({
         channel: z.string().min(1, {
           message: "You must select a channel",
         }),
-        mention: z.string().optional(),
+        mention: z
+          .string()
+          .optional()
+          .transform((str) => (str?.length ? str : undefined)),
       }),
     )
     .max(5),
@@ -395,21 +403,12 @@ export const welcomeMessagesSchema = z.object({
   mention: z.boolean(),
   card: z.object({
     enabled: z.boolean(),
-    background: z.string().url().optional(),
+    background: z
+      .string()
+      .url()
+      .optional()
+      .transform((str) => (str?.length ? str : undefined)),
   }),
-  // .refine(
-  //   (card) =>
-  //     card.enabled &&
-  //     card.background &&
-  //     (card.background.endsWith(".png") ||
-  //       card.background.endsWith(".jpg") ||
-  //       card.background.endsWith(".jpeg") ||
-  //       card.background.endsWith(".webp")),
-  //   {
-  //     message: "Background image must be either png, jpg, or webp",
-  //     path: ["background"]
-  //   },
-  // ),
 })
 
 export const modulesSchema = z.object({
