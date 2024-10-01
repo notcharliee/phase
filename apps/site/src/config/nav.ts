@@ -1,14 +1,23 @@
-import { DiscordLogoIcon, GitHubLogoIcon } from "@radix-ui/react-icons"
+import {
+  DashboardIcon,
+  DiscordLogoIcon,
+  GitHubLogoIcon,
+  MixerHorizontalIcon,
+} from "@radix-ui/react-icons"
 
-interface Page {
+import { CommandIcon } from "~/components/icons/command-icon"
+
+import type { IconProps } from "@radix-ui/react-icons/dist/types"
+
+export interface NavItem {
   label: string
   href: string
-  icon?: typeof GitHubLogoIcon
+  icon?: React.FC<IconProps>
   category?: string
   external?: boolean
 }
 
-export const mainPages: Page[] = [
+export const mainPages: NavItem[] = [
   {
     label: "Home",
     href: "/",
@@ -41,7 +50,56 @@ export const mainPages: Page[] = [
   },
 ]
 
-export const docsPages: Page[] = [
+export const dashboardPages: NavItem[] = [
+  // pages
+  {
+    label: "Modules",
+    href: "/dashboard/modules",
+    icon: DashboardIcon,
+  },
+  {
+    label: "Commands",
+    href: "/dashboard/commands",
+    icon: CommandIcon,
+  },
+  {
+    label: "Settings",
+    href: "/dashboard/settings",
+    icon: MixerHorizontalIcon,
+  },
+  // resources
+  {
+    label: "Documentation",
+    href: "/docs",
+    category: "Resources",
+  },
+  {
+    label: "Support",
+    href: "/redirect/discord",
+    category: "Resources",
+    external: true,
+  },
+  // other links
+  {
+    label: "Report a Bug",
+    href: "/contact/bug-report",
+    category: "Other Links",
+  },
+  {
+    label: "Make a Suggestion",
+    href: "/redirect/discord",
+    category: "Other Links",
+    external: true,
+  },
+  {
+    label: "Give me money :3",
+    href: "/redirect/donate",
+    category: "Other Links",
+    external: true,
+  },
+]
+
+export const docsPages: NavItem[] = [
   {
     label: "Introduction",
     href: "/docs",
@@ -75,7 +133,9 @@ export const docsPages: Page[] = [
   },
 ]
 
-export const splitPagesByCategory = (pages: Page[]): Record<string, Page[]> => {
+export const splitPagesByCategory = (
+  pages: NavItem[],
+): Record<string, NavItem[]> => {
   return pages.reduce(
     (acc, page) => {
       const category = page.category ?? "Misc"
@@ -85,6 +145,6 @@ export const splitPagesByCategory = (pages: Page[]): Record<string, Page[]> => {
       acc[category].push(page)
       return acc
     },
-    {} as Record<string, Page[]>,
+    {} as Record<string, NavItem[]>,
   )
 }
