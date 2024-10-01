@@ -41,6 +41,10 @@ interface CredenzaProps extends BaseProps {
   asChild?: true
 }
 
+interface CredenzaContentProps extends CredenzaProps {
+  onOpenAutoFocus?: (event: Event) => void
+}
+
 const desktop = "(min-width: 768px)"
 
 const Credenza = ({ children, ...props }: RootCredenzaProps) => {
@@ -72,7 +76,11 @@ const CredenzaClose = ({ className, children, ...props }: CredenzaProps) => {
   )
 }
 
-const CredenzaContent = ({ className, children, ...props }: CredenzaProps) => {
+const CredenzaContent = ({
+  className,
+  children,
+  ...props
+}: CredenzaContentProps) => {
   const isDesktop = useMediaQuery(desktop)
   const CredenzaContent = isDesktop ? DialogContent : DrawerContent
 
