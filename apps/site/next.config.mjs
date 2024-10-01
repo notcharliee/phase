@@ -10,32 +10,7 @@ import { env } from "./src/lib/env.js"
 /** @type {import('next').NextConfig} */
 const config = {
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
-  experimental: {
-    mdxRs: true,
-    turbo: {
-      resolveAlias: {
-        "next-mdx-import-source-file": [
-          "private-next-root-dir/src/mdx-components",
-          "private-next-root-dir/mdx-components",
-          "@mdx-js/react",
-        ],
-      },
-      rules: {
-        // @ts-expect-error type error for some reason idk
-        test: /\.mdx$/,
-        use: [
-          {
-            loader: import.meta.resolve(
-              "./node_modules/@next/mdx/mdx-rs-loader.js",
-            ),
-            options: {
-              providerImportSource: "next-mdx-import-source-file",
-            },
-          },
-        ],
-      },
-    },
-  },
+  experimental: { mdxRs: true },
   async redirects() {
     return [
       {
@@ -57,9 +32,21 @@ const config = {
         permanent: false,
       },
       {
-        // donation page
+        // old donation redirect
         source: "/redirect/donate",
+        destination: `${env.NEXT_PUBLIC_BASE_URL}/redirect/buymeacoffee`,
+        permanent: false,
+      },
+      {
+        // donation page 1
+        source: "/redirect/buymeacoffee",
         destination: "https://www.buymeacoffee.com/notcharliee",
+        permanent: false,
+      },
+      {
+        // donation page 2
+        source: "/redirect/ko-fi",
+        destination: "https://ko-fi.com/mikaelareid",
         permanent: false,
       },
       {
@@ -98,20 +85,11 @@ const config = {
 
 const withMDX = createMDX({
   options: {
-    // @ts-expect-error type error for some reason idk
-    remarkPlugins: [remarkGfm],
-    rehypePlugins: [
-      rehypeSlug,
-      [
-        rehypeAutolinkHeadings,
-        {
-          properties: {
-            className: ["subheading-anchor"],
-            ariaLabel: "Link to section",
-          },
-        },
-      ],
+    remarkPlugins: [
+      // @ts-expect-error type error for some reason idk
+      remarkGfm,
     ],
+    rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
   },
 })
 
