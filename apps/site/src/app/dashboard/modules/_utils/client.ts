@@ -1,17 +1,12 @@
 import { ModuleId } from "@repo/config/phase/modules.ts"
-import { v4 as randomUUID } from "uuid"
 
 import { safeMs } from "~/lib/utils"
 
-import type { GuildModulesWithData } from "~/types/dashboard"
+import type { GuildModulesWithData, ModulesFormValues } from "~/types/dashboard"
 import type { GuildModules } from "~/types/db"
-import type { modulesSchema } from "~/validators/modules"
 import type { APIMessage } from "discord-api-types/v10"
-import type { z } from "zod"
 
-type FormValues = z.infer<typeof modulesSchema>
-
-export const defaultValues: Required<FormValues> = {
+export const defaultEmptyFormValues: Required<ModulesFormValues> = {
   [ModuleId.AuditLogs]: {
     enabled: false,
     channels: {
@@ -25,14 +20,7 @@ export const defaultValues: Required<FormValues> = {
   },
   [ModuleId.AutoMessages]: {
     enabled: false,
-    messages: [
-      {
-        name: "",
-        channel: "",
-        content: "",
-        interval: "",
-      },
-    ],
+    messages: [],
   },
   [ModuleId.AutoRoles]: {
     enabled: false,
@@ -46,13 +34,7 @@ export const defaultValues: Required<FormValues> = {
   },
   [ModuleId.Counters]: {
     enabled: false,
-    counters: [
-      {
-        name: "",
-        channel: "",
-        content: "",
-      },
-    ],
+    counters: [],
   },
   [ModuleId.Forms]: {
     enabled: false,
@@ -69,19 +51,14 @@ export const defaultValues: Required<FormValues> = {
     enabled: false,
     channel: "",
     message: "",
-    background: undefined,
+    background: "",
     mention: false,
     roles: [],
   },
   [ModuleId.ReactionRoles]: {
     enabled: false,
     messageUrl: "",
-    reactions: [
-      {
-        emoji: "",
-        role: "",
-      },
-    ],
+    reactions: [],
   },
   [ModuleId.SelfRoles]: {
     enabled: false,
@@ -91,25 +68,12 @@ export const defaultValues: Required<FormValues> = {
     enabled: false,
     channel: "",
     message: "",
-    max_open: undefined,
-    tickets: [
-      {
-        id: randomUUID(),
-        name: "Ticket 1",
-        message: "",
-        mention: undefined,
-      },
-    ],
+    max_open: Infinity,
+    tickets: [],
   },
   [ModuleId.TwitchNotifications]: {
     enabled: false,
-    streamers: [
-      {
-        id: "",
-        channel: "",
-        mention: undefined,
-      },
-    ],
+    streamers: [],
   },
   [ModuleId.Warnings]: {
     enabled: false,
@@ -122,7 +86,7 @@ export const defaultValues: Required<FormValues> = {
     mention: false,
     card: {
       enabled: false,
-      background: undefined,
+      background: "",
     },
   },
 }
@@ -161,11 +125,13 @@ export const getDirtyFields = <
 export function getDefaultValues(
   guildId: string,
   modules: Partial<GuildModules>,
-): FormValues {
-  const parsedValues: FormValues = {}
+): ModulesFormValues {
+  const parsedValues: ModulesFormValues = {}
 
   const moduleParsers: {
-    [K in ModuleId]?: (data: Required<GuildModulesWithData>[K]) => FormValues[K]
+    [K in ModuleId]?: (
+      data: Required<GuildModulesWithData>[K],
+    ) => ModulesFormValues[K]
   } = {
     [ModuleId.AutoMessages]: (data) => ({
       ...data,
@@ -196,7 +162,7 @@ export function getDefaultValues(
             .filter((role) => role.action === "remove")
             .map(({ id }) => id),
         })),
-      })) as Required<FormValues>[ModuleId.SelfRoles]["messages"],
+      })) as Required<ModulesFormValues>[ModuleId.SelfRoles]["messages"],
     }),
     [ModuleId.Tickets]: (data) => {
       const message = data._data?.message as APIMessage | undefined
@@ -226,8 +192,6 @@ export function getDefaultValues(
       })),
     }),
   }
-
-  if (!modules) return parsedValues
 
   for (const [moduleId, moduleData] of Object.entries(modules) as [
     ModuleId,

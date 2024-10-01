@@ -15,7 +15,7 @@ import { TwitchNotifications } from "~/app/dashboard/modules/_forms/twitch-notif
 import { Warnings } from "~/app/dashboard/modules/_forms/warnings"
 import { WelcomeMessages } from "~/app/dashboard/modules/_forms/welcome-messages"
 
-export const moduleFormItems = {
+export const moduleFormFields = {
   [ModuleId.AuditLogs]: AuditLogs,
   [ModuleId.AutoMessages]: AutoMessages,
   [ModuleId.AutoRoles]: AutoRoles,

@@ -26,14 +26,15 @@ export const filterOptions: FilterOption[] = [
 
 interface FilterSelectProps<T extends FilterOption> {
   value: T["value"]
-  onChange: (value: T["value"]) => void
+  onValueChange: (value: T["value"]) => void
 }
 
-export function FilterSelect<T extends FilterOption>(
-  props: FilterSelectProps<T>,
-) {
+export function SelectFilter<T extends FilterOption>({
+  value,
+  onValueChange,
+}: FilterSelectProps<T>) {
   return (
-    <Select defaultValue={props.value} onValueChange={props.onChange}>
+    <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger>
         <div className="inline-flex space-x-2 font-medium">
           <span className="text-muted-foreground">Filters:</span>

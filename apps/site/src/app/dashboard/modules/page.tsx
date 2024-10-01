@@ -7,130 +7,94 @@ import { modules } from "@repo/config/phase/modules.ts"
 import { useForm } from "react-hook-form"
 
 import { ActionBar } from "~/components/dashboard/modules/action-bar"
+import { AddModule } from "~/components/dashboard/modules/add-module"
 import {
-  ModuleCard,
-  ModuleCardState,
-} from "~/components/dashboard/modules/card"
-import { FilterSelect } from "~/components/dashboard/modules/filter"
-import { Mode, ModeToggle } from "~/components/dashboard/modules/mode-toggle"
+  ConfigCard,
+  ConfigCardStatus,
+} from "~/components/dashboard/modules/config-card"
+import { ModuleTag } from "~/components/dashboard/modules/module-tags"
+import { SelectFilter } from "~/components/dashboard/modules/select-filter"
 import { Form } from "~/components/ui/form"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
+import { entries, keys } from "~/lib/utils"
+
+import {
+  defaultEmptyFormValues,
+  getDefaultValues,
+  getDirtyFields,
+} from "~/app/dashboard/modules/_utils/client"
 import { updateModules } from "~/app/dashboard/modules/actions"
-import { moduleFormItems } from "~/app/dashboard/modules/forms"
+import { moduleFormFields } from "~/app/dashboard/modules/forms"
 import { modulesSchema } from "~/validators/modules"
-import { getDefaultValues, getDirtyFields } from "./_utils/client"
 
 import type { ModuleId } from "@repo/config/phase/modules.ts"
-import type { FilterOption } from "~/components/dashboard/modules/filter"
-import type { DashboardData, ModulesFormValues } from "~/types/dashboard"
-import type { z } from "zod"
+import type { ConfigCardOption } from "~/components/dashboard/modules/config-card"
+import type { FilterOption } from "~/components/dashboard/modules/select-filter"
+import type { ModulesFormValues } from "~/types/dashboard"
 
-function useGuildModules(
-  dashboardData: DashboardData,
-  filter: FilterOption["value"],
-) {
-  return useMemo(() => {
-    return Object.entries(modules)
-      .map(([moduleId, moduleInfo]) => ({
-        ...moduleInfo,
-        id: moduleId as ModuleId,
-        enabled:
-          dashboardData.guild.modules?.[moduleId as ModuleId]?.enabled ?? false,
-      }))
-      .filter((moduleInfo) => {
-        if (filter === "none") return true
-        return moduleInfo.tags.some((tag) => tag.toLowerCase() === filter)
-      })
-  }, [dashboardData, filter])
-}
+export type ModuleData = {
+  -readonly [K in keyof (typeof modules)[ModuleId]]: (typeof modules)[ModuleId][K]
+} & { id: ModuleId; config: ModulesFormValues[ModuleId] }
 
-export default function Page() {
-  const [mode, setMode] = useState<Mode>(Mode.Edit)
+export default function ModulesPage() {
   const [filter, setFilter] = useState<FilterOption["value"]>("none")
 
   const dashboardData = useDashboardContext()
-  const guildModulesData = useGuildModules(dashboardData, filter)
 
-  const defaultValues = getDefaultValues(
+  const defaultFormValues = getDefaultValues(
     dashboardData.guild.id,
     dashboardData.guild.modules ?? {},
   )
 
-  const form = useForm<z.infer<typeof modulesSchema>>({
+  const form = useForm<ModulesFormValues>({
     resolver: zodResolver(modulesSchema),
-    defaultValues,
+    defaultValues: defaultFormValues,
   })
 
-  const { dirtyFields: boolDirtyFields, errors, isSubmitting } = form.formState
-
   const formFields = form.watch()
-  const dirtyFields = getDirtyFields(formFields, boolDirtyFields)
-  const dirtyKeys = Object.keys(dirtyFields) as ModuleId[]
-  const invalidKeys = Object.keys(errors) as ModuleId[]
+  const formState = form.formState
 
-  const cards = useMemo(() => {
-    const isAllKeysUndefined = (obj: object | undefined | null) => {
-      if (obj === undefined || obj === null) return true
-      return Object.values(obj).every(
-        (value) => value === undefined || value === null,
-      )
-    }
+  const dirtyFields = getDirtyFields(formFields, formState.dirtyFields)
+  const dirtyFieldNames = keys(dirtyFields) as ModuleId[]
+  const invalidFieldNames = keys(formState.errors) as ModuleId[]
 
-    return guildModulesData
-      .sort((a, b) => {
-        if (formFields[a.id] === undefined && formFields[b.id] !== undefined)
-          return 1
-        if (formFields[a.id] !== undefined && formFields[b.id] === undefined)
-          return -1
-        return a.name.localeCompare(b.name)
+  const moduleDataArray: ModuleData[] = useMemo(() => {
+    const modulesArray = entries(modules).map(([key, value]) => ({
+      id: key,
+      config: formFields[key],
+      ...value,
+    }))
+
+    return modulesArray.filter((module) => {
+      if (filter === "none") return true
+      return module.tags.some((tag) => tag.toLowerCase() === filter)
+    })
+  }, [dashboardData, formFields, filter])
+
+  const onModuleAdd = useCallback(
+    (moduleId: ModuleId) => {
+      const moduleConfig = modules[moduleId]
+      if (!moduleConfig) return
+
+      form.setValue(moduleId, defaultEmptyFormValues[moduleId], {
+        shouldDirty: true,
       })
-      .map(({ id }) => {
-        const ModuleFormItem = moduleFormItems[id]
-        if (!ModuleFormItem) return null
-
-        const isUndefined = isAllKeysUndefined(formFields[id])
-
-        const isDirty = dirtyKeys.includes(id)
-        const isInvalid = invalidKeys.includes(id)
-
-        const state = isUndefined
-          ? ModuleCardState.Undefined
-          : isSubmitting
-            ? ModuleCardState.Submitting
-            : isInvalid
-              ? ModuleCardState.Invalid
-              : isDirty
-                ? ModuleCardState.Dirty
-                : ModuleCardState.Clean
-
-        return (
-          <ModuleCard key={id} id={id} mode={mode} state={state} form={form}>
-            <ModuleFormItem />
-          </ModuleCard>
-        )
-      })
-  }, [
-    guildModulesData,
-    formFields,
-    dirtyKeys,
-    invalidKeys,
-    isSubmitting,
-    mode,
-    form,
-  ])
+    },
+    [form],
+  )
 
   const onSubmit = useCallback(
     async (data: ModulesFormValues) => {
       const id = dashboardData.guild.id
 
-      const updatedModules = await updateModules(data, dirtyKeys)
+      const updatedModules = await updateModules(data, dirtyFieldNames)
       const updatedDefaultValues = getDefaultValues(id, updatedModules)
 
       form.reset(updatedDefaultValues)
     },
-    [form, dirtyKeys, dashboardData.guild.id],
+    [form, dirtyFieldNames, dashboardData.guild.id],
   )
 
   return (
@@ -144,13 +108,71 @@ export default function Page() {
             Modules
           </h1>
           <div className="flex space-x-2">
-            <FilterSelect value={filter} onChange={setFilter} />
-            <ModeToggle value={mode} onChange={setMode} />
+            <SelectFilter value={filter} onValueChange={setFilter} />
+            <AddModule
+              moduleDataArray={moduleDataArray}
+              onSelect={onModuleAdd}
+            />
           </div>
         </div>
-        <ActionBar dirtyKeys={dirtyKeys} invalidKeys={invalidKeys} />
+        <ActionBar
+          dirtyKeys={dirtyFieldNames}
+          invalidKeys={invalidFieldNames}
+        />
         <div className="grid grid-cols-[repeat(var(--column-count),minmax(0,1fr))] gap-4">
-          {cards}
+          {moduleDataArray.map((moduleData) => {
+            if (!moduleData.config) return null
+
+            const ModuleFormFields = moduleFormFields[moduleData.id]
+            if (!ModuleFormFields) return null
+
+            const moduleStatus = formState.isSubmitting
+              ? ConfigCardStatus.Disabled
+              : invalidFieldNames.includes(moduleData.id)
+                ? ConfigCardStatus.Invalid
+                : dirtyFieldNames.includes(moduleData.id)
+                  ? ConfigCardStatus.Dirty
+                  : ConfigCardStatus.Clean
+
+            const onTagSelect = (tag: ModuleTag) => {
+              const value = tag.toLowerCase() as FilterOption["value"]
+              if (value === filter) setFilter("none")
+              else setFilter(value)
+            }
+
+            const onDropdownSelect = (option: ConfigCardOption) => {
+              switch (option) {
+                case "undo": {
+                  return form.resetField(moduleData.id, {
+                    defaultValue: defaultFormValues[moduleData.id],
+                  })
+                }
+                case "reset": {
+                  return form.setValue(
+                    moduleData.id,
+                    defaultEmptyFormValues[moduleData.id],
+                    { shouldDirty: true },
+                  )
+                }
+                case "remove": {
+                  return form.setValue(moduleData.id, undefined, {
+                    shouldDirty: true,
+                  })
+                }
+              }
+            }
+
+            return (
+              <ConfigCard
+                moduleData={moduleData}
+                moduleStatus={moduleStatus}
+                onTagSelect={onTagSelect}
+                onDropdownSelect={onDropdownSelect}
+              >
+                <ModuleFormFields />
+              </ConfigCard>
+            )
+          })}
         </div>
       </form>
     </Form>
