@@ -3,14 +3,26 @@
 import * as React from "react"
 
 import { Slot } from "@radix-ui/react-slot"
-import { Controller, FormProvider, useFormContext } from "react-hook-form"
+import {
+  Controller,
+  FormProvider,
+  useFieldArray,
+  useFormContext,
+} from "react-hook-form"
 
-import { Label } from "@/components/ui/label"
+import { Label } from "~/components/ui/label"
 
-import { cn } from "@/lib/utils"
+import { cn } from "~/lib/utils"
 
 import type * as LabelPrimitive from "@radix-ui/react-label"
-import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form"
+import type {
+  ControllerProps,
+  FieldArrayPath,
+  FieldPath,
+  FieldValues,
+  UseFieldArrayProps,
+  UseFieldArrayReturn,
+} from "react-hook-form"
 
 const Form = FormProvider
 
@@ -25,17 +37,32 @@ const FormFieldContext = React.createContext<FormFieldContextValue>(
   {} as FormFieldContextValue,
 )
 
-const FormField = <
+function FormField<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->({
-  ...props
-}: ControllerProps<TFieldValues, TName>) => {
+>({ ...props }: ControllerProps<TFieldValues, TName>) {
   return (
     <FormFieldContext.Provider value={{ name: props.name }}>
       <Controller {...props} />
     </FormFieldContext.Provider>
   )
+}
+
+function FormFieldArray<
+  TFieldValues extends FieldValues = FieldValues,
+  TFieldArrayName extends
+    FieldArrayPath<TFieldValues> = FieldArrayPath<TFieldValues>,
+  TKeyName extends string = "id",
+>(
+  props: UseFieldArrayProps<TFieldValues, TFieldArrayName, TKeyName> & {
+    render: (
+      props: UseFieldArrayReturn<TFieldValues, TFieldArrayName, TKeyName>,
+    ) => React.ReactElement
+  },
+) {
+  const { render, ...rest } = props
+  const fieldArray = useFieldArray(rest)
+  return render(fieldArray)
 }
 
 const useFormField = () => {
@@ -187,4 +214,5 @@ export {
   FormDescription,
   FormMessage,
   FormField,
+  FormFieldArray,
 }
