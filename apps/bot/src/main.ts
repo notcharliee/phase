@@ -10,14 +10,12 @@ const isDev = process.env.NODE_ENV === "development"
 const phaseClient = new PhaseClient({
   config: {
     intents: [
-      "DirectMessages",
       "Guilds",
       "GuildMembers",
-      "GuildModeration",
-      "GuildEmojisAndStickers",
-      "GuildInvites",
       "GuildMessages",
       "GuildMessageReactions",
+      "GuildModeration",
+      "GuildInvites",
       "GuildVoiceStates",
     ],
     partials: [
