@@ -1,14 +1,19 @@
 import { Schema } from "mongoose"
 
+import type { UUID } from "~/types"
+
 export interface Tickets {
   enabled: boolean
   channel: string
+  category?: string
+  message?: string
   max_open?: number
   tickets: {
-    id: string
+    id: UUID
     name: string
     message: string
     mention?: string
+    reason?: "required" | "optional" | "disabled"
   }[]
 }
 
@@ -16,15 +21,21 @@ export const ticketsSchema = new Schema<Tickets>(
   {
     enabled: { type: Schema.Types.Boolean, required: true },
     channel: { type: Schema.Types.String, required: true },
-    max_open: { type: Schema.Types.Number, required: true },
+    category: { type: Schema.Types.String },
+    message: { type: Schema.Types.String },
+    max_open: { type: Schema.Types.Number },
     tickets: {
       type: [
         new Schema(
           {
-            id: { type: Schema.Types.String, required: true },
+            id: { type: Schema.Types.UUID, required: true },
             name: { type: Schema.Types.String, required: true },
             message: { type: Schema.Types.String, required: true },
-            mention: Schema.Types.String,
+            mention: { type: Schema.Types.String },
+            reason: {
+              type: Schema.Types.String,
+              enum: ["required", "optional", "disabled"],
+            },
           },
           { _id: false },
         ),
