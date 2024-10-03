@@ -329,30 +329,43 @@ export const selfRolesSchema = z.object({
 
 export const ticketsSchema = z.object({
   enabled: z.boolean(),
-  channel: z.string().min(1, {
-    message: "Channel is required",
-  }),
-  message: z.string().min(1, {
-    message: "Message is required",
-  }),
+  channel: z.string().min(1, "Channel is required"),
+  category: z
+    .string()
+    .optional()
+    .transform((str) => (str?.length ? str : undefined)),
+  message: z
+    .string()
+    .min(1, "Message must be at least 1 character")
+    .max(1000, "Message must be less than 1000 characters")
+    .optional()
+    .transform((str) => (str?.length ? str : undefined)),
   max_open: z
     .number()
     .int()
     .optional()
     .transform((num) => (num === Infinity ? undefined : num)),
   tickets: z
-    .array(
-      z.object({
-        id: z.string(),
-        name: z.string().min(1, {
-          message: "Name is required",
-        }),
-        message: z.string().min(1, {
-          message: "Message is required",
-        }),
-        mention: z.string().optional(),
-      }),
-    )
+    .object({
+      id: z.string().uuid(),
+      name: z
+        .string()
+        .min(1, "Name is required")
+        .max(32, "Name cannot be longer than 32 characters"),
+      message: z
+        .string()
+        .min(1, "Message is required")
+        .max(1000, "Message must be less than 1000 characters"),
+      mention: z
+        .string()
+        .optional()
+        .transform((str) => (str?.length ? str : undefined)),
+      reason: z
+        .enum(["required", "optional", "disabled"])
+        .default("disabled")
+        .optional(),
+    })
+    .array()
     .max(5),
 })
 
