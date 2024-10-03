@@ -1,5 +1,3 @@
-import "./index"
-
 import Prism from "prismjs"
 import { Text } from "slate"
 

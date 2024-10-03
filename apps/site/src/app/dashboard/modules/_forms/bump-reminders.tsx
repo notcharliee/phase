@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
-import { RichTextarea } from "~/components/ui/slate"
+import { RichTextarea } from "~/components/dashboard/richtext/textarea"
 
 import type { modulesSchema } from "~/validators/modules"
 import type { z } from "zod"

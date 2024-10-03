@@ -38,9 +38,8 @@ export const getCurrentWord = (
   currentWord?: string
   currentRange?: Range
 } => {
-  const { selection } = editor // selection is Range type
+  const { selection } = editor
 
-  // change this regexp if you want other characters to be considered a part of a word
   const wordRegexp = /[0-9a-zA-Z-_@#]/
 
   if (selection) {

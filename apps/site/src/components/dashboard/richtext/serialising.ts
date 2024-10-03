@@ -1,5 +1,9 @@
-import type { GuildData } from "."
-import type { ChannelElement, MentionElement, TextElement } from "./nodes"
+import type {
+  ChannelElement,
+  GuildElementData,
+  MentionElement,
+  TextElement,
+} from "~/types/slate"
 import type { Descendant } from "slate"
 
 /**
@@ -27,7 +31,10 @@ export function serialise(descendants: Descendant[]): string {
 /**
  * Deserialises a Discord message string into a Slate value.
  */
-export function deserialise(value: string, guildData: GuildData): Descendant[] {
+export function deserialise(
+  value: string,
+  guildData: GuildElementData,
+): Descendant[] {
   const children = []
   const textParts = value.split(/(<[@][!&]?\d+>|@everyone|@here|<#\d+>)/)
 
@@ -62,12 +69,12 @@ export function deserialise(value: string, guildData: GuildData): Descendant[] {
       textParts[i - 1] = "" // Clear the previous part to avoid duplication
     } else if (part.startsWith("<@&")) {
       const roleId = part.slice(3, -1)
-      const role = guildData.roles.find((role) => role.id === roleId)
+      const role = guildData.mentions.find((role) => role.id === roleId)
       children.push(
         createMentionElement({
           id: roleId,
           name: role?.name ?? "unknown",
-          colour: role?.color ? `#${role.color.toString(16)}` : "#f8f8f8",
+          colour: role?.colour ?? "#f8f8f8",
           type: "role",
         }),
       )

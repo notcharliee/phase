@@ -20,7 +20,7 @@ import {
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
-import { RichTextarea } from "~/components/ui/slate"
+import { RichTextarea } from "~/components/dashboard/richtext/textarea"
 import { Switch } from "~/components/ui/switch"
 
 import type { modulesSchema } from "~/validators/modules"

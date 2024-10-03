@@ -3,6 +3,7 @@
 import { ModuleId } from "@repo/config/phase/modules.ts"
 import { useFormContext } from "react-hook-form"
 
+import { RichTextarea } from "~/components/dashboard/richtext/textarea"
 import { SelectChannel } from "~/components/dashboard/select/channel"
 import {
   FormControl,
@@ -13,7 +14,6 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
-import { RichTextarea } from "~/components/ui/slate"
 import { Switch } from "~/components/ui/switch"
 
 import type { modulesSchema } from "~/validators/modules"

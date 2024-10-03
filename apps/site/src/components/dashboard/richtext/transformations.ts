@@ -1,10 +1,13 @@
 import { Editor, Node, Text, Transforms } from "slate"
 
-import type { GuildData } from "."
+import type { GuildElementData } from "~/types/slate"
 import type { Element, Path } from "slate"
 import type { ReactEditor } from "slate-react"
 
-export function applyTransformations(editor: ReactEditor, guildData: GuildData) {
+export function applyTransformations(
+  editor: ReactEditor,
+  guildData: GuildElementData,
+) {
   const applyTransformation = (path: Path) => {
     const node = Node.get(editor, path)
 
@@ -52,7 +55,7 @@ export function applyTransformations(editor: ReactEditor, guildData: GuildData) 
             },
           }
         } else if (matchedText.startsWith("<@&")) {
-          const role = guildData.roles.find((role) => role.id === id)
+          const role = guildData.mentions.find((role) => role.id === id)
 
           element = {
             type: "mention",
@@ -60,7 +63,7 @@ export function applyTransformations(editor: ReactEditor, guildData: GuildData) 
             data: {
               id,
               name: role?.name ?? "unknown",
-              colour: role?.color ? `#${role.color.toString(16)}` : "#f8f8f8",
+              colour: role?.colour ?? "#f8f8f8",
               type: "role",
             },
           }
