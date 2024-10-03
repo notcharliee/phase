@@ -1,7 +1,5 @@
 import { Schema } from "mongoose"
 
-import type { UUID } from "~/types"
-
 export interface Tickets {
   enabled: boolean
   channel: string
@@ -9,7 +7,7 @@ export interface Tickets {
   message?: string
   max_open?: number
   tickets: {
-    id: UUID
+    id: string
     name: string
     message: string
     mention?: string
