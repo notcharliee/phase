@@ -7,6 +7,7 @@ import type {
 import type { ModuleId } from "@repo/config/phase/modules.ts"
 import type { GuildCommand, GuildModules } from "~/types/db"
 import type { modulesSchema } from "~/validators/modules"
+import type { UseFormReturn } from "react-hook-form"
 import type { z } from "zod"
 
 export interface ModulesDataFields {
@@ -34,6 +35,7 @@ export interface ModulesDataFields {
 }
 
 export type ModulesFormValues = z.infer<typeof modulesSchema>
+export type ModulesFormReturn = UseFormReturn<ModulesFormValues>
 
 export type ModulesFormValuesWithData = Partial<{
   [K in keyof ModulesFormValues]: ModulesFormValues[K] & {
