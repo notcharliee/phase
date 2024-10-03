@@ -168,7 +168,7 @@ export async function handleFormsModule(
         return pins[0]
       }),
     )
-  ).filter(Boolean) as APIMessage[]
+  ).filter(Boolean)
 
   for (const form of forms) {
     const formId = form.id
