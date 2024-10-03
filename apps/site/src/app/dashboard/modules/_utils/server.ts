@@ -398,7 +398,7 @@ export async function handleSelfRolesModule(
 export async function handleTicketsModule(
   channelId: string,
   tickets: GuildModules[ModuleId.Tickets]["tickets"],
-  message: string,
+  message?: string,
 ): Promise<APIMessage> {
   const existingMessage = (
     await discordAPI.channels.getPins(channelId).catch(() => [])
