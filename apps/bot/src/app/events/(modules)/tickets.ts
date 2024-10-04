@@ -1,152 +1,196 @@
 import {
-  ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
   ChannelType,
-  EmbedBuilder,
-  PermissionFlagsBits,
+  ThreadAutoArchiveDuration,
 } from "discord.js"
 import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/config/phase/modules.ts"
 
-import { PhaseColour } from "~/lib/enums"
-import { BotErrorMessage } from "~/structures/BotError"
+import { CustomMessageBuilder } from "~/lib/builders/message"
+import { Emojis } from "~/lib/emojis"
 
-import type { UUID } from "crypto"
-import type { AnyThreadChannel, TextChannel } from "discord.js"
+import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotEventBuilder()
   .setName("interactionCreate")
-  .setExecute(async (client, interaction) => {
+  .setExecute(async (_, interaction) => {
+    const { client } = interaction
+
     if (
-      interaction.isButton() &&
-      /ticket.(open|lock).[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/.test(
-        interaction.customId,
-      ) &&
-      interaction.inGuild() &&
-      interaction.member &&
-      interaction.channel
+      !interaction.isButton() ||
+      !interaction.inGuild() ||
+      !interaction.customId.startsWith("ticket.")
     ) {
-      if (
-        !(
-          interaction.guild!.members.me ??
-          (await interaction.guild!.members.fetchMe())
-        ).permissions.has(PermissionFlagsBits.ManageThreads)
-      ) {
-        return interaction.reply(
-          BotErrorMessage.botMissingPermission("ManageThreads").toJSON(),
-        )
-      }
+      return
+    }
 
-      const customIdParts = interaction.customId.split(".")
+    const guildDoc = client.store.guilds.get(interaction.guildId)
+    const moduleConfig = guildDoc?.modules?.[ModuleId.Tickets]
 
-      const ticketAction = customIdParts[1] as "open" | "lock"
-      const ticketId = customIdParts[2] as UUID
-
-      const guildDoc = client.store.guilds.get(interaction.guildId)
-      const moduleConfig = guildDoc?.modules?.[ModuleId.Tickets]
-
-      if (!moduleConfig?.enabled) {
-        return interaction.reply(
-          BotErrorMessage.moduleNotEnabled(ModuleId.Tickets).toJSON(),
-        )
-      }
-
-      const ticketData = moduleConfig.tickets.find(
-        (ticket) => ticket.id == ticketId,
+    if (!moduleConfig?.enabled) {
+      return interaction.reply(
+        BotErrorMessage[
+          moduleConfig ? "moduleNotEnabled" : "moduleNotConfigured"
+        ](ModuleId.Tickets),
       )
+    }
 
-      const ticketChannel = client.channels.cache.get(moduleConfig.channel) as
-        | TextChannel
-        | undefined
+    const customIdParts = interaction.customId.split(".")
 
-      if (!ticketData || !ticketChannel) {
+    const ticketAction = customIdParts[1]!
+    const ticketId = customIdParts[2]!
+
+    const ticket = moduleConfig.tickets.find(({ id }) => ticketId === id)
+
+    if (!ticket) {
+      return interaction.reply(
+        new BotErrorMessage(
+          "The ticket you are trying to access no longer exists.",
+        ),
+      )
+    }
+
+    const isThreadBased = !moduleConfig.category
+    const isCategoryBased = moduleConfig.category
+
+    if (isThreadBased) {
+      const guildChannels = interaction.guild?.channels.cache
+      const panelChannel = guildChannels?.get(moduleConfig.channel)
+
+      if (panelChannel?.type !== ChannelType.GuildText) {
         return interaction.reply(
-          BotErrorMessage.moduleNotEnabled(ModuleId.Tickets).toJSON(),
+          new BotErrorMessage("The panel channel no longer exists."),
         )
       }
 
-      switch (ticketAction) {
-        case "open":
-          {
-            await interaction.deferReply({
-              ephemeral: true,
-            })
+      if (!panelChannel.permissionsFor(client.user)?.has("ManageThreads")) {
+        return interaction.reply(
+          BotErrorMessage.botMissingPermission("ManageThreads", true),
+        )
+      }
 
-            const ticketName = `🎫 ${interaction.member.user.username}`
+      if (ticketAction === "open") {
+        await interaction.deferReply({ ephemeral: true })
 
-            const ticketsOpen = ticketChannel.threads.cache.filter((thread) =>
-              thread.name.startsWith(ticketName),
-            ).size
+        let ticketName = `🎫 ${interaction.user.username}`
 
-            if (moduleConfig.max_open && ticketsOpen >= moduleConfig.max_open) {
-              return interaction.editReply(
-                new BotErrorMessage(
-                  `You are not allowed to open more than ${moduleConfig.max_open} ticket${moduleConfig.max_open > 1 ? "s" : ""} at a time.`,
-                ).toJSON(),
-              )
-            }
+        const threadsOpenedByUserCount = panelChannel.threads.cache.filter(
+          (thread) => thread.name.startsWith(ticketName),
+        ).size
 
-            const ticket = await ticketChannel.threads.create({
-              name: ticketName + (ticketsOpen ? ` (${ticketsOpen + 1})` : ""),
-              type: ChannelType.PrivateThread,
-              invitable: true,
-            })
-
-            await ticket.send(
-              `<@${interaction.user.id}>${ticketData.mention ? `<@&${ticketData.mention}>` : ""}`,
+        if (threadsOpenedByUserCount > 0) {
+          if (
+            moduleConfig.max_open &&
+            threadsOpenedByUserCount >= moduleConfig.max_open
+          ) {
+            return interaction.editReply(
+              new BotErrorMessage(
+                "You are not allowed to open more than " +
+                  `${moduleConfig.max_open} ticket` +
+                  `${moduleConfig.max_open !== 1 ? "s" : ""} at a time.`,
+              ),
             )
+          }
 
-            await ticket.send({
-              components: [
-                new ActionRowBuilder<ButtonBuilder>().setComponents(
+          ticketName = `${ticketName} (${threadsOpenedByUserCount + 1})`
+        }
+
+        try {
+          const ticketThread = await panelChannel.threads.create({
+            name: ticketName,
+            type: ChannelType.PrivateThread,
+            autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
+            invitable: false,
+          })
+
+          const ticketUserMention = `<@${interaction.user.id}>`
+          const ticketModMention = ticket.mention ? `<@&${ticket.mention}>` : ""
+
+          await ticketThread.send(
+            new CustomMessageBuilder()
+              .setContent(ticketUserMention + ticketModMention)
+              .setEmbeds((embed) => {
+                return embed
+                  .setColor("Primary")
+                  .setTitle(ticket.name)
+                  .setDescription(ticket.message)
+                  .setTimestamp()
+              })
+              .setComponents((actionrow) => {
+                return actionrow.addComponents(
                   new ButtonBuilder()
                     .setCustomId(`ticket.lock.${ticketId}`)
-                    .setEmoji("🔒")
+                    .setEmoji(Emojis.Ticket_Locked)
                     .setLabel("Lock Ticket")
                     .setStyle(ButtonStyle.Secondary),
-                ),
-              ],
-              embeds: [
-                new EmbedBuilder()
-                  .setColor(PhaseColour.Primary)
-                  .setDescription(ticketData.message)
-                  .setTitle(ticketName),
-              ],
-            })
+                )
+              }),
+          )
 
-            await interaction.editReply(
-              `Your ticket has been created! <#${ticket.id}>`,
-            )
-          }
-          break
-
-        case "lock":
-          {
-            const ticket = interaction.channel as AnyThreadChannel
-
-            if (ticket.locked) {
-              return interaction.reply(
-                new BotErrorMessage("The ticket is already locked.").toJSON(),
-              )
-            }
-
-            await ticket.setLocked(true)
-            await ticket.setName(ticket.name.replace("🎫", "🔒"))
-
-            await interaction.reply({
-              embeds: [
-                new EmbedBuilder()
-                  .setColor(PhaseColour.Primary)
-                  .setDescription(
-                    `Ticket locked by <@${interaction.user.id}>\n\nModerators can unlock this ticket using \`/ticket unlock\`.`,
-                  )
-                  .setTitle("Ticket Locked"),
-              ],
-            })
-          }
-          break
+          return interaction.editReply(`<#${ticket.id}>`)
+        } catch {
+          return interaction.editReply(
+            new BotErrorMessage("Failed to create the ticket thread."),
+          )
+        }
       }
+
+      if (ticketAction === "lock") {
+        await interaction.deferReply()
+
+        const ticketThread = interaction.channel
+
+        if (ticketThread?.type !== ChannelType.PrivateThread) {
+          return interaction.editReply(
+            new BotErrorMessage("This is not a ticket thread."),
+          )
+        }
+
+        if (ticketThread.locked) {
+          return interaction.editReply(
+            new BotErrorMessage("This ticket is already locked."),
+          )
+        }
+
+        try {
+          await ticketThread.setLocked(true)
+          await ticketThread.setName(ticketThread.name.replace("🎫", "🔒"))
+
+          const ticketCommandId = client.application?.commands.cache.find(
+            ({ name }) => name === "ticket",
+          )!.id
+
+          const ticketUserMention = `<@${interaction.user.id}>`
+          const ticketCommandMention = `</ticket unlock:${ticketCommandId}>`
+
+          return interaction.editReply(
+            new CustomMessageBuilder().setEmbeds((embed) => {
+              embed.setColor("Primary")
+              embed.setTitle("Ticket Locked")
+              embed.setDescription(`
+                Ticket has been locked by ${ticketUserMention}
+                
+                Moderators can unlock this ticket with ${ticketCommandMention}
+              `)
+
+              return embed
+            }),
+          )
+        } catch {
+          return interaction.editReply(
+            new BotErrorMessage("Failed to lock the ticket thread."),
+          )
+        }
+      }
+    }
+
+    if (isCategoryBased) {
+      // TODO: implement category-based tickets
+
+      return interaction.reply(
+        new BotErrorMessage("How did you even get here?"),
+      )
     }
   })
