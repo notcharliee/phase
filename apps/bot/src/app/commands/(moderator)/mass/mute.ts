@@ -95,7 +95,7 @@ export default new BotSubcommandBuilder()
 
     const [failedMutes] = await Promise.all(
       membersToMute.flatMap(async (member) => {
-        if (member.voice.mute) return []
+        if (member.voice.serverMute) return []
         try {
           await member.voice.setMute(true, reason ?? undefined)
           return []
