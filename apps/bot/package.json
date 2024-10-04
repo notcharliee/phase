@@ -7,7 +7,7 @@
     "docker:start": "docker run -it --rm bot-image",
     "build": "",
     "start": "NODE_ENV=production bun run src/main.ts",
-    "dev": "NODE_ENV=development bun run src/main.ts",
+    "dev": "NODE_ENV=development bun run --watch src/main.ts",
     "lint": "eslint ."
   },
   "dependencies": {
