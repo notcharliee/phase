@@ -26,7 +26,7 @@ export const ticketsSchema = new Schema<Tickets>(
       type: [
         new Schema(
           {
-            id: { type: Schema.Types.UUID, required: true },
+            id: { type: Schema.Types.String, required: true },
             name: { type: Schema.Types.String, required: true },
             message: { type: Schema.Types.String, required: true },
             mention: { type: Schema.Types.String },
