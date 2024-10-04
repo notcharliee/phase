@@ -129,8 +129,11 @@ export default new BotEventBuilder()
               }),
           )
 
-          return interaction.editReply(`<#${ticket.id}>`)
-        } catch {
+          return interaction.editReply(`<#${ticketThread.id}>`)
+        } catch (error) {
+          console.error(`[Tickets] Failed to create ticket thread:`)
+          console.error(error)
+
           return interaction.editReply(
             new BotErrorMessage("Failed to create the ticket thread."),
           )
