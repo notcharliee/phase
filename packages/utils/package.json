@@ -1,0 +1,23 @@
+{
+  "name": "@repo/utils",
+  "type": "module",
+  "module": "index.ts",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "exports": {
+    "./modules": "./dist/modules/index.js",
+    "./variables": "./dist/variables/index.js"
+  },
+  "dependencies": {
+    "tsup": "^8.3.0"
+  },
+  "devDependencies": {
+    "discord.js": "^14.16.3",
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
