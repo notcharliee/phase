@@ -1,9 +1,9 @@
-import { modules } from "@repo/config/phase/modules.ts"
+import { moduleDefinitions } from "@repo/utils/modules"
 import { constantCase } from "change-case"
 
 import { CustomMessageBuilder } from "~/lib/builders/message"
 
-import type { ModuleId } from "@repo/config/phase/modules.ts"
+import type { ModuleId } from "@repo/utils/modules"
 import type { ChannelTypeName } from "~/types/utils"
 import type { APIEmbed, ChannelType, PermissionFlagsBits } from "discord.js"
 
@@ -77,14 +77,14 @@ export class BotErrorMessage extends CustomMessageBuilder {
   static moduleNotEnabled(moduleId: ModuleId) {
     return new this({
       title: "Module not enabled",
-      description: `The \`${modules[moduleId].name.replace(/([A-Z])/g, " $1").trimStart()}\` module is not enabled, which is required to use this command.`,
+      description: `The \`${moduleDefinitions[moduleId].name.replace(/([A-Z])/g, " $1").trimStart()}\` module is not enabled, which is required to use this command.`,
     })
   }
 
   static moduleNotConfigured(moduleId: ModuleId) {
     return new this({
       title: "Module not configured",
-      description: `The \`${modules[moduleId].name.replace(/([A-Z])/g, " $1").trimStart()}\` module is not configured.`,
+      description: `The \`${moduleDefinitions[moduleId].name.replace(/([A-Z])/g, " $1").trimStart()}\` module is not configured.`,
     })
   }
 

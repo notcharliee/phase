@@ -34,11 +34,10 @@ import {
 } from "~/components/ui/dropdown-menu"
 
 import type { IconProps } from "@radix-ui/react-icons/dist/types"
-import type { ModuleId, modules } from "@repo/config/phase/modules.ts"
+import type { ModuleDefinition, ModuleTag } from "@repo/utils/modules"
 import type { ModuleData } from "~/app/dashboard/modules/page"
-import type { ModuleTag } from "~/components/dashboard/modules/module-tags"
 
-export type ConfigCardData = (typeof modules)[ModuleId]
+export type ConfigCardData = ModuleDefinition
 export type ConfigCardOption = (typeof moduleOptions)[number]["value"]
 
 export enum ConfigCardStatus {

@@ -2,7 +2,7 @@
 
 import { TrashIcon } from "@radix-ui/react-icons"
 import { Label } from "@radix-ui/react-label"
-import { ModuleId } from "@repo/config/phase/modules.ts"
+import { ModuleId } from "@repo/utils/modules"
 import { useFieldArray, useFormContext } from "react-hook-form"
 
 import { SelectChannel } from "~/components/dashboard/select/channel"

@@ -7,7 +7,7 @@ import {
 } from "discord.js"
 import { BotCronBuilder } from "phasebot/builders"
 
-import { ModuleId } from "@repo/config/phase/modules.ts"
+import { ModuleId } from "@repo/utils/modules"
 
 import { twitchAPI } from "~/lib/clients/twitch"
 import { PhaseColour } from "~/lib/enums"

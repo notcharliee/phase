@@ -1,7 +1,7 @@
 "use client"
 
 import { TrashIcon } from "@radix-ui/react-icons"
-import { ModuleId } from "@repo/config/phase/modules.ts"
+import { ModuleId } from "@repo/utils/modules"
 import { useFieldArray, useFormContext } from "react-hook-form"
 
 import { SelectRole } from "~/components/dashboard/select/role"

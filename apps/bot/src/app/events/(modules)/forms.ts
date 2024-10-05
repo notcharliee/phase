@@ -15,7 +15,7 @@ import {
 } from "discord.js"
 import { BotEventBuilder } from "phasebot/builders"
 
-import { ModuleId } from "@repo/config/phase/modules.ts"
+import { ModuleId } from "@repo/utils/modules"
 import dedent from "dedent"
 import { z } from "zod"
 

@@ -16,6 +16,7 @@
     "@repo/config": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/music": "workspace:*",
+    "@repo/utils": "workspace:*",
     "@t3-oss/env-core": "^0.11.1",
     "@twurple/api": "^7.1.0",
     "@twurple/auth": "^7.1.0",

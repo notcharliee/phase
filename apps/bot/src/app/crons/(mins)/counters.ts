@@ -1,11 +1,9 @@
-import { GuildPremiumTier } from "discord.js"
 import { BotCronBuilder } from "phasebot/builders"
 
-import { ModuleId } from "@repo/config/phase/modules.ts"
-import { moduleVariables } from "@repo/config/phase/variables.ts"
+import { ModuleId } from "@repo/utils/modules"
+import { variables } from "@repo/utils/variables"
 
-import type { Variable } from "@repo/config/phase/variables.ts"
-import type { Client, Guild } from "discord.js"
+import type { Client } from "discord.js"
 
 export default new BotCronBuilder()
   .setPattern("*/10 * * * *")
@@ -25,15 +23,10 @@ export default new BotCronBuilder()
           const channel = guild.channels.cache.get(counter.channel)
           if (!channel) return
 
-          let newName = counter.content
-
-          const variables = moduleVariables[ModuleId.Counters].filter(
-            (variable) => newName.includes(`{${variable.name}}`),
+          const newName = variables.modules[ModuleId.Counters].parse(
+            counter.content,
+            guild,
           )
-
-          for (const variable of variables) {
-            newName = replaceVariable(newName, variable, guild)
-          }
 
           if (newName === channel.name) return
 
@@ -51,65 +44,6 @@ export default new BotCronBuilder()
       }),
     )
   })
-
-function replaceVariable(newName: string, variable: Variable, guild: Guild) {
-  switch (variable.name) {
-    case "ageInDays":
-      return newName.replaceAll(
-        `{${variable.name}}`,
-        Math.floor(
-          (Date.now() - guild.createdAt.getTime()) / (1000 * 60 * 60 * 24),
-        ) + "",
-      )
-
-    case "boostCount":
-      return newName.replaceAll(
-        `{${variable.name}}`,
-        guild.premiumSubscriptionCount + "",
-      )
-
-    case "boostTarget":
-      return newName.replaceAll(
-        `{${variable.name}}`,
-        {
-          [GuildPremiumTier.None]: "2",
-          [GuildPremiumTier.Tier1]: "7",
-          [GuildPremiumTier.Tier2]: "14",
-          [GuildPremiumTier.Tier3]: "None",
-        }[guild.premiumTier],
-      )
-
-    case "channelCount":
-      return newName.replaceAll(
-        `{${variable.name}}`,
-        guild.channels.cache.size + "",
-      )
-
-    case "memberCount":
-      return newName.replaceAll(`{${variable.name}}`, guild.memberCount + "")
-
-    case "onlineMemberCount":
-      return newName.replaceAll(
-        `{${variable.name}}`,
-        guild.approximatePresenceCount + "",
-      )
-
-    case "offlineMemberCount":
-      return newName.replaceAll(
-        `{${variable.name}}`,
-        guild.memberCount - (guild.approximatePresenceCount ?? 0) + "",
-      )
-
-    case "roleCount":
-      return newName.replaceAll(
-        `{${variable.name}}`,
-        guild.roles.cache.size + "",
-      )
-
-    default:
-      return newName
-  }
-}
 
 async function fetchGuildWithCounts(client: Client, guildId: string) {
   let guild = client.guilds.cache.get(guildId)

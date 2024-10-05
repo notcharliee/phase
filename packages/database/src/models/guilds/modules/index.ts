@@ -1,4 +1,4 @@
-import { ModuleId } from "@repo/config/phase/modules.ts"
+import { ModuleId } from "@repo/utils/modules"
 import { Schema } from "mongoose"
 
 import { auditLogsSchema } from "~/models/guilds/modules/audit-logs"

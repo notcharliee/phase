@@ -4,7 +4,7 @@ import { ChannelType, EmbedBuilder } from "discord.js"
 import { BotEventBuilder } from "phasebot/builders"
 
 import invitesTracker from "@androz2091/discord-invites-tracker"
-import { ModuleId } from "@repo/config/phase/modules.ts"
+import { ModuleId } from "@repo/utils/modules"
 
 import { PhaseColour } from "~/lib/enums"
 import { dateToTimestamp, wrapText } from "~/lib/utils"

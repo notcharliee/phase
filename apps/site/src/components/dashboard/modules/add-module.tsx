@@ -21,7 +21,7 @@ import {
   CredenzaTrigger,
 } from "~/components/ui/credenza"
 
-import type { ModuleId } from "@repo/config/phase/modules.ts"
+import type { ModuleId } from "@repo/utils/modules"
 import type { ModuleData } from "~/app/dashboard/modules/page"
 
 export interface AddButtonProps {

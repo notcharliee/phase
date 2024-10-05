@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { modules } from "@repo/config/phase/modules.ts"
+import { moduleDefinitions } from "@repo/utils/modules"
 import { useForm } from "react-hook-form"
 
 import { ActionBar } from "~/components/dashboard/modules/action-bar"
@@ -12,13 +12,12 @@ import {
   ConfigCard,
   ConfigCardStatus,
 } from "~/components/dashboard/modules/config-card"
-import { ModuleTag } from "~/components/dashboard/modules/module-tags"
 import { SelectFilter } from "~/components/dashboard/modules/select-filter"
 import { Form } from "~/components/ui/form"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import { entries, keys } from "~/lib/utils"
+import { keys } from "~/lib/utils"
 
 import {
   defaultEmptyFormValues,
@@ -29,14 +28,14 @@ import { updateModules } from "~/app/dashboard/modules/actions"
 import { moduleFormFields } from "~/app/dashboard/modules/forms"
 import { modulesSchema } from "~/validators/modules"
 
-import type { ModuleId } from "@repo/config/phase/modules.ts"
+import type { ModuleId, ModuleTag } from "@repo/utils/modules"
 import type { ConfigCardOption } from "~/components/dashboard/modules/config-card"
 import type { FilterOption } from "~/components/dashboard/modules/select-filter"
 import type { ModulesFormValues } from "~/types/dashboard"
 
-export type ModuleData = {
-  -readonly [K in keyof (typeof modules)[ModuleId]]: (typeof modules)[ModuleId][K]
-} & { id: ModuleId; config: ModulesFormValues[ModuleId] }
+export type ModuleData<T extends ModuleId = ModuleId> = {
+  -readonly [K in keyof (typeof moduleDefinitions)[T]]: (typeof moduleDefinitions)[T][K]
+} & { id: T; config: ModulesFormValues[T] }
 
 export default function ModulesPage() {
   const [filter, setFilter] = useState<FilterOption["value"]>("none")
@@ -61,9 +60,8 @@ export default function ModulesPage() {
   const invalidFieldNames = keys(formState.errors) as ModuleId[]
 
   const moduleDataArray: ModuleData[] = useMemo(() => {
-    const modulesArray = entries(modules).map(([key, value]) => ({
-      id: key,
-      config: formFields[key],
+    const modulesArray = Object.values(moduleDefinitions).map((value) => ({
+      config: formFields[value.id],
       ...value,
     }))
 
@@ -75,7 +73,7 @@ export default function ModulesPage() {
 
   const onModuleAdd = useCallback(
     (moduleId: ModuleId) => {
-      const moduleConfig = modules[moduleId]
+      const moduleConfig = moduleDefinitions[moduleId]
       if (!moduleConfig) return
 
       form.setValue(moduleId, defaultEmptyFormValues[moduleId], {

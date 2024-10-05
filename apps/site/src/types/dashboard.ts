@@ -4,7 +4,7 @@ import type {
   APIMessage,
   GuildChannelType,
 } from "@discordjs/core/http-only"
-import type { ModuleId } from "@repo/config/phase/modules.ts"
+import type { ModuleId } from "@repo/utils/modules"
 import type { GuildCommand, GuildModules } from "~/types/db"
 import type { modulesSchema } from "~/validators/modules"
 import type { UseFormReturn } from "react-hook-form"

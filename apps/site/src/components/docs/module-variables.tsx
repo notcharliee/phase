@@ -1,9 +1,9 @@
-import { moduleVariables } from "@repo/config/phase/variables.ts"
+import { variables } from "@repo/utils/variables"
 
 import { useMDXComponents } from "~/mdx-components"
 
 interface ModuleVariableProps {
-  moduleId: keyof typeof moduleVariables
+  moduleId: keyof typeof variables.modules
 }
 
 export function ModuleVariables({ moduleId }: ModuleVariableProps) {
@@ -11,7 +11,7 @@ export function ModuleVariables({ moduleId }: ModuleVariableProps) {
 
   return (
     <MDXComponents.ul>
-      {moduleVariables[moduleId].map((variable) => {
+      {variables.modules[moduleId].variables.map((variable) => {
         return (
           <MDXComponents.li key={variable.name}>
             <MDXComponents.code>{`{${variable.name}}`}</MDXComponents.code> -{" "}

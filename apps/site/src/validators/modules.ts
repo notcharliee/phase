@@ -1,4 +1,4 @@
-import { ModuleId } from "@repo/config/phase/modules.ts"
+import { ModuleId } from "@repo/utils/modules"
 import { z } from "zod"
 
 import { safeMs } from "~/lib/utils"

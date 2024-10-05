@@ -1,5 +1,5 @@
 import { DotsHorizontalIcon, TrashIcon } from "@radix-ui/react-icons"
-import { ModuleId } from "@repo/config/phase/modules.ts"
+import { ModuleId } from "@repo/utils/modules"
 import { capitalCase } from "change-case"
 import { useFieldArray, useFormContext } from "react-hook-form"
 import { v4 as randomUUID } from "uuid"

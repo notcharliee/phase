@@ -1,16 +1,13 @@
 import { DiscordAPIError } from "discord.js"
 import { BotEventBuilder } from "phasebot/builders"
 
-import { ModuleId } from "@repo/config/phase/modules.ts"
-import { moduleVariables } from "@repo/config/phase/variables.ts"
+import { ModuleId } from "@repo/utils/modules"
+import { variables } from "@repo/utils/variables"
 
 import { CustomMessageBuilder } from "~/lib/builders/message"
 import { db } from "~/lib/db"
 
 import { generateWelcomeCard } from "~/images/welcome"
-
-import type { Variable } from "@repo/config/phase/variables.ts"
-import type { GuildMember } from "discord.js"
 
 export default new BotEventBuilder()
   .setName("guildMemberAdd")
@@ -36,15 +33,10 @@ export default new BotEventBuilder()
 
     await channel.sendTyping().catch(() => null)
 
-    let description = moduleConfig.message
-
-    const variables = moduleVariables[ModuleId.WelcomeMessages].filter(
-      (variable) => description.includes(`{${variable.name}}`),
+    const description = variables.modules[ModuleId.WelcomeMessages].parse(
+      moduleConfig.message,
+      member,
     )
-
-    for (const variable of variables) {
-      description = replaceVariable(description, variable, member)
-    }
 
     const welcomeCard = moduleConfig.card.enabled
       ? await (await generateWelcomeCard({ client, member })).toAttachment()
@@ -88,26 +80,3 @@ export default new BotEventBuilder()
       }
     }
   })
-
-function replaceVariable(
-  newDescription: string,
-  variable: Variable,
-  member: GuildMember,
-) {
-  switch (variable.name) {
-    case "memberCount":
-      return newDescription.replaceAll(
-        `{${variable.name}}`,
-        member.guild.memberCount + "",
-      )
-
-    case "username":
-      return newDescription.replaceAll(
-        `{${variable.name}}`,
-        member.user.username,
-      )
-
-    default:
-      return newDescription
-  }
-}

@@ -1,10 +1,10 @@
-import { ModuleId, modules } from "@repo/config/phase/modules.ts"
+import { moduleDefinitions, ModuleId } from "@repo/utils/modules"
 
 import { ModuleVariables } from "~/components/docs/module-variables"
 
 export const metadata = {
-  title: modules[ModuleId.Counters].name,
-  description: modules[ModuleId.Counters].description,
+  title: moduleDefinitions[ModuleId.Counters].name,
+  description: moduleDefinitions[ModuleId.Counters].description,
 }
 
 <Heading>

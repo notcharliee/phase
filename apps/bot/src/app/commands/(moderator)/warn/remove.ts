@@ -1,7 +1,7 @@
 import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { ModuleId } from "@repo/config/phase/modules.ts"
+import { ModuleId } from "@repo/utils/modules"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"

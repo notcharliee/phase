@@ -1,6 +1,6 @@
 import { ImageBuilder } from "phasebot/builders"
 
-import { ModuleId } from "@repo/config/phase/modules.ts"
+import { ModuleId } from "@repo/utils/modules"
 import dedent from "dedent"
 
 import { tw } from "~/lib/tw"

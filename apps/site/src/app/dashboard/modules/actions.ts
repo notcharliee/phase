@@ -1,6 +1,6 @@
 "use server"
 
-import { ModuleId } from "@repo/config/phase/modules.ts"
+import { ModuleId } from "@repo/utils/modules"
 
 import { db } from "~/lib/db"
 import { env } from "~/lib/env"

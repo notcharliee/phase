@@ -1,6 +1,6 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { ModuleId } from "@repo/config/phase/modules.ts"
+import { ModuleId } from "@repo/utils/modules"
 
 import { db } from "~/lib/db"
 import { BotErrorMessage } from "~/structures/BotError"

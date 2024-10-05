@@ -2,7 +2,7 @@ import { cache } from "react"
 
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
-import { ModuleId } from "@repo/config/phase/modules.ts"
+import { ModuleId } from "@repo/utils/modules"
 
 import { connectDB } from "~/lib/db"
 import { env } from "~/lib/env"

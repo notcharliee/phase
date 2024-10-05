@@ -1,6 +1,6 @@
 import { BotEventBuilder } from "phasebot/builders"
 
-import { ModuleId } from "@repo/config/phase/modules.ts"
+import { ModuleId } from "@repo/utils/modules"
 
 export default new BotEventBuilder()
   .setName("guildMemberUpdate")

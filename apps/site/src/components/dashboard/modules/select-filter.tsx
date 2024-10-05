@@ -1,4 +1,4 @@
-import { moduleTags } from "@repo/config/phase/modules.ts"
+import { moduleTags } from "@repo/utils/modules"
 
 import {
   Select,

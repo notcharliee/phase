@@ -1,4 +1,4 @@
-import { ModuleId } from "@repo/config/phase/modules.ts"
+import { ModuleId } from "@repo/utils/modules"
 
 import { AuditLogs } from "~/app/dashboard/modules/_forms/audit-logs"
 import { AutoMessages } from "~/app/dashboard/modules/_forms/auto-messages"

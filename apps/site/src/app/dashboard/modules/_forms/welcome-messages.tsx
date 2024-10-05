@@ -1,6 +1,6 @@
 "use client"
 
-import { ModuleId } from "@repo/config/phase/modules.ts"
+import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
 import { RichTextarea } from "~/components/dashboard/richtext/textarea"

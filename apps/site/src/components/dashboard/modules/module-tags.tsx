@@ -2,9 +2,7 @@ import { badgeVariants } from "~/components/ui/badge"
 
 import { cn } from "~/lib/utils"
 
-import type { ModuleId, modules } from "@repo/config/phase/modules.ts"
-
-export type ModuleTag = (typeof modules)[ModuleId]["tags"][number]
+import type { ModuleTag } from "@repo/utils/modules"
 
 export interface ModuleTagsProps {
   tags: ModuleTag[]
