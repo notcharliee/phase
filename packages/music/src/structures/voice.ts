@@ -15,6 +15,7 @@ import ffmpegPath from "ffmpeg-static"
 import type {
   AudioPlayer,
   AudioResource,
+  DiscordGatewayAdapterCreator,
   VoiceConnection,
 } from "@discordjs/voice"
 import type { VoiceManager } from "~/managers/voice"
@@ -49,7 +50,8 @@ export class Voice {
     this.voiceConnection = joinVoiceChannel({
       guildId: voiceChannel.guild.id,
       channelId: voiceChannel.id,
-      adapterCreator: voiceChannel.guild.voiceAdapterCreator,
+      adapterCreator: voiceChannel.guild
+        .voiceAdapterCreator as DiscordGatewayAdapterCreator,
     })
 
     this.join()
