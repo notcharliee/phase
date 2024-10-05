@@ -4,7 +4,7 @@ import { BotEventBuilder } from "phasebot/builders"
 import { ModuleId } from "@repo/utils/modules"
 import { variables } from "@repo/utils/variables"
 
-import { CustomMessageBuilder } from "~/lib/builders/message"
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 import { db } from "~/lib/db"
 
 import { generateWelcomeCard } from "~/images/welcome"

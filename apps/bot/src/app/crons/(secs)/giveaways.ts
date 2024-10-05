@@ -1,6 +1,6 @@
 import { BotCronBuilder } from "phasebot/builders"
 
-import { CustomMessageBuilder } from "~/lib/builders/message"
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 import { db } from "~/lib/db"
 
 import type { GuildTextBasedChannel, User } from "discord.js"

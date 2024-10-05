@@ -16,3 +16,5 @@ export type ChannelTypeName<S extends string> = TrimTrailingSpaces<
     ? PascalToSentence<`${Prefix}${Suffix}`>
     : PascalToSentence<S>
 >
+
+export type Awaitable<T> = T | Promise<T>

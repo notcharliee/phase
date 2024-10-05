@@ -1,7 +1,7 @@
 import { moduleDefinitions } from "@repo/utils/modules"
 import { constantCase } from "change-case"
 
-import { CustomMessageBuilder } from "~/lib/builders/message"
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 
 import type { ModuleId } from "@repo/utils/modules"
 import type { ChannelTypeName } from "~/types/utils"

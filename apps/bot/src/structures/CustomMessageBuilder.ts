@@ -1,7 +1,8 @@
 import { ActionRowBuilder, AttachmentBuilder, normalizeArray } from "discord.js"
 
-import { CustomEmbedBuilder } from "~/lib/builders/embed"
+import { CustomEmbedBuilder } from "~/structures/CustomEmbedBuilder"
 
+import type { BuilderOrBuilderFunction } from "~/types/builders"
 import type {
   APIActionRowComponent,
   APIEmbed,
@@ -11,11 +12,8 @@ import type {
   BaseMessageOptions,
   MessageActionRowComponentBuilder,
   MessageMentionOptions,
-  PollData,
   RestOrArray,
 } from "discord.js"
-
-type BuilderOrBuilderFunction<T> = T | ((builder: T) => T)
 
 type MessageActionRowBuilder =
   ActionRowBuilder<MessageActionRowComponentBuilder>
@@ -26,7 +24,6 @@ export class CustomMessageBuilder {
   readonly components?: APIActionRowComponent<APIMessageActionRowComponent>[]
   readonly embeds?: APIEmbed[]
   readonly files?: AttachmentPayload[]
-  readonly poll?: PollData
 
   setAllowedMentions(allowedMentions: MessageMentionOptions) {
     Reflect.set(this, "allowedMentions", allowedMentions)
@@ -99,11 +96,6 @@ export class CustomMessageBuilder {
     return this
   }
 
-  setPoll(poll: PollData) {
-    Reflect.set(this, "poll", poll)
-    return this
-  }
-
   toJSON(): BaseMessageOptions {
     return {
       allowedMentions: this.allowedMentions,
@@ -111,7 +103,6 @@ export class CustomMessageBuilder {
       components: this.components,
       embeds: this.embeds,
       files: this.files,
-      poll: this.poll,
     }
   }
 }

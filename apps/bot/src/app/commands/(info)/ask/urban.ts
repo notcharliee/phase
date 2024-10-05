@@ -1,7 +1,7 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { getUrbanPost } from "~/lib/apis/urban"
-import { CustomMessageBuilder } from "~/lib/builders/message"
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 import { truncateString } from "~/lib/utils"
 
 import { BotErrorMessage } from "~/structures/BotError"

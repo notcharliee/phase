@@ -6,7 +6,7 @@ import {
 } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { CustomMessageBuilder } from "~/lib/builders/message"
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 
 import { Connect4 } from "~/structures/Connect4"
 

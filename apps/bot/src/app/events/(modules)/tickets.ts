@@ -8,7 +8,7 @@ import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/utils/modules"
 
-import { CustomMessageBuilder } from "~/lib/builders/message"
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 import { Emojis } from "~/lib/emojis"
 
 import { BotErrorMessage } from "~/structures/BotError"

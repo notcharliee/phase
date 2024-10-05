@@ -1,6 +1,6 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { CustomMessageBuilder } from "~/lib/builders/message"
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 
 export default new BotSubcommandBuilder()
   .setName("ping")

@@ -2,7 +2,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 
 import ms from "ms"
 
-import { CustomMessageBuilder } from "~/lib/builders/message"
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 import { db } from "~/lib/db"
 import { dateToTimestamp } from "~/lib/utils"
 

@@ -4,7 +4,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 import { capitalCase } from "change-case"
 
 import { askDictionary, getPhonetic } from "~/lib/apis/dictionary"
-import { CustomMessageBuilder } from "~/lib/builders/message"
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 import { truncateString } from "~/lib/utils"
 
 import { BotErrorMessage } from "~/structures/BotError"

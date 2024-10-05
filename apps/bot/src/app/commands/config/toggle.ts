@@ -2,7 +2,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { moduleDefinitions } from "@repo/utils/modules"
 
-import { CustomMessageBuilder } from "~/lib/builders/message"
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 import { db } from "~/lib/db"
 
 import { BotErrorMessage } from "~/structures/BotError"
