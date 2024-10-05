@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@repo/config": "workspace:*",
+    "@repo/utils": "workspace:*",
     "mongoose": "^8.1.0",
     "tsup": "^8.0.1"
   },
