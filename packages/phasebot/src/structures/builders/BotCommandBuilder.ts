@@ -6,9 +6,11 @@ import {
 
 import { Mixin } from "ts-mixer"
 
+import { CommandManager } from "~/managers"
 import { BotCommandExecute } from "~/types/commands"
 
 import type {
+  APIApplicationCommandSubcommandOption,
   ChannelType,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
   SharedNameAndDescription,
@@ -16,7 +18,6 @@ import type {
   SharedSlashCommandOptions,
   SharedSlashCommandSubcommands,
 } from "discord.js"
-import { CommandManager } from "~/managers"
 
 declare module "discord.js" {
   /**
@@ -117,21 +118,31 @@ export class BotCommandBuilder extends Mixin(
   BotCommandBuilderBase,
   SlashCommandBuilder,
 ) {
-  toJSON(): RESTPostAPIChatInputApplicationCommandsJSONBody {
-    const data = super.toJSON()
+  // @ts-expect-error i'll fix this later
+  toJSON(): RESTPostAPIChatInputApplicationCommandsJSONBody  {
+    const {
+      type,
+      name_localizations,
+      description_localizations,
+      default_member_permissions,
+      dm_permission,
+      options,
+      nsfw,
+      ...rest
+    } = super.toJSON()
 
-    return CommandManager.sortCommandKeys({
-      name: data.name,
-      name_localizations: data.name_localizations ?? null,
-      description: data.description,
-      nsfw: data.nsfw === undefined ? false : data.nsfw,
-      description_localizations: data.description_localizations ?? null,
-      type: data.type ?? ApplicationCommandType.ChatInput,
-      options: data.options ?? [],
-      default_member_permissions: data.default_member_permissions ?? null,
-      dm_permission:
-        data.dm_permission === undefined ? true : data.dm_permission,
+    const json = CommandManager.sortCommandKeys({
+      type: type ?? ApplicationCommandType.ChatInput,
+      name_localizations: name_localizations ?? null,
+      description_localizations: description_localizations ?? null,
+      default_member_permissions: default_member_permissions ?? null,
+      dm_permission: dm_permission === undefined ? true : dm_permission,
+      options: options ?? [],
+      nsfw: nsfw === undefined ? false : nsfw,
+      ...rest,
     })
+
+    return json
   }
 }
 
@@ -144,7 +155,7 @@ export class BotSubcommandBuilder extends Mixin(
   BotCommandBuilderBase,
   SlashCommandSubcommandBuilder,
 ) {
-  toJSON() {
+  toJSON(): APIApplicationCommandSubcommandOption {
     const data = super.toJSON()
 
     delete (data as { metadata?: unknown }).metadata
