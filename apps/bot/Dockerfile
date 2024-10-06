@@ -4,22 +4,23 @@ WORKDIR /usr/src/phase
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y build-essential python3 --no-install-recommends
+RUN npm i -g bun@1.1.26
 
-# Copy package manifests first and install dependencies
-COPY ../../bun.lockb ./ 
-COPY ../../package.json ./
-COPY ../../turbo.json ./
-RUN npm i -g bun@1.1.26 && bun install
+# Copy files into the image
+COPY ../../bun.lockb /usr/src/phase
+COPY ../../package.json /usr/src/phase
+COPY ../../turbo.json /usr/src/phase
+COPY ../../apps/bot /usr/src/phase/apps/bot
+COPY ../../packages /usr/src/phase/packages
 
-# Copy the remaining source files
-COPY ../../apps/bot ./apps/bot
-COPY ../../packages ./packages
+# Install monorepo dependencies
+RUN bun install
 
 # BODGE: Edit @discordjs/opus prebuild name
-RUN cd ./node_modules/@discordjs/opus/prebuild && mv node-v115-napi-v3-linux-x64-glibc-2.31 node-v127-napi-v3-linux-x64-glibc-2.29
+RUN cd /usr/src/phase/node_modules/@discordjs/opus/prebuild && mv node-v115-napi-v3-linux-x64-glibc-2.31 node-v127-napi-v3-linux-x64-glibc-2.29
 
 # Build the bot
-RUN turbo run build
+RUN bun run turbo run build
 
 # Use a smaller oven/bun image for the final stage
 FROM oven/bun:1.1.26 AS final
