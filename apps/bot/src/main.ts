@@ -1,6 +1,8 @@
-import { Partials } from "discord.js"
+import { Options, Partials } from "discord.js"
 import { PhaseClient } from "phasebot"
 import { BotPluginBuilder } from "phasebot/builders"
+
+import { Emojis } from "~/lib/emojis"
 
 import { Music } from "~/structures/music/Music"
 import { Store } from "~/structures/Store"
@@ -34,6 +36,27 @@ const phaseClient = new PhaseClient({
       Partials.Reaction,
       Partials.User,
     ],
+    sweepers: {
+      ...Options.DefaultSweeperSettings,
+      messages: {
+        interval: 60 * 60, // run every hour
+        lifetime: 60 * 30, // only keep messages for 30 minutes
+      },
+    },
+    makeCache: Options.cacheWithLimits({
+      ...Options.DefaultMakeCacheSettings,
+      ReactionManager: {
+        maxSize: 0,
+        keepOverLimit: (reaction) => {
+          const reactionsToKeep = [Emojis.Giveaway_Reaction]
+          return !!(
+            reaction.me &&
+            reaction.emoji.name &&
+            reactionsToKeep.includes(reaction.emoji.name)
+          )
+        },
+      },
+    }),
   },
   dev: isDev,
   exports: {
