@@ -2,6 +2,9 @@
   "extends": "../../node_modules/@repo/config/src/typescript/base.json",
   "include": ["src/**/*", "eslint.config.js", "bunprestart.ts"],
   "compilerOptions": {
+    "outDir": ".tsc",
+    "incremental": true,
+    "noEmit": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"],
