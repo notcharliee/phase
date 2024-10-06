@@ -1,7 +1,13 @@
 import { Variable } from "~/variables/structures"
 
-import type { Level } from "@repo/database"
-import type { User } from "discord.js"
+import type { Snowflake, User } from "discord.js"
+
+interface Level {
+  guild: Snowflake
+  user: Snowflake
+  level: number
+  xp: number
+}
 
 export const levels = [
   new Variable<[User, Level]>({
