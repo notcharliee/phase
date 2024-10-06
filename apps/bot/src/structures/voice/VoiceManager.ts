@@ -55,6 +55,7 @@ export class VoiceManager {
     const connection = joinVoiceChannel({
       guildId: guild.id,
       channelId: channel.id,
+      // @ts-expect-error see https://discord.com/channels/222078108977594368/1290817966447001711/1290907378606276628
       adapterCreator: guild.voiceAdapterCreator,
     })
 
