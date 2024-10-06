@@ -8,16 +8,11 @@
     "packages/*"
   ],
   "scripts": {
-    "bot:start": "cd apps/bot && bun run start",
-    "bot:dev": "cd apps/bot && bun run dev",
-    "bot:build": "turbo run build --filter=bot",
-    "site:start": "cd apps/site && bun run start",
-    "site:dev": "turbo run dev --filter=site",
-    "site:build": "turbo run build --filter=site",
-    "database:dev": "turbo run dev --filter=@repo/database",
-    "database:build": "turbo run build --filter=@repo/database",
-    "phasebot:dev": "turbo run dev --filter=phasebot",
-    "phasebot:build": "turbo run build --filter=phasebot"
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "preview": "turbo run preview",
+    "lint": "turbo run lint"
   },
   "dependencies": {
     "turbo": "^2.0.12"
