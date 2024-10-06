@@ -3,7 +3,7 @@ import { Variable } from "~/variables/structures"
 import type { Guild } from "discord.js"
 
 export const counters = [
-  new Variable({
+  new Variable<[Guild]>({
     name: "ageInDays",
     description: "The age of the server in days.",
     syntax: /(?<!\\){ageInDays}/g,
@@ -15,7 +15,7 @@ export const counters = [
       return value.replaceAll(this.syntax, ageInDays)
     },
   }),
-  new Variable({
+  new Variable<[Guild]>({
     name: "boostCount",
     description: "The number of boosts in the server.",
     syntax: /(?<!\\){boostCount}/g,
@@ -25,7 +25,7 @@ export const counters = [
       return value.replaceAll(this.syntax, boostCount)
     },
   }),
-  new Variable({
+  new Variable<[Guild]>({
     name: "boostTarget",
     description: "The target boost level of the server.",
     syntax: /(?<!\\){boostTarget}/g,
@@ -36,7 +36,7 @@ export const counters = [
       return value.replaceAll(this.syntax, boostTarget)
     },
   }),
-  new Variable({
+  new Variable<[Guild]>({
     name: "channelCount",
     description: "The number of channels in the server.",
     syntax: /(?<!\\){channelCount}/g,
@@ -46,7 +46,7 @@ export const counters = [
       return value.replaceAll(this.syntax, channelCount)
     },
   }),
-  new Variable({
+  new Variable<[Guild]>({
     name: "memberCount",
     description: "The number of members in the server.",
     syntax: /(?<!\\){memberCount}/g,
@@ -56,7 +56,7 @@ export const counters = [
       return value.replaceAll(this.syntax, memberCount)
     },
   }),
-  new Variable({
+  new Variable<[Guild]>({
     name: "onlineMemberCount",
     description: "The number of online members in the server.",
     syntax: /(?<!\\){onlineMemberCount}/g,
@@ -66,7 +66,7 @@ export const counters = [
       return value.replaceAll(this.syntax, onlineMemberCount)
     },
   }),
-  new Variable({
+  new Variable<[Guild]>({
     name: "offlineMemberCount",
     description: "The number of offline members in the server.",
     syntax: /(?<!\\){offlineMemberCount}/g,
@@ -78,7 +78,7 @@ export const counters = [
       return value.replaceAll(this.syntax, offlineMemberCount)
     },
   }),
-  new Variable({
+  new Variable<[Guild]>({
     name: "roleCount",
     description: "The number of roles in the server.",
     syntax: /(?<!\\){roleCount}/g,
@@ -88,4 +88,4 @@ export const counters = [
       return value.replaceAll(this.syntax, roleCount)
     },
   }),
-] as const satisfies Variable<any[]>[]
+] as const satisfies Variable<[Guild]>[]

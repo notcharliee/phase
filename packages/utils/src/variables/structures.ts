@@ -1,4 +1,4 @@
-export class Variable<TArgs extends any[]> {
+export class Variable<TArgs extends [any, ...any[]] = [any]> {
   readonly name: string
   readonly description: string
   readonly syntax: RegExp
@@ -17,7 +17,7 @@ export class Variable<TArgs extends any[]> {
   }
 }
 
-export class VariableGroup<TArgs extends any[]> {
+export class VariableGroup<TArgs extends [any, ...any[]] = [any]> {
   readonly variables: Variable<TArgs>[]
   readonly parse: (value: string, ...args: TArgs) => string
 

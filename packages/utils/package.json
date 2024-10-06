@@ -11,6 +11,7 @@
     "./variables": "./dist/variables/index.js"
   },
   "dependencies": {
+    "@repo/database": "workspace:*",
     "tsup": "^8.3.0"
   },
   "devDependencies": {
