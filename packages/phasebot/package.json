@@ -8,8 +8,8 @@
   "module": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup ./src/index.ts ./src/structures/builders/* --clean --dts --format=esm --no-splitting --sourcemap",
-    "dev": "tsup ./src/index.ts ./src/structures/builders/* --clean --dts --format=esm --no-splitting --sourcemap --watch"
+    "build": "tsup",
+    "dev": "tsup --watch"
   },
   "bin": {
     "phase": "dist/cli.js"
