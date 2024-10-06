@@ -1,12 +1,12 @@
-import { EmbedBuilder } from "discord.js"
 import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/utils/modules"
+import { variables } from "@repo/utils/variables"
 
 import { db } from "~/lib/db"
-import { PhaseColour } from "~/lib/enums"
+import { isSnowflake } from "~/lib/utils"
 
-import type { GuildTextBasedChannel } from "discord.js"
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 
 export default new BotEventBuilder()
   .setName("messageCreate")
@@ -18,130 +18,96 @@ export default new BotEventBuilder()
 
     if (!moduleConfig?.enabled) return
 
-    let levelSchema = await db.levels.findOne({
-      guild: message.guildId,
-      user: message.author.id,
-    })
-
-    if (!levelSchema) {
-      levelSchema = await db.levels.create({
+    const levelDoc =
+      (await db.levels.findOne({
+        guild: message.guildId,
+        user: message.author.id,
+      })) ??
+      (await db.levels.create({
         guild: message.guildId,
         user: message.author.id,
         level: 0,
         xp: 0,
-      })
-    }
+      }))
 
-    const currentLevel = levelSchema.level
-    const currentXP = levelSchema.xp
-    const currentTarget = 500 * (levelSchema.level + 1)
-    const xpToAdd = Math.floor(Math.random() * 70) + 5
+    const currentLevel = levelDoc.level
+    const currentXP = levelDoc.xp
+    const currentTarget = 500 * (levelDoc.level + 1)
+
+    const guaranteedXP = 5
+    const randomXP = Math.random() * 70
+
+    const xpToAdd = Math.floor(randomXP + guaranteedXP)
 
     if (currentXP + xpToAdd <= currentTarget) {
-      levelSchema.level = currentLevel
-      levelSchema.xp = currentXP + xpToAdd
+      levelDoc.level = currentLevel
+      levelDoc.xp = currentXP + xpToAdd
     } else {
-      levelSchema.level += 1
-      levelSchema.xp = 0
+      levelDoc.level += 1
+      levelDoc.xp = 0
 
-      let levelUpMessage: string | null = `${moduleConfig.message}`
+      const levelUpMessage = new CustomMessageBuilder()
 
-      levelUpMessage = levelUpMessage.replaceAll(
-        "{member}",
-        `<@${message.author.id}>`,
-      )
-      levelUpMessage = levelUpMessage.replaceAll(
-        "{member.name}",
-        `${message.author.username}`,
-      )
-      levelUpMessage = levelUpMessage.replaceAll(
-        "{member.level}",
-        `${levelSchema.level}`,
-      )
-      levelUpMessage = levelUpMessage.replaceAll(
-        "{member.xp}",
-        `${levelSchema.xp}`,
-      )
-      levelUpMessage = levelUpMessage.replaceAll(
-        "{member.target}",
-        `${500 * (levelSchema.level + 1)}`,
-      )
-
-      if (!levelUpMessage.length) levelUpMessage = null
-
-      switch (moduleConfig.channel) {
-        case "dm":
-          {
-            void message.author
-              .send({
-                content: moduleConfig.mention
-                  ? `<@${message.author.id}>`
-                  : undefined,
-                embeds: [
-                  new EmbedBuilder()
-                    .setColor(PhaseColour.Primary)
-                    .setDescription(levelUpMessage)
-                    .setFooter({ text: `Sent from ${message.guild.name}` })
-                    .setTitle("You levelled up!"),
-                ],
-              })
-              .catch(() => null)
-          }
-          break
-
-        case "reply":
-          {
-            await message.reply({
-              content: moduleConfig.mention
-                ? `<@${message.author.id}>`
-                : undefined,
-              embeds: [
-                new EmbedBuilder()
-                  .setColor(PhaseColour.Primary)
-                  .setDescription(levelUpMessage)
-                  .setTitle("You levelled up!"),
-              ],
-            })
-          }
-          break
-
-        default:
-          {
-            const channel = client.channels.cache.get(
-              moduleConfig.channel,
-            ) as GuildTextBasedChannel
-
-            if (!channel) return
-
-            void channel
-              .send({
-                content: moduleConfig.mention
-                  ? `<@${message.author.id}>`
-                  : undefined,
-                embeds: [
-                  new EmbedBuilder()
-                    .setColor(PhaseColour.Primary)
-                    .setDescription(levelUpMessage)
-                    .setTitle("You levelled up!"),
-                ],
-              })
-              .catch(() => null)
-          }
-          break
+      if (moduleConfig.mention) {
+        levelUpMessage.setContent(`<@${message.author.id}>`)
       }
 
-      for (const levelUpRole of moduleConfig.roles.filter(
-        (role) => role.level === levelSchema.level,
-      )) {
-        const role = message.guild.roles.cache.get(levelUpRole.role)
-        if (!role) return
+      levelUpMessage.setEmbeds((embed) => {
+        embed.setColor("Primary")
+        embed.setTitle("You levelled up!")
 
-        await message.guild.members.addRole({
-          user: message.author.id,
-          role,
-        })
+        if (moduleConfig.message.length) {
+          embed.setDescription(
+            variables.modules[ModuleId.Levels].parse(
+              moduleConfig.message,
+              message.author,
+              levelDoc,
+            ),
+          )
+        }
+
+        if (moduleConfig.channel === "dm") {
+          embed.setFooter({ text: `Sent from ${message.guild.name}` })
+        }
+
+        return embed
+      })
+
+      try {
+        if (moduleConfig.channel === "dm") {
+          await message.author.send(levelUpMessage)
+        } else if (moduleConfig.channel === "reply") {
+          await message.reply(levelUpMessage)
+        } else if (isSnowflake(moduleConfig.channel)) {
+          const channel = message.guild.channels.cache.get(moduleConfig.channel)
+          if (channel?.isSendable()) await channel.send(levelUpMessage)
+        }
+      } catch (error) {
+        console.error(`[Levels] Failed to send level up message:`)
+        console.error(error)
+      }
+
+      try {
+        const rolesToAdd = moduleConfig.roles.reduce<string[]>(
+          (acc, { level, role }) => {
+            if (level === currentLevel) acc.push(role)
+            return acc
+          },
+          [],
+        )
+
+        if (rolesToAdd.length) {
+          await Promise.all(
+            rolesToAdd.map((role) =>
+              message.guild.members.addRole({ user: message, role }),
+            ),
+          )
+        }
+      } catch (error) {
+        console.error(`[Levels] Failed to add level up roles:`)
+        console.error(error)
       }
     }
 
-    return await levelSchema.save()
+    return await levelDoc.save()
   })
