@@ -1,12 +1,13 @@
 import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { formatDuration, QueueRepeatMode } from "@repo/music"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
+import { dateToTimestamp, formatDuration, wrapText } from "~/lib/utils"
+
 import { BotErrorMessage } from "~/structures/BotError"
-import { dateToTimestamp, wrapText } from "~/lib/utils"
+import { QueueRepeatMode } from "~/structures/music/Queue"
 
 import type { GuildMember } from "discord.js"
 

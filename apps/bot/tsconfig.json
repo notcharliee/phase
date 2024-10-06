@@ -6,7 +6,6 @@
     "paths": {
       "~/*": ["src/*"],
       "@repo/database": ["../../node_modules/@repo/database/dist"],
-      "@repo/music": ["../../node_modules/@repo/music/dist"]
     }
   }
 }
