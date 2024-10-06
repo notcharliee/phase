@@ -30,6 +30,28 @@ export function getDayName(day: number, short = false) {
 }
 
 /**
+ * Format duration to string
+ * @param sec - Duration in seconds
+ */
+export function formatDuration(secs: number): string {
+  if (!secs || !Number(secs)) return "00:00"
+
+  const seconds = Math.floor(secs % 60)
+  const minutes = Math.floor((secs % 3600) / 60)
+  const hours = Math.floor(secs / 3600)
+
+  const formatInt = (int: number) => (int < 10 ? `0${int}` : int)
+
+  if (hours > 0) {
+    return `${formatInt(hours)}:${formatInt(minutes)}:${formatInt(seconds)}`
+  } else if (minutes > 0) {
+    return `${formatInt(minutes)}:${formatInt(seconds)}`
+  } else {
+    return `00:${formatInt(seconds)}`
+  }
+}
+
+/**
  * Exploits a long-lasting bug in Discord where the content of a message is hidden if it's preceded by a bunch of pipe characters. Useful for hiding metadata in messages.
  *
  * @param content The content to hide.

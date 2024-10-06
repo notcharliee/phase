@@ -1,10 +1,10 @@
 import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { QueueRepeatMode } from "@repo/music"
-
 import { PhaseColour } from "~/lib/enums"
+
 import { BotErrorMessage } from "~/structures/BotError"
+import { QueueRepeatMode } from "~/structures/music/Queue"
 
 import type { GuildMember } from "discord.js"
 
@@ -55,7 +55,9 @@ export default new BotSubcommandBuilder()
 
     if (queue.repeatMode === (repeat as QueueRepeatMode)) {
       return void interaction.editReply(
-        new BotErrorMessage("Repeat mode is already set to that state.").toJSON(),
+        new BotErrorMessage(
+          "Repeat mode is already set to that state.",
+        ).toJSON(),
       )
     }
 

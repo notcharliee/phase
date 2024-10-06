@@ -3,7 +3,7 @@ WORKDIR /usr/src/app
 
 # Install build dependencies
 FROM base AS build-env
-RUN apt-get update && apt-get install -y build-essential python3 chromium fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 --no-install-recommends
+RUN apt-get update && apt-get install -y build-essential python3 --no-install-recommends
 
 # Install bun
 FROM build-env AS bun-install
@@ -19,8 +19,6 @@ COPY ../../turbo.json /usr/src/app/turbo.json
 
 # Install and build monorepo dependencies
 FROM copy-source AS build-deps
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 RUN bun install --no-save
 RUN bun run bot:build
 

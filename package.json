@@ -34,7 +34,6 @@
     "esbuild",
     "ffmpeg-static",
     "protobufjs",
-    "puppeteer",
     "sharp",
     "sodium-native"
   ]

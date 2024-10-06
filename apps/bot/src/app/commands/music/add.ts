@@ -1,11 +1,12 @@
 import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { MusicError } from "@repo/music"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
+
 import { BotErrorMessage } from "~/structures/BotError"
+import { MusicError } from "~/structures/music/Music"
 
 import type { GuildMember } from "discord.js"
 

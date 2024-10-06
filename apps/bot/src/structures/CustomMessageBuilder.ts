@@ -4,9 +4,7 @@ import { CustomEmbedBuilder } from "~/structures/CustomEmbedBuilder"
 
 import type { BuilderOrBuilderFunction } from "~/types/builders"
 import type {
-  APIActionRowComponent,
   APIEmbed,
-  APIMessageActionRowComponent,
   APIMessageComponent,
   AttachmentPayload,
   BaseMessageOptions,
@@ -19,11 +17,11 @@ type MessageActionRowBuilder =
   ActionRowBuilder<MessageActionRowComponentBuilder>
 
 export class CustomMessageBuilder {
-  readonly allowedMentions?: MessageMentionOptions
-  readonly content?: string
-  readonly components?: APIActionRowComponent<APIMessageActionRowComponent>[]
-  readonly embeds?: APIEmbed[]
-  readonly files?: AttachmentPayload[]
+  readonly allowedMentions?: BaseMessageOptions["allowedMentions"]
+  readonly content?: BaseMessageOptions["content"]
+  readonly components?: BaseMessageOptions["components"]
+  readonly embeds?: BaseMessageOptions["embeds"]
+  readonly files?: BaseMessageOptions["files"]
 
   setAllowedMentions(allowedMentions: MessageMentionOptions) {
     Reflect.set(this, "allowedMentions", allowedMentions)

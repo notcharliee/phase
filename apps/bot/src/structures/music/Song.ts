@@ -1,6 +1,6 @@
-import { formatDuration } from "~/utils"
+import { formatDuration } from "~/lib/utils"
 
-import type { Queue } from "~/structures/queue"
+import type { Queue } from "~/structures/music/Queue"
 import type { GuildMember } from "discord.js"
 
 export class Song {
@@ -16,7 +16,7 @@ export class Song {
   readonly submittedBy: GuildMember
 
   get playbackDuration() {
-    const audioResource = this.queue.voice.audioResource
+    const audioResource = this.queue.voice.resource
     const playbackDuration = audioResource?.playbackDuration ?? 0
     return playbackDuration !== 0 ? Math.floor(playbackDuration / 1000) : 0
   }

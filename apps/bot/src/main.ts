@@ -1,9 +1,17 @@
 import { Partials } from "discord.js"
 import { PhaseClient } from "phasebot"
 
-import { Music } from "@repo/music"
-
+import { Music } from "~/structures/music/Music"
 import { Store } from "~/structures/Store"
+import { VoiceManager } from "~/structures/voice/VoiceManager"
+
+declare module "discord.js" {
+  interface Client {
+    music: Music
+    store: Store
+    voices: VoiceManager
+  }
+}
 
 const isDev = process.env.NODE_ENV === "development"
 
@@ -34,7 +42,7 @@ const phaseClient = new PhaseClient({
     middleware: "default",
     prestart: "default",
   },
-  plugins: [Music.plugin, Store.plugin],
+  plugins: [VoiceManager.plugin, Music.plugin, Store.plugin],
 })
 
 await phaseClient.start()

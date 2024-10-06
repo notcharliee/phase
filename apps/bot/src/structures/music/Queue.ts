@@ -1,12 +1,11 @@
-import { Snowflake, VoiceBasedChannel } from "discord.js"
-
 import { AudioPlayerStatus } from "@discordjs/voice"
 
-import { formatDuration } from "~/utils"
+import { formatDuration } from "~/lib/utils"
 
-import type { Music } from "~/structures/music"
-import type { Song } from "~/structures/song"
-import type { Voice } from "~/structures/voice"
+import type { Music } from "~/structures/music/Music"
+import type { Song } from "~/structures/music/Song"
+import type { Voice } from "~/structures/voice/Voice"
+import type { Snowflake, VoiceBasedChannel } from "discord.js"
 
 export enum QueueRepeatMode {
   Disabled = 0,
@@ -26,21 +25,21 @@ export class Queue {
   constructor(music: Music, voiceChannel: VoiceBasedChannel) {
     this.id = voiceChannel.guild.id
     this.music = music
-    this.voice = music.voices.create(voiceChannel)
+    this.voice = music.client.voices.create(voiceChannel)
     this.songs = []
     this.repeatMode = QueueRepeatMode.Disabled
 
-    this.voice.audioPlayer.on("stateChange", (oldState, newState) => {
+    this.voice.player.on("stateChange", (oldState, newState) => {
       if (
         oldState.status === AudioPlayerStatus.Playing &&
         newState.status === AudioPlayerStatus.Idle
       ) {
         if (this.currentSongIndex === undefined) return
         if (this.repeatMode === QueueRepeatMode.Song) {
-          this.voice.play(this.currentSong!)
+          void this.voice.play(this.currentSong!.streamUrl)
         } else if (this.nextSong) {
           if (this.repeatMode !== QueueRepeatMode.Queue) this.currentSongIndex++
-          this.voice.play(this.currentSong!)
+          void this.voice.play(this.currentSong!.streamUrl)
         } else {
           this.delete()
         }
@@ -75,7 +74,7 @@ export class Queue {
   }
 
   public get isPaused(): boolean {
-    return this.voice.audioPlayer.state.status === AudioPlayerStatus.Paused
+    return this.voice.player.state.status === AudioPlayerStatus.Paused
   }
 
   public get duration(): number {
@@ -85,7 +84,7 @@ export class Queue {
   public get durationRemaining(): number {
     if (!this.currentSong) return 0
     return this.songs
-      .slice(this.currentSongIndex!)
+      .slice(this.currentSongIndex)
       .reduce(
         (acc, song) => acc + song.duration,
         -this.currentSong.playbackDuration,
@@ -110,7 +109,7 @@ export class Queue {
 
     if (!this.currentSong) {
       this.currentSongIndex = this.songs.length - 1
-      this.voice.play(this.currentSong!)
+      void this.voice.play(this.currentSong!.streamUrl)
     }
 
     return song
@@ -135,7 +134,7 @@ export class Queue {
       if (!this.nextSong) return void this.delete()
 
       this.currentSongIndex!++
-      this.voice.play(this.currentSong)
+      void this.voice.play(this.currentSong.streamUrl)
     }
 
     return song
@@ -172,7 +171,7 @@ export class Queue {
     }
 
     this.currentSongIndex!++
-    this.voice.play(this.currentSong!)
+    void this.voice.play(this.currentSong!.streamUrl)
 
     return this.currentSong
   }
@@ -202,7 +201,7 @@ export class Queue {
    * Deletes the queue and destroys the voice connection.
    */
   public delete() {
+    this.voice.destroy()
     this.music.queues.delete(this.id)
-    this.voice.leave()
   }
 }
