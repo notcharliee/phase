@@ -32,7 +32,7 @@ export class Voice {
   public readonly channel: VoiceBasedChannel
   public readonly connection: VoiceConnection
 
-  public player?: AudioPlayer
+  public player: AudioPlayer
   public stream?: PassThrough
   public resource?: AudioResource
   public lastSilentAt: number
@@ -53,6 +53,7 @@ export class Voice {
     this.guild = guild
     this.channel = channel
     this.connection = connection
+    this.player = this.createAudioPlayer()
     this.lastSilentAt = Date.now()
   }
 
@@ -104,29 +105,19 @@ export class Voice {
    *
    * @internal
    */
-  private cleanUp(rmPlayer = false) {
+  private cleanUp() {
+    this.player.stop(true)
+
     if (this.stream) {
       this.stream.destroy()
       this.stream = undefined
-    }
-
-    if (this.player) {
-      this.player.stop(true)
-      if (rmPlayer) this.player = undefined
     }
   }
 
   /**
    * Joins the voice channel and subscribes to the audio player.
-   *
-   * @remarks This method is called automatically when creating a new `Voice`
-   * instance, so you shouldn't need to call it manually.
    */
   public async join() {
-    if (!this.player) {
-      this.player = this.createAudioPlayer()
-    }
-
     try {
       await entersState(this.connection, VoiceConnectionStatus.Ready, 30_000)
       this.connection.subscribe(this.player)
@@ -146,8 +137,8 @@ export class Voice {
    * song will be stopped.
    */
   public async play(url: string) {
-    if (!this.player) {
-      this.player = this.createAudioPlayer()
+    if (this.connection.state.status === VoiceConnectionStatus.Disconnected) {
+      await this.join()
     }
 
     this.cleanUp()
@@ -204,8 +195,8 @@ export class Voice {
    * instance from the `VoiceManager`.
    */
   public destroy() {
+    this.cleanUp()
     this.connection.destroy()
-    this.cleanUp(true)
     this.manager.voices.delete(this.guild.id)
   }
 }

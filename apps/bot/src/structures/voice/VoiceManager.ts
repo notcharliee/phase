@@ -46,7 +46,7 @@ export class VoiceManager {
   /**
    * Creates a new voice connection.
    */
-  public async create(channel: VoiceBasedChannel) {
+  public create(channel: VoiceBasedChannel) {
     const { guild } = channel
 
     const existingVoiceExists = this.voices.has(guild.id)
@@ -59,7 +59,6 @@ export class VoiceManager {
     })
 
     const voice = new Voice(this, { guild, channel, connection })
-    await voice.join()
 
     this.voices.set(guild.id, voice)
 
