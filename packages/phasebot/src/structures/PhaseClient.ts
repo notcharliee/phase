@@ -9,6 +9,7 @@ import dedent from "dedent"
 import { CommandManager } from "~/managers/CommandManager"
 import { CronManager } from "~/managers/CronManager"
 import { EventManager } from "~/managers/EventManager"
+import { BotPlugin } from "~/types/plugin"
 import { phaseHeader, spinner } from "~/utils"
 
 import type { BotCronBuilder } from "~/structures/builders/BotCronBuilder"
@@ -41,19 +42,30 @@ export class PhaseClient {
   public config: PhaseClientParams["config"]
   public exports: PhaseClientParams["exports"]
   public files: PhaseClientParams["files"]
-  public plugins: PhaseClientParams["plugins"]
+  public plugins: BotPlugin[]
 
-  public client!: Client<false>
-  public commands!: CommandManager
-  public crons!: CronManager
-  public events!: EventManager
+  public readonly client!: Client<false>
+  public readonly commands?: CommandManager
+  public readonly crons?: CronManager
+  public readonly events?: EventManager
 
   constructor(params?: PhaseClientParams) {
     this.dev = params?.dev
     this.config = { ...defaultConfig, ...params?.config }
     this.exports = { ...defaultExports, ...params?.exports }
     this.files = params?.files
-    this.plugins = params?.plugins
+
+    this.plugins = (params?.plugins ?? []).reduce<BotPlugin[]>(
+      (acc, plugin) => {
+        if ("toJSON" in plugin) {
+          plugin = plugin.toJSON()
+        }
+
+        acc.push(plugin)
+        return acc
+      },
+      [],
+    )
   }
 
   private get allowedFileExtensions() {
@@ -75,13 +87,15 @@ export class PhaseClient {
     `)
 
     this.config = await this.loadConfig()
-    this.client = new Client(this.config)
 
-    if (this.plugins) {
-      this.plugins.forEach((plugin) => {
-        this.client = plugin(this.client)
-      })
-    }
+    Reflect.set(
+      this,
+      "client",
+      this.plugins.reduce(
+        (client, plugin) => plugin.onLoad(client),
+        new Client<false>(this.config),
+      ),
+    )
 
     if (!existsSync(this.srcDir)) {
       throw new Error("No source directory found.")
@@ -120,15 +134,17 @@ export class PhaseClient {
             this.loadMiddleware(),
           ])
 
-        this.commands = new CommandManager(
+        const commandManager = new CommandManager(
           this.client,
           commandFiles,
           middlewareFile?.commands,
         )
+        const cronManager = new CronManager(this.client, cronFiles)
+        const eventManager = new EventManager(this.client, eventFiles)
 
-        this.crons = new CronManager(this.client, cronFiles)
-
-        this.events = new EventManager(this.client, eventFiles)
+        Reflect.set(this, "commands", commandManager)
+        Reflect.set(this, "crons", cronManager)
+        Reflect.set(this, "events", eventManager)
 
         resolve()
       })

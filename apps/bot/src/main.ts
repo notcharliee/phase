@@ -1,5 +1,6 @@
 import { Partials } from "discord.js"
 import { PhaseClient } from "phasebot"
+import { BotPluginBuilder } from "phasebot/builders"
 
 import { Music } from "~/structures/music/Music"
 import { Store } from "~/structures/Store"
@@ -42,7 +43,29 @@ const phaseClient = new PhaseClient({
     middleware: "default",
     prestart: "default",
   },
-  plugins: [VoiceManager.plugin, Music.plugin, Store.plugin],
+  plugins: [
+    new BotPluginBuilder()
+      .setName("VoiceManager")
+      .setVersion("1.0.0")
+      .setOnLoad((client) => {
+        client.voices = new VoiceManager(client)
+        return client
+      }),
+    new BotPluginBuilder()
+      .setName("Music")
+      .setVersion("1.0.0")
+      .setOnLoad((client) => {
+        client.music = new Music(client)
+        return client
+      }),
+    new BotPluginBuilder()
+      .setName("Store")
+      .setVersion("1.0.0")
+      .setOnLoad((client) => {
+        client.store = new Store(client)
+        return client
+      }),
+  ],
 })
 
 await phaseClient.start()

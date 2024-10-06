@@ -83,12 +83,4 @@ export class VoiceManager {
       }
     })
   }
-
-  /**
-   * Plugins the `VoiceManager` into the client.
-   */
-  static plugin(this: void, client: Client<false>) {
-    Object.assign(client, { voices: new VoiceManager(client) })
-    return client
-  }
 }

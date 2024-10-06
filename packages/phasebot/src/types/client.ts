@@ -8,8 +8,8 @@ import type { BotConfig } from "~/types/config"
 import type { CronFile } from "~/types/crons"
 import type { EventFile } from "~/types/events"
 import type { BotMiddleware } from "~/types/middleware"
+import type { BotPluginResolvable } from "~/types/plugin"
 import type { BotPrestart } from "~/types/prestart"
-import type { Client } from "discord.js"
 
 export interface PhaseClientParams {
   /**
@@ -53,5 +53,5 @@ export interface PhaseClientParams {
    *
    * @remarks Plugins are loaded in the order they are specified.
    */
-  plugins?: ((client: Client<false>) => Client<false>)[]
+  plugins?: BotPluginResolvable[]
 }

@@ -102,9 +102,4 @@ export class Music {
   public getQueue(guildId: string) {
     return this.queues.get(guildId)
   }
-
-  static plugin(this: void, client: Client<false>) {
-    Object.assign(client, { music: new Music(client) })
-    return client
-  }
 }

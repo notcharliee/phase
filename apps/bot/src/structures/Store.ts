@@ -79,9 +79,4 @@ export class Store {
         }
       })
   }
-
-  static plugin(this: void, client: Client<false>) {
-    Object.assign(client, { store: new Store(client) })
-    return client
-  }
 }
