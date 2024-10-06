@@ -1,7 +1,9 @@
 import { BotCronBuilder } from "phasebot/builders"
 
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 import { db } from "~/lib/db"
+import { Emojis } from "~/lib/emojis"
+
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 
 import type { GuildTextBasedChannel, User } from "discord.js"
 
@@ -26,7 +28,9 @@ export default new BotCronBuilder()
       try {
         const message = await channel.messages.fetch(giveaway.id as string)
         const host = await channel.guild.members.fetch(giveaway.host)
-        const entries = await message.reactions.cache.get("🎉")?.users.fetch()
+        const entries = await message.reactions.cache
+          .get(Emojis.Giveaway_Reaction)
+          ?.users.fetch()
 
         const filter = (user: User) => user.id !== client.user.id
 

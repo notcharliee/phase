@@ -2,7 +2,9 @@ import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { db } from "~/lib/db"
+import { Emojis } from "~/lib/emojis"
 import { PhaseColour } from "~/lib/enums"
+
 import { BotErrorMessage } from "~/structures/BotError"
 
 import type { GuildMember, GuildTextBasedChannel } from "discord.js"
@@ -81,12 +83,14 @@ export default new BotSubcommandBuilder()
       return
     }
 
-    const giveawayReaction = giveawayMessage.reactions.cache.get("🎉")
+    const giveawayReaction = giveawayMessage.reactions.cache.get(
+      Emojis.Giveaway_Reaction,
+    )
 
     if (!giveawayReaction) {
       void interaction.editReply(
         new BotErrorMessage(
-          "The `🎉` reaction was not found in the giveaway message, which is required to track the giveaway entries and subsequently reroll the winners.",
+          `The \`${Emojis.Giveaway_Reaction}\` reaction was not found in the giveaway message, which is required to track the giveaway entries and subsequently reroll the winners.`,
         ).toJSON(),
       )
 

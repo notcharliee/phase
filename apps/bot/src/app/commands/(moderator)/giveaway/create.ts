@@ -2,9 +2,11 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 
 import ms from "ms"
 
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 import { db } from "~/lib/db"
+import { Emojis } from "~/lib/emojis"
 import { dateToTimestamp } from "~/lib/utils"
+
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 
 import type { GuildMember } from "discord.js"
 
@@ -52,7 +54,7 @@ export default new BotSubcommandBuilder()
           .setTitle(`${prize}`)
           .setDescription(
             `
-              React with 🎉 to enter!
+              React with ${Emojis.Giveaway_Reaction} to enter!
               Giveaway ends: ${dateToTimestamp(expires)}
             `,
           )
@@ -60,7 +62,7 @@ export default new BotSubcommandBuilder()
       }),
     )
 
-    await message.react("🎉")
+    await message.react(Emojis.Giveaway_Reaction)
 
     await db.giveaways.create({
       id: message.id,

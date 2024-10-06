@@ -19,6 +19,7 @@ export const FallbackEmojis = {
 
 export const Emojis = {
   ZeroWidthJoiner: "‍",
+  Giveaway_Reaction: "🎉",
   Ticket_Locked: "🔒",
   Ticket_Unlocked: "🔓",
   Ticket_Delete: "🗑️",
