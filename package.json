@@ -9,10 +9,20 @@
   ],
   "scripts": {
     "dev": "turbo run dev",
+    "dev:bot": "turbo run dev --filter=bot",
+    "dev:site": "turbo run dev --filter=site",
     "build": "turbo run build",
-    "start": "turbo run start",
+    "build:bot": "turbo run build --filter=bot",
+    "build:site": "turbo run build --filter=site",
+    "start": "turbo run start --filter=./apps/*",
+    "start:bot": "turbo run start --filter=bot",
+    "start:site": "turbo run start --filter=site",
     "preview": "turbo run preview",
-    "lint": "turbo run lint"
+    "preview:bot": "turbo run preview --filter=bot",
+    "preview:site": "turbo run preview --filter=site",
+    "lint": "turbo run lint",
+    "lint:bot": "turbo run lint --filter=bot",
+    "lint:site": "turbo run lint --filter=site"
   },
   "dependencies": {
     "turbo": "^2.0.12"

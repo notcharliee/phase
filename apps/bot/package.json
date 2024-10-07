@@ -6,7 +6,7 @@
     "docker:build": "docker build -t bot-image -f Dockerfile ../../",
     "docker:start": "docker run -it --rm bot-image",
     "build": "tsc",
-    "start": "NODE_ENV=production bun run src/main.ts",
+    "start": "NODE_ENV=production bun run --smol src/main.ts",
     "dev": "NODE_ENV=development bun run --watch src/main.ts",
     "lint": "eslint ."
   },

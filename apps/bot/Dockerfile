@@ -31,4 +31,4 @@ COPY --from=base /usr/src/phase /usr/src/phase
 
 # Set the environment to production and run the bot using Bun
 ENV NODE_ENV=production
-CMD ["bun", "--smol", "run", "start"]
+CMD ["bun", "run", "start"]
