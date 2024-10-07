@@ -3,6 +3,8 @@ import { YouTubePlaylist, YouTubePlugin } from "@distube/youtube"
 import { QueueManager } from "~/structures/music/QueueManager"
 import { Song } from "~/structures/music/Song"
 
+import type { YouTubeSong } from "@distube/youtube"
+import type { Queue } from "~/structures/music/Queue"
 import type { Client, GuildMember, VoiceBasedChannel } from "discord.js"
 
 export enum MusicError {
@@ -44,62 +46,59 @@ export class Music {
 
     if (youtubeSongOrPlaylist instanceof YouTubePlaylist) {
       const youtubePlaylist = youtubeSongOrPlaylist
-
       const newSongs: Song[] = []
 
       for (const youtubeSong of youtubePlaylist.songs) {
-        const streamUrl = await this.youtube
-          .getStreamURL(youtubeSong)
-          .catch(() => null)
-
-        if (!streamUrl) {
-          throw new Error(MusicError.InvalidQuery)
-        }
-
-        const song = new Song(queue, {
-          name: youtubeSong.name!,
-          thumbnail: youtubeSong.thumbnail!,
-          duration: youtubeSong.duration,
-          url: youtubeSong.url!,
-          streamUrl,
-          submitter,
-        })
-
+        const song = await this.addSongToQueue(queue, youtubeSong, submitter)
         newSongs.push(song)
-        queue.addSong(song)
       }
 
       return newSongs
     } else {
       const youtubeSong = youtubeSongOrPlaylist
-
-      const streamUrl = await this.youtube
-        .getStreamURL(youtubeSong)
-        .catch(() => null)
-
-      if (!streamUrl) {
-        throw new Error(MusicError.InvalidQuery)
-      }
-
-      const song = new Song(queue, {
-        name: youtubeSong.name!,
-        thumbnail: youtubeSong.thumbnail!,
-        duration: youtubeSong.duration,
-        url: youtubeSong.url!,
-        streamUrl,
-        submitter,
-      })
-
-      queue.addSong(song)
-
+      const song = await this.addSongToQueue(queue, youtubeSong, submitter)
       return [song]
     }
   }
 
   /**
    * Gets the queue for a guild.
+   *
+   * @returns The queue for the guild, or null if there is no queue.
    */
   public getQueue(guildId: string) {
     return this.queues.get(guildId)
+  }
+
+  /**
+   * Adds a song to a queue.
+   *
+   * @returns The song that was added to the queue.
+   */
+  private async addSongToQueue(
+    queue: Queue,
+    youtubeSong: YouTubeSong,
+    submitter: GuildMember,
+  ) {
+    const streamUrl = await this.youtube
+      .getStreamURL(youtubeSong)
+      .catch(() => null)
+
+    if (!streamUrl) {
+      throw new Error(MusicError.InvalidQuery)
+    }
+
+    const song = new Song(queue, {
+      name: youtubeSong.name!,
+      thumbnail: youtubeSong.thumbnail!,
+      duration: youtubeSong.duration,
+      url: youtubeSong.url!,
+      streamUrl,
+      submitter,
+    })
+
+    queue.addSong(song)
+
+    return song
   }
 }
