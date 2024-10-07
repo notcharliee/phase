@@ -16,10 +16,6 @@
     "plugins": [{ "name": "next" }],
     "incremental": true,
     "noEmit": true,
-    "paths": {
-      "~/*": ["src/*"],
-      "@/*": ["src/*"],
-      "public/*": ["public/*"]
-    }
+    "paths": { "~/*": ["src/*"] }
   }
 }
