@@ -1,23 +1,19 @@
-import { absoluteURL } from "~/lib/utils"
+import { env } from "~/lib/env"
+
+const BASE_URL = new URL(env.NEXT_PUBLIC_BASE_URL)
 
 export const siteConfig = {
-  name: "Phase Bot",
-  url: absoluteURL(""),
-  ogImage: absoluteURL("/og.png"),
-  favicon: absoluteURL("/favicon.ico"),
-  apple: absoluteURL("/apple.png"),
-  description:
-    "Phase is a free to use, open source Discord bot that aims to be the all-in-one solution for as many servers as possible.",
-  creator: "notcharliee",
-  author: {
-    name: "notcharliee",
+  url: BASE_URL,
+  title: "Phase Bot",
+  description: `Phase is a free to use, open source Discord bot that aims to be the all-in-one solution for as many servers as possible.`,
+  keywords: ["Discord", "Bot", "Phase", "Free"],
+  developer: {
+    name: "mikaela",
     url: "https://github.com/notcharliee",
   },
-  links: {
-    discord: "/redirect/discord",
-    github: "/redirect/github",
-  },
-  keywords: ["Discord", "Bot", "Phase", "Free"],
+  images: {
+    og: new URL("/og.png", BASE_URL),
+    favicon: new URL("/favicon.ico", BASE_URL),
+    apple: new URL("/favicon.ico", BASE_URL),
+  }
 }
-
-export type SiteConfig = typeof siteConfig

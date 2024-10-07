@@ -15,45 +15,42 @@ import { cn } from "~/lib/utils"
 import type { LayoutProps } from "~/types/props"
 import type { Metadata, Viewport } from "next"
 
-export const metadata = {
-  title: { default: siteConfig.name, template: `%s - ${siteConfig.name}` },
+export const metadata: Metadata = {
+  metadataBase: siteConfig.url,
+  title: { default: siteConfig.title, template: `%s - ${siteConfig.title}` },
   description: siteConfig.description,
-  metadataBase: new URL(siteConfig.url),
-  authors: siteConfig.author,
-  creator: siteConfig.creator,
+  authors: siteConfig.developer,
+  creator: siteConfig.developer.name,
   keywords: siteConfig.keywords,
   openGraph: {
+    url: siteConfig.url,
+    title: siteConfig.title,
+    description: siteConfig.description,
+    siteName: siteConfig.title,
     type: "website",
     locale: "en_GB",
-    url: siteConfig.url,
-    title: siteConfig.name,
-    description: siteConfig.description,
-    siteName: siteConfig.name,
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.name,
-      },
-    ],
+    images: {
+      url: siteConfig.images.og,
+      width: 1200,
+      height: 630,
+      alt: siteConfig.title,
+    },
   },
   twitter: {
     card: "summary_large_image",
-    title: siteConfig.name,
+    title: siteConfig.title,
     description: siteConfig.description,
-    images: [siteConfig.ogImage],
-    creator: "@" + siteConfig.creator,
+    images: siteConfig.images.og,
   },
   icons: {
-    icon: siteConfig.favicon,
-    apple: siteConfig.apple,
+    icon: siteConfig.images.favicon,
+    apple: siteConfig.images.apple,
   },
 } satisfies Metadata
 
-export const viewport = {
+export const viewport: Viewport = {
   colorScheme: "dark",
-  themeColor: "#f8f8f8",
+  themeColor: "#101010",
 } satisfies Viewport
 
 export default function RootLayout({ children }: LayoutProps) {
@@ -61,7 +58,7 @@ export default function RootLayout({ children }: LayoutProps) {
     <html lang="en" style={{ colorScheme: "dark" }}>
       <body
         className={cn(
-          "bg-background text-foreground font-sans tracking-[-0.04em]",
+          "bg-background text-foreground font-sans tracking-tighter",
           GeistSans.variable,
           GeistMono.variable,
         )}
