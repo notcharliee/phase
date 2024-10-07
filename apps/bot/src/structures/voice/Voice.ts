@@ -1,5 +1,3 @@
-import { PassThrough } from "node:stream"
-
 import {
   AudioPlayerStatus,
   createAudioPlayer,
@@ -19,6 +17,7 @@ import type {
 } from "@discordjs/voice"
 import type { VoiceManager } from "~/structures/voice/VoiceManager"
 import type { Guild, VoiceBasedChannel } from "discord.js"
+import type { Readable } from "node:stream"
 
 ffmpeg.setFfmpegPath(ffmpegPath!)
 
@@ -33,7 +32,6 @@ export class Voice {
   public readonly connection: VoiceConnection
 
   public player: AudioPlayer
-  public stream?: PassThrough
   public resource?: AudioResource
   public lastSilentAt: number
 
@@ -78,14 +76,7 @@ export class Voice {
 
     player.on("stateChange", (_oldState, newState) => {
       if (newState.status === AudioPlayerStatus.Idle) {
-        if (this.resource) {
-          this.resource = undefined
-        }
-
-        if (this.stream) {
-          this.stream.destroy()
-          this.stream = undefined
-        }
+        this.cleanUp()
       }
 
       if (
@@ -106,11 +97,12 @@ export class Voice {
    * @internal
    */
   private cleanUp() {
-    this.player.stop(true)
+    if (this.player.state.status !== AudioPlayerStatus.Idle) {
+      this.player.stop(true)
+    }
 
-    if (this.stream) {
-      this.stream.destroy()
-      this.stream = undefined
+    if (this.resource) {
+      this.resource = undefined
     }
   }
 
@@ -137,39 +129,26 @@ export class Voice {
    * song will be stopped.
    */
   public async play(url: string) {
-    if (this.connection.state.status === VoiceConnectionStatus.Disconnected) {
-      await this.join()
-    }
+    await this.join()
 
-    this.cleanUp()
-
-    this.stream = new PassThrough({ objectMode: true })
-
-    this.stream.on("error", (error: Error) => {
-      console.error(`Audio stream error: ${error.message}`)
-      console.error(error)
-      this.cleanUp()
-    })
-
-    const handleFFmpegError = (error: Error) => {
-      console.error(`FFmpeg error: ${error.message}`)
-      console.error(error)
-      this.cleanUp()
-    }
-
-    ffmpeg(url)
-      .inputOptions(["-analyzeduration", "0", "-loglevel", "0"])
-      .audioCodec("libopus")
-      .audioChannels(2)
-      .audioFrequency(48000)
-      .format("opus")
-      .on("error", handleFFmpegError)
-      .pipe(this.stream)
-
-    this.resource = createAudioResource(this.stream, {
-      inputType: StreamType.Opus,
-      inlineVolume: false,
-    })
+    this.resource = createAudioResource(
+      ffmpeg(url)
+        .inputOptions(["-analyzeduration", "0", "-loglevel", "0"])
+        .audioCodec("libopus")
+        .audioChannels(2)
+        .audioFrequency(48000)
+        .format("opus")
+        .on("error", (error: Error) => {
+          console.error(`FFmpeg error: ${error.message}`)
+          console.error(error)
+          this.cleanUp()
+        })
+        .pipe() as Readable,
+      {
+        inputType: StreamType.OggOpus,
+        inlineVolume: false,
+      },
+    )
 
     this.player.play(this.resource)
   }
@@ -196,7 +175,11 @@ export class Voice {
    */
   public destroy() {
     this.cleanUp()
-    this.connection.destroy()
+
+    if (this.connection.state.status !== VoiceConnectionStatus.Destroyed) {
+      this.connection.destroy()
+    }
+
     this.manager.voices.delete(this.guild.id)
   }
 }
