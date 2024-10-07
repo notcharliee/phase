@@ -7,7 +7,7 @@ import { ChevronDownIcon } from "@radix-ui/react-icons"
 
 import { Button } from "~/components/ui/button"
 
-import { cn } from "@/lib/utils"
+import { cn } from "~/lib/utils"
 
 const Accordion = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Root>,

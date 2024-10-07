@@ -6,8 +6,8 @@ import { useCallback, useEffect, useState } from "react"
 
 import { FileIcon, GlobeIcon, RocketIcon } from "@radix-ui/react-icons"
 
-import { Moon } from "@/components/moon"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Moon } from "~/components/moon"
+import { Button, buttonVariants } from "~/components/ui/button"
 import {
   CommandDialog,
   CommandEmpty,
@@ -16,11 +16,11 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command"
+} from "~/components/ui/command"
 
 import { docsPages, mainPages, splitPagesByCategory } from "~/config/nav"
 
-import { cn } from "@/lib/utils"
+import { cn } from "~/lib/utils"
 
 export const Header = () => {
   const pathname = usePathname()

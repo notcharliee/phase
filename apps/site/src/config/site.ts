@@ -1,4 +1,4 @@
-import { absoluteURL } from "@/lib/utils"
+import { absoluteURL } from "~/lib/utils"
 
 export const siteConfig = {
   name: "Phase Bot",

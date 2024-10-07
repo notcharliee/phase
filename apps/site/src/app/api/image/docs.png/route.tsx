@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og"
 import { type NextRequest } from "next/server"
 
-import { absoluteURL } from "@/lib/utils"
+import { absoluteURL } from "~/lib/utils"
 
 export const runtime = "edge"
 export const dynamic = "force-dynamic"

@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server"
 
 import { z } from "zod"
 
-import { absoluteURL, getOrdinal } from "@/lib/utils"
+import { absoluteURL, getOrdinal } from "~/lib/utils"
 
 export const runtime = "edge"
 export const dynamic = "force-dynamic"
