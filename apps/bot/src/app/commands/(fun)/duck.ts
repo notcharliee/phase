@@ -1,18 +1,38 @@
-import { EmbedBuilder } from "discord.js"
+import { AttachmentBuilder } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import { PhaseColour } from "~/lib/enums"
+import { BotErrorMessage } from "~/structures/BotError"
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+
+const API_URL = new URL("https://random-d.uk/api/randomimg")
 
 export default new BotCommandBuilder()
   .setName("duck")
   .setDescription("Gives you a random picture of a duck.")
   .setExecute(async (interaction) => {
-    void interaction.reply({
-      embeds: [
-        new EmbedBuilder()
-          .setTitle("Random Duck")
-          .setColor(PhaseColour.Primary)
-          .setImage("https://random-d.uk/api/randomimg?t=" + Date.now()),
-      ],
-    })
+    await interaction.deferReply()
+
+    try {
+      const response = await fetch(API_URL.toString())
+      const arrayBuffer = await response.arrayBuffer()
+      const buffer = Buffer.from(arrayBuffer)
+
+      const attachment = new AttachmentBuilder(buffer)
+        .setName("random-duck.png")
+        .setDescription("Random duck image")
+
+      return void interaction.editReply(
+        new CustomMessageBuilder().setFiles(attachment).setEmbeds((embed) => {
+          return embed
+            .setColor("Primary")
+            .setTitle("Random Duck")
+            .setImage(attachment)
+            .setFooter({ text: `Made with ${API_URL.hostname} 🤍` })
+        }),
+      )
+    } catch {
+      return void interaction.editReply(
+        new BotErrorMessage("Failed to fetch a duck image."),
+      )
+    }
   })
