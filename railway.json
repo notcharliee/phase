@@ -1,3 +1,5 @@
 {
-  "build": { "dockerfilePath": "apps/bot/Dockerfile" }
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": { "dockerfilePath": "apps/bot/Dockerfile" },
+  "deploy": { "startCommand": "cd apps/bot && bun run start" }
 }
