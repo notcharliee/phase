@@ -18,7 +18,7 @@ import type { PhaseClientParams } from "~/types/client"
 import type { CommandFile } from "~/types/commands"
 import type { BotConfig } from "~/types/config"
 import type { CronFile } from "~/types/crons"
-import type { EventFile } from "~/types/events"
+import type { BotEventName, EventFile } from "~/types/events"
 import type { BotMiddleware } from "~/types/middleware"
 import type { BotPrestart } from "~/types/prestart"
 
@@ -426,7 +426,10 @@ export class PhaseClient {
             )
           }
 
-          const event = defaultExport as BotEventBuilder
+          const event = defaultExport as BotEventBuilder<
+            BotEventName,
+            undefined
+          >
 
           eventFiles.push({ path, event })
         }

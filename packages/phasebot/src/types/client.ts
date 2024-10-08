@@ -6,7 +6,7 @@ import type {
 import type { CommandFile } from "~/types/commands"
 import type { BotConfig } from "~/types/config"
 import type { CronFile } from "~/types/crons"
-import type { EventFile } from "~/types/events"
+import type { BotEventName, EventFile } from "~/types/events"
 import type { BotMiddleware } from "~/types/middleware"
 import type { BotPluginResolvable } from "~/types/plugin"
 import type { BotPrestart } from "~/types/prestart"
@@ -43,7 +43,9 @@ export interface PhaseClientParams {
   exports?: {
     commands?: "default" | ((exports: unknown) => BotCommandBuilder)
     crons?: "default" | ((exports: unknown) => BotCronBuilder)
-    events?: "default" | ((exports: unknown) => BotEventBuilder)
+    events?:
+      | "default"
+      | ((exports: unknown) => BotEventBuilder<BotEventName, undefined>)
     middleware?: "default" | ((exports: unknown) => BotMiddleware)
     prestart?: "default" | ((exports: unknown) => BotPrestart)
   }
