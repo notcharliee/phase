@@ -1,1 +1,3 @@
-export type BuilderOrBuilderFunction<T> = T | ((builder: T) => T)
+export type BuilderOrBuilderFunction<TBuilder, TReturn = TBuilder> =
+  | TReturn
+  | ((builder: TBuilder) => TReturn)
