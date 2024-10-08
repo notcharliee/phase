@@ -29,7 +29,7 @@ export default new BotCronBuilder()
         const message = await channel.messages.fetch(giveaway.id as string)
         const host = await channel.guild.members.fetch(giveaway.host)
         const entries = await message.reactions.cache
-          .get(Emojis.Giveaway_Reaction)
+          .get(Emojis.GiveawayReaction)
           ?.users.fetch()
 
         const filter = (user: User) => user.id !== client.user.id

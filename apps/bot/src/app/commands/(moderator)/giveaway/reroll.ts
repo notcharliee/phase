@@ -84,13 +84,13 @@ export default new BotSubcommandBuilder()
     }
 
     const giveawayReaction = giveawayMessage.reactions.cache.get(
-      Emojis.Giveaway_Reaction,
+      Emojis.GiveawayReaction,
     )
 
     if (!giveawayReaction) {
       void interaction.editReply(
         new BotErrorMessage(
-          `The \`${Emojis.Giveaway_Reaction}\` reaction was not found in the giveaway message, which is required to track the giveaway entries and subsequently reroll the winners.`,
+          `The \`${Emojis.GiveawayReaction}\` reaction was not found in the giveaway message, which is required to track the giveaway entries and subsequently reroll the winners.`,
         ).toJSON(),
       )
 

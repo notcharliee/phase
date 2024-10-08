@@ -3,9 +3,9 @@ import { Emojis } from "~/lib/emojis"
 import type { Client, Snowflake, User } from "discord.js"
 
 export const Markers = {
-  Empty: Emojis.Connect4_Empty,
-  Player1: Emojis.Connect4_Player1,
-  Player2: Emojis.Connect4_Player2,
+  Empty: Emojis.Connect4Empty,
+  Player1: Emojis.Connect4Player1,
+  Player2: Emojis.Connect4Player2,
 }
 
 export type Marker = (typeof Markers)[keyof typeof Markers]
@@ -202,11 +202,11 @@ export class Connect4 {
 
     const parseCell = (cell: string): Marker => {
       switch (cell) {
-        case Emojis.Connect4_Empty:
+        case Emojis.Connect4Empty:
           return Markers.Empty
-        case Emojis.Connect4_Player1:
+        case Emojis.Connect4Player1:
           return Markers.Player1
-        case Emojis.Connect4_Player2:
+        case Emojis.Connect4Player2:
           return Markers.Player2
         default:
           throw new Error(`Invalid cell content: ${cell}`)

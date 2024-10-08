@@ -122,7 +122,7 @@ export default new BotEventBuilder()
                 return actionrow.addComponents(
                   new ButtonBuilder()
                     .setCustomId(`ticket.lock.${ticketId}`)
-                    .setEmoji(Emojis.Lock_Closed)
+                    .setEmoji(Emojis.LockClosed)
                     .setLabel("Lock Ticket")
                     .setStyle(ButtonStyle.Secondary),
                 )

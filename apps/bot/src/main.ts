@@ -48,7 +48,7 @@ const phaseClient = new PhaseClient({
       ReactionManager: {
         maxSize: 0,
         keepOverLimit: (reaction) => {
-          const reactionsToKeep = [Emojis.Giveaway_Reaction]
+          const reactionsToKeep = [Emojis.GiveawayReaction]
           return !!(
             reaction.me &&
             reaction.emoji.name &&

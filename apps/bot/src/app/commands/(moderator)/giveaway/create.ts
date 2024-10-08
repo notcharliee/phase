@@ -54,7 +54,7 @@ export default new BotSubcommandBuilder()
           .setTitle(`${prize}`)
           .setDescription(
             `
-              React with ${Emojis.Giveaway_Reaction} to enter!
+              React with ${Emojis.GiveawayReaction} to enter!
               Giveaway ends: ${dateToTimestamp(expires)}
             `,
           )
@@ -62,7 +62,7 @@ export default new BotSubcommandBuilder()
       }),
     )
 
-    await message.react(Emojis.Giveaway_Reaction)
+    await message.react(Emojis.GiveawayReaction)
 
     await db.giveaways.create({
       id: message.id,
