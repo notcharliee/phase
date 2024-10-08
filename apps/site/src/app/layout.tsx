@@ -50,7 +50,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   colorScheme: "dark",
-  themeColor: "#101010",
+  themeColor: "#f8f8f8", // used in rich embeds
 } satisfies Viewport
 
 export default function RootLayout({ children }: LayoutProps) {
