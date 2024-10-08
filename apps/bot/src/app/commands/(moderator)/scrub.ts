@@ -36,7 +36,7 @@ export default new BotCommandBuilder()
           .setColor("Yellow")
           .setTitle("⚠️ Warning")
           .setDescription(
-            `This command will delete <@${interaction.channel!.id}>, then create a new channel with the same settings. All message history will be lost forever.\n\nAny bots, webhooks, or third-party applications currently connected to <@${interaction.channel!.id}> will not be transferred to the new channel. You will need to reconnect them manually.\n\nThis action is irreversible, are you absolutely sure you wish to proceed?`,
+            `This command will delete <#${interaction.channel!.id}>, then create a new channel with the same settings. All message history will be lost forever.\n\nAny bots, webhooks, or third-party applications currently connected to <#${interaction.channel!.id}> will not be transferred to the new channel. You will need to reconnect them manually.\n\nThis action is irreversible, are you absolutely sure you wish to proceed?`,
           )
           .setFooter({
             text: "Buttons will be disabled in 1 minute.",
