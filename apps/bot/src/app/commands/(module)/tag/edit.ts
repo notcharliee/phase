@@ -1,6 +1,7 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { db } from "~/lib/db"
+
 import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
@@ -19,38 +20,31 @@ export default new BotSubcommandBuilder()
       .setRequired(true),
   )
   .setExecute(async (interaction) => {
-    const tagDoc = (await (db.tags.findOne({ guild: interaction.guildId }) ??
-      db.tags.create({
-        guild: interaction.guildId,
-        tags: [],
-      })))!
+    await interaction.deferReply({ ephemeral: true })
 
     const name = interaction.options.getString("name", true)
     const value = interaction.options.getString("value", true)
 
-    const tagIndex = tagDoc.tags.findIndex((tag) => tag.name == name)
+    const tagDoc = await db.tags.findOne({
+      guild: interaction.guildId,
+    })
 
-    if (tagIndex == -1) {
-      void interaction.reply(
+    if (!tagDoc?.tags.find((tag) => tag.name == name)) {
+      return void interaction.editReply(
         new BotErrorMessage(
           "Could not find a tag by that name. Make sure you typed it in correctly and try again.",
-        ).toJSON(),
+        ),
       )
-
-      return
     }
 
-    tagDoc.tags.splice(tagIndex, 1)
+    await tagDoc.updateOne(
+      { "tags.name": name },
+      {
+        $set: {
+          "tags.$.value": value,
+        },
+      },
+    )
 
-    tagDoc.tags.push({
-      name,
-      value,
-    })
-
-    void tagDoc.save()
-
-    void interaction.reply({
-      content: `Edited tag \`${name}\`.`,
-      ephemeral: true,
-    })
+    return void interaction.editReply(`Edited tag \`${name}\`.`)
   })

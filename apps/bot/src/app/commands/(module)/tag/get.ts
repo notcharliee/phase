@@ -1,6 +1,7 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { db } from "~/lib/db"
+
 import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
@@ -13,24 +14,23 @@ export default new BotSubcommandBuilder()
       .setRequired(true),
   )
   .setExecute(async (interaction) => {
-    const tagDoc = (await (db.tags.findOne({ guild: interaction.guildId }) ??
-      db.tags.create({
-        guild: interaction.guildId,
-        tags: [],
-      })))!
+    await interaction.deferReply({ ephemeral: true })
 
-    const name = interaction.options.getString("name", true)
-    const tagIndex = tagDoc.tags.findIndex((tag) => tag.name == name)
+    const name = interaction.options.getString("name")
 
-    if (tagIndex == -1) {
-      void interaction.reply(
+    const tagDoc = await db.tags.findOne({
+      guild: interaction.guildId,
+    })
+
+    const tag = tagDoc?.tags.find((tag) => tag.name == name)
+
+    if (!tag) {
+      return void interaction.reply(
         new BotErrorMessage(
           "Could not find a tag by that name. Make sure you typed it in correctly and try again.",
-        ).toJSON(),
+        ),
       )
-
-      return
     }
 
-    void interaction.reply(tagDoc.tags[tagIndex]!.value)
+    return void interaction.reply(tag.value)
   })

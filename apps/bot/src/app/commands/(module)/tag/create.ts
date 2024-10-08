@@ -1,6 +1,7 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { db } from "~/lib/db"
+
 import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
@@ -19,36 +20,27 @@ export default new BotSubcommandBuilder()
       .setRequired(true),
   )
   .setExecute(async (interaction) => {
-    const tagDoc = (await (db.tags.findOne({ guild: interaction.guildId }) ??
-      db.tags.create({
-        guild: interaction.guildId,
-        tags: [],
-      })))!
+    await interaction.deferReply({ ephemeral: true })
 
     const name = interaction.options.getString("name", true)
     const value = interaction.options.getString("value", true)
 
+    const tagDoc =
+      (await db.tags.findOne({
+        guild: interaction.guildId,
+      })) ?? (await db.tags.create({ guild: interaction.guildId, tags: [] }))
+
     const tagAlreadyExists = !!tagDoc.tags.find((tag) => tag.name == name)
 
     if (tagAlreadyExists) {
-      void interaction.reply(
+      return void interaction.editReply(
         new BotErrorMessage(
           `A tag already exists with that name. Use </tag edit:${interaction.id}> instead.`,
-        ).toJSON(),
+        ),
       )
-
-      return
     }
 
-    tagDoc.tags.push({
-      name,
-      value,
-    })
+    await tagDoc.updateOne({ $push: { tags: { name, value } } })
 
-    void tagDoc.save()
-
-    void interaction.reply({
-      content: `Added tag \`${name}\` to the server.`,
-      ephemeral: true,
-    })
+    return void interaction.editReply(`Added tag \`${name}\` to the server.`)
   })
