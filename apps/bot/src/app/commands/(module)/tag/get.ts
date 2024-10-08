@@ -25,12 +25,12 @@ export default new BotSubcommandBuilder()
     const tag = tagDoc?.tags.find((tag) => tag.name == name)
 
     if (!tag) {
-      return void interaction.reply(
+      return void interaction.editReply(
         new BotErrorMessage(
           "Could not find a tag by that name. Make sure you typed it in correctly and try again.",
         ),
       )
     }
 
-    return void interaction.reply(tag.value)
+    return void interaction.editReply(tag.value)
   })
