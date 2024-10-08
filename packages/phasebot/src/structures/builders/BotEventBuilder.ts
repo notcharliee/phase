@@ -1,71 +1,51 @@
-import type { BotEventExecute } from "~/types/events"
-import type { ClientEvents } from "discord.js"
+import { BotEventContext, BotEventExecute, BotEventName } from "~/types/events"
 
 export class BotEventBuilder<
-  T extends keyof ClientEvents = keyof ClientEvents,
+  TName extends BotEventName,
+  TContext extends BotEventContext[TName] | undefined,
 > {
-  /**
-   * The name of the event.
-   */
-  public readonly name!: T
+  public readonly name!: TName
+  public readonly context!: TContext
+  public readonly metadata: object
+  public readonly listenerType: "on" | "once"
+  public readonly execute: BotEventExecute<TName, TContext>
 
-  /**
-   * The type of listener to attach to the event.
-   */
-  public readonly once: boolean = false
-
-  /**
-   * The function to execute when the event is triggered.
-   */
-  public readonly execute!: BotEventExecute<T>
-
-  /**
-   * The metadata for the event.
-   */
-  public readonly metadata: object = {
-    type: "event",
+  public constructor() {
+    this.metadata = { type: "event" }
+    this.listenerType = "on"
+    this.execute = () => {}
   }
 
-  /**
-   * Set the event name to listen for.
-   *
-   * @param name - The name of the event.
-   */
-  setName<Name extends T>(name: Name) {
+  public setName<T extends BotEventName>(name: T) {
     Reflect.set(this, "name", name)
-    return this as unknown as BotEventBuilder<Name>
+    return this as unknown as BotEventBuilder<T, undefined>
   }
 
-  /**
-   * Set the type of listener to attach to the event.
-   *
-   * @param name - The type of listener to attach to the event.
-   */
-  setOnce(once: boolean) {
-    Reflect.set(this, "once", once)
+  public setContext<T extends BotEventContext[TName]>(context: T) {
+    Reflect.set(this, "context", context)
+    return this as unknown as BotEventBuilder<TName, T>
+  }
+
+  public setMetadata(metadata: object) {
+    Reflect.set(this, "metadata", { type: "event", ...metadata })
+    return this
+  }
+
+  public setListenerType(listenerType: "on" | "once") {
+    Reflect.set(this, "listenerType", listenerType)
     return this
   }
 
   /**
-   * Set the function to execute when the event is triggered.
-   *
-   * @param fn - The function to execute when the event is triggered.
+   * @deprecated Use `setListenerType` instead.
    */
-  setExecute(fn: BotEventExecute<T>) {
-    Reflect.set(this, "execute", fn)
+  public setOnce(value: boolean) {
+    Reflect.set(this, "listenerType", value ? "once" : "on")
     return this
   }
 
-  /**
-   * Set the metadata for the event.
-   *
-   * @param metadata - The metadata for the event.
-   */
-  setMetadata(metadata: object) {
-    Reflect.set(this, "metadata", {
-      type: "event",
-      ...metadata,
-    })
+  public setExecute(execute: BotEventExecute<TName, TContext>) {
+    Reflect.set(this, "execute", execute)
     return this
   }
 }

@@ -8,9 +8,7 @@ export class EventManager extends BaseManager {
     super(client)
 
     for (const { event } of eventFiles) {
-      const listenerType = event.once ? "once" : "on"
-
-      client[listenerType](event.name, (...args) =>
+      client[event.listenerType](event.name, (...args) =>
         event.execute(client, ...args),
       )
     }
