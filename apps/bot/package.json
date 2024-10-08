@@ -33,6 +33,7 @@
     "phasebot": "workspace:*",
     "sodium-native": "^4.2.1",
     "tailwindcss": "^3.4.12",
+    "ts-mixer": "^6.0.4",
     "tw-to-css": "^0.0.12",
     "zod": "^3.23.8"
   },
