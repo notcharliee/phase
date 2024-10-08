@@ -48,7 +48,7 @@ export default new BotSubcommandBuilder()
           new ButtonBuilder()
             .setLabel("Login page")
             .setStyle(ButtonStyle.Link)
-            .setURL("https://phasebot.xyz/auth/login"),
+            .setURL("https://phasebot.xyz/auth/signin"),
         ),
       ],
     })
