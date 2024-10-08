@@ -76,9 +76,16 @@ export default function ModulesPage() {
       const moduleConfig = moduleDefinitions[moduleId]
       if (!moduleConfig) return
 
-      form.setValue(moduleId, defaultEmptyFormValues[moduleId], {
-        shouldDirty: true,
-      })
+      form.setValue(
+        moduleId,
+        {
+          ...defaultEmptyFormValues[moduleId],
+          enabled: true,
+        },
+        {
+          shouldDirty: true,
+        },
+      )
     },
     [form],
   )
