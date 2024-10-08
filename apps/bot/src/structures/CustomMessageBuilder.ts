@@ -1,5 +1,6 @@
 import { ActionRowBuilder, AttachmentBuilder, normalizeArray } from "discord.js"
 
+import { CustomActionRowBuilder } from "~/structures/CustomActionRowBuilder"
 import { CustomEmbedBuilder } from "~/structures/CustomEmbedBuilder"
 
 import type { BuilderOrBuilderFunction } from "~/types/builders"
@@ -8,13 +9,9 @@ import type {
   APIMessageComponent,
   AttachmentPayload,
   BaseMessageOptions,
-  MessageActionRowComponentBuilder,
   MessageMentionOptions,
   RestOrArray,
 } from "discord.js"
-
-type MessageActionRowBuilder =
-  ActionRowBuilder<MessageActionRowComponentBuilder>
 
 export class CustomMessageBuilder {
   readonly allowedMentions?: BaseMessageOptions["allowedMentions"]
@@ -34,14 +31,14 @@ export class CustomMessageBuilder {
   }
 
   setComponents(
-    ...builders: RestOrArray<BuilderOrBuilderFunction<MessageActionRowBuilder>>
+    ...builders: RestOrArray<BuilderOrBuilderFunction<CustomActionRowBuilder>>
   ) {
     const normalisedBuilders = normalizeArray(builders)
     const actionRows: APIMessageComponent[] = []
 
     for (const builder of normalisedBuilders) {
       if (builder instanceof ActionRowBuilder) actionRows.push(builder.toJSON())
-      else actionRows.push(builder(new ActionRowBuilder()).toJSON())
+      else actionRows.push(builder(new CustomActionRowBuilder()).toJSON())
     }
 
     Reflect.set(this, "components", actionRows)
