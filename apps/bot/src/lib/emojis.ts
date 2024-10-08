@@ -1,11 +1,9 @@
-import { formatEmoji } from "discord.js"
-
 import { env } from "~/lib/env"
 
 export const ApplicationEmojis = {
-  Connect4_Empty: formatEmoji("1287414239098835025"),
-  Connect4_Player1: formatEmoji("1287414378412642304"),
-  Connect4_Player2: formatEmoji("1287539813058084914"),
+  Connect4_Empty: "<:connect4_empty:1287414239098835025>",
+  Connect4_Player1: "<:connect4_player1:1287414378412642304>",
+  Connect4_Player2: "<:connect4_player2:1287539813058084914>",
   Ticket_Locked: `<:lock_closed:1293180513816809496>`,
   Ticket_Unlocked: `<:lock_open:1293180537317494815>`,
   Ticket_Delete: `<:delete:1293180561598447656>`,
