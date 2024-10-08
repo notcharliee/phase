@@ -1,21 +1,16 @@
-import { EmbedBuilder } from "discord.js"
+import { chatInputApplicationCommandMention } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import dedent from "dedent"
-
-import { PhaseColour } from "~/lib/enums"
 import { BotErrorMessage } from "~/structures/BotError"
-
-import type { GuildTextBasedChannel } from "discord.js"
 
 export default new BotCommandBuilder()
   .setName("purge")
-  .setDescription("Bulk deletes messages from the channel.")
+  .setDescription("Bulk deletes recent messages.")
   .setDMPermission(false)
   .addIntegerOption((option) =>
     option
-      .setName("amount")
-      .setDescription("The number of messages to purge (max 100).")
+      .setName("limit")
+      .setDescription("The number of messages to fetch (max 100).")
       .setMaxValue(100)
       .setMinValue(1)
       .setRequired(true),
@@ -27,51 +22,51 @@ export default new BotCommandBuilder()
       .setRequired(false),
   )
   .setExecute(async (interaction) => {
-    const amount = interaction.options.getInteger("amount", true)
+    await interaction.deferReply({ ephemeral: true })
+
+    const limit = interaction.options.getInteger("limit", true)
     const author = interaction.options.getUser("author", false)
 
-    const channel = interaction.channel as GuildTextBasedChannel
+    const channel = interaction.guild!.channels.resolve(interaction.channelId)!
+    if (!channel.isSendable()) return
 
     let fetchedMessages = await channel.messages
-      .fetch({ limit: amount })
+      .fetch({ limit, cache: false })
       .catch(() => null)
 
-    if (author) {
-      fetchedMessages =
-        fetchedMessages?.filter((message) => message.author.id == author.id) ??
-        null
+    if (!fetchedMessages) {
+      return void interaction.editReply(
+        new BotErrorMessage("Failed to fetch messages."),
+      )
     }
 
-    const deletedMessages = fetchedMessages
+    if (author) {
+      fetchedMessages = fetchedMessages.filter(
+        ({ author: { id } }) => id === author.id,
+      )
+    }
+
+    const deletedMessages = fetchedMessages.size
       ? await channel.bulkDelete(fetchedMessages, true).catch(() => null)
       : null
 
     if (!deletedMessages?.size) {
-      const commandMention = `</scrub:${interaction.client.application.commands.cache.find((command) => command.name === "scrub")!.id}>`
-
-      void interaction.reply(
-        new BotErrorMessage({
-          title: "Messages Not Found",
-          description: dedent`
-            No messages were found.
-            
-            -# **Note:** Discord doesn't allow bots to bulk delete messages that older than 2 weeks. If you need to purge the entire channel, run ${commandMention} instead.
-          `,
-        }).toJSON(),
+      const scrubCommandMention = chatInputApplicationCommandMention(
+        "scrub",
+        interaction.client.application.commands.cache.find(
+          (command) => command.name === "scrub",
+        )!.id,
       )
 
-      return
+      return void interaction.editReply(
+        new BotErrorMessage(
+          `No recent messages were found. If you want to purge the entire channel, run ${scrubCommandMention} instead.`,
+        ),
+      )
     }
 
-    void interaction.reply({
-      embeds: [
-        new EmbedBuilder()
-          .setColor(PhaseColour.Primary)
-          .setDescription(
-            `Purged **${deletedMessages.size}** messages in total` +
-              `${author ? ` sent by <@${author.id}>` : "."}`,
-          )
-          .setTitle("Messages Purged"),
-      ],
-    })
+    return void interaction.editReply(
+      `Purged **${deletedMessages.size}** messages` +
+        (author ? ` sent by <@${author.id}>` : "."),
+    )
   })
