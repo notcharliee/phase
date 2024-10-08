@@ -17,7 +17,7 @@ import type {
   ModalActionRowComponentBuilder,
 } from "discord.js"
 
-class MessageActionRowBuilder extends ActionRowBuilder<MessageActionRowComponentBuilder> {
+export class MessageActionRowBuilder extends ActionRowBuilder<MessageActionRowComponentBuilder> {
   public addButton(builder: BuilderOrBuilderFunction<ButtonBuilder>) {
     return super.addComponents(
       typeof builder === "function" ? builder(new ButtonBuilder()) : builder,
@@ -75,13 +75,17 @@ class MessageActionRowBuilder extends ActionRowBuilder<MessageActionRowComponent
   }
 }
 
-class ModalActionRowBuilder extends ActionRowBuilder<ModalActionRowComponentBuilder> {
+export class ModalActionRowBuilder extends ActionRowBuilder<ModalActionRowComponentBuilder> {
   public addTextInput(builder: BuilderOrBuilderFunction<TextInputBuilder>) {
     return super.addComponents(
       typeof builder === "function" ? builder(new TextInputBuilder()) : builder,
     ) as ModalActionRowBuilder
   }
 }
+
+export type CustomActionRowBuilderReturnType =
+  | MessageActionRowBuilder
+  | ModalActionRowBuilder
 
 export class CustomActionRowBuilder extends Mixin(
   MessageActionRowBuilder,

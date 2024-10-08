@@ -1,12 +1,14 @@
-import { ActionRowBuilder, AttachmentBuilder, normalizeArray } from "discord.js"
+import { AttachmentBuilder, normalizeArray } from "discord.js"
 
 import { CustomActionRowBuilder } from "~/structures/CustomActionRowBuilder"
 import { CustomEmbedBuilder } from "~/structures/CustomEmbedBuilder"
 
+import type { CustomActionRowBuilderReturnType } from "~/structures/CustomActionRowBuilder"
 import type { BuilderOrBuilderFunction } from "~/types/builders"
 import type {
   APIEmbed,
   APIMessageComponent,
+  APIModalComponent,
   AttachmentPayload,
   BaseMessageOptions,
   MessageMentionOptions,
@@ -31,14 +33,22 @@ export class CustomMessageBuilder {
   }
 
   setComponents(
-    ...builders: RestOrArray<BuilderOrBuilderFunction<CustomActionRowBuilder>>
+    ...builders: RestOrArray<
+      BuilderOrBuilderFunction<
+        CustomActionRowBuilder,
+        CustomActionRowBuilderReturnType
+      >
+    >
   ) {
     const normalisedBuilders = normalizeArray(builders)
-    const actionRows: APIMessageComponent[] = []
+    const actionRows: (APIMessageComponent | APIModalComponent)[] = []
 
     for (const builder of normalisedBuilders) {
-      if (builder instanceof ActionRowBuilder) actionRows.push(builder.toJSON())
-      else actionRows.push(builder(new CustomActionRowBuilder()).toJSON())
+      actionRows.push(
+        typeof builder === "function"
+          ? builder(new CustomActionRowBuilder()).toJSON()
+          : builder.toJSON(),
+      )
     }
 
     Reflect.set(this, "components", actionRows)
