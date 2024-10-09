@@ -5,6 +5,7 @@ import { analytics } from "~/models/analytics"
 import { configs } from "~/models/configs"
 import { giveaways } from "~/models/giveaways"
 import { guilds } from "~/models/guilds"
+import { joinToCreates } from "~/models/join-to-creates"
 import { levels } from "~/models/levels"
 import { otps } from "~/models/otps"
 import { reminders } from "~/models/reminders"
@@ -16,6 +17,7 @@ class DatabaseModels {
   readonly configs = configs
   readonly giveaways = giveaways
   readonly guilds = guilds
+  readonly joinToCreates = joinToCreates
   readonly levels = levels
   readonly otps = otps
   readonly reminders = reminders
@@ -84,6 +86,7 @@ export type * from "~/models/analytics"
 export type * from "~/models/configs"
 export type * from "~/models/giveaways"
 export type * from "~/models/guilds"
+export type * from "~/models/join-to-creates"
 export type * from "~/models/levels"
 export type * from "~/models/otps"
 export type * from "~/models/reminders"
