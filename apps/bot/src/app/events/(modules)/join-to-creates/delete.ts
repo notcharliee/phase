@@ -32,7 +32,12 @@ export default new BotEventBuilder()
 
     try {
       await oldVoice.guild.channels.delete(oldVoice.channelId)
-    } catch {
-      // do nothing
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(`[Join to Creates] Failed to delete channel`)
+        console.error(error)
+      } else {
+        throw error
+      }
     }
   })
