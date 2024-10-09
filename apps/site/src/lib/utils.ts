@@ -8,7 +8,7 @@ import type { ClassValue } from "clsx"
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs))
 
-export const absoluteURL = (path: string) => env.NEXT_PUBLIC_BASE_URL + path
+export const absoluteURL = (path: string) => env.BASE_URL + path
 
 export const getInitials = (input: string) => {
   const words = input.split(" ")

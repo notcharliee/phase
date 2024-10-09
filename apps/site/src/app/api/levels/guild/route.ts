@@ -72,7 +72,7 @@ export const GET = async (request: NextRequest) => {
               forceStatic: true,
               extension: "png",
             })
-          : `${env.NEXT_PUBLIC_BASE_URL}/discord.png`,
+          : `${env.BASE_URL}/discord.png`,
         level: data.level,
         xp: data.xp,
         rank: rankStart + index,
