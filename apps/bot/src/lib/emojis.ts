@@ -9,9 +9,8 @@ export const ApplicationEmojis = {
   Delete: `<:delete:1293180561598447656>`,
   PencilEdit: `<:pencil_edit:1293297875601588405>`,
   MicrophoneOff: `<:microphone_off:1293297932774150214>`,
-  Stop: `<:stop:1293297971059752980>`,
   Users: `<:users:1293297987375595590>`,
-  Information: `<:information:1293298017142706197>`,
+  Transfer: `<:transfer:1293549888679710771>`,
 }
 
 export const FallbackEmojis = {
@@ -23,9 +22,8 @@ export const FallbackEmojis = {
   Delete: "🗑️",
   PencilEdit: "📝",
   MicrophoneOff: "🎙️",
-  Stop: "⛔",
   Users: "👥",
-  Information: "ℹ️",
+  Transfer: "➡️",
 } satisfies Record<keyof typeof ApplicationEmojis, string>
 
 export const Emojis = {
