@@ -1,17 +1,28 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
+// @ts-nocheck
+
 import "@total-typescript/ts-reset"
 
+import { fileURLToPath } from "node:url"
+
 import createMDX from "@next/mdx"
+import { createJiti } from "jiti"
 import rehypeAutolinkHeadings from "rehype-autolink-headings"
 import rehypeSlug from "rehype-slug"
 import remarkGfm from "remark-gfm"
 
-import { env } from "./src/lib/env.js"
+const jiti = createJiti(fileURLToPath(import.meta.url))
 
 /** @type {import('next').NextConfig} */
 const config = {
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
   experimental: { mdxRs: true },
   async redirects() {
+    const env = (await jiti.import("./src/lib/env.ts")).env
+
     return [
       {
         // discord server
@@ -85,10 +96,7 @@ const config = {
 
 const withMDX = createMDX({
   options: {
-    remarkPlugins: [
-      // @ts-expect-error type error for some reason idk
-      remarkGfm,
-    ],
+    remarkPlugins: [remarkGfm],
     rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
   },
 })
