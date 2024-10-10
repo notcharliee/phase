@@ -1,14 +1,11 @@
-import { ClientOnly } from "~/components/client-only"
 import { DashboardNavigation } from "~/components/dashboard/navigation"
 
-export default function Layout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+import type { LayoutProps } from "~/types/props"
+
+export default function Layout({ children }: LayoutProps) {
   return (
     <main className="flex h-screen w-screen flex-col-reverse sm:flex-row">
-      <ClientOnly>
-        <DashboardNavigation />
-      </ClientOnly>
+      <DashboardNavigation />
       <div className="relative h-full w-full overflow-auto p-6 sm:p-12">
         {children}
       </div>
