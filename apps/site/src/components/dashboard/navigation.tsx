@@ -32,6 +32,8 @@ const categories = Object.entries(
 )
 
 export function DashboardNavigation() {
+  const pathname = usePathname()
+
   return (
     <nav className="sm:flex sm:h-screen sm:min-w-[20rem] sm:flex-col sm:justify-between sm:border-r sm:p-12">
       <div className="hidden sm:block sm:space-y-12">
@@ -40,14 +42,14 @@ export function DashboardNavigation() {
         </h3>
         <div className="space-y-1.5">
           {iconNavItems.map((item) => (
-            <NavigationItem key={item.href} {...item} />
+            <NavigationItem key={item.href} pathname={pathname} {...item} />
           ))}
         </div>
         {categories.map(([category, items]) => (
           <div key={category} className="flex flex-col space-y-1.5">
             <Label className="text-base uppercase">{category}</Label>
             {items.map((item) => (
-              <NavigationItem key={item.href} {...item} />
+              <NavigationItem key={item.href} pathname={pathname} {...item} />
             ))}
           </div>
         ))}
@@ -62,7 +64,12 @@ export function DashboardNavigation() {
       </div>
       <div className="bg-background text-muted-foreground before:from-background relative flex w-screen justify-evenly border-t py-5 before:absolute before:top-[-25px] before:h-6 before:w-full before:bg-gradient-to-t before:to-transparent sm:hidden">
         {iconNavItems.map((item) => (
-          <NavigationItem key={item.href} {...item} mobile />
+          <NavigationItem
+            key={item.href}
+            pathname={pathname}
+            mobile
+            {...item}
+          />
         ))}
       </div>
     </nav>
@@ -70,20 +77,23 @@ export function DashboardNavigation() {
 }
 
 interface NavigationItemProps extends NavItem {
+  pathname: string
+  disabled?: boolean
   mobile?: boolean
 }
 
 function NavigationItem(props: NavigationItemProps) {
-  const pathname = usePathname()
+  const Component = props.disabled ? "span" : NextLink
 
   if (props.icon) {
     return (
-      <NextLink
+      <Component
         href={props.href}
         aria-label={props.label}
-        aria-selected={pathname === props.href}
+        aria-selected={props.pathname === props.href}
+        aria-disabled={props.disabled}
         className={cn(
-          "before:bg-primary relative flex before:absolute before:rounded-full before:opacity-0 aria-selected:before:opacity-100",
+          "before:bg-primary relative flex before:absolute before:rounded-full before:opacity-0 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-selected:before:opacity-100",
           props.mobile
             ? "aria-selected:text-foreground justify-center before:-bottom-3 before:z-10 before:h-1 before:w-3.5"
             : "aria-selected:text-primary-foreground w-full items-center gap-2.5 py-2.5 before:-left-5 before:h-full before:w-[calc(100%+2.5rem)]",
@@ -101,18 +111,18 @@ function NavigationItem(props: NavigationItemProps) {
         >
           {props.label}
         </span>
-      </NextLink>
+      </Component>
     )
   }
 
   if (!props.mobile) {
     return (
-      <NextLink
+      <Component
         href={props.href}
         className="text-muted-foreground hover:text-foreground"
       >
         {props.label}
-      </NextLink>
+      </Component>
     )
   }
 
