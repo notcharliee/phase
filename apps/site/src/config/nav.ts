@@ -62,11 +62,13 @@ export const dashboardPages: NavItem[] = [
     label: "Commands",
     href: "/dashboard/commands",
     icon: CommandIcon,
+    disabled: true,
   },
   {
     label: "Settings",
     href: "/dashboard/settings",
     icon: MixerHorizontalIcon,
+    disabled: true,
   },
   // resources
   {
