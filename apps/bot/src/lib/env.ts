@@ -12,7 +12,6 @@ export const env = createEnv({
     TWITCH_CLIENT_SECRET: z.string(),
     AUTH_OTP_SECRET: z.string(),
     WEBHOOK_ALERT: z.string(),
-    API_YOUTUBE: z.string(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

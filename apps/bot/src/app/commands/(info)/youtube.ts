@@ -1,13 +1,11 @@
-import { EmbedBuilder } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
-import dedent from "dedent"
-import { google } from "googleapis"
+import { getBasicInfo, validateURL } from "@distube/ytdl-core"
 
-import { PhaseColour } from "~/lib/enums"
-import { env } from "~/lib/env"
+import { dateToTimestamp, formatNumber, truncateString } from "~/lib/utils"
+
 import { BotErrorMessage } from "~/structures/BotError"
-import { formatNumber } from "~/lib/utils"
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 
 interface YoutTubeDislikeAPIResponse {
   id: string
@@ -22,70 +20,75 @@ interface YoutTubeDislikeAPIResponse {
 export default new BotCommandBuilder()
   .setName("youtube")
   .setDescription("Gives you info about a YouTube video.")
-  .addStringOption((option) =>
-    option.setName("video").setDescription("The video URL.").setRequired(true),
-  )
-  .setExecute(async (interaction) => {
-    const youtube = google.youtube("v3")
-
-    const videoUrl = interaction.options.getString("video", true)
-    let videoId = ""
-
-    if (videoUrl.includes("v=")) {
-      videoId = videoUrl.split("v=")[1]!.split("&")[0]!
-    } else if (videoUrl.includes(".be/")) {
-      videoId = videoUrl.split(".be/")[1]!.split("?")[0]!
-    } else {
-      void interaction.reply(
-        new BotErrorMessage("Could not find a YouTube video with that URL.").toJSON(),
-      )
-
-      return
-    }
-
-    const videoResponse = await youtube.videos
-      .list({
-        key: env.API_YOUTUBE,
-        part: ["snippet"],
-        id: [videoId],
-      })
-      .catch(() => null)
-
-    if (!videoResponse?.data.items?.[0]!.snippet) {
-      void interaction.reply(
-        new BotErrorMessage("Could not find a YouTube video with that URL.").toJSON(),
-      )
-
-      return
-    }
-
-    const video = videoResponse.data.items[0].snippet
-    const videoThumbnail = video.thumbnails?.maxres?.url
-
-    const ratingsData = await fetch(
-      "https://returnyoutubedislikeapi.com/votes?videoId=" + videoId,
-    )
-      .catch(() => null)
-      .then((res) => res?.json() as Promise<YoutTubeDislikeAPIResponse | null>)
-
-    void interaction.reply({
-      embeds: [
-        new EmbedBuilder()
-          .setColor(PhaseColour.Primary)
-          .setTitle(`${video.channelTitle} - ${video.title}`)
-          .setURL(videoUrl)
-          .setDescription(
-            dedent`
-              **Published:** <t:${Date.parse(`${video.publishedAt}`) / 1000}:R>
-              **Views:** ${formatNumber(ratingsData?.viewCount ?? 0)}
-              **Likes:** ${formatNumber(ratingsData?.likes ?? 0)}
-              **Dislikes:** ${formatNumber(ratingsData?.dislikes ?? 0)}
-              
-              **Description:**
-              ${video.description}
-            `,
-          )
-          .setImage(videoThumbnail ?? null),
-      ],
-    })
+  .addStringOption((option) => {
+    return option
+      .setName("url")
+      .setDescription("The video URL.")
+      .setRequired(true)
   })
+  .setExecute(async (interaction) => {
+    await interaction.deferReply()
+
+    const url = interaction.options.getString("url", true)
+
+    if (!validateURL(url)) {
+      return void interaction.editReply(
+        new BotErrorMessage("Invalid YouTube URL."),
+      )
+    }
+
+    try {
+      const { videoDetails } = await getBasicInfo(url)
+      const videoRatings = await getRatings(videoDetails.videoId)
+
+      const videoIsLive = videoDetails.isLive
+      const videoTitle = `${videoIsLive ? "🔴" : ""} ${videoDetails.title}`
+      const videoViews = videoRatings?.viewCount ?? 0
+      const videoLikes = videoRatings?.likes ?? 0
+      const videoDislikes = videoRatings?.dislikes ?? 0
+      const videoPublishedAt = new Date(videoDetails.publishDate)
+      const videoDescription = videoDetails.description ?? "N/A"
+
+      void interaction.editReply(
+        new CustomMessageBuilder().setEmbeds((embed) => {
+          return embed
+            .setColor("Primary")
+            .setAuthor({
+              name: videoDetails.author.name,
+              iconURL: videoDetails.author.avatar,
+              url: videoDetails.author.channel_url,
+            })
+            .setURL(videoDetails.video_url)
+            .setTitle(videoTitle)
+            .setDescription(
+              `
+                **Views:** ${formatNumber(videoViews)}
+                **Likes:** ${formatNumber(videoLikes)}
+                **Dislikes:** ${formatNumber(videoDislikes)}
+                **Published:** ${dateToTimestamp(videoPublishedAt)}
+
+                **Description:**
+                ${truncateString(videoDescription, 1024)}
+              `,
+            )
+            .setImage(videoDetails.thumbnails.pop()?.url ?? null)
+        }),
+      )
+    } catch {
+      return void interaction.editReply(
+        new BotErrorMessage("Could not find a video with that URL."),
+      )
+    }
+  })
+
+async function getRatings(videoId: string) {
+  const url = new URL("https://returnyoutubedislikeapi.com/votes")
+
+  url.searchParams.set("videoId", videoId)
+
+  const ratingsData = await fetch(url.toString())
+    .then((res) => (res.ok ? res.json() : null))
+    .catch(() => null)
+
+  return ratingsData as Promise<YoutTubeDislikeAPIResponse | null>
+}
