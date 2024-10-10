@@ -19,7 +19,18 @@ const jiti = createJiti(fileURLToPath(import.meta.url))
 /** @type {import('next').NextConfig} */
 const config = {
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
-  experimental: { mdxRs: true },
+  experimental: {
+    mdxRs: true,
+    turbo: {
+      resolveAlias: {
+        "next-mdx-import-source-file": [
+          "private-next-root-dir/src/mdx-components",
+          "private-next-root-dir/mdx-components",
+          "@mdx-js/react",
+        ],
+      },
+    },
+  },
   async redirects() {
     const env = (await jiti.import("./src/lib/env.ts")).env
 
