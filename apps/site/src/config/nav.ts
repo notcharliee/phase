@@ -15,6 +15,7 @@ export interface NavItem {
   icon?: React.FC<IconProps>
   category?: string
   external?: boolean
+  disabled?: boolean
 }
 
 export const mainPages: NavItem[] = [

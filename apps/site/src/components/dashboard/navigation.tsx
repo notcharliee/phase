@@ -78,7 +78,6 @@ export function DashboardNavigation() {
 
 interface NavigationItemProps extends NavItem {
   pathname: string
-  disabled?: boolean
   mobile?: boolean
 }
 
