@@ -14,7 +14,7 @@ import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 export default new BotEventBuilder()
   .setName("voiceStateUpdate")
   .setExecute(async (client, oldVoice, newVoice) => {
-    if (oldVoice.channel || !newVoice.channel || !newVoice.member) return
+    if (!newVoice.channel || !newVoice.member) return
 
     const guildDoc = client.store.guilds.get(oldVoice.guild.id)
     const moduleConfig = guildDoc?.modules?.[ModuleId.JoinToCreates]
