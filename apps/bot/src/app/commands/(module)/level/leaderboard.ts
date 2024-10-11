@@ -1,9 +1,10 @@
-import { AttachmentBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/utils/modules"
 
 import { BotErrorMessage } from "~/structures/BotError"
+import { db } from '~/lib/db.ts'
+import { generateLeaderboardCard } from '~/images/leaderboard.tsx'
 
 export default new BotSubcommandBuilder()
   .setName("leaderboard")
@@ -39,26 +40,64 @@ export default new BotSubcommandBuilder()
 
     await interaction.deferReply()
 
-    const apiResponse = await fetch(
-      `https://phasebot.xyz/api/image/levels/guild.png?rankStart=${rankStart}&rankEnd=${rankEnd}&guild=${interaction.guildId}&date=${Date.now()}`,
-    )
+    try {
+      const usersData = await db.levels
+        .find({ guild: interaction.guildId })
+        .sort({ level: -1, xp: -1 })
+        .skip(rankStart - 1)
+        .limit(rankEnd - rankStart + 1);
 
-    if (apiResponse.ok) {
-      const imageArrayBuffer = await apiResponse.arrayBuffer()
-      const imageBuffer = Buffer.from(imageArrayBuffer)
-      const imageAttachment = new AttachmentBuilder(imageBuffer)
+      if (!usersData?.length) {
+        return void interaction.editReply({
+          content: "No users found within the specified rank range.",
+        })
+      };
 
-      void interaction.editReply({
-        files: [imageAttachment],
-      })
-    } else {
+      const response = []
+
+      for (let index = 0; index < usersData.length; index++) {
+        const data = usersData[index]!
+
+        try {
+          const user = await interaction.client.users.fetch(data.user)
+
+          response.push({
+            id: user.id,
+            username: user.username,
+            global_name: user.displayName ?? user.username,
+            avatar:
+              user.avatarURL({
+                size: 128,
+                forceStatic: true,
+                extension: "png",
+              }) ?? `https://phasebot.xyz/discord.png`,
+            level: data.level,
+            xp: data.xp,
+            rank: rankStart + index,
+            target: 500 * (data.level + 1),
+          })
+        } catch {
+          continue
+        };
+      };
+
+      const leaderBoardCard = await generateLeaderboardCard({
+        data: response,
+      }).toAttachment()
+
+      leaderBoardCard.setName(`leaderboard-card-${interaction.guildId}.png`)
+
+      await interaction.editReply({ files: [leaderBoardCard] })
+    } catch (error) {
+      console.error(error)
+
       void interaction.editReply(
         BotErrorMessage.unknown({
-          error: new Error(apiResponse.statusText),
+          error: error as Error,
           commandName: "level leaderboard",
           channelId: interaction.channelId,
           guildId: interaction.guildId!,
         }).toJSON(),
       )
-    }
+    };
   })
