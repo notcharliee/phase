@@ -1,11 +1,11 @@
 import { ImageBuilder } from "phasebot/builders"
 
+import { getOrdinal } from "~/lib/utils"
+
 import geistBold from "./fonts/geist-bold.otf"
 import geistMedium from "./fonts/geist-medium.otf"
 
-import { getOrdinal } from "~/lib/utils"
-
-interface dataProps {
+interface DataProps {
   id: string
   username: string
   global_name: string
@@ -14,109 +14,105 @@ interface dataProps {
   xp: number
   rank: number
   target: number
-};
-
-
-interface LeaderboardCardProps {
-  data: dataProps[]
 }
 
-export const generateLeaderboardCard = async (props: LeaderboardCardProps) => {
-  const leaderboardItems = await Promise.all(
-    props.data.map(async (user, index) => (
+interface LeaderboardCardProps {
+  data: DataProps[]
+}
+
+export const generateLeaderboardCard = (props: LeaderboardCardProps) => {
+  const leaderboardItems = props.data.map((user, index) => (
+    <div
+      key={index}
+      style={{
+        display: "flex",
+        gap: "24px",
+        alignItems: "center",
+        height: "60px",
+      }}
+    >
+      <img
+        src={user.avatar}
+        width={60}
+        height={60}
+        style={{
+          borderRadius: "11.25px",
+        }}
+      />
       <div
-        key={index}
         style={{
           display: "flex",
-          gap: "24px",
-          alignItems: "center",
-          height: "60px",
+          flexDirection: "column",
         }}
       >
-        <img
-          src={user.avatar}
-          width={60}
-          height={60}
+        <span
           style={{
-            borderRadius: "11.25px",
-          }}
-        />
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
+            color: "#f8f8f8",
+            fontSize: "20px",
+            fontWeight: "600",
           }}
         >
-          <span
-            style={{
-              color: "#f8f8f8",
-              fontSize: "20px",
-              fontWeight: "600",
-            }}
-          >
-            {getOrdinal(user.rank)} Place
-          </span>
-          <span
-            style={{
-              color: "#c0c0c0",
-              fontSize: "20px",
-              fontWeight: "600",
-            }}
-          >
-            {user.username}
-          </span>
-        </div>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width={60}
-          height={60}
-          viewBox="-1 -1 34 34"
+          {getOrdinal(user.rank)} Place
+        </span>
+        <span
           style={{
-            marginRight: "0px",
-            marginLeft: "auto",
+            color: "#c0c0c0",
+            fontSize: "20px",
+            fontWeight: "600",
           }}
         >
-          <g transform="rotate(-90 16 16)">
-            <circle
-              cx="16"
-              cy="16"
-              r="15.9155"
-              stroke={"#f8f8f8"}
-              strokeWidth="2"
-              fill="none"
-            />
-            <circle
-              cx="16"
-              cy="16"
-              r="15.9155"
-              stroke={"#c0c0c0"}
-              strokeWidth="2"
-              strokeDasharray="100 100"
-              strokeDashoffset={-((user.xp / user.target) * 100)}
-              fill="none"
-            />
-          </g>
-          <span
-            style={{
-              color: "#f8f8f8",
-              fontSize: "20px",
-              fontWeight: "600",
-              margin: "auto",
-            }}
-          >
-            {user.level}
-          </span>
-        </svg>
+          {user.username}
+        </span>
       </div>
-    ))
-  );
-
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={60}
+        height={60}
+        viewBox="-1 -1 34 34"
+        style={{
+          marginRight: "0px",
+          marginLeft: "auto",
+        }}
+      >
+        <g transform="rotate(-90 16 16)">
+          <circle
+            cx="16"
+            cy="16"
+            r="15.9155"
+            stroke={"#f8f8f8"}
+            strokeWidth="2"
+            fill="none"
+          />
+          <circle
+            cx="16"
+            cy="16"
+            r="15.9155"
+            stroke={"#c0c0c0"}
+            strokeWidth="2"
+            strokeDasharray="100 100"
+            strokeDashoffset={-((user.xp / user.target) * 100)}
+            fill="none"
+          />
+        </g>
+        <span
+          style={{
+            color: "#f8f8f8",
+            fontSize: "20px",
+            fontWeight: "600",
+            margin: "auto",
+          }}
+        >
+          {user.level}
+        </span>
+      </svg>
+    </div>
+  ))
 
   return new ImageBuilder(
     (
       <div
         style={{
-          background: '#080808',
+          background: "#080808",
           padding: "24px",
           display: "flex",
           flexDirection: "column",
@@ -126,7 +122,8 @@ export const generateLeaderboardCard = async (props: LeaderboardCardProps) => {
       >
         {leaderboardItems}
       </div>
-    ))
+    ),
+  )
     .setWidth(450)
     .setHeight(props.data.length * 60 + (props.data.length - 1) * 24 + 48)
     .setFonts([

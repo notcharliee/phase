@@ -83,7 +83,7 @@ export default new BotSubcommandBuilder()
 
       const leaderBoardCard = await generateLeaderboardCard({
         data: response,
-      }).then((res) => res.toAttachment())
+      }).toAttachment()
 
       leaderBoardCard.setName(`leaderboard-card-${interaction.guildId}.png`)
 
