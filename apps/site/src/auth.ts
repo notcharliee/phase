@@ -81,25 +81,34 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         return session
       }
 
-      try {
-        const discordUser = await discordAPI.users.get(userId)
+      // try {
+      //   const discordUser = await discordAPI.users.get(userId)
 
-        session.user = {
-          id: discordUser.id,
-          username: discordUser.username,
-          globalName: discordUser.global_name ?? discordUser.username,
-          avatarUrl: discordUser.avatar
-            ? discordREST.cdn.avatar(discordUser.id, discordUser.avatar)
-            : discordREST.cdn.defaultAvatar(
-                discordUser.discriminator === "0"
-                  ? Number(BigInt(userId) >> 22n) % 6
-                  : Number(discordUser.discriminator) % 5,
-              ),
-        }
-      } catch (error) {
-        console.error("[Session] Failed to fetch user data:")
-        console.error(error)
-        return session
+      //   session.user = {
+      //     id: discordUser.id,
+      //     username: discordUser.username,
+      //     globalName: discordUser.global_name ?? discordUser.username,
+      //     avatarUrl: discordUser.avatar
+      //       ? discordREST.cdn.avatar(discordUser.id, discordUser.avatar)
+      //       : discordREST.cdn.defaultAvatar(
+      //           discordUser.discriminator === "0"
+      //             ? Number(BigInt(userId) >> 22n) % 6
+      //             : Number(discordUser.discriminator) % 5,
+      //         ),
+      //   }
+      // } catch (error) {
+      //   console.error("[Session] Failed to fetch user data:")
+      //   console.error(error)
+      //   return session
+      // }
+
+      session.user = {
+        id: userId,
+        username: "unknown",
+        globalName: "unknown",
+        avatarUrl: discordREST.cdn.defaultAvatar(
+          Number(BigInt(userId) >> 22n) % 6,
+        ),
       }
 
       return session
