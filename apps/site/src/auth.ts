@@ -50,7 +50,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           throw new Error(json.message)
         }
 
-        return json.data
+        return { userId: json.data.userId }
       },
     }),
   ],
