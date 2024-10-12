@@ -33,7 +33,7 @@ const config = {
       {
         // dashboard oauth
         source: "/redirect/oauth",
-        destination: `https://discord.com/api/oauth2/authorize?client_id=${process.env.DISCORD_ID}&response_type=code&scope=identify&redirect_uri=${process.env.BASE_URL}/auth/login`,
+        destination: `https://discord.com/api/oauth2/authorize?client_id=${process.env.DISCORD_ID}&response_type=code&scope=identify&redirect_uri=${process.env.BASE_URL}/dashboard/guilds`,
         permanent: false,
       },
       {
