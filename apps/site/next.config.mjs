@@ -1,12 +1,11 @@
-import "@total-typescript/ts-reset"
+/* eslint-disable no-undef */
 
-import { fileURLToPath } from "node:url"
+import "@total-typescript/ts-reset"
 
 import createMDX from "@next/mdx"
 import rehypeAutolinkHeadings from "rehype-autolink-headings"
 import rehypeSlug from "rehype-slug"
 import remarkGfm from "remark-gfm"
-import z from "zod"
 
 /** @type {import('next').NextConfig} */
 const config = {
@@ -24,20 +23,6 @@ const config = {
     },
   },
   async redirects() {
-    const { createJiti } = await import("jiti")
-
-    const jitiId = fileURLToPath(import.meta.url)
-    const jiti = createJiti(jitiId)
-
-    const { env } = z
-      .object({
-        env: z.object({
-          DISCORD_ID: z.string(),
-          BASE_URL: z.string(),
-        }),
-      })
-      .parse(await jiti.import("./src/lib/env.ts"))
-
     return [
       {
         // discord server
@@ -48,19 +33,19 @@ const config = {
       {
         // dashboard oauth
         source: "/redirect/oauth",
-        destination: `https://discord.com/api/oauth2/authorize?client_id=${env.DISCORD_ID}&response_type=code&scope=identify&redirect_uri=${env.BASE_URL}/auth/login`,
+        destination: `https://discord.com/api/oauth2/authorize?client_id=${process.env.DISCORD_ID}&response_type=code&scope=identify&redirect_uri=${process.env.BASE_URL}/auth/login`,
         permanent: false,
       },
       {
         // bot invite
         source: "/redirect/invite",
-        destination: `https://discord.com/oauth2/authorize?client_id=${env.DISCORD_ID}&response_type=code&scope=bot%20applications.commands&permissions=17666911472`,
+        destination: `https://discord.com/oauth2/authorize?client_id=${process.env.DISCORD_ID}&response_type=code&scope=bot%20applications.commands&permissions=17666911472`,
         permanent: false,
       },
       {
         // old donation redirect
         source: "/redirect/donate",
-        destination: `${env.BASE_URL}/redirect/buymeacoffee`,
+        destination: `${process.env.BASE_URL}/redirect/buymeacoffee`,
         permanent: false,
       },
       {
