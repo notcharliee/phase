@@ -14,13 +14,7 @@ import type { JWT, Profile, Session } from "~/types/auth"
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
 
-export const {
-  handlers,
-  auth,
-  signIn,
-  signOut,
-  unstable_update: updateSession,
-} = NextAuth({
+export const { handlers, auth, signIn, signOut } = NextAuth({
   secret: env.AUTH_COOKIE_SECRET,
   cookies: {
     sessionToken: {
