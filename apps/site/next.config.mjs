@@ -1,20 +1,12 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
-// @ts-nocheck
-
 import "@total-typescript/ts-reset"
 
 import { fileURLToPath } from "node:url"
 
 import createMDX from "@next/mdx"
-import { createJiti } from "jiti"
 import rehypeAutolinkHeadings from "rehype-autolink-headings"
 import rehypeSlug from "rehype-slug"
 import remarkGfm from "remark-gfm"
-
-const jiti = createJiti(fileURLToPath(import.meta.url))
+import z from "zod"
 
 /** @type {import('next').NextConfig} */
 const config = {
@@ -32,7 +24,19 @@ const config = {
     },
   },
   async redirects() {
-    const env = (await jiti.import("./src/lib/env.ts")).env
+    const { createJiti } = await import("jiti")
+
+    const jitiId = fileURLToPath(import.meta.url)
+    const jiti = createJiti(jitiId)
+
+    const { env } = z
+      .object({
+        env: z.object({
+          DISCORD_ID: z.string(),
+          BASE_URL: z.string(),
+        }),
+      })
+      .parse(await jiti.import("./src/lib/env.ts"))
 
     return [
       {
@@ -113,6 +117,7 @@ const config = {
 
 const withMDX = createMDX({
   options: {
+    // @ts-expect-error will fix later
     remarkPlugins: [remarkGfm],
     rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
   },
