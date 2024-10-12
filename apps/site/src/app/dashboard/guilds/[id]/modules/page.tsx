@@ -23,9 +23,9 @@ import {
   defaultEmptyFormValues,
   getDefaultValues,
   getDirtyFields,
-} from "~/app/dashboard/modules/_utils/client"
-import { updateModules } from "~/app/dashboard/modules/actions"
-import { moduleFormFields } from "~/app/dashboard/modules/forms"
+} from "~/app/dashboard/guilds/[id]/modules/_utils/client"
+import { updateModules } from "~/app/dashboard/guilds/[id]/modules/actions"
+import { moduleFormFields } from "~/app/dashboard/guilds/[id]/modules/forms"
 import { modulesSchema } from "~/validators/modules"
 
 import type { ModuleId, ModuleTag } from "@repo/utils/modules"
@@ -94,7 +94,7 @@ export default function ModulesPage() {
     async (data: ModulesFormValues) => {
       const id = dashboardData.guild.id
 
-      const updatedModules = await updateModules(data, dirtyFieldNames)
+      const updatedModules = await updateModules(id, data, dirtyFieldNames)
       const updatedDefaultValues = getDefaultValues(id, updatedModules)
 
       form.reset(updatedDefaultValues)

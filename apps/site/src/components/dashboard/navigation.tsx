@@ -33,6 +33,7 @@ const categories = Object.entries(
 
 export function DashboardNavigation() {
   const pathname = usePathname()
+  const guildId = pathname.split("/")[3]
 
   return (
     <nav className="sm:flex sm:h-screen sm:min-w-[20rem] sm:flex-col sm:justify-between sm:border-r sm:p-12">
@@ -41,9 +42,25 @@ export function DashboardNavigation() {
           Phase
         </h3>
         <div className="space-y-1.5">
-          {iconNavItems.map((item) => (
-            <NavigationItem key={item.href} pathname={pathname} {...item} />
-          ))}
+          {iconNavItems.map((item) => {
+            let disabled = item.disabled
+            let href = item.href
+
+            if (item.href.includes("[id]")) {
+              if (!guildId) disabled = true
+              else href = item.href.replace("[id]", guildId)
+            }
+
+            return (
+              <NavigationItem
+                {...item}
+                pathname={pathname}
+                disabled={disabled}
+                href={href}
+                key={href}
+              />
+            )
+          })}
         </div>
         {categories.map(([category, items]) => (
           <div key={category} className="flex flex-col space-y-1.5">
@@ -63,14 +80,26 @@ export function DashboardNavigation() {
         </span>
       </div>
       <div className="bg-background text-muted-foreground before:from-background relative flex w-screen justify-evenly border-t py-5 before:absolute before:top-[-25px] before:h-6 before:w-full before:bg-gradient-to-t before:to-transparent sm:hidden">
-        {iconNavItems.map((item) => (
-          <NavigationItem
-            key={item.href}
-            pathname={pathname}
-            mobile
-            {...item}
-          />
-        ))}
+        {iconNavItems.map((item) => {
+          let disabled = item.disabled
+          let href = item.href
+
+          if (item.href.includes("[id]")) {
+            if (!guildId) disabled = true
+            else href = item.href.replace("[id]", guildId)
+          }
+
+          return (
+            <NavigationItem
+              {...item}
+              pathname={pathname}
+              disabled={disabled}
+              href={href}
+              key={href}
+              mobile
+            />
+          )
+        })}
       </div>
     </nav>
   )

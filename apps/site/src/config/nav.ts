@@ -2,6 +2,7 @@ import {
   DashboardIcon,
   DiscordLogoIcon,
   GitHubLogoIcon,
+  IdCardIcon,
   MixerHorizontalIcon,
 } from "@radix-ui/react-icons"
 
@@ -54,19 +55,24 @@ export const mainPages: NavItem[] = [
 export const dashboardPages: NavItem[] = [
   // pages
   {
+    label: "Guilds",
+    href: "/dashboard/guilds",
+    icon: IdCardIcon,
+  },
+  {
     label: "Modules",
-    href: "/dashboard/modules",
+    href: "/dashboard/guilds/[id]/modules",
     icon: DashboardIcon,
   },
   {
     label: "Commands",
-    href: "/dashboard/commands",
+    href: "/dashboard/guilds/[id]/commands",
     icon: CommandIcon,
     disabled: true,
   },
   {
     label: "Settings",
-    href: "/dashboard/settings",
+    href: "/dashboard/guilds/[id]/settings",
     icon: MixerHorizontalIcon,
     disabled: true,
   },

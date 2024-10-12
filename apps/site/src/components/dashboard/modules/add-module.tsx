@@ -22,7 +22,7 @@ import {
 } from "~/components/ui/credenza"
 
 import type { ModuleId } from "@repo/utils/modules"
-import type { ModuleData } from "~/app/dashboard/modules/page"
+import type { ModuleData } from "~/app/dashboard/guilds/[id]/modules/page"
 
 export interface AddButtonProps {
   moduleDataArray: ModuleData[]
