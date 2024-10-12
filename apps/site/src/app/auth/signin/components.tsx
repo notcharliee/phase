@@ -100,7 +100,7 @@ function OtpLogin(props: { onLoadingChange: (value: boolean) => void }) {
       </InputOTP>
       {state === OTPState.Success ? (
         <Button size={"lg"} className="mt-4 w-full" asChild>
-          <Link href={"/dashboard/modules"}>Enter the dashboard</Link>
+          <Link href={"/dashboard/guilds"}>Enter the dashboard</Link>
         </Button>
       ) : (
         <Button
