@@ -98,7 +98,13 @@ const config = {
       {
         // dashboard page
         source: "/dashboard",
-        destination: "/dashboard/modules",
+        destination: "/dashboard/guilds",
+        permanent: false,
+      },
+      {
+        // dashboard page
+        source: "/dashboard/modules",
+        destination: "/dashboard/guilds",
         permanent: false,
       },
     ]

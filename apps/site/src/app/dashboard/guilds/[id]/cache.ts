@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation"
 import { cache } from "react"
 
 import { API } from "@discordjs/core/http-only"
@@ -15,7 +16,6 @@ import type {
   GuildModulesWithData,
   ModulesDataFields,
 } from "~/types/dashboard"
-import { signOut } from "~/auth"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
@@ -36,8 +36,7 @@ export const getGuildData = cache(async (params: GuildDataParams) => {
   })
 
   if (!dbGuild) {
-    await signOut()
-    return null
+    redirect("/dashboard/guilds")
   }
 
   const apiGuild = await discordAPI.guilds
@@ -45,8 +44,7 @@ export const getGuildData = cache(async (params: GuildDataParams) => {
     .catch(() => null)
 
   if (!apiGuild) {
-    await signOut()
-    return null
+    redirect("/dashboard/guilds")
   }
 
   const apiChannels = (await discordAPI.guilds.getChannels(

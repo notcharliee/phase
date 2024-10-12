@@ -12,8 +12,9 @@ import {
   handleSelfRolesModule,
   handleTicketsModule,
   parseModuleData,
-} from "~/app/dashboard/modules/_utils/server"
+} from "~/app/dashboard/guilds/[id]/modules/_utils/server"
 import { auth } from "~/auth"
+import { snowflakeSchema } from "~/validators/discord"
 import { moduleIdSchema, modulesSchema } from "~/validators/modules"
 
 import type {
@@ -24,13 +25,12 @@ import type {
 import type { GuildModules } from "~/types/db"
 
 export async function updateModules(
+  unsafeGuildId: string,
   unsafeFormValues: ModulesFormValues,
   unsafeDirtyFields: ModuleId[],
 ) {
-  const session = (await auth())!
-
-  const userId = session.user.id
-  const guildId = session.guild.id
+  const userId = (await auth())!.user.id
+  const guildId = snowflakeSchema.parse(unsafeGuildId)
 
   await db.connect(env.MONGODB_URI)
 

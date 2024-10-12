@@ -7,7 +7,7 @@ import { connectDB } from "~/lib/db"
 import { auth, signIn, updateSession } from "~/auth"
 
 export async function signInWithDiscord() {
-  await signIn("discord", { redirectTo: "/auth/guilds" })
+  await signIn("discord", { redirectTo: "/dashboard/guilds" })
 }
 
 export async function signInWithOTP(unsafeData: string) {

@@ -61,10 +61,9 @@ export const {
     }),
   ],
   callbacks: {
-    async jwt({ user, account, token, session, trigger }) {
+    async jwt({ user, account, token, trigger }) {
       if (trigger === "signIn" && user?.userId) {
         token.userId = user.userId
-        token.guildId = user.guildId
 
         if (account?.access_token) {
           void discordAPI.oauth2.revokeToken(
@@ -78,17 +77,10 @@ export const {
         }
       }
 
-      if (trigger === "update") {
-        // validation takes place in server actions, so we don't need to do it here
-        const sessionData = session as Partial<Session>
-        token.guildId = sessionData.guild?.id
-      }
-
       return token
     },
     async session({ session, token }: { session: Session; token: JWT }) {
       const userId = token.userId
-      const guildId = token.guildId
 
       if (!userId) {
         console.error("[Session] Missing user ID in JWT")
@@ -116,10 +108,6 @@ export const {
         return session
       }
 
-      if (guildId) {
-        session.guild = { id: guildId }
-      }
-
       return session
     },
     authorized({ request, auth }) {
@@ -134,16 +122,6 @@ export const {
         return method === "GET"
           ? NextResponse.redirect(new URL("/auth/signin", request.url))
           : NextResponse.json("Missing user credentials", { status: 401 })
-      }
-
-      if (!auth?.guild) {
-        if (pathname === "/auth/signin" || pathname === "/auth/guilds") {
-          return NextResponse.next()
-        }
-
-        return method === "GET"
-          ? NextResponse.redirect(new URL("/auth/guilds", request.url))
-          : NextResponse.json("Missing guild credentials", { status: 401 })
       }
 
       return true

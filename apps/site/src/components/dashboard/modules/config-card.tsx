@@ -35,7 +35,7 @@ import {
 
 import type { IconProps } from "@radix-ui/react-icons/dist/types"
 import type { ModuleDefinition, ModuleTag } from "@repo/utils/modules"
-import type { ModuleData } from "~/app/dashboard/modules/page"
+import type { ModuleData } from "~/app/dashboard/guilds/[id]/modules/page"
 
 export type ConfigCardData = ModuleDefinition
 export type ConfigCardOption = (typeof moduleOptions)[number]["value"]
