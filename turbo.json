@@ -5,17 +5,14 @@
       "cache": true,
       "env": ["*"],
       "dependsOn": ["^build"],
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**",
-        "dist/**"
-      ]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "dev": {
       "cache": false,
       "persistent": true,
       "env": ["*"]
-    }
+    },
+    "lint": {}
   },
   "remoteCache": {
     "enabled": true
