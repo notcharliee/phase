@@ -30,7 +30,7 @@ export default new BotSubcommandBuilder()
 
     const moduleId = interaction.options.getString("module", true)
 
-    const guildDoc = interaction.client.store.guilds.get(interaction.guildId!)!
+    const guildDoc = interaction.client.stores.guilds.get(interaction.guildId!)!
     const guildAdminIds = guildDoc.admins ?? []
 
     if (!guildAdminIds.includes(interaction.user.id)) {

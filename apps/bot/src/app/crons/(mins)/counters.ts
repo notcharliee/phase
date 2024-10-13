@@ -8,7 +8,7 @@ import type { Client } from "discord.js"
 export default new BotCronBuilder()
   .setPattern("*/10 * * * *")
   .setExecute(async (client) => {
-    const guildDocs = client.store.guilds
+    const guildDocs = client.stores.guilds
       .filter((guildDoc) => guildDoc.modules?.[ModuleId.Counters]?.enabled)
       .values()
 

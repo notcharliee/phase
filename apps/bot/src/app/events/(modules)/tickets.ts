@@ -26,7 +26,7 @@ export default new BotEventBuilder()
       return
     }
 
-    const guildDoc = client.store.guilds.get(interaction.guildId)
+    const guildDoc = client.stores.guilds.get(interaction.guildId)
     const moduleConfig = guildDoc?.modules?.[ModuleId.Tickets]
 
     if (!moduleConfig?.enabled) {

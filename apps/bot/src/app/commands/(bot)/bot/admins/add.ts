@@ -29,7 +29,7 @@ export default new BotSubcommandBuilder()
 
     const user = interaction.options.getUser("user", true)
 
-    const guildDoc = interaction.client.store.guilds.get(interaction.guildId!)!
+    const guildDoc = interaction.client.stores.guilds.get(interaction.guildId!)!
 
     if (user.bot) {
       void interaction.editReply(

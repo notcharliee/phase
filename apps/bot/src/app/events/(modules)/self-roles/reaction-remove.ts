@@ -17,7 +17,7 @@ export default new BotEventBuilder()
     if (!reactionMessage.inGuild()) return
     if (reactionMessage.author.id !== reaction.client.user.id) return
 
-    const guildDoc = reaction.client.store.guilds.get(reactionMessage.guildId)
+    const guildDoc = reaction.client.stores.guilds.get(reactionMessage.guildId)
     const moduleData = guildDoc?.modules?.[ModuleId.SelfRoles]
 
     if (!moduleData?.enabled) return

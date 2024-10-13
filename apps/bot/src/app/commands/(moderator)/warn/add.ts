@@ -28,7 +28,7 @@ export default new BotSubcommandBuilder()
       return
     }
 
-    const guildDoc = interaction.client.store.guilds.get(interaction.guildId!)
+    const guildDoc = interaction.client.stores.guilds.get(interaction.guildId!)
     const warningsModule = guildDoc?.modules?.[ModuleId.Warnings]
 
     if (!warningsModule?.enabled) {

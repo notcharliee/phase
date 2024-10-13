@@ -13,7 +13,7 @@ export default new BotEventBuilder()
   .setExecute(async (client, channel) => {
     if (channel.isDMBased()) return
 
-    const guildDoc = client.store.guilds.get(channel.guildId)
+    const guildDoc = client.stores.guilds.get(channel.guildId)
     const moduleConfig = guildDoc?.modules?.[ModuleId.JoinToCreates]
 
     if (!moduleConfig?.enabled) return

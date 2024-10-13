@@ -11,7 +11,7 @@ export default new BotEventBuilder()
   .setExecute(async (client, message) => {
     if (message.interaction?.commandName !== "bump") return
 
-    const guildDoc = client.store.guilds.get(message.guildId!)
+    const guildDoc = client.stores.guilds.get(message.guildId!)
     const moduleConfig = guildDoc?.modules?.[ModuleId.BumpReminders]
 
     if (!guildDoc || !moduleConfig?.enabled) return

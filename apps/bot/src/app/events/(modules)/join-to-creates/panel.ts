@@ -37,7 +37,7 @@ export default new BotEventBuilder()
       await interaction.deferReply({ ephemeral: true })
     }
 
-    const guildDoc = client.store.guilds.get(interaction.guildId)
+    const guildDoc = client.stores.guilds.get(interaction.guildId)
     const moduleConfig = guildDoc?.modules?.[ModuleId.JoinToCreates]
 
     if (!moduleConfig?.enabled) {

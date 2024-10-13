@@ -261,7 +261,7 @@ type ExtraFieldTypeMap = {
 export default new BotEventBuilder()
   .setName("guildAuditLogEntryCreate")
   .setExecute(async (client, entry, guild) => {
-    const guildDoc = client.store.guilds.get(guild.id)
+    const guildDoc = client.stores.guilds.get(guild.id)
     if (!guildDoc) return
 
     const moduleConfig = guildDoc.modules?.[ModuleId.AuditLogs]

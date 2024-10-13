@@ -7,7 +7,7 @@ export default new BotEventBuilder()
   .setExecute(async (client, reaction, user) => {
     if (user.bot || !reaction.message.inGuild()) return
 
-    const guildDoc = client.store.guilds.get(reaction.message.guildId)
+    const guildDoc = client.stores.guilds.get(reaction.message.guildId)
     const moduleData = guildDoc?.modules?.[ModuleId.ReactionRoles]
 
     if (

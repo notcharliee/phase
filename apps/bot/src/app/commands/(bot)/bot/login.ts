@@ -26,7 +26,7 @@ export default new BotSubcommandBuilder()
       return
     }
 
-    const guildDoc = interaction.client.store.guilds.get(interaction.guildId!)
+    const guildDoc = interaction.client.stores.guilds.get(interaction.guildId!)
 
     if (!guildDoc?.admins.includes(interaction.user.id)) {
       return void interaction.editReply(BotErrorMessage.userNotAdmin().toJSON())

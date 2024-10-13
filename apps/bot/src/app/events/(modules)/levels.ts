@@ -13,7 +13,7 @@ export default new BotEventBuilder()
   .setExecute(async (client, message) => {
     if (!message.inGuild() || message.author.bot) return
 
-    const guildDoc = client.store.guilds.get(message.guildId)
+    const guildDoc = client.stores.guilds.get(message.guildId)
     const moduleConfig = guildDoc?.modules?.[ModuleId.Levels]
 
     if (!moduleConfig?.enabled) return

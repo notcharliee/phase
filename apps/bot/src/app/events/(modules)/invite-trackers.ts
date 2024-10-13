@@ -23,7 +23,7 @@ export default new BotEventBuilder()
 
       const { guild } = member
 
-      const guildDoc = client.store.guilds.get(guild.id)
+      const guildDoc = client.stores.guilds.get(guild.id)
       if (!guildDoc) return
 
       const moduleConfig = guildDoc.modules?.[ModuleId.AuditLogs]

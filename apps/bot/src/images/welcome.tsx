@@ -18,7 +18,7 @@ interface WelcomeCardProps {
 
 export async function generateWelcomeCard(props: WelcomeCardProps) {
   const guild = props.member.guild
-  const guildDoc = props.client.store.guilds.get(guild.id)
+  const guildDoc = props.client.stores.guilds.get(guild.id)
 
   if (!guildDoc) {
     throw new Error("Guild not found in the database")

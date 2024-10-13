@@ -5,13 +5,13 @@ import { BotPluginBuilder } from "phasebot/builders"
 import { Emojis } from "~/lib/emojis"
 
 import { Music } from "~/structures/music/Music"
-import { Store } from "~/structures/Store"
+import { StoreManager } from "~/structures/stores/StoreManager"
 import { VoiceManager } from "~/structures/voice/VoiceManager"
 
 declare module "discord.js" {
   interface Client {
     music: Music
-    store: Store
+    stores: StoreManager
     voices: VoiceManager
   }
 }
@@ -82,10 +82,10 @@ const phaseClient = new PhaseClient({
         return client
       }),
     new BotPluginBuilder()
-      .setName("Store")
+      .setName("StoreManager")
       .setVersion("1.0.0")
       .setOnLoad((client) => {
-        client.store = new Store(client)
+        client.stores = new StoreManager(client)
         return client
       }),
   ],

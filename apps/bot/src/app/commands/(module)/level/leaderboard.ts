@@ -30,7 +30,7 @@ export default new BotSubcommandBuilder()
     const rankCount = interaction.options.getInteger("rank-count", true)
     const rankEnd = rankStart + (rankCount - 1)
 
-    const guildDoc = interaction.client.store.guilds.get(interaction.guildId!)
+    const guildDoc = interaction.client.stores.guilds.get(interaction.guildId!)
 
     if (!guildDoc?.modules?.[ModuleId.Levels]?.enabled) {
       return void interaction.reply(

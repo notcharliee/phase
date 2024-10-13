@@ -16,7 +16,7 @@ export default new BotEventBuilder()
   .setExecute(async (client, oldVoice, newVoice) => {
     if (!newVoice.channel || !newVoice.member) return
 
-    const guildDoc = client.store.guilds.get(oldVoice.guild.id)
+    const guildDoc = client.stores.guilds.get(oldVoice.guild.id)
     const moduleConfig = guildDoc?.modules?.[ModuleId.JoinToCreates]
 
     if (!moduleConfig?.enabled) return

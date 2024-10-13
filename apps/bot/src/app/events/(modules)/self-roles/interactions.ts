@@ -20,7 +20,7 @@ export default new BotEventBuilder()
     if (!interaction.isMessageComponent()) return
     if (!interaction.customId.startsWith("selfroles")) return
 
-    const guildDoc = client.store.guilds.get(interaction.guildId)
+    const guildDoc = client.stores.guilds.get(interaction.guildId)
     const moduleConfig = guildDoc?.modules?.[ModuleId.SelfRoles]
 
     if (!moduleConfig?.enabled) {

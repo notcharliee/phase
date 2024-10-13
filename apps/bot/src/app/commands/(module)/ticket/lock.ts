@@ -12,7 +12,7 @@ export default new BotSubcommandBuilder()
   .setDescription("Locks a ticket.")
   .setMetadata({ dmPermission: false })
   .setExecute(async (interaction) => {
-    const guildDoc = interaction.client.store.guilds.get(interaction.guildId!)
+    const guildDoc = interaction.client.stores.guilds.get(interaction.guildId!)
     const ticketModule = guildDoc?.modules?.[ModuleId.Tickets]
 
     if (!ticketModule?.enabled) {

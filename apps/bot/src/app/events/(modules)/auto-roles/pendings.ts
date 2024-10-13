@@ -7,7 +7,7 @@ export default new BotEventBuilder()
   .setExecute(async (client, oldMember, newMember) => {
     if (!oldMember.pending || (oldMember.pending && newMember.pending)) return
 
-    const guildDoc = client.store.guilds.get(newMember.guild.id)
+    const guildDoc = client.stores.guilds.get(newMember.guild.id)
     const autoRolesModule = guildDoc?.modules?.[ModuleId.AutoRoles]
 
     if (!autoRolesModule?.enabled) return

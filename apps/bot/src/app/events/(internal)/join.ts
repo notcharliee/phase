@@ -12,11 +12,11 @@ export default new BotEventBuilder()
   .setExecute(async (client, newGuild) => {
     const owner = await newGuild.fetchOwner().catch(console.error)
 
-    const guildIsBlacklisted = client.store.config.blacklist.guilds.find(
+    const guildIsBlacklisted = client.stores.config.blacklist.guilds.find(
       (guild) => guild.id === newGuild.id,
     )
 
-    const userIsBlacklisted = client.store.config.blacklist.users.find(
+    const userIsBlacklisted = client.stores.config.blacklist.users.find(
       (user) => user.id === newGuild.ownerId,
     )
 

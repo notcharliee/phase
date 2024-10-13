@@ -29,7 +29,7 @@ export default new BotSubcommandBuilder()
     const level = interaction.options.getInteger("level", true)
     const xp = interaction.options.getInteger("xp", true)
 
-    const guildDoc = interaction.client.store.guilds.get(interaction.guildId!)
+    const guildDoc = interaction.client.stores.guilds.get(interaction.guildId!)
 
     if (!guildDoc?.modules?.[ModuleId.Levels]?.enabled) {
       return void interaction.reply(

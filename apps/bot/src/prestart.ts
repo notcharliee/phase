@@ -5,5 +5,5 @@ import type { Client } from "discord.js"
 
 export default async function prestart(client: Client<false>) {
   await db.connect(env.MONGODB_URI)
-  await client.store.init()
+  await client.stores.init()
 }

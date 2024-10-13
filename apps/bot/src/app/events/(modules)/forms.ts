@@ -662,7 +662,7 @@ export default new BotEventBuilder()
 
       // the module config from the database
 
-      const guildDoc = client.store.guilds.get(interaction.guildId)
+      const guildDoc = client.stores.guilds.get(interaction.guildId)
       const moduleConfig = guildDoc?.modules?.[ModuleId.Forms]
 
       if (!moduleConfig?.enabled) {

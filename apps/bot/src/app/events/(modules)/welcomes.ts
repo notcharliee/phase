@@ -12,7 +12,7 @@ import { generateWelcomeCard } from "~/images/welcome"
 export default new BotEventBuilder()
   .setName("guildMemberAdd")
   .setExecute(async (client, member) => {
-    const guildDoc = client.store.guilds.get(member.guild.id)
+    const guildDoc = client.stores.guilds.get(member.guild.id)
     const moduleConfig = guildDoc?.modules?.[ModuleId.WelcomeMessages]
 
     if (!guildDoc || !moduleConfig?.enabled) return

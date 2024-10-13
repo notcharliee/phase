@@ -17,7 +17,7 @@ export default new BotSubcommandBuilder()
   .setExecute(async (interaction) => {
     const user = interaction.options.getUser("user", false) ?? interaction.user
 
-    const guildDoc = interaction.client.store.guilds.get(interaction.guildId!)
+    const guildDoc = interaction.client.stores.guilds.get(interaction.guildId!)
 
     if (!guildDoc?.modules?.[ModuleId.Levels]?.enabled) {
       return void interaction.reply(

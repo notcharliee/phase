@@ -10,7 +10,7 @@ import { PhaseColour } from "~/lib/enums"
 export default new BotEventBuilder()
   .setName("guildDelete")
   .setExecute(async (client, guild) => {
-    const existsInDatabase = client.store.guilds.has(guild.id)
+    const existsInDatabase = client.stores.guilds.has(guild.id)
 
     // means the guild is blacklisted so was auto removed (see ./join.ts)
     if (!existsInDatabase) return

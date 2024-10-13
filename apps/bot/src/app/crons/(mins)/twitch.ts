@@ -17,7 +17,7 @@ import type { GuildTextBasedChannel } from "discord.js"
 export default new BotCronBuilder()
   .setPattern("* * * * *")
   .setExecute(async (client) => {
-    const guildDocs = client.store.guilds.filter(
+    const guildDocs = client.stores.guilds.filter(
       (guildDoc) => guildDoc.modules?.[ModuleId.TwitchNotifications]?.enabled,
     )
 
@@ -64,12 +64,12 @@ export default new BotCronBuilder()
       const stream = await twitchAPI.streams.getStreamByUserId(id)
 
       const isLiveNow = !!stream
-      const wasLiveBefore = client.store.twitchStatuses.has(id)
+      const wasLiveBefore = client.stores.twitchStatuses.has(id)
 
       if (!isLiveNow && wasLiveBefore) {
-        client.store.twitchStatuses.delete(id)
+        client.stores.twitchStatuses.delete(id)
       } else if (!wasLiveBefore && isLiveNow) {
-        client.store.twitchStatuses.set(id, true)
+        client.stores.twitchStatuses.set(id, true)
 
         for (const notification of streamer.notifications) {
           const channel = client.channels.cache.get(

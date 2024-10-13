@@ -18,7 +18,7 @@ export default new BotEventBuilder()
       return
     }
 
-    const guildDoc = client.store.guilds.get(oldVoice.guild.id)
+    const guildDoc = client.stores.guilds.get(oldVoice.guild.id)
     const moduleConfig = guildDoc?.modules?.[ModuleId.JoinToCreates]
 
     if (!moduleConfig?.enabled) return
