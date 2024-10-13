@@ -5,9 +5,10 @@
   "scripts": {
     "docker:build": "docker build -t bot-image -f Dockerfile ../../",
     "docker:start": "docker run -it --rm bot-image",
+    "dev": "bun run --watch src/main.ts",
     "build": "tsc",
     "start": "NODE_ENV=production bun run --smol src/main.ts",
-    "dev": "NODE_ENV=development bun run --watch src/main.ts",
+    "preview": "bun run build && bun run start",
     "lint": "eslint ."
   },
   "dependencies": {

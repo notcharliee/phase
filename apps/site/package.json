@@ -3,10 +3,10 @@
   "name": "site",
   "type": "module",
   "scripts": {
-    "build": "next build",
-    "dev": "next dev --turbo",
-    "start": "next start",
     "lint": "eslint .",
+    "dev": "next dev --turbo",
+    "build": "next build",
+    "start": "next start",
     "preview": "bun run build && bun run start"
   },
   "dependencies": {
