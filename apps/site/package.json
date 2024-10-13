@@ -6,7 +6,7 @@
     "build": "next build",
     "dev": "next dev --turbo",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "preview": "bun run build && bun run start"
   },
   "dependencies": {
