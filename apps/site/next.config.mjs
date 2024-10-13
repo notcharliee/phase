@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 import "@total-typescript/ts-reset"
 
 import createMDX from "@next/mdx"

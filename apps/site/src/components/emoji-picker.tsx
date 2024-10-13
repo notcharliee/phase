@@ -198,7 +198,6 @@ interface EmojiProps {
 
 function Emoji({ name, skin, className, isPlaceholder }: EmojiProps) {
   return (
-    // eslint-disable-next-line @next/next/no-img-element
     <div
       title={name}
       aria-label={name}

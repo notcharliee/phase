@@ -69,7 +69,7 @@ export default function ModulesPage() {
       if (filter === "none") return true
       return module.tags.some((tag) => tag.toLowerCase() === filter)
     })
-  }, [dashboardData, formFields, filter])
+  }, [formFields, filter])
 
   const onModuleAdd = useCallback(
     (moduleId: ModuleId) => {

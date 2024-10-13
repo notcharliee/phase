@@ -210,7 +210,7 @@ export const RichTextarea = React.forwardRef<HTMLDivElement, RichTextareaProps>(
           }
         }
       },
-      [editor, selectOpen],
+      [editor, selectOpen, onKeyDown],
     )
 
     const onEditorBlur = React.useCallback(
@@ -218,7 +218,7 @@ export const RichTextarea = React.forwardRef<HTMLDivElement, RichTextareaProps>(
         setSelectOpen(false)
         if (onBlur) onBlur(event)
       },
-      [],
+      [onBlur],
     )
 
     // actual rendering stuff //
