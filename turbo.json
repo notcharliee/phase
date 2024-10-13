@@ -12,7 +12,11 @@
       "persistent": true,
       "env": ["*"]
     },
-    "lint": {}
+    "lint": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "outputs": []
+    }
   },
   "remoteCache": {
     "enabled": true
