@@ -13,11 +13,7 @@ const Accordion = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>
 >(({ className, ...props }, ref) => (
-  <AccordionPrimitive.Root
-    ref={ref}
-    className={cn(className)}
-    {...props}
-  />
+  <AccordionPrimitive.Root ref={ref} className={cn(className)} {...props} />
 ))
 
 const AccordionItem = React.forwardRef<
@@ -37,23 +33,28 @@ const AccordionTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => (
   <AccordionPrimitive.Header className="flex">
-    <AccordionPrimitive.Trigger
-      ref={ref}
+    <div
       className={cn(
-        "flex flex-1 items-center justify-between py-1.5 text-sm font-medium underline-offset-2 transition-all hover:underline [&[data-state=open]>button>svg]:rotate-180",
+        "relative flex flex-1 items-center justify-between py-1.5 text-sm font-medium underline-offset-2 transition-all hover:underline",
         className,
       )}
-      {...props}
     >
+      <AccordionPrimitive.Trigger
+        ref={ref}
+        className="focus-visible:ring-ring absolute left-0 top-0 h-full w-full focus-visible:outline-none focus-visible:ring-1 [&[data-state=open]~.chevron-icon>svg]:rotate-180"
+        {...props}
+      />
       {children}
-      <Button
-        size={"icon"}
-        variant={"ghost"}
-        className="text-muted-foreground hover:text-foreground"
-      >
-        <ChevronDownIcon className="h-4 w-4 transition-transform duration-200" />
-      </Button>
-    </AccordionPrimitive.Trigger>
+      <AccordionPrimitive.Trigger asChild>
+        <Button
+          size={"icon"}
+          variant={"ghost"}
+          className="text-muted-foreground hover:text-foreground chevron-icon relative"
+        >
+          <ChevronDownIcon className="h-4 w-4 transition-transform duration-200" />
+        </Button>
+      </AccordionPrimitive.Trigger>
+    </div>
   </AccordionPrimitive.Header>
 ))
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName
