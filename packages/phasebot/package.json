@@ -1,8 +1,7 @@
 {
+  "private": true,
   "name": "phasebot",
-  "description": "A simple framework for building and running discord bots",
   "version": "0.15.1",
-  "license": "MIT",
   "type": "module",
   "scripts": {
     "build": "tsup",
@@ -29,21 +28,6 @@
       "require": "./dist/structures/stores/index.js",
       "types": "./dist/structures/stores/index.d.ts"
     }
-  },
-  "keywords": [
-    "discord",
-    "discordjs",
-    "bot",
-    "framework",
-    "client",
-    "bun"
-  ],
-  "files": [
-    "dist"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/notcharliee/phase.git"
   },
   "dependencies": {
     "@vercel/og": "^0.6.3",
