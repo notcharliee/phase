@@ -1,8 +1,7 @@
 import { Collection } from "discord.js"
+import { BaseKVStore } from "phasebot/stores"
 
 import { db } from "~/lib/db"
-
-import { BaseKVStore } from "~/structures/stores/BaseStore"
 
 import type { Guild, mongoose } from "~/lib/db"
 import type { Snowflake } from "discord.js"

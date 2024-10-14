@@ -1,7 +1,7 @@
 {
   "name": "phasebot",
   "description": "A simple framework for building and running discord bots",
-  "version": "0.13.1",
+  "version": "0.14.0",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -24,6 +24,16 @@
       "import": "./dist/structures/builders/index.js",
       "require": "./dist/structures/builders/index.js",
       "types": "./dist/structures/builders/index.d.ts"
+    },
+    "./managers": {
+      "import": "./dist/structures/managers/index.js",
+      "require": "./dist/structures/managers/index.js",
+      "types": "./dist/structures/managers/index.d.ts"
+    },
+    "./stores": {
+      "import": "./dist/structures/stores/index.js",
+      "require": "./dist/structures/stores/index.js",
+      "types": "./dist/structures/stores/index.d.ts"
     }
   },
   "keywords": [

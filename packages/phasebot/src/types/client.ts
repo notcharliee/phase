@@ -1,8 +1,7 @@
-import type {
-  BotCommandBuilder,
-  BotCronBuilder,
-  BotEventBuilder,
-} from "~/structures/builders"
+import type { StoreManager } from "~/structures/managers/StoreManager"
+import type { BotCommandBuilder } from "~/structures/builders/BotCommandBuilder"
+import type { BotCronBuilder } from "~/structures/builders/BotCronBuilder"
+import type { BotEventBuilder } from "~/structures/builders/BotEventBuilder"
 import type { CommandFile } from "~/types/commands"
 import type { BotConfig } from "~/types/config"
 import type { CronFile } from "~/types/crons"
@@ -10,6 +9,7 @@ import type { BotEventName, EventFile } from "~/types/events"
 import type { BotMiddleware } from "~/types/middleware"
 import type { BotPluginResolvable } from "~/types/plugin"
 import type { BotPrestart } from "~/types/prestart"
+import type { Stores } from "~/types/stores"
 
 export interface PhaseClientParams {
   /**
@@ -18,11 +18,6 @@ export interface PhaseClientParams {
    * @remarks This will override the `NODE_ENV` environment variable.
    */
   dev?: boolean
-
-  /**
-   * The discord.js client options.
-   */
-  config?: BotConfig
 
   /**
    * The files to pass to the bot handlers.
@@ -51,9 +46,21 @@ export interface PhaseClientParams {
   }
 
   /**
+   * The discord.js client options.
+   */
+  config?: BotConfig
+
+  /**
    * The plugins to load.
    *
    * @remarks Plugins are loaded in the order they are specified.
    */
   plugins?: BotPluginResolvable[]
+
+  /**
+   * The stores to create.
+   *
+   * @remarks Stores are created in the order they are specified.
+   */
+  stores?: Stores
 }

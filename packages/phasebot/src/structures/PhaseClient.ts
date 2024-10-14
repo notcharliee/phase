@@ -6,9 +6,10 @@ import { Client } from "discord.js"
 import chalk from "chalk"
 import dedent from "dedent"
 
-import { CommandManager } from "~/managers/CommandManager"
-import { CronManager } from "~/managers/CronManager"
-import { EventManager } from "~/managers/EventManager"
+import { CommandManager } from "~/structures/managers/CommandManager"
+import { CronManager } from "~/structures/managers/CronManager"
+import { EventManager } from "~/structures/managers/EventManager"
+import { StoreManager } from "~/structures/managers/StoreManager"
 import { BotPlugin } from "~/types/plugin"
 import { phaseHeader, spinner } from "~/utils"
 
@@ -16,11 +17,16 @@ import type { BotCronBuilder } from "~/structures/builders/BotCronBuilder"
 import type { BotEventBuilder } from "~/structures/builders/BotEventBuilder"
 import type { PhaseClientParams } from "~/types/client"
 import type { CommandFile } from "~/types/commands"
-import type { BotConfig } from "~/types/config"
 import type { CronFile } from "~/types/crons"
 import type { BotEventName, EventFile } from "~/types/events"
 import type { BotMiddleware } from "~/types/middleware"
 import type { BotPrestart } from "~/types/prestart"
+
+declare module "discord.js" {
+  interface Client {
+    stores: StoreManager
+  }
+}
 
 const defaultConfig = {
   intents: [],
@@ -34,38 +40,43 @@ const defaultExports = {
   prestart: "default",
 } satisfies PhaseClientParams["exports"]
 
-export class PhaseClient {
+export class PhaseClient implements PhaseClientParams {
   private srcDir: string = join(process.cwd(), "src")
   private appDir: string = join(this.srcDir, "app")
 
-  public dev: PhaseClientParams["dev"]
-  public config: PhaseClientParams["config"]
-  public exports: PhaseClientParams["exports"]
-  public files: PhaseClientParams["files"]
-  public plugins: BotPlugin[]
+  public dev
+  public files
+  public exports
+  public config
+  public plugins
+  public stores
 
-  public readonly client!: Client<false>
+  public readonly client: Client<false>
+
   public readonly commands?: CommandManager
   public readonly crons?: CronManager
   public readonly events?: EventManager
 
-  constructor(params?: PhaseClientParams) {
+  constructor(params: PhaseClientParams) {
     this.dev = params?.dev
-    this.config = { ...defaultConfig, ...params?.config }
-    this.exports = { ...defaultExports, ...params?.exports }
     this.files = params?.files
+    this.exports = { ...defaultExports, ...params?.exports }
+    this.config = { ...defaultConfig, ...params?.config }
+
+    this.client = new Client<false>(this.config)
 
     this.plugins = (params?.plugins ?? []).reduce<BotPlugin[]>(
       (acc, plugin) => {
-        if ("toJSON" in plugin) {
-          plugin = plugin.toJSON()
-        }
-
+        if ("toJSON" in plugin) plugin = plugin.toJSON()
+        plugin.onLoad(this.client)
         acc.push(plugin)
         return acc
       },
       [],
     )
+
+    this.stores = params?.stores ?? {}
+    this.client.stores = new StoreManager(this.client, this.stores)
   }
 
   private get allowedFileExtensions() {
@@ -81,21 +92,8 @@ export class PhaseClient {
   public async start() {
     process.env.NODE_ENV = this.dev ? "development" : "production"
 
-    console.log(dedent`
-      ${phaseHeader}
-        Environment:  ${chalk.grey(process.env.NODE_ENV)}\n
-    `)
-
-    this.config = await this.loadConfig()
-
-    Reflect.set(
-      this,
-      "client",
-      this.plugins.reduce(
-        (client, plugin) => plugin.onLoad(client),
-        new Client<false>(this.config),
-      ),
-    )
+    console.log(`${phaseHeader}`)
+    console.log(`  Environment:  ${chalk.grey(process.env.NODE_ENV)}\n`)
 
     if (!existsSync(this.srcDir)) {
       throw new Error("No source directory found.")
@@ -107,22 +105,20 @@ export class PhaseClient {
 
     const cliSpinner = spinner()
 
-    const prestartFunction = await this.loadPrestart()
+    cliSpinner.start("Executing prestart ...")
+    
+    await new Promise<void>((resolve) => {
+      setImmediate(async () => {
+        const prestartFunction = await this.loadPrestart()
+        await prestartFunction?.(this.client)
 
-    if (prestartFunction) {
-      cliSpinner.start("Executing prestart ...")
+        await this.client.stores.init()
 
-      await new Promise<void>((resolve) => {
-        setImmediate(async () => {
-          await prestartFunction(this.client)
-          resolve()
-        })
+        resolve()
       })
+    })
 
-      cliSpinner.text = "Loading your code ..."
-    } else {
-      cliSpinner.start("Loading your code ...")
-    }
+    cliSpinner.text = "Loading your code ..."
 
     await new Promise<void>((resolve) => {
       setImmediate(async () => {
@@ -162,40 +158,6 @@ export class PhaseClient {
     cliSpinner.succeed(
       `Bot is online! ${chalk.grey(`(${(Bun.nanoseconds() / 1e9).toFixed(2)}s)`)}\n`,
     )
-  }
-
-  async loadConfig(): Promise<BotConfig> {
-    if (this.config) return this.config
-
-    const configFiles = readdirSync("./").filter(
-      (dirent) =>
-        dirent.startsWith("phase.config") &&
-        this.allowedFileExtensions.includes(extname(dirent)),
-    )
-
-    if (!configFiles.length) {
-      throw new Error(
-        `No config file found. Please make a 'phase.config.{${this.allowedFileExtensions.join()}}' file.`,
-      )
-    }
-
-    if (configFiles.length > 1) {
-      throw new Error(
-        `You can only have one config file. Please delete or rename the other files.`,
-      )
-    }
-
-    const filePath = join(process.cwd(), configFiles[0]!)
-
-    const config = await import(filePath)
-      .catch(() => null)
-      .then((m) => m?.default as BotConfig | undefined)
-
-    if (!config) {
-      throw new Error("Config file is missing a default export.")
-    }
-
-    return config
   }
 
   async loadPrestart(): Promise<BotPrestart | undefined> {

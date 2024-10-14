@@ -5,16 +5,10 @@ import { BotPluginBuilder } from "phasebot/builders"
 import { Emojis } from "~/lib/emojis"
 
 import { Music } from "~/structures/music/Music"
-import { StoreManager } from "~/structures/stores/StoreManager"
+import { ConfigStore } from "~/structures/stores/ConfigStore"
+import { GuildStore } from "~/structures/stores/GuildStore"
+import { TwitchStatusStore } from "~/structures/stores/TwitchStatusStore"
 import { VoiceManager } from "~/structures/voice/VoiceManager"
-
-declare module "discord.js" {
-  interface Client {
-    music: Music
-    stores: StoreManager
-    voices: VoiceManager
-  }
-}
 
 const isDev = process.env.NODE_ENV === "development"
 
@@ -81,14 +75,12 @@ const phaseClient = new PhaseClient({
         client.music = new Music(client)
         return client
       }),
-    new BotPluginBuilder()
-      .setName("StoreManager")
-      .setVersion("1.0.0")
-      .setOnLoad((client) => {
-        client.stores = new StoreManager(client)
-        return client
-      }),
   ],
+  stores: {
+    config: new ConfigStore(),
+    guilds: new GuildStore(),
+    twitchStatuses: new TwitchStatusStore(),
+  },
 })
 
 await phaseClient.start()

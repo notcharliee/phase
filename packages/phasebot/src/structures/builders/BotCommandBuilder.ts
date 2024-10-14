@@ -6,7 +6,7 @@ import {
 
 import { Mixin } from "ts-mixer"
 
-import { CommandManager } from "~/managers"
+import { CommandManager } from "~/structures/managers"
 import { BotCommandExecute } from "~/types/commands"
 
 import type {

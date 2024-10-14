@@ -1,6 +1,6 @@
-import { db } from "~/lib/db"
+import { BaseStore } from "phasebot/stores"
 
-import { BaseStore } from "~/structures/stores/BaseStore"
+import { db } from "~/lib/db"
 
 import type { Config, mongoose } from "~/lib/db"
 
