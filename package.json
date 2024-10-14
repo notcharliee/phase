@@ -34,7 +34,6 @@
   },
   "trustedDependencies": [
     "@discordjs/opus",
-    "@vercel/speed-insights",
     "aws-sdk",
     "esbuild",
     "ffmpeg-static",
