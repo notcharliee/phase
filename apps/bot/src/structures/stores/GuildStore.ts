@@ -1,4 +1,3 @@
-import { Collection } from "discord.js"
 import { BaseKVStore } from "phasebot/stores"
 
 import { db } from "~/lib/db"
@@ -15,11 +14,9 @@ export class GuildStore extends BaseKVStore<Snowflake, WithId<Guild>> {
     const guildDocs = await db.guilds.find({})
     const guildObjs = guildDocs.map((doc) => doc.toObject())
 
-    const guildCollection = new Collection(
-      guildObjs.map((guild) => [guild.id, guild]),
-    )
-
-    Reflect.set(this, "guilds", guildCollection)
+    for (const guild of guildObjs) {
+      this.set(guild.id, guild)
+    }
 
     type GuildObject = (typeof guildObjs)[number]
     type GuildChangeStreamDoc = mongoose.mongo.ChangeStreamDocument<GuildObject>
