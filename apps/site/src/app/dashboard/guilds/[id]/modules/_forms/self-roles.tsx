@@ -4,6 +4,7 @@ import { capitalCase } from "change-case"
 import { useFieldArray, useFormContext } from "react-hook-form"
 import { v4 as randomUUID } from "uuid"
 
+import { RichTextarea } from "~/components/dashboard/richtext/textarea"
 import { SelectChannel } from "~/components/dashboard/select/channel"
 import { SelectRole } from "~/components/dashboard/select/role"
 import { EmojiPicker } from "~/components/emoji-picker"
@@ -33,7 +34,6 @@ import {
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
-import { RichTextarea } from "~/components/dashboard/richtext/textarea"
 
 import { cn } from "~/lib/utils"
 
@@ -236,14 +236,10 @@ function MessageMethods({ index }: { index: number }) {
                       <Button
                         size={"icon"}
                         variant={"ghost"}
-                        className="text-muted-foreground hover:text-foreground"
-                        onClick={(event) => event.stopPropagation()}
-                        asChild
+                        className="text-muted-foreground hover:text-foreground relative"
+                        aria-label="Options"
                       >
-                        <div>
-                          <Label className="sr-only">Options</Label>
-                          <DotsHorizontalIcon className="h-4 w-4" />
-                        </div>
+                        <DotsHorizontalIcon className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>

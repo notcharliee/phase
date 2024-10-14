@@ -214,14 +214,10 @@ const FormQuestions = (props: FormQuestionsProps) => {
                       <Button
                         size={"icon"}
                         variant={"ghost"}
-                        className="text-muted-foreground hover:text-foreground"
-                        onClick={(event) => event.stopPropagation()}
-                        asChild
+                        className="text-muted-foreground hover:text-foreground relative"
+                        aria-label="Options"
                       >
-                        <div>
-                          <Label className="sr-only">Options</Label>
-                          <DotsHorizontalIcon className="h-4 w-4" />
-                        </div>
+                        <DotsHorizontalIcon className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
