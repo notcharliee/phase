@@ -8,3 +8,5 @@ export * from "~/types/middleware"
 export * from "~/types/plugin"
 export * from "~/types/prestart"
 export * from "~/types/stores"
+
+export { version } from "../package.json"

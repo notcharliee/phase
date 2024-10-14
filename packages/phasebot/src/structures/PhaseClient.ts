@@ -4,14 +4,14 @@ import { basename, extname, join } from "node:path"
 import { Client } from "discord.js"
 
 import chalk from "chalk"
-import dedent from "dedent"
 
+import { version } from "~/index"
 import { CommandManager } from "~/structures/managers/CommandManager"
 import { CronManager } from "~/structures/managers/CronManager"
 import { EventManager } from "~/structures/managers/EventManager"
 import { StoreManager } from "~/structures/managers/StoreManager"
 import { BotPlugin } from "~/types/plugin"
-import { phaseHeader, spinner } from "~/utils"
+import { spinner } from "~/utils"
 
 import type { BotCronBuilder } from "~/structures/builders/BotCronBuilder"
 import type { BotEventBuilder } from "~/structures/builders/BotEventBuilder"
@@ -92,7 +92,7 @@ export class PhaseClient implements PhaseClientParams {
   public async start() {
     process.env.NODE_ENV = this.dev ? "development" : "production"
 
-    console.log(`${phaseHeader}`)
+    console.log(`${chalk.bold.white(`☽ PhaseBot v${version}`)}`)
     console.log(`  Environment:  ${chalk.grey(process.env.NODE_ENV)}\n`)
 
     if (!existsSync(this.srcDir)) {
@@ -106,7 +106,7 @@ export class PhaseClient implements PhaseClientParams {
     const cliSpinner = spinner()
 
     cliSpinner.start("Executing prestart ...")
-    
+
     await new Promise<void>((resolve) => {
       setImmediate(async () => {
         const prestartFunction = await this.loadPrestart()
