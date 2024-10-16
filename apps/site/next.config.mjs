@@ -21,6 +21,13 @@ const config = {
     },
   },
   async redirects() {
+    const BASE_URL =
+      process.env.VERCEL_ENV === "production"
+        ? "https://phasebot.xyz"
+        : process.env.VERCEL_ENV === "preview"
+          ? `https://${process.env.VERCEL_URL}`
+          : "http://localhost:3000"
+
     return [
       {
         // discord server
@@ -31,7 +38,7 @@ const config = {
       {
         // dashboard oauth
         source: "/redirect/oauth",
-        destination: `https://discord.com/api/oauth2/authorize?client_id=${process.env.DISCORD_ID}&response_type=code&scope=identify&redirect_uri=${process.env.BASE_URL}/dashboard/guilds`,
+        destination: `https://discord.com/api/oauth2/authorize?client_id=${process.env.DISCORD_ID}&response_type=code&scope=identify&redirect_uri=${BASE_URL}/dashboard/guilds`,
         permanent: false,
       },
       {
@@ -43,7 +50,7 @@ const config = {
       {
         // old donation redirect
         source: "/redirect/donate",
-        destination: `/redirect/buymeacoffee`,
+        destination: `${BASE_URL}/redirect/buymeacoffee`,
         permanent: false,
       },
       {
