@@ -43,7 +43,7 @@ const config = {
       {
         // old donation redirect
         source: "/redirect/donate",
-        destination: `${process.env.BASE_URL}/redirect/buymeacoffee`,
+        destination: `/redirect/buymeacoffee`,
         permanent: false,
       },
       {
