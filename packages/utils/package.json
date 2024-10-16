@@ -9,7 +9,6 @@
   },
   "exports": {
     "./modules": {
-      "default": "./dist/modules/index.js",
       "import": "./dist/modules/index.js",
       "require": "./dist/modules/index.js",
       "types": "./dist/modules/index.d.ts"
