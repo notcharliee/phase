@@ -1,24 +1,26 @@
 {
+  "private": true,
   "name": "@repo/utils",
+  "version": "0.0.0",
   "type": "module",
-  "module": "index.ts",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
   },
   "exports": {
-    "./modules": "./dist/modules/index.js",
-    "./variables": "./dist/variables/index.js"
-  },
-  "dependencies": {
-    "tsup": "^8.3.0"
-  },
-  "devDependencies": {
-    "@types/bun": "latest"
+    "./modules": {
+      "default": "./dist/modules/index.js",
+      "import": "./dist/modules/index.js",
+      "require": "./dist/modules/index.js",
+      "types": "./dist/modules/index.d.ts"
+    }
   },
   "peerDependencies": {
     "@repo/database": "workspace:*",
-    "typescript": "^5.0.0",
     "discord.js": "^14.x.x"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "tsup": "^8.3.0"
   }
 }

@@ -1,4 +1,4 @@
-import { moduleDefinitions } from "@repo/utils/modules"
+import { ModuleDefinitions } from "@repo/utils/modules"
 import { constantCase } from "change-case"
 
 import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
@@ -77,14 +77,14 @@ export class BotErrorMessage extends CustomMessageBuilder {
   static moduleNotEnabled(moduleId: ModuleId) {
     return new this({
       title: "Module not enabled",
-      description: `The \`${moduleDefinitions[moduleId].name.replace(/([A-Z])/g, " $1").trimStart()}\` module is not enabled, which is required to use this command.`,
+      description: `The \`${ModuleDefinitions[moduleId].name.replace(/([A-Z])/g, " $1").trimStart()}\` module is not enabled, which is required to use this command.`,
     })
   }
 
   static moduleNotConfigured(moduleId: ModuleId) {
     return new this({
       title: "Module not configured",
-      description: `The \`${moduleDefinitions[moduleId].name.replace(/([A-Z])/g, " $1").trimStart()}\` module is not configured.`,
+      description: `The \`${ModuleDefinitions[moduleId].name.replace(/([A-Z])/g, " $1").trimStart()}\` module is not configured.`,
     })
   }
 

@@ -1,0 +1,16 @@
+export enum ModuleId {
+  AuditLogs = "2uA4lWg9gW",
+  AutoMessages = "2Cwqwmk84t",
+  AutoRoles = "56Fd2OVE6Q",
+  BumpReminders = "7ImdmYll1t",
+  Counters = "5QvEVG03KK",
+  Forms = "1uWxuEkesd",
+  JoinToCreates = "67NXpiGedU",
+  Levels = "23OmPKCPG0",
+  ReactionRoles = "3MOVeYkTa1",
+  SelfRoles = "5pZqVNWucH",
+  Tickets = "7i5YEGu2Fj",
+  TwitchNotifications = "1q4EDddac2",
+  Warnings = "3aqDA1m91r",
+  WelcomeMessages = "44Xaf7KFo1",
+}

@@ -1,7 +1,6 @@
 import { BotCronBuilder } from "phasebot/builders"
 
-import { ModuleId } from "@repo/utils/modules"
-import { variables } from "@repo/utils/variables"
+import { ModuleDefinitions, ModuleId } from "@repo/utils/modules"
 
 import type { Client } from "discord.js"
 
@@ -18,12 +17,13 @@ export default new BotCronBuilder()
         if (!guild) return
 
         const moduleConfig = guildDoc.modules![ModuleId.Counters]!
+        const moduleDefinintion = ModuleDefinitions[ModuleId.Counters]
 
         const counterPromises = moduleConfig.counters.map(async (counter) => {
           const channel = guild.channels.cache.get(counter.channel)
           if (!channel) return
 
-          const newName = variables.modules[ModuleId.Counters].parse(
+          const newName = moduleDefinintion.variables.parse(
             counter.content,
             guild,
           )

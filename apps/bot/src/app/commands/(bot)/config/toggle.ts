@@ -1,6 +1,6 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { moduleDefinitions } from "@repo/utils/modules"
+import { ModuleDefinitions } from "@repo/utils/modules"
 
 import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 import { db } from "~/lib/db"
@@ -18,7 +18,7 @@ export default new BotSubcommandBuilder()
       .setDescription("The module to toggle.")
       .setRequired(true)
       .addChoices(
-        Object.values(moduleDefinitions).map(({ id: value, name }) => ({
+        Object.values(ModuleDefinitions).map(({ id: value, name }) => ({
           name,
           value,
         })),
@@ -47,7 +47,7 @@ export default new BotSubcommandBuilder()
       )
     }
 
-    const moduleName = moduleDefinitions[moduleId as ModuleId].name
+    const moduleName = ModuleDefinitions[moduleId as ModuleId].name
 
     try {
       await db.guilds.updateOne(

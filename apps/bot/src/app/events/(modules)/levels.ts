@@ -1,7 +1,6 @@
 import { BotEventBuilder } from "phasebot/builders"
 
-import { ModuleId } from "@repo/utils/modules"
-import { variables } from "@repo/utils/variables"
+import { ModuleDefinitions, ModuleId } from "@repo/utils/modules"
 
 import { db } from "~/lib/db"
 import { isSnowflake } from "~/lib/utils"
@@ -15,6 +14,7 @@ export default new BotEventBuilder()
 
     const guildDoc = client.stores.guilds.get(message.guildId)
     const moduleConfig = guildDoc?.modules?.[ModuleId.Levels]
+    const moduleDefinition = ModuleDefinitions[ModuleId.Levels]
 
     if (!moduleConfig?.enabled) return
 
@@ -58,7 +58,7 @@ export default new BotEventBuilder()
 
         if (moduleConfig.message.length) {
           embed.setDescription(
-            variables.modules[ModuleId.Levels].parse(
+            moduleDefinition.variables.parse(
               moduleConfig.message,
               message.author,
               levelDoc,

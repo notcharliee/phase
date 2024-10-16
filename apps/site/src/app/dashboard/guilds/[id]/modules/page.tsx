@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { moduleDefinitions } from "@repo/utils/modules"
+import { ModuleDefinitions } from "@repo/utils/modules"
 import { useForm } from "react-hook-form"
 
 import { ActionBar } from "~/components/dashboard/modules/action-bar"
@@ -34,8 +34,8 @@ import type { FilterOption } from "~/components/dashboard/modules/select-filter"
 import type { ModulesFormValues } from "~/types/dashboard"
 
 export type ModuleData<T extends ModuleId = ModuleId> = {
-  -readonly [K in keyof (typeof moduleDefinitions)[T]]: (typeof moduleDefinitions)[T][K]
-} & { id: T; config: ModulesFormValues[T] }
+  -readonly [K in keyof (typeof ModuleDefinitions)[T]]: (typeof ModuleDefinitions)[T][K]
+} & { config: ModulesFormValues[T] }
 
 export default function ModulesPage() {
   const [filter, setFilter] = useState<FilterOption["value"]>("none")
@@ -60,7 +60,7 @@ export default function ModulesPage() {
   const invalidFieldNames = keys(formState.errors) as ModuleId[]
 
   const moduleDataArray: ModuleData[] = useMemo(() => {
-    const modulesArray = Object.values(moduleDefinitions).map((value) => ({
+    const modulesArray = Object.values(ModuleDefinitions).map((value) => ({
       config: formFields[value.id],
       ...value,
     }))
@@ -73,7 +73,7 @@ export default function ModulesPage() {
 
   const onModuleAdd = useCallback(
     (moduleId: ModuleId) => {
-      const moduleConfig = moduleDefinitions[moduleId]
+      const moduleConfig = ModuleDefinitions[moduleId]
       if (!moduleConfig) return
 
       form.setValue(

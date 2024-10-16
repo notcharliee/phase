@@ -1,19 +1,19 @@
 import { DiscordAPIError } from "discord.js"
 import { BotEventBuilder } from "phasebot/builders"
 
-import { ModuleId } from "@repo/utils/modules"
-import { variables } from "@repo/utils/variables"
+import { ModuleDefinitions, ModuleId } from "@repo/utils/modules"
 
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 import { db } from "~/lib/db"
 
 import { generateWelcomeCard } from "~/images/welcome"
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 
 export default new BotEventBuilder()
   .setName("guildMemberAdd")
   .setExecute(async (client, member) => {
     const guildDoc = client.stores.guilds.get(member.guild.id)
     const moduleConfig = guildDoc?.modules?.[ModuleId.WelcomeMessages]
+    const moduleDefinition = ModuleDefinitions[ModuleId.WelcomeMessages]
 
     if (!guildDoc || !moduleConfig?.enabled) return
 
@@ -33,7 +33,7 @@ export default new BotEventBuilder()
 
     await channel.sendTyping().catch(() => null)
 
-    const description = variables.modules[ModuleId.WelcomeMessages].parse(
+    const description = moduleDefinition.variables.parse(
       moduleConfig.message,
       member,
     )
