@@ -49,7 +49,7 @@ export const WelcomeMessages = () => {
             <FormLabel>Welcome Message</FormLabel>
             <FormControl>
               <RichTextarea
-                placeholder={`Example: Hi **{username}**, welcome to the server! You are member #{membercount}.`}
+                placeholder={`Example: Hi **{username}**, welcome to the server! You are member #{memberCount}.`}
                 {...field}
               />
             </FormControl>
