@@ -1,7 +1,7 @@
 import { ModuleId } from "@repo/utils/modules"
 import mongoose from "mongoose"
 
-import { defineModel } from "~/utils"
+import { defineModel } from "~/mongo/utils"
 
 // status (subdocument) //
 

@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 
-import { defineModel } from "~/utils"
+import { defineModel } from "~/mongo/utils"
 
 export interface Tag {
   /** The guild's ID. */

@@ -6,13 +6,18 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "genkey": "bun --print 'require(`src/utils.ts`).generateKey()'"
+    "genkey": "bun --print 'require(`src/mongo/utils.ts`).generateKey()'"
   },
   "exports": {
     ".": {
-      "main": "./dist/index.js",
-      "module": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "main": "./dist/mongo/index.js",
+      "module": "./dist/mongo/index.js",
+      "types": "./dist/mongo/index.d.ts"
+    },
+    "./postgres": {
+      "main": "./dist/postgres/index.js",
+      "module": "./dist/postgres/index.js",
+      "types": "./dist/postgres/index.d.ts"
     }
   },
   "dependencies": {

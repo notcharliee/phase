@@ -1,8 +1,8 @@
 import { Schema } from "mongoose"
 
-import { defineModel } from "~/utils"
+import { defineModel } from "~/mongo/utils"
 
-import type { Snowflake } from "~/types"
+import type { Snowflake } from "~/mongo/types"
 
 export interface Analytics {
   id: Snowflake

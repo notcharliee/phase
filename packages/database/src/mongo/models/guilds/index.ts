@@ -1,11 +1,11 @@
 import { Schema } from "mongoose"
 
-import { commandSchema } from "~/models/guilds/commands"
-import { modulesSchema } from "~/models/guilds/modules"
-import { defineModel } from "~/utils"
+import { commandSchema } from "~/mongo/models/guilds/commands"
+import { modulesSchema } from "~/mongo/models/guilds/modules"
+import { defineModel } from "~/mongo/utils"
 
-import type { GuildCommand } from "~/models/guilds/commands"
-import type { GuildModules } from "~/models/guilds/modules"
+import type { GuildCommand } from "~/mongo/models/guilds/commands"
+import type { GuildModules } from "~/mongo/models/guilds/modules"
 
 export interface Guild {
   id: string
