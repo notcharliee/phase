@@ -9,9 +9,9 @@
   },
   "exports": {
     "./modules": {
+      "types": "./dist/modules/index.d.ts",
       "import": "./dist/modules/index.js",
-      "require": "./dist/modules/index.js",
-      "types": "./dist/modules/index.d.ts"
+      "require": "./dist/modules/index.js"
     }
   },
   "peerDependencies": {

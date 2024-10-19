@@ -9,24 +9,24 @@
   },
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.js"
     },
     "./builders": {
+      "types": "./dist/structures/builders/index.d.ts",
       "import": "./dist/structures/builders/index.js",
-      "require": "./dist/structures/builders/index.js",
-      "types": "./dist/structures/builders/index.d.ts"
+      "require": "./dist/structures/builders/index.js"
     },
     "./managers": {
+      "types": "./dist/structures/managers/index.d.ts",
       "import": "./dist/structures/managers/index.js",
-      "require": "./dist/structures/managers/index.js",
-      "types": "./dist/structures/managers/index.d.ts"
+      "require": "./dist/structures/managers/index.js"
     },
     "./stores": {
+      "types": "./dist/structures/stores/index.d.ts",
       "import": "./dist/structures/stores/index.js",
-      "require": "./dist/structures/stores/index.js",
-      "types": "./dist/structures/stores/index.d.ts"
+      "require": "./dist/structures/stores/index.js"
     }
   },
   "dependencies": {

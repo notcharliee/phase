@@ -5,9 +5,9 @@
   "type": "module",
   "exports": {
     "./*": {
+      "types": "./src/*",
       "import": "./src/*",
-      "require": "./src/*",
-      "types": "./src/*"
+      "require": "./src/*"
     }
   },
   "dependencies": {
