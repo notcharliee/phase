@@ -7,13 +7,13 @@ import { auth } from "~/auth"
 import type { LayoutProps } from "~/types/props"
 
 export default async function GuildLayout({
-  children,
   params,
+  children,
 }: LayoutProps<"id">) {
   const session = (await auth())!
 
   const userId = session.user.id
-  const guildId = params.id
+  const guildId = (await params).id
 
   const guildData = await getGuildData({ guildId, userId })
 

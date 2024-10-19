@@ -38,7 +38,7 @@ interface EmojiPickerProps {
 }
 
 export const EmojiPicker = forwardRef<
-  React.ElementRef<typeof Button>,
+  React.ComponentRef<typeof Button>,
   React.PropsWithoutRef<EmojiPickerProps>
 >(({ onChange, value, ...props }: EmojiPickerProps, ref) => {
   const [open, setOpen] = useState(false)
@@ -188,6 +188,7 @@ export const EmojiPicker = forwardRef<
     </Popover>
   )
 })
+EmojiPicker.displayName = "EmojiPicker"
 
 interface EmojiProps {
   name: string

@@ -4,7 +4,6 @@ import { safeMs } from "~/lib/utils"
 
 import type { GuildModulesWithData, ModulesFormValues } from "~/types/dashboard"
 import type { GuildModules } from "~/types/db"
-import type { APIMessage } from "discord-api-types/v10"
 
 export const defaultEmptyFormValues: Required<ModulesFormValues> = {
   [ModuleId.AuditLogs]: {
@@ -165,7 +164,7 @@ export function getDefaultValues(
       })) as Required<ModulesFormValues>[ModuleId.SelfRoles]["messages"],
     }),
     [ModuleId.Tickets]: (data) => {
-      const message = data._data?.message as APIMessage | undefined
+      const message = data._data?.message
       const messageContent = message?.embeds?.[0]?.description
 
       return {

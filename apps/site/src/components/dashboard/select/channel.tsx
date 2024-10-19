@@ -173,7 +173,7 @@ export const SelectChannel = React.forwardRef<
         <PopoverContent className="p-0" style={{ width: triggerWidth + "px" }}>
           <Command onKeyDown={onKeyDown} loop>
             <CommandInput
-              ref={ref}
+              ref={ref as React.Ref<never>}
               name={name}
               disabled={disabled}
               placeholder={"Search channels..."}
@@ -183,7 +183,7 @@ export const SelectChannel = React.forwardRef<
             <CommandList>
               <CommandEmpty>No results found :(</CommandEmpty>
               {sortedCategories.map((category) => (
-                <CommandGroup heading={category.name}>
+                <CommandGroup key={category.name} heading={category.name}>
                   {category.channels.map((channel) => (
                     <CommandItem
                       key={channel.id}
@@ -213,3 +213,4 @@ export const SelectChannel = React.forwardRef<
     )
   },
 )
+SelectChannel.displayName = "SelectChannel"

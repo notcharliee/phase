@@ -1,6 +1,6 @@
 import * as React from "react"
 
-export function useElementSize(ref: React.RefObject<HTMLElement>) {
+export function useElementSize(ref: React.RefObject<HTMLElement | null>) {
   const [size, setSize] = React.useState<[number, number]>([0, 0])
 
   React.useEffect(() => {

@@ -1,33 +1,15 @@
 import "@total-typescript/ts-reset"
 
 import createMDX from "@next/mdx"
-import rehypeAutolinkHeadings from "rehype-autolink-headings"
-import rehypeSlug from "rehype-slug"
-import remarkGfm from "remark-gfm"
 
-/** @type {import('next').NextConfig} */
-const config = {
+import { env } from "~/lib/env"
+
+import type { NextConfig } from "next"
+
+const config: NextConfig = {
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
-  experimental: {
-    mdxRs: true,
-    turbo: {
-      resolveAlias: {
-        "next-mdx-import-source-file": [
-          "private-next-root-dir/src/mdx-components",
-          "private-next-root-dir/mdx-components",
-          "@mdx-js/react",
-        ],
-      },
-    },
-  },
+  experimental: { mdxRs: true },
   async redirects() {
-    const BASE_URL =
-      process.env.VERCEL_ENV === "production"
-        ? "https://phasebot.xyz"
-        : process.env.VERCEL_ENV === "preview"
-          ? `https://${process.env.VERCEL_URL}`
-          : "http://localhost:3000"
-
     return [
       {
         // discord server
@@ -38,19 +20,19 @@ const config = {
       {
         // dashboard oauth
         source: "/redirect/oauth",
-        destination: `https://discord.com/api/oauth2/authorize?client_id=${process.env.DISCORD_ID}&response_type=code&scope=identify&redirect_uri=${BASE_URL}/dashboard/guilds`,
+        destination: `https://discord.com/api/oauth2/authorize?client_id=${env.DISCORD_ID}&response_type=code&scope=identify&redirect_uri=${env.BASE_URL}/dashboard/guilds`,
         permanent: false,
       },
       {
         // bot invite
         source: "/redirect/invite",
-        destination: `https://discord.com/oauth2/authorize?client_id=${process.env.DISCORD_ID}&response_type=code&scope=bot%20applications.commands&permissions=17666911472`,
+        destination: `https://discord.com/oauth2/authorize?client_id=${env.DISCORD_ID}&response_type=code&scope=bot%20applications.commands&permissions=17666911472`,
         permanent: false,
       },
       {
         // old donation redirect
         source: "/redirect/donate",
-        destination: `${BASE_URL}/redirect/buymeacoffee`,
+        destination: `${env.BASE_URL}/redirect/buymeacoffee`,
         permanent: false,
       },
       {
@@ -105,12 +87,6 @@ const config = {
   },
 }
 
-const withMDX = createMDX({
-  options: {
-    // @ts-expect-error will fix later
-    remarkPlugins: [remarkGfm],
-    rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
-  },
-})
+const withMDX = createMDX()
 
 export default withMDX(config)

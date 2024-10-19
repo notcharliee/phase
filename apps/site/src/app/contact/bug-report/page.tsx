@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { use, useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -31,11 +31,10 @@ import { formSchema } from "./schema"
 
 import type { FormValues } from "./schema"
 
-export default function BugReportPage({
-  searchParams,
-}: Readonly<{
-  searchParams: Partial<FormValues>
-}>) {
+export default function BugReportPage(
+  props: Readonly<{ searchParams: Promise<Partial<FormValues>> }>,
+) {
+  const searchParams = use(props.searchParams)
   const [status, setStatus] = useState<
     "loading" | "success" | "error" | undefined
   >()

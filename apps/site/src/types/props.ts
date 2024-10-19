@@ -4,10 +4,10 @@ export type LayoutProps<
   {
     children: React.ReactNode
   } & (T extends string
-    ? { params: { [K in T]: string } }
+    ? { params: Promise<{ [K in T]: string }> }
     : T extends string[]
-      ? { params: { [K in T[number]]: string } }
+      ? { params: Promise<{ [K in T[number]]: string }> }
       : T extends string[][]
-        ? { params: { [K in T[number][number]]: string } }
+        ? { params: Promise<{ [K in T[number][number]]: string }> }
         : never)
 >

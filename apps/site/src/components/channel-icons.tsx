@@ -1,4 +1,4 @@
-import { ChannelType } from "discord-api-types/v10"
+import { ChannelType } from "@discordjs/core/http-only"
 
 import { cn } from "~/lib/utils"
 

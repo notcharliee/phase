@@ -169,6 +169,7 @@ export default function ModulesPage() {
 
             return (
               <ConfigCard
+                key={moduleData.id}
                 moduleData={moduleData}
                 moduleStatus={moduleStatus}
                 onTagSelect={onTagSelect}

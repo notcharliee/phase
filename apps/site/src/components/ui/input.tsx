@@ -13,7 +13,7 @@ export interface InputProps<TType extends React.HTMLInputTypeAttribute>
   onChange?: (value: InputValue<TType> | null) => void
 }
 
-export const Input = React.forwardRef<
+const InputComponent = React.forwardRef<
   HTMLInputElement,
   InputProps<React.HTMLInputTypeAttribute>
 >(({ className, type = "text", onChange, ...props }, ref) => {
@@ -46,6 +46,13 @@ export const Input = React.forwardRef<
       {...props}
     />
   )
-}) as unknown as <TType extends React.HTMLInputTypeAttribute = "text">(
+})
+InputComponent.displayName = "Input"
+
+const Input = InputComponent as unknown as <
+  TType extends React.HTMLInputTypeAttribute = "text",
+>(
   props: InputProps<TType> & { ref?: React.Ref<HTMLInputElement> },
 ) => React.ReactElement<InputProps<TType>>
+
+export { Input }

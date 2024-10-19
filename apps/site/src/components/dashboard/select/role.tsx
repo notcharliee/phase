@@ -152,7 +152,7 @@ export const SelectRole = React.forwardRef<HTMLInputElement, SelectRoleProps>(
         <PopoverContent className="p-0" style={{ width: triggerWidth + "px" }}>
           <Command onKeyDown={onKeyDown} loop>
             <CommandInput
-              ref={ref}
+              ref={ref as React.Ref<never>}
               name={name}
               disabled={disabled}
               placeholder={"Search roles..."}
@@ -190,3 +190,4 @@ export const SelectRole = React.forwardRef<HTMLInputElement, SelectRoleProps>(
     )
   },
 )
+SelectRole.displayName = "SelectRole"

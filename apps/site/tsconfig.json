@@ -5,7 +5,7 @@
     "src/**/*",
     "eslint.config.js",
     "next-env.d.ts",
-    "next.config.mjs",
+    "next.config.ts",
     "postcss.config.cjs",
     "tailwind.config.ts"
   ],

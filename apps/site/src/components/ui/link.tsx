@@ -9,7 +9,7 @@ interface LinkProps
   extends NextLinkProps,
     React.HTMLAttributes<HTMLAnchorElement> {}
 
-export const Link = forwardRef<React.ElementRef<typeof NextLink>, LinkProps>(
+export const Link = forwardRef<React.ComponentRef<typeof NextLink>, LinkProps>(
   ({ className, ...props }, ref) => (
     <NextLink
       ref={ref}
@@ -21,3 +21,4 @@ export const Link = forwardRef<React.ElementRef<typeof NextLink>, LinkProps>(
     />
   ),
 )
+Link.displayName = NextLink.displayName

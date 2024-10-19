@@ -167,7 +167,7 @@ export const SelectMention = React.forwardRef<
         <PopoverContent className="p-0" style={{ width: triggerWidth + "px" }}>
           <Command onKeyDown={onKeyDown} loop>
             <CommandInput
-              ref={ref}
+              ref={ref as React.Ref<never>}
               name={name}
               disabled={disabled}
               placeholder={"Search mentions..."}
@@ -205,3 +205,4 @@ export const SelectMention = React.forwardRef<
     )
   },
 )
+SelectMention.displayName = "SelectMention"

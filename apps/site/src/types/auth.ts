@@ -1,4 +1,4 @@
-import type { APIUser } from "discord-api-types/v10"
+import type { APIUser } from "@discordjs/core/http-only"
 import type { Profile, Session, User } from "next-auth"
 import type { JWT } from "next-auth/jwt"
 

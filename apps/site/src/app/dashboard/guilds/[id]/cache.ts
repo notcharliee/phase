@@ -1,5 +1,5 @@
+import { unstable_cache } from "next/cache"
 import { redirect } from "next/navigation"
-import { cache } from "react"
 
 import { API } from "@discordjs/core/http-only"
 import { REST } from "@discordjs/rest"
@@ -25,7 +25,7 @@ interface GuildDataParams {
   userId: string
 }
 
-export const getGuildData = cache(async (params: GuildDataParams) => {
+export const getGuildData = unstable_cache(async (params: GuildDataParams) => {
   const { guildId, userId } = params
 
   const db = await connectDB()
