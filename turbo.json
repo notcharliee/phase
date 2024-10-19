@@ -5,7 +5,7 @@
       "cache": true,
       "env": ["*"],
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "outputs": [".next/**", "!.next/cache/**", ".tsc/**", "dist/**"]
     },
     "dev": {
       "cache": false,
