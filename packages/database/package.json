@@ -30,8 +30,8 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.1",
+    "@repo/env": "workspace:*",
     "@repo/utils": "workspace:*",
-    "@t3-oss/env-core": "^0.11.1",
     "drizzle-orm": "^0.35.1",
     "mongoose": "^8.1.0",
     "pg": "^8.13.0",
