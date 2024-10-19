@@ -1,5 +1,6 @@
 import {
   AuditLogEvent,
+  AutoModerationActionType,
   AutoModerationRuleEventType,
   AutoModerationRuleTriggerType,
   ChannelType,
@@ -14,6 +15,7 @@ import {
   PermissionsBitField,
   StageInstancePrivacyLevel,
   StickerFormatType,
+  WebhookType,
 } from "discord.js"
 import { BotEventBuilder } from "phasebot/builders"
 
@@ -186,7 +188,9 @@ const AuditLogTitles: Record<AuditLogEvent, string> = {
 /**
  * Serializes a permissions bitfield into an array of permission names.
  */
-function serializePermissions(bitfield: bigint) {
+function serializePermissions(bitfield: bigint | string) {
+  bitfield = BigInt(bitfield)
+
   return Object.entries(new PermissionsBitField(bitfield).serialize()).reduce(
     (acc, [key, value]) => {
       if (value) acc.push(key.replace(/([A-Z])/g, " $1").trim())
@@ -664,7 +668,23 @@ export default new BotEventBuilder()
             embed.addFields({
               name: "Type",
               value: capitalCase(
-                ChannelType[change.new as ChannelType].replace("Guild", ""),
+                change.new
+                  ? AuditLogEvent[action].startsWith("AutoModerationRule")
+                    ? AutoModerationRuleEventType[
+                        change.new as AutoModerationRuleEventType
+                      ]
+                    : AuditLogEvent[action].startsWith("AutoModeration")
+                      ? AutoModerationActionType[
+                          change.new as AutoModerationActionType
+                        ]
+                      : AuditLogEvent[action].startsWith("Sticker")
+                        ? StickerFormatType[change.new as StickerFormatType]
+                        : AuditLogEvent[action].startsWith("Channel")
+                          ? ChannelType[change.new as ChannelType]
+                          : AuditLogEvent[action].startsWith("Webhook")
+                            ? WebhookType[change.new as WebhookType]
+                            : (change.new?.toString() ?? "unknown")
+                  : (change.new?.toString() ?? "unknown"),
               ),
             })
 
@@ -824,11 +844,13 @@ export default new BotEventBuilder()
           case "permissions":
           case "allow":
           case "deny": {
-            const oldBitfield = BigInt(change.old!)
-            const newBitfield = BigInt(change.new!)
+            const oldPermissions = change.old
+              ? serializePermissions(change.old)
+              : []
 
-            const oldPermissions = serializePermissions(oldBitfield)
-            const newPermissions = serializePermissions(newBitfield)
+            const newPermissions = change.new
+              ? serializePermissions(change.new)
+              : []
 
             const removedPermissions = oldPermissions
               .filter((permission) => !newPermissions.includes(permission))
