@@ -14,8 +14,7 @@
     },
     "lint": {
       "cache": true,
-      "dependsOn": ["^build"],
-      "outputs": []
+      "dependsOn": ["^build"]
     }
   },
   "remoteCache": {
