@@ -4,12 +4,20 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build": "tsup",
     "dev": "tsup --watch",
-    "genkey": "bun --print 'require(`src/mongo/utils.ts`).generateKey()'"
+    "build": "tsup",
+    "lint": "eslint .",
+    "genkey": "bun --print 'require(`src/mongo/utils.ts`).generateKey()'",
+    "drizzle:push": "bun run --env-file=.env.local drizzle-kit push",
+    "drizzle:studio": "bun run --env-file=.env.local drizzle-kit studio"
   },
   "exports": {
     ".": {
+      "main": "./dist/mongo/index.js",
+      "module": "./dist/mongo/index.js",
+      "types": "./dist/mongo/index.d.ts"
+    },
+    "./mongo": {
       "main": "./dist/mongo/index.js",
       "module": "./dist/mongo/index.js",
       "types": "./dist/mongo/index.d.ts"
@@ -21,13 +29,19 @@
     }
   },
   "dependencies": {
+    "@neondatabase/serverless": "^0.10.1",
     "@repo/utils": "workspace:*",
     "@t3-oss/env-core": "^0.11.1",
+    "drizzle-orm": "^0.35.1",
     "mongoose": "^8.1.0",
+    "pg": "^8.13.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@repo/config": "workspace:*",
     "@types/node": "^20.8.9",
+    "drizzle-kit": "^0.26.2",
+    "eslint": "^9.13.0",
     "tsup": "^8.3.0",
     "typescript": "^5.3.2"
   }
