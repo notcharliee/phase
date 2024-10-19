@@ -7,6 +7,7 @@ export const env = createEnv({
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
     MONGODB_URI: z.string(),
+    POSTGRES_URI: z.string(),
     DISCORD_TOKEN: z.string(),
     TWITCH_CLIENT_ID: z.string(),
     TWITCH_CLIENT_SECRET: z.string(),

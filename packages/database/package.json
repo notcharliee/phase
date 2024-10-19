@@ -22,7 +22,8 @@
   },
   "dependencies": {
     "@repo/utils": "workspace:*",
-    "mongoose": "^8.1.0"
+    "@t3-oss/env-core": "^0.11.1",
+    "mongoose": "^8.1.0",
   },
   "devDependencies": {
     "@repo/config": "workspace:*",
