@@ -40,16 +40,20 @@ class Database extends DatabaseModels implements Disposable {
   async connect(uri: string) {
     this.#debug("Initialising database")
 
-    if (mongoose.connection.readyState === 1) {
+    if (
+      mongoose.connection.readyState === mongoose.ConnectionStates.connected
+    ) {
       this.#debug("Reusing existing connection to MongoDB")
     } else {
       this.#debug("Connecting to MongoDB")
 
       try {
-        await mongoose.connect(uri, { autoIndex: this.#options.autoIndex })
+        await mongoose.connect(uri, {
+          autoIndex: this.#options.autoIndex,
+        })
         this.#debug("Connected to MongoDB")
       } catch (error) {
-        this.#debug(`Failed to connect to MongoDB: ${error}`)
+        this.#debug(`Failed to connect to MongoDB: ${error as Error}`)
         throw error
       }
     }
@@ -62,7 +66,7 @@ class Database extends DatabaseModels implements Disposable {
       await mongoose.disconnect()
       this.#debug("Disconnected from MongoDB")
     } catch (error) {
-      this.#debug(`Failed to disconnect from MongoDB: ${error}`)
+      this.#debug(`Failed to disconnect from MongoDB: ${error as Error}`)
       throw error
     }
 
@@ -75,7 +79,7 @@ class Database extends DatabaseModels implements Disposable {
   }
 
   [Symbol.dispose]() {
-    this.disconnect()
+    void this.disconnect()
   }
 }
 
