@@ -24,20 +24,19 @@ export const FallbackEmojis = {
   MicrophoneOff: "🎙️",
   Users: "👥",
   Transfer: "➡️",
-
 } satisfies Record<keyof typeof ApplicationEmojis, string>
 
 export const Emojis = {
   ZeroWidthJoiner: "‍",
   GiveawayReaction: "🎉",
-  Add: '➕',
-  Remove: '➖',
-  Play: '▶️',
-  Pause: '⏸️',
-  Stop: '⏹️',
-  Skip: '⏭️',
-  Previous: '⏮️',
-  Repeat: '🔁',
-  Shuffle: '🔀',
+  Add: "➕",
+  Remove: "➖",
+  Play: "▶️",
+  Pause: "⏸️",
+  Stop: "⏹️",
+  Skip: "⏭️",
+  Previous: "⏮️",
+  Repeat: "🔁",
+  Shuffle: "🔀",
   ...(env.NODE_ENV === "production" ? ApplicationEmojis : FallbackEmojis),
 }
