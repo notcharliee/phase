@@ -14,7 +14,8 @@
     },
     "lint": {
       "cache": true,
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "passThroughEnv": ["SKIP_ENV_VALIDATION"]
     }
   },
   "remoteCache": {
