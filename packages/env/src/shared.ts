@@ -12,8 +12,10 @@ export function shared() {
   return createEnv({
     emptyStringAsUndefined: true,
     runtimeEnv: process.env,
+    skipValidation: !!process.env.SKIP_ENV_VALIDATION,
     server: {
       // environment
+      SKIP_ENV_VALIDATION: z.boolean().optional(),
       NODE_ENV: z.enum(["development", "test", "production"]),
       BASE_URL: z.string().url().default(BASE_URL),
       // database

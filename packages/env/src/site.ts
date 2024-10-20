@@ -8,6 +8,7 @@ export function site() {
     extends: [vercel(), shared()],
     emptyStringAsUndefined: true,
     experimental__runtimeEnv: {},
+    skipValidation: !!process.env.SKIP_ENV_VALIDATION,
     server: {},
   })
 }
