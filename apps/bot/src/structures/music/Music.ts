@@ -1,8 +1,9 @@
-import { YouTubePlaylist, YouTubePlugin, YouTubeSong } from "@distube/youtube"
+import { YouTubePlaylist, YouTubePlugin } from "@distube/youtube"
 
 import { QueueManager } from "~/structures/music/QueueManager"
 import { Song } from "~/structures/music/Song"
 
+import type { YouTubeSong } from "@distube/youtube"
 import type { Queue } from "~/structures/music/Queue"
 import type { Client, GuildMember, VoiceBasedChannel } from "discord.js"
 
@@ -43,16 +44,12 @@ export class Music {
     const newSongs: Song[] = []
 
     if (youtubeSongOrPlaylist instanceof YouTubePlaylist) {
-      const youtubePlaylist = youtubeSongOrPlaylist
-      for (const youtubeSong of youtubePlaylist.songs) {
+      for (const youtubeSong of youtubeSongOrPlaylist.songs) {
         const song = await this.addSongToQueue(queue, youtubeSong, submitter)
 
-        queue.addSong(song)
         newSongs.push(song)
       }
-    }
-
-    if (youtubeSongOrPlaylist instanceof YouTubeSong) {
+    } else {
       const youtubeSong = youtubeSongOrPlaylist
       const song = await this.addSongToQueue(queue, youtubeSong, submitter)
 
@@ -63,16 +60,12 @@ export class Music {
   }
 
   public async search(query: string) {
-    let youtubeSongOrPlaylist = this.youtube.validate(query)
+    const youtubeSongOrPlaylist = this.youtube.validate(query)
       ? await this.youtube.resolve(query, {}).catch(() => null)
-      : await this.youtube.search(query, { limit: 1 }).catch(() => null)
+      : await this.youtube.searchSong(query, {}).catch(() => null)
 
     if (!youtubeSongOrPlaylist) {
       throw new Error(MusicError.InvalidQuery)
-    }
-
-    if (Array.isArray(youtubeSongOrPlaylist)) {
-      youtubeSongOrPlaylist = youtubeSongOrPlaylist[0]!
     }
 
     return youtubeSongOrPlaylist
