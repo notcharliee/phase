@@ -29,5 +29,14 @@ export const FallbackEmojis = {
 export const Emojis = {
   ZeroWidthJoiner: "‍",
   GiveawayReaction: "🎉",
+  Add: "➕",
+  Remove: "➖",
+  Play: "▶️",
+  Pause: "⏸️",
+  Stop: "⏹️",
+  Skip: "⏭️",
+  Previous: "⏮️",
+  Repeat: "🔁",
+  Shuffle: "🔀",
   ...(env.NODE_ENV === "production" ? ApplicationEmojis : FallbackEmojis),
 }

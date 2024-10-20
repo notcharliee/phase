@@ -1,8 +1,14 @@
-import { EmbedBuilder } from "discord.js"
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  EmbedBuilder,
+} from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import dedent from "dedent"
 
+import { Emojis } from "~/lib/emojis.ts"
 import { PhaseColour } from "~/lib/enums"
 
 import { BotErrorMessage } from "~/structures/BotError"
@@ -44,6 +50,68 @@ export default new BotSubcommandBuilder()
 
       const duration = firstSong.formattedDuration
       const placeInQueue = queue.songs.slice(queue.currentSongIndex! + 1).length
+
+      if (queue.songs.length === 1) {
+        await channel.send({
+          content: firstSong.submittedBy.toString(),
+          embeds: [
+            new EmbedBuilder()
+              .setColor(PhaseColour.Primary)
+              .setAuthor({
+                name: `Started playing by ${firstSong.submittedBy.displayName}`,
+                iconURL: firstSong.submittedBy.displayAvatarURL(),
+              })
+              .setTitle(firstSong.name)
+              .setURL(firstSong.url)
+              .setImage(firstSong.thumbnail),
+          ],
+          components: [
+            new ActionRowBuilder<ButtonBuilder>().addComponents([
+              new ButtonBuilder()
+                .setCustomId("music.stop")
+                .setEmoji(Emojis.Stop)
+                .setStyle(ButtonStyle.Secondary),
+
+              new ButtonBuilder()
+                .setCustomId("music.previous")
+                .setEmoji(Emojis.Previous)
+                .setStyle(ButtonStyle.Secondary),
+
+              new ButtonBuilder()
+                .setCustomId("music.pause")
+                .setEmoji(Emojis.Pause)
+                .setStyle(ButtonStyle.Secondary),
+
+              new ButtonBuilder()
+                .setCustomId("music.skip")
+                .setEmoji(Emojis.Skip)
+                .setStyle(ButtonStyle.Secondary),
+            ]),
+
+            new ActionRowBuilder<ButtonBuilder>().addComponents([
+              new ButtonBuilder()
+                .setCustomId("music.repeat")
+                .setEmoji(Emojis.Repeat)
+                .setStyle(ButtonStyle.Secondary),
+
+              new ButtonBuilder()
+                .setCustomId("music.shuffle")
+                .setEmoji(Emojis.Shuffle)
+                .setStyle(ButtonStyle.Secondary),
+
+              new ButtonBuilder()
+                .setCustomId("music.add")
+                .setEmoji(Emojis.Add)
+                .setStyle(ButtonStyle.Secondary),
+
+              new ButtonBuilder()
+                .setCustomId("music.remove")
+                .setEmoji(Emojis.Remove)
+                .setStyle(ButtonStyle.Secondary),
+            ]),
+          ],
+        })
+      }
 
       return void interaction.editReply({
         embeds: [
