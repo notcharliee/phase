@@ -5,6 +5,7 @@ import { ModuleId } from "@repo/utils/modules"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
+
 import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
@@ -61,6 +62,10 @@ export default new BotSubcommandBuilder()
     })
 
     setTimeout(() => {
-      ticket.delete().catch(() => null)
+      try {
+        void ticket.delete()
+      } catch {
+        // do nothing
+      }
     }, 3_000)
   })
