@@ -20,13 +20,14 @@ import dedent from "dedent"
 import { z } from "zod"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotErrorMessage } from "~/structures/BotError"
 import {
   createHiddenContent,
   dateToTimestamp,
   parseHiddenContent,
   truncateString,
 } from "~/lib/utils"
+
+import { BotErrorMessage } from "~/structures/BotError"
 
 import type {
   BaseGuildTextChannel,
@@ -552,16 +553,18 @@ async function handleStatusUpdate(
     ],
   } satisfies MessageCreateOptions
 
-  await (
-    formThread.lastMessage
-      ? formThread.lastMessage.reply(submissionStatusUpdateMessage)
-      : formThread.send(submissionStatusUpdateMessage)
-  ).catch((error) => {
+  try {
+    if (formThread.lastMessage) {
+      await formThread.lastMessage.reply(submissionStatusUpdateMessage)
+    } else {
+      await formThread.send(submissionStatusUpdateMessage)
+    }
+  } catch (error) {
     console.error(
       `Failed to send form submission status update to form thread ${formThread.id} of parent channel ${formThread.parentId} in guild ${interaction.guildId}:`,
-      error,
     )
-  })
+    console.error(error)
+  }
 
   // the bot will always have the permissions to edit this, so we don't need to check
   await interaction.message.edit({
@@ -905,7 +908,9 @@ export default new BotEventBuilder()
         )
 
         if (!success) {
-          return await interaction.reply(new BotErrorMessage(error.message).toJSON())
+          return await interaction.reply(
+            new BotErrorMessage(error.message).toJSON(),
+          )
         }
 
         return await handleInput(
