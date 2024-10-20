@@ -30,12 +30,36 @@ export class Music {
   public async play(
     voiceChannel: VoiceBasedChannel,
     submitter: GuildMember,
-    query: string,
+    queryOrSong: string | YouTubePlaylist<unknown> | YouTubeSong<unknown>,
   ): Promise<Song[]> {
     const queue = this.queues.has(voiceChannel.guild.id)
       ? this.queues.get(voiceChannel.guild.id)!
       : this.queues.create(voiceChannel)
 
+    const youtubeSongOrPlaylist =
+      typeof queryOrSong === "string"
+        ? await this.search(queryOrSong)
+        : queryOrSong
+
+    const newSongs: Song[] = []
+
+    if (youtubeSongOrPlaylist instanceof YouTubePlaylist) {
+      for (const youtubeSong of youtubeSongOrPlaylist.songs) {
+        const song = await this.addSongToQueue(queue, youtubeSong, submitter)
+
+        newSongs.push(song)
+      }
+    } else {
+      const youtubeSong = youtubeSongOrPlaylist
+      const song = await this.addSongToQueue(queue, youtubeSong, submitter)
+
+      newSongs.push(song)
+    }
+
+    return newSongs
+  }
+
+  public async search(query: string) {
     const youtubeSongOrPlaylist = this.youtube.validate(query)
       ? await this.youtube.resolve(query, {}).catch(() => null)
       : await this.youtube.searchSong(query, {}).catch(() => null)
@@ -44,21 +68,7 @@ export class Music {
       throw new Error(MusicError.InvalidQuery)
     }
 
-    if (youtubeSongOrPlaylist instanceof YouTubePlaylist) {
-      const youtubePlaylist = youtubeSongOrPlaylist
-      const newSongs: Song[] = []
-
-      for (const youtubeSong of youtubePlaylist.songs) {
-        const song = await this.addSongToQueue(queue, youtubeSong, submitter)
-        newSongs.push(song)
-      }
-
-      return newSongs
-    } else {
-      const youtubeSong = youtubeSongOrPlaylist
-      const song = await this.addSongToQueue(queue, youtubeSong, submitter)
-      return [song]
-    }
+    return youtubeSongOrPlaylist
   }
 
   /**
@@ -75,7 +85,7 @@ export class Music {
    *
    * @returns The song that was added to the queue.
    */
-  private async addSongToQueue(
+  public async addSongToQueue(
     queue: Queue,
     youtubeSong: YouTubeSong,
     submitter: GuildMember,

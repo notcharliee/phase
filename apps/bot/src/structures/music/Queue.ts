@@ -177,6 +177,19 @@ export class Queue {
   }
 
   /**
+   * Plays the previous song.
+   *
+   * @returns The previous song if one exists, otherwise `null`.
+   */
+  public playPreviousSong(): Song | null {
+    if (!this.previousSong) return null
+
+    void this.voice.play(this.previousSong.streamUrl)
+
+    return this.previousSong
+  }
+
+  /**
    * Pauses the queue.
    */
   public pause() {

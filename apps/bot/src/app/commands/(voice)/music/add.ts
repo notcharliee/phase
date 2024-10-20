@@ -1,11 +1,7 @@
-import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import dedent from "dedent"
-
-import { PhaseColour } from "~/lib/enums"
-
 import { BotErrorMessage } from "~/structures/BotError"
+import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 import { MusicError } from "~/structures/music/Music"
 
 import type { GuildMember } from "discord.js"
@@ -45,10 +41,10 @@ export default new BotSubcommandBuilder()
       const duration = firstSong.formattedDuration
       const placeInQueue = queue.songs.slice(queue.currentSongIndex! + 1).length
 
-      return void interaction.editReply({
-        embeds: [
-          new EmbedBuilder()
-            .setColor(PhaseColour.Primary)
+      return void interaction.editReply(
+        new CustomMessageBuilder().setEmbeds((embed) => {
+          return embed
+            .setColor("Primary")
             .setAuthor({
               name: `Added by ${member.displayName}`,
               iconURL: member.displayAvatarURL(),
@@ -57,30 +53,36 @@ export default new BotSubcommandBuilder()
             .setURL(firstSong.url)
             .setThumbnail(firstSong.thumbnail)
             .setDescription(
-              dedent`
+              `
                 **Duration:** \`${duration}\`
                 **Place in queue:** \`${placeInQueue}\`
                 ${placeInQueue >= 1 ? `**Starts playing:** ${songStartsPlaying}` : `**Finishes playing:** ${songFinishesPlaying}`}
               `,
             )
-            .setFooter({ text: firstSong.url }),
-        ],
-      })
+            .setFooter({ text: firstSong.url })
+        }),
+      )
     } catch (error) {
       if (error instanceof Error) {
         if (error.message === (MusicError.InvalidQuery as string)) {
           return await interaction.editReply(
-            new BotErrorMessage("Song not found").toJSON(),
+            new BotErrorMessage("Song not found"),
           )
         }
       }
+
+      console.error(
+        `Failed to play song in channel ${channel.id} of guild ${channel.guild.id}:`,
+      )
+      
+      console.error(error)
 
       return void interaction.editReply(
         BotErrorMessage.unknown({
           channelId: channel.id,
           guildId: channel.guild.id,
           error: error as Error,
-        }).toJSON(),
+        }),
       )
     }
   })
