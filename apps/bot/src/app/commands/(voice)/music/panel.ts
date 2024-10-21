@@ -1,9 +1,6 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import {
-  createPanelButtons,
-  createPanelEmbed,
-} from "~/app/events/(music)/panel"
+import { createPanelButtons, createPanelEmbed } from "~/app/events/music-panel"
 import { BotErrorMessage } from "~/structures/BotError"
 import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 
