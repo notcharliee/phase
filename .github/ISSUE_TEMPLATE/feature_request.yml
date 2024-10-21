@@ -26,11 +26,11 @@ body:
     attributes:
       label: "Describe alternatives you've considered"
       description: "A clear and concise description of any alternative solutions or features you've considered."
-      placeholder: "Describe any alternatives"
+      placeholder: "Describe any alternatives (optional)"
 
   - type: textarea
     id: additional_context
     attributes:
       label: "Additional context"
       description: "Add any other context or screenshots about the feature request here."
-      placeholder: "Additional information"
+      placeholder: "Additional information (optional)"
