@@ -310,12 +310,6 @@ export function createPanelButtons(song: Song) {
     new CustomActionRowBuilder()
       .addButton((button) => {
         return button
-          .setCustomId(MusicCustomID.Stop)
-          .setEmoji(Emojis.Stop)
-          .setStyle(ButtonStyle.Secondary)
-      })
-      .addButton((button) => {
-        return button
           .setCustomId(MusicCustomID.PreviousTrack)
           .setEmoji(Emojis.PreviousTrack)
           .setStyle(ButtonStyle.Secondary)
@@ -331,14 +325,14 @@ export function createPanelButtons(song: Song) {
           .setCustomId(MusicCustomID.NextTrack)
           .setEmoji(Emojis.NextTrack)
           .setStyle(ButtonStyle.Secondary)
-      }),
-    new CustomActionRowBuilder()
+      })
       .addButton((button) => {
         return button
-          .setCustomId(MusicCustomID.Repeat)
-          .setEmoji(Emojis.Repeat)
+          .setCustomId(MusicCustomID.AddSong)
+          .setEmoji(Emojis.Plus)
           .setStyle(ButtonStyle.Secondary)
-      })
+      }),
+    new CustomActionRowBuilder()
       .addButton((button) => {
         return button
           .setCustomId(MusicCustomID.Shuffle)
@@ -347,8 +341,14 @@ export function createPanelButtons(song: Song) {
       })
       .addButton((button) => {
         return button
-          .setCustomId(MusicCustomID.AddSong)
-          .setEmoji(Emojis.Plus)
+          .setCustomId(MusicCustomID.Stop)
+          .setEmoji(Emojis.Stop)
+          .setStyle(ButtonStyle.Secondary)
+      })
+      .addButton((button) => {
+        return button
+          .setCustomId(MusicCustomID.Repeat)
+          .setEmoji(Emojis.Repeat)
           .setStyle(ButtonStyle.Secondary)
       })
       .addButton((button) => {
