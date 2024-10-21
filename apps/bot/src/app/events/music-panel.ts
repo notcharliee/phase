@@ -37,7 +37,7 @@ export default new BotEventBuilder()
       !interaction.inGuild() ||
       (!interaction.isButton() && !interaction.isModalSubmit()) ||
       (interaction.isModalSubmit() && !interaction.isFromMessage()) ||
-      !(interaction.customId in MusicCustomID)
+      !Object.values(MusicCustomID).includes(interaction.customId)
     ) {
       return
     }
