@@ -11,6 +11,15 @@ export const ApplicationEmojis = {
   MicrophoneOff: `<:microphone_off:1293297932774150214>`,
   Users: `<:users:1293297987375595590>`,
   Transfer: `<:transfer:1293549888679710771>`,
+  Plus: "<:plus:1297802422579630231>",
+  Minus: "<:minus:1297802433019252786>",
+  Play: "<:play:1297802467551215667>",
+  Pause: "<:pause:1297802457392480297>",
+  Stop: "<:stop:1297802542951956562>",
+  Shuffle: "<:shuffle:1297802481484697623>",
+  Repeat: "<:repeat:1297802492750463036>",
+  NextTrack: "<:next_track:1297802528142004235>",
+  PreviousTrack: "<:previous_track:1297802516146421854>",
 }
 
 export const FallbackEmojis = {
@@ -24,19 +33,19 @@ export const FallbackEmojis = {
   MicrophoneOff: "🎙️",
   Users: "👥",
   Transfer: "➡️",
+  Plus: "➕",
+  Minus: "➖",
+  Play: "▶️",
+  Pause: "⏸️",
+  Stop: "⏹️",
+  Shuffle: "🔀",
+  Repeat: "🔁",
+  NextTrack: "⏭️",
+  PreviousTrack: "⏮️",
 } satisfies Record<keyof typeof ApplicationEmojis, string>
 
 export const Emojis = {
   ZeroWidthJoiner: "‍",
   GiveawayReaction: "🎉",
-  Add: "➕",
-  Remove: "➖",
-  Pause: "⏸️",
-  Resume: "▶️",
-  Stop: "⏹️",
-  Skip: "⏭️",
-  Previous: "⏮️",
-  Repeat: "🔁",
-  Shuffle: "🔀",
   ...(env.NODE_ENV === "production" ? ApplicationEmojis : FallbackEmojis),
 }

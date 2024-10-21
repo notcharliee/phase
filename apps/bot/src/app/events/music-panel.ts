@@ -12,38 +12,32 @@ import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
 import { QueueRepeatMode } from "~/structures/music/Queue"
 
 import type { Song } from "~/structures/music/Song"
-import type {
-  CustomIDWithAction,
-  ExtractCustomIDAction,
-  ExtractCustomIDParts,
-} from "~/types/custom-ids"
+import type { ExtractCustomIDParts } from "~/types/custom-ids"
 
-const MUSIC_CUSTOM_IDS = [
-  "music.stop",
-  "music.previous",
-  "music.pause",
-  "music.resume",
-  "music.skip",
-  "music.repeat",
-  "music.shuffle",
-  "music.add",
-  "music.add.query",
-  "music.remove",
-  "music.remove.position",
-] as const satisfies CustomIDWithAction<"music">[]
+enum MusicCustomID {
+  Pause = "music.pause",
+  Resume = "music.resume",
+  Stop = "music.stop",
+  Repeat = "music.repeat",
+  Shuffle = "music.shuffle",
+  NextTrack = "music.next-track",
+  PreviousTrack = "music.previous-track",
+  AddSong = "music.add",
+  AddSongInput = "music.add.query",
+  RemoveSong = "music.remove",
+  RemoveSongInput = "music.remove.position",
+}
 
-type MusicCustomID = (typeof MUSIC_CUSTOM_IDS)[number]
 type MusicCustomIDParts = ExtractCustomIDParts<MusicCustomID>
-type MusicCustomIDAction = ExtractCustomIDAction<MusicCustomID>
 
 export default new BotEventBuilder()
   .setName("interactionCreate")
   .setExecute(async (client, interaction) => {
     if (
       !interaction.inGuild() ||
-      (!interaction.isButton() &&
-        (!interaction.isModalSubmit() || !interaction.isFromMessage())) ||
-      !MUSIC_CUSTOM_IDS.includes(interaction.customId)
+      (!interaction.isButton() && !interaction.isModalSubmit()) ||
+      (interaction.isModalSubmit() && !interaction.isFromMessage()) ||
+      !(interaction.customId in MusicCustomID)
     ) {
       return
     }
@@ -73,7 +67,7 @@ export default new BotEventBuilder()
 
     const customId = interaction.customId as MusicCustomID
     const customIdParts = customId.split(".") as MusicCustomIDParts
-    const customIdAction = customIdParts[1] satisfies MusicCustomIDAction
+    const customIdAction = customIdParts[1]
 
     switch (customIdAction) {
       case "stop": {
@@ -81,7 +75,7 @@ export default new BotEventBuilder()
         return void queue.delete()
       }
 
-      case "previous": {
+      case "previous-track": {
         if (!queue.previousSong) {
           return void interaction.reply(
             new BotErrorMessage("No previous song was found."),
@@ -169,7 +163,7 @@ export default new BotEventBuilder()
         )
       }
 
-      case "skip": {
+      case "next-track": {
         if (!queue?.currentSong) {
           return void interaction.reply(
             new BotErrorMessage("No songs were found in the queue."),
@@ -213,12 +207,12 @@ export default new BotEventBuilder()
         if (interaction.isButton()) {
           return void interaction.showModal(
             new ModalBuilder()
-              .setCustomId("music.add")
+              .setCustomId(MusicCustomID.AddSong)
               .setTitle("Search for a song")
               .addComponents([
                 new CustomActionRowBuilder().addTextInput((input) => {
                   return input
-                    .setCustomId("music.add.query")
+                    .setCustomId(MusicCustomID.AddSongInput)
                     .setLabel("Search Query")
                     .setStyle(TextInputStyle.Short)
                     .setPlaceholder("A song name or URL")
@@ -227,7 +221,9 @@ export default new BotEventBuilder()
               ]),
           )
         } else {
-          const query = interaction.fields.getTextInputValue("music.add.query")
+          const query = interaction.fields.getTextInputValue(
+            MusicCustomID.AddSongInput,
+          )
           await queue.music.play(channel, member, query)
           const song = queue.currentSong!
 
@@ -243,12 +239,12 @@ export default new BotEventBuilder()
         if (interaction.isButton()) {
           return void interaction.showModal(
             new ModalBuilder()
-              .setCustomId("music.remove")
+              .setCustomId(MusicCustomID.RemoveSong)
               .setTitle("Search for a song")
               .addComponents([
                 new CustomActionRowBuilder().addTextInput((input) => {
                   return input
-                    .setCustomId("music.remove.position")
+                    .setCustomId(MusicCustomID.RemoveSongInput)
                     .setLabel("Position")
                     .setStyle(TextInputStyle.Short)
                     .setPlaceholder(
@@ -260,7 +256,7 @@ export default new BotEventBuilder()
           )
         } else {
           const position = Number(
-            interaction.fields.getTextInputValue("music.remove.position"),
+            interaction.fields.getTextInputValue(MusicCustomID.RemoveSongInput),
           )
 
           const songToRemove = queue.songs[position - 1]!
@@ -314,51 +310,51 @@ export function createPanelButtons(song: Song) {
     new CustomActionRowBuilder()
       .addButton((button) => {
         return button
-          .setCustomId("music.stop")
+          .setCustomId(MusicCustomID.Stop)
           .setEmoji(Emojis.Stop)
           .setStyle(ButtonStyle.Secondary)
       })
       .addButton((button) => {
         return button
-          .setCustomId("music.previous")
-          .setEmoji(Emojis.Previous)
+          .setCustomId(MusicCustomID.PreviousTrack)
+          .setEmoji(Emojis.PreviousTrack)
           .setStyle(ButtonStyle.Secondary)
       })
       .addButton((button) => {
         return button
-          .setCustomId(isPaused ? "music.resume" : "music.pause")
-          .setEmoji(isPaused ? Emojis.Resume : Emojis.Pause)
+          .setCustomId(isPaused ? MusicCustomID.Resume : MusicCustomID.Pause)
+          .setEmoji(isPaused ? Emojis.Play : Emojis.Pause)
           .setStyle(ButtonStyle.Secondary)
       })
       .addButton((button) => {
         return button
-          .setCustomId("music.skip")
-          .setEmoji(Emojis.Skip)
+          .setCustomId(MusicCustomID.NextTrack)
+          .setEmoji(Emojis.NextTrack)
           .setStyle(ButtonStyle.Secondary)
       }),
     new CustomActionRowBuilder()
       .addButton((button) => {
         return button
-          .setCustomId("music.repeat")
+          .setCustomId(MusicCustomID.Repeat)
           .setEmoji(Emojis.Repeat)
           .setStyle(ButtonStyle.Secondary)
       })
       .addButton((button) => {
         return button
-          .setCustomId("music.shuffle")
+          .setCustomId(MusicCustomID.Shuffle)
           .setEmoji(Emojis.Shuffle)
           .setStyle(ButtonStyle.Secondary)
       })
       .addButton((button) => {
         return button
-          .setCustomId("music.add")
-          .setEmoji(Emojis.Add)
+          .setCustomId(MusicCustomID.AddSong)
+          .setEmoji(Emojis.Plus)
           .setStyle(ButtonStyle.Secondary)
       })
       .addButton((button) => {
         return button
-          .setCustomId("music.remove")
-          .setEmoji(Emojis.Remove)
+          .setCustomId(MusicCustomID.RemoveSong)
+          .setEmoji(Emojis.Minus)
           .setStyle(ButtonStyle.Secondary)
       }),
   ]
