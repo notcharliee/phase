@@ -131,17 +131,18 @@ export async function updateModules(
       const updatedModule = parsedModulesWithData[ModuleId.Tickets]
       const messageContent = formValues[ModuleId.Tickets]!.message
 
-      const updatedMessage = await handleTicketsModule(
+      await handleTicketsModule(
         updatedModule.channel,
         updatedModule.tickets,
         messageContent,
       )
 
-      updatedModule._data.message = updatedMessage
+      updatedModule._data.messageContent = messageContent
     } else {
-      parsedModulesWithData[ModuleId.Tickets]._data.message = (unsafeFormValues[
-        ModuleId.Tickets
-      ] as ModulesFormValuesWithData[ModuleId.Tickets])!._data.message
+      parsedModulesWithData[ModuleId.Tickets]._data.messageContent =
+        (unsafeFormValues[
+          ModuleId.Tickets
+        ] as ModulesFormValuesWithData[ModuleId.Tickets])!._data.messageContent
     }
   }
 

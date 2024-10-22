@@ -162,15 +162,10 @@ export function getDefaultValues(
         })),
       })) as Required<ModulesFormValues>[ModuleId.SelfRoles]["messages"],
     }),
-    [ModuleId.Tickets]: (data) => {
-      const message = data._data?.message
-      const messageContent = message?.embeds?.[0]?.description
-
-      return {
-        ...data,
-        message: messageContent ?? "",
-      }
-    },
+    [ModuleId.Tickets]: (data) => ({
+      ...data,
+      message: data._data?.messageContent ?? "",
+    }),
     [ModuleId.TwitchNotifications]: (data) => ({
       ...data,
       streamers: data.streamers.map((streamer, index) => {

@@ -92,7 +92,7 @@ export const getGuildData = async (params: GuildDataParams) => {
     const pins = channel ? await discordAPI.channels.getPins(channel.id) : []
     const message = pins.find((pin) => pin.author.id === env.DISCORD_ID)
 
-    guildModule._data.message = message
+    guildModule._data.messageContent = message?.embeds[0]?.description
   }
 
   if (guildModules[ModuleId.TwitchNotifications]) {

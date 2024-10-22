@@ -27,7 +27,7 @@ export interface ModulesDataFields {
     }[]
   }
   [ModuleId.Tickets]: {
-    message: APIMessage | undefined
+    messageContent: string | undefined
   }
   [ModuleId.TwitchNotifications]: {
     streamerNames: string[]

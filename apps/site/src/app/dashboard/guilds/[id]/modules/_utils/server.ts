@@ -399,21 +399,21 @@ export async function handleTicketsModule(
   channelId: string,
   tickets: GuildModules[ModuleId.Tickets]["tickets"],
   message?: string,
-): Promise<APIMessage> {
+) {
   const existingMessage = (
     await discordAPI.channels.getPins(channelId).catch(() => [])
   ).find((pin) => pin.author.id === env.DISCORD_ID)
 
-  const newMessageBody = {
+  const body = {
     components: [
       {
         components: tickets.map((ticket) => ({
-          custom_id: `ticket.open.${ticket.id}`,
           label: ticket.name,
+          custom_id: `ticket.open.${ticket.id}`,
           style: ButtonStyle.Secondary,
-          type: 2,
+          type: ComponentType.Button,
         })),
-        type: 1,
+        type: ComponentType.ActionRow,
       },
     ],
     embeds: [
@@ -425,25 +425,16 @@ export async function handleTicketsModule(
     ],
   } satisfies RESTPostAPIChannelMessageJSONBody
 
-  let updatedMessage: APIMessage
-
   if (existingMessage) {
-    updatedMessage = await discordAPI.channels.editMessage(
-      channelId,
-      existingMessage.id,
-      newMessageBody,
-    )
+    await discordAPI.channels.editMessage(channelId, existingMessage.id, body)
   } else {
-    updatedMessage = await discordAPI.channels.createMessage(
-      channelId,
-      newMessageBody,
-    )
+    const message = await discordAPI.channels.createMessage(channelId, body)
 
-    await discordAPI.channels.pinMessage(channelId, updatedMessage.id)
+    await discordAPI.channels.pinMessage(channelId, message.id)
 
     const pinNotification = (
       await discordAPI.channels.getMessages(channelId, {
-        after: updatedMessage.id,
+        after: message.id,
         limit: 1,
       })
     ).at(0)
@@ -457,6 +448,4 @@ export async function handleTicketsModule(
         .catch(() => null)
     }
   }
-
-  return updatedMessage
 }
