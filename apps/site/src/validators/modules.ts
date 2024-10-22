@@ -104,8 +104,7 @@ export const formsSchema = moduleSchema({
             .max(100, "Choice cannot be longer than 100 characters")
             .array()
             .max(10)
-            .nullish()
-            .transform((arr) => (arr?.length === 0 ? undefined : arr)),
+            .transform((arr) => (arr.length === 0 ? undefined : arr)),
           min: zod.number().min(0).max(1024).optional(),
           max: zod.number().min(0).max(1024).optional(),
         })
