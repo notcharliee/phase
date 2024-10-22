@@ -43,12 +43,12 @@
     "@types/bun": "^1.1.10",
     "@types/fluent-ffmpeg": "^2.1.26",
     "@types/ms": "^0.7.34",
-    "@types/react": "npm:types-react@19.0.0-rc.1",
+    "@types/react": "npm:types-react@rc",
     "distube": "^5.0.2",
     "eslint": "^9.11.0",
     "typescript": "^5.6.2"
   },
   "overrides": {
-    "@types/react": "npm:types-react@19.0.0-rc.1"
+    "@types/react": "npm:types-react@rc"
   }
 }
