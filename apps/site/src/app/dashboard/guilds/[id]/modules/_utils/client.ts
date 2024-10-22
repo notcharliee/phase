@@ -44,7 +44,6 @@ export const defaultEmptyFormValues: Required<ModulesFormValues> = {
     enabled: false,
     channel: "",
     category: "",
-    active: [],
   },
   [ModuleId.Levels]: {
     enabled: false,

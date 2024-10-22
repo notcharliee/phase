@@ -158,7 +158,6 @@ export const joinToCreatesSchema = z.object({
   category: z.string().min(1, {
     message: "Category is required",
   }),
-  active: z.string().array(),
 })
 
 export const levelsSchema = z.object({
