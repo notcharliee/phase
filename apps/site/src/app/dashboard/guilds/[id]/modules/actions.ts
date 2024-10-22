@@ -4,6 +4,7 @@ import { ModuleId } from "@repo/utils/modules"
 
 import { db } from "~/lib/db"
 import { env } from "~/lib/env"
+import { zod } from "~/lib/zod"
 
 import {
   handleAutoMessagesModule,
@@ -14,7 +15,6 @@ import {
   parseModuleData,
 } from "~/app/dashboard/guilds/[id]/modules/_utils/server"
 import { auth } from "~/auth"
-import { snowflakeSchema } from "~/validators/discord"
 import { moduleIdSchema, modulesSchema } from "~/validators/modules"
 
 import type {
@@ -30,7 +30,7 @@ export async function updateModules(
   unsafeDirtyFields: ModuleId[],
 ) {
   const userId = (await auth())!.user.id
-  const guildId = snowflakeSchema.parse(unsafeGuildId)
+  const guildId = zod.string().snowflake().parse(unsafeGuildId)
 
   await db.connect(env.MONGODB_URI)
 
