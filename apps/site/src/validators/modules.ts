@@ -1,365 +1,301 @@
 import { ModuleId } from "@repo/utils/modules"
-import { z } from "zod"
 
 import { safeMs } from "~/lib/utils"
+import { zod } from "~/lib/zod"
 
-export const auditLogsSchema = z.object({
-  enabled: z.boolean(),
-  channels: z.object({
-    server: z.string().optional(),
-    messages: z.string().optional(),
-    voice: z.string().optional(),
-    invites: z.string().optional(),
-    members: z.string().optional(),
-    punishments: z.string().optional(),
+function moduleSchema<T extends Record<string, Zod.ZodType>>(schema: T) {
+  return zod.object({ enabled: zod.boolean(), ...schema })
+}
+
+export const auditLogsSchema = moduleSchema({
+  channels: zod.object({
+    server: zod.string().snowflake().optional(),
+    messages: zod.string().snowflake().optional(),
+    voice: zod.string().snowflake().optional(),
+    invites: zod.string().snowflake().optional(),
+    members: zod.string().snowflake().optional(),
+    punishments: zod.string().snowflake().optional(),
   }),
 })
 
-export const autoMessagesSchema = z.object({
-  enabled: z.boolean(),
-  messages: z.array(
-    z.object({
-      name: z
+export const autoMessagesSchema = moduleSchema({
+  messages: zod.array(
+    zod.object({
+      name: zod
         .string()
-        .min(1, "Name is required")
+        .nonempty("Name is required")
         .max(100, "Name cannot be longer than 100 characters"),
-      channel: z.string().min(1, "Channel is required"),
-      content: z
+      channel: zod.string().snowflake("Channel is required"),
+      content: zod
         .string()
-        .min(1, "Content is required")
+        .nonempty("Content is required")
         .max(2000, "Content cannot be longer than 2000 characters"),
-      mention: z.string().optional(),
-      interval: z
+      mention: zod.string().mention().optional(),
+      interval: zod
         .string()
-        .min(2, { message: "Interval is required" })
-        .max(100, { message: "Interval cannot be longer than 100 characters" })
-        .refine(safeMs, { message: "Invalid interval format" }),
+        .nonempty("Interval is required")
+        .max(100, "Interval cannot be longer than 100 characters")
+        .refine(safeMs, "Invalid interval format"),
     }),
   ),
 })
 
-export const autoRolesSchema = z.object({
-  enabled: z.boolean(),
-  roles: z
-    .array(
-      z.object({
-        id: z.string().min(1, { message: "Role is required" }),
-        target: z.enum(["everyone", "members", "bots"]),
-      }),
-    )
-    .max(10),
-})
-
-export const bumpRemindersSchema = z.object({
-  enabled: z.boolean(),
-  time: z
-    .string()
-    .min(2, { message: "Time is required" })
-    .max(100, { message: "Time cannot be longer than 100 characters" })
-    .refine(safeMs, { message: "Invalid time format" }),
-  initialMessage: z
-    .string()
-    .min(1, { message: "Initial message is required" })
-    .max(2000, {
-      message: "Initial message cannot be longer than 2000 characters",
-    }),
-  reminderMessage: z
-    .string()
-    .min(1, { message: "Reminder message is required" })
-    .max(2000, {
-      message: "Reminder message cannot be longer than 2000 characters",
-    }),
-  mention: z.string().optional(),
-})
-
-export const countersSchema = z.object({
-  enabled: z.boolean(),
-  counters: z.array(
-    z.object({
-      name: z.string().min(1, {
-        message: "You must provide a counter name",
-      }),
-      channel: z.string().min(1, {
-        message: "You must select a channel",
-      }),
-      content: z
-        .string()
-        .min(1, {
-          message: "Content must be at least 1 character",
-        })
-        .max(100, {
-          message: "Content cannot be longer than 100 characters",
-        }),
-    }),
-  ),
-})
-
-export const formsSchema = z.object({
-  enabled: z.boolean(),
-  channel: z.string().min(1, {
-    message: "You must select a channel",
-  }),
-  forms: z
-    .array(
-      z.object({
-        id: z.string(),
-        name: z
-          .string()
-          .min(1, {
-            message: "Name must be at least 1 character",
-          })
-          .max(32, {
-            message: "Name cannot be longer than 32 characters",
-          }),
-        channel: z.string().min(1, {
-          message: "You must select a channel",
-        }),
-        questions: z
-          .array(
-            z.object({
-              label: z
-                .string()
-                .min(1, {
-                  message: "Question must be at least 1 character",
-                })
-                .max(128, {
-                  message: "Question cannot be longer than 128 characters",
-                }),
-              type: z.enum(["string", "number", "boolean"]),
-              required: z.boolean(),
-              choices: z
-                .string()
-                .min(1, {
-                  message: "Choice must be at least 1 character",
-                })
-                .max(100, {
-                  message: "Choice cannot be longer than 100 characters",
-                })
-                .array()
-                .max(10)
-                .transform((v) => (v.length === 0 ? undefined : v))
-                .optional(),
-              min: z.number().min(0).max(1024).optional(),
-              max: z.number().min(0).max(1024).optional(),
-            }),
-          )
-          .min(1)
-          .max(25),
-      }),
-    )
-    .max(10),
-})
-
-export const joinToCreatesSchema = z.object({
-  enabled: z.boolean(),
-  channel: z.string().min(1, {
-    message: "Channel is required",
-  }),
-  category: z.string().min(1, {
-    message: "Category is required",
-  }),
-})
-
-export const levelsSchema = z.object({
-  enabled: z.boolean(),
-  channel: z.string().min(1, {
-    message: "Channel is required",
-  }),
-  message: z
-    .string()
-    .min(1, {
-      message: "Message is required",
+export const autoRolesSchema = moduleSchema({
+  roles: zod
+    .object({
+      id: zod.string().snowflake("Role is required"),
+      target: zod.enum(["everyone", "members", "bots"]),
     })
-    .max(2000, {
-      message: "Message must be less than 2000 characters",
-    }),
-  background: z
+    .array()
+    .max(10),
+})
+
+export const bumpRemindersSchema = moduleSchema({
+  time: zod
+    .string()
+    .nonempty("Time is required")
+    .max(100, "Time cannot be longer than 100 characters")
+    .refine(safeMs, "Invalid time format"),
+  initialMessage: zod
+    .string()
+    .nonempty("Initial message is required")
+    .max(2000, "Initial message cannot be longer than 2000 characters"),
+  reminderMessage: zod
+    .string()
+    .nonempty("Reminder message is required")
+    .max(2000, "Reminder message cannot be longer than 2000 characters"),
+  mention: zod.string().mention().optional(),
+})
+
+export const countersSchema = moduleSchema({
+  counters: zod
+    .object({
+      name: zod.string().nonempty("Name is required"),
+      channel: zod.string().snowflake("Channel is required"),
+      content: zod
+        .string()
+        .nonempty("Content is required")
+        .max(100, "Content cannot be longer than 100 characters"),
+    })
+    .array(),
+})
+
+export const formsSchema = moduleSchema({
+  channel: zod.string().snowflake("Channel is required"),
+  forms: zod
+    .object({
+      id: zod.string().uuid(),
+      name: zod
+        .string()
+        .nonempty("Name is required")
+        .max(32, "Name cannot be longer than 32 characters"),
+      channel: zod.string().snowflake("Channel is required"),
+      questions: zod
+        .object({
+          label: zod
+            .string()
+            .nonempty("Question is required")
+            .max(128, "Question cannot be longer than 128 characters"),
+          type: zod.enum(["string", "number", "boolean"]),
+          required: zod.boolean(),
+          choices: zod
+            .string()
+            .nonempty("Choice is required")
+            .max(100, "Choice cannot be longer than 100 characters")
+            .array()
+            .max(10)
+            .nullish()
+            .transform((arr) => (arr?.length === 0 ? undefined : arr)),
+          min: zod.number().min(0).max(1024).optional(),
+          max: zod.number().min(0).max(1024).optional(),
+        })
+        .array()
+        .min(1)
+        .max(25),
+    })
+    .array()
+    .max(10),
+})
+
+export const joinToCreatesSchema = moduleSchema({
+  channel: zod.string().snowflake("Channel is required"),
+  category: zod.string().snowflake("Category is required"),
+})
+
+export const levelsSchema = moduleSchema({
+  channel: zod.string().snowflake("Channel is required"),
+  message: zod
+    .string()
+    .nonempty("Message is required")
+    .max(2000, "Message cannot be longer than 2000 characters"),
+  background: zod
     .string()
     .url()
-    .max(256, {
-      message: "Background must be less than 256 characters",
+    .max(256, "Background URL cannot be longer than 256 characters")
+    .nullish()
+    .transform((str) => str ?? undefined),
+  mention: zod.boolean(),
+  roles: zod
+    .object({
+      level: zod.number().int().min(1).max(1000),
+      role: zod.string().snowflake("Role is required"),
     })
-    .refine((value) => /\.(jpeg|jpg|png)$/.exec(value), {
-      message: "Background must be a valid PNG or JPEG image URL",
-    })
-    .optional()
-    .transform((str) => (str?.length ? str : undefined)),
-  mention: z.boolean(),
-  roles: z
-    .array(
-      z.object({
-        level: z.number().min(1).max(100).int(),
-        role: z.string(),
-      }),
-    )
+    .array()
     .max(100),
 })
 
-export const reactionRolesSchema = z.object({
-  enabled: z.boolean(),
-  messageUrl: z
+export const reactionRolesSchema = moduleSchema({
+  messageUrl: zod
     .string()
-    .url()
-    .refine(
-      (url) => {
-        const discordChannelRegex =
-          /^https:\/\/discord\.com\/channels\/\d+\/\d+\/\d+$/
-        return discordChannelRegex.test(url)
-      },
-      {
-        message: "URL does not match the Discord message URL pattern",
-      },
+    .regex(
+      /^https:\/\/discord\.com\/channels\/\d+\/\d+\/\d+$/,
+      "URL does not match the Discord message URL pattern",
     ),
-  reactions: z
-    .array(
-      z.object({
-        emoji: z.string().emoji().min(1, {
-          message: "Emoji is required",
-        }),
-        role: z.string().min(1, {
-          message: "Role is required",
-        }),
-      }),
-    )
+  reactions: zod
+    .object({
+      emoji: zod.string().nonempty("Emoji is required").emoji(),
+      role: zod.string().snowflake("Role is required"),
+    })
+    .array()
     .max(20),
 })
 
-export const selfRolesSchema = z.object({
-  enabled: z.boolean(),
-  messages: z
+export const selfRolesSchema = moduleSchema({
+  messages: zod
     .union([
-      z.object({
-        id: z.string().uuid(),
-        type: z.literal("reaction"),
-        name: z.string().min(1, { message: "Name is required" }),
-        channel: z.string().min(1, { message: "Channel is required" }),
-        content: z.string().min(1, { message: "Content is required" }),
-        multiselect: z.boolean(),
-        methods: z
+      zod.object({
+        id: zod.string().uuid(),
+        type: zod.literal("reaction"),
+        name: zod.string().nonempty("Name is required"),
+        channel: zod.string().snowflake("Channel is required"),
+        content: zod.string().nonempty("Content is required"),
+        multiselect: zod.boolean(),
+        methods: zod
           .object({
-            id: z.string().uuid(),
-            emoji: z.string().emoji(),
-            rolesToAdd: z
+            id: zod.string().uuid(),
+            emoji: zod.string().emoji("Emoji is required"),
+            rolesToAdd: zod
               .string()
               .array()
-              .max(10, { message: "Maximum of 10 roles allowed" })
+              .max(10, "Maximum of 10 roles allowed")
               .default([]),
-            rolesToRemove: z
+            rolesToRemove: zod
               .string()
               .array()
-              .max(10, { message: "Maximum of 10 roles allowed" })
+              .max(10, "Maximum of 10 roles allowed")
               .default([]),
           })
           .array()
-          .min(1, { message: "At least one method is required" })
-          .max(20, { message: "Maximum of 20 methods allowed" }),
+          .min(1, "At least one method is required")
+          .max(20, "Maximum of 20 methods allowed"),
       }),
-      z.object({
-        id: z.string().uuid(),
-        type: z.literal("button"),
-        name: z.string().min(1, { message: "Name is required" }),
-        channel: z.string().min(1, { message: "Channel is required" }),
-        content: z.string().min(1, { message: "Content is required" }),
-        multiselect: z.boolean(),
-        methods: z
+      zod.object({
+        id: zod.string().uuid(),
+        type: zod.literal("button"),
+        name: zod.string().nonempty("Name is required"),
+        channel: zod.string().snowflake("Channel is required"),
+        content: zod.string().nonempty("Content is required"),
+        multiselect: zod.boolean().default(false),
+        methods: zod
           .object({
-            id: z.string().uuid(),
-            emoji: z.string().emoji().optional(),
-            label: z
+            id: zod.string().uuid(),
+            emoji: zod.string().emoji().optional(),
+            label: zod
               .string()
-              .min(1, { message: "Label is required" })
-              .max(80, { message: "Maximum of 80 characters allowed" }),
-            rolesToAdd: z
+              .nonempty("Label is required")
+              .max(80, "Maximum of 80 characters allowed"),
+            rolesToAdd: zod
               .string()
               .array()
-              .max(10, { message: "Maximum of 10 roles allowed" })
+              .max(10, "Maximum of 10 roles allowed")
               .default([]),
-            rolesToRemove: z
+            rolesToRemove: zod
               .string()
               .array()
-              .max(10, { message: "Maximum of 10 roles allowed" })
+              .max(10, "Maximum of 10 roles allowed")
               .default([]),
           })
           .array()
-          .min(1, { message: "At least one method is required" })
-          .max(20, { message: "Maximum of 20 methods allowed" }),
+          .min(1, "At least one method is required")
+          .max(20, "Maximum of 20 methods allowed"),
       }),
-      z.object({
-        id: z.string().uuid(),
-        type: z.literal("dropdown"),
-        name: z
+      zod.object({
+        id: zod.string().uuid(),
+        type: zod.literal("dropdown"),
+        name: zod
           .string()
-          .min(1, { message: "Name is required" })
-          .max(256, { message: "Maximum of 256 characters allowed" }),
-        channel: z.string().min(1, { message: "Channel is required" }),
-        content: z
+          .nonempty("Name is required")
+          .max(256, "Maximum of 256 characters allowed"),
+        channel: zod.string().snowflake("Channel is required"),
+        content: zod
           .string()
-          .min(1, { message: "Content is required" })
-          .max(512, { message: "Maximum of 512 characters allowed" }),
-        multiselect: z.boolean().default(false),
-        methods: z
+          .nonempty("Content is required")
+          .max(512, "Maximum of 512 characters allowed"),
+        multiselect: zod.boolean().default(false),
+        methods: zod
           .object({
-            id: z.string().uuid(),
-            emoji: z.string().emoji().optional(),
-            label: z
+            id: zod.string().uuid(),
+            emoji: zod.string().emoji().optional(),
+            label: zod
               .string()
-              .min(1, { message: "Label is required" })
-              .max(80, { message: "Maximum of 80 characters allowed" }),
-            rolesToAdd: z
+              .nonempty("Label is required")
+              .max(80, "Maximum of 80 characters allowed"),
+            rolesToAdd: zod
               .string()
+              .snowflake()
               .array()
-              .max(10, { message: "Maximum of 10 roles allowed" })
+              .max(10, "Maximum of 10 roles allowed")
               .default([]),
-            rolesToRemove: z
+            rolesToRemove: zod
               .string()
+              .snowflake()
               .array()
-              .max(10, { message: "Maximum of 10 roles allowed" })
+              .max(10, "Maximum of 10 roles allowed")
               .default([]),
           })
           .array()
-          .min(1, { message: "At least one method is required" })
-          .max(20, { message: "Maximum of 20 methods allowed" }),
+          .min(1, "At least one method is required")
+          .max(20, "Maximum of 20 methods allowed"),
       }),
     ])
     .array()
     .min(1)
-    .max(10, { message: "Maximum of 10 messages allowed" }),
+    .max(10, "Maximum of 10 messages allowed"),
 })
 
-export const ticketsSchema = z.object({
-  enabled: z.boolean(),
-  channel: z.string().min(1, "Channel is required"),
-  category: z
+export const ticketsSchema = moduleSchema({
+  channel: zod.string().nonempty("Channel is required"),
+  category: zod
     .string()
-    .optional()
-    .transform((str) => (str?.length ? str : undefined)),
-  message: z
+    .nullish()
+    .transform((str) => str ?? undefined),
+  message: zod
     .string()
-    .min(1, "Message must be at least 1 character")
     .max(1000, "Message must be less than 1000 characters")
-    .optional()
-    .transform((str) => (str?.length ? str : undefined)),
-  max_open: z
+    .trim()
+    .nullish()
+    .transform((str) => str ?? undefined),
+  max_open: zod
     .number()
     .int()
-    .optional()
-    .transform((num) => (num === Infinity ? undefined : num)),
-  tickets: z
+    .nullish()
+    .transform((int) => int ?? undefined),
+  tickets: zod
     .object({
-      id: z.string().uuid(),
-      name: z
+      id: zod.string().uuid(),
+      name: zod
         .string()
-        .min(1, "Name is required")
+        .nonempty("Name is required")
         .max(32, "Name cannot be longer than 32 characters"),
-      message: z
+      message: zod
         .string()
-        .min(1, "Message is required")
+        .nonempty("Message is required")
         .max(1000, "Message must be less than 1000 characters"),
-      mention: z
+      mention: zod
         .string()
-        .optional()
-        .transform((str) => (str?.length ? str : undefined)),
-      reason: z
+        .nullish()
+        .transform((str) => str ?? undefined),
+      reason: zod
         .enum(["required", "optional", "disabled"])
         .default("disabled")
         .optional(),
@@ -368,76 +304,66 @@ export const ticketsSchema = z.object({
     .max(5),
 })
 
-export const twitchNotificationsSchema = z.object({
-  enabled: z.boolean(),
-  streamers: z
-    .array(
-      z.object({
-        id: z
-          .string()
-          .min(4, {
-            message: "The streamer name must be at least 4 characters",
-          })
-          .max(25, {
-            message: "The streamer name must be less than 25 characters",
-          }),
-        channel: z.string().min(1, {
-          message: "You must select a channel",
-        }),
-        mention: z
-          .string()
-          .optional()
-          .transform((str) => (str?.length ? str : undefined)),
-      }),
-    )
+export const twitchNotificationsSchema = moduleSchema({
+  streamers: zod
+    .object({
+      id: zod
+        .string()
+        .min(4, "The streamer name must be at least 4 characters")
+        .max(25, "The streamer name must be less than 25 characters"),
+      channel: zod.string().snowflake("You must select a channel"),
+      mention: zod
+        .string()
+        .mention()
+        .nullish()
+        .transform((str) => str ?? undefined),
+    })
+    .array()
     .max(5),
 })
 
-export const warningsSchema = z.object({
-  enabled: z.boolean(),
-  warnings: z
-    .array(
-      z.object({
-        role: z.string().min(1, {
-          message: "Role is required",
-        }),
-      }),
-    )
+export const warningsSchema = moduleSchema({
+  warnings: zod
+    .object({ role: zod.string().snowflake("Role is required") })
+    .array()
     .max(10),
 })
 
-export const welcomeMessagesSchema = z.object({
-  enabled: z.boolean(),
-  channel: z.string().min(1, {
-    message: "Channel is required",
-  }),
-  message: z.string(),
-  mention: z.boolean(),
-  card: z.object({
-    enabled: z.boolean(),
-    background: z
+export const welcomeMessagesSchema = moduleSchema({
+  channel: zod.string().snowflake("Channel is required"),
+  message: zod
+    .string()
+    .nonempty("Message is required")
+    .max(2000, "Message must be less than 2000 characters"),
+  mention: zod.boolean(),
+  card: zod.object({
+    enabled: zod.boolean(),
+    background: zod
       .string()
       .url()
-      .optional()
-      .transform((str) => (str?.length ? str : undefined)),
+      .max(256, "Background URL cannot be longer than 256 characters")
+      .nullish()
+      .transform((str) => str ?? undefined),
   }),
 })
 
-export const modulesSchema = z.object({
-  [ModuleId.AuditLogs]: auditLogsSchema.optional(),
-  [ModuleId.AutoMessages]: autoMessagesSchema.optional(),
-  [ModuleId.AutoRoles]: autoRolesSchema.optional(),
-  [ModuleId.BumpReminders]: bumpRemindersSchema.optional(),
-  [ModuleId.Counters]: countersSchema.optional(),
-  [ModuleId.Forms]: formsSchema.optional(),
-  [ModuleId.JoinToCreates]: joinToCreatesSchema.optional(),
-  [ModuleId.Levels]: levelsSchema.optional(),
-  [ModuleId.ReactionRoles]: reactionRolesSchema.optional(),
-  [ModuleId.SelfRoles]: selfRolesSchema.optional(),
-  [ModuleId.Tickets]: ticketsSchema.optional(),
-  [ModuleId.TwitchNotifications]: twitchNotificationsSchema.optional(),
-  [ModuleId.Warnings]: warningsSchema.optional(),
-  [ModuleId.WelcomeMessages]: welcomeMessagesSchema.optional(),
-})
+export const modulesSchema = zod
+  .object({
+    [ModuleId.AuditLogs]: auditLogsSchema,
+    [ModuleId.AutoMessages]: autoMessagesSchema,
+    [ModuleId.AutoRoles]: autoRolesSchema,
+    [ModuleId.BumpReminders]: bumpRemindersSchema,
+    [ModuleId.Counters]: countersSchema,
+    [ModuleId.Forms]: formsSchema,
+    [ModuleId.JoinToCreates]: joinToCreatesSchema,
+    [ModuleId.Levels]: levelsSchema,
+    [ModuleId.ReactionRoles]: reactionRolesSchema,
+    [ModuleId.SelfRoles]: selfRolesSchema,
+    [ModuleId.Tickets]: ticketsSchema,
+    [ModuleId.TwitchNotifications]: twitchNotificationsSchema,
+    [ModuleId.Warnings]: warningsSchema,
+    [ModuleId.WelcomeMessages]: welcomeMessagesSchema,
+  })
+  .partial()
 
-export const moduleIdSchema = z.nativeEnum(ModuleId)
+export const moduleIdSchema = zod.nativeEnum(ModuleId)
