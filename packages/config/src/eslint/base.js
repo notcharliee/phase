@@ -37,6 +37,6 @@ export default tseslint.config(
     },
   },
   {
-    ignores: [".next/", "dist/", "node_modules/"],
+    ignores: [".next/", "dist/", "node_modules/", "tsup.config.ts"],
   },
 )
