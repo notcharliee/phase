@@ -25,7 +25,7 @@ export class StoreManager extends BaseManager {
 
   public async init() {
     for (const key of Object.keys(this._stores)) {
-      await (this._stores[key as keyof Stores] as BaseStore).init()
+      await (this._stores[key as keyof Stores] as BaseStore).init(this.client)
     }
 
     return this
