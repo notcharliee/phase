@@ -22,8 +22,8 @@ export default tseslint.config(...base, {
     "@next/next": nextPlugin,
   },
   rules: {
-    ...reactPlugin.configs.flat.recommended.rules,
-    ...reactPlugin.configs.flat["jsx-runtime"].rules,
+    ...reactPlugin.configs.recommended.rules,
+    ...reactPlugin.configs["jsx-runtime"].rules,
     ...hooksPlugin.configs.recommended.rules,
     ...nextPlugin.configs.recommended.rules,
     ...nextPlugin.configs["core-web-vitals"].rules,
