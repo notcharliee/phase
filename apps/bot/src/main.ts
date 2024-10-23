@@ -7,6 +7,7 @@ import { Emojis } from "~/lib/emojis"
 import { Music } from "~/structures/music/Music"
 import { ConfigStore } from "~/structures/stores/ConfigStore"
 import { GuildStore } from "~/structures/stores/GuildStore"
+import { InviteStore } from "~/structures/stores/InviteStore"
 import { TwitchStatusStore } from "~/structures/stores/TwitchStatusStore"
 import { VoiceManager } from "~/structures/voice/VoiceManager"
 
@@ -79,6 +80,7 @@ const phaseClient = new PhaseClient({
   stores: {
     config: new ConfigStore(),
     guilds: new GuildStore(),
+    invites: new InviteStore(),
     twitchStatuses: new TwitchStatusStore(),
   },
 })
