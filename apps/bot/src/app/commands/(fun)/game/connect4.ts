@@ -8,9 +8,9 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
-import { Connect4 } from "~/structures/Connect4"
+import { Connect4 } from "~/structures/games/Connect4"
 
-import type { BoardColumnIndex } from "~/structures/Connect4"
+import type { BoardColumnIndex } from "~/structures/games/Connect4"
 import type { Message } from "discord.js"
 
 const indexWordMap: Record<BoardColumnIndex, string> = {
