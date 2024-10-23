@@ -3,6 +3,7 @@ import "~/styles/globals.css"
 import { Analytics } from "@vercel/analytics/react"
 import { GeistMono } from "geist/font/mono"
 import { GeistSans } from "geist/font/sans"
+import { NuqsAdapter } from "nuqs/adapters/next/pages"
 
 import { LoadingBar } from "~/components/loading-bar"
 import { Toaster } from "~/components/ui/sonner"
@@ -62,7 +63,7 @@ export default function RootLayout({ children }: LayoutProps) {
           GeistMono.variable,
         )}
       >
-        {children}
+        <NuqsAdapter>{children}</NuqsAdapter>
         <Toaster />
         <Analytics />
         <LoadingBar />
