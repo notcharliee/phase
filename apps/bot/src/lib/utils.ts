@@ -1,6 +1,8 @@
-import { SnowflakeUtil } from "discord.js"
+import { PermissionFlagsBits, SnowflakeUtil } from "discord.js"
 
 import unsafeMs from "ms"
+
+import type { GuildBasedChannel, GuildTextBasedChannel } from "discord.js"
 
 export function isSnowflake(id: string) {
   try {
@@ -8,6 +10,20 @@ export function isSnowflake(id: string) {
   } catch {
     return false
   }
+}
+
+export function isSendableChannel(
+  channel: GuildBasedChannel,
+): channel is GuildTextBasedChannel {
+  const requiredPermissions = [
+    PermissionFlagsBits.ViewChannel,
+    PermissionFlagsBits.SendMessages,
+  ]
+
+  return (
+    channel.isSendable() &&
+    channel.permissionsFor(channel.guild.members.me!).has(requiredPermissions)
+  )
 }
 
 export function getDayName(day: number, short = false) {
