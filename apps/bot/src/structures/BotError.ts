@@ -1,13 +1,13 @@
 import { ModuleDefinitions } from "@repo/utils/modules"
 import { constantCase } from "change-case"
 
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 import type { ModuleId } from "@repo/utils/modules"
 import type { ChannelTypeName } from "~/types/utils"
 import type { APIEmbed, ChannelType, PermissionFlagsBits } from "discord.js"
 
-export class BotErrorMessage extends CustomMessageBuilder {
+export class BotErrorMessage extends MessageBuilder {
   readonly ephemeral: boolean
 
   constructor(

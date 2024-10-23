@@ -6,9 +6,9 @@ import { wrapText } from "~/lib/utils"
 
 import { createProgressBar } from "~/app/commands/(voice)/music/_utils"
 import { BotErrorMessage } from "~/structures/BotError"
-import { CustomActionRowBuilder } from "~/structures/CustomActionRowBuilder"
-import { CustomEmbedBuilder } from "~/structures/CustomEmbedBuilder"
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { ActionRowBuilder } from "~/structures/builders/ActionRowBuilder"
+import { EmbedBuilder } from "~/structures/builders/EmbedBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 import { QueueRepeatMode } from "~/structures/music/Queue"
 
 import type { Song } from "~/structures/music/Song"
@@ -85,7 +85,7 @@ export default new BotEventBuilder()
         const song = queue.playPreviousSong()!
 
         return void interaction.update(
-          new CustomMessageBuilder()
+          new MessageBuilder()
             .setEmbeds(createPanelEmbed(song))
             .setComponents(createPanelButtons(song)),
         )
@@ -109,7 +109,7 @@ export default new BotEventBuilder()
         const song = queue.currentSong
 
         return void interaction.update(
-          new CustomMessageBuilder()
+          new MessageBuilder()
             .setEmbeds(() => {
               const embed = createPanelEmbed(song)
 
@@ -157,7 +157,7 @@ export default new BotEventBuilder()
         const song = queue.currentSong
 
         return void interaction.update(
-          new CustomMessageBuilder()
+          new MessageBuilder()
             .setEmbeds(createPanelEmbed(song))
             .setComponents(createPanelButtons(song)),
         )
@@ -175,7 +175,7 @@ export default new BotEventBuilder()
         const song = queue.currentSong
 
         return void interaction.update(
-          new CustomMessageBuilder()
+          new MessageBuilder()
             .setEmbeds(createPanelEmbed(song))
             .setComponents(createPanelButtons(song)),
         )
@@ -210,7 +210,7 @@ export default new BotEventBuilder()
               .setCustomId(MusicCustomID.AddSong)
               .setTitle("Search for a song")
               .addComponents([
-                new CustomActionRowBuilder().addTextInput((input) => {
+                new ActionRowBuilder().addTextInput((input) => {
                   return input
                     .setCustomId(MusicCustomID.AddSongInput)
                     .setLabel("Search Query")
@@ -228,7 +228,7 @@ export default new BotEventBuilder()
           const song = queue.currentSong!
 
           return void interaction.update(
-            new CustomMessageBuilder()
+            new MessageBuilder()
               .setEmbeds(createPanelEmbed(song))
               .setComponents(createPanelButtons(song)),
           )
@@ -242,7 +242,7 @@ export default new BotEventBuilder()
               .setCustomId(MusicCustomID.RemoveSong)
               .setTitle("Search for a song")
               .addComponents([
-                new CustomActionRowBuilder().addTextInput((input) => {
+                new ActionRowBuilder().addTextInput((input) => {
                   return input
                     .setCustomId(MusicCustomID.RemoveSongInput)
                     .setLabel("Position")
@@ -272,7 +272,7 @@ export default new BotEventBuilder()
           const song = queue.currentSong!
 
           return void interaction.update(
-            new CustomMessageBuilder()
+            new MessageBuilder()
               .setEmbeds(createPanelEmbed(song))
               .setComponents(createPanelButtons(song)),
           )
@@ -285,7 +285,7 @@ export function createPanelEmbed(song: Song) {
   const songFinishesPlaying = `<t:${Math.floor(Date.now() / 1000) + song.duration}:R>`
   const songPosition = `[${song.queue.currentSongIndex! + 1}/${song.queue.songs.length}]`
 
-  return new CustomEmbedBuilder()
+  return new EmbedBuilder()
     .setColor("Primary")
     .setAuthor({
       name: `Added by ${song.submittedBy.displayName}`,
@@ -307,7 +307,7 @@ export function createPanelButtons(song: Song) {
   const isPaused = song.queue.isPaused
 
   return [
-    new CustomActionRowBuilder()
+    new ActionRowBuilder()
       .addButton((button) => {
         return button
           .setCustomId(MusicCustomID.PreviousTrack)
@@ -332,7 +332,7 @@ export function createPanelButtons(song: Song) {
           .setEmoji(Emojis.Plus)
           .setStyle(ButtonStyle.Secondary)
       }),
-    new CustomActionRowBuilder()
+    new ActionRowBuilder()
       .addButton((button) => {
         return button
           .setCustomId(MusicCustomID.Shuffle)

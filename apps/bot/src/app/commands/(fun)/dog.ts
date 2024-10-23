@@ -2,7 +2,7 @@ import { AttachmentBuilder } from "discord.js"
 import { BotCommandBuilder } from "phasebot/builders"
 
 import { BotErrorMessage } from "~/structures/BotError"
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 const API_URL = new URL("https://random.dog")
 
@@ -29,7 +29,7 @@ export default new BotCommandBuilder()
         .setDescription("Random dog image")
 
       return void interaction.editReply(
-        new CustomMessageBuilder().setFiles(attachment).setEmbeds((embed) => {
+        new MessageBuilder().setFiles(attachment).setEmbeds((embed) => {
           return embed
             .setTitle("Random Dog")
             .setColor("Primary")

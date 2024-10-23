@@ -6,7 +6,7 @@ import {
 } from "discord.js"
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 import { Connect4 } from "~/structures/Connect4"
 
@@ -58,7 +58,7 @@ export default new BotSubcommandBuilder()
   })
 
 function createMessage(connect4: Connect4, disabled = false) {
-  return new CustomMessageBuilder()
+  return new MessageBuilder()
     .setContent(`<@${connect4.currentPlayer.id}> it's your turn, make a move!`)
     .setEmbeds((embed) => {
       return embed.setColor("Primary").setTitle("Connect-4").setDescription(`

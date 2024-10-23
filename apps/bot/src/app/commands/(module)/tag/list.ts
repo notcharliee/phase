@@ -2,7 +2,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { db } from "~/lib/db"
 
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 export default new BotSubcommandBuilder()
   .setName("list")
@@ -15,7 +15,7 @@ export default new BotSubcommandBuilder()
     })
 
     return void interaction.editReply(
-      new CustomMessageBuilder().setEmbeds((embed) => {
+      new MessageBuilder().setEmbeds((embed) => {
         return embed
           .setColor("Primary")
           .setTitle(`Tag List (${tagDoc?.tags.length ?? 0})`)

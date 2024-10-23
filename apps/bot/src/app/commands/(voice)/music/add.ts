@@ -1,7 +1,7 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { BotErrorMessage } from "~/structures/BotError"
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 import { MusicError } from "~/structures/music/Music"
 
 import type { GuildMember } from "discord.js"
@@ -42,7 +42,7 @@ export default new BotSubcommandBuilder()
       const placeInQueue = queue.songs.slice(queue.currentSongIndex! + 1).length
 
       return void interaction.editReply(
-        new CustomMessageBuilder().setEmbeds((embed) => {
+        new MessageBuilder().setEmbeds((embed) => {
           return embed
             .setColor("Primary")
             .setAuthor({

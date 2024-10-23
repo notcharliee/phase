@@ -5,17 +5,11 @@ import {
   MentionableSelectMenuBuilder,
   RoleSelectMenuBuilder,
   StringSelectMenuBuilder,
-  TextInputBuilder,
   UserSelectMenuBuilder,
 } from "discord.js"
 
-import { Mixin } from "ts-mixer"
-
 import type { BuilderOrBuilderFunction } from "~/types/builders"
-import type {
-  MessageActionRowComponentBuilder,
-  ModalActionRowComponentBuilder,
-} from "discord.js"
+import type { MessageActionRowComponentBuilder } from "discord.js"
 
 export class MessageActionRowBuilder extends ActionRowBuilder<MessageActionRowComponentBuilder> {
   public addButton(builder: BuilderOrBuilderFunction<ButtonBuilder>) {
@@ -74,20 +68,3 @@ export class MessageActionRowBuilder extends ActionRowBuilder<MessageActionRowCo
     ) as MessageActionRowBuilder
   }
 }
-
-export class ModalActionRowBuilder extends ActionRowBuilder<ModalActionRowComponentBuilder> {
-  public addTextInput(builder: BuilderOrBuilderFunction<TextInputBuilder>) {
-    return super.addComponents(
-      typeof builder === "function" ? builder(new TextInputBuilder()) : builder,
-    ) as ModalActionRowBuilder
-  }
-}
-
-export type CustomActionRowBuilderReturnType =
-  | MessageActionRowBuilder
-  | ModalActionRowBuilder
-
-export class CustomActionRowBuilder extends Mixin(
-  MessageActionRowBuilder,
-  ModalActionRowBuilder,
-) {}

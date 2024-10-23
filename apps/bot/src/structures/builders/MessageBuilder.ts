@@ -1,9 +1,9 @@
 import { AttachmentBuilder, normalizeArray } from "discord.js"
 
-import { CustomActionRowBuilder } from "~/structures/CustomActionRowBuilder"
-import { CustomEmbedBuilder } from "~/structures/CustomEmbedBuilder"
+import { ActionRowBuilder } from "~/structures/builders/ActionRowBuilder"
+import { EmbedBuilder } from "~/structures/builders/EmbedBuilder"
 
-import type { CustomActionRowBuilderReturnType } from "~/structures/CustomActionRowBuilder"
+import type { ActionRowBuilderReturnType } from "~/structures/builders/ActionRowBuilder"
 import type { BuilderOrBuilderFunction } from "~/types/builders"
 import type {
   APIEmbed,
@@ -15,7 +15,7 @@ import type {
   RestOrArray,
 } from "discord.js"
 
-export class CustomMessageBuilder {
+export class MessageBuilder {
   readonly allowedMentions?: BaseMessageOptions["allowedMentions"]
   readonly content?: BaseMessageOptions["content"]
   readonly components?: BaseMessageOptions["components"]
@@ -35,8 +35,8 @@ export class CustomMessageBuilder {
   setComponents(
     ...builders: RestOrArray<
       BuilderOrBuilderFunction<
-        CustomActionRowBuilder,
-        CustomActionRowBuilderReturnType
+        ActionRowBuilder,
+        ActionRowBuilderReturnType
       >
     >
   ) {
@@ -46,7 +46,7 @@ export class CustomMessageBuilder {
     for (const builder of normalisedBuilders) {
       actionRows.push(
         typeof builder === "function"
-          ? builder(new CustomActionRowBuilder()).toJSON()
+          ? builder(new ActionRowBuilder()).toJSON()
           : builder.toJSON(),
       )
     }
@@ -57,14 +57,14 @@ export class CustomMessageBuilder {
   }
 
   setEmbeds(
-    ...builders: RestOrArray<BuilderOrBuilderFunction<CustomEmbedBuilder>>
+    ...builders: RestOrArray<BuilderOrBuilderFunction<EmbedBuilder>>
   ) {
     const normalisedBuilders = normalizeArray(builders)
     const embeds: APIEmbed[] = []
 
     for (const builder of normalisedBuilders) {
-      if (builder instanceof CustomEmbedBuilder) embeds.push(builder.toJSON())
-      else embeds.push(builder(new CustomEmbedBuilder()).toJSON())
+      if (builder instanceof EmbedBuilder) embeds.push(builder.toJSON())
+      else embeds.push(builder(new EmbedBuilder()).toJSON())
     }
 
     Reflect.set(this, "embeds", embeds)

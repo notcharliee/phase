@@ -1,7 +1,7 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { getUrbanPost } from "~/lib/apis/urban"
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 import { truncateString } from "~/lib/utils"
 
 import { BotErrorMessage } from "~/structures/BotError"
@@ -39,7 +39,7 @@ export default new BotSubcommandBuilder()
     }
 
     void interaction.editReply(
-      new CustomMessageBuilder().setEmbeds((embed) => {
+      new MessageBuilder().setEmbeds((embed) => {
         const { thumbsUp, thumbsDown, ...urbanPost } = urbanResponse[0]
 
         const truncatedDefinition = truncateString(urbanPost.definition, 2048)

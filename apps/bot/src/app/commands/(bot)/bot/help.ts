@@ -3,14 +3,14 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { PhaseColour } from "~/lib/enums"
 
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 export default new BotSubcommandBuilder()
   .setName("help")
   .setDescription("Links to the bot's docs and support discord.")
   .setExecute(async (interaction) => {
     return void interaction.reply(
-      new CustomMessageBuilder()
+      new MessageBuilder()
         .setEmbeds((embed) => {
           return embed
             .setColor(PhaseColour.Primary)

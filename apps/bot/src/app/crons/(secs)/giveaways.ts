@@ -3,7 +3,7 @@ import { BotCronBuilder } from "phasebot/builders"
 import { db } from "~/lib/db"
 import { Emojis } from "~/lib/emojis"
 
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 import type { GuildTextBasedChannel, User } from "discord.js"
 
@@ -41,7 +41,7 @@ export default new BotCronBuilder()
 
         try {
           await message.reply(
-            new CustomMessageBuilder()
+            new MessageBuilder()
               .setContent(
                 entries.filter(filter).random(giveaway.winners).join(""),
               )

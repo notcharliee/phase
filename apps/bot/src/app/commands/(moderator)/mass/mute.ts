@@ -3,7 +3,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 
 import ms from "ms"
 
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 import { BotErrorMessage } from "~/structures/BotError"
 
@@ -119,7 +119,7 @@ export default new BotSubcommandBuilder()
     const formattedTimeTaken = ms(timeAtEnd - timeAtStart, { long: true })
 
     return void interaction.editReply(
-      new CustomMessageBuilder().setEmbeds((embed) => {
+      new MessageBuilder().setEmbeds((embed) => {
         return embed
           .setColor("Primary")
           .setTitle("Mass Muted")

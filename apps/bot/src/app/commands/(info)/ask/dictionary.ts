@@ -4,7 +4,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 import { capitalCase } from "change-case"
 
 import { askDictionary, getPhonetic } from "~/lib/apis/dictionary"
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 import { truncateString } from "~/lib/utils"
 
 import { BotErrorMessage } from "~/structures/BotError"
@@ -35,7 +35,7 @@ export default new BotSubcommandBuilder()
     const phonetic = getPhonetic(wordData)
 
     void interaction.editReply(
-      new CustomMessageBuilder()
+      new MessageBuilder()
         .setEmbeds((embed) => {
           return embed
             .setColor("Primary")

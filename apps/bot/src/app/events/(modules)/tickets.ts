@@ -8,7 +8,7 @@ import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/utils/modules"
 
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 import { Emojis } from "~/lib/emojis"
 
 import { BotErrorMessage } from "~/structures/BotError"
@@ -109,7 +109,7 @@ export default new BotEventBuilder()
           const ticketModMention = ticket.mention ? `<@&${ticket.mention}>` : ""
 
           await ticketThread.send(
-            new CustomMessageBuilder()
+            new MessageBuilder()
               .setContent(ticketUserMention + ticketModMention)
               .setEmbeds((embed) => {
                 return embed
@@ -169,7 +169,7 @@ export default new BotEventBuilder()
           const ticketCommandMention = `</ticket unlock:${ticketCommandId}>`
 
           return interaction.editReply(
-            new CustomMessageBuilder().setEmbeds((embed) => {
+            new MessageBuilder().setEmbeds((embed) => {
               embed.setColor("Primary")
               embed.setTitle("Ticket Locked")
               embed.setDescription(`

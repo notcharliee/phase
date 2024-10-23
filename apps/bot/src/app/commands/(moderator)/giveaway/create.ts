@@ -6,7 +6,7 @@ import { db } from "~/lib/db"
 import { Emojis } from "~/lib/emojis"
 import { dateToTimestamp } from "~/lib/utils"
 
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 import type { GuildMember } from "discord.js"
 
@@ -44,7 +44,7 @@ export default new BotSubcommandBuilder()
     const expires = new Date(Date.now() + duration)
 
     await interaction.editReply(
-      new CustomMessageBuilder().setEmbeds((embed) => {
+      new MessageBuilder().setEmbeds((embed) => {
         return embed
           .setAuthor({
             iconURL: host.displayAvatarURL(),

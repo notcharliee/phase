@@ -1,4 +1,4 @@
-import { AttachmentBuilder, EmbedBuilder } from "discord.js"
+import { AttachmentBuilder, EmbedBuilder as DjsEmbedBuilder } from "discord.js"
 
 import dedent from "dedent"
 
@@ -14,7 +14,7 @@ export type CustomColourResolvable =
   | keyof typeof CustomColour
   | Omit<ColorResolvable, keyof typeof Colors | "Random">
 
-export class CustomEmbedBuilder extends EmbedBuilder {
+export class EmbedBuilder extends DjsEmbedBuilder {
   constructor(data?: Partial<APIEmbed>) {
     super(data)
   }

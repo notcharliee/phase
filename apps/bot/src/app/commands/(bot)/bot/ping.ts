@@ -1,6 +1,6 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 export default new BotSubcommandBuilder()
   .setName("ping")
@@ -15,7 +15,7 @@ export default new BotSubcommandBuilder()
     const rebootTimestamp = `<t:${Math.floor(interaction.client.readyTimestamp / 1000)}:R>`
 
     await interaction.editReply(
-      new CustomMessageBuilder().setEmbeds((embed) => {
+      new MessageBuilder().setEmbeds((embed) => {
         return embed.setColor("Primary").setTitle("Pong! 🏓").setDescription(`
           Command Latency: ${commandLatency}ms
           Discord API Latency: ${apiLatency}ms

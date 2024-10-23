@@ -5,7 +5,7 @@ import { getBasicInfo, validateURL } from "@distube/ytdl-core"
 import { dateToTimestamp, formatNumber, truncateString } from "~/lib/utils"
 
 import { BotErrorMessage } from "~/structures/BotError"
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 interface YoutTubeDislikeAPIResponse {
   id: string
@@ -50,7 +50,7 @@ export default new BotCommandBuilder()
       const videoDescription = videoDetails.description ?? "N/A"
 
       void interaction.editReply(
-        new CustomMessageBuilder().setEmbeds((embed) => {
+        new MessageBuilder().setEmbeds((embed) => {
           return embed
             .setColor("Primary")
             .setAuthor({

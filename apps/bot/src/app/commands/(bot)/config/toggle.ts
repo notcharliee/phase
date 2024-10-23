@@ -2,7 +2,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { ModuleDefinitions } from "@repo/utils/modules"
 
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 import { db } from "~/lib/db"
 
 import { BotErrorMessage } from "~/structures/BotError"
@@ -71,7 +71,7 @@ export default new BotSubcommandBuilder()
     }
 
     return await interaction.editReply(
-      new CustomMessageBuilder().setEmbeds((embed) => {
+      new MessageBuilder().setEmbeds((embed) => {
         return embed
           .setColor("Primary")
           .setTitle("Module Toggled")

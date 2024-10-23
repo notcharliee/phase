@@ -12,7 +12,7 @@ import { ModuleId } from "@repo/utils/modules"
 import { db } from "~/lib/db"
 
 import { BotErrorMessage } from "~/structures/BotError"
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 type PanelAction = "name" | "users" | "lock" | "mute" | "transfer" | "delete"
 
@@ -106,7 +106,7 @@ export default new BotEventBuilder()
         case "users": {
           if (interaction.isButton()) {
             return void interaction.editReply(
-              new CustomMessageBuilder().setComponents((actionrow) => {
+              new MessageBuilder().setComponents((actionrow) => {
                 return actionrow.addUserSelectMenu((selectmenu) => {
                   return selectmenu
                     .setCustomId("jtc.panel.users.select")
@@ -205,7 +205,7 @@ export default new BotEventBuilder()
         case "transfer": {
           if (interaction.isButton()) {
             return void interaction.editReply(
-              new CustomMessageBuilder().setComponents((actionrow) => {
+              new MessageBuilder().setComponents((actionrow) => {
                 return actionrow.addUserSelectMenu((selectmenu) => {
                   return selectmenu
                     .setCustomId("jtc.panel.transfer.select")

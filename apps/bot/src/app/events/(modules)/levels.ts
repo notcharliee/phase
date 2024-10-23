@@ -5,7 +5,7 @@ import { ModuleDefinitions, ModuleId } from "@repo/utils/modules"
 import { db } from "~/lib/db"
 import { isSnowflake } from "~/lib/utils"
 
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 export default new BotEventBuilder()
   .setName("messageCreate")
@@ -46,7 +46,7 @@ export default new BotEventBuilder()
       levelDoc.level += 1
       levelDoc.xp = 0
 
-      const levelUpMessage = new CustomMessageBuilder()
+      const levelUpMessage = new MessageBuilder()
 
       if (moduleConfig.mention) {
         levelUpMessage.setContent(`<@${message.author.id}>`)

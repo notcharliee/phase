@@ -6,7 +6,7 @@ import { ModuleId } from "@repo/utils/modules"
 import { db } from "~/lib/db"
 import { Emojis } from "~/lib/emojis"
 
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 /**
  * Creates a JTC channel when a member joins the trigger channel.
@@ -43,7 +43,7 @@ export default new BotEventBuilder()
       await newVoice.setChannel(newJTCChannel)
 
       await newJTCChannel.send(
-        new CustomMessageBuilder()
+        new MessageBuilder()
           .setContent(userMention(newVoice.member.id))
           .setEmbeds((embed) => {
             return embed

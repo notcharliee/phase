@@ -6,7 +6,7 @@ import { ModuleDefinitions, ModuleId } from "@repo/utils/modules"
 import { db } from "~/lib/db"
 
 import { generateWelcomeCard } from "~/images/welcome"
-import { CustomMessageBuilder } from "~/structures/CustomMessageBuilder"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 export default new BotEventBuilder()
   .setName("guildMemberAdd")
@@ -42,7 +42,7 @@ export default new BotEventBuilder()
       ? await (await generateWelcomeCard({ client, member })).toAttachment()
       : null
 
-    const message = new CustomMessageBuilder()
+    const message = new MessageBuilder()
 
     if (moduleConfig.mention) {
       message.setContent(`<@${member.id}>`)
