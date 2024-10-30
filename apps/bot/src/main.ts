@@ -1,5 +1,5 @@
 import { Options, Partials } from "discord.js"
-import { PhaseClient } from "phasebot"
+import { BotClient } from "phasebot"
 import { BotPluginBuilder } from "phasebot/builders"
 
 import { Emojis } from "~/lib/emojis"
@@ -11,9 +11,7 @@ import { InviteStore } from "~/structures/stores/InviteStore"
 import { TwitchStatusStore } from "~/structures/stores/TwitchStatusStore"
 import { VoiceManager } from "~/structures/voice/VoiceManager"
 
-const isDev = process.env.NODE_ENV === "development"
-
-const phaseClient = new PhaseClient({
+const phaseClient = new BotClient({
   config: {
     intents: [
       "Guilds",
@@ -53,28 +51,18 @@ const phaseClient = new PhaseClient({
       },
     }),
   },
-  dev: isDev,
-  exports: {
-    commands: "default",
-    crons: "default",
-    events: "default",
-    middleware: "default",
-    prestart: "default",
-  },
   plugins: [
     new BotPluginBuilder()
       .setName("VoiceManager")
       .setVersion("1.0.0")
       .setOnLoad((client) => {
         client.voices = new VoiceManager(client)
-        return client
       }),
     new BotPluginBuilder()
       .setName("Music")
       .setVersion("1.0.0")
       .setOnLoad((client) => {
         client.music = new Music(client)
-        return client
       }),
   ],
   stores: {

@@ -8,7 +8,7 @@ import type { Client } from "discord.js"
 export class StoreManager extends BaseManager {
   protected readonly _stores: Stores
 
-  constructor(client: Client, stores: Stores) {
+  constructor(client: Client, stores: Stores = {}) {
     super(client)
 
     this._stores = stores
@@ -24,6 +24,8 @@ export class StoreManager extends BaseManager {
   }
 
   public async init() {
+    this.client.stores = this
+
     for (const key of Object.keys(this._stores)) {
       await (this._stores[key as keyof Stores] as BaseStore).init(this.client)
     }

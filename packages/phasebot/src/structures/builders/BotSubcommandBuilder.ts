@@ -1,4 +1,4 @@
-import { ApplicationCommandType, ApplicationIntegrationType } from "discord.js"
+import { ApplicationCommandOptionType } from "discord.js"
 
 import { Mixin } from "ts-mixer"
 import { z } from "zod"
@@ -9,55 +9,32 @@ import { SharedBotCommandBuilderDescription } from "~/structures/builders/shared
 import { SharedBotCommandBuilderName } from "~/structures/builders/shared/SharedBotCommandBuilderName"
 import { SharedBotCommandBuilderOptions } from "~/structures/builders/shared/SharedBotCommandBuilderOptions"
 
-import type { BotCommandBody } from "~/types/commands"
-import type { Client, InteractionContextType } from "discord.js"
+import type { BotSubcommandBody } from "~/types/commands"
+import type { Client } from "discord.js"
 
-export class BotCommandBuilder extends Mixin(
+export class BotSubcommandBuilder extends Mixin(
   SharedBotCommandBuilderBase,
   SharedBotCommandBuilderName,
   SharedBotCommandBuilderDescription,
   SharedBotCommandBuilderOptions,
 ) {
-  protected declare body: BotCommandBody
+  protected declare body: BotSubcommandBody
 
   constructor() {
     super()
 
-    this.body.type = ApplicationCommandType.ChatInput
-    this.body.integration_types = [ApplicationIntegrationType.GuildInstall]
-    this.body.options = []
-    this.body.dm_permission = true
+    this.body.type = ApplicationCommandOptionType.Subcommand
   }
 
   /**
-   * Sets the DM permission of this command.
+   * Builds the subcommand.
    */
-  public setDMPermission(enabled: boolean) {
-    this.body.dm_permission = enabled
-    return this
-  }
-
-  /**
-   * Sets the interaction contexts of this command.
-   */
-  public setContexts(contexts: InteractionContextType[]) {
-    this.body.contexts = contexts
-    return this
-  }
-
-  /**
-   * Sets the integration types of this command.
-   */
-  public setIntegrationTypes(integrationTypes: ApplicationIntegrationType[]) {
-    this.body.integration_types = integrationTypes
-    return this
-  }
-
-  /**
-   * Builds the command.
-   */
-  public build(client: Client) {
+  public build(
+    client: Client,
+    params: { parentName?: string; groupName?: string } = {},
+  ) {
     return new BotCommand(client, {
+      ...params,
       body: this.body,
       metadata: this.metadata,
       execute: this.execute,
@@ -65,10 +42,10 @@ export class BotCommandBuilder extends Mixin(
   }
 
   /**
-   * Creates a command builder from a command.
+   * Creates a subcommand builder from a subcommand.
    */
   static from(command: BotCommand) {
-    const builder = new BotCommandBuilder()
+    const builder = new BotSubcommandBuilder()
 
     builder.setName(command.name)
     builder.setDescription(command.description)
@@ -87,25 +64,13 @@ export class BotCommandBuilder extends Mixin(
       builder.setOptions(command.options)
     }
 
-    if (command.dmPermission !== undefined) {
-      builder.setDMPermission(command.dmPermission)
-    }
-
-    if (command.contexts) {
-      builder.setContexts(command.contexts)
-    }
-
-    if (command.integrationTypes) {
-      builder.setIntegrationTypes(command.integrationTypes)
-    }
-
     return builder
   }
 
   /**
-   * Checks if something is a command builder.
+   * Checks if something is a subcommand builder.
    */
-  static isBuilder(thing: unknown): thing is BotCommandBuilder {
+  static isBuilder(thing: unknown): thing is BotSubcommandBuilder {
     const schema = z
       .object({
         setName: z.function(),
@@ -115,9 +80,10 @@ export class BotCommandBuilder extends Mixin(
         setOptions: z.function(),
         setMetadata: z.function(),
         setExecute: z.function(),
-        setDMPermission: z.function(),
-        setContexts: z.function(),
-        setIntegrationTypes: z.function(),
+        // these are not supported in subcommands
+        setDMPermission: z.never().optional(),
+        setContexts: z.never().optional(),
+        setIntegrationTypes: z.never().optional(),
       })
       .passthrough()
 

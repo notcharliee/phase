@@ -1,25 +1,31 @@
+import type { BotCommand } from "~/structures/BotCommand"
 import type {
-  BotCommandBuilder,
-  BotSubcommandBuilder,
-} from "~/structures/builders/BotCommandBuilder"
-import type { ChatInputCommandInteraction } from "discord.js"
+  APIApplicationCommandSubcommandOption,
+  ChatInputCommandInteraction,
+  RESTPostAPIChatInputApplicationCommandsJSONBody,
+} from "discord.js"
 
+export type BotCommandBody = Omit<
+  RESTPostAPIChatInputApplicationCommandsJSONBody,
+  "default_member_permissions" | "default_permission" | "nsfw" | "handler"
+>
+export type BotSubcommandBody = Omit<
+  APIApplicationCommandSubcommandOption,
+  "required"
+>
+
+export type BotCommandOrSubcommandBody = BotCommandBody | BotSubcommandBody
+export type BotCommandMetadata = { type: "command"; [key: string]: unknown }
 export type BotCommandExecute = (
   interaction: ChatInputCommandInteraction,
 ) => unknown | Promise<unknown>
 
-export interface BaseCommandFile {
-  name: string
-  path: string
-  command: BotCommandBuilder
-}
+export type BotCommandNameResolvable =
+  | string
+  | BotCommand
+  | ChatInputCommandInteraction
 
-export interface SubCommandFile {
-  name: string
+export interface BotCommandFile {
   path: string
-  parent: string
-  group?: string
-  command: BotSubcommandBuilder
+  command: BotCommand
 }
-
-export type CommandFile = BaseCommandFile | SubCommandFile

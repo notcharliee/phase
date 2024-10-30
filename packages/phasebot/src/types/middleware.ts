@@ -5,7 +5,7 @@ export type BotCommandMiddleware = (
   interaction: ChatInputCommandInteraction,
   execute: BotCommandExecute,
   metadata: object,
-) => unknown | Promise<unknown>
+) => unknown
 
 export interface BotMiddleware {
   commands?: BotCommandMiddleware

@@ -1,333 +1,244 @@
 import {
-  ApplicationCommand,
-  ApplicationCommandOptionType,
-  ApplicationCommandType,
   BaseManager,
+  ChatInputCommandInteraction,
   Collection,
-  PermissionsBitField,
-  SlashCommandAssertions,
 } from "discord.js"
 
 import chalk from "chalk"
+import { deepmergeCustom } from "deepmerge-ts"
 
-import { BotCommandBuilder } from "~/structures/builders/BotCommandBuilder"
-import { spinner } from "~/utils"
+import { BotCommand } from "~/structures/BotCommand"
 
-import type { CommandFile } from "~/types/commands"
+import type { BotCommandBody, BotCommandNameResolvable } from "~/types/commands"
 import type { BotCommandMiddleware } from "~/types/middleware"
-import type {
-  APIApplicationCommandOption,
-  APIApplicationCommandSubcommandGroupOption,
-  ChatInputApplicationCommandData,
-  ChatInputCommandInteraction,
-  Client,
-  RESTPostAPIChatInputApplicationCommandsJSONBody,
-  Snowflake,
-} from "discord.js"
+import type { Client } from "discord.js"
 
-type PartialCommand = Pick<BotCommandBuilder, "name" | "metadata" | "execute">
-type ApplicationCommandJSON = RESTPostAPIChatInputApplicationCommandsJSONBody
-
-export class CommandManager extends BaseManager {
-  protected _partialCommands = new Collection<string, PartialCommand>()
-  protected _apiCommands = new Collection<string, ApplicationCommandJSON>()
-
-  private commandsToCreate: ApplicationCommandJSON[] = []
-  private commandsToDelete: [Snowflake, ApplicationCommandJSON][] = []
-  private commandsToUpdate: [Snowflake, ApplicationCommandJSON][] = []
-
-  /**
-   * The middleware function to pass commands through.
-   */
-  readonly middleware?: BotCommandMiddleware
-
-  constructor(
-    client: Client,
-    commandFiles: CommandFile[],
-    middleware?: BotCommandMiddleware,
-  ) {
-    super(client)
-
-    for (const file of commandFiles) {
-      this._partialCommands.set(file.name, {
-        name: file.name,
-        metadata: file.command.metadata,
-        execute: file.command.execute,
-      })
-
-      if (CommandManager.isSubcommand(file)) {
-        let existingApiCommand = this._apiCommands.get(file.parent)
-
-        if (!existingApiCommand) {
-          this._apiCommands.set(
-            file.parent,
-            new BotCommandBuilder()
-              .setName(file.parent)
-              .setDescription(file.parent)
-              .toJSON(),
-          )
-
-          existingApiCommand = this._apiCommands.get(file.parent)!
-        }
-
-        if (!existingApiCommand.options) existingApiCommand.options = []
-
-        if (file.group) {
-          const existingGroup = existingApiCommand.options.find(
-            (option) =>
-              option.name === file.group &&
-              option.type === ApplicationCommandOptionType.SubcommandGroup,
-          ) as APIApplicationCommandSubcommandGroupOption | undefined
-
-          if (!existingGroup) {
-            SlashCommandAssertions.validateMaxOptionsLength(
-              existingApiCommand.options,
-            )
-
-            existingApiCommand.options.push({
-              name: file.group,
-              description: file.group,
-              type: ApplicationCommandOptionType.SubcommandGroup,
-              options: [file.command.toJSON()],
-            })
-          } else {
-            SlashCommandAssertions.validateMaxOptionsLength(
-              existingGroup.options,
-            )
-
-            existingGroup.options.push(file.command.toJSON())
-          }
+const mergeCommands = deepmergeCustom({
+  mergeArrays(values, utils) {
+    const merged = new Map()
+    values.flat().forEach((item) => {
+      if (typeof item === "object" && item !== null && "name" in item) {
+        const existingItem = merged.get(item.name)
+        if (existingItem) {
+          merged.set(item.name, utils.deepmerge(existingItem, item))
         } else {
-          SlashCommandAssertions.validateMaxOptionsLength(
-            existingApiCommand.options,
-          )
-
-          existingApiCommand.options.push(file.command.toJSON())
+          merged.set(item.name, item)
         }
       } else {
-        this._apiCommands.set(file.command.name, file.command.toJSON())
+        merged.set(item, item)
       }
-    }
+    })
+    return Array.from(merged.values())
+  },
+})
 
-    if (middleware) {
-      this.middleware = middleware
-    }
+export class CommandManager extends BaseManager {
+  protected _commands: Collection<string, BotCommand>
+  protected _middleware?: BotCommandMiddleware
 
-    this.client.once("ready", async (readyClient) => {
-      const globalCommands = (
-        await readyClient.application.commands.fetch()
-      ).filter(({ type }) => type === ApplicationCommandType.ChatInput)
+  constructor(client: Client) {
+    super(client)
+    this._commands = new Collection()
 
-      const globalCommandNames: string[] = []
+    client.on("interactionCreate", async (interaction) => {
+      if (!interaction.isChatInputCommand()) return
+      await this.execute(interaction)
+    })
 
-      for (const [snowflake, globalCommand] of globalCommands) {
-        let globalCommandData = CommandManager.transformCommand(
-          globalCommand.toJSON() as ChatInputApplicationCommandData,
+    client.once("ready", async (client) => {
+      const localAPICommands = new Collection<string, BotCommandBody>()
+      const remoteAPICommands = new Collection<string, BotCommandBody>()
+
+      // populate the local api command collection
+      const localJSONCommands = this._commands.map((command) =>
+        command.toJSON(),
+      )
+      for (const jsonCommand of localJSONCommands) {
+        const existingAPICommand = localAPICommands.get(jsonCommand.name) ?? {}
+        const updatedAPICommand = mergeCommands(existingAPICommand, jsonCommand)
+        localAPICommands.set(updatedAPICommand.name, updatedAPICommand)
+      }
+
+      // populate the remote api command collection
+      const remoteAppCommands = await client.application?.commands.fetch()
+      for (const appCommand of remoteAppCommands.values()) {
+        const transformedAppCommand = BotCommand.transformCommand(appCommand)
+        remoteAPICommands.set(transformedAppCommand.name, transformedAppCommand)
+      }
+
+      const getCommandId = (localCommand: BotCommandBody) => {
+        return remoteAppCommands.find(
+          (remoteCommand) => remoteCommand.name === localCommand.name,
+        )?.id
+      }
+
+      // determine which commands to create
+      const commandsToCreate = localAPICommands.filter(
+        (command) => !remoteAPICommands.has(command.name),
+      )
+
+      // determine which commands to delete
+      const commandsToDelete = remoteAPICommands.filter(
+        (command) => !localAPICommands.has(command.name),
+      )
+
+      // determine which commands to update
+      const commandsToUpdate = localAPICommands.filter((command) => {
+        return (
+          !commandsToCreate.has(command.name) &&
+          !commandsToDelete.has(command.name) &&
+          !BotCommand.equals(command, remoteAPICommands.get(command.name)!)
         )
+      })
 
-        let localCommandData = this._apiCommands.get(globalCommandData.name)
+      // determine how many commands to sync
+      const commandsToSync =
+        commandsToCreate.size + commandsToDelete.size + commandsToUpdate.size
 
-        globalCommandNames.push(globalCommandData.name)
+      // sync commands if needed
+      if (commandsToSync) {
+        const symbol = chalk.bold.whiteBright("↻")
+        console.log(`${symbol} Syncing ${commandsToSync} commands ...`)
 
-        if (localCommandData) {
-          globalCommandData = CommandManager.sortCommandKeys(globalCommandData)
-          localCommandData = CommandManager.sortCommandKeys(localCommandData)
+        // commands to create
+        const createPromises = commandsToCreate.map(async (command) => {
+          await client.application.commands.create(command)
+          console.log(chalk.grey(`  created /${command.name}`))
+        })
 
-          const requiresUpdate =
-            JSON.stringify(globalCommandData) !==
-            JSON.stringify(localCommandData)
+        // commands to delete
+        const deletePromises = commandsToDelete.map(async (command) => {
+          const commandId = getCommandId(command)!
+          await client.application.commands.delete(commandId)
+          console.log(chalk.grey(`  deleted /${command.name}`))
+        })
 
-          if (requiresUpdate) {
-            this.commandsToUpdate.push([snowflake, localCommandData])
-          }
-        } else {
-          this.commandsToDelete.push([snowflake, globalCommandData])
+        // commands to update
+        const updatePromises = commandsToUpdate.map(async (command) => {
+          const commandId = getCommandId(command)!
+          await client.application.commands.edit(commandId, command)
+          console.log(chalk.grey(`  updated /${command.name}`))
+        })
+
+        try {
+          await Promise.all([
+            ...createPromises,
+            ...deletePromises,
+            ...updatePromises,
+          ])
+        } catch (error) {
+          console.error(`Failed to sync commands:`)
+          console.error(error)
         }
       }
-
-      this.commandsToCreate = this._apiCommands
-        .filter((apiCommand) => !globalCommandNames.includes(apiCommand.name))
-        .toJSON()
-
-      if (!globalCommands.size) {
-        const cliSpinner = spinner("Setting up slash commands ...").start()
-
-        await readyClient.application.commands.set(this.commandsToCreate)
-
-        cliSpinner.succeed("Slash commands are live!")
-
-        return
-      }
-
-      if (
-        this.commandsToCreate.length ||
-        this.commandsToDelete.length ||
-        this.commandsToUpdate.length
-      ) {
-        const commandNames = new Array<string>().concat(
-          this.commandsToCreate.map(({ name }) =>
-            chalk.grey(`  ${chalk.bold.greenBright("+")} /${name}`),
-          ),
-          this.commandsToDelete.map(([_, { name }]) =>
-            chalk.grey(`  ${chalk.bold.redBright("-")} /${name}`),
-          ),
-          this.commandsToUpdate.map(([_, { name }]) =>
-            chalk.grey(`  ${chalk.bold.cyanBright("↑")} /${name}`),
-          ),
-        )
-
-        const cliSpinner = spinner(
-          `Updating ${commandNames.length} live slash commands ...`,
-        ).start()
-
-        await Promise.all([
-          ...this.commandsToCreate.map((cmd) =>
-            readyClient.application.commands.create(cmd),
-          ),
-          ...this.commandsToDelete.map(([snowflake]) =>
-            readyClient.application.commands.delete(snowflake),
-          ),
-          ...this.commandsToUpdate.map(([snowflake, command]) =>
-            readyClient.application.commands.edit(snowflake, command),
-          ),
-        ])
-
-        cliSpinner.succeed("The following live slash commands were updated:")
-        console.log(commandNames.join("\n") + "\n")
-      }
     })
+  }
 
-    this.client.on("interactionCreate", async (interaction) => {
-      if (!interaction.isChatInputCommand() || !interaction.command) return
+  /**
+   * Adds a command to the command manager.
+   */
+  public create(command: BotCommand) {
+    if (this.client.isReady()) {
+      throw new Error("Commands cannot be created post client initialisation")
+    }
 
-      const subcommandGroup = interaction.options.getSubcommandGroup(false)
-      const subcommand = interaction.options.getSubcommand(false)
+    const name = this.resolveName(command)
 
-      const commandNameWithSubcommands = [
+    if (this._commands.has(name)) {
+      throw new Error(`Duplicate command detected: '${name}'`)
+    }
+
+    this._commands.set(name, command)
+  }
+
+  /**
+   * Removes a command from the command manager.
+   */
+  public delete(name: string) {
+    if (this.client.isReady()) {
+      throw new Error("Commands cannot be deleted post client initialisation")
+    }
+
+    return this._commands.delete(name)
+  }
+
+  /**
+   * Checks if a command exists in the command manager.
+   */
+  public has(name: string) {
+    return this._commands.has(name)
+  }
+
+  /**
+   * Gets a command from the command manager.
+   */
+  public get(name: string) {
+    return this._commands.get(name)
+  }
+
+  /**
+   * Sets the middleware function for the command manager.
+   *
+   * @remarks This is temporary and will be replaced by a middleware manager.
+   */
+  public use(middleware: BotCommandMiddleware) {
+    this._middleware = middleware
+    return this
+  }
+
+  /**
+   * Gets the full name of a command.
+   */
+  public resolveName(commandNameResolvable: BotCommandNameResolvable) {
+    if (commandNameResolvable instanceof ChatInputCommandInteraction) {
+      const interaction = commandNameResolvable
+
+      const fullNameParts = [
         interaction.commandName,
-        subcommandGroup,
-        subcommand,
+        interaction.options.getSubcommandGroup(false),
+        interaction.options.getSubcommand(false),
       ]
-        .filter(Boolean)
-        .join(" ")
 
-      const command = this._partialCommands.get(commandNameWithSubcommands)
-      if (!command) return
+      return fullNameParts.filter(Boolean).join(" ")
+    }
 
-      await this.execute(command, interaction)
-    })
+    if (commandNameResolvable instanceof BotCommand) {
+      const command = commandNameResolvable
+
+      const parentName = command.parentName
+      const groupName = command.groupName
+      const commandName = command.name
+
+      const fullNameParts = [parentName, groupName, commandName]
+
+      return fullNameParts.filter(Boolean).join(" ")
+    }
+
+    return commandNameResolvable
   }
 
   /**
    * Executes a command.
-   *
-   * @param command - The command to execute.
-   * @param interaction - The interaction to execute the command with.
    */
-  public async execute(
-    command: PartialCommand,
-    interaction: ChatInputCommandInteraction,
-  ) {
+  private async execute(interaction: ChatInputCommandInteraction) {
+    const name = this.resolveName(interaction)
+    const command = this.get(name)
+
+    if (!command) return
+
     try {
-      if (this.middleware) {
-        return await this.middleware(
+      if (this._middleware) {
+        return await this._middleware(
           interaction,
           command.execute,
           command.metadata,
         )
-      } else {
-        return await command.execute(interaction)
       }
+
+      return await command.execute(interaction)
     } catch (error) {
-      console.error(`Command '${command.name}' failed:`)
+      console.error(`Error occurred in '${name}' command:`)
       console.error(error)
     }
-  }
-
-  static isSubcommand(file: CommandFile) {
-    return "parent" in file
-  }
-
-  static transformCommand(
-    command: ChatInputApplicationCommandData,
-  ): ApplicationCommandJSON {
-    let default_member_permissions: string | null = null
-    let options: APIApplicationCommandOption[] = []
-
-    if (command.defaultMemberPermissions) {
-      default_member_permissions =
-        command.defaultMemberPermissions !== null
-          ? new PermissionsBitField(
-              command.defaultMemberPermissions,
-            ).bitfield.toString()
-          : command.defaultMemberPermissions
-    }
-
-    if (command.options) {
-      options = command.options.map(
-        (option) =>
-          // @ts-expect-error it's a private method
-          ApplicationCommand.transformOption(
-            option,
-          ) as APIApplicationCommandOption,
-      )
-    }
-
-    return {
-      name: command.name,
-      name_localizations: command.nameLocalizations,
-      description: command.description,
-      nsfw: command.nsfw,
-      description_localizations: command.descriptionLocalizations,
-      type: command.type,
-      options,
-      default_member_permissions,
-      dm_permission: command.dmPermission,
-    }
-  }
-
-  static sortCommandKeys(data: ApplicationCommandJSON): ApplicationCommandJSON {
-    const sortKeys = <T extends object>(obj: T) => {
-      return Object.keys(obj)
-        .sort((a, b) => a.localeCompare(b))
-        .reduce(
-          (acc, key) => ({
-            ...acc,
-            [key.replace(/([A-Z])/g, "_$1").toLowerCase()]: obj[key as keyof T],
-          }),
-          {} as T,
-        )
-    }
-
-    const sortOptions = (
-      options: APIApplicationCommandOption[],
-    ): APIApplicationCommandOption[] => {
-      return options
-        .map((option: APIApplicationCommandOption) =>
-          option.type === ApplicationCommandOptionType.Subcommand ||
-          option.type === ApplicationCommandOptionType.SubcommandGroup
-            ? sortKeys({
-                ...option,
-                options:
-                  option.options && option.options.length
-                    ? sortOptions(option.options)
-                    : [],
-              })
-            : sortKeys(option),
-        )
-        .sort((a, b) =>
-          (a.type === ApplicationCommandOptionType.Subcommand ||
-            a.type === ApplicationCommandOptionType.SubcommandGroup) &&
-          (b.type === ApplicationCommandOptionType.Subcommand ||
-            b.type === ApplicationCommandOptionType.SubcommandGroup)
-            ? a.name.localeCompare(b.name)
-            : 0,
-        ) as APIApplicationCommandOption[]
-    }
-
-    return sortKeys({
-      ...data,
-      options: data.options?.length ? sortOptions(data.options) : [],
-    })
   }
 }

@@ -1,4 +1,4 @@
-export * from "~/structures/PhaseClient"
+export * from "~/structures/BotClient"
 
 export * from "~/types/client"
 export * from "~/types/commands"
