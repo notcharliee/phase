@@ -8,6 +8,24 @@ export const metadata = {
   <HeadingDescription>{metadata.description}</HeadingDescription>
 </Heading>
 
+## October 2024 - v3.27 release
+
+This release focuses mainly on internal updates as we prepare for the upcoming Phase v4.0.0 release. However, here are a few notable additions and changes:
+
+- **New music command:**
+  The `/music panel` command sends an interactive control panel that combines all of the other music commands into one. Existing music commands remain available as usual. Huge thanks to `@vantedev` for helping me out with this.
+
+- **Framework improvements:**
+  Major updates to the bot’s underlying framework improve speed, resource usage, error handling, and developer experience.
+
+- **Audit Logs update:**
+  The invite tracker has been redesigned and isolated within the codebase, in preparation for its eventual transition to a standalone module.
+
+- **Codebase cleanup:**
+  Lots of small changes here and there to clean up the codebase.
+
+There's a lot to come in the following weeks and months, so stay tuned! 🤍
+
 ## October 2024 - v3.26 release
 
 Server selection now has its own dedicated page in the dashboard to make server switching easier. With this change came an update to the dashboard's routing system, so `/dashboard/modules` is now `/dashboard/guilds/[id]/modules`. This allows for opening multiple dashboards in separate tabs, making it simpler to copy configurations between servers.
