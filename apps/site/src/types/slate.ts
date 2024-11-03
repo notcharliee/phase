@@ -1,14 +1,38 @@
 import type { GuildChannelType } from "@discordjs/core/http-only"
-import type { Text } from "slate"
 
-export interface TextElement {
-  type: "text"
-  children: (Text | ChannelElement | MentionElement)[]
+// base interfaces //
+
+export interface BaseLeaf {
+  text: string
 }
 
-export interface ChannelElement {
+export interface BaseElement {
+  type: string
+  children: (BaseLeaf | BaseElement)[]
+}
+
+// leaf interfaces //
+
+export interface TextLeaf extends BaseLeaf {
+  h1?: boolean
+  h2?: boolean
+  h3?: boolean
+  subtext?: boolean
+  bold?: boolean
+  italic?: boolean
+  strike?: boolean
+  underline?: boolean
+  spoiler?: boolean
+  code?: boolean
+  codeblock?: boolean
+  punctuation?: boolean
+}
+
+// element interfaces //
+
+export interface ChannelElement extends BaseElement {
   type: "channel"
-  children: Pick<Text, "text">[]
+  children: BaseLeaf[]
   data: {
     id: string
     name: string
@@ -16,15 +40,20 @@ export interface ChannelElement {
   }
 }
 
-export interface MentionElement {
+export interface MentionElement extends BaseElement {
   type: "mention"
-  children: Pick<Text, "text">[]
+  children: BaseLeaf[]
   data: {
     id: string
     name: string
     colour: string
     type: "role" | "user" | "everyone" | "here"
   }
+}
+
+export interface TextElement extends BaseElement {
+  type: "text"
+  children: (TextLeaf | ChannelElement | MentionElement)[]
 }
 
 export interface GuildElementData {
@@ -34,21 +63,7 @@ export interface GuildElementData {
 
 declare module "slate" {
   interface CustomTypes {
-    Text: {
-      text: string
-      h1?: boolean
-      h2?: boolean
-      h3?: boolean
-      subtext?: boolean
-      bold?: boolean
-      italic?: boolean
-      strike?: boolean
-      underline?: boolean
-      spoiler?: boolean
-      code?: boolean
-      codeblock?: boolean
-      punctuation?: boolean
-    }
+    Text: TextLeaf,
     Element: TextElement | ChannelElement | MentionElement
   }
 }

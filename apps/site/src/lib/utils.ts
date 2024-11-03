@@ -33,6 +33,11 @@ export const getOrdinal = (number: number): string => {
   )
 }
 
+/** Prevents default browser behaviour. */
+export function preventDefault(event: { preventDefault: () => void }) {
+  event.preventDefault()
+}
+
 /** `Object.keys` but with better typing. */
 export function keys<T extends object>(obj: T): (keyof T)[] {
   return Object.keys(obj) as (keyof T)[]

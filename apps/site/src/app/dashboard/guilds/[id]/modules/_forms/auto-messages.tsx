@@ -18,7 +18,7 @@ import {
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
-import { RichTextarea } from "~/components/dashboard/richtext/textarea"
+import { RichTextarea } from "~/components/ui/richtext/textarea"
 
 import type { autoMessagesSchema, modulesSchema } from "~/validators/modules"
 import type { z } from "zod"

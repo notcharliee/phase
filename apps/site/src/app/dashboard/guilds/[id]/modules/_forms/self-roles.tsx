@@ -4,7 +4,6 @@ import { capitalCase } from "change-case"
 import { useFieldArray, useFormContext } from "react-hook-form"
 import { v4 as randomUUID } from "uuid"
 
-import { RichTextarea } from "~/components/dashboard/richtext/textarea"
 import { SelectChannel } from "~/components/dashboard/select/channel"
 import { SelectRole } from "~/components/dashboard/select/role"
 import { EmojiPicker } from "~/components/emoji-picker"
@@ -34,6 +33,7 @@ import {
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
+import { RichTextarea } from "~/components/ui/richtext/textarea"
 
 import { cn } from "~/lib/utils"
 

@@ -5,7 +5,6 @@ import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 import { v4 as randomUUID } from "uuid"
 
-import { RichTextarea } from "~/components/dashboard/richtext/textarea"
 import { SelectChannel } from "~/components/dashboard/select/channel"
 import { SelectRole } from "~/components/dashboard/select/role"
 import { Button } from "~/components/ui/button"
@@ -21,6 +20,7 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
+import { RichTextarea } from "~/components/ui/richtext/textarea"
 
 import type { ModulesFormReturn, ModulesFormValues } from "~/types/dashboard"
 
