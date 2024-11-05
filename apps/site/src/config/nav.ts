@@ -90,18 +90,18 @@ export const dashboardPages: NavItem[] = [
   },
   // other links
   {
-    label: "Report a Bug",
+    label: "Report a bug",
     href: "/contact/bug-report",
     category: "Other Links",
   },
   {
-    label: "Make a Suggestion",
+    label: "Make a suggestion",
     href: "/redirect/discord",
     category: "Other Links",
     external: true,
   },
   {
-    label: "Give me money :3",
+    label: "Gimme ur money",
     href: "/redirect/donate",
     category: "Other Links",
     external: true,

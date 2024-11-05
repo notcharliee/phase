@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 
@@ -17,10 +16,12 @@ import {
   CommandList,
   CommandSeparator,
 } from "~/components/ui/command"
+import { Link } from "~/components/ui/link"
 
 import { docsPages, mainPages, splitPagesByCategory } from "~/config/nav"
 
-import { cn } from "~/lib/utils"
+import type { NavItem } from "~/config/nav"
+import type { WithRequired } from "~/types/utils"
 
 export const Header = () => {
   const pathname = usePathname()
@@ -58,7 +59,12 @@ export const Header = () => {
     <header className="sticky top-0 z-50 h-16 w-full border-b backdrop-blur-sm">
       <div className="container flex h-full items-center">
         <nav className="mr-8 hidden items-center space-x-4 md:flex lg:space-x-6">
-          <Link href={"/"} className="mr-6 flex items-center space-x-2">
+          <Link
+            href={"/"}
+            title="Home"
+            variant={"no-underline"}
+            className="mr-6 flex items-center space-x-2"
+          >
             <Moon className="h-5 w-5" />
             <span className="font-bold leading-tight">Phase</span>
           </Link>
@@ -68,10 +74,12 @@ export const Header = () => {
               <Link
                 key={item.href}
                 href={item.href}
-                className={cn(
-                  "hover:text-primary text-sm font-medium transition-colors",
-                  pathname !== item.href && "text-muted-foreground",
-                )}
+                title={item.label}
+                aria-label={item.label}
+                aria-selected={item.href === pathname}
+                external={item.external}
+                variant={"hover"}
+                size={"sm"}
               >
                 {item.label}
               </Link>
@@ -142,27 +150,24 @@ export const Header = () => {
           </div>
           <nav className="flex items-center gap-1.5">
             {mainPages
-              .filter((item) => item.icon)
-              .map(
-                (item) =>
-                  item.icon && (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <div
-                        className={cn(
-                          buttonVariants({ variant: "outline", size: "icon" }),
-                        )}
-                      >
-                        <item.icon className="h-5 w-5" />
-                        <span className="sr-only">{item.label}</span>
-                      </div>
-                    </Link>
-                  ),
-              )}
+              .filter((i): i is WithRequired<NavItem, "icon"> => !!i.icon)
+              .map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  title={item.label}
+                  aria-label={item.label}
+                  external={item.external}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={buttonVariants({
+                    variant: "outline",
+                    size: "icon",
+                  })}
+                >
+                  <item.icon className="h-5 w-5" />
+                </Link>
+              ))}
           </nav>
         </div>
       </div>

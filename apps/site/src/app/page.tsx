@@ -1,10 +1,9 @@
-import Link from "next/link"
-
 import { ArrowRightIcon } from "@radix-ui/react-icons"
 
 import { Header } from "~/components/header"
 import { OrbitingDots } from "~/components/orbiting-dots"
 import { Button } from "~/components/ui/button"
+import { Link } from "~/components/ui/link"
 
 import { siteConfig } from "~/config/site"
 
@@ -17,10 +16,11 @@ export default function HomePage() {
         <section className="flex max-w-[980px] flex-col items-center gap-4 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20">
           <Link
             href="/docs/changelog"
+            variant={"no-underline"}
             className="bg-muted inline-flex items-center rounded-lg px-3 py-1 text-sm font-medium"
           >
             <span className="mr-4">🎉</span>
-            <span className="inline">Check out the v3.12 changelog.</span>
+            <span className="inline">Check out the latest changelog.</span>
             <ArrowRightIcon className="ml-2 h-4 w-4" />
           </Link>
           <h1 className="text-center text-4xl font-bold leading-none tracking-tighter md:text-6xl lg:leading-[1.1]">
@@ -31,10 +31,14 @@ export default function HomePage() {
           </p>
           <div className="flex w-full items-center justify-center space-x-4 py-4 md:pb-10">
             <Button variant={"glow"} size={"xl"} asChild>
-              <Link href="/redirect/invite">Invite the bot</Link>
+              <Link href="/redirect/invite" variant={"no-underline"} external>
+                Invite the bot
+              </Link>
             </Button>
             <Button variant={"outline"} size={"xl"} asChild>
-              <Link href="/docs">Learn More</Link>
+              <Link href="/docs" variant={"no-underline"}>
+                Learn More
+              </Link>
             </Button>
           </div>
         </section>
@@ -45,18 +49,26 @@ export default function HomePage() {
             Built by{" "}
             <Link
               href={"/redirect/developer"}
+              variant={"hover"}
+              size={"sm"}
               target="_blank"
               rel="noreferrer"
-              className="font-medium underline underline-offset-4"
+              title="Developer GitHub profile"
+              aria-label="Developer GitHub profile"
+              external
             >
               mikaela
             </Link>
             . The source code is available on{" "}
             <Link
               href={"/redirect/github"}
+              variant={"hover"}
+              size={"sm"}
               target="_blank"
               rel="noreferrer"
-              className="font-medium underline underline-offset-4"
+              title="Project GitHub repository"
+              aria-label="Project GitHub repository"
+              external
             >
               GitHub
             </Link>

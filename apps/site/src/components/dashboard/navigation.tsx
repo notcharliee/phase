@@ -4,7 +4,7 @@ import NextLink from "next/link"
 import { usePathname } from "next/navigation"
 
 import { Label } from "~/components/ui/label"
-import { Link } from "~/components/ui/link"
+import { Link, linkVariants } from "~/components/ui/link"
 
 import { dashboardPages } from "~/config/nav"
 
@@ -56,6 +56,7 @@ export function DashboardNavigation() {
                 {...item}
                 pathname={pathname}
                 disabled={disabled}
+                external={item.external}
                 href={href}
                 key={href}
               />
@@ -73,10 +74,16 @@ export function DashboardNavigation() {
       </div>
       <div className="text-muted-foreground before:bg-foreground relative hidden flex-col font-mono text-sm saturate-0 before:absolute before:-left-4 before:h-full before:w-1 before:rounded-l-sm sm:flex">
         <span>
-          Made with ❤ by <Link href={"/redirect/developer"}>mikaela.</Link>
+          Made with ❤ by{" "}
+          <Link href={"/redirect/developer"} size={"sm"} external>
+            mikaela.
+          </Link>
         </span>
         <span>
-          Source code is on <Link href={"/redirect/github"}>GitHub.</Link>
+          Source code is on{" "}
+          <Link href={"/redirect/github"} size={"sm"} external>
+            GitHub.
+          </Link>
         </span>
       </div>
       <div className="bg-background text-muted-foreground before:from-background relative flex w-screen justify-evenly border-t py-5 before:absolute before:top-[-25px] before:h-6 before:w-full before:bg-gradient-to-t before:to-transparent sm:hidden">
@@ -94,6 +101,7 @@ export function DashboardNavigation() {
               {...item}
               pathname={pathname}
               disabled={disabled}
+              external={item.external}
               href={href}
               key={href}
               mobile
@@ -111,12 +119,13 @@ interface NavigationItemProps extends NavItem {
 }
 
 function NavigationItem(props: NavigationItemProps) {
-  const Component = props.disabled ? "span" : NextLink
+  const Component = props.disabled ? "span" : props.external ? "a" : NextLink
 
   if (props.icon) {
     return (
       <Component
         href={props.href}
+        title={props.label}
         aria-label={props.label}
         aria-selected={props.pathname === props.href}
         aria-disabled={props.disabled}
@@ -147,7 +156,9 @@ function NavigationItem(props: NavigationItemProps) {
     return (
       <Component
         href={props.href}
-        className="text-muted-foreground hover:text-foreground"
+        title={props.label}
+        aria-label={props.label}
+        className={cn(linkVariants({ variant: "hover" }), "font-normal")}
       >
         {props.label}
       </Component>

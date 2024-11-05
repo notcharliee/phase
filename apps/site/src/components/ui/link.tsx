@@ -1,24 +1,52 @@
 import NextLink from "next/link"
-import { forwardRef } from "react"
+
+import { cva } from "class-variance-authority"
 
 import { cn } from "~/lib/utils"
 
+import type { VariantProps } from "class-variance-authority"
 import type { LinkProps as NextLinkProps } from "next/link"
 
-interface LinkProps
-  extends NextLinkProps,
-    React.HTMLAttributes<HTMLAnchorElement> {}
+export const linkVariants = cva("font-medium underline-offset-2 transition-colors", {
+  variants: {
+    variant: {
+      default: "text-foreground underline",
+      hover:
+        "text-muted-foreground hover:text-primary aria-selected:text-primary hover:underline",
+      "no-underline": "no-underline",
+    },
+    size: {
+      default: "text-base",
+      sm: "text-sm",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+    size: "default",
+  },
+})
 
-export const Link = forwardRef<React.ComponentRef<typeof NextLink>, LinkProps>(
-  ({ className, ...props }, ref) => (
-    <NextLink
-      ref={ref}
-      className={cn(
-        "text-foreground font-medium underline underline-offset-2",
-        className,
-      )}
+export interface LinkProps
+  extends NextLinkProps,
+    React.AnchorHTMLAttributes<HTMLAnchorElement>,
+    VariantProps<typeof linkVariants> {
+  href: string
+  external?: boolean
+}
+
+export function Link({
+  variant,
+  size,
+  className,
+  external,
+  ...props
+}: LinkProps) {
+  const Comp = external ? "a" : NextLink
+
+  return (
+    <Comp
+      className={cn(linkVariants({ variant, size, className }))}
       {...props}
     />
-  ),
-)
-Link.displayName = NextLink.displayName
+  )
+}
