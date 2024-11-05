@@ -1,10 +1,11 @@
 "use client"
 
-import { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
+import * as React from "react"
 
+import { Collection } from "@discordjs/collection"
 import emojiData from "@emoji-mart/data/sets/15/twitter.json"
 import { useDebounce } from "@uidotdev/usehooks"
-import * as emojiMart from "emoji-mart"
+import { init as emojiMartInit, SearchIndex } from "emoji-mart"
 
 import { Spinner } from "~/components/spinner"
 import { Button } from "~/components/ui/button"
@@ -19,15 +20,20 @@ import { ScrollArea } from "~/components/ui/scroll-area"
 
 import { cn } from "~/lib/utils"
 
-import type { Emoji as EmojiMartEmoji, Skin } from "@emoji-mart/data"
+import type {
+  Emoji as EmojiMartEmoji,
+  Skin as EmojiSkin,
+} from "@emoji-mart/data"
+
+type EmojiId = keyof typeof emojiData.emojis
 
 interface Emoji {
   id: string
   name: string
-  skin: Skin
+  skin: EmojiSkin
 }
 
-interface EmojiPickerProps {
+export interface EmojiPickerProps {
   size?: "default" | "fill"
   disabled?: boolean
   name?: string
@@ -37,89 +43,106 @@ interface EmojiPickerProps {
   onChange?: (value: string) => void
 }
 
-export const EmojiPicker = forwardRef<
-  React.ComponentRef<typeof Button>,
-  React.PropsWithoutRef<EmojiPickerProps>
->(({ onChange, value, ...props }: EmojiPickerProps, ref) => {
-  const [open, setOpen] = useState(false)
-  const [loaded, setLoaded] = useState(false)
+function EmojiPickerComponent({
+  onChange,
+  value,
+  size,
+  ...props
+}: EmojiPickerProps) {
+  const [open, setOpen] = React.useState(false)
 
-  const [searchTerm, setSearchTerm] = useState("")
+  const [searchTerm, setSearchTerm] = React.useState("")
   const debouncedSearchTerm = useDebounce(searchTerm, 300)
 
-  const [searchResults, setSearchResults] = useState<Emoji[]>([])
+  const [searchResults, setSearchResults] = React.useState<Emoji[]>([])
 
-  const emojis = useMemo(() => {
-    void emojiMart.init({ data: emojiData }).then(() => setLoaded(true))
-    return Object.entries(emojiData.emojis).reduce(
-      (acc, [id, emoji]) => ({
-        ...acc,
-        [id]: { id, name: emoji.name, skin: emoji.skins[0]! },
-      }),
-      {} as { [K in keyof typeof emojiData.emojis]: Emoji },
-    )
+  // initialise emoji mart
+  React.use(emojiMartInit({ data: emojiData }))
+
+  // a collection of emojis
+  const emojis = React.useMemo(() => {
+    const emojis = new Collection<EmojiId, Emoji>()
+
+    for (const emoji of Object.values(emojiData.emojis)) {
+      emojis.set(emoji.id as EmojiId, {
+        id: emoji.id,
+        name: emoji.name,
+        skin: emoji.skins[0]!,
+      })
+    }
+
+    return emojis
   }, [])
 
-  const [selectedEmoji, setSelectedEmoji] = useState<Emoji>(
+  // the emoji to show when nothing is selected
+  const fallbackEmoji = emojis.get("crescent_moon")!
+
+  // the emoji to show when a value is selected
+  const [selectedEmoji, setSelectedEmoji] = React.useState<Emoji>(
     value
-      ? (Object.values(emojis).find((emoji) => emoji.skin.native === value) ??
-          emojis.waxing_crescent_moon)
-      : emojis.waxing_crescent_moon,
+      ? (emojis.find((emoji) => emoji.skin.native === value) ?? fallbackEmoji)
+      : fallbackEmoji,
   )
 
-  const searchEmojis = useCallback(async (query: string) => {
+  // handles searching for emojis
+  const searchEmojis = React.useCallback(async (query: string) => {
     const queryResults = query.length
-      ? ((await emojiMart.SearchIndex.search(query)) as EmojiMartEmoji[])
+      ? ((await SearchIndex.search(query)) as EmojiMartEmoji[])
       : []
 
     const newSearchResults = queryResults.map((emoji) => {
       const { id, name, skins } = emoji
       return { id, name, skin: skins[0]! }
     })
+
     setSearchResults(newSearchResults)
   }, [])
 
-  useEffect(() => {
+  // calls `searchEmojis` when the search term changes
+  React.useEffect(() => {
     void searchEmojis(debouncedSearchTerm)
   }, [searchEmojis, debouncedSearchTerm])
 
-  const updateValue = (emoji: Emoji) => {
-    onChange?.(emoji.skin.native)
-    setSelectedEmoji(emoji)
-    setOpen(false)
-  }
+  // handles clicking on an emoji
+  const onClick = React.useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      const dataset = event.currentTarget.dataset
 
-  if (!loaded) {
-    return (
-      <Button
-        variant="outline"
-        size={props.size === "fill" ? "default" : "icon"}
-        className={cn("gap-2", props.size === "fill" && "w-full")}
-        disabled={props.disabled}
-      >
-        <Spinner className="size-5" />
-        {props.size === "fill" && <span>Loading ...</span>}
-      </Button>
-    )
-  }
+      const emoji: Emoji = {
+        id: dataset.emojiId!,
+        name: dataset.emojiName!,
+        skin: {
+          unified: dataset.emojiSkinUnified!,
+          native: dataset.emojiSkinNative!,
+          x: +dataset.emojiSkinX!,
+          y: +dataset.emojiSkinY!,
+        },
+      }
+
+      onChange?.(emoji.skin.native)
+      setSelectedEmoji(emoji)
+      setOpen(false)
+    },
+    [onChange],
+  )
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          {...props}
           variant="outline"
-          size={props.size === "fill" ? "default" : "icon"}
-          className={cn("gap-2.5 justify-start", props.size === "fill" && "w-full")}
-          ref={ref}
+          size={size === "fill" ? "default" : "icon"}
+          className={cn(
+            size === "fill" ? "w-full justify-start gap-2.5" : "justify-center",
+          )}
+          {...props}
         >
-          <Emoji
-            className="size-5"
-            name={selectedEmoji.name}
-            skin={selectedEmoji.skin}
+          <EmojiPickerEmoji
+            emoji={selectedEmoji}
             isPlaceholder={onChange && !value}
+            className="size-5"
           />
-          {props.size === "fill" &&
+          {size === "fill" &&
             (onChange && !value ? (
               <span>Pick an emoji</span>
             ) : (
@@ -135,84 +158,103 @@ export const EmojiPicker = forwardRef<
         <div className="h-[calc(100%-52px)]">
           <ScrollArea className="h-full">
             <div className="flex flex-col gap-4">
-              {searchTerm.length && searchTerm === debouncedSearchTerm ? (
-                <div className="space-y-2">
-                  <Label>Search Results</Label>
-                  {searchResults.length ? (
-                    <div className="grid grid-cols-9">
-                      {searchResults.map((emoji) => (
-                        <button
-                          key={emoji.id}
-                          aria-label={emoji.name}
-                          onClick={() => updateValue(emoji)}
-                        >
-                          <Emoji name={emoji.name} skin={emoji.skin} />
-                        </button>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-muted-foreground text-sm">
-                      No results found.
-                    </div>
-                  )}
-                </div>
-              ) : (
-                emojiData.categories.map((category) => (
-                  <div className="space-y-2" key={category.id}>
+              {emojiData.categories.map((category) => {
+                const categoryEmojis = emojis.filter((emoji) =>
+                  category.emojis.includes(emoji.id),
+                )
+
+                const visibleCategoryEmojis = debouncedSearchTerm.length
+                  ? categoryEmojis.filter((categoryEmoji) =>
+                      searchResults.find(
+                        (searchResultEmoji) =>
+                          searchResultEmoji.id === categoryEmoji.id,
+                      ),
+                    )
+                  : categoryEmojis
+
+                return (
+                  <div
+                    key={category.id}
+                    aria-hidden={!visibleCategoryEmojis.size}
+                    className="space-y-2 aria-hidden:hidden"
+                  >
                     <Label className="capitalize">{category.id}</Label>
                     <div className="grid grid-cols-9 text-xl">
-                      {(category.emojis as (keyof typeof emojis)[]).map(
-                        (emojiId) => {
-                          const emoji = emojis[emojiId]
-                          const { id, name, skin } = emoji
-
-                          return (
-                            <button
-                              key={id}
-                              aria-label={name}
-                              onClick={() => updateValue(emoji)}
-                            >
-                              <Emoji name={name} skin={skin} />
-                            </button>
-                          )
-                        },
-                      )}
+                      {categoryEmojis.map((emoji) => {
+                        const isHidden = !visibleCategoryEmojis.has(emoji.id)
+                        return (
+                          <EmojiPickerEmoji
+                            key={emoji.id}
+                            emoji={emoji}
+                            aria-hidden={isHidden}
+                            onClick={onClick}
+                            role="button"
+                          />
+                        )
+                      })}
                     </div>
                   </div>
-                ))
-              )}
+                )
+              })}
             </div>
           </ScrollArea>
         </div>
       </PopoverContent>
     </Popover>
   )
-})
-EmojiPicker.displayName = "EmojiPicker"
+}
 
-interface EmojiProps {
-  name: string
-  skin: Skin
-  className?: string
+export function EmojiPickerFallback({ size }: EmojiPickerProps) {
+  return (
+    <Button
+      variant="outline"
+      size={size === "fill" ? "default" : "icon"}
+      className={cn("gap-2", size === "fill" && "w-full")}
+      disabled
+    >
+      <Spinner className="size-5" />
+      {size === "fill" && <span>Loading ...</span>}
+    </Button>
+  )
+}
+
+export function EmojiPicker(props: EmojiPickerProps) {
+  return <EmojiPickerComponent {...props} />
+}
+
+interface EmojiPickerEmojiProps extends React.HTMLAttributes<HTMLDivElement> {
+  emoji: Emoji
   isPlaceholder?: boolean
 }
 
-function Emoji({ name, skin, className, isPlaceholder }: EmojiProps) {
+function EmojiPickerEmoji({
+  emoji,
+  className,
+  isPlaceholder,
+  ...props
+}: EmojiPickerEmojiProps) {
   return (
     <div
-      title={name}
-      aria-label={name}
+      title={emoji.name}
+      aria-label={emoji.name}
+      data-emoji-id={emoji.id}
+      data-emoji-name={emoji.name}
+      data-emoji-skin-unified={emoji.skin.unified}
+      data-emoji-skin-native={emoji.skin.native}
+      data-emoji-skin-x={emoji.skin.x}
+      data-emoji-skin-y={emoji.skin.y}
       className={cn(
-        "hover:bg-accent grid aspect-square place-items-center rounded-sm",
+        "hover:bg-accent grid aspect-square place-items-center rounded-sm aria-hidden:hidden",
         className,
       )}
+      {...props}
     >
       <span
         className={cn("block size-3/4", isPlaceholder && "opacity-50")}
         style={{
           backgroundImage: `url("https://cdn.jsdelivr.net/npm/emoji-datasource-twitter@15.0.0/img/twitter/sheets-256/64.png")`,
           backgroundSize: `${100 * emojiData.sheet.cols}% ${100 * emojiData.sheet.rows}%`,
-          backgroundPosition: `${(100 / (emojiData.sheet.cols - 1)) * skin.x!}% ${(100 / (emojiData.sheet.rows - 1)) * skin.y!}%`,
+          backgroundPosition: `${(100 / (emojiData.sheet.cols - 1)) * emoji.skin.x!}% ${(100 / (emojiData.sheet.rows - 1)) * emoji.skin.y!}%`,
         }}
       />
     </div>
