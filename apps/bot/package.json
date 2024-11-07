@@ -15,7 +15,7 @@
     "@discordjs/opus": "^0.9.0",
     "@discordjs/voice": "^0.17.0",
     "@distube/youtube": "^1.0.4",
-    "@distube/ytdl-core": "^4.14.4",
+    "@distube/ytdl-core": "^4.15.1",
     "@octokit/rest": "^20.1.1",
     "@repo/config": "workspace:*",
     "@repo/database": "workspace:*",
