@@ -61,8 +61,8 @@ export class Music {
 
   public async search(query: string) {
     const youtubeSongOrPlaylist = this.youtube.validate(query)
-      ? await this.youtube.resolve(query, {}).catch(() => null)
-      : await this.youtube.searchSong(query, {}).catch(() => null)
+      ? await this.youtube.resolve(query, {})
+      : await this.youtube.searchSong(query, {})
 
     if (!youtubeSongOrPlaylist) {
       throw new Error(MusicError.InvalidQuery)
