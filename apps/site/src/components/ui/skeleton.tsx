@@ -1,9 +1,8 @@
 import { cn } from "~/lib/utils"
 
-function Skeleton({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export function Skeleton({ className, ...props }: SkeletonProps) {
   return (
     <div
       className={cn("bg-secondary/50 animate-pulse rounded-md", className)}
@@ -11,5 +10,3 @@ function Skeleton({
     />
   )
 }
-
-export { Skeleton }

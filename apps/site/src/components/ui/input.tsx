@@ -4,39 +4,47 @@ import * as React from "react"
 
 import { cn } from "~/lib/utils"
 
-type InputValue<TType extends React.HTMLInputTypeAttribute> =
-  TType extends "number" ? number : string
+type InputType = React.HTMLInputTypeAttribute
 
-export interface InputProps<TType extends React.HTMLInputTypeAttribute>
+type InputValue<TType extends InputType = InputType> = TType extends "number"
+  ? number
+  : string
+
+export interface InputProps<TType extends InputType = InputType>
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   type?: TType
   onChange?: (value: InputValue<TType> | null) => void
 }
 
-const InputComponent = React.forwardRef<
-  HTMLInputElement,
-  InputProps<React.HTMLInputTypeAttribute>
->(({ className, type = "text", onChange, ...props }, ref) => {
-  const onChangeFn = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!onChange) return
+export function Input<TType extends InputType = "text">({
+  type = "text" as TType,
+  className,
+  onChange,
+  ...props
+}: InputProps<TType>) {
+  const onChangeFn = React.useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!onChange) return
 
-    let value: string | number | null = event.target.value
+      let value: InputValue<TType> | null = event.target
+        .value as InputValue<TType>
 
-    if (type === "number") {
-      value = parseInt(event.target.value, 10)
-      if (isNaN(value)) value = null
-    }
+      if (type === "number") {
+        const numericValue = Number(event.target.value)
+        value = isNaN(numericValue) ? null : (numericValue as InputValue<TType>)
+      }
 
-    if (!value || value === "") {
-      value = null
-    }
+      if (value === "" || value === undefined) {
+        value = null
+      }
 
-    onChange(value)
-  }
+      onChange(value)
+    },
+    [onChange, type],
+  )
 
   return (
     <input
-      ref={ref}
       type={type}
       onChange={onChangeFn}
       className={cn(
@@ -46,13 +54,4 @@ const InputComponent = React.forwardRef<
       {...props}
     />
   )
-})
-InputComponent.displayName = "Input"
-
-const Input = InputComponent as unknown as <
-  TType extends React.HTMLInputTypeAttribute = "text",
->(
-  props: InputProps<TType> & { ref?: React.Ref<HTMLInputElement> },
-) => React.ReactElement<InputProps<TType>>
-
-export { Input }
+}

@@ -1,5 +1,3 @@
-import * as React from "react"
-
 import { cva } from "class-variance-authority"
 
 import { cn } from "~/lib/utils"
@@ -15,7 +13,7 @@ const alertVariants = cva(
         destructive:
           "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
         warning:
-          "bg-[darkorange]/5 border-[darkorange]/50 text-[darkorange] dark:border-[darkorange] [&>svg]:text-[darkorange]",
+          "border-[darkorange]/50 bg-[darkorange]/5 text-[darkorange] dark:border-[darkorange] [&>svg]:text-[darkorange]",
       },
     },
     defaultVariants: {
@@ -24,41 +22,42 @@ const alertVariants = cva(
   },
 )
 
-const Alert = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
->(({ className, variant, ...props }, ref) => (
-  <div
-    ref={ref}
-    role="alert"
-    className={cn(alertVariants({ variant }), className)}
-    {...props}
-  />
-))
-Alert.displayName = "Alert"
+export interface AlertProps
+  extends React.ComponentPropsWithRef<"div">,
+    VariantProps<typeof alertVariants> {}
 
-const AlertTitle = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
-  <h5
-    ref={ref}
-    className={cn("mb-1 font-medium leading-none tracking-tight", className)}
-    {...props}
-  />
-))
-AlertTitle.displayName = "AlertTitle"
+export function Alert({ className, variant, ...props }: AlertProps) {
+  return (
+    <div
+      role="alert"
+      className={cn(alertVariants({ variant }), className)}
+      {...props}
+    />
+  )
+}
 
-const AlertDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("text-sm [&_p]:leading-relaxed", className)}
-    {...props}
-  />
-))
-AlertDescription.displayName = "AlertDescription"
+export interface AlertTitleProps extends React.ComponentPropsWithRef<"h5"> {}
 
-export { Alert, AlertTitle, AlertDescription }
+export function AlertTitle({ className, ...props }: AlertTitleProps) {
+  return (
+    <h5
+      className={cn("mb-1 font-medium leading-none tracking-tight", className)}
+      {...props}
+    />
+  )
+}
+
+export interface AlertDescriptionProps
+  extends React.ComponentPropsWithRef<"div"> {}
+
+export function AlertDescription({
+  className,
+  ...props
+}: AlertDescriptionProps) {
+  return (
+    <div
+      className={cn("text-sm [&_p]:leading-relaxed", className)}
+      {...props}
+    />
+  )
+}
