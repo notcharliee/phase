@@ -1,11 +1,45 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalEnv": ["NODE_ENV"],
   "tasks": {
+    "bot#build": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "outputs": [".tsc/**"],
+      "env": [
+        "MONGODB_URI",
+        "POSTGRES_URI",
+        "DISCORD_TOKEN",
+        "DISCORD_SECRET",
+        "DISCORD_ID",
+        "TWITCH_CLIENT_SECRET",
+        "TWITCH_CLIENT_ID",
+        "AUTH_COOKIE_SECRET",
+        "AUTH_OTP_SECRET",
+        "WEBHOOK_ALERT"
+      ]
+    },
+    "site#build": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": [
+        "MONGODB_URI",
+        "POSTGRES_URI",
+        "DISCORD_TOKEN",
+        "DISCORD_SECRET",
+        "DISCORD_ID",
+        "TWITCH_CLIENT_SECRET",
+        "TWITCH_CLIENT_ID",
+        "AUTH_COOKIE_SECRET",
+        "AUTH_OTP_SECRET",
+        "WEBHOOK_ALERT"
+      ]
+    },
     "build": {
       "cache": true,
-      "env": ["*"],
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", ".tsc/**", "dist/**"]
+      "outputs": ["dist/**"]
     },
     "dev": {
       "cache": false,
