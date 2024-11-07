@@ -2,9 +2,8 @@ import { BotCommandBuilder } from "phasebot/builders"
 
 import { fetchWeatherApi } from "openmeteo"
 
-import { BotErrorMessage } from "~/structures/BotError"
-
 import { generateWeatherCard } from "~/images/weather"
+import { BotErrorMessage } from "~/structures/BotError"
 
 import type { SnakeToCamel } from "~/types/utils"
 
@@ -217,11 +216,10 @@ export async function getWeatherData({
           v.replace(/(_\w)/g, (match) => match[1]!.toUpperCase()),
           dailyWeatherVariables[vi]![fi],
         ]),
-      ) as {
-        [k in SnakeToCamel<
-          (typeof params.daily)[number]
-        >]: (typeof dailyWeatherVariables)[number][number]
-      }),
+      ) as Record<
+        SnakeToCamel<(typeof params.daily)[number]>,
+        (typeof dailyWeatherVariables)[number][number]
+      >),
     })),
     hourly: Array.from({ length: 24 }).map((_, fi) => ({
       date: new Date(Date.now() + fi * 1000 * 60 * 60 * 24),
@@ -230,11 +228,10 @@ export async function getWeatherData({
           v.replace(/(_\w)/g, (match) => match[1]!.toUpperCase()),
           hourlyWeatherVariables[vi]![fi],
         ]),
-      ) as {
-        [k in SnakeToCamel<
-          (typeof params.hourly)[number]
-        >]: (typeof hourlyWeatherVariables)[number][number]
-      }),
+      ) as Record<
+        SnakeToCamel<(typeof params.hourly)[number]>,
+        (typeof hourlyWeatherVariables)[number][number]
+      >),
     })),
   }
 
