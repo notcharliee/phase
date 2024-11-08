@@ -1,14 +1,6 @@
 [phases.setup]
-nixpkgsArchive = "c29012c10c2a8d2ad65702f560c77cc7004a1cf9" # bun v1.1.31
 nixPkgs = ["nodejs_20", "bun"]
 aptPkgs = ["build-essential", "python3"]
-onlyIncludeFiles = [
-  "bun.lockb",
-  "package.json",
-  "turbo.json",
-  "apps/bot",
-  "packages",
-]
 
 [phases.install]
 dependsOn = ["setup"]
@@ -16,14 +8,12 @@ cmds = ["bun install"]
 
 [phases.bodge]
 dependsOn = ["install"]
-cmds = [
-  "cd ./node_modules/@discordjs/opus/prebuild && mv node-v115-napi-v3-linux-x64-glibc-2.35 node-v127-napi-v3-linux-x64-glibc-2.29",
-]
+cmds = ["bun run scripts/opus-bodge.ts"]
 
 [phases.build]
 dependsOn = ["bodge"]
 cmds = ["bun run build:bot"]
 
 [start]
-runImage = "oven/bun:1.1.31"
+runImage = "oven/bun:1.1"
 cmd = "bun run start:bot"
