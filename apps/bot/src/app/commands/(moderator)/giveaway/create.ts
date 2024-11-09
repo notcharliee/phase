@@ -4,7 +4,7 @@ import ms from "ms"
 
 import { db } from "~/lib/db"
 import { Emojis } from "~/lib/emojis"
-import { dateToTimestamp } from "~/lib/utils"
+import { dateToTimestamp } from "~/lib/utils/formatting"
 
 import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 

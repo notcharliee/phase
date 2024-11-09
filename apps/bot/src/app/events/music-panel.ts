@@ -2,7 +2,7 @@ import { ButtonStyle, ModalBuilder, TextInputStyle } from "discord.js"
 import { BotEventBuilder } from "phasebot/builders"
 
 import { Emojis } from "~/lib/emojis"
-import { wrapText } from "~/lib/utils"
+import { wrapText } from "~/lib/utils/formatting"
 
 import { createProgressBar } from "~/app/commands/(voice)/music/_utils"
 import { BotErrorMessage } from "~/structures/BotError"

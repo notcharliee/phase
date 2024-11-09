@@ -3,8 +3,9 @@ import { BotCommandBuilder } from "phasebot/builders"
 
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"
+import { safeMs } from "~/lib/ms"
+
 import { BotErrorMessage } from "~/structures/BotError"
-import { safeMs } from "~/lib/utils"
 
 export default new BotCommandBuilder()
   .setName("reminder")

@@ -3,7 +3,7 @@ import { BotEventBuilder } from "phasebot/builders"
 import { ModuleDefinitions, ModuleId } from "@repo/utils/modules"
 
 import { db } from "~/lib/db"
-import { isSnowflake } from "~/lib/utils"
+import { isSnowflake } from "~/lib/utils/guards"
 
 import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 

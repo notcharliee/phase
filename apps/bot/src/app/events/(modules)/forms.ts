@@ -20,12 +20,8 @@ import dedent from "dedent"
 import { z } from "zod"
 
 import { PhaseColour } from "~/lib/enums"
-import {
-  createHiddenContent,
-  dateToTimestamp,
-  parseHiddenContent,
-  truncateString,
-} from "~/lib/utils"
+import { dateToTimestamp, truncateString } from "~/lib/utils/formatting"
+import { createHiddenContent, parseHiddenContent } from "~/lib/utils/misc"
 
 import { BotErrorMessage } from "~/structures/BotError"
 

@@ -5,8 +5,9 @@ import { ModuleId } from "@repo/utils/modules"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
+import { numberToOrdinal } from "~/lib/utils/formatting"
+
 import { BotErrorMessage } from "~/structures/BotError"
-import { getOrdinal } from "~/lib/utils"
 
 import type { GuildMember, GuildTextBasedChannel } from "discord.js"
 
@@ -70,7 +71,7 @@ export default new BotSubcommandBuilder()
           .setTitle("Member unwarned")
           .setDescription(
             memberWarnings.size - 1 !== 0
-              ? `<@${member.id}> is now on their **${getOrdinal(memberWarnings.size - 1)}** warning.`
+              ? `<@${member.id}> is now on their **${numberToOrdinal(memberWarnings.size - 1)}** warning.`
               : `<@${member.id}> now has no warnings.`,
           ),
       ],

@@ -2,7 +2,8 @@ import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/utils/modules"
 
-import { dateToTimestamp, isSendableChannel, wrapText } from "~/lib/utils"
+import { dateToTimestamp, wrapText } from "~/lib/utils/formatting"
+import { isSendableChannel } from "~/lib/utils/guards"
 
 import { MessageBuilder } from "~/structures/builders"
 import { getUsedInvite, hasRequiredGuildPermissions, mapInvite } from "./_utils"

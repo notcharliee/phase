@@ -4,7 +4,11 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
-import { dateToTimestamp, formatDuration, wrapText } from "~/lib/utils"
+import {
+  dateToTimestamp,
+  numberToDuration,
+  wrapText,
+} from "~/lib/utils/formatting"
 
 import { BotErrorMessage } from "~/structures/BotError"
 import { QueueRepeatMode } from "~/structures/music/Queue"
@@ -37,7 +41,7 @@ export default new BotSubcommandBuilder()
 
     const now = Date.now() / 1000
 
-    const totalPlaybackDuration = formatDuration(
+    const totalPlaybackDuration = numberToDuration(
       queue.songs
         .slice(0, queue.currentSongIndex)
         .reduce(

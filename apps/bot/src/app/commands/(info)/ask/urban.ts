@@ -1,10 +1,10 @@
 import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { getUrbanPost } from "~/lib/apis/urban"
-import { MessageBuilder } from "~/structures/builders/MessageBuilder"
-import { truncateString } from "~/lib/utils"
+import { truncateString } from "~/lib/utils/formatting"
 
 import { BotErrorMessage } from "~/structures/BotError"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 export default new BotSubcommandBuilder()
   .setName("urban")

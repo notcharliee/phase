@@ -3,7 +3,7 @@ import { BotEventBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/utils/modules"
 
-import { parseHiddenContent } from "~/lib/utils"
+import { parseHiddenContent } from "~/lib/utils/misc"
 
 import { updateRoles } from "./_utils"
 

@@ -1,6 +1,6 @@
 import { ImageBuilder } from "phasebot/builders"
 
-import { getOrdinal } from "~/lib/utils"
+import { numberToOrdinal } from "~/lib/utils/formatting"
 
 import geistBold from "./fonts/geist-bold.otf"
 import geistMedium from "./fonts/geist-medium.otf"
@@ -52,7 +52,7 @@ export const generateLeaderboardCard = (props: LeaderboardCardProps) => {
             fontWeight: "600",
           }}
         >
-          {getOrdinal(user.rank)} Place
+          {numberToOrdinal(user.rank)} Place
         </span>
         <span
           style={{

@@ -2,7 +2,11 @@ import { BotCommandBuilder } from "phasebot/builders"
 
 import { getBasicInfo, validateURL } from "@distube/ytdl-core"
 
-import { dateToTimestamp, formatNumber, truncateString } from "~/lib/utils"
+import {
+  dateToTimestamp,
+  numberToAbbrevition,
+  truncateString,
+} from "~/lib/utils/formatting"
 
 import { BotErrorMessage } from "~/structures/BotError"
 import { MessageBuilder } from "~/structures/builders/MessageBuilder"
@@ -62,9 +66,9 @@ export default new BotCommandBuilder()
             .setTitle(videoTitle)
             .setDescription(
               `
-                **Views:** ${formatNumber(videoViews)}
-                **Likes:** ${formatNumber(videoLikes)}
-                **Dislikes:** ${formatNumber(videoDislikes)}
+                **Views:** ${numberToAbbrevition(videoViews)}
+                **Likes:** ${numberToAbbrevition(videoLikes)}
+                **Dislikes:** ${numberToAbbrevition(videoDislikes)}
                 **Published:** ${dateToTimestamp(videoPublishedAt)}
 
                 **Description:**

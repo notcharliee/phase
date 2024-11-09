@@ -25,7 +25,11 @@ import dedent from "dedent"
 import ms from "ms"
 
 import { PhaseColour } from "~/lib/enums"
-import { dateToTimestamp, truncateString, wrapText } from "~/lib/utils"
+import {
+  dateToTimestamp,
+  truncateString,
+  wrapText,
+} from "~/lib/utils/formatting"
 
 import type { GuildModules } from "~/lib/db"
 import type {

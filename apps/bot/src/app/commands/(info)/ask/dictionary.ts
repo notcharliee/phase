@@ -4,10 +4,10 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 import { capitalCase } from "change-case"
 
 import { askDictionary, getPhonetic } from "~/lib/apis/dictionary"
-import { MessageBuilder } from "~/structures/builders/MessageBuilder"
-import { truncateString } from "~/lib/utils"
+import { truncateString } from "~/lib/utils/formatting"
 
 import { BotErrorMessage } from "~/structures/BotError"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 export default new BotSubcommandBuilder()
   .setName("dictionary")

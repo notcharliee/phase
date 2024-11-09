@@ -1,4 +1,4 @@
-import { formatDuration } from "~/lib/utils"
+import { numberToDuration } from "~/lib/utils/formatting"
 
 import type { Queue } from "~/structures/music/Queue"
 import type { GuildMember } from "discord.js"
@@ -22,7 +22,7 @@ export class Song {
   }
 
   get formattedPlaybackDuration() {
-    return formatDuration(this.playbackDuration)
+    return numberToDuration(this.playbackDuration)
   }
 
   constructor(
@@ -40,7 +40,7 @@ export class Song {
     this.name = data.name
     this.thumbnail = data.thumbnail
     this.duration = data.duration
-    this.formattedDuration = formatDuration(data.duration)
+    this.formattedDuration = numberToDuration(data.duration)
     this.isLive = data.duration === 0
     this.url = data.url
     this.streamUrl = data.streamUrl

@@ -1,6 +1,6 @@
 import { AudioPlayerStatus } from "@discordjs/voice"
 
-import { formatDuration } from "~/lib/utils"
+import { numberToDuration } from "~/lib/utils/formatting"
 
 import type { Music } from "~/structures/music/Music"
 import type { Song } from "~/structures/music/Song"
@@ -92,11 +92,11 @@ export class Queue {
   }
 
   public get formattedDuration(): string {
-    return formatDuration(this.duration)
+    return numberToDuration(this.duration)
   }
 
   public get formattedDurationRemaining(): string {
-    return formatDuration(this.durationRemaining)
+    return numberToDuration(this.durationRemaining)
   }
 
   /**

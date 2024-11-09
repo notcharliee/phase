@@ -5,8 +5,9 @@ import { ModuleId } from "@repo/utils/modules"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
+import { numberToOrdinal } from "~/lib/utils/formatting"
+
 import { BotErrorMessage } from "~/structures/BotError"
-import { getOrdinal } from "~/lib/utils"
 
 import type { GuildMember, GuildTextBasedChannel } from "discord.js"
 
@@ -52,7 +53,9 @@ export default new BotSubcommandBuilder()
 
     if (memberWarnings.size === warningsModule.warnings.length) {
       void interaction.reply(
-        new BotErrorMessage("This member is already on their final warning.").toJSON(),
+        new BotErrorMessage(
+          "This member is already on their final warning.",
+        ).toJSON(),
       )
 
       return
@@ -66,7 +69,7 @@ export default new BotSubcommandBuilder()
           .setColor(PhaseColour.Primary)
           .setTitle("Member warned")
           .setDescription(
-            `<@${member.id}> is now on their **${memberWarnings.size + 1 !== warningsModule.warnings.length ? getOrdinal(memberWarnings.size + 1) : "final"}** warning.`,
+            `<@${member.id}> is now on their **${memberWarnings.size + 1 !== warningsModule.warnings.length ? numberToOrdinal(memberWarnings.size + 1) : "final"}** warning.`,
           ),
       ],
     })

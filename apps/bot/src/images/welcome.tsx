@@ -4,7 +4,7 @@ import { ModuleId } from "@repo/utils/modules"
 import dedent from "dedent"
 
 import { tw } from "~/lib/tw"
-import { getOrdinal } from "~/lib/utils"
+import { numberToOrdinal } from "~/lib/utils/formatting"
 
 import geistBold from "./fonts/geist-bold.otf"
 import geistMedium from "./fonts/geist-medium.otf"
@@ -49,7 +49,7 @@ export async function generateWelcomeCard(props: WelcomeCardProps) {
 
   const text = dedent(`
     Welcome, **${props.member.user.username}**
-    You are our **${getOrdinal(guild.memberCount)}** member
+    You are our **${numberToOrdinal(guild.memberCount)}** member
   `)
 
   const width = 600

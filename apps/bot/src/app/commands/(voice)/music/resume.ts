@@ -3,7 +3,7 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { PhaseColour } from "~/lib/enums"
 import { BotErrorMessage } from "~/structures/BotError"
-import { wrapText } from "~/lib/utils"
+import { wrapText } from "~/lib/utils/formatting"
 
 import { createProgressBar } from "./_utils"
 

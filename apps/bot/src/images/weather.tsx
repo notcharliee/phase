@@ -1,7 +1,6 @@
 import { ImageBuilder } from "phasebot/builders"
 
 import { tw } from "~/lib/tw"
-import { getDayName } from "~/lib/utils"
 
 import geistBold from "./fonts/geist-bold.otf"
 import geistMedium from "./fonts/geist-medium.otf"
@@ -128,4 +127,23 @@ export function generateWeatherCard(props: WeatherCardProps) {
 
 function degrees(degrees: string | number) {
   return degrees + "°"
+}
+
+function getDayName(day: number, short = false) {
+  switch (day) {
+    case 0:
+      return short ? "Sun" : "Sunday"
+    case 1:
+      return short ? "Mon" : "Monday"
+    case 2:
+      return short ? "Tue" : "Tuesday"
+    case 3:
+      return short ? "Wed" : "Wednesday"
+    case 4:
+      return short ? "Thu" : "Thursday"
+    case 5:
+      return short ? "Fri" : "Friday"
+    case 6:
+      return short ? "Sat" : "Saturday"
+  }
 }
