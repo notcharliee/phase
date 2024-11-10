@@ -108,13 +108,17 @@ export function FormItem({ className, ...props }: FormItemProps) {
 }
 
 export interface FormLabelProps
-  extends React.ComponentPropsWithRef<typeof Label> {}
+  extends React.ComponentPropsWithRef<typeof Label> {
+  asChild?: boolean
+}
 
-export function FormLabel({ className, ...props }: FormLabelProps) {
+export function FormLabel({ className, asChild, ...props }: FormLabelProps) {
   const { error, formItemId } = useFormField()
 
+  const Comp = asChild ? Slot : Label
+
   return (
-    <Label
+    <Comp
       className={cn(error && "text-destructive", className)}
       htmlFor={formItemId}
       {...props}
