@@ -146,7 +146,7 @@ export const SelectRole = React.forwardRef<HTMLInputElement, SelectRoleProps>(
             className="hover:bg-background h-auto min-h-9 w-full justify-between px-3 py-1.5 font-normal transition-colors"
           >
             <div className="flex flex-wrap gap-1">{renderSelectedRoles()}</div>
-            <CaretSortIcon className="text-muted-foreground ml-2 h-4 w-4" />
+            <CaretSortIcon className="ml-2 h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0" style={{ width: triggerWidth + "px" }}>

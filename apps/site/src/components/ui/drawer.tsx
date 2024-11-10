@@ -70,10 +70,7 @@ export interface DrawerHeaderProps
 export function DrawerHeader({ className, ...props }: DrawerHeaderProps) {
   return (
     <div
-      className={cn(
-        "grid gap-1.5 text-balance pb-6 text-center sm:text-left",
-        className,
-      )}
+      className={cn("grid gap-1.5 text-pretty pb-6 text-left", className)}
       {...props}
     />
   )

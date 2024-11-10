@@ -16,13 +16,13 @@ export const linkVariants = cva("font-medium underline-offset-2 transition-color
       "no-underline": "no-underline",
     },
     size: {
-      default: "text-base",
+      base: "text-sm",
       sm: "text-sm",
     },
   },
   defaultVariants: {
     variant: "default",
-    size: "default",
+    size: "sm",
   },
 })
 

@@ -91,7 +91,7 @@ export function ConfigCard({
           <CardDescription>{moduleData.description}</CardDescription>
         </CardContent>
       </Card>
-      <CredenzaContent className="flex max-h-[90%] flex-col gap-8 overflow-auto lg:max-h-[80%]">
+      <CredenzaContent className="flex max-h-[90%] flex-col gap-6 overflow-auto lg:max-h-[80%]">
         <CredenzaHeader className="pb-0">
           <CredenzaTitle>{moduleData.name}</CredenzaTitle>
           <CredenzaDescription>{moduleData.description}</CredenzaDescription>

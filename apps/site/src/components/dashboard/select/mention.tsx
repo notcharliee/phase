@@ -161,7 +161,7 @@ export const SelectMention = React.forwardRef<
             <div className="flex flex-wrap gap-1">
               {renderSelectedMentions()}
             </div>
-            <CaretSortIcon className="text-muted-foreground ml-2 h-4 w-4" />
+            <CaretSortIcon className="ml-2 h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0" style={{ width: triggerWidth + "px" }}>
