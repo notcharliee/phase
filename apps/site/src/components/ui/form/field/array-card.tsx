@@ -51,10 +51,10 @@ export function FormFieldArrayCard<
       render={({ field }) => (
         <FormItem className="space-y-0">
           <Card>
-            <div className="flex items-center justify-between px-6 py-3">
-              <div className="flex flex-col gap-1.5">
+            <div className="flex items-center justify-between gap-2 px-6 py-3">
+              <div className="flex min-w-0 flex-col gap-1.5">
                 <FormLabel asChild>
-                  <CardTitle>{props.label}</CardTitle>
+                  <CardTitle className="truncate">{props.label}</CardTitle>
                 </FormLabel>
                 <FormDescription className="sr-only">
                   {props.description ?? props.label}
