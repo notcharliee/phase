@@ -3,56 +3,31 @@
 import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
-import { SelectChannel } from "~/components/dashboard/select/channel"
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form"
+import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channel"
 
-import type { modulesSchema } from "~/validators/modules"
-import type { z } from "zod"
+import type { ModulesFormValues } from "~/types/dashboard"
+
+const baseName = `${ModuleId.JoinToCreates}`
 
 export const JoinToCreates = () => {
-  const form = useFormContext<z.infer<typeof modulesSchema>>()
+  const form = useFormContext<ModulesFormValues>()
 
   return (
-    <FormItem className="space-y-8">
-      <FormField
+    <div className="space-y-6">
+      <FormFieldSelectChannel
+        label="Trigger Channel"
+        description="The voice channel that triggers the module"
+        channelType="GuildVoice"
         control={form.control}
-        name={`${ModuleId.JoinToCreates}.channel`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Trigger Channel</FormLabel>
-            <FormControl>
-              <SelectChannel channelType="GuildVoice" {...field} />
-            </FormControl>
-            <FormDescription>
-              The channel that members join to trigger the module
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
+        name={`${baseName}.channel`}
       />
-      <FormField
+      <FormFieldSelectChannel
+        label="Category"
+        description="The category to create voice channels in"
+        channelType="GuildCategory"
         control={form.control}
-        name={`${ModuleId.JoinToCreates}.category`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Category</FormLabel>
-            <FormControl>
-              <SelectChannel channelType="GuildCategory" {...field} />
-            </FormControl>
-            <FormDescription>
-              The category where temporary channels will be created
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
+        name={`${baseName}.category`}
       />
-    </FormItem>
+    </div>
   )
 }

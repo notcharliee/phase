@@ -3,96 +3,43 @@
 import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
-import { SelectMention } from "~/components/dashboard/select/mention"
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
-import { RichTextarea } from "~/components/ui/richtext/textarea"
+import { FormFieldInput } from "~/components/ui/form/field/input"
+import { FormFieldRichTextarea } from "~/components/ui/form/field/rich-textarea"
+import { FormFieldSelectMention } from "~/components/ui/form/field/select-mention"
 
-import type { modulesSchema } from "~/validators/modules"
-import type { z } from "zod"
+import type { ModulesFormValues } from "~/types/dashboard"
+
+const baseName = `${ModuleId.BumpReminders}`
 
 export const BumpReminders = () => {
-  const form = useFormContext<z.infer<typeof modulesSchema>>()
+  const form = useFormContext<ModulesFormValues>()
 
   return (
-    <FormItem className="space-y-8">
-      <FormField
+    <div className="space-y-6">
+      <FormFieldInput
+        label="Reminder Time"
+        description="How long to wait before reminding members"
         control={form.control}
-        name={`${ModuleId.BumpReminders}.time`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Reminder Time</FormLabel>
-            <FormControl>
-              <Input placeholder="Example: 2 hours" {...field} />
-            </FormControl>
-            <FormDescription>
-              How long to wait before reminding members
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
+        name={`${baseName}.time`}
       />
-      <FormField
+      <FormFieldRichTextarea
+        label="Initial Message"
+        description="What to send when a member first bumps"
         control={form.control}
-        name={`${ModuleId.BumpReminders}.initialMessage`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Initial Message</FormLabel>
-            <FormControl>
-              <RichTextarea
-                placeholder="Example: Thanks for bumping!"
-                {...field}
-              />
-            </FormControl>
-            <FormDescription>
-              What to send when a member first bumps
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
+        name={`${baseName}.initialMessage`}
       />
-      <FormField
+      <FormFieldRichTextarea
+        label="Reminder Message"
+        description="What to send in the reminder message"
         control={form.control}
-        name={`${ModuleId.BumpReminders}.reminderMessage`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Reminder Message</FormLabel>
-            <FormControl>
-              <RichTextarea
-                placeholder="Example: It's time to bump again!"
-                {...field}
-              />
-            </FormControl>
-            <FormDescription>
-              What to send in the reminder message
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
+        name={`${baseName}.reminderMessage`}
       />
-      <FormField
+      <FormFieldSelectMention
+        label="Reminder Mention"
+        description="Who to ping in the reminder message"
         control={form.control}
-        name={`${ModuleId.BumpReminders}.mention`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Reminder Mention</FormLabel>
-            <FormControl>
-              <SelectMention {...field} />
-            </FormControl>
-            <FormDescription>
-              Who to ping in the reminder message (optional)
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
+        name={`${baseName}.mention`}
       />
-    </FormItem>
+    </div>
   )
 }
