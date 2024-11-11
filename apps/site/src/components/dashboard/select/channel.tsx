@@ -160,6 +160,7 @@ export const SelectChannel = React.forwardRef<
         <PopoverTrigger asChild>
           <Button
             ref={triggerRef}
+            disabled={disabled}
             role="combobox"
             variant="outline"
             className="hover:bg-background h-auto min-h-9 w-full justify-between px-3 py-1.5 font-normal transition-colors"
