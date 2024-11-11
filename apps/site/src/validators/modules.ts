@@ -123,7 +123,12 @@ export const joinToCreatesSchema = moduleSchema({
 })
 
 export const levelsSchema = moduleSchema({
-  channel: zod.string().snowflake("Channel is required"),
+  replyType: zod.enum(["reply", "dm", "channel"]),
+  channel: zod.union([
+    zod.literal("reply"),
+    zod.literal("dm"),
+    zod.string().snowflake("Channel is required"),
+  ]),
   message: zod
     .string()
     .nonempty("Message is required")
@@ -142,7 +147,10 @@ export const levelsSchema = moduleSchema({
     })
     .array()
     .max(100),
-})
+}).transform(({ replyType, ...data }) => ({
+  ...data,
+  channel: replyType === "channel" ? data.channel : replyType,
+}))
 
 export const reactionRolesSchema = moduleSchema({
   messageUrl: zod
