@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { CaretSortIcon } from "@radix-ui/react-icons"
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 
 import { Button } from "~/components/ui/button"
 import {
@@ -82,6 +82,9 @@ export function FormFieldSelectItem<
                     >
                       {item.icon && <item.icon />}
                       {item.label}
+                      {item.value === currentItem?.value && (
+                        <CheckIcon className="absolute right-2" />
+                      )}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
