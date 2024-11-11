@@ -22,10 +22,13 @@ import {
 import { Input } from "~/components/ui/input"
 import { RichTextarea } from "~/components/ui/richtext/textarea"
 
-import type { ModulesFormReturn, ModulesFormValues } from "~/types/dashboard"
+import type {
+  ModulesFormReturn,
+  ModulesFormValuesInput,
+} from "~/types/dashboard"
 
 export const Tickets = () => {
-  const form = useFormContext<ModulesFormValues>()
+  const form = useFormContext<ModulesFormValuesInput>()
 
   return (
     <div className="space-y-8">

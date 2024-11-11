@@ -7,12 +7,12 @@ import { FormFieldInput } from "~/components/ui/form/field/input"
 import { FormFieldRichTextarea } from "~/components/ui/form/field/rich-textarea"
 import { FormFieldSelectMention } from "~/components/ui/form/field/select-mention"
 
-import type { ModulesFormValues } from "~/types/dashboard"
+import type { ModulesFormValuesInput } from "~/types/dashboard"
 
 const baseName = `${ModuleId.BumpReminders}`
 
 export const BumpReminders = () => {
-  const form = useFormContext<ModulesFormValues>()
+  const form = useFormContext<ModulesFormValuesInput>()
 
   return (
     <div className="space-y-6">

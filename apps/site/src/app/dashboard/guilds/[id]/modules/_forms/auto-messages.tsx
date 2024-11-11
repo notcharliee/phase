@@ -11,12 +11,12 @@ import { FormFieldRichTextarea } from "~/components/ui/form/field/rich-textarea"
 import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channel"
 import { FormFieldSelectMention } from "~/components/ui/form/field/select-mention"
 
-import type { ModulesFormValues } from "~/types/dashboard"
+import type { ModulesFormValuesInput } from "~/types/dashboard"
 
 const baseName = `${ModuleId.AutoMessages}.messages`
 
 export function AutoMessages() {
-  const form = useFormContext<ModulesFormValues>()
+  const form = useFormContext<ModulesFormValuesInput>()
   const formFields = form.watch()[ModuleId.AutoMessages]!
 
   return (

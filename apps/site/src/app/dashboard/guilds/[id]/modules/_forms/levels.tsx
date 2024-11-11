@@ -13,10 +13,10 @@ import { FormFieldSelectRadio } from "~/components/ui/form/field/select-radio"
 import { FormFieldSelectRole } from "~/components/ui/form/field/select-role"
 import { FormFieldSwitch } from "~/components/ui/form/field/switch"
 
-import type { ModulesFormValues } from "~/types/dashboard"
+import type { ModulesFormValuesInput } from "~/types/dashboard"
 
 export const Levels = () => {
-  const form = useFormContext<ModulesFormValues>()
+  const form = useFormContext<ModulesFormValuesInput>()
   const formFields = form.watch()[ModuleId.Levels]!
 
   return (

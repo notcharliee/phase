@@ -5,12 +5,12 @@ import { useFormContext } from "react-hook-form"
 
 import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channel"
 
-import type { ModulesFormValues } from "~/types/dashboard"
+import type { ModulesFormValuesInput } from "~/types/dashboard"
 
 const baseName = `${ModuleId.JoinToCreates}`
 
 export const JoinToCreates = () => {
-  const form = useFormContext<ModulesFormValues>()
+  const form = useFormContext<ModulesFormValuesInput>()
 
   return (
     <div className="space-y-6">

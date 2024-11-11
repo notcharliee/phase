@@ -25,13 +25,10 @@ export interface ModulesDataFields {
 export type ModulesFormValuesInput = z.input<typeof modulesSchema>
 export type ModulesFormValuesOutput = z.output<typeof modulesSchema>
 
-/** @deprecated Use `ModulesFormValuesInput` instead. */
-export type ModulesFormValues = ModulesFormValuesInput
-
 export type ModulesFormReturn = UseFormReturn<ModulesFormValuesInput>
 
-export type ModulesFormValuesWithData = Partial<{
-  [K in keyof ModulesFormValues]: ModulesFormValuesInput[K] & {
+export type ModulesFormValuesInputWithData = Partial<{
+  [K in keyof ModulesFormValuesInput]: ModulesFormValuesInput[K] & {
     _data: K extends keyof ModulesDataFields ? ModulesDataFields[K] : unknown
   }
 }>

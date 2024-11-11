@@ -10,13 +10,12 @@ import { FormFieldInput } from "~/components/ui/form/field/input"
 import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channel"
 import { Link } from "~/components/ui/link"
 
-import type { modulesSchema } from "~/validators/modules"
-import type { z } from "zod"
+import type { ModulesFormValuesInput } from "~/types/dashboard"
 
 const baseName = `${ModuleId.Counters}.counters`
 
 export const Counters = () => {
-  const form = useFormContext<z.infer<typeof modulesSchema>>()
+  const form = useFormContext<ModulesFormValuesInput>()
   const formFields = form.watch()[ModuleId.Counters]!
 
   return (

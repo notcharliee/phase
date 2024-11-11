@@ -20,7 +20,7 @@ import { moduleIdSchema, modulesSchema } from "~/validators/modules"
 import type {
   GuildModulesWithData,
   ModulesFormValuesOutput,
-  ModulesFormValuesWithData,
+  ModulesFormValuesInputWithData,
 } from "~/types/dashboard"
 import type { GuildModules } from "~/types/db"
 
@@ -114,7 +114,7 @@ export async function updateModules(
     } else {
       parsedModulesWithData[ModuleId.Forms]._data.messages = (unsafeFormValues[
         ModuleId.Forms
-      ] as ModulesFormValuesWithData[ModuleId.Forms])!._data.messages
+      ] as ModulesFormValuesInputWithData[ModuleId.Forms])!._data.messages
     }
   }
 
@@ -142,7 +142,7 @@ export async function updateModules(
       parsedModulesWithData[ModuleId.Tickets]._data.messageContent =
         (unsafeFormValues[
           ModuleId.Tickets
-        ] as ModulesFormValuesWithData[ModuleId.Tickets])!._data.messageContent
+        ] as ModulesFormValuesInputWithData[ModuleId.Tickets])!._data.messageContent
     }
   }
 
@@ -158,7 +158,7 @@ export async function updateModules(
       parsedModulesWithData[ModuleId.TwitchNotifications]._data.streamerNames =
         (unsafeFormValues[
           ModuleId.TwitchNotifications
-        ] as ModulesFormValuesWithData[ModuleId.TwitchNotifications])!._data.streamerNames
+        ] as ModulesFormValuesInputWithData[ModuleId.TwitchNotifications])!._data.streamerNames
     }
   }
 

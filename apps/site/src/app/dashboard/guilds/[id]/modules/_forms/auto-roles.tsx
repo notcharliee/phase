@@ -12,12 +12,12 @@ import { FormFieldSelectRole } from "~/components/ui/form/field/select-role"
 
 import { getOrdinal } from "~/lib/utils"
 
-import type { ModulesFormValues } from "~/types/dashboard"
+import type { ModulesFormValuesInput } from "~/types/dashboard"
 
 const baseName = `${ModuleId.AutoRoles}.roles`
 
 export const AutoRoles = () => {
-  const form = useFormContext<ModulesFormValues>()
+  const form = useFormContext<ModulesFormValuesInput>()
 
   return (
     <FormFieldArray

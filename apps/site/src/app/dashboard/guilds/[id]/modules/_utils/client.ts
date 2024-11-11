@@ -2,10 +2,13 @@ import { ModuleId } from "@repo/utils/modules"
 
 import { safeMs } from "~/lib/utils"
 
-import type { GuildModulesWithData, ModulesFormValues } from "~/types/dashboard"
+import type {
+  GuildModulesWithData,
+  ModulesFormValuesInput,
+} from "~/types/dashboard"
 import type { GuildModules } from "~/types/db"
 
-export const defaultEmptyFormValues: Required<ModulesFormValues> = {
+export const defaultEmptyFormValues: Required<ModulesFormValuesInput> = {
   [ModuleId.AuditLogs]: {
     enabled: false,
     channels: {
@@ -124,13 +127,13 @@ export const getDirtyFields = <
 export function getDefaultValues(
   guildId: string,
   modules: Partial<GuildModules>,
-): ModulesFormValues {
-  const parsedValues: ModulesFormValues = {}
+): ModulesFormValuesInput {
+  const parsedValues: ModulesFormValuesInput = {}
 
   const moduleParsers: {
     [K in ModuleId]?: (
       data: Required<GuildModulesWithData>[K],
-    ) => ModulesFormValues[K]
+    ) => ModulesFormValuesInput[K]
   } = {
     [ModuleId.AutoMessages]: (data) => ({
       ...data,
@@ -170,7 +173,7 @@ export function getDefaultValues(
             .filter((role) => role.action === "remove")
             .map(({ id }) => id),
         })),
-      })) as Required<ModulesFormValues>[ModuleId.SelfRoles]["messages"],
+      })) as Required<ModulesFormValuesInput>[ModuleId.SelfRoles]["messages"],
     }),
     [ModuleId.Tickets]: (data) => ({
       ...data,
