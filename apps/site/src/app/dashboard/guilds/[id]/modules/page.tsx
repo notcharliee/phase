@@ -31,11 +31,14 @@ import { modulesSchema } from "~/validators/modules"
 import type { ModuleId, ModuleTag } from "@repo/utils/modules"
 import type { ConfigCardOption } from "~/components/dashboard/modules/config-card"
 import type { FilterOption } from "~/components/dashboard/modules/select-filter"
-import type { ModulesFormValues } from "~/types/dashboard"
+import type {
+  ModulesFormValuesInput,
+  ModulesFormValuesOutput,
+} from "~/types/dashboard"
 
 export type ModuleData<T extends ModuleId = ModuleId> = {
   -readonly [K in keyof (typeof ModuleDefinitions)[T]]: (typeof ModuleDefinitions)[T][K]
-} & { config: ModulesFormValues[T] }
+} & { config: ModulesFormValuesInput[T] }
 
 export default function ModulesPage() {
   const [filter, setFilter] = useState<FilterOption["value"]>("none")
@@ -47,7 +50,7 @@ export default function ModulesPage() {
     dashboardData.guild.modules ?? {},
   )
 
-  const form = useForm<ModulesFormValues>({
+  const form = useForm<ModulesFormValuesInput>({
     resolver: zodResolver(modulesSchema),
     defaultValues: defaultFormValues,
   })
@@ -91,7 +94,7 @@ export default function ModulesPage() {
   )
 
   const onSubmit = useCallback(
-    async (data: ModulesFormValues) => {
+    async (data: ModulesFormValuesOutput) => {
       const id = dashboardData.guild.id
 
       const updatedModules = await updateModules(id, data, dirtyFieldNames)
@@ -100,7 +103,7 @@ export default function ModulesPage() {
       form.reset(updatedDefaultValues)
     },
     [form, dirtyFieldNames, dashboardData.guild.id],
-  )
+  ) as Parameters<typeof form.handleSubmit>[0]
 
   return (
     <Form {...form}>

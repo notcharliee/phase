@@ -17,7 +17,7 @@ import type {
   APIMessage,
   RESTPostAPIChannelMessageJSONBody,
 } from "@discordjs/core/http-only"
-import type { ModulesFormValues } from "~/types/dashboard"
+import type { ModulesFormValuesOutput } from "~/types/dashboard"
 import type { GuildModules, mongoose, Reminder } from "~/types/db"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
@@ -25,12 +25,12 @@ const discordAPI = new API(discordREST)
 
 export async function parseModuleData(
   moduleId: ModuleId,
-  formData: ModulesFormValues[ModuleId],
+  formData: ModulesFormValuesOutput[ModuleId],
 ): Promise<GuildModules[ModuleId] | undefined> {
   const formDataIs = <T extends ModuleId>(
     id: T,
-    data: ModulesFormValues[keyof ModulesFormValues],
-  ): data is Required<ModulesFormValues>[T] => {
+    data: ModulesFormValuesOutput[keyof ModulesFormValuesOutput],
+  ): data is Required<ModulesFormValuesOutput>[T] => {
     return id === moduleId && data !== undefined
   }
 
@@ -52,6 +52,11 @@ export async function parseModuleData(
       ...formData,
       time: safeMs(formData.time)!,
     }
+  }
+
+  if (formDataIs(ModuleId.Levels, formData)) {
+    const { replyType: _, ...rest } = formData
+    return rest
   }
 
   if (formDataIs(ModuleId.ReactionRoles, formData)) {

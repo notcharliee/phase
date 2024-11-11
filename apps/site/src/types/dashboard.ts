@@ -14,18 +14,6 @@ export interface ModulesDataFields {
   [ModuleId.Forms]: {
     messages: APIMessage[]
   }
-  [ModuleId.Levels]: {
-    leaderboard: {
-      id: string
-      username: string
-      global_name: string
-      avatar: string
-      level: number
-      xp: number
-      rank: number
-      target: number
-    }[]
-  }
   [ModuleId.Tickets]: {
     messageContent: string | undefined
   }
@@ -34,11 +22,16 @@ export interface ModulesDataFields {
   }
 }
 
-export type ModulesFormValues = z.input<typeof modulesSchema>
-export type ModulesFormReturn = UseFormReturn<ModulesFormValues>
+export type ModulesFormValuesInput = z.input<typeof modulesSchema>
+export type ModulesFormValuesOutput = z.output<typeof modulesSchema>
+
+/** @deprecated Use `ModulesFormValuesInput` instead. */
+export type ModulesFormValues = ModulesFormValuesInput
+
+export type ModulesFormReturn = UseFormReturn<ModulesFormValuesInput>
 
 export type ModulesFormValuesWithData = Partial<{
-  [K in keyof ModulesFormValues]: ModulesFormValues[K] & {
+  [K in keyof ModulesFormValues]: ModulesFormValuesInput[K] & {
     _data: K extends keyof ModulesDataFields ? ModulesDataFields[K] : unknown
   }
 }>

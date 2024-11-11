@@ -19,14 +19,14 @@ import { moduleIdSchema, modulesSchema } from "~/validators/modules"
 
 import type {
   GuildModulesWithData,
-  ModulesFormValues,
+  ModulesFormValuesOutput,
   ModulesFormValuesWithData,
 } from "~/types/dashboard"
 import type { GuildModules } from "~/types/db"
 
 export async function updateModules(
   unsafeGuildId: string,
-  unsafeFormValues: ModulesFormValues,
+  unsafeFormValues: ModulesFormValuesOutput,
   unsafeDirtyFields: ModuleId[],
 ) {
   const userId = (await auth())!.user.id

@@ -124,11 +124,7 @@ export const joinToCreatesSchema = moduleSchema({
 
 export const levelsSchema = moduleSchema({
   replyType: zod.enum(["reply", "dm", "channel"]),
-  channel: zod.union([
-    zod.literal("reply"),
-    zod.literal("dm"),
-    zod.string().snowflake("Channel is required"),
-  ]),
+  channel: zod.string().optional(),
   message: zod
     .string()
     .nonempty("Message is required")
@@ -137,7 +133,7 @@ export const levelsSchema = moduleSchema({
     .string()
     .url()
     .max(256, "Background URL cannot be longer than 256 characters")
-    .nullish()
+    .optional()
     .transform((str) => str ?? undefined),
   mention: zod.boolean(),
   roles: zod
@@ -147,9 +143,9 @@ export const levelsSchema = moduleSchema({
     })
     .array()
     .max(100),
-}).transform(({ replyType, ...data }) => ({
+}).transform(({ channel, ...data }) => ({
   ...data,
-  channel: replyType === "channel" ? data.channel : replyType,
+  channel: data.replyType === "channel" ? channel! : data.replyType,
 }))
 
 export const reactionRolesSchema = moduleSchema({

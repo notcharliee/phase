@@ -47,6 +47,7 @@ export const defaultEmptyFormValues: Required<ModulesFormValues> = {
   },
   [ModuleId.Levels]: {
     enabled: false,
+    replyType: "reply",
     channel: "",
     message: "",
     background: "",
@@ -146,6 +147,15 @@ export function getDefaultValues(
     [ModuleId.ReactionRoles]: (data) => ({
       ...data,
       messageUrl: `https://discord.com/channels/${guildId}/${data.channel}/${data.message}`,
+    }),
+    [ModuleId.Levels]: (data) => ({
+      ...data,
+      replyType:
+        data.channel === "dm" || data.channel === "reply"
+          ? data.channel
+          : data.channel.length
+            ? "channel"
+            : defaultEmptyFormValues[ModuleId.Levels].replyType,
     }),
     [ModuleId.SelfRoles]: (data) => ({
       ...data,
