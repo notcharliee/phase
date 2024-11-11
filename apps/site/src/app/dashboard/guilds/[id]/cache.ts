@@ -59,7 +59,6 @@ export const getGuildData = async (params: GuildDataParams) => {
 
   const guildModuleIdsWithDataFields = [
     ModuleId.Forms,
-    ModuleId.Levels,
     ModuleId.Tickets,
     ModuleId.TwitchNotifications,
   ] as const
