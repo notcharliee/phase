@@ -96,7 +96,7 @@ export const SelectChannel = React.forwardRef<
             ? { ...(category as GuildCategory), channels: sortedChannels }
             : {
                 id: Date.now().toString(),
-                name: "Orphaned Channels",
+                name: "",
                 type: ChannelType.GuildCategory,
                 channels: sortedChannels,
                 position: 0,
@@ -183,11 +183,15 @@ export const SelectChannel = React.forwardRef<
             <CommandList>
               <CommandEmpty>No results found :(</CommandEmpty>
               {sortedCategories.map((category) => (
-                <CommandGroup key={category.name} heading={category.name}>
+                <CommandGroup
+                  key={category.name}
+                  heading={category.name.length ? category.name : undefined}
+                >
                   {category.channels.map((channel) => (
                     <CommandItem
                       key={channel.id}
-                      value={channel.name}
+                      value={channel.id}
+                      keywords={[channel.name]}
                       className="gap-1"
                       onSelect={() =>
                         value?.includes(channel.id)

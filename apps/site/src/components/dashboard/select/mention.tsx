@@ -180,7 +180,8 @@ export const SelectMention = React.forwardRef<
                 {sortedSelectables.map((selectable) => (
                   <CommandItem
                     key={selectable.value}
-                    value={selectable.name}
+                    value={selectable.value}
+                    keywords={[selectable.name]}
                     onSelect={() =>
                       value?.includes(selectable.value)
                         ? handleDeselect(selectable)
