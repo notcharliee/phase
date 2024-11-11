@@ -23,6 +23,9 @@ export const Counters = () => {
     <div className="space-y-6">
       <CountersNotice />
       <FormFieldArray
+        label="Counters"
+        description="Counters config"
+        srOnlyLabelAndDescription={true}
         control={form.control}
         name={baseName}
         render={({ fields, append }) => (

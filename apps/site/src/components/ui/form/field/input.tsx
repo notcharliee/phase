@@ -19,6 +19,8 @@ export interface FormFieldInputProps<
   label: string
   description: string
   placeholder?: string
+  disabled?: boolean
+  type?: React.HTMLInputTypeAttribute
 }
 
 export function FormFieldInput<
@@ -29,11 +31,16 @@ export function FormFieldInput<
     <FormField
       control={props.control}
       name={props.name}
+      disabled={props.disabled}
       render={({ field }) => (
         <FormItem>
           <FormLabel>{props.label}</FormLabel>
           <FormControl>
-            <Input placeholder={props.placeholder} {...field} />
+            <Input
+              type={props.type}
+              placeholder={props.placeholder}
+              {...field}
+            />
           </FormControl>
           <FormDescription>{props.description}</FormDescription>
           <FormMessage />

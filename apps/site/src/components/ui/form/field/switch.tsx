@@ -18,6 +18,7 @@ export interface FormFieldSwitchProps<
   name: TName
   label: string
   description: string
+  disabled?: boolean
 }
 
 export function FormFieldSwitch<
@@ -28,9 +29,10 @@ export function FormFieldSwitch<
     <FormField
       control={props.control}
       name={props.name}
+      disabled={props.disabled}
       render={({ field: { value, onChange, ...field } }) => (
         <FormItem className="flex items-center justify-between space-y-0">
-          <div className="space-y-1.5">
+          <div>
             <FormLabel>{props.label}</FormLabel>
             <FormDescription>{props.description}</FormDescription>
           </div>

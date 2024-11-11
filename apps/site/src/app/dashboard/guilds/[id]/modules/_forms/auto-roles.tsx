@@ -21,6 +21,9 @@ export const AutoRoles = () => {
 
   return (
     <FormFieldArray
+      label="Auto Roles"
+      description="Auto Roles config"
+      srOnlyLabelAndDescription={true}
       control={form.control}
       name={baseName}
       render={({ fields, append }) => (

@@ -2,9 +2,21 @@ import * as React from "react"
 
 import { useFieldArray } from "react-hook-form"
 
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "~/components/ui/form"
+
+import { cn } from "~/lib/utils"
+
 import type {
   Control,
   FieldArrayPath,
+  FieldPath,
   FieldValues,
   UseFieldArrayReturn,
 } from "react-hook-form"
@@ -27,6 +39,10 @@ export interface FormFieldArrayProps<
   TFieldArrayName extends
     FieldArrayPath<TFieldValues> = FieldArrayPath<TFieldValues>,
 > {
+  label: string
+  description: string
+  disabled?: boolean
+  srOnlyLabelAndDescription?: boolean
   control: Control<TFieldValues>
   name: TFieldArrayName
   render: (
@@ -38,12 +54,34 @@ export function FormFieldArray<
   TFieldValues extends FieldValues = FieldValues,
   TFieldArrayName extends
     FieldArrayPath<TFieldValues> = FieldArrayPath<TFieldValues>,
->({ render, ...rest }: FormFieldArrayProps<TFieldValues, TFieldArrayName>) {
-  const fieldArray = useFieldArray(rest)
+>({ render, ...props }: FormFieldArrayProps<TFieldValues, TFieldArrayName>) {
+  const fieldArray = useFieldArray(props)
 
   return (
     <FormFieldArrayContext value={fieldArray as UseFieldArrayReturn}>
-      {render(fieldArray)}
+      <FormField
+        control={props.control}
+        name={props.name as FieldPath<TFieldValues>}
+        disabled={props.disabled}
+        render={() => (
+          <FormItem className="space-y-4">
+            <div>
+              <FormLabel
+                className={cn(props.srOnlyLabelAndDescription && "sr-only")}
+              >
+                {props.label}
+              </FormLabel>
+              <FormDescription
+                className={cn(props.srOnlyLabelAndDescription && "sr-only")}
+              >
+                {props.description}
+              </FormDescription>
+            </div>
+            <FormMessage />
+            <FormControl>{render(fieldArray)}</FormControl>
+          </FormItem>
+        )}
+      />
     </FormFieldArrayContext>
   )
 }

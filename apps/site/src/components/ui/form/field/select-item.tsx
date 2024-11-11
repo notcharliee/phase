@@ -30,6 +30,7 @@ export interface FormFieldSelectItemProps<
   label: string
   description: string
   placeholder?: string
+  disabled?: boolean
   items: {
     label: string
     value: string
@@ -47,6 +48,7 @@ export function FormFieldSelectItem<
     <FormField
       control={props.control}
       name={props.name}
+      disabled={props.disabled}
       render={({ field }) => {
         const currentItem = field.value
           ? props.items.find((item) => item.value === field.value)

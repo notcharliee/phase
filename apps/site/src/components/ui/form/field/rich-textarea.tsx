@@ -19,6 +19,7 @@ export interface FormFieldRichTextareaProps<
   label: string
   description: string
   placeholder?: string
+  disabled?: boolean
 }
 
 export function FormFieldRichTextarea<
@@ -29,6 +30,7 @@ export function FormFieldRichTextarea<
     <FormField
       control={props.control}
       name={props.name}
+      disabled={props.disabled}
       render={({ field }) => (
         <FormItem>
           <FormLabel>{props.label}</FormLabel>

@@ -29,6 +29,8 @@ export const Forms = () => {
         name={`${ModuleId.Forms}.channel`}
       />
       <FormFieldArray
+        label="Forms"
+        description="The forms you want members to be able to create"
         control={form.control}
         name={baseName}
         render={({ fields, append }) => (
@@ -61,6 +63,8 @@ export const Forms = () => {
                     name={`${baseName}.${index}.channel`}
                   />
                   <FormFieldArray
+                    label="Questions"
+                    description="The questions to ask the members to fill out"
                     control={form.control}
                     name={`${baseName}.${index}.questions`}
                     render={({ fields, append }) => (

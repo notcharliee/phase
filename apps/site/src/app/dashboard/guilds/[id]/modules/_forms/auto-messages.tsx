@@ -21,6 +21,9 @@ export function AutoMessages() {
 
   return (
     <FormFieldArray
+      label="Auto Messages"
+      description="Auto Messages config"
+      srOnlyLabelAndDescription={true}
       control={form.control}
       name={baseName}
       render={({ fields, append }) => (

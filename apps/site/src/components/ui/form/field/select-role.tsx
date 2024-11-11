@@ -20,6 +20,7 @@ export interface FormFieldSelectRoleProps<
   description: string
   placeholder?: string
   multiselect?: boolean
+  disabled?: boolean
 }
 
 export function FormFieldSelectRole<
@@ -30,6 +31,7 @@ export function FormFieldSelectRole<
     <FormField
       control={props.control}
       name={props.name}
+      disabled={props.disabled}
       render={({ field }) => (
         <FormItem>
           <FormLabel>{props.label}</FormLabel>

@@ -22,6 +22,7 @@ export interface FormFieldSelectChannelProps<
   placeholder?: string
   channelType?: keyof typeof ChannelType
   multiselect?: boolean
+  disabled?: boolean
 }
 
 export function FormFieldSelectChannel<
@@ -32,6 +33,7 @@ export function FormFieldSelectChannel<
     <FormField
       control={props.control}
       name={props.name}
+      disabled={props.disabled}
       render={({ field }) => (
         <FormItem>
           <FormLabel>{props.label}</FormLabel>
