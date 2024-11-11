@@ -34,7 +34,7 @@ export interface ModulesDataFields {
   }
 }
 
-export type ModulesFormValues = z.infer<typeof modulesSchema>
+export type ModulesFormValues = z.input<typeof modulesSchema>
 export type ModulesFormReturn = UseFormReturn<ModulesFormValues>
 
 export type ModulesFormValuesWithData = Partial<{
