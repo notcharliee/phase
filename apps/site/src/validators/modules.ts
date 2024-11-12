@@ -70,7 +70,7 @@ export const bumpRemindersSchema = moduleSchema({
 export const countersSchema = moduleSchema({
   counters: zod
     .object({
-      name: zod.string().nonempty("Name is required"),
+      // name: zod.string().nonempty("Name is required"),
       channel: zod.string().snowflake("Channel is required"),
       content: zod
         .string()

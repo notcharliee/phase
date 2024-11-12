@@ -16,7 +16,7 @@ const baseName = `${ModuleId.Counters}.counters`
 
 export const Counters = () => {
   const form = useFormContext<ModulesFormValuesInput>()
-  const formFields = form.watch()[ModuleId.Counters]!
+  // const formFields = form.watch()[ModuleId.Counters]!
 
   return (
     <div className="space-y-6">
@@ -30,10 +30,8 @@ export const Counters = () => {
         render={({ fields, append }) => (
           <div className="space-y-4">
             {fields.map((field, index) => {
-              const nameField = formFields.counters[index]?.name
-              const cardTitle = nameField?.length
-                ? nameField
-                : `Counter ${index + 1}`
+              // const nameField = formFields.counters[index]?.name
+              const cardTitle = `Counter ${index + 1}`
 
               return (
                 <FormFieldArrayCard
@@ -65,7 +63,7 @@ export const Counters = () => {
               variant="outline"
               onClick={() =>
                 append({
-                  name: "",
+                  // name: "",
                   channel: "",
                   content: "",
                 })

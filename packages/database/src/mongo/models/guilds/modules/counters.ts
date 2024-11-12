@@ -16,7 +16,7 @@ export const countersSchema = new Schema<Counters>(
       type: [
         new Schema(
           {
-            name: { type: Schema.Types.String, required: true },
+            // name: { type: Schema.Types.String, required: true },
             channel: { type: Schema.Types.String, required: true },
             content: { type: Schema.Types.String, required: true },
           },
