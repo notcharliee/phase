@@ -16,11 +16,11 @@ export const counters = {
       description: "The age of the server in days.",
       syntax: /(?<!\\){ageInDays}/g,
       parse(value, guild) {
-        const ageInDays = Math.floor(
-          Date.now() / 1000 - guild.createdAt.getTime() / 1000,
-        ).toString()
-
-        return value.replaceAll(this.syntax, ageInDays)
+        const createdTime = guild.createdAt.getTime()
+        const currentTime = Date.now()
+        const ageInMilliseconds = currentTime - createdTime
+        const ageInDays = Math.floor(ageInMilliseconds / 1000 / 60 / 60 / 24)
+        return value.replaceAll(this.syntax, ageInDays.toString())
       },
     }),
     new Variable({
@@ -29,7 +29,6 @@ export const counters = {
       syntax: /(?<!\\){boostCount}/g,
       parse(value, guild) {
         const boostCount = (guild.premiumSubscriptionCount ?? 0).toString()
-
         return value.replaceAll(this.syntax, boostCount)
       },
     }),
@@ -40,7 +39,6 @@ export const counters = {
       parse(value, guild) {
         const premiumTiers = ["2", "7", "14", "None"] as const
         const boostTarget = premiumTiers[guild.premiumTier].toString()
-
         return value.replaceAll(this.syntax, boostTarget)
       },
     }),
@@ -50,7 +48,6 @@ export const counters = {
       syntax: /(?<!\\){channelCount}/g,
       parse(value, guild) {
         const channelCount = guild.channels.cache.size.toString()
-
         return value.replaceAll(this.syntax, channelCount)
       },
     }),
@@ -60,7 +57,6 @@ export const counters = {
       syntax: /(?<!\\){memberCount}/g,
       parse(value, guild) {
         const memberCount = guild.memberCount.toString()
-
         return value.replaceAll(this.syntax, memberCount)
       },
     }),
@@ -69,10 +65,7 @@ export const counters = {
       description: "The number of online members in the server.",
       syntax: /(?<!\\){onlineMemberCount}/g,
       parse(value, guild) {
-        const onlineMemberCount = (
-          guild.approximatePresenceCount ?? 0
-        ).toString()
-
+        const onlineMemberCount = `${guild.approximatePresenceCount}`
         return value.replaceAll(this.syntax, onlineMemberCount)
       },
     }),
@@ -81,10 +74,7 @@ export const counters = {
       description: "The number of offline members in the server.",
       syntax: /(?<!\\){offlineMemberCount}/g,
       parse(value, guild) {
-        const offlineMemberCount = (
-          guild.memberCount - (guild.approximatePresenceCount ?? 0)
-        ).toString()
-
+        const offlineMemberCount = `${guild.memberCount - (guild.approximatePresenceCount ?? 0)}`
         return value.replaceAll(this.syntax, offlineMemberCount)
       },
     }),
@@ -94,7 +84,6 @@ export const counters = {
       syntax: /(?<!\\){roleCount}/g,
       parse(value, guild) {
         const roleCount = guild.roles.cache.size.toString()
-
         return value.replaceAll(this.syntax, roleCount)
       },
     }),

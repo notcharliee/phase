@@ -2,19 +2,24 @@ import { BotCronBuilder } from "phasebot/builders"
 
 import { ModuleDefinitions, ModuleId } from "@repo/utils/modules"
 
-import type { Client } from "discord.js"
-
 export default new BotCronBuilder()
   .setPattern("*/10 * * * *")
   .setExecute(async (client) => {
     const guildDocs = client.stores.guilds
-      .filter((guildDoc) => guildDoc.modules?.[ModuleId.Counters]?.enabled)
+      .filter(
+        (guildDoc) =>
+          client.guilds.cache.has(guildDoc.id) &&
+          guildDoc.modules?.[ModuleId.Counters]?.enabled,
+      )
       .values()
 
     await Promise.all(
       Array.from(guildDocs).map(async (guildDoc) => {
-        const guild = await fetchGuildWithCounts(client, guildDoc.id)
-        if (!guild) return
+        const guild = await client.guilds.fetch({
+          guild: guildDoc.id,
+          withCounts: true,
+          force: true,
+        })
 
         const moduleConfig = guildDoc.modules![ModuleId.Counters]!
         const moduleDefinintion = ModuleDefinitions[ModuleId.Counters]
@@ -44,23 +49,3 @@ export default new BotCronBuilder()
       }),
     )
   })
-
-async function fetchGuildWithCounts(client: Client, guildId: string) {
-  let guild = client.guilds.cache.get(guildId)
-
-  if (!guild) return null
-
-  if (!guild.approximateMemberCount) {
-    try {
-      guild = await client.guilds.fetch({
-        guild: guildId,
-        cache: true,
-        withCounts: true,
-      })
-    } catch {
-      return null
-    }
-  }
-
-  return guild
-}
