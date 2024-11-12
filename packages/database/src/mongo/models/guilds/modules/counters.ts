@@ -3,7 +3,7 @@ import { Schema } from "mongoose"
 export interface Counters {
   enabled: boolean
   counters: {
-    name: string
+    // name: string
     channel: string
     content: string
   }[]
