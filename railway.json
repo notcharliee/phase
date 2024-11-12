@@ -1,4 +1,16 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
-  "deploy": { "startCommand": "bun run start:bot" }
+  "build": {
+    "builder": "NIXPACKS",
+    "nixpacksConfigPath": "./nixpacks.toml",
+    "watchPatterns": ["/apps/bot", "/packages/**"]
+  },
+  "deploy": {
+    "runtime": "V2",
+    "numReplicas": 1,
+    "sleepApplication": false,
+    "startCommand": "bun run start:bot",
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 100
+  }
 }
