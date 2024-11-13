@@ -3,150 +3,55 @@
 import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
-import { SelectChannel } from "~/components/dashboard/select/channel"
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
-import { RichTextarea } from "~/components/ui/richtext/textarea"
-import { Switch } from "~/components/ui/switch"
+import { FormFieldInput } from "~/components/ui/form/field/input"
+import { FormFieldRichTextarea } from "~/components/ui/form/field/rich-textarea"
+import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channel"
+import { FormFieldSwitch } from "~/components/ui/form/field/switch"
+import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
 
-import type { modulesSchema } from "~/validators/modules"
-import type { z } from "zod"
+import type { ModulesFormValuesInput } from "~/types/dashboard"
+
+const baseName = ModuleId.WelcomeMessages
 
 export const WelcomeMessages = () => {
-  const form = useFormContext<z.infer<typeof modulesSchema>>()
-  const formFields = form.watch()[ModuleId.WelcomeMessages]!
+  const form = useFormContext<ModulesFormValuesInput>()
+  const formFields = form.watch(baseName)!
 
   return (
-    <FormItem className="space-y-8">
-      <FormField
+    <FormFieldWrapper>
+      <FormFieldSelectChannel
+        label="Channel"
+        description="Where to send welcome messages"
         control={form.control}
-        name={`${ModuleId.WelcomeMessages}.channel`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Welcome Channel</FormLabel>
-            <FormControl>
-              <SelectChannel {...field} />
-            </FormControl>
-            <FormDescription>
-              The channel to send welcome messages to
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
+        name={`${baseName}.channel`}
       />
-      <FormField
+      <FormFieldRichTextarea
+        label="Content"
+        description="What to put in welcome messages"
+        placeholder="Example: Welcome to the server!"
         control={form.control}
-        name={`${ModuleId.WelcomeMessages}.message`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Welcome Message</FormLabel>
-            <FormControl>
-              <RichTextarea
-                placeholder={`Example: Hi **{username}**, welcome to the server! You are member #{memberCount}.`}
-                {...field}
-              />
-            </FormControl>
-            <FormDescription>
-              The message to send when a new member joins
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
+        name={`${baseName}.message`}
       />
-      <FormField
+      <FormFieldSwitch
+        label="Mention"
+        description="Whether or not to ping members in welcome messages"
         control={form.control}
-        name={`${ModuleId.WelcomeMessages}.card`}
-        render={() => {
-          const baseName = `${ModuleId.WelcomeMessages}.card`
-
-          return (
-            <FormItem className="space-y-4">
-              <FormField
-                control={form.control}
-                name={`${baseName}.enabled`}
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="mb-4 space-y-1">
-                      <FormLabel>Welcome Cards</FormLabel>
-                      <FormDescription>
-                        Whether or not to attach a welcome card
-                      </FormDescription>
-                    </div>
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal">
-                        {field.value
-                          ? "Yes, attach a welcome card"
-                          : "No, don't attach a welcome card"}
-                      </FormLabel>
-                    </FormItem>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={`${baseName}.background`}
-                disabled={!formFields?.card?.enabled}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder={`https://placehold.co/1200x448.png`}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Style your welcome card with a custom background
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </FormItem>
-          )
-        }}
+        name={`${baseName}.mention`}
       />
-      <FormField
+      <FormFieldSwitch
+        label="Card"
+        description="Whether or not to attach a welcome card to welcome messages"
         control={form.control}
-        name={`${ModuleId.WelcomeMessages}.mention`}
-        render={({ field }) => (
-          <FormItem>
-            <div className="mb-4 space-y-1">
-              <FormLabel>Mention on join</FormLabel>
-              <FormDescription>
-                Whether or not members should be pinged in the welcome message
-              </FormDescription>
-            </div>
-            <FormItem className="flex items-center space-x-3 space-y-0">
-              <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <FormLabel className="font-normal">
-                {field.value
-                  ? "Yes, members should be pinged"
-                  : "No, members shouldn't be pinged"}
-              </FormLabel>
-            </FormItem>
-            <FormMessage />
-          </FormItem>
-        )}
+        name={`${baseName}.card.enabled`}
       />
-    </FormItem>
+      <FormFieldInput
+        label="Card Image URL"
+        description="What background image to use for the welcome card"
+        placeholder="Example: https://example.com/image.png"
+        disabled={!formFields?.card?.enabled}
+        control={form.control}
+        name={`${baseName}.card.background`}
+      />
+    </FormFieldWrapper>
   )
 }
