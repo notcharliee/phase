@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 
 import { useFieldArray } from "react-hook-form"
@@ -21,8 +23,12 @@ import type {
   UseFieldArrayReturn,
 } from "react-hook-form"
 
+export type FormFieldArrayContextValue = UseFieldArrayReturn & {
+  maxLength?: number
+}
+
 export const FormFieldArrayContext =
-  React.createContext<UseFieldArrayReturn | null>(null)
+  React.createContext<FormFieldArrayContextValue | null>(null)
 
 export function useFormFieldArrayContext() {
   const fieldArrayContext = React.use(FormFieldArrayContext)
@@ -42,6 +48,7 @@ export interface FormFieldArrayProps<
   label: string
   description: string
   disabled?: boolean
+  maxLength?: number
   srOnlyLabelAndDescription?: boolean
   control: Control<TFieldValues>
   name: TFieldArrayName
@@ -54,11 +61,16 @@ export function FormFieldArray<
   TFieldValues extends FieldValues = FieldValues,
   TFieldArrayName extends
     FieldArrayPath<TFieldValues> = FieldArrayPath<TFieldValues>,
->({ render, ...props }: FormFieldArrayProps<TFieldValues, TFieldArrayName>) {
+>(props: FormFieldArrayProps<TFieldValues, TFieldArrayName>) {
   const fieldArray = useFieldArray(props)
 
+  const contextValue = {
+    ...fieldArray,
+    maxLength: props.maxLength,
+  } as FormFieldArrayContextValue
+
   return (
-    <FormFieldArrayContext value={fieldArray as UseFieldArrayReturn}>
+    <FormFieldArrayContext value={contextValue}>
       <FormField
         control={props.control}
         name={props.name as FieldPath<TFieldValues>}
@@ -78,7 +90,7 @@ export function FormFieldArray<
               </FormDescription>
             </div>
             <FormMessage />
-            <FormControl>{render(fieldArray)}</FormControl>
+            <FormControl>{props.render(fieldArray)}</FormControl>
           </FormItem>
         )}
       />

@@ -1,0 +1,40 @@
+import { Button } from "~/components/ui/button"
+import { useFormFieldArrayContext } from "~/components/ui/form/field/array"
+
+export interface FormFieldArrayButtonProps
+  extends React.ComponentPropsWithRef<typeof Button> {
+  label: string
+  description?: string
+  appendValue?: object | (() => object)
+}
+
+export function FormFieldArrayButton({
+  disabled,
+  children,
+  label,
+  description,
+  appendValue,
+  ...props
+}: FormFieldArrayButtonProps) {
+  const { maxLength, fields, append } = useFormFieldArrayContext()
+  const isDisabled = disabled ?? !!(maxLength && fields.length >= maxLength)
+
+  const onClick = () => {
+    const isFunction = typeof appendValue === "function"
+    append(isFunction ? appendValue() : appendValue)
+  }
+
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      disabled={isDisabled}
+      aria-label={label}
+      aria-description={description}
+      onClick={onClick}
+      {...props}
+    >
+      {children ?? label}
+    </Button>
+  )
+}
