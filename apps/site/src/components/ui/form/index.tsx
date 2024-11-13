@@ -3,25 +3,13 @@
 import * as React from "react"
 
 import { Slot } from "@radix-ui/react-slot"
-import {
-  Controller,
-  FormProvider,
-  useFieldArray,
-  useFormContext,
-} from "react-hook-form"
+import { Controller, FormProvider, useFormContext } from "react-hook-form"
 
 import { Label } from "~/components/ui/label"
 
 import { cn } from "~/lib/utils"
 
-import type {
-  ControllerProps,
-  FieldArrayPath,
-  FieldPath,
-  FieldValues,
-  UseFieldArrayProps,
-  UseFieldArrayReturn,
-} from "react-hook-form"
+import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form"
 
 export const Form = FormProvider
 
@@ -45,23 +33,6 @@ export function FormField<
       <Controller {...props} />
     </FormFieldContext.Provider>
   )
-}
-
-export function FormFieldArray<
-  TFieldValues extends FieldValues = FieldValues,
-  TFieldArrayName extends
-    FieldArrayPath<TFieldValues> = FieldArrayPath<TFieldValues>,
-  TKeyName extends string = "id",
->(
-  props: UseFieldArrayProps<TFieldValues, TFieldArrayName, TKeyName> & {
-    render: (
-      props: UseFieldArrayReturn<TFieldValues, TFieldArrayName, TKeyName>,
-    ) => React.ReactElement
-  },
-) {
-  const { render, ...rest } = props
-  const fieldArray = useFieldArray(rest)
-  return render(fieldArray)
 }
 
 export const useFormField = () => {
