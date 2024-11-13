@@ -5,9 +5,9 @@ import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
 import { FormFieldArray } from "~/components/ui/form/field/array"
-import { FormFieldArrayButton } from "~/components/ui/form/field/array-button"
+import { FormFieldArrayAppendButton } from "~/components/ui/form/field/array-append-button"
 import { FormFieldArrayCard } from "~/components/ui/form/field/array-card"
-import { FormFieldSelectItem } from "~/components/ui/form/field/select-item"
+import { FormFieldSelect } from "~/components/ui/form/field/select"
 import { FormFieldSelectRole } from "~/components/ui/form/field/select-role"
 import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
 
@@ -49,7 +49,7 @@ export const AutoRoles = () => {
                   control={form.control}
                   name={`${baseName}.${index}.id`}
                 />
-                <FormFieldSelectItem
+                <FormFieldSelect
                   label="Target"
                   description="The target user type"
                   placeholder="Select a target"
@@ -64,7 +64,7 @@ export const AutoRoles = () => {
               </FormFieldArrayCard>
             )
           })}
-          <FormFieldArrayButton
+          <FormFieldArrayAppendButton
             label="Add Role"
             description="Add a new auto role"
             appendValue={{ id: "", target: "everyone" }}

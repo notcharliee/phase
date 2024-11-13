@@ -4,7 +4,7 @@ import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
 import { FormFieldArray } from "~/components/ui/form/field/array"
-import { FormFieldArrayButton } from "~/components/ui/form/field/array-button"
+import { FormFieldArrayAppendButton } from "~/components/ui/form/field/array-append-button"
 import { FormFieldArrayCard } from "~/components/ui/form/field/array-card"
 import { FormFieldInput } from "~/components/ui/form/field/input"
 import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channel"
@@ -60,7 +60,7 @@ export const Counters = () => {
                 </FormFieldArrayCard>
               )
             })}
-            <FormFieldArrayButton
+            <FormFieldArrayAppendButton
               label="Add Counter"
               description="Add a new counter"
               appendValue={{

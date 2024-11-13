@@ -5,11 +5,11 @@ import { useFormContext } from "react-hook-form"
 import { v4 as randomUUID } from "uuid"
 
 import { FormFieldArray } from "~/components/ui/form/field/array"
-import { FormFieldArrayButton } from "~/components/ui/form/field/array-button"
+import { FormFieldArrayAppendButton } from "~/components/ui/form/field/array-append-button"
 import { FormFieldArrayCard } from "~/components/ui/form/field/array-card"
 import { FormFieldInput } from "~/components/ui/form/field/input"
+import { FormFieldSelect } from "~/components/ui/form/field/select"
 import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channel"
-import { FormFieldSelectItem } from "~/components/ui/form/field/select-item"
 import { FormFieldSwitch } from "~/components/ui/form/field/switch"
 import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
 
@@ -94,7 +94,7 @@ export const Forms = () => {
                                 control={form.control}
                                 name={`${baseName}.${index}.questions.${index}.label`}
                               />
-                              <FormFieldSelectItem
+                              <FormFieldSelect
                                 label="Type"
                                 description="What type of response to expect"
                                 placeholder="Select a response type"
@@ -115,7 +115,7 @@ export const Forms = () => {
                             </FormFieldArrayCard>
                           )
                         })}
-                        <FormFieldArrayButton
+                        <FormFieldArrayAppendButton
                           label="Add Question"
                           description="Add a new question"
                           appendValue={{
@@ -130,7 +130,7 @@ export const Forms = () => {
                 </FormFieldArrayCard>
               )
             })}
-            <FormFieldArrayButton
+            <FormFieldArrayAppendButton
               label="Add Form"
               description="Add a new form"
               appendValue={() => ({

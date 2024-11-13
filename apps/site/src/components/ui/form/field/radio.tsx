@@ -10,7 +10,7 @@ import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
 
 import type { Control, FieldPath, FieldValues } from "react-hook-form"
 
-export interface FormFieldSelectRadioProps<
+export interface FormFieldRadioProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > {
@@ -25,10 +25,10 @@ export interface FormFieldSelectRadioProps<
   }[]
 }
 
-export function FormFieldSelectRadio<
+export function FormFieldRadio<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->(props: FormFieldSelectRadioProps<TFieldValues, TName>) {
+>(props: FormFieldRadioProps<TFieldValues, TName>) {
   return (
     <FormField
       control={props.control}

@@ -4,7 +4,7 @@ import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
 import { FormFieldArray } from "~/components/ui/form/field/array"
-import { FormFieldArrayButton } from "~/components/ui/form/field/array-button"
+import { FormFieldArrayAppendButton } from "~/components/ui/form/field/array-append-button"
 import { FormFieldArrayCard } from "~/components/ui/form/field/array-card"
 import { FormFieldInput } from "~/components/ui/form/field/input"
 import { FormFieldRichTextarea } from "~/components/ui/form/field/rich-textarea"
@@ -80,7 +80,7 @@ export function AutoMessages() {
               </FormFieldArrayCard>
             )
           })}
-          <FormFieldArrayButton
+          <FormFieldArrayAppendButton
             label="Add Message"
             description="Add a new auto message"
             appendValue={{

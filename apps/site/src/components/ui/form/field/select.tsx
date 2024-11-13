@@ -21,7 +21,7 @@ import {
 import type { IconProps } from "@radix-ui/react-icons/dist/types"
 import type { Control, FieldPath, FieldValues } from "react-hook-form"
 
-export interface FormFieldSelectItemProps<
+export interface FormFieldSelectProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > {
@@ -38,10 +38,10 @@ export interface FormFieldSelectItemProps<
   }[]
 }
 
-export function FormFieldSelectItem<
+export function FormFieldSelect<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->(props: FormFieldSelectItemProps<TFieldValues, TName>) {
+>(props: FormFieldSelectProps<TFieldValues, TName>) {
   const [open, setOpen] = React.useState(false)
 
   return (

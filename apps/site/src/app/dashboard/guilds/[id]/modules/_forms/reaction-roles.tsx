@@ -4,7 +4,7 @@ import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
 import { FormFieldArray } from "~/components/ui/form/field/array"
-import { FormFieldArrayButton } from "~/components/ui/form/field/array-button"
+import { FormFieldArrayAppendButton } from "~/components/ui/form/field/array-append-button"
 import { FormFieldArrayCard } from "~/components/ui/form/field/array-card"
 import { FormFieldEmojiPicker } from "~/components/ui/form/field/emoji-picker"
 import { FormFieldInput } from "~/components/ui/form/field/input"
@@ -59,7 +59,7 @@ export const ReactionRoles = () => {
                 />
               </FormFieldArrayCard>
             ))}
-            <FormFieldArrayButton
+            <FormFieldArrayAppendButton
               label="Add Reaction"
               description="Adds a reaction to the message"
               appendValue={{ emoji: "🌒", role: "" }}

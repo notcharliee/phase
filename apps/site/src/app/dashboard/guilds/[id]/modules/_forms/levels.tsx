@@ -4,12 +4,12 @@ import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
 import { FormFieldArray } from "~/components/ui/form/field/array"
-import { FormFieldArrayButton } from "~/components/ui/form/field/array-button"
+import { FormFieldArrayAppendButton } from "~/components/ui/form/field/array-append-button"
 import { FormFieldArrayCard } from "~/components/ui/form/field/array-card"
 import { FormFieldInput } from "~/components/ui/form/field/input"
+import { FormFieldRadio } from "~/components/ui/form/field/radio"
 import { FormFieldRichTextarea } from "~/components/ui/form/field/rich-textarea"
 import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channel"
-import { FormFieldSelectRadio } from "~/components/ui/form/field/select-radio"
 import { FormFieldSelectRole } from "~/components/ui/form/field/select-role"
 import { FormFieldSwitch } from "~/components/ui/form/field/switch"
 import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
@@ -29,7 +29,7 @@ export const Levels = () => {
         control={form.control}
         name={`${ModuleId.Levels}.message`}
       />
-      <FormFieldSelectRadio
+      <FormFieldRadio
         label="Reply Type"
         description="How to send level-up messages"
         control={form.control}
@@ -90,7 +90,7 @@ export const Levels = () => {
                 </FormFieldArrayCard>
               )
             })}
-            <FormFieldArrayButton
+            <FormFieldArrayAppendButton
               label="Add Role Reward"
               description="Add a new role reward"
               appendValue={{
