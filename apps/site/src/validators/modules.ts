@@ -19,8 +19,8 @@ export const auditLogsSchema = moduleSchema({
 })
 
 export const autoMessagesSchema = moduleSchema({
-  messages: zod.array(
-    zod.object({
+  messages: zod
+    .object({
       name: zod
         .string()
         .nonempty("Name is required")
@@ -36,8 +36,9 @@ export const autoMessagesSchema = moduleSchema({
         .nonempty("Interval is required")
         .max(100, "Interval cannot be longer than 100 characters")
         .refine(safeMs, "Invalid interval format"),
-    }),
-  ),
+    })
+    .array()
+    .max(10),
 })
 
 export const autoRolesSchema = moduleSchema({
@@ -77,7 +78,8 @@ export const countersSchema = moduleSchema({
         .nonempty("Content is required")
         .max(100, "Content cannot be longer than 100 characters"),
     })
-    .array(),
+    .array()
+    .max(10),
 })
 
 export const formsSchema = moduleSchema({
