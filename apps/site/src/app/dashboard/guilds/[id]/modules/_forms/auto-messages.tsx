@@ -3,13 +3,14 @@
 import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
-import { Button } from "~/components/ui/button"
 import { FormFieldArray } from "~/components/ui/form/field/array"
+import { FormFieldArrayButton } from "~/components/ui/form/field/array-button"
 import { FormFieldArrayCard } from "~/components/ui/form/field/array-card"
 import { FormFieldInput } from "~/components/ui/form/field/input"
 import { FormFieldRichTextarea } from "~/components/ui/form/field/rich-textarea"
 import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channel"
 import { FormFieldSelectMention } from "~/components/ui/form/field/select-mention"
+import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
 
 import type { ModulesFormValuesInput } from "~/types/dashboard"
 
@@ -24,10 +25,11 @@ export function AutoMessages() {
       label="Auto Messages"
       description="Auto Messages config"
       srOnlyLabelAndDescription={true}
+      maxLength={10}
       control={form.control}
       name={baseName}
-      render={({ fields, append }) => (
-        <div className="space-y-4">
+      render={({ fields }) => (
+        <FormFieldWrapper type={"array"}>
           {fields.map((field, index) => {
             const nameField = formFields.messages[index]?.name
             const cardTitle = nameField?.length
@@ -78,21 +80,17 @@ export function AutoMessages() {
               </FormFieldArrayCard>
             )
           })}
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() =>
-              append({
-                name: "",
-                channel: "",
-                content: "",
-                interval: "",
-              })
-            }
-          >
-            Add Message
-          </Button>
-        </div>
+          <FormFieldArrayButton
+            label="Add Message"
+            description="Add a new auto message"
+            appendValue={{
+              name: "",
+              channel: "",
+              content: "",
+              interval: "",
+            }}
+          />
+        </FormFieldWrapper>
       )}
     />
   )

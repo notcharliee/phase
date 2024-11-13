@@ -4,6 +4,7 @@ import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
 import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channel"
+import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
 
 import type { ModulesFormValuesInput } from "~/types/dashboard"
 
@@ -13,7 +14,7 @@ export const JoinToCreates = () => {
   const form = useFormContext<ModulesFormValuesInput>()
 
   return (
-    <div className="space-y-6">
+    <FormFieldWrapper>
       <FormFieldSelectChannel
         label="Trigger Channel"
         description="The voice channel that triggers the module"
@@ -28,6 +29,6 @@ export const JoinToCreates = () => {
         control={form.control}
         name={`${baseName}.category`}
       />
-    </div>
+    </FormFieldWrapper>
   )
 }

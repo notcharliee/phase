@@ -3,11 +3,12 @@
 import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
-import { Button } from "~/components/ui/button"
 import { FormFieldArray } from "~/components/ui/form/field/array"
+import { FormFieldArrayButton } from "~/components/ui/form/field/array-button"
 import { FormFieldArrayCard } from "~/components/ui/form/field/array-card"
 import { FormFieldInput } from "~/components/ui/form/field/input"
 import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channel"
+import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
 import { Link } from "~/components/ui/link"
 
 import type { ModulesFormValuesInput } from "~/types/dashboard"
@@ -19,16 +20,17 @@ export const Counters = () => {
   // const formFields = form.watch()[ModuleId.Counters]!
 
   return (
-    <div className="space-y-6">
+    <FormFieldWrapper>
       <CountersNotice />
       <FormFieldArray
         label="Counters"
         description="Counters config"
         srOnlyLabelAndDescription={true}
+        maxLength={10}
         control={form.control}
         name={baseName}
-        render={({ fields, append }) => (
-          <div className="space-y-4">
+        render={({ fields }) => (
+          <FormFieldWrapper type={"array"}>
             {fields.map((field, index) => {
               // const nameField = formFields.counters[index]?.name
               const cardTitle = `Counter ${index + 1}`
@@ -58,23 +60,19 @@ export const Counters = () => {
                 </FormFieldArrayCard>
               )
             })}
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() =>
-                append({
-                  // name: "",
-                  channel: "",
-                  content: "",
-                })
-              }
-            >
-              Add Counter
-            </Button>
-          </div>
+            <FormFieldArrayButton
+              label="Add Counter"
+              description="Add a new counter"
+              appendValue={{
+                // name: "",
+                channel: "",
+                content: "",
+              }}
+            />
+          </FormFieldWrapper>
         )}
       />
-    </div>
+    </FormFieldWrapper>
   )
 }
 

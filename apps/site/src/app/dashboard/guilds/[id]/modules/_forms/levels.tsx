@@ -3,8 +3,8 @@
 import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
-import { Button } from "~/components/ui/button"
 import { FormFieldArray } from "~/components/ui/form/field/array"
+import { FormFieldArrayButton } from "~/components/ui/form/field/array-button"
 import { FormFieldArrayCard } from "~/components/ui/form/field/array-card"
 import { FormFieldInput } from "~/components/ui/form/field/input"
 import { FormFieldRichTextarea } from "~/components/ui/form/field/rich-textarea"
@@ -12,6 +12,7 @@ import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channe
 import { FormFieldSelectRadio } from "~/components/ui/form/field/select-radio"
 import { FormFieldSelectRole } from "~/components/ui/form/field/select-role"
 import { FormFieldSwitch } from "~/components/ui/form/field/switch"
+import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
 
 import type { ModulesFormValuesInput } from "~/types/dashboard"
 
@@ -20,7 +21,7 @@ export const Levels = () => {
   const formFields = form.watch()[ModuleId.Levels]!
 
   return (
-    <div className="space-y-6">
+    <FormFieldWrapper>
       <FormFieldRichTextarea
         label="Message"
         description="The message to send on member level-ups"
@@ -55,10 +56,11 @@ export const Levels = () => {
       <FormFieldArray
         label="Role Rewards"
         description="Assign roles to members when they reach a new milestones"
+        maxLength={100}
         control={form.control}
         name={`${ModuleId.Levels}.roles`}
-        render={({ fields, append }) => (
-          <div className="space-y-4">
+        render={({ fields }) => (
+          <FormFieldWrapper type={"array"}>
             {fields.map((field, index) => {
               const levelField = formFields.roles[index]?.level
               const cardLabel = `Level ${levelField ?? ""} Reward`
@@ -88,20 +90,15 @@ export const Levels = () => {
                 </FormFieldArrayCard>
               )
             })}
-            <Button
-              type="button"
-              variant="outline"
-              disabled={fields.length >= 100}
-              onClick={() =>
-                append({
-                  role: "",
-                  level: (formFields.roles[fields.length - 1]?.level ?? 0) + 5,
-                })
-              }
-            >
-              Add Role Reward
-            </Button>
-          </div>
+            <FormFieldArrayButton
+              label="Add Role Reward"
+              description="Add a new role reward"
+              appendValue={{
+                role: "",
+                level: (formFields.roles[fields.length - 1]?.level ?? 0) + 5,
+              }}
+            />
+          </FormFieldWrapper>
         )}
       />
       <FormFieldInput
@@ -111,6 +108,6 @@ export const Levels = () => {
         control={form.control}
         name={`${ModuleId.Levels}.background`}
       />
-    </div>
+    </FormFieldWrapper>
   )
 }

@@ -6,6 +6,7 @@ import { useFormContext } from "react-hook-form"
 import { FormFieldInput } from "~/components/ui/form/field/input"
 import { FormFieldRichTextarea } from "~/components/ui/form/field/rich-textarea"
 import { FormFieldSelectMention } from "~/components/ui/form/field/select-mention"
+import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
 
 import type { ModulesFormValuesInput } from "~/types/dashboard"
 
@@ -15,7 +16,7 @@ export const BumpReminders = () => {
   const form = useFormContext<ModulesFormValuesInput>()
 
   return (
-    <div className="space-y-6">
+    <FormFieldWrapper>
       <FormFieldInput
         label="Reminder Time"
         description="How long to wait before reminding members"
@@ -40,6 +41,6 @@ export const BumpReminders = () => {
         control={form.control}
         name={`${baseName}.mention`}
       />
-    </div>
+    </FormFieldWrapper>
   )
 }

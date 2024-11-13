@@ -4,11 +4,12 @@ import { AvatarIcon, FaceIcon, RadiobuttonIcon } from "@radix-ui/react-icons"
 import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
-import { Button } from "~/components/ui/button"
 import { FormFieldArray } from "~/components/ui/form/field/array"
+import { FormFieldArrayButton } from "~/components/ui/form/field/array-button"
 import { FormFieldArrayCard } from "~/components/ui/form/field/array-card"
 import { FormFieldSelectItem } from "~/components/ui/form/field/select-item"
 import { FormFieldSelectRole } from "~/components/ui/form/field/select-role"
+import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
 
 import { getOrdinal } from "~/lib/utils"
 
@@ -24,10 +25,11 @@ export const AutoRoles = () => {
       label="Auto Roles"
       description="Auto Roles config"
       srOnlyLabelAndDescription={true}
+      maxLength={10}
       control={form.control}
       name={baseName}
-      render={({ fields, append }) => (
-        <div className="space-y-4">
+      render={({ fields }) => (
+        <FormFieldWrapper type={"array"}>
           {fields.map((field, index) => {
             const cardLabel = `Auto Role ${index + 1}`
             const cardDescription = `The ${getOrdinal(index + 1)} role to assign to new members`
@@ -62,15 +64,12 @@ export const AutoRoles = () => {
               </FormFieldArrayCard>
             )
           })}
-          <Button
-            type="button"
-            variant="outline"
-            disabled={fields.length >= 10}
-            onClick={() => append({ id: "", target: "everyone" })}
-          >
-            Add Role
-          </Button>
-        </div>
+          <FormFieldArrayButton
+            label="Add Role"
+            description="Add a new auto role"
+            appendValue={{ id: "", target: "everyone" }}
+          />
+        </FormFieldWrapper>
       )}
     />
   )

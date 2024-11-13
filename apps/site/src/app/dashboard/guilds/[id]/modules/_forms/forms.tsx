@@ -4,13 +4,14 @@ import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 import { v4 as randomUUID } from "uuid"
 
-import { Button } from "~/components/ui/button"
 import { FormFieldArray } from "~/components/ui/form/field/array"
+import { FormFieldArrayButton } from "~/components/ui/form/field/array-button"
 import { FormFieldArrayCard } from "~/components/ui/form/field/array-card"
 import { FormFieldInput } from "~/components/ui/form/field/input"
 import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channel"
 import { FormFieldSelectItem } from "~/components/ui/form/field/select-item"
 import { FormFieldSwitch } from "~/components/ui/form/field/switch"
+import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
 
 import type { ModulesFormValuesInput } from "~/types/dashboard"
 
@@ -21,7 +22,7 @@ export const Forms = () => {
   const formFields = form.watch()[ModuleId.Forms]!
 
   return (
-    <div className="space-y-6">
+    <FormFieldWrapper>
       <FormFieldSelectChannel
         label="Channel"
         description="Where to send submitted form responses"
@@ -31,10 +32,11 @@ export const Forms = () => {
       <FormFieldArray
         label="Forms"
         description="The forms you want members to be able to create"
+        maxLength={10}
         control={form.control}
         name={baseName}
-        render={({ fields, append }) => (
-          <div className="space-y-4">
+        render={({ fields }) => (
+          <FormFieldWrapper type={"array"}>
             {fields.map((field, index) => {
               const nameField = formFields.forms[index]?.name
               const cardTitle = nameField?.length
@@ -65,10 +67,11 @@ export const Forms = () => {
                   <FormFieldArray
                     label="Questions"
                     description="The questions to ask the members to fill out"
+                    maxLength={25}
                     control={form.control}
                     name={`${baseName}.${index}.questions`}
-                    render={({ fields, append }) => (
-                      <div className="space-y-4">
+                    render={({ fields }) => (
+                      <FormFieldWrapper type={"array"}>
                         {fields.map((field, index) => {
                           const labelField =
                             formFields.forms[index]?.questions[index]?.label
@@ -112,44 +115,34 @@ export const Forms = () => {
                             </FormFieldArrayCard>
                           )
                         })}
-                        <Button
-                          type="button"
-                          variant="outline"
-                          disabled={fields.length >= 25}
-                          onClick={() =>
-                            append({
-                              label: undefined,
-                              type: "string",
-                              required: true,
-                            })
-                          }
-                        >
-                          Add Question
-                        </Button>
-                      </div>
+                        <FormFieldArrayButton
+                          label="Add Question"
+                          description="Add a new question"
+                          appendValue={{
+                            label: undefined,
+                            type: "string",
+                            required: true,
+                          }}
+                        />
+                      </FormFieldWrapper>
                     )}
                   />
                 </FormFieldArrayCard>
               )
             })}
-            <Button
-              type="button"
-              variant="outline"
-              disabled={fields.length >= 10}
-              onClick={() =>
-                append({
-                  id: randomUUID(),
-                  name: undefined,
-                  channel: "",
-                  questions: [],
-                })
-              }
-            >
-              Add Form
-            </Button>
-          </div>
+            <FormFieldArrayButton
+              label="Add Form"
+              description="Add a new form"
+              appendValue={() => ({
+                id: randomUUID(),
+                name: undefined,
+                channel: "",
+                questions: [],
+              })}
+            />
+          </FormFieldWrapper>
         )}
       />
-    </div>
+    </FormFieldWrapper>
   )
 }
