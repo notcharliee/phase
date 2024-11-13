@@ -23,15 +23,16 @@ export function SelfRoles() {
   const formFields = form.watch()[ModuleId.SelfRoles]!
 
   const appendValue = (type: (typeof formFields.messages)[number]["type"]) => {
-    return {
-      id: randomUUID(),
-      type,
-      name: `Message ${formFields.messages.length + 1}`,
-      channel: "",
-      content: "",
-      multiselect: false,
-      methods: [],
-    } satisfies (typeof formFields.messages)[number]
+    return () =>
+      ({
+        id: randomUUID(),
+        type,
+        name: `Message ${formFields.messages.length + 1}`,
+        channel: "",
+        content: "",
+        multiselect: false,
+        methods: [],
+      }) satisfies (typeof formFields.messages)[number]
   }
 
   return (
