@@ -22,18 +22,19 @@ export function SelfRoles() {
   const form = useFormContext<ModulesFormValuesInput>()
   const formFields = form.watch()[ModuleId.SelfRoles]!
 
-  const appendValue = (type: (typeof formFields.messages)[number]["type"]) => {
-    return () =>
-      ({
-        id: randomUUID(),
-        type,
-        name: `Message ${formFields.messages.length + 1}`,
-        channel: "",
-        content: "",
-        multiselect: false,
-        methods: [],
-      }) satisfies (typeof formFields.messages)[number]
-  }
+  type Message = (typeof formFields.messages)[number]
+  type MessageType = Message["type"]
+
+  const appendValue = (type: MessageType) => () =>
+    ({
+      id: randomUUID(),
+      type,
+      name: `Message ${formFields.messages.length + 1}`,
+      channel: "",
+      content: "",
+      multiselect: false,
+      methods: [],
+    }) satisfies Message
 
   return (
     <FormFieldArray
@@ -43,21 +44,24 @@ export function SelfRoles() {
       maxLength={10}
       control={form.control}
       name={baseName}
-      render={({ fields }) => (
+      render={({ fields: messageFields }) => (
         <FormFieldWrapper type={"array"}>
-          {fields.map(({ id: messageId }, messageIndex) => {
-            const messageField = formFields.messages[messageIndex]!
+          {messageFields.map((messageField, messageIndex) => {
+            const message = formFields.messages[messageIndex]!
 
-            const nameField = messageField.name
-            const typeField = messageField.type
-
-            const messageCardTitle = nameField?.length
-              ? nameField
+            const messageCardTitle = message.name?.length
+              ? message.name
               : `Message ${messageIndex + 1}`
+
+            const messageMethodName = {
+              reaction: "reaction",
+              button: "button",
+              dropdown: "option",
+            }[message.type]
 
             return (
               <FormFieldArrayCard
-                key={messageId}
+                key={messageField.id}
                 index={messageIndex}
                 label={messageCardTitle}
                 control={form.control}
@@ -84,73 +88,76 @@ export function SelfRoles() {
                   name={`${baseName}.${messageIndex}.content`}
                 />
                 <FormFieldArray
-                  label={capitalCase(typeField ?? "Method") + "s"}
+                  label={capitalCase(messageMethodName)}
                   description="The methods to assign to the message"
                   maxLength={20}
                   control={form.control}
                   name={`${baseName}.${messageIndex}.methods`}
-                  render={({ fields }) => (
+                  render={({ fields: methodFields }) => (
                     <FormFieldWrapper type={"array"}>
-                      {fields.map(({ id: methodId }, methodIndex) => {
-                        const methodField = messageField.methods[methodIndex]!
+                      {methodFields.map((methodField, methodIndex) => {
+                        const method = message.methods[methodIndex]!
 
                         const labelField =
-                          "label" in methodField ? methodField.label : undefined
+                          "label" in method ? method.label : undefined
 
                         const methodCardTitle = labelField?.length
                           ? labelField
-                          : `${capitalCase(typeField ?? "Method")} ${methodIndex + 1}`
+                          : `${capitalCase(messageMethodName)} ${methodIndex + 1}`
+
+                        const methodBaseName =
+                          `${baseName}.${messageIndex}.methods.${methodIndex}` as const
 
                         return (
                           <FormFieldArrayCard
-                            key={methodId}
+                            key={methodField.id}
                             index={methodIndex}
                             label={methodCardTitle}
                             control={form.control}
-                            name={`${baseName}.${messageIndex}.methods.${methodIndex}`}
+                            name={methodBaseName}
                           >
-                            {messageField.type === "reaction" ? (
+                            {message.type === "reaction" ? (
                               <FormFieldEmojiPicker
                                 label="Emoji"
                                 description={`The emoji to react with`}
                                 size="fill"
                                 control={form.control}
-                                name={`${baseName}.${messageIndex}.methods.${methodIndex}.emoji`}
+                                name={`${methodBaseName}.emoji`}
                               />
                             ) : (
                               <FormFieldInput
                                 label="Label"
-                                description={`The label for the ${typeField}`}
+                                description={`The label for the ${messageMethodName}`}
                                 placeholder="Example: Click me!"
                                 control={form.control}
-                                name={`${baseName}.${messageIndex}.methods.${methodIndex}.label`}
+                                name={`${methodBaseName}.label`}
                               />
                             )}
                             <FormFieldSelectRole
                               label="Roles to Add"
-                              description={`The roles to add when the ${typeField} is used`}
+                              description={`The roles to add when the ${messageMethodName} is used`}
                               multiselect={true}
                               control={form.control}
-                              name={`${baseName}.${messageIndex}.methods.${methodIndex}.rolesToAdd`}
+                              name={`${methodBaseName}.rolesToAdd`}
                             />
                             <FormFieldSelectRole
                               label="Roles to Remove"
-                              description={`The roles to remove when the ${typeField} is used`}
+                              description={`The roles to remove when the ${messageMethodName} is used`}
                               multiselect={true}
                               control={form.control}
-                              name={`${baseName}.${messageIndex}.methods.${methodIndex}.rolesToRemove`}
+                              name={`${methodBaseName}.rolesToRemove`}
                             />
                           </FormFieldArrayCard>
                         )
                       })}
                       <FormFieldArrayAppendButton
-                        label={`Add ${capitalCase(typeField ?? "Method")}`}
-                        description={`Add a new ${typeField ?? "method"}`}
+                        label={`Add ${capitalCase(messageMethodName)}`}
+                        description={`Add a new ${messageMethodName}`}
                         appendValue={() => ({
                           id: randomUUID(),
                           rolesToAdd: [],
                           rolesToRemove: [],
-                          ...(typeField === "reaction"
+                          ...(message.type === "reaction"
                             ? { emoji: "" }
                             : { label: "" }),
                         })}
