@@ -1,387 +1,191 @@
-import { DotsHorizontalIcon, TrashIcon } from "@radix-ui/react-icons"
 import { ModuleId } from "@repo/utils/modules"
 import { capitalCase } from "change-case"
-import { useFieldArray, useFormContext } from "react-hook-form"
+import { useFormContext } from "react-hook-form"
 import { v4 as randomUUID } from "uuid"
 
-import { SelectChannel } from "~/components/dashboard/select/channel"
-import { SelectRole } from "~/components/dashboard/select/role"
-import { EmojiPicker } from "~/components/emoji-picker"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "~/components/ui/accordion"
-import { Button } from "~/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu"
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormHeader,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
-import { Label } from "~/components/ui/label"
-import { RichTextarea } from "~/components/ui/richtext/textarea"
+import { FormFieldArray } from "~/components/ui/form/field/array"
+import { FormFieldArrayAppendButton } from "~/components/ui/form/field/array-append-button"
+import { FormFieldArrayAppendSelect } from "~/components/ui/form/field/array-append-select"
+import { FormFieldArrayCard } from "~/components/ui/form/field/array-card"
+import { FormFieldEmojiPicker } from "~/components/ui/form/field/emoji-picker"
+import { FormFieldInput } from "~/components/ui/form/field/input"
+import { FormFieldRichTextarea } from "~/components/ui/form/field/rich-textarea"
+import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channel"
+import { FormFieldSelectRole } from "~/components/ui/form/field/select-role"
+import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
 
-import { cn } from "~/lib/utils"
+import type { ModulesFormValuesInput } from "~/types/dashboard"
 
-import type { modulesSchema } from "~/validators/modules"
-import type { z } from "zod"
+const baseName = `${ModuleId.SelfRoles}.messages`
 
 export function SelfRoles() {
-  const form = useFormContext<z.infer<typeof modulesSchema>>()
+  const form = useFormContext<ModulesFormValuesInput>()
   const formFields = form.watch()[ModuleId.SelfRoles]!
-  const formFieldArray = useFieldArray({
-    control: form.control,
-    name: `${ModuleId.SelfRoles}.messages`,
-  })
 
-  const addMessage = (type: (typeof formFields.messages)[number]["type"]) => {
-    formFieldArray.append({
+  const appendValue = (type: (typeof formFields.messages)[number]["type"]) => {
+    return {
       id: randomUUID(),
       type,
-      name: `Message ${capitalCase(type)} ${formFields.messages.length + 1}`,
+      name: `Message ${formFields.messages.length + 1}`,
       channel: "",
       content: "",
       multiselect: false,
       methods: [],
-    } satisfies (typeof formFields.messages)[number])
+    } satisfies (typeof formFields.messages)[number]
   }
 
   return (
-    <div className="space-y-4">
-      {formFieldArray.fields.map((field, index) => {
-        const baseName = `${ModuleId.SelfRoles}.messages.${index}` as const
+    <FormFieldArray
+      label="Messages"
+      description="The messages to send when a member performs a self-role"
+      srOnlyLabelAndDescription={true}
+      maxLength={10}
+      control={form.control}
+      name={baseName}
+      render={({ fields }) => (
+        <FormFieldWrapper type={"array"}>
+          {fields.map(({ id: messageId }, messageIndex) => {
+            const messageField = formFields.messages[messageIndex]!
 
-        const messageName =
-          formFields.messages[index]?.name ?? `Message ${index + 1}`
+            const nameField = messageField.name
+            const typeField = messageField.type
 
-        return (
-          <FormField
-            key={field.id}
-            control={form.control}
-            name={baseName}
-            render={() => (
-              <Card>
-                <CardHeader className="flex-row items-center justify-between space-y-0 py-3">
-                  <CardTitle>{messageName}</CardTitle>
-                  <Button
-                    variant={"outline"}
-                    size={"icon"}
-                    onClick={() => formFieldArray.remove(index)}
-                  >
-                    <Label className="sr-only">Delete Message</Label>
-                    <TrashIcon className="h-4 w-4" />
-                  </Button>
-                </CardHeader>
-                <CardContent className="space-y-6 border-t pt-6">
-                  <FormField
-                    control={form.control}
-                    name={`${baseName}.name`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="Example: Pick a colour role!"
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          The name of the message
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`${baseName}.channel`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Channel</FormLabel>
-                        <FormControl>
-                          <SelectChannel {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          The channel to send the message to
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`${baseName}.content`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Content</FormLabel>
-                        <FormControl>
-                          <RichTextarea
-                            {...field}
-                            placeholder="Example: Pick a colour role pleaseee!!"
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          The content of the message
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </CardContent>
-                <CardContent className="space-y-6 border-t pt-6">
-                  <MessageMethods index={index} />
-                </CardContent>
-              </Card>
-            )}
+            const messageCardTitle = nameField?.length
+              ? nameField
+              : `Message ${messageIndex + 1}`
+
+            return (
+              <FormFieldArrayCard
+                key={messageId}
+                index={messageIndex}
+                label={messageCardTitle}
+                control={form.control}
+                name={`${baseName}.${messageIndex}`}
+              >
+                <FormFieldInput
+                  label="Name"
+                  description="The name of the message"
+                  placeholder="Example: Colour Roles"
+                  control={form.control}
+                  name={`${baseName}.${messageIndex}.name`}
+                />
+                <FormFieldSelectChannel
+                  label="Channel"
+                  description="Where to send the message"
+                  control={form.control}
+                  name={`${baseName}.${messageIndex}.channel`}
+                />
+                <FormFieldRichTextarea
+                  label="Content"
+                  description="The content of the message"
+                  placeholder="Example: Pick a colour role!"
+                  control={form.control}
+                  name={`${baseName}.${messageIndex}.content`}
+                />
+                <FormFieldArray
+                  label={capitalCase(typeField ?? "Method") + "s"}
+                  description="The methods to assign to the message"
+                  maxLength={20}
+                  control={form.control}
+                  name={`${baseName}.${messageIndex}.methods`}
+                  render={({ fields }) => (
+                    <FormFieldWrapper type={"array"}>
+                      {fields.map(({ id: methodId }, methodIndex) => {
+                        const methodField = messageField.methods[methodIndex]!
+
+                        const labelField =
+                          "label" in methodField ? methodField.label : undefined
+
+                        const methodCardTitle = labelField?.length
+                          ? labelField
+                          : `${capitalCase(typeField ?? "Method")} ${methodIndex + 1}`
+
+                        return (
+                          <FormFieldArrayCard
+                            key={methodId}
+                            index={methodIndex}
+                            label={methodCardTitle}
+                            control={form.control}
+                            name={`${baseName}.${messageIndex}.methods.${methodIndex}`}
+                          >
+                            {messageField.type === "reaction" ? (
+                              <FormFieldEmojiPicker
+                                label="Emoji"
+                                description={`The emoji to react with`}
+                                size="fill"
+                                control={form.control}
+                                name={`${baseName}.${messageIndex}.methods.${methodIndex}.emoji`}
+                              />
+                            ) : (
+                              <FormFieldInput
+                                label="Label"
+                                description={`The label for the ${typeField}`}
+                                placeholder="Example: Click me!"
+                                control={form.control}
+                                name={`${baseName}.${messageIndex}.methods.${methodIndex}.label`}
+                              />
+                            )}
+                            <FormFieldSelectRole
+                              label="Roles to Add"
+                              description={`The roles to add when the ${typeField} is used`}
+                              multiselect={true}
+                              control={form.control}
+                              name={`${baseName}.${messageIndex}.methods.${methodIndex}.rolesToAdd`}
+                            />
+                            <FormFieldSelectRole
+                              label="Roles to Remove"
+                              description={`The roles to remove when the ${typeField} is used`}
+                              multiselect={true}
+                              control={form.control}
+                              name={`${baseName}.${messageIndex}.methods.${methodIndex}.rolesToRemove`}
+                            />
+                          </FormFieldArrayCard>
+                        )
+                      })}
+                      <FormFieldArrayAppendButton
+                        label={`Add ${capitalCase(typeField ?? "Method")}`}
+                        description={`Add a new ${typeField ?? "method"}`}
+                        appendValue={() => ({
+                          id: randomUUID(),
+                          rolesToAdd: [],
+                          rolesToRemove: [],
+                          ...(typeField === "reaction"
+                            ? { emoji: "" }
+                            : { label: "" }),
+                        })}
+                      />
+                    </FormFieldWrapper>
+                  )}
+                />
+              </FormFieldArrayCard>
+            )
+          })}
+          <FormFieldArrayAppendSelect
+            label="Add Message"
+            description="Add a new message"
+            items={[
+              {
+                label: "Reaction Based",
+                description: "Add a reaction-based message",
+                value: "reaction",
+                appendValue: appendValue("reaction"),
+              },
+              {
+                label: "Button Based",
+                description: "Add a button-based message",
+                value: "button",
+                appendValue: appendValue("button"),
+              },
+              {
+                label: "Dropdown Based",
+                description: "Add a dropdown-based message",
+                value: "dropdown",
+                appendValue: appendValue("dropdown"),
+              },
+            ]}
           />
-        )
-      })}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            type="button"
-            variant="outline"
-            disabled={formFieldArray.fields.length >= 10}
-          >
-            Add Message
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem onClick={() => addMessage("reaction")}>
-            Reaction Based
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => addMessage("button")}>
-            Button Based
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => addMessage("dropdown")}>
-            Dropdown Based
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-  )
-}
-
-function MessageMethods({ index }: { index: number }) {
-  const form = useFormContext<z.infer<typeof modulesSchema>>()
-
-  const message = form.watch()[ModuleId.SelfRoles]!.messages[index]!
-
-  const methodsFieldArray = useFieldArray({
-    control: form.control,
-    name: `${ModuleId.SelfRoles}.messages.${index}.methods`,
-  })
-
-  const addMethod = () => {
-    if (message.type === "reaction") {
-      methodsFieldArray.append({
-        id: randomUUID(),
-        emoji: "",
-        rolesToAdd: [],
-        rolesToRemove: [],
-      })
-    } else {
-      methodsFieldArray.append({
-        id: randomUUID(),
-        label: "",
-        rolesToAdd: [],
-        rolesToRemove: [],
-      })
-    }
-  }
-
-  const methodName = message.type === "dropdown" ? "option" : message.type
-
-  return (
-    <div className="space-y-4">
-      <FormHeader>
-        <FormLabel>Methods</FormLabel>
-        <FormDescription className="whitespace-pre-wrap">
-          Choose the {methodName + "s"} members can use to self-assign roles.
-          (max 20)
-        </FormDescription>
-      </FormHeader>
-      <Accordion
-        type="single"
-        className={cn(!methodsFieldArray.fields.length && "hidden", "!my-2")}
-        collapsible
-      >
-        {methodsFieldArray.fields.map((field, fieldIndex) => {
-          const baseName =
-            `${ModuleId.SelfRoles}.messages.${index}.methods.${fieldIndex}` as const
-
-          const methodLabel = `${capitalCase(methodName)} ${fieldIndex + 1}`
-
-          return (
-            <AccordionItem value={field.id} key={field.id}>
-              <AccordionTrigger className="group py-2">
-                <div className="flex w-full items-center justify-between">
-                  <Label className="cursor-pointer">{methodLabel}</Label>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        size={"icon"}
-                        variant={"ghost"}
-                        className="text-muted-foreground hover:text-foreground relative"
-                        aria-label="Options"
-                      >
-                        <DotsHorizontalIcon className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem
-                        disabled={index === 0}
-                        onClick={() => methodsFieldArray.move(index, index - 1)}
-                      >
-                        Move up
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        disabled={index === methodsFieldArray.fields.length - 1}
-                        onClick={() => methodsFieldArray.move(index, index + 1)}
-                      >
-                        Move down
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        onClick={() => methodsFieldArray.remove(index)}
-                      >
-                        Remove
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="space-y-8 pb-6">
-                {message.type === "reaction" ? (
-                  <>
-                    <FormField
-                      control={form.control}
-                      name={`${baseName}.emoji`}
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col">
-                          <FormLabel>Emoji</FormLabel>
-                          <FormControl>
-                            <EmojiPicker size="fill" {...field} />
-                          </FormControl>
-                          <FormDescription>
-                            The emoji to react with
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`${baseName}.rolesToAdd`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Roles to Add</FormLabel>
-                          <FormControl>
-                            <SelectRole multiselect {...field} />
-                          </FormControl>
-                          <FormDescription>
-                            The roles to assign when the button is pressed
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`${baseName}.rolesToRemove`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Roles to Remove</FormLabel>
-                          <FormControl>
-                            <SelectRole multiselect {...field} />
-                          </FormControl>
-                          <FormDescription>
-                            The roles to remove when the button is pressed
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <FormField
-                      control={form.control}
-                      name={`${baseName}.label`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Label</FormLabel>
-                          <FormControl>
-                            <Input {...field} placeholder="Example: Role 1" />
-                          </FormControl>
-                          <FormDescription>
-                            The text to display on the button
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`${baseName}.rolesToAdd`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Roles to Add</FormLabel>
-                          <FormControl>
-                            <SelectRole multiselect {...field} />
-                          </FormControl>
-                          <FormDescription>
-                            The roles to assign when the button is pressed
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`${baseName}.rolesToRemove`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Roles to Remove</FormLabel>
-                          <FormControl>
-                            <SelectRole multiselect {...field} />
-                          </FormControl>
-                          <FormDescription>
-                            The roles to remove when the button is pressed
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </>
-                )}
-              </AccordionContent>
-            </AccordionItem>
-          )
-        })}
-      </Accordion>
-      <Button
-        type="button"
-        variant="outline"
-        disabled={methodsFieldArray.fields.length >= 20}
-        onClick={() => addMethod()}
-      >
-        Add {capitalCase(methodName)}
-      </Button>
-    </div>
+        </FormFieldWrapper>
+      )}
+    />
   )
 }
