@@ -103,8 +103,8 @@ export const Levels = () => {
       />
       <FormFieldInput
         label="Card Image URL"
-        description="The background image for the level-up card"
-        placeholder="https://example.com/image.png"
+        description="What background image to use for the level-up card"
+        placeholder="Example: https://example.com/image.png"
         control={form.control}
         name={`${ModuleId.Levels}.background`}
       />
