@@ -46,6 +46,9 @@ export const getGuildData = async (params: GuildDataParams) => {
     redirect("/dashboard/guilds")
   }
 
+  // remove @everyone role
+  apiGuild.roles = apiGuild.roles.filter((role) => role.id !== guildId)
+
   const apiChannels = (await discordAPI.guilds.getChannels(
     guildId,
   )) as RESTAPIGuildChannelResolvable[]
