@@ -1,3 +1,5 @@
+import * as React from "react"
+
 import { moduleTags } from "@repo/utils/modules"
 
 import {
@@ -8,9 +10,11 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 
-export interface FilterOption {
-  label: (typeof moduleTags)[number] | "None"
-  value: Lowercase<(typeof moduleTags)[number]> | "none"
+export interface FilterOption<
+  T extends string = (typeof moduleTags)[number] | "None",
+> {
+  label: T
+  value: Lowercase<T>
 }
 
 export const filterOptions: FilterOption[] = [
@@ -33,8 +37,10 @@ export function SelectFilter<T extends FilterOption>({
   value,
   onValueChange,
 }: FilterSelectProps<T>) {
+  const name = `select-filter-${React.useId()}`
+
   return (
-    <Select value={value} onValueChange={onValueChange}>
+    <Select name={name} value={value} onValueChange={onValueChange}>
       <SelectTrigger>
         <div className="inline-flex space-x-2 font-medium">
           <span className="text-muted-foreground">Filters:</span>
