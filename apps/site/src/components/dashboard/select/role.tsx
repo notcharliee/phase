@@ -2,194 +2,73 @@
 
 import * as React from "react"
 
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
+import { AtSign, Lock } from "lucide-react"
 
-import { MentionBadge } from "~/components/dashboard/badges/mention"
-import { Button } from "~/components/ui/button"
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "~/components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover"
+  Combobox,
+  ComboboxContent,
+  ComboboxTrigger,
+  ComboboxValue,
+} from "~/components/ui/combobox"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
-import { useElementSize } from "~/hooks/use-element-size"
 
-import type { APIRole } from "@discordjs/core/http-only"
-import type { Optional } from "~/types/utils"
+import type { ComboboxItem } from "~/components/ui/combobox"
+import type { Arrayable, Optional } from "~/types/utils"
 
-interface Selectable {
-  name: string
-  value: string
-  hexColour?: string
-}
-
-interface SelectRoleProps<TMultiselect extends boolean = boolean> {
+interface SelectRoleProps<
+  TMultiselect extends boolean,
+  TValue extends Optional<Arrayable<string, TMultiselect>>,
+> {
   placeholder?: string
   multiselect?: TMultiselect
-  name: string
-  value: Optional<TMultiselect extends true ? string[] : string>
   disabled?: boolean
-  ref: (instance: unknown) => void
-  onChange: (
-    value: Optional<TMultiselect extends true ? string[] : string>,
-  ) => void
+  name: string
+  value: TValue
+  onValueChange: (value: TValue) => void
 }
 
-export const SelectRole = React.forwardRef<HTMLInputElement, SelectRoleProps>(
-  (
-    {
-      placeholder = "Select a role",
-      multiselect = false,
-      name,
-      value,
-      disabled,
-      onChange,
-    },
-    ref,
-  ) => {
-    const dashboard = useDashboardContext()
+export function SelectRole<
+  TMultiselect extends boolean,
+  TValue extends Optional<Arrayable<string, TMultiselect>>,
+>({
+  disabled,
+  placeholder = "Select a role",
+  ...props
+}: SelectRoleProps<TMultiselect, TValue>) {
+  const dashboard = useDashboardContext()
 
-    const triggerRef = React.useRef<HTMLButtonElement>(null)
-    const [open, setOpen] = React.useState(false)
-    const [inputValue, setInputValue] = React.useState("")
-    const [triggerWidth] = useElementSize(triggerRef)
+  const items = React.useMemo(() => {
+    const items: ComboboxItem[] = []
 
-    const sortedSelectables: Selectable[] = React.useMemo(() => {
-      const roles = dashboard.guild.roles.reduce<APIRole[]>((acc, role) => {
-        if (!role.managed && role.name !== "@everyone") {
-          acc.push(role)
-        }
+    const roles = dashboard.guild.roles
+    const sortedRoles = roles.sort((a, b) => b.position - a.position)
 
-        return acc
-      }, [])
+    for (const role of sortedRoles) {
+      const isDisabled = false
 
-      const sortedRoles = roles.sort((a, b) => b.position + a.position)
+      const hexColour = role.color
+        ? (`#${role.color.toString(16).padStart(6, "0")}` as const)
+        : undefined
 
-      return sortedRoles.map((role) => ({
-        name: role.name,
+      items.push({
+        label: role.name,
         value: role.id,
-        hexColour:
-          role.color !== 0
-            ? "#" + role.color.toString(16).padStart(6, "0")
-            : undefined,
-      }))
-    }, [dashboard.guild.roles])
-
-    const selectedValues = React.useMemo(() => {
-      return sortedSelectables.filter((selectable) =>
-        value?.includes(selectable.value),
-      )
-    }, [sortedSelectables, value])
-
-    const handleSelect = (selectable: Selectable) => {
-      setInputValue("")
-      setOpen(false)
-      onChange(
-        multiselect ? [...(value ?? []), selectable.value] : selectable.value,
-      )
+        disabled: isDisabled,
+        colour: hexColour,
+        icon: isDisabled ? Lock : AtSign,
+      })
     }
 
-    const handleDeselect = (selectable: Selectable) => {
-      onChange(
-        multiselect
-          ? (value as string[]).filter((id) => id !== selectable.value)
-          : "",
-      )
-    }
+    return items
+  }, [dashboard.guild.roles])
 
-    const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (event.key === "Backspace" && inputValue === "") {
-        const selectableToRemove = multiselect
-          ? selectedValues[selectedValues.length - 1]
-          : selectedValues[0]
-        handleDeselect(selectableToRemove!)
-      }
-    }
-
-    const renderSelectedRoles = () =>
-      multiselect ? (
-        selectedValues.length ? (
-          selectedValues.map((selectable) => (
-            <MentionBadge
-              key={selectable.value}
-              mention={selectable}
-              onButtonClick={() => handleDeselect(selectable)}
-            />
-          ))
-        ) : (
-          <span>{placeholder}</span>
-        )
-      ) : selectedValues[0] ? (
-        <span style={{ color: selectedValues[0].hexColour }}>
-          @{selectedValues[0].name}
-        </span>
-      ) : (
-        <span>{placeholder}</span>
-      )
-
-    return (
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            ref={triggerRef}
-            disabled={disabled}
-            role="combobox"
-            variant="outline"
-            className="hover:bg-background h-auto min-h-9 w-full justify-between px-3 py-1.5 font-normal transition-colors"
-          >
-            <div className="flex flex-wrap gap-1">{renderSelectedRoles()}</div>
-            <CaretSortIcon className="ml-2 h-4 w-4 opacity-50" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="p-0" style={{ width: triggerWidth + "px" }}>
-          <Command onKeyDown={onKeyDown} loop>
-            <CommandInput
-              ref={ref as React.Ref<never>}
-              name={name}
-              disabled={disabled}
-              placeholder={"Search roles..."}
-              value={inputValue}
-              onValueChange={setInputValue}
-            />
-            <CommandList>
-              <CommandEmpty>No results found :(</CommandEmpty>
-              <CommandGroup>
-                {sortedSelectables.map((selectable) => (
-                  <CommandItem
-                    key={selectable.value}
-                    value={selectable.value}
-                    keywords={[selectable.name]}
-                    onSelect={() =>
-                      value?.includes(selectable.value)
-                        ? handleDeselect(selectable)
-                        : handleSelect(selectable)
-                    }
-                  >
-                    <span style={{ color: selectable.hexColour }}>
-                      @{selectable.name}
-                    </span>
-                    <span className="absolute right-2">
-                      {value?.includes(selectable.value) && (
-                        <CheckIcon className="h-4 w-4" />
-                      )}
-                    </span>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    )
-  },
-)
-SelectRole.displayName = "SelectRole"
+  return (
+    <Combobox>
+      <ComboboxTrigger disabled={disabled}>
+        <ComboboxValue placeholder={placeholder} />
+      </ComboboxTrigger>
+      <ComboboxContent items={items} {...props} />
+    </Combobox>
+  )
+}

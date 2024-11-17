@@ -32,11 +32,15 @@ export function FormFieldSelectRole<
       control={props.control}
       name={props.name}
       disabled={props.disabled}
-      render={({ field }) => (
+      render={({ field: { onChange, ...field } }) => (
         <FormItem>
           <FormLabel>{props.label}</FormLabel>
           <FormControl>
-            <SelectRole multiselect={props.multiselect} {...field} />
+            <SelectRole
+              multiselect={props.multiselect}
+              onValueChange={onChange}
+              {...field}
+            />
           </FormControl>
           <FormDescription>{props.description}</FormDescription>
           <FormMessage />
