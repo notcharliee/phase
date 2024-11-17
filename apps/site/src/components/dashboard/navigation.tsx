@@ -65,7 +65,9 @@ export function DashboardNavigation() {
         </div>
         {categories.map(([category, items]) => (
           <div key={category} className="flex flex-col space-y-1.5">
-            <Label className="text-base uppercase">{category}</Label>
+            <Label className="text-base uppercase" asChild>
+              <h4>{category}</h4>
+            </Label>
             {items.map((item) => (
               <NavigationItem key={item.href} pathname={pathname} {...item} />
             ))}
@@ -75,13 +77,13 @@ export function DashboardNavigation() {
       <div className="text-muted-foreground before:bg-foreground relative hidden flex-col font-mono text-sm saturate-0 before:absolute before:-left-4 before:h-full before:w-1 before:rounded-l-sm sm:flex">
         <span>
           Made with ❤ by{" "}
-          <Link href={"/redirect/developer"} size={"sm"} external>
+          <Link href={"/redirect/developer"} external>
             mikaela.
           </Link>
         </span>
         <span>
           Source code is on{" "}
-          <Link href={"/redirect/github"} size={"sm"} external>
+          <Link href={"/redirect/github"} external>
             GitHub.
           </Link>
         </span>
@@ -158,7 +160,10 @@ function NavigationItem(props: NavigationItemProps) {
         href={props.href}
         title={props.label}
         aria-label={props.label}
-        className={cn(linkVariants({ variant: "hover" }), "font-normal")}
+        className={cn(
+          linkVariants({ variant: "hover", size: "base" }),
+          "font-normal",
+        )}
       >
         {props.label}
       </Component>
