@@ -58,7 +58,7 @@ export default function RootLayout({ children }: LayoutProps) {
     <html lang="en" style={{ colorScheme: "dark" }}>
       <body
         className={cn(
-          "bg-background text-foreground font-sans tracking-tighter",
+          "bg-background text-foreground font-sans tracking-tighter antialiased",
           GeistSans.variable,
           GeistMono.variable,
         )}
