@@ -15,7 +15,7 @@ export async function signInWithOTP(unsafeData: string) {
     .safeParse(unsafeData)
 
   if (dataParseResult.success) {
-    await signIn("otp", { code: dataParseResult.data })
+    await signIn("otp", { code: dataParseResult.data, redirect: false })
   } else {
     throw new Error("Invalid data")
   }
