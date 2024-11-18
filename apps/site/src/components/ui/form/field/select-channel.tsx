@@ -8,7 +8,7 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 
-import type { ChannelType } from "@discordjs/core/http-only"
+import type { AllowedChannelTypes } from "~/components/channel-icons"
 import type { Control, FieldPath, FieldValues } from "react-hook-form"
 
 export interface FormFieldSelectChannelProps<
@@ -20,7 +20,7 @@ export interface FormFieldSelectChannelProps<
   label: string
   description: string
   placeholder?: string
-  channelType?: keyof typeof ChannelType
+  channelType?: keyof typeof AllowedChannelTypes
   multiselect?: boolean
   disabled?: boolean
 }
