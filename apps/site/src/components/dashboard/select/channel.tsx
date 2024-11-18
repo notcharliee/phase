@@ -12,9 +12,11 @@ import {
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
+import type { APIGuildCategoryChannel } from "@discordjs/core/http-only"
 import type { AllowedAPIChannel } from "~/components/channel-icons"
 import type { ComboboxItem } from "~/components/ui/combobox"
 import type { Arrayable, Optional } from "~/types/utils"
+import type { LucideProps } from "lucide-react"
 
 export interface SelectChannelProps<
   TMultiselect extends boolean,
@@ -42,30 +44,45 @@ export function SelectChannel<
 
   const items = React.useMemo(() => {
     const categories = dashboard.guild.channels
-      .filter((channel) => channel.type === ChannelType.GuildCategory)
+      .filter(
+        (channel): channel is APIGuildCategoryChannel =>
+          channel.type === ChannelType.GuildCategory,
+      )
       .sort((a, b) => a.position + b.position)
 
     const items: ComboboxItem[] = []
 
-    for (const category of categories) {
-      const channels = dashboard.guild.channels
-        .filter(
-          (channel): channel is AllowedAPIChannel =>
-            channel.parent_id === category.id &&
-            AllowedChannelTypes[channelType] === channel.type,
-        )
-        .sort((a, b) => a.position + b.position)
-
+    if (channelType === "GuildCategory") {
       items.push(
-        ...channels.map((channel) => ({
-          label: channel.name,
-          value: channel.id,
-          group: category.name,
-          icon: ({ className }: { className?: string }) => (
-            <ChannelIcon channelType={channel.type} className={className} />
+        ...categories.map((category) => ({
+          label: category.name,
+          value: category.id,
+          icon: (props: LucideProps) => (
+            <ChannelIcon channelType={category.type} {...props} />
           ),
         })),
       )
+    } else {
+      for (const category of categories) {
+        const channels = dashboard.guild.channels
+          .filter(
+            (channel): channel is AllowedAPIChannel =>
+              channel.parent_id === category.id &&
+              AllowedChannelTypes[channelType] === channel.type,
+          )
+          .sort((a, b) => a.position + b.position)
+
+        items.push(
+          ...channels.map((channel) => ({
+            label: channel.name,
+            value: channel.id,
+            group: category.name,
+            icon: ({ className }: { className?: string }) => (
+              <ChannelIcon channelType={channel.type} className={className} />
+            ),
+          })),
+        )
+      }
     }
 
     return items
