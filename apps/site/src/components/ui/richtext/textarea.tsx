@@ -184,7 +184,7 @@ export function RichTextarea({
                         style={{ color: hasColour ? data.colour : undefined }}
                         onSelect={() => handleItemSelect(data)}
                       >
-                        {isChannel && <ChannelIcon type={data.type} />}
+                        {isChannel && <ChannelIcon channelType={data.type} />}
                         {isMention && <span>@</span>}
                         <span>{data.name}</span>
                       </CommandItem>

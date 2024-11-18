@@ -1,4 +1,4 @@
-import type { GuildChannelType } from "@discordjs/core/http-only"
+import type { AllowedChannelType } from "~/components/channel-icons"
 
 // base interfaces //
 
@@ -36,7 +36,7 @@ export interface ChannelElement extends BaseElement {
   data: {
     id: string
     name: string
-    type: GuildChannelType
+    type: AllowedChannelType
   }
 }
 
@@ -63,7 +63,7 @@ export interface GuildElementData {
 
 declare module "slate" {
   interface CustomTypes {
-    Text: TextLeaf,
+    Text: TextLeaf
     Element: TextElement | ChannelElement | MentionElement
   }
 }

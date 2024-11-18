@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { ChannelType } from "@discordjs/core/http-only"
 
-import { ChannelIcon } from "~/components/channel-icons"
+import { AllowedChannelTypes, ChannelIcon } from "~/components/channel-icons"
 import {
   Combobox,
   ComboboxContent,
@@ -12,6 +12,7 @@ import {
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
+import type { AllowedAPIChannel } from "~/components/channel-icons"
 import type { ComboboxItem } from "~/components/ui/combobox"
 import type { Arrayable, Optional } from "~/types/utils"
 
@@ -19,7 +20,7 @@ export interface SelectChannelProps<
   TMultiselect extends boolean,
   TValue extends Optional<Arrayable<string, TMultiselect>>,
 > {
-  channelType?: keyof typeof ChannelType
+  channelType?: keyof typeof AllowedChannelTypes
   placeholder?: string
   multiselect?: TMultiselect
   disabled?: boolean
@@ -49,9 +50,9 @@ export function SelectChannel<
     for (const category of categories) {
       const channels = dashboard.guild.channels
         .filter(
-          (channel) =>
+          (channel): channel is AllowedAPIChannel =>
             channel.parent_id === category.id &&
-            channel.type === ChannelType[channelType],
+            AllowedChannelTypes[channelType] === channel.type,
         )
         .sort((a, b) => a.position + b.position)
 
@@ -61,7 +62,7 @@ export function SelectChannel<
           value: channel.id,
           group: category.name,
           icon: ({ className }: { className?: string }) => (
-            <ChannelIcon type={channel.type} className={className} />
+            <ChannelIcon channelType={channel.type} className={className} />
           ),
         })),
       )

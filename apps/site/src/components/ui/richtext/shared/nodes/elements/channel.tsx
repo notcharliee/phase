@@ -17,7 +17,7 @@ export function ChannelElementNode({
     <span {...attributes} className="h-4 cursor-default">
       <span className="text-foreground bg-foreground/25 whitespace-nowrap rounded-[4px] px-1">
         <span className="mr-0.5 inline-block h-4 align-middle">
-          <ChannelIcon type={element.data.type} />
+          <ChannelIcon channelType={element.data.type} />
         </span>
         <span className="leading-none">{element.data.name}</span>
       </span>

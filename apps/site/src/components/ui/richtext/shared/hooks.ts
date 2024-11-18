@@ -2,11 +2,12 @@ import * as React from "react"
 
 import { createEditor } from "slate"
 
-import { allowedChannelTypes } from "~/components/channel-icons"
+import { AllowedChannelTypes } from "~/components/channel-icons"
 import { withPlugins } from "~/components/ui/richtext/shared/plugins"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
+import type { AllowedAPIChannel } from "~/components/channel-icons"
 import type { RichTextFlags } from "~/components/ui/richtext/shared/types"
 import type { GuildElementData } from "~/types/slate"
 
@@ -21,7 +22,10 @@ export function useGuildData(flags: RichTextFlags) {
     () => ({
       channels:
         dashboard?.guild.channels
-          .filter((channel) => allowedChannelTypes.includes(channel.type))
+          .filter(
+            (channel): channel is AllowedAPIChannel =>
+              channel.type in AllowedChannelTypes,
+          )
           .map((channel) => ({
             id: channel.id,
             name: channel.name,
