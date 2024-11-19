@@ -18,7 +18,7 @@ export const buttonVariants = cva(
           "border-input bg-background hover:bg-accent hover:text-accent-foreground border shadow-sm",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm",
-        glow: "bg-primary border-primary text-primary-foreground !shadow-glow-sm shadow-primary/50 hover:bg-primary-foreground focus-visible:bg-primary-foreground hover:text-primary focus-visible:text-primary border",
+        glow: "bg-primary border-primary text-primary-foreground !shadow-glow-sm shadow-primary/25 sm:shadow-primary/50 hover:bg-primary-foreground focus-visible:bg-primary-foreground hover:text-primary focus-visible:text-primary border",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
@@ -27,7 +27,7 @@ export const buttonVariants = cva(
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
         xl: "h-10 rounded-lg px-8 sm:h-11 sm:px-12",
-        icon: "size-9 shrink-0",
+        icon: "size-9 shrink-0 [&>svg]:size-5",
       },
     },
     defaultVariants: {
