@@ -8,7 +8,7 @@ import type {
 } from "~/types/crons"
 
 export class BotCron {
-  protected _init: boolean = false
+  protected _init = false
   protected _client: DjsClient
   protected _cron: Cron | undefined
 

@@ -18,7 +18,7 @@ export type BotCommandOrSubcommandBody = BotCommandBody | BotSubcommandBody
 export type BotCommandMetadata = { type: "command"; [key: string]: unknown }
 export type BotCommandExecute = (
   interaction: ChatInputCommandInteraction,
-) => unknown | Promise<unknown>
+) => unknown
 
 export type BotCommandNameResolvable =
   | string

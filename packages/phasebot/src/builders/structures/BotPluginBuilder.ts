@@ -1,4 +1,4 @@
-import { BotPlugin } from "~/types/plugin"
+import type { BotPlugin } from "~/types/plugin"
 
 export class BotPluginBuilder {
   public readonly name!: BotPlugin["name"]

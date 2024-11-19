@@ -12,7 +12,7 @@ export class SharedBotCommandBuilderBase {
   constructor() {
     this.body = {} as BotCommandOrSubcommandBody
     this.metadata = { type: "command" }
-    this.execute = () => {}
+    this.execute = () => undefined
   }
 
   /**

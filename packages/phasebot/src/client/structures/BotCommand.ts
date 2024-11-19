@@ -1,8 +1,4 @@
 import {
-  APIApplicationCommandOption,
-  ApplicationCommand,
-  ApplicationCommandOption,
-  ApplicationCommandOptionData,
   ApplicationCommandOptionType,
   ApplicationCommandType,
   ApplicationIntegrationType,
@@ -18,6 +14,11 @@ import type {
   BotCommandOrSubcommandBody,
   BotSubcommandBody,
 } from "~/types/commands"
+import type {
+  APIApplicationCommandOption,
+  ApplicationCommand,
+  ApplicationCommandOptionData,
+} from "discord.js"
 
 export class BotCommand {
   protected _client: DjsClient
@@ -120,12 +121,12 @@ export class BotCommand {
         this.groupName
           ? {
               type: ApplicationCommandOptionType.SubcommandGroup,
-              name: this.groupName!,
-              description: this.groupName!,
-              options: [this._body as BotSubcommandBody],
+              name: this.groupName,
+              description: this.groupName,
+              options: [this._body],
             }
           : {
-              ...(this._body as BotSubcommandBody),
+              ...this._body,
             },
       ],
       integration_types: [ApplicationIntegrationType.GuildInstall],

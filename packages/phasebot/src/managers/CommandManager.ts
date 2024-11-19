@@ -15,7 +15,7 @@ import type { BotCommandMiddleware } from "~/types/middleware"
 
 const mergeCommands = deepmergeCustom({
   mergeArrays(values, utils) {
-    const merged = new Map()
+    const merged = new Map<unknown, unknown>()
     values.flat().forEach((item) => {
       if (typeof item === "object" && item !== null && "name" in item) {
         const existingItem = merged.get(item.name)
@@ -40,11 +40,13 @@ export class CommandManager extends BaseManager {
     super(client)
     this._commands = new Collection()
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     client.on("interactionCreate", async (interaction) => {
       if (!interaction.isChatInputCommand()) return
       await this.execute(interaction)
     })
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     client.once("ready", async (client) => {
       const localAPICommands = new Collection<string, BotCommandBody>()
       const remoteAPICommands = new Collection<string, BotCommandBody>()

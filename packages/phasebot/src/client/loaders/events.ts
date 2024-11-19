@@ -28,7 +28,7 @@ export async function loadEventFiles(client: DjsClient, paths: string[]) {
         continue
       }
 
-      const exports = await import(path)
+      const exports = (await import(path)) as Record<string, unknown>
       const builder = exports.default
 
       if (!BotEventBuilder.isBuilder(builder)) {

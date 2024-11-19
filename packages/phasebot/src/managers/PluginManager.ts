@@ -1,7 +1,7 @@
 import { BaseManager, Collection } from "discord.js"
 
 import { BotPluginBuilder } from "~/builders/structures/BotPluginBuilder"
-import { DjsClient } from "~/types/client"
+import type { DjsClient } from "~/types/client"
 
 import type { BotPlugin, BotPluginResolvable } from "~/types/plugin"
 

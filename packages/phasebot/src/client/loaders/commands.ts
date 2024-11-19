@@ -11,7 +11,7 @@ import type { BotCommandFile } from "~/types/commands"
 export async function loadCommandFiles(client: DjsClient, paths: string[]) {
   const commandFiles: BotCommandFile[] = []
 
-  const analyseDirectory = async (currentDir: string, prefix: string = "") => {
+  const analyseDirectory = async (currentDir: string, prefix = "") => {
     const entries = readdirSync(currentDir)
 
     for (const entry of entries) {
@@ -29,7 +29,7 @@ export async function loadCommandFiles(client: DjsClient, paths: string[]) {
         continue
       }
 
-      const exports = await import(path)
+      const exports = (await import(path)) as Record<string, unknown>
       const builder = exports.default
 
       if (

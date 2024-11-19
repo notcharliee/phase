@@ -20,7 +20,7 @@ export class BotEventBuilder<
     this.context = undefined
     this.listenerType = "on"
     this.metadata = { type: "event" }
-    this.execute = () => {}
+    this.execute = () => undefined
   }
 
   /**

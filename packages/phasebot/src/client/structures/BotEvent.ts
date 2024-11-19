@@ -12,7 +12,7 @@ export class BotEvent<
   TName extends BotEventName = BotEventName,
   TContext extends BotEventContextMap[TName] = BotEventContextMap[TName],
 > {
-  protected _init: boolean = false
+  protected _init = false
   protected _client: DjsClient
 
   public readonly name: TName
@@ -50,6 +50,7 @@ export class BotEvent<
       throw new Error("Event has already been initialised.")
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     this._client[this.listenerType](this.name, async (...args) => {
       const executeArgs = args as BotEventExecuteArgs<TName, TContext>
 
