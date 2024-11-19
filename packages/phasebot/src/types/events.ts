@@ -1,5 +1,6 @@
-import type { CacheType, Client, ClientEvents, Interaction } from "discord.js"
-import type { BotEvent } from "~/structures"
+import type { BotEvent } from "~/client/structures/BotEvent"
+import type { DjsClient } from "~/types/client"
+import type { CacheType, ClientEvents, Interaction } from "discord.js"
 
 export type BotEventInteractionContextMap = {
   Guild: Interaction<"raw" | "cached">
@@ -32,7 +33,10 @@ export type BotEventMetadata = { type: "event"; [key: string]: unknown }
 export type BotEventExecute<
   TName extends BotEventName = BotEventName,
   TContext extends BotEventContextMap[TName] = BotEventContextMap[TName],
-> = (client: Client, ...args: BotEventExecuteArgs<TName, TContext>) => unknown
+> = (
+  client: DjsClient,
+  ...args: BotEventExecuteArgs<TName, TContext>
+) => unknown
 
 export interface BotEventFile {
   path: string

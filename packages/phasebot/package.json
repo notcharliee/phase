@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "phasebot",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "type": "module",
   "scripts": {
     "build": "tsup",
@@ -13,20 +13,25 @@
       "import": "./dist/index.js",
       "require": "./dist/index.js"
     },
+    "./client": {
+      "types": "./dist/client/index.d.ts",
+      "import": "./dist/client/index.js",
+      "require": "./dist/client/index.js"
+    },
     "./builders": {
-      "types": "./dist/structures/builders/index.d.ts",
-      "import": "./dist/structures/builders/index.js",
-      "require": "./dist/structures/builders/index.js"
+      "types": "./dist/builders/index.d.ts",
+      "import": "./dist/builders/index.js",
+      "require": "./dist/builders/index.js"
     },
     "./managers": {
-      "types": "./dist/structures/managers/index.d.ts",
-      "import": "./dist/structures/managers/index.js",
-      "require": "./dist/structures/managers/index.js"
+      "types": "./dist/managers/index.d.ts",
+      "import": "./dist/managers/index.js",
+      "require": "./dist/managers/index.js"
     },
     "./stores": {
-      "types": "./dist/structures/stores/index.d.ts",
-      "import": "./dist/structures/stores/index.js",
-      "require": "./dist/structures/stores/index.js"
+      "types": "./dist/stores/index.d.ts",
+      "import": "./dist/stores/index.js",
+      "require": "./dist/stores/index.js"
     }
   },
   "dependencies": {

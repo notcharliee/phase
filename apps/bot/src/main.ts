@@ -1,6 +1,6 @@
 import { Options, Partials } from "discord.js"
-import { BotClient } from "phasebot"
 import { BotPluginBuilder } from "phasebot/builders"
+import { BotClient } from "phasebot/client"
 
 import { Emojis } from "~/lib/emojis"
 
@@ -73,4 +73,4 @@ const phaseClient = new BotClient({
   },
 })
 
-await phaseClient.start()
+await phaseClient.init()

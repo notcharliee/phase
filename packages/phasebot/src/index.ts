@@ -1,5 +1,3 @@
-export * from "~/structures/BotClient"
-
 export * from "~/types/client"
 export * from "~/types/commands"
 export * from "~/types/crons"
@@ -9,4 +7,4 @@ export * from "~/types/plugin"
 export * from "~/types/prestart"
 export * from "~/types/stores"
 
-export { version } from "../package.json"
+export { version } from "~/shared/utils"
