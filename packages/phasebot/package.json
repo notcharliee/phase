@@ -4,8 +4,9 @@
   "version": "0.17.0",
   "type": "module",
   "scripts": {
+    "dev": "tsup --watch",
     "build": "tsup",
-    "dev": "tsup --watch"
+    "lint": "eslint ."
   },
   "exports": {
     ".": {
@@ -48,6 +49,7 @@
   "devDependencies": {
     "@repo/config": "workspace:*",
     "@types/bun": "^1.1.9",
+    "eslint": "^9.15.0",
     "tsup": "^8.3.0",
     "typescript": "^5.6.2"
   },
