@@ -18,14 +18,12 @@ export const linkVariants = cva(
         "no-underline": "no-underline",
       },
       size: {
-        auto: "",
         base: "text-base",
         sm: "text-sm",
       },
     },
     defaultVariants: {
       variant: "default",
-      size: "sm",
     },
   },
 )
