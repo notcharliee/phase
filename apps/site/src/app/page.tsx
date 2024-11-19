@@ -1,4 +1,4 @@
-import { ArrowRightIcon } from "@radix-ui/react-icons"
+import { ArrowRightIcon, PartyPopperIcon } from "lucide-react"
 
 import { Header } from "~/components/header"
 import { OrbitingDots } from "~/components/orbiting-dots"
@@ -7,35 +7,49 @@ import { Link } from "~/components/ui/link"
 
 import { siteConfig } from "~/config/site"
 
-export default function HomePage() {
+export default function Home() {
   return (
     <main className="grid min-h-screen grid-rows-[4rem_auto_4rem]">
       <OrbitingDots />
       <Header />
       <div className="container grid h-full place-items-center">
-        <section className="flex max-w-[980px] flex-col items-center gap-4 py-8 md:py-12 md:pb-8 lg:py-24 lg:pb-20">
-          <Link
-            href="/docs/changelog"
-            variant={"no-underline"}
-            className="bg-muted inline-flex items-center rounded-lg px-3 py-1 text-sm font-medium"
-          >
-            <span className="mr-4">🎉</span>
-            <span className="inline">Check out the latest changelog.</span>
-            <ArrowRightIcon className="ml-2 h-4 w-4" />
-          </Link>
-          <h1 className="text-center text-4xl font-bold leading-none tracking-tighter md:text-6xl lg:leading-[1.1]">
-            The all-in-one Discord bot
-          </h1>
-          <p className="text-muted-foreground max-w-[750px] text-center text-lg sm:text-xl">
-            {siteConfig.description}
-          </p>
-          <div className="flex w-full items-center justify-center space-x-4 py-4 md:pb-10">
-            <Button variant={"glow"} size={"xl"} asChild>
+        <section className="flex max-w-[980px] flex-col items-center md:py-12 md:pb-8 lg:py-24 lg:pb-20">
+          <div className="hidden md:mb-6 md:block">
+            <Link
+              href="/docs/changelog"
+              variant={"no-underline"}
+              className="bg-secondary/50 hover:bg-secondary hover:paused inline-flex animate-bounce items-center gap-3 rounded border px-3 py-1 font-mono text-sm font-medium shadow transition-colors [&>svg]:size-4 [&>svg]:shrink-0"
+            >
+              <PartyPopperIcon />
+              <span>Check out the latest updates!</span>
+              <ArrowRightIcon />
+            </Link>
+          </div>
+          <div className="mb-12 space-y-4">
+            <h1 className="text-balance text-center text-5xl font-bold leading-none tracking-tighter md:text-6xl lg:leading-[1.1]">
+              The all-in-one Discord bot
+            </h1>
+            <p className="text-muted-foreground max-w-[750px] text-pretty text-center text-lg sm:text-xl md:text-balance">
+              {siteConfig.description}
+            </p>
+          </div>
+          <div className="flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
+            <Button
+              variant={"glow"}
+              size={"xl"}
+              className="w-4/5 sm:w-auto"
+              asChild
+            >
               <Link href="/redirect/invite" variant={"no-underline"} external>
                 Invite the bot
               </Link>
             </Button>
-            <Button variant={"outline"} size={"xl"} asChild>
+            <Button
+              variant={"outline"}
+              size={"xl"}
+              className="w-4/5 sm:w-auto"
+              asChild
+            >
               <Link href="/docs" variant={"no-underline"}>
                 Learn More
               </Link>
@@ -49,25 +63,17 @@ export default function HomePage() {
             Built by{" "}
             <Link
               href={"/redirect/developer"}
+              label="Developer profile"
               variant={"hover"}
-              size={"sm"}
-              target="_blank"
-              rel="noreferrer"
-              title="Developer GitHub profile"
-              aria-label="Developer GitHub profile"
               external
             >
               mikaela
             </Link>
-            . The source code is available on{" "}
+            . Source code is available on{" "}
             <Link
               href={"/redirect/github"}
+              label="Project repository"
               variant={"hover"}
-              size={"sm"}
-              target="_blank"
-              rel="noreferrer"
-              title="Project GitHub repository"
-              aria-label="Project GitHub repository"
               external
             >
               GitHub
