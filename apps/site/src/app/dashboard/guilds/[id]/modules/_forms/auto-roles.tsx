@@ -1,6 +1,5 @@
 "use client"
 
-import { AvatarIcon, FaceIcon, RadiobuttonIcon } from "@radix-ui/react-icons"
 import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
@@ -56,9 +55,21 @@ export const AutoRoles = () => {
                   control={form.control}
                   name={`${baseName}.${index}.target`}
                   items={[
-                    { label: "Everyone", value: "everyone", icon: FaceIcon },
-                    { label: "Members", value: "members", icon: AvatarIcon },
-                    { label: "Bots", value: "bots", icon: RadiobuttonIcon },
+                    {
+                      label: "Everyone",
+                      value: "everyone",
+                      iconName: "heart",
+                    },
+                    {
+                      label: "Members",
+                      value: "members",
+                      iconName: "user-round",
+                    },
+                    {
+                      label: "Bots",
+                      value: "bots",
+                      iconName: "bot",
+                    },
                   ]}
                 />
               </FormFieldArrayCard>

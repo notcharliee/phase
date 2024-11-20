@@ -1,15 +1,10 @@
 import React from "react"
 
-import {
-  CrumpledPaperIcon,
-  DotsVerticalIcon,
-  ResetIcon,
-  TrashIcon,
-} from "@radix-ui/react-icons"
 import { cva } from "class-variance-authority"
 
 import { BetaAlert } from "~/components/dashboard/modules/beta-alert"
 import { ModuleTags } from "~/components/dashboard/modules/module-tags"
+import { LucideIcon } from "~/components/icons/lucide"
 import { Button } from "~/components/ui/button"
 import {
   Card,
@@ -33,9 +28,9 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu"
 
-import type { IconProps } from "@radix-ui/react-icons/dist/types"
 import type { ModuleDefinition, ModuleTag } from "@repo/utils/modules"
 import type { ModuleData } from "~/app/dashboard/guilds/[id]/modules/page"
+import type { LucideIconName } from "~/components/icons/lucide"
 
 export type ConfigCardData = ModuleDefinition
 export type ConfigCardOption = (typeof moduleOptions)[number]["value"]
@@ -109,23 +104,23 @@ const moduleOptions = [
   {
     label: "Undo Changes",
     value: "undo",
-    icon: ResetIcon,
+    iconName: "rotate-ccw",
     requiresDirty: true,
   },
   {
     label: "Clear Values",
     value: "reset",
-    icon: CrumpledPaperIcon,
+    iconName: "eraser",
   },
   {
     label: "Remove Module",
     value: "remove",
-    icon: TrashIcon,
+    iconName: "trash-2",
   },
 ] satisfies {
   label: string
   value: string
-  icon?: React.FC<IconProps>
+  iconName?: LucideIconName
   requiresDirty?: boolean
 }[]
 
@@ -145,7 +140,7 @@ function ConfigCardOptions({ moduleStatus, onSelect }: ConfigCardOptionsProps) {
           size={"icon"}
           className="absolute right-6 top-6 bg-transparent"
         >
-          <DotsVerticalIcon className="h-4 w-4" />
+          <LucideIcon name="ellipsis-vertical" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
@@ -156,7 +151,7 @@ function ConfigCardOptions({ moduleStatus, onSelect }: ConfigCardOptionsProps) {
             disabled={option.requiresDirty && !isDirty}
             onSelect={() => onSelect(option.value)}
           >
-            <option.icon className="h-4 w-4" />
+            <LucideIcon name={option.iconName} />
             {option.label}
           </DropdownMenuItem>
         ))}

@@ -3,9 +3,10 @@
 import { useRouter } from "next/navigation"
 import * as React from "react"
 
-import { FileIcon, GlobeIcon, RocketIcon } from "@radix-ui/react-icons"
 import { useIntersectionObserver } from "@uidotdev/usehooks"
 
+import { LucideIcon } from "~/components/icons/lucide"
+import { SimpleIcon } from "~/components/icons/simple"
 import { Moon } from "~/components/moon"
 import { Button } from "~/components/ui/button"
 import {
@@ -79,7 +80,11 @@ export function Header({ className, ...props }: HeaderProps) {
                   asChild
                 >
                   <Link href={item.href} external={item.external}>
-                    <item.icon />
+                    {item.icon.type === "lucide" ? (
+                      <LucideIcon name={item.icon.name} />
+                    ) : (
+                      <SimpleIcon name={item.icon.name} />
+                    )}
                   </Link>
                 </Button>
               ))}
@@ -139,9 +144,9 @@ function NavigationCombobox() {
         onSelect={() => navigateTo(item.href)}
       >
         {item.external ? (
-          <GlobeIcon className="mr-2 size-4 shrink-0" />
+          <LucideIcon name="external-link" className="mr-2" />
         ) : (
-          <FileIcon className="mr-2 size-4 shrink-0" />
+          <LucideIcon name="scroll-text" className="mr-2" />
         )}
         {item.label}
       </CommandItem>
@@ -158,7 +163,7 @@ function NavigationCombobox() {
         onClick={() => setOpen(!open)}
       >
         <span className="flex items-center gap-2">
-          <RocketIcon className="size-3.5 shrink-0" />
+          <LucideIcon name="telescope" className="size-3.5" />
           Wanna explore?
         </span>
         <kbd className="bg-muted pointer-events-none absolute right-[4.333px] top-[4.333] hidden h-[26px] select-none items-center gap-1 rounded-sm px-2.5 font-mono text-[10px] font-medium opacity-100 sm:flex">

@@ -2,8 +2,6 @@
 
 import * as React from "react"
 
-import { AtSign, Lock } from "lucide-react"
-
 import {
   Combobox,
   ComboboxContent,
@@ -56,7 +54,7 @@ export function SelectRole<
         value: role.id,
         disabled: isDisabled,
         colour: hexColour,
-        icon: isDisabled ? Lock : AtSign,
+        iconName: isDisabled ? "lock" : "at-sign",
       })
     }
 

@@ -3,8 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons"
-
+import { LucideIcon } from "~/components/icons/lucide"
 import { Button } from "~/components/ui/button"
 
 import { docsPages } from "~/config/nav"
@@ -28,7 +27,7 @@ export const Pager = () => {
     <div className="flex justify-between">
       <Button variant={"outline"} asChild>
         <Link href={prevPage.href}>
-          <ChevronLeftIcon className="mr-2 h-4 w-4" />
+          <LucideIcon name="chevron-left" className="mr-2" />
           {prevPage.label}
         </Link>
       </Button>
@@ -36,7 +35,7 @@ export const Pager = () => {
         <Button variant={"outline"} asChild>
           <Link href={nextPage.href}>
             {nextPage.label}
-            <ChevronRightIcon className="ml-2 h-4 w-4" />
+            <LucideIcon name="chevron-right" className="ml-2" />
           </Link>
         </Button>
       )}

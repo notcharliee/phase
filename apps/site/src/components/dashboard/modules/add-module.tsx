@@ -1,8 +1,7 @@
 import React from "react"
 
-import { PlusIcon } from "@radix-ui/react-icons"
-
 import { ModuleTags } from "~/components/dashboard/modules/module-tags"
+import { LucideIcon } from "~/components/icons/lucide"
 import { Button } from "~/components/ui/button"
 import {
   Card,
@@ -43,7 +42,7 @@ export function AddModule({ moduleDataArray, onSelect }: AddButtonProps) {
         >
           <span className="hidden sm:inline">Add Module</span>
           <span className="inline sm:hidden">Add</span>
-          <PlusIcon className="h-4 w-4" />
+          <LucideIcon name="plus" />
         </Button>
       </CredenzaTrigger>
       <CredenzaContent
@@ -74,7 +73,7 @@ export function AddModule({ moduleDataArray, onSelect }: AddButtonProps) {
                       onSelect?.(moduleData.id)
                     }}
                   >
-                    <PlusIcon className="h-4 w-4" />
+                    <LucideIcon name="plus" />
                   </Button>
                 </CardHeader>
                 <CardContent>

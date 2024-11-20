@@ -1,7 +1,6 @@
 import * as React from "react"
 
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
-
+import { LucideIcon } from "~/components/icons/lucide"
 import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
@@ -18,7 +17,7 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 
-import type { IconProps } from "@radix-ui/react-icons/dist/types"
+import type { LucideIconName } from "~/components/icons/lucide"
 import type { Control, FieldPath, FieldValues } from "react-hook-form"
 
 export interface FormFieldSelectProps<
@@ -34,7 +33,7 @@ export interface FormFieldSelectProps<
   items: {
     label: string
     value: string
-    icon?: React.FC<IconProps>
+    iconName?: LucideIconName
   }[]
 }
 
@@ -65,12 +64,14 @@ export function FormFieldSelect<
                     className="w-full justify-between gap-2 px-3 py-1.5 font-normal"
                   >
                     <span className="flex items-center gap-2 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
-                      {currentItem?.icon && <currentItem.icon />}
+                      {currentItem?.iconName && (
+                        <LucideIcon name={currentItem.iconName} />
+                      )}
                       {currentItem?.label ??
                         props.placeholder ??
                         "Select an item"}
                     </span>
-                    <CaretSortIcon className="size-4 shrink-0 opacity-50" />
+                    <LucideIcon name="chevrons-up-down" className="opacity-50" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
@@ -80,10 +81,13 @@ export function FormFieldSelect<
                       onClick={() => field.onChange(item.value)}
                       className="flex items-center"
                     >
-                      {item.icon && <item.icon />}
+                      {item.iconName && <LucideIcon name={item.iconName} />}
                       {item.label}
                       {item.value === currentItem?.value && (
-                        <CheckIcon className="absolute right-2" />
+                        <LucideIcon
+                          name="check"
+                          className="absolute right-2 size-3.5"
+                        />
                       )}
                     </DropdownMenuItem>
                   ))}

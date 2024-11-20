@@ -1,6 +1,5 @@
-import { ArrowRightIcon, PartyPopperIcon } from "lucide-react"
-
 import { Header } from "~/components/header"
+import { LucideIcon } from "~/components/icons/lucide"
 import { OrbitingDots } from "~/components/orbiting-dots"
 import { Button } from "~/components/ui/button"
 import { Link } from "~/components/ui/link"
@@ -18,11 +17,11 @@ export default function Home() {
             <Link
               href="/docs/changelog"
               variant={"no-underline"}
-              className="bg-secondary/50 hover:bg-secondary hover:paused inline-flex animate-bounce items-center gap-3 rounded border px-3 py-1 font-mono text-sm font-medium shadow transition-colors [&>svg]:size-4 [&>svg]:shrink-0"
+              className="bg-secondary/50 hover:bg-secondary hover:paused inline-flex animate-bounce items-center gap-3 rounded border px-3 py-1 font-mono text-sm font-medium shadow transition-colors"
             >
-              <PartyPopperIcon />
+              <LucideIcon name="party-popper" />
               <span>Check out the latest updates!</span>
-              <ArrowRightIcon />
+              <LucideIcon name="arrow-right" />
             </Link>
           </div>
           <div className="mb-12 space-y-4">

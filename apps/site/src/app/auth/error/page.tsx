@@ -1,7 +1,6 @@
 import Link from "next/link"
 
-import { ChatBubbleIcon, ReloadIcon } from "@radix-ui/react-icons"
-
+import { LucideIcon } from "~/components/icons/lucide"
 import { Button } from "~/components/ui/button"
 
 export default function Page() {
@@ -19,13 +18,13 @@ export default function Page() {
       <div className="w-72 space-y-4 md:w-[336px]">
         <Button size={"lg"} className="w-full gap-2" asChild>
           <Link href={"/auth/signin"}>
-            <ReloadIcon className="h-5 w-5" />
+            <LucideIcon name="rotate-cw" />
             Attempt login again
           </Link>
         </Button>
         <Button variant="outline" size={"lg"} className="w-full gap-2" asChild>
           <Link href={"/redirect/discord"}>
-            <ChatBubbleIcon className="h-5 w-5" />
+            <LucideIcon name="message-circle-question" />
             Make a support ticket
           </Link>
         </Button>

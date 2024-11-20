@@ -2,8 +2,9 @@
 
 import * as React from "react"
 
-import { DotFilledIcon } from "@radix-ui/react-icons"
 import { OTPInput, OTPInputContext } from "input-otp"
+
+import { LucideIcon } from "~/components/icons/lucide"
 
 import { cn } from "~/lib/utils"
 
@@ -70,7 +71,7 @@ export interface InputOTPSeparatorProps
 export function InputOTPSeparator({ ...props }: InputOTPSeparatorProps) {
   return (
     <div role="separator" {...props}>
-      <DotFilledIcon />
+      <LucideIcon name="dot" />
     </div>
   )
 }

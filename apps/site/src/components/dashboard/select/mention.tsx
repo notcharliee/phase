@@ -2,8 +2,6 @@
 
 import * as React from "react"
 
-import { AtSign, Lock } from "lucide-react"
-
 import {
   Combobox,
   ComboboxContent,
@@ -44,13 +42,13 @@ export function SelectMention<
         group: "Server",
         label: "everyone",
         value: "@everyone",
-        icon: AtSign,
+        iconName: "at-sign",
       },
       {
         group: "Server",
         label: "here",
         value: "@here",
-        icon: AtSign,
+        iconName: "at-sign",
       },
     ]
 
@@ -70,7 +68,7 @@ export function SelectMention<
         value: `<@&${role.id}>`,
         disabled: isDisabled,
         colour: hexColour,
-        icon: isDisabled ? Lock : AtSign,
+        iconName: isDisabled ? "lock" : "at-sign",
       })
     }
 

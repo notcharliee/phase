@@ -1,11 +1,4 @@
-import {
-  CaretDownIcon,
-  CaretUpIcon,
-  CopyIcon,
-  MoveIcon,
-  TrashIcon,
-} from "@radix-ui/react-icons"
-
+import { LucideIcon } from "~/components/icons/lucide"
 import { Button } from "~/components/ui/button"
 import { ButtonGroup } from "~/components/ui/button-group"
 import { Card, CardContent, CardTitle } from "~/components/ui/card"
@@ -64,7 +57,7 @@ export function FormFieldArrayCard<
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button size={"icon"} variant={"outline"} aria-label="Move">
-                      <MoveIcon className="pointer-events-none size-4 shrink-0" />
+                      <LucideIcon name="move" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
@@ -72,14 +65,14 @@ export function FormFieldArrayCard<
                       disabled={props.index === 0}
                       onClick={() => move(props.index, props.index - 1)}
                     >
-                      <CaretUpIcon className="h-4 w-4" />
+                      <LucideIcon name="chevron-up" />
                       Move up
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       disabled={props.index === fields.length - 1}
                       onClick={() => move(props.index, props.index + 1)}
                     >
-                      <CaretDownIcon className="h-4 w-4" />
+                      <LucideIcon name="chevron-down" />
                       Move down
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -90,7 +83,7 @@ export function FormFieldArrayCard<
                   aria-label="Duplicate"
                   onClick={() => append(field.value, { shouldFocus: true })}
                 >
-                  <CopyIcon className="pointer-events-none size-4 shrink-0" />
+                  <LucideIcon name="copy" />
                 </Button>
                 <Button
                   size={"icon"}
@@ -98,7 +91,7 @@ export function FormFieldArrayCard<
                   aria-label="Delete"
                   onClick={() => remove(props.index)}
                 >
-                  <TrashIcon className="pointer-events-none size-4 shrink-0" />
+                  <LucideIcon name="trash" />
                 </Button>
               </ButtonGroup>
             </div>

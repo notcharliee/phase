@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { ChannelType } from "@discordjs/core/http-only"
 
-import { AllowedChannelTypes, ChannelIcon } from "~/components/channel-icons"
+import { AllowedChannelTypes, channelIcons } from "~/components/channel-icons"
 import {
   Combobox,
   ComboboxContent,
@@ -16,7 +16,6 @@ import type { APIGuildCategoryChannel } from "@discordjs/core/http-only"
 import type { AllowedAPIChannel } from "~/components/channel-icons"
 import type { ComboboxItem } from "~/components/ui/combobox"
 import type { Arrayable, Optional } from "~/types/utils"
-import type { LucideProps } from "lucide-react"
 
 export interface SelectChannelProps<
   TMultiselect extends boolean,
@@ -57,9 +56,7 @@ export function SelectChannel<
         ...categories.map((category) => ({
           label: category.name,
           value: category.id,
-          icon: (props: LucideProps) => (
-            <ChannelIcon channelType={category.type} {...props} />
-          ),
+          iconName: channelIcons[category.type],
         })),
       )
     } else {
@@ -73,14 +70,14 @@ export function SelectChannel<
           .sort((a, b) => a.position + b.position)
 
         items.push(
-          ...channels.map((channel) => ({
-            label: channel.name,
-            value: channel.id,
-            group: category.name,
-            icon: ({ className }: { className?: string }) => (
-              <ChannelIcon channelType={channel.type} className={className} />
-            ),
-          })),
+          ...channels.map(
+            (channel): ComboboxItem => ({
+              label: channel.name,
+              value: channel.id,
+              group: category.name,
+              iconName: channelIcons[channel.type],
+            }),
+          ),
         )
       }
     }

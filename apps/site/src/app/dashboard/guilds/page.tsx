@@ -1,10 +1,9 @@
 import NextLink from "next/link"
 import { Suspense } from "react"
 
-import { PlusIcon } from "@radix-ui/react-icons"
-
 import { GuildCardGrid } from "~/components/dashboard/guilds/guild-card-grid"
 import { GuildCardSearch } from "~/components/dashboard/guilds/guild-card-search"
+import { LucideIcon } from "~/components/icons/lucide"
 import { Button } from "~/components/ui/button"
 
 import { getGuilds } from "~/app/dashboard/guilds/actions"
@@ -23,7 +22,7 @@ export default function GuildsPage() {
             <NextLink href={"/redirect/invite"}>
               <span className="hidden sm:inline">Add Guild</span>
               <span className="inline sm:hidden">Add</span>
-              <PlusIcon className="h-4 w-4" />
+              <LucideIcon name="plus" />
             </NextLink>
           </Button>
         </div>

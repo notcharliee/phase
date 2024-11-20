@@ -27,7 +27,7 @@ export const buttonVariants = cva(
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
         xl: "h-10 rounded-lg px-8 sm:h-11 sm:px-12",
-        icon: "size-9 shrink-0 [&>svg]:size-5",
+        icon: "size-9 shrink-0",
       },
     },
     defaultVariants: {

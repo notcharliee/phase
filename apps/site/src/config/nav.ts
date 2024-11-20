@@ -1,19 +1,20 @@
-import {
-  DashboardIcon,
-  DiscordLogoIcon,
-  GitHubLogoIcon,
-  IdCardIcon,
-  MixerHorizontalIcon,
-} from "@radix-ui/react-icons"
+import type { LucideIconName } from "~/components/icons/lucide"
+import type { SimpleIconName } from "~/components/icons/simple"
 
-import { CommandIcon } from "~/components/icons/command-icon"
+type NavItemIcon =
+  | {
+      type: "lucide"
+      name: LucideIconName
+    }
+  | {
+      type: "simple"
+      name: SimpleIconName
+    }
 
-import type { IconProps } from "@radix-ui/react-icons/dist/types"
-
-export interface NavItem {
+export type NavItem = {
   label: string
   href: string
-  icon?: React.FC<IconProps>
+  icon?: NavItemIcon
   category?: string
   external?: boolean
   disabled?: boolean
@@ -41,14 +42,20 @@ export const mainPages: NavItem[] = [
   {
     label: "GitHub",
     href: "/redirect/github",
+    icon: {
+      type: "simple",
+      name: "github",
+    },
     external: true,
-    icon: GitHubLogoIcon,
   },
   {
     label: "Discord",
     href: "/redirect/discord",
+    icon: {
+      type: "simple",
+      name: "discord",
+    },
     external: true,
-    icon: DiscordLogoIcon,
   },
 ]
 
@@ -57,23 +64,35 @@ export const dashboardPages: NavItem[] = [
   {
     label: "Guilds",
     href: "/dashboard/guilds",
-    icon: IdCardIcon,
+    icon: {
+      type: "lucide",
+      name: "list",
+    },
   },
   {
     label: "Modules",
     href: "/dashboard/guilds/[id]/modules",
-    icon: DashboardIcon,
+    icon: {
+      type: "lucide",
+      name: "package",
+    },
   },
   {
     label: "Commands",
     href: "/dashboard/guilds/[id]/commands",
-    icon: CommandIcon,
+    icon: {
+      type: "lucide",
+      name: "square-chevron-right",
+    },
     disabled: true,
   },
   {
     label: "Settings",
     href: "/dashboard/guilds/[id]/settings",
-    icon: MixerHorizontalIcon,
+    icon: {
+      type: "lucide",
+      name: "settings-2",
+    },
     disabled: true,
   },
   // resources

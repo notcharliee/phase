@@ -1,15 +1,9 @@
 import { ChannelType } from "@discordjs/core/http-only"
-import {
-  Folder,
-  Hash,
-  Image,
-  MessagesSquare,
-  Newspaper,
-  Volume2,
-} from "lucide-react"
+
+import { LucideIcon } from "~/components/icons/lucide"
 
 import type { APIChannel } from "@discordjs/core/http-only"
-import type { LucideProps } from "lucide-react"
+import type { LucideIconName, LucideIconProps } from "~/components/icons/lucide"
 
 export const AllowedChannelTypes = {
   GuildAnnouncement: ChannelType.GuildAnnouncement,
@@ -26,21 +20,21 @@ export type AllowedChannelType =
 
 export type AllowedAPIChannel = APIChannel & { type: AllowedChannelType }
 
-export const channelIcons: Record<AllowedChannelType, React.FC<LucideProps>> = {
-  [ChannelType.GuildAnnouncement]: Newspaper,
-  [ChannelType.GuildCategory]: Folder,
-  [ChannelType.GuildForum]: MessagesSquare,
-  [ChannelType.GuildMedia]: Image,
-  [ChannelType.GuildStageVoice]: Volume2,
-  [ChannelType.GuildText]: Hash,
-  [ChannelType.GuildVoice]: Volume2,
+export const channelIcons: Record<AllowedChannelType, LucideIconName> = {
+  [ChannelType.GuildAnnouncement]: "newspaper",
+  [ChannelType.GuildCategory]: "folder",
+  [ChannelType.GuildForum]: "messages-square",
+  [ChannelType.GuildMedia]: "image",
+  [ChannelType.GuildStageVoice]: "volume-2",
+  [ChannelType.GuildText]: "hash",
+  [ChannelType.GuildVoice]: "volume-2",
 }
 
-export interface ChannelIconProps extends LucideProps {
+export interface ChannelIconProps extends Omit<LucideIconProps, "name"> {
   channelType: AllowedChannelType
 }
 
 export function ChannelIcon({ channelType, ...props }: ChannelIconProps) {
-  const ChannelIcon = channelIcons[channelType]
-  return <ChannelIcon {...props} />
+  const iconName = channelIcons[channelType]
+  return <LucideIcon name={iconName} {...props} />
 }

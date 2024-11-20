@@ -1,8 +1,8 @@
 "use client"
 
 import * as AccordionPrimitive from "@radix-ui/react-accordion"
-import { ChevronDownIcon } from "@radix-ui/react-icons"
 
+import { LucideIcon } from "~/components/icons/lucide"
 import { Button } from "~/components/ui/button"
 
 import { cn } from "~/lib/utils"
@@ -53,7 +53,10 @@ export function AccordionTrigger({
             variant={"ghost"}
             className="text-muted-foreground hover:text-foreground chevron-icon relative"
           >
-            <ChevronDownIcon className="h-4 w-4 transition-transform duration-200" />
+            <LucideIcon
+              name="chevron-down"
+              className="transition-transform duration-200"
+            />
           </Button>
         </AccordionPrimitive.Trigger>
       </div>

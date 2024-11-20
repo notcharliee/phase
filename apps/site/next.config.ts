@@ -7,6 +7,7 @@ import { env } from "~/lib/env"
 import type { NextConfig } from "next"
 
 const config: NextConfig = {
+  transpilePackages: ["lucide-react"],
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
   experimental: { mdxRs: true },
   async redirects() {

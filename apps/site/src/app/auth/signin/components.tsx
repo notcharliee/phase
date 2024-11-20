@@ -3,7 +3,7 @@
 import Link from "next/link"
 import React from "react"
 
-import { DiscordLogoIcon } from "@radix-ui/react-icons"
+import { SiDiscord as DiscordLogoIcon } from "@icons-pack/react-simple-icons"
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp"
 
 import { OrSeparator } from "~/components/or-separator"

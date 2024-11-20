@@ -1,5 +1,4 @@
-import { CalendarIcon } from "@radix-ui/react-icons"
-
+import { LucideIcon } from "~/components/icons/lucide"
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import {
   HoverCard,
@@ -33,7 +32,7 @@ export const UserHoverCard = (props: UserHoverCardProps) => (
           <h4 className="text-sm font-semibold">{props.username}</h4>
           <p className="text-sm">{props.bio}</p>
           <div className="flex items-center pt-2">
-            <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
+            <LucideIcon name="calendar" className="mr-2 opacity-70" />{" "}
             <span className="text-muted-foreground text-xs">
               Joined {props.joined}
             </span>

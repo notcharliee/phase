@@ -2,9 +2,7 @@
 
 import * as React from "react"
 
-import { CaretSortIcon } from "@radix-ui/react-icons"
-import { Check } from "lucide-react"
-
+import { LucideIcon } from "~/components/icons/lucide"
 import { Badge } from "~/components/ui/badge"
 import {
   Command,
@@ -22,14 +20,14 @@ import {
 
 import { cn } from "~/lib/utils"
 
-import type { IconProps } from "@radix-ui/react-icons/dist/types"
+import type { LucideIconName } from "~/components/icons/lucide"
 import type { Arrayable, Optional } from "~/types/utils"
 
 export interface ComboboxItem {
   label: string
   value: string
   group?: string
-  icon?: React.FC<IconProps>
+  iconName?: LucideIconName
   colour?: `#${string}`
   disabled?: boolean
 }
@@ -93,7 +91,7 @@ export function ComboboxTrigger({
       {...props}
     >
       {children}
-      <CaretSortIcon className="ml-2 h-4 w-4 opacity-50" />
+      <LucideIcon name="chevrons-up-down" className="ml-2 opacity-50" />
     </PopoverTrigger>
   )
 }
@@ -127,7 +125,9 @@ export function ComboboxValue({
               "--background-colour": (item.colour ?? `#f8f8f8`) + "40",
             }}
           >
-            {item.icon && <item.icon className="size-3 shrink-0 stroke-2" />}
+            {item.iconName && (
+              <LucideIcon name={item.iconName} className="size-3" />
+            )}
             {item.label}
           </Badge>
         ))}
@@ -142,7 +142,9 @@ export function ComboboxValue({
       className="inline-flex items-center gap-1.5 text-[--text-colour]"
       style={{ "--text-colour": item.colour ?? `#f8f8f8` }}
     >
-      {item.icon && <item.icon className="size-3.5 shrink-0 stroke-2" />}
+      {item.iconName && (
+        <LucideIcon name={item.iconName} className="size-3.5" />
+      )}
       <span>{item.label}</span>
     </div>
   )
@@ -281,10 +283,12 @@ export function ComboboxContent<
           className="min-w-0 gap-1.5 pr-8 text-[--text-colour]"
           style={{ "--text-colour": item.colour ?? `#f8f8f8` }}
         >
-          {item.icon && <item.icon className="size-3.5 shrink-0 stroke-2" />}
+          {item.iconName && (
+            <LucideIcon name={item.iconName} className="size-3.5" />
+          )}
           <span className="truncate">{item.label}</span>
           <span className="absolute right-2">
-            {isSelected && <Check className="size-3.5 shrink-0 stroke-2" />}
+            {isSelected && <LucideIcon name="check" className="size-3.5" />}
           </span>
         </CommandItem>
       )
