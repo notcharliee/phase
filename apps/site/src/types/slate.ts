@@ -60,10 +60,3 @@ export interface GuildElementData {
   channels: ChannelElement["data"][]
   mentions: MentionElement["data"][]
 }
-
-declare module "slate" {
-  interface CustomTypes {
-    Text: TextLeaf
-    Element: TextElement | ChannelElement | MentionElement
-  }
-}

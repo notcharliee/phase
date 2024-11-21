@@ -1,6 +1,7 @@
 import type { APIUser } from "@discordjs/core/http-only"
-import type { Profile, Session, User } from "next-auth"
-import type { JWT } from "next-auth/jwt"
+
+import type {} from "next-auth"
+import type {} from "next-auth/jwt"
 
 declare module "next-auth" {
   interface User {
@@ -24,5 +25,3 @@ declare module "next-auth/jwt" {
     userId: string
   }
 }
-
-export type { Session, User, Profile, JWT }

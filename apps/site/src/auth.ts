@@ -9,7 +9,8 @@ import DiscordProvider from "next-auth/providers/discord"
 import { env } from "~/lib/env"
 
 import type { OTPResponse } from "~/app/api/auth/otp/route"
-import type { JWT, Profile, Session } from "~/types/auth"
+import type { Profile, Session } from "next-auth"
+import type { JWT } from "next-auth/jwt"
 
 const discordREST = new REST().setToken(env.DISCORD_TOKEN)
 const discordAPI = new API(discordREST)
