@@ -1,4 +1,9 @@
-import type { ChannelElement, MentionElement, TextElement } from "~/types/slate"
+import type {
+  ChannelElement,
+  MentionElement,
+  TextElement,
+  TextLeaf,
+} from "~/types/slate"
 
 import type {} from "slate"
 
