@@ -39,7 +39,8 @@
     "build": {
       "cache": true,
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "env": ["!*"]
     },
     "dev": {
       "cache": false,
