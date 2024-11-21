@@ -43,7 +43,6 @@ export const metadata: Metadata = {
     images: siteConfig.images.logo,
   },
   icons: {
-    icon: siteConfig.images.favicon,
     apple: siteConfig.images.apple,
   },
 } satisfies Metadata

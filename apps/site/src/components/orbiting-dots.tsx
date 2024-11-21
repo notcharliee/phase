@@ -1,101 +1,124 @@
+import { cva } from "class-variance-authority"
+
 import { cn } from "~/lib/utils"
 
-interface OrbitingDotsProps extends React.ComponentPropsWithoutRef<"div"> {
-  svgClassName?: string
-}
+import type { VariantProps } from "class-variance-authority"
+
+export const orbitingDotsVariants = cva(undefined, {
+  variants: {
+    animate: {
+      true: "animate-spin [animation-duration:60s]",
+      false: "animate-none",
+    },
+    size: {
+      default: undefined,
+      screen: "size-[90vh] md:size-[85vw] lg:size-[80vw] xl:size-[75vw]",
+    },
+  },
+  defaultVariants: {
+    animate: true,
+    size: "default",
+  },
+})
+
+interface OrbitingDotsProps
+  extends React.ComponentPropsWithRef<"svg">,
+    VariantProps<typeof orbitingDotsVariants> {}
 
 export const OrbitingDots = ({
   className,
-  svgClassName,
+  animate,
+  size,
   ...props
 }: OrbitingDotsProps) => {
   return (
-    <div
-      className={cn(
-        "fixed left-1/2 top-1/2 -z-10 flex h-full min-h-screen w-full min-w-[100vw] -translate-x-1/2 -translate-y-1/2 items-center justify-center",
-        className,
-      )}
+    <svg
+      width="1156"
+      height="1156"
+      viewBox="0 0 1156 1156"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn(orbitingDotsVariants({ animate, size }), className)}
       {...props}
     >
-      <svg
-        width="1394"
-        height="1394"
-        viewBox="0 0 1394 1394"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className={cn(
-          "fixed max-h-[87.5%] animate-spin [animation-duration:60s] lg:max-h-none lg:w-[70vw]",
-          svgClassName,
-        )}
-      >
-        <g clipPath="url(#clip0_87_3)">
-          <path
-            d="M696.001 1392C1080.39 1392 1392 1080.39 1392 696C1392 311.61 1080.39 -0.000244141 696.001 -0.000244141C311.611 -0.000244141 0.0012207 311.61 0.0012207 696C0.0012207 1080.39 311.611 1392 696.001 1392Z"
-            stroke="#282828"
-          />
-          <path
-            d="M1178 1202C1180.21 1202 1182 1200.21 1182 1198C1182 1195.79 1180.21 1194 1178 1194C1175.79 1194 1174 1195.79 1174 1198C1174 1200.21 1175.79 1202 1178 1202Z"
-            fill="#C0C0C0"
-          />
-          <path
-            d="M61.0012 412C63.2104 412 65.0012 410.209 65.0012 408C65.0012 405.791 63.2104 404 61.0012 404C58.7921 404 57.0012 405.791 57.0012 408C57.0012 410.209 58.7921 412 61.0012 412Z"
-            fill="#C0C0C0"
-          />
-          <path
-            d="M301.001 1273C303.21 1273 305.001 1271.21 305.001 1269C305.001 1266.79 303.21 1265 301.001 1265C298.792 1265 297.001 1266.79 297.001 1269C297.001 1271.21 298.792 1273 301.001 1273Z"
-            fill="#F8F8F8"
-          />
-          <path
-            d="M13.0012 833C15.2104 833 17.0012 831.209 17.0012 829C17.0012 826.791 15.2104 825 13.0012 825C10.7921 825 9.00122 826.791 9.00122 829C9.00122 831.209 10.7921 833 13.0012 833Z"
-            fill="#C0C0C0"
-          />
-          <path
-            d="M770.732 8.08691C772.941 8.08691 774.732 6.29605 774.732 4.08691C774.732 1.87777 772.941 0.0869141 770.732 0.0869141C768.523 0.0869141 766.732 1.87777 766.732 4.08691C766.732 6.29605 768.523 8.08691 770.732 8.08691Z"
-            fill="#C0C0C0"
-          />
-          <path
-            d="M1388.85 634.27C1391.05 634.27 1392.85 632.479 1392.85 630.27C1392.85 628.061 1391.05 626.27 1388.85 626.27C1386.64 626.27 1384.85 628.061 1384.85 630.27C1384.85 632.479 1386.64 634.27 1388.85 634.27Z"
-            fill="#F8F8F8"
-          />
-          <path
-            d="M694 1200C970.142 1200 1194 976.142 1194 700C1194 423.858 970.142 200 694 200C417.858 200 194 423.858 194 700C194 976.142 417.858 1200 694 1200Z"
-            stroke="#282828"
-          />
-          <path
-            d="M1123 448C1125.21 448 1127 446.209 1127 444C1127 441.791 1125.21 440 1123 440C1120.79 440 1119 441.791 1119 444C1119 446.209 1120.79 448 1123 448Z"
-            fill="#C0C0C0"
-          />
-          <path
-            d="M245 925C247.209 925 249 923.209 249 921C249 918.791 247.209 917 245 917C242.791 917 241 918.791 241 921C241 923.209 242.791 925 245 925Z"
-            fill="#C0C0C0"
-          />
-          <path
-            d="M1182 814C1183.66 814 1185 812.657 1185 811C1185 809.343 1183.66 808 1182 808C1180.34 808 1179 809.343 1179 811C1179 812.657 1180.34 814 1182 814Z"
-            fill="#F8F8F8"
-          />
-          <path
-            d="M950 1133C952.209 1133 954 1131.21 954 1129C954 1126.79 952.209 1125 950 1125C947.79 1125 946 1126.79 946 1129C946 1131.21 947.79 1133 950 1133Z"
-            fill="#C0C0C0"
-          />
-          <path
-            d="M859.999 233C862.209 233 863.999 231.209 863.999 229C863.999 226.791 862.209 225 859.999 225C857.79 225 855.999 226.791 855.999 229C855.999 231.209 857.79 233 859.999 233Z"
-            fill="#C0C0C0"
-          />
-          <path
-            d="M472.999 255C475.209 255 476.999 253.209 476.999 251C476.999 248.791 475.209 247 472.999 247C470.79 247 468.999 248.791 468.999 251C468.999 253.209 470.79 255 472.999 255Z"
-            fill="#C0C0C0"
-          />
-          <path
-            d="M582.999 1191C584.656 1191 585.999 1189.66 585.999 1188C585.999 1186.34 584.656 1185 582.999 1185C581.343 1185 579.999 1186.34 579.999 1188C579.999 1189.66 581.343 1191 582.999 1191Z"
-            fill="#F8F8F8"
-          />
-        </g>
-        <defs>
-          <clipPath id="clip0_87_3">
-            <rect width="1394" height="1394" fill="white" />
-          </clipPath>
-        </defs>
-      </svg>
-    </div>
+      <circle
+        cx="580"
+        cy="578"
+        r="513"
+        className="stroke-secondary"
+        strokeWidth="1"
+      />
+      <circle
+        cx="137.781"
+        cy="837.781"
+        r="3.5"
+        transform="rotate(-60 137.781 837.781)"
+        className="fill-muted-foreground"
+      />
+      <circle cx="457" cy="80" r="5" className="fill-muted-foreground" />
+      <circle cx="859" cy="147" r="5" className="fill-muted-foreground" />
+      <circle cx="1075" cy="443" r="5" className="fill-foreground" />
+      <circle cx="1005" cy="864" r="5" className="fill-muted-foreground" />
+      <circle cx="820" cy="1031" r="5" className="fill-muted-foreground" />
+      <circle cx="305" cy="1011" r="5" className="fill-foreground" />
+      <circle cx="67" cy="551" r="5" className="fill-muted-foreground" />
+      <circle
+        cx="168.781"
+        cy="270.781"
+        r="3.5"
+        transform="rotate(-60 168.781 270.781)"
+        className="fill-foreground"
+      />
+      <circle
+        cx="578.699"
+        cy="576.788"
+        r="358.8"
+        transform="rotate(-60 578.699 576.788)"
+        className="stroke-secondary"
+        strokeWidth="1"
+      />
+      <circle
+        cx="231.592"
+        cy="669.795"
+        r="3.5"
+        transform="rotate(-60 231.592 669.795)"
+        className="fill-foreground"
+      />
+      <circle
+        cx="670.11"
+        cy="229.46"
+        r="3.5"
+        transform="rotate(-60 670.11 229.46)"
+        className="fill-foreground"
+      />
+      <circle
+        cx="411.83"
+        cy="259.232"
+        r="5"
+        transform="rotate(-60 411.83 259.232)"
+        className="fill-muted-foreground"
+      />
+      <circle
+        cx="900.828"
+        cy="419.245"
+        r="3.5"
+        transform="rotate(-60 900.828 419.245)"
+        className="fill-muted-foreground"
+      />
+      <circle
+        cx="936.83"
+        cy="589.83"
+        r="5"
+        transform="rotate(-60 936.83 589.83)"
+        className="fill-muted-foreground"
+      />
+      <circle
+        cx="559.998"
+        cy="935.379"
+        r="3.5"
+        transform="rotate(-60 559.998 935.379)"
+        className="fill-muted-foreground"
+      />
+    </svg>
   )
 }
