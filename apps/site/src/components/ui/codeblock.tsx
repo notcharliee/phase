@@ -33,13 +33,7 @@ export function Codeblock({
 
   return (
     <Component
-      className={cn(
-        "text-foreground bg-muted/50 border font-mono text-sm",
-        inline
-          ? "mx-[0.25ch] inline-block rounded-[4px] px-1"
-          : "my-1 rounded px-3 py-2",
-        className,
-      )}
+      className={cn(codeblockVariants({ inline }), className)}
       {...props}
     >
       <code>{children}</code>
