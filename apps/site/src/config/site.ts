@@ -14,6 +14,6 @@ export const siteConfig = {
   images: {
     logo: new URL("/phase.png", BASE_URL),
     favicon: new URL("/favicon.ico", BASE_URL),
-    apple: new URL("/favicon.ico", BASE_URL),
+    apple: new URL("/apple.png", BASE_URL),
   }
 }
