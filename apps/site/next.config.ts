@@ -1,5 +1,3 @@
-import "@total-typescript/ts-reset"
-
 import createMDX from "@next/mdx"
 
 import { env } from "~/lib/env"
