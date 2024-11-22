@@ -49,6 +49,7 @@
     },
     "lint": {
       "cache": false,
+      "dependsOn": ["^build"],
       "passThroughEnv": ["SKIP_ENV_VALIDATION"]
     }
   },
