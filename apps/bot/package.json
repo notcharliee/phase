@@ -21,7 +21,7 @@
     "@repo/config": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/env": "workspace:*",
-    "@repo/image": "workspace:*",
+    "@phasejs/image": "workspace:*",
     "@repo/utils": "workspace:*",
     "@twurple/api": "^7.2.0",
     "@twurple/auth": "^7.2.0",

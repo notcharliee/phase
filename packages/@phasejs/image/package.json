@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "@repo/image",
+  "name": "@phasejs/image",
   "version": "0.0.0",
   "private": true,
   "scripts": {

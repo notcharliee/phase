@@ -1,4 +1,4 @@
-import { ImageBuilder } from "@repo/image"
+import { ImageBuilder } from "@phasejs/image"
 import { ModuleId } from "@repo/utils/modules"
 import dedent from "dedent"
 

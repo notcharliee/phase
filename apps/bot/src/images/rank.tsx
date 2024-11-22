@@ -1,4 +1,4 @@
-import { ImageBuilder } from "@repo/image"
+import { ImageBuilder } from "@phasejs/image"
 
 import { tw } from "~/lib/tw"
 
