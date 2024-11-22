@@ -9,7 +9,7 @@ export const siteConfig = {
   keywords: ["Discord", "Bot", "Phase", "Free"],
   developer: {
     name: "mikaela",
-    url: "https://github.com/notcharliee",
+    url: "https://github.com/mikaeladev",
   },
   images: {
     logo: new URL("/phase.png", BASE_URL),

@@ -49,13 +49,13 @@ const config: NextConfig = {
       {
         // developer page
         source: "/redirect/developer",
-        destination: "https://github.com/notcharliee",
+        destination: "https://github.com/mikaeladev",
         permanent: false,
       },
       {
         // github repo
         source: "/redirect/github",
-        destination: "https://github.com/notcharliee/phase",
+        destination: "https://github.com/mikaeladev/phase",
         permanent: false,
       },
       {

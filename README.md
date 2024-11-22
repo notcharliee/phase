@@ -6,7 +6,7 @@ Visit [https://phasebot.xyz/docs](https://phasebot.xyz/docs) to view the full do
 
 The Phase Bot community can be found in our [Discord server](https://phasebot.xyz/redirect/discord), where you can ask questions, voice ideas, and share your projects.
 
-Our [Code of Conduct](https://github.com/notcharliee/phase/blob/main/.github/CODE_OF_CONDUCT.md) applies to all Phase Bot community channels.
+Our [Code of Conduct](https://github.com/mikaeladev/phase/blob/main/.github/CODE_OF_CONDUCT.md) applies to all Phase Bot community channels.
 
 ## Contributions
 
