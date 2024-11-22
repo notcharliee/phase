@@ -37,7 +37,6 @@
   },
   "dependencies": {
     "@types/lodash": "^4.17.13",
-    "@vercel/og": "^0.6.3",
     "chalk": "^5.3.0",
     "croner": "^8.1.2",
     "deepmerge-ts": "^7.1.3",

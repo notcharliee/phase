@@ -1,4 +1,4 @@
-import { ImageBuilder } from "phasebot/builders"
+import { ImageBuilder } from "@repo/image"
 
 import { tw } from "~/lib/tw"
 
@@ -10,8 +10,8 @@ import type { getWeatherData } from "~/app/commands/(info)/weather"
 interface WeatherCardProps extends Awaited<ReturnType<typeof getWeatherData>> {}
 
 export function generateWeatherCard(props: WeatherCardProps) {
-  return new ImageBuilder(
-    (
+  return new ImageBuilder()
+    .setElement(
       <div
         style={tw`text-foreground flex flex-col font-['Geist'] font-bold leading-5 tracking-tighter`}
       >
@@ -114,15 +114,13 @@ export function generateWeatherCard(props: WeatherCardProps) {
             ))}
           </div>
         </div>
-      </div>
-    ),
-  )
+      </div>,
+    )
     .setWidth(730)
     .setHeight(920)
-    .setFonts([
-      { name: "Geist", weight: 500, data: geistMedium },
-      { name: "Geist", weight: 700, data: geistBold },
-    ])
+    .addFont({ name: "Geist", weight: 500, data: geistMedium })
+    .addFont({ name: "Geist", weight: 700, data: geistBold })
+    .build()
 }
 
 function degrees(degrees: string | number) {

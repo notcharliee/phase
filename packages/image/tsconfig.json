@@ -1,0 +1,9 @@
+{
+  "extends": "../../node_modules/@repo/config/src/typescript/base.json",
+  "include": [
+    "src/**/*",
+    "eslint.config.js",
+    "tsup.config.ts"
+  ],
+  "compilerOptions": { "baseUrl": "." }
+}

@@ -1,5 +1,4 @@
-import { ImageBuilder } from "phasebot/builders"
-
+import { ImageBuilder } from "@repo/image"
 import { ModuleId } from "@repo/utils/modules"
 import dedent from "dedent"
 
@@ -55,8 +54,8 @@ export async function generateWelcomeCard(props: WelcomeCardProps) {
   const width = 600
   const height = 192
 
-  return new ImageBuilder(
-    (
+  return new ImageBuilder()
+    .setElement(
       <div
         style={tw`text-foreground relative flex h-full w-full items-center justify-center font-['Geist'] font-medium leading-5 tracking-tighter`}
       >
@@ -93,15 +92,13 @@ export async function generateWelcomeCard(props: WelcomeCardProps) {
             {text.split("\n").map(markdownToJSX)}
           </div>
         </div>
-      </div>
-    ),
-  )
+      </div>,
+    )
     .setWidth(width)
     .setHeight(height)
-    .setFonts([
-      { name: "Geist", weight: 500, data: geistMedium },
-      { name: "Geist", weight: 700, data: geistBold },
-    ])
+    .addFont({ name: "Geist", weight: 500, data: geistMedium })
+    .addFont({ name: "Geist", weight: 700, data: geistBold })
+    .build()
 }
 
 /**

@@ -2,9 +2,10 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 
 import { ModuleId } from "@repo/utils/modules"
 
+import { db } from "~/lib/db.ts"
+
+import { generateLeaderboardCard } from "~/images/leaderboard.tsx"
 import { BotErrorMessage } from "~/structures/BotError"
-import { db } from '~/lib/db.ts'
-import { generateLeaderboardCard } from '~/images/leaderboard.tsx'
 
 export default new BotSubcommandBuilder()
   .setName("leaderboard")
@@ -45,13 +46,13 @@ export default new BotSubcommandBuilder()
         .find({ guild: interaction.guildId })
         .sort({ level: -1, xp: -1 })
         .skip(rankStart - 1)
-        .limit(rankEnd - rankStart + 1);
+        .limit(rankEnd - rankStart + 1)
 
       if (!usersData?.length) {
         return void interaction.editReply({
           content: "No users found within the specified rank range.",
         })
-      };
+      }
 
       const response = []
 
@@ -78,14 +79,16 @@ export default new BotSubcommandBuilder()
           })
         } catch {
           continue
-        };
-      };
+        }
+      }
 
-      const leaderBoardCard = await generateLeaderboardCard({
-        data: response,
-      }).toAttachment()
-
-      leaderBoardCard.setName(`leaderboard-card-${interaction.guildId}.png`)
+      const leaderBoardCard = (
+        await generateLeaderboardCard({
+          data: response,
+        })
+      ).toAttachment({
+        name: `leaderboard-card-${interaction.guildId}.png`,
+      })
 
       await interaction.editReply({ files: [leaderBoardCard] })
     } catch (error) {
@@ -99,5 +102,5 @@ export default new BotSubcommandBuilder()
           guildId: interaction.guildId!,
         }).toJSON(),
       )
-    };
+    }
   })

@@ -3,9 +3,9 @@ import { BotSubcommandBuilder } from "phasebot/builders"
 import { ModuleId } from "@repo/utils/modules"
 
 import { db } from "~/lib/db"
-import { BotErrorMessage } from "~/structures/BotError"
 
 import { generateRankCard } from "~/images/rank"
+import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
   .setName("rank")
@@ -67,18 +67,20 @@ export default new BotSubcommandBuilder()
               )
           : undefined) ?? "linear-gradient(to right, #282828, #282828)"
 
-      const rankCard = await generateRankCard({
-        username: user.username,
-        displayName: user.displayName,
-        avatarUrl: user.displayAvatarURL({ extension: "png", size: 256 }),
-        rank: userRank,
-        level: userLevelData.level,
-        currentXp: userLevelData.xp,
-        targetXp: 500 * (userLevelData.level + 1),
-        bannerImage,
-      }).toAttachment()
-
-      rankCard.setName(`rank-card-${user.id}.png`)
+      const rankCard = (
+        await generateRankCard({
+          username: user.username,
+          displayName: user.displayName,
+          avatarUrl: user.displayAvatarURL({ extension: "png", size: 256 }),
+          rank: userRank,
+          level: userLevelData.level,
+          currentXp: userLevelData.xp,
+          targetXp: 500 * (userLevelData.level + 1),
+          bannerImage,
+        })
+      ).toAttachment({
+        name: `rank-card-${user.id}.png`,
+      })
 
       await interaction.editReply({ files: [rankCard] })
     } catch (error) {

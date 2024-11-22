@@ -1,4 +1,4 @@
-import { ImageBuilder } from "phasebot/builders"
+import { ImageBuilder } from "@repo/image"
 
 import { tw } from "~/lib/tw"
 
@@ -17,8 +17,8 @@ interface RankCardProps {
 }
 
 export const generateRankCard = (props: RankCardProps) => {
-  return new ImageBuilder(
-    (
+  return new ImageBuilder()
+    .setElement(
       <div
         style={tw`text-foreground flex h-full w-full flex-col font-['Geist'] font-bold leading-5 tracking-tighter`}
       >
@@ -96,13 +96,11 @@ export const generateRankCard = (props: RankCardProps) => {
             </div>
           </div>
         </div>
-      </div>
-    ),
-  )
+      </div>,
+    )
     .setWidth(900)
     .setHeight(592)
-    .setFonts([
-      { name: "Geist", weight: 500, data: geistMedium },
-      { name: "Geist", weight: 700, data: geistBold },
-    ])
+    .addFont({ name: "Geist", weight: 500, data: geistMedium })
+    .addFont({ name: "Geist", weight: 700, data: geistBold })
+    .build()
 }

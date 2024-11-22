@@ -50,7 +50,7 @@ export default new BotCommandBuilder()
       units,
     })
 
-    const weatherCard = await generateWeatherCard(weatherData).toAttachment()
+    const weatherCard = (await generateWeatherCard(weatherData)).toAttachment()
 
     void interaction.editReply({
       files: [weatherCard],
