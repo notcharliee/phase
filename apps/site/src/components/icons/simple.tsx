@@ -5,6 +5,8 @@ import {
 
 import { cn } from "~/lib/utils"
 
+import type { IconType } from "@icons-pack/react-simple-icons"
+
 // this library is MASSIVE, so we're only importing the icons we need
 export const simpleIcons = {
   github,
@@ -13,7 +15,7 @@ export const simpleIcons = {
 
 export type SimpleIconName = keyof typeof simpleIcons
 
-export interface SimpleIconProps extends React.ComponentPropsWithRef<"svg"> {
+export interface SimpleIconProps extends React.ComponentPropsWithRef<IconType> {
   name: SimpleIconName
 }
 
