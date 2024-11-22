@@ -27,7 +27,7 @@ export const DrawerPortal = DrawerPrimitive.Portal
 export const DrawerClose = DrawerPrimitive.Close
 
 export interface DrawerOverlayProps
-  extends React.ComponentPropsWithRef<typeof DrawerPrimitive.Overlay> {}
+  extends React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay> {}
 
 export function DrawerOverlay({ className, ...props }: DrawerOverlayProps) {
   return (
@@ -39,7 +39,7 @@ export function DrawerOverlay({ className, ...props }: DrawerOverlayProps) {
 }
 
 export interface DrawerContentProps
-  extends React.ComponentPropsWithRef<typeof DrawerPrimitive.Content> {}
+  extends React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content> {}
 
 export function DrawerContent({
   className,

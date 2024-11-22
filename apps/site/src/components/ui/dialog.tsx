@@ -12,7 +12,7 @@ export const DialogPortal = DialogPrimitive.Portal
 export const DialogClose = DialogPrimitive.Close
 
 export interface DialogOverlayProps
-  extends React.ComponentPropsWithRef<typeof DialogPrimitive.Overlay> {}
+  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay> {}
 
 export function DialogOverlay({ className, ...props }: DialogOverlayProps) {
   return (

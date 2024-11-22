@@ -125,7 +125,7 @@ export function FormControl({ ...props }: FormControlProps) {
   )
 }
 
-export interface FormDescriptionProps extends React.ComponentPropsWithRef<"p"> {
+export interface FormDescriptionProps extends React.ComponentPropsWithoutRef<"p"> {
   asChild?: boolean
 }
 

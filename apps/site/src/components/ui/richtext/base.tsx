@@ -141,6 +141,7 @@ export function BaseRichtext({
       initialValue={deserialiseValue(value ?? "")}
       onValueChange={onEditorValueChange}
     >
+      {/* @ts-expect-error - JUST RELEASE REACT 19 STABLE TYPES ALREADY AHHHHH */}
       <Editable
         readOnly={props.disabled}
         decorate={decorate}
