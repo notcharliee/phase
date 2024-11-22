@@ -50,7 +50,7 @@ export function Button({
   asChild = false,
   ...props
 }: ButtonProps) {
-  const Comp = asChild ? Slot : "button"
+  const Comp = asChild ? (Slot as unknown as "button") : "button"
   return (
     <Comp
       className={cn(buttonVariants({ variant, size, className }))}
