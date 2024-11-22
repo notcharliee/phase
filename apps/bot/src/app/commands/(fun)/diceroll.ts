@@ -1,4 +1,4 @@
-import { BotCommandBuilder } from "phasebot/builders"
+import { BotCommandBuilder } from "@phasejs/core/builders"
 
 const DICE = ["d4", "d6", "d8", "d10", "d12", "d20", "d100"] as const
 const DEFAULT_DICE = "d6" satisfies (typeof DICE)[number]

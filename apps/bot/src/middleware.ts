@@ -3,7 +3,7 @@ import { PermissionFlagsBits } from "discord.js"
 import { BotErrorMessage } from "~/structures/BotError"
 
 import type { GuildMember } from "discord.js"
-import type { BotCommandMiddleware } from "phasebot"
+import type { BotCommandMiddleware } from "@phasejs/core"
 
 export const commands: BotCommandMiddleware = async (
   interaction,

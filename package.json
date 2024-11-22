@@ -5,8 +5,8 @@
   "type": "module",
   "workspaces": [
     "apps/*",
-    "packages/@repo/*",
-    "packages/phasebot"
+    "packages/@phasejs/*",
+    "packages/@repo/*"
   ],
   "scripts": {
     "dev": "turbo run dev",

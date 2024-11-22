@@ -1,4 +1,4 @@
-import { BotCronBuilder } from "phasebot/builders"
+import { BotCronBuilder } from "@phasejs/core/builders"
 
 import { ModuleDefinitions, ModuleId } from "@repo/utils/modules"
 

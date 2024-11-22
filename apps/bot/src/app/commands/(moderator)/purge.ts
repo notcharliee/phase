@@ -1,5 +1,5 @@
 import { chatInputApplicationCommandMention } from "discord.js"
-import { BotCommandBuilder } from "phasebot/builders"
+import { BotCommandBuilder } from "@phasejs/core/builders"
 
 import { BotErrorMessage } from "~/structures/BotError"
 

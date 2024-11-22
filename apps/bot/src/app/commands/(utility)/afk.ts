@@ -1,5 +1,5 @@
 import { EmbedBuilder } from "discord.js"
-import { BotCommandBuilder } from "phasebot/builders"
+import { BotCommandBuilder } from "@phasejs/core/builders"
 
 import { db } from "~/lib/db"
 import { PhaseColour } from "~/lib/enums"

@@ -1,5 +1,5 @@
 import { EmbedBuilder, PermissionFlagsBits } from "discord.js"
-import { BotSubcommandBuilder } from "phasebot/builders"
+import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import { PhaseColour } from "~/lib/enums"
 import { BotErrorMessage } from "~/structures/BotError"

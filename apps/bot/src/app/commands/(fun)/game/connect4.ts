@@ -4,7 +4,7 @@ import {
   DiscordjsErrorCodes,
   StringSelectMenuBuilder,
 } from "discord.js"
-import { BotSubcommandBuilder } from "phasebot/builders"
+import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 

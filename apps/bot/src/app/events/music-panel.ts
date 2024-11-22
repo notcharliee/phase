@@ -1,5 +1,5 @@
 import { ButtonStyle, ModalBuilder, TextInputStyle } from "discord.js"
-import { BotEventBuilder } from "phasebot/builders"
+import { BotEventBuilder } from "@phasejs/core/builders"
 
 import { Emojis } from "~/lib/emojis"
 import { wrapText } from "~/lib/utils/formatting"

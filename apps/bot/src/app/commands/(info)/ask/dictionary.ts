@@ -1,5 +1,5 @@
 import { ButtonBuilder, ButtonStyle } from "discord.js"
-import { BotSubcommandBuilder } from "phasebot/builders"
+import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import { capitalCase } from "change-case"
 

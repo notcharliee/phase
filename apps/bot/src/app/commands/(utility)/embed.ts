@@ -4,7 +4,7 @@ import {
   ButtonStyle,
   EmbedBuilder,
 } from "discord.js"
-import { BotCommandBuilder } from "phasebot/builders"
+import { BotCommandBuilder } from "@phasejs/core/builders"
 
 import { PhaseColour } from "~/lib/enums"
 

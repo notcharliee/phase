@@ -1,4 +1,4 @@
-import { BotEventBuilder } from "phasebot/builders"
+import { BotEventBuilder } from "@phasejs/core/builders"
 
 import { ModuleId } from "@repo/utils/modules"
 

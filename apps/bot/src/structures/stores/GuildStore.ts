@@ -1,4 +1,4 @@
-import { BaseKVStore } from "phasebot/stores"
+import { BaseKVStore } from "@phasejs/core/stores"
 
 import { db } from "~/lib/db"
 

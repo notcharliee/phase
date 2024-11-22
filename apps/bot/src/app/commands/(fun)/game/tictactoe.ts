@@ -4,7 +4,7 @@ import {
   ButtonStyle,
   ComponentType,
 } from "discord.js"
-import { BotSubcommandBuilder } from "phasebot/builders"
+import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import dedent from "dedent"
 

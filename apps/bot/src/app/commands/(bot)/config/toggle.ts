@@ -1,4 +1,4 @@
-import { BotSubcommandBuilder } from "phasebot/builders"
+import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import { ModuleDefinitions } from "@repo/utils/modules"
 

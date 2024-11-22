@@ -1,4 +1,4 @@
-import { BotCommandBuilder } from "phasebot/builders"
+import { BotCommandBuilder } from "@phasejs/core/builders"
 
 import { fetchWeatherApi } from "openmeteo"
 

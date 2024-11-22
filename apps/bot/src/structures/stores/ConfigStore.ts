@@ -1,4 +1,4 @@
-import { BaseStore } from "phasebot/stores"
+import { BaseStore } from "@phasejs/core/stores"
 
 import { db } from "~/lib/db"
 

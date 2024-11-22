@@ -1,4 +1,4 @@
-import { BotSubcommandBuilder } from "phasebot/builders"
+import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import { createPanelButtons, createPanelEmbed } from "~/app/events/music-panel"
 import { BotErrorMessage } from "~/structures/BotError"

@@ -5,7 +5,7 @@ import {
   TextInputBuilder,
   TextInputStyle,
 } from "discord.js"
-import { BotEventBuilder } from "phasebot/builders"
+import { BotEventBuilder } from "@phasejs/core/builders"
 
 import { BotErrorMessage } from "~/structures/BotError"
 

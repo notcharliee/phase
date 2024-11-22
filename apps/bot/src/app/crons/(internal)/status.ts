@@ -1,5 +1,5 @@
 import { ActivityType } from "discord.js"
-import { BotCronBuilder } from "phasebot/builders"
+import { BotCronBuilder } from "@phasejs/core/builders"
 
 export default new BotCronBuilder()
   .setPattern("*/30 * * * * *") // every 30 seconds

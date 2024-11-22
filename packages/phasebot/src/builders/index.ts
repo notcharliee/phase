@@ -1,5 +1,0 @@
-export * from "~/builders/structures/BotCommandBuilder"
-export * from "~/builders/structures/BotSubcommandBuilder"
-export * from "~/builders/structures/BotCronBuilder"
-export * from "~/builders/structures/BotEventBuilder"
-export * from "~/builders/structures/BotPluginBuilder"

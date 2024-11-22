@@ -1,6 +1,6 @@
 import { Options, Partials } from "discord.js"
-import { BotPluginBuilder } from "phasebot/builders"
-import { BotClient } from "phasebot/client"
+import { BotPluginBuilder } from "@phasejs/core/builders"
+import { BotClient } from "@phasejs/core/client"
 
 import { Emojis } from "~/lib/emojis"
 
