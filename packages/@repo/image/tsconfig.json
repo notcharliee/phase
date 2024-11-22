@@ -1,8 +1,7 @@
 {
-  "extends": "../../node_modules/@repo/config/src/typescript/base.json",
+  "extends": "../../../node_modules/@repo/config/src/typescript/base.json",
   "include": [
     "src/**/*",
-    "drizzle.config.ts",
     "eslint.config.js",
     "tsup.config.ts"
   ],
