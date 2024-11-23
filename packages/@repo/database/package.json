@@ -33,12 +33,13 @@
     "@repo/utils": "workspace:*",
     "drizzle-orm": "^0.35.1",
     "mongoose": "^8.1.0",
-    "pg": "^8.13.0",
+    "pg": "^8.13.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@repo/config": "workspace:*",
     "@types/node": "^20.8.9",
+    "@types/pg": "^8.11.10",
     "drizzle-kit": "^0.26.2",
     "eslint": "^9.13.0",
     "tsup": "^8.3.0",
