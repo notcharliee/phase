@@ -1,3 +1,5 @@
+export * from "~/postgres/schemas/afks"
+export * from "~/postgres/schemas/giveaways"
 export * from "~/postgres/schemas/guilds"
 export * from "~/postgres/schemas/modules"
 export * from "~/postgres/schemas/themes"
