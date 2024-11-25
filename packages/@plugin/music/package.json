@@ -21,6 +21,7 @@
     "@phasejs/plugin": "workspace:*"
   },
   "devDependencies": {
+    "@plugin/voice": "workspace:*",
     "@repo/config": "workspace:*",
     "@types/bun": "^1.1.13",
     "distube": "^5.0.4",
@@ -29,7 +30,6 @@
     "typescript": "^5.6.3"
   },
   "peerDependencies": {
-    "@plugin/voice": "workspace:*",
     "discord.js": "^14.16.x"
   }
 }
