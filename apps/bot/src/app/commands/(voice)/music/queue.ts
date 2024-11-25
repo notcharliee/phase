@@ -1,6 +1,7 @@
 import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
+import { QueueRepeatMode } from "@plugin/music"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
@@ -11,7 +12,6 @@ import {
 } from "~/lib/utils/formatting"
 
 import { BotErrorMessage } from "~/structures/BotError"
-import { QueueRepeatMode } from "~/structures/music/Queue"
 
 import type { GuildMember } from "discord.js"
 

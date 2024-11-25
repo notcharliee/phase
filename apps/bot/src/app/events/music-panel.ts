@@ -1,6 +1,8 @@
 import { ButtonStyle, ModalBuilder, TextInputStyle } from "discord.js"
 import { BotEventBuilder } from "@phasejs/core/builders"
 
+import { QueueRepeatMode } from "@plugin/music"
+
 import { Emojis } from "~/lib/emojis"
 import { wrapText } from "~/lib/utils/formatting"
 
@@ -9,9 +11,8 @@ import { BotErrorMessage } from "~/structures/BotError"
 import { ActionRowBuilder } from "~/structures/builders/ActionRowBuilder"
 import { EmbedBuilder } from "~/structures/builders/EmbedBuilder"
 import { MessageBuilder } from "~/structures/builders/MessageBuilder"
-import { QueueRepeatMode } from "~/structures/music/Queue"
 
-import type { Song } from "~/structures/music/Song"
+import type { Song } from "@plugin/music"
 import type { ExtractCustomIDParts } from "~/types/custom-ids"
 
 enum MusicCustomID {

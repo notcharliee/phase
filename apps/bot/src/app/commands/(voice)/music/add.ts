@@ -1,8 +1,9 @@
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
+import { MusicError } from "@plugin/music"
+
 import { BotErrorMessage } from "~/structures/BotError"
 import { MessageBuilder } from "~/structures/builders/MessageBuilder"
-import { MusicError } from "~/structures/music/Music"
 
 import type { GuildMember } from "discord.js"
 
@@ -74,7 +75,7 @@ export default new BotSubcommandBuilder()
       console.error(
         `Failed to play song in channel ${channel.id} of guild ${channel.guild.id}:`,
       )
-      
+
       console.error(error)
 
       return void interaction.editReply(
