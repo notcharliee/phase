@@ -3,11 +3,11 @@ import satori from "satori"
 
 import { Image } from "~/structures/Image"
 
-import type { Font } from "satori"
+import type { ImageFont } from "~/types/image"
 
 export class ImageBuilder {
   private element: React.ReactNode = null
-  private fonts: Font[] = []
+  private fonts: ImageFont[] = []
   private width = 0
   private height = 0
   private debug = false
@@ -17,12 +17,12 @@ export class ImageBuilder {
     return this
   }
 
-  setFonts(fonts: Font[]) {
+  setFonts(fonts: ImageFont[]) {
     this.fonts = fonts
     return this
   }
 
-  addFont(font: Font) {
+  addFont(font: ImageFont) {
     this.fonts.push(font)
     return this
   }
