@@ -54,7 +54,7 @@ export default new BotSubcommandBuilder()
         })
       }
 
-      const response = []
+      const users = []
 
       for (let index = 0; index < usersData.length; index++) {
         const data = usersData[index]!
@@ -62,7 +62,7 @@ export default new BotSubcommandBuilder()
         try {
           const user = await interaction.client.users.fetch(data.user)
 
-          response.push({
+          users.push({
             id: user.id,
             username: user.username,
             global_name: user.displayName ?? user.username,
@@ -82,15 +82,10 @@ export default new BotSubcommandBuilder()
         }
       }
 
-      const leaderBoardCard = (
-        await generateLeaderboardCard({
-          data: response,
-        })
-      ).toAttachment({
-        name: `leaderboard-card-${interaction.guildId}.png`,
-      })
+      const leaderboard = await generateLeaderboardCard(users)
+      const leaderboardAttachment = leaderboard.toAttachment()
 
-      await interaction.editReply({ files: [leaderBoardCard] })
+      await interaction.editReply({ files: [leaderboardAttachment] })
     } catch (error) {
       console.error(error)
 

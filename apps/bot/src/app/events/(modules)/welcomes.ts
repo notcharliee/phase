@@ -39,7 +39,7 @@ export default new BotEventBuilder()
     )
 
     const welcomeCard = moduleConfig.card.enabled
-      ? (await generateWelcomeCard({ client, member })).toAttachment()
+      ? (await generateWelcomeCard(client, member)).toAttachment()
       : null
 
     const message = new MessageBuilder()
