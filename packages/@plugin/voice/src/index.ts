@@ -2,6 +2,7 @@ import { BotPluginBuilder } from "@phasejs/plugin"
 
 import { pluginVersion } from "~/lib/utils"
 
+import { Voice } from "~/structures/Voice"
 import { VoiceManager } from "~/structures/VoiceManager"
 
 import type {} from "discord.js"
@@ -22,3 +23,5 @@ export function voicePlugin() {
 
   return voicePluginBuilder.build()
 }
+
+export { Voice, VoiceManager }
