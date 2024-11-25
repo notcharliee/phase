@@ -1,12 +1,11 @@
 import { Options, Partials } from "discord.js"
-import { BotPluginBuilder } from "@phasejs/core/builders"
 import { BotClient } from "@phasejs/core/client"
 
+import { musicPlugin } from "@plugin/music"
 import { voicePlugin } from "@plugin/voice"
 
 import { Emojis } from "~/lib/emojis"
 
-import { Music } from "~/structures/music/Music"
 import { ConfigStore } from "~/structures/stores/ConfigStore"
 import { GuildStore } from "~/structures/stores/GuildStore"
 import { InviteStore } from "~/structures/stores/InviteStore"
@@ -52,15 +51,7 @@ const phaseClient = new BotClient({
       },
     }),
   },
-  plugins: [
-    voicePlugin(),
-    new BotPluginBuilder()
-      .setName("Music")
-      .setVersion("1.0.0")
-      .setOnLoad((client) => {
-        client.music = new Music(client)
-      }),
-  ],
+  plugins: [voicePlugin(), musicPlugin()],
   stores: {
     config: new ConfigStore(),
     guilds: new GuildStore(),

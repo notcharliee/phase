@@ -1,6 +1,6 @@
-import { numberToDuration } from "~/lib/utils/formatting"
+import { numberToDuration } from "~/lib/utils"
 
-import type { Queue } from "~/structures/music/Queue"
+import type { Queue } from "~/structures/Queue"
 import type { GuildMember } from "discord.js"
 
 export class Song {

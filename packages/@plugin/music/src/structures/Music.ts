@@ -1,10 +1,10 @@
 import { YouTubePlaylist, YouTubePlugin } from "@distube/youtube"
 
-import { QueueManager } from "~/structures/music/QueueManager"
-import { Song } from "~/structures/music/Song"
+import { QueueManager } from "~/structures/QueueManager"
+import { Song } from "~/structures/Song"
 
 import type { YouTubeSong } from "@distube/youtube"
-import type { Queue } from "~/structures/music/Queue"
+import type { Queue } from "~/structures/Queue"
 import type { Client, GuildMember, VoiceBasedChannel } from "discord.js"
 
 export enum MusicError {

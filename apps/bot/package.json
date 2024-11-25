@@ -13,11 +13,10 @@
   },
   "dependencies": {
     "@discordjs/opus": "^0.9.0",
-    "@distube/youtube": "^1.0.4",
-    "@distube/ytdl-core": "^4.15.1",
     "@octokit/rest": "^20.1.1",
     "@phasejs/core": "workspace:*",
     "@phasejs/image": "workspace:*",
+    "@plugin/music": "workspace:*",
     "@plugin/voice": "workspace:*",
     "@repo/config": "workspace:*",
     "@repo/database": "workspace:*",
@@ -42,7 +41,6 @@
     "@types/bun": "^1.1.13",
     "@types/ms": "^0.7.34",
     "@types/react": "npm:types-react@19.0.0-rc.1",
-    "distube": "^5.0.4",
     "eslint": "^9.15.0",
     "typescript": "^5.6.3"
   },

@@ -1,10 +1,10 @@
 import { AudioPlayerStatus } from "@discordjs/voice"
 
-import { numberToDuration } from "~/lib/utils/formatting"
+import { numberToDuration } from "~/lib/utils"
 
-import type { Music } from "~/structures/music/Music"
-import type { Song } from "~/structures/music/Song"
-import type { Voice } from "~/structures/voice/Voice"
+import type { Voice } from "@plugin/voice"
+import type { Music } from "~/structures/Music"
+import type { Song } from "~/structures/Song"
 import type { Snowflake, VoiceBasedChannel } from "discord.js"
 
 export enum QueueRepeatMode {

@@ -1,15 +1,20 @@
-import { BaseManager } from "~/structures/BaseManager"
-import { Queue } from "~/structures/music/Queue"
+import { BaseManager } from "discord.js"
 
-import type { Music } from "~/structures/music/Music"
+import { Queue } from "~/structures/Queue"
+
+import type { Music } from "~/structures/Music"
 import type { Snowflake, VoiceBasedChannel } from "discord.js"
 
-export class QueueManager extends BaseManager<Snowflake, Queue> {
+export class QueueManager extends BaseManager {
   public music: Music
+
+  private queues: Map<Snowflake, Queue>
 
   constructor(music: Music) {
     super(music.client)
+
     this.music = music
+    this.queues = new Map()
 
     this.client.on("voiceStateUpdate", (oldState, newState) => {
       const bot = oldState.guild.members.me!
@@ -21,6 +26,22 @@ export class QueueManager extends BaseManager<Snowflake, Queue> {
         this.delete(oldState.guild.id)
       }
     })
+  }
+
+  public get(key: Snowflake) {
+    return this.queues.get(key)
+  }
+
+  public set(key: Snowflake, value: Queue) {
+    return this.queues.set(key, value)
+  }
+
+  public delete(key: Snowflake) {
+    return this.queues.delete(key)
+  }
+
+  public has(key: Snowflake) {
+    return this.queues.has(key)
   }
 
   public create(voiceChannel: VoiceBasedChannel) {
