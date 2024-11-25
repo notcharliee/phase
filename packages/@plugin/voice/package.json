@@ -16,10 +16,12 @@
     }
   },
   "dependencies": {
+    "@discordjs/opus": "^0.9.0",
     "@discordjs/voice": "^0.18.0",
     "@phasejs/plugin": "workspace:*",
     "ffmpeg-static": "^5.2.0",
-    "fluent-ffmpeg": "^2.1.3"
+    "fluent-ffmpeg": "^2.1.3",
+    "node-gyp": "^10.2.0"
   },
   "devDependencies": {
     "@repo/config": "workspace:*",
