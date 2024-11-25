@@ -2,6 +2,8 @@ import { Options, Partials } from "discord.js"
 import { BotPluginBuilder } from "@phasejs/core/builders"
 import { BotClient } from "@phasejs/core/client"
 
+import { voicePlugin } from "@plugin/voice"
+
 import { Emojis } from "~/lib/emojis"
 
 import { Music } from "~/structures/music/Music"
@@ -9,7 +11,6 @@ import { ConfigStore } from "~/structures/stores/ConfigStore"
 import { GuildStore } from "~/structures/stores/GuildStore"
 import { InviteStore } from "~/structures/stores/InviteStore"
 import { TwitchStatusStore } from "~/structures/stores/TwitchStatusStore"
-import { VoiceManager } from "~/structures/voice/VoiceManager"
 
 const phaseClient = new BotClient({
   config: {
@@ -52,12 +53,7 @@ const phaseClient = new BotClient({
     }),
   },
   plugins: [
-    new BotPluginBuilder()
-      .setName("VoiceManager")
-      .setVersion("1.0.0")
-      .setOnLoad((client) => {
-        client.voices = new VoiceManager(client)
-      }),
+    voicePlugin(),
     new BotPluginBuilder()
       .setName("Music")
       .setVersion("1.0.0")

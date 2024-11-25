@@ -1,6 +1,6 @@
 import { joinVoiceChannel } from "@discordjs/voice"
 
-import { Voice } from "~/structures/voice/Voice"
+import { Voice } from "~/structures/Voice"
 
 import type { Client, Snowflake, VoiceBasedChannel } from "discord.js"
 
@@ -55,7 +55,6 @@ export class VoiceManager {
     const connection = joinVoiceChannel({
       guildId: guild.id,
       channelId: channel.id,
-      // @ts-expect-error see https://discord.com/channels/222078108977594368/1290817966447001711/1290907378606276628
       adapterCreator: guild.voiceAdapterCreator,
     })
 

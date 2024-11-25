@@ -7,19 +7,17 @@ import {
   StreamType,
   VoiceConnectionStatus,
 } from "@discordjs/voice"
-import ffmpegPath from "ffmpeg-static"
-import ffmpeg from "fluent-ffmpeg"
+
+import { ffmpeg } from "~/lib/ffmpeg"
 
 import type {
   AudioPlayer,
   AudioResource,
   VoiceConnection,
 } from "@discordjs/voice"
-import type { VoiceManager } from "~/structures/voice/VoiceManager"
+import type { VoiceManager } from "~/structures/VoiceManager"
 import type { Guild, VoiceBasedChannel } from "discord.js"
 import type { Readable } from "node:stream"
-
-ffmpeg.setFfmpegPath(ffmpegPath!)
 
 /**
  * Represents a connection to a voice channel.

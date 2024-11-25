@@ -3,7 +3,6 @@ import type { ConfigStore } from "~/structures/stores/ConfigStore"
 import type { GuildStore } from "~/structures/stores/GuildStore"
 import type { InviteStore } from "~/structures/stores/InviteStore"
 import type { TwitchStatusStore } from "~/structures/stores/TwitchStatusStore"
-import type { VoiceManager } from "~/structures/voice/VoiceManager"
 
 import type {} from "@phasejs/core/managers"
 import type {} from "discord.js"
@@ -11,7 +10,6 @@ import type {} from "discord.js"
 declare module "discord.js" {
   interface Client {
     music: Music
-    voices: VoiceManager
   }
 }
 
