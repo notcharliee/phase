@@ -28,7 +28,7 @@ export class BotPluginBuilder {
     return this
   }
 
-  toJSON(): BotPlugin {
+  build(): BotPlugin {
     if (!this.name || !this.version || !this.onLoad) {
       throw new Error("Plugin is missing required properties")
     }
@@ -38,5 +38,10 @@ export class BotPluginBuilder {
       version: this.version,
       onLoad: this.onLoad,
     }
+  }
+
+  /** @deprecated Use `build` instead */
+  toJSON(): BotPlugin {
+    return this.build()
   }
 }
