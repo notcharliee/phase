@@ -1,11 +1,6 @@
 {
   "extends": "../../node_modules/@repo/config/src/typescript/base.json",
-  "include": [
-    "src/**/*",
-    "eslint.config.js",
-    "bunprestart.ts",
-    "tailwind.config.ts"
-  ],
+  "include": ["src/**/*", "eslint.config.js", "bunprestart.ts"],
   "compilerOptions": {
     "outDir": ".tsc",
     "incremental": true,
@@ -13,7 +8,7 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"],
-      "@repo/database": ["../../node_modules/@repo/database/dist/mongo"],
+      "@repo/database": ["../../node_modules/@repo/database/dist/mongo"]
     }
   }
 }

@@ -1,6 +1,5 @@
+import tailwindConfig from "@repo/config/tailwind/base.ts"
 import { tailwindToCSS } from "tw-to-css"
-
-import tailwindConfig from "~/../tailwind.config"
 
 const { twj } = tailwindToCSS({
   config: tailwindConfig,
