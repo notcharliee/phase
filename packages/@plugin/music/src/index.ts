@@ -3,9 +3,6 @@ import { BotPluginBuilder } from "@phasejs/plugin"
 import { pluginVersion } from "~/lib/utils"
 
 import { Music } from "~/structures/Music"
-import { Queue } from "~/structures/Queue"
-import { QueueManager } from "~/structures/QueueManager"
-import { Song } from "~/structures/Song"
 
 import type {} from "discord.js"
 
@@ -26,4 +23,7 @@ export function musicPlugin() {
   return musicPluginBuilder.build()
 }
 
-export { Music, Queue, QueueManager, Song }
+export * from "~/structures/Music"
+export * from "~/structures/Queue"
+export * from "~/structures/QueueManager"
+export * from "~/structures/Song"
