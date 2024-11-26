@@ -7,11 +7,9 @@ import { geistBoldFile, geistMediumFile } from "~/assets/fonts"
 
 import type { ImageFont } from "@phasejs/image"
 
-interface LeaderboardUser {
-  id: string
+export interface LeaderboardUser {
   username: string
-  global_name: string
-  avatar: string
+  avatarUrl: string
   level: number
   xp: number
   rank: number
@@ -34,15 +32,15 @@ export async function generateLeaderboardCard(users: LeaderboardUser[]) {
     <div
       style={tw`bg-background text-foreground flex w-full flex-col gap-6 p-6`}
     >
-      {users.map((user) => (
-        <div style={tw`flex h-16 items-center gap-6`} key={user.id}>
-          <img src={user.avatar} style={tw`h-16 w-16 shrink-0 rounded-md`} />
+      {users.map((user, index) => (
+        <div style={tw`flex h-16 items-center gap-6`} key={index}>
+          <img src={user.avatarUrl} style={tw`h-16 w-16 shrink-0 rounded-md`} />
           <div style={tw`flex flex-col`}>
             <span style={tw`text-xl font-semibold`}>
               {`${numberToOrdinal(user.rank)} Place`}
             </span>
             <span style={tw`text-muted-foreground text-xl font-medium`}>
-              {user.username}
+              {`@${user.username}`}
             </span>
           </div>
           <svg

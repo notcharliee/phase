@@ -2,44 +2,46 @@ import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import { ModuleId } from "@repo/utils/modules"
 
-import { db } from "~/lib/db.ts"
+import { db } from "~/lib/db"
 
-import { generateLeaderboardCard } from "~/images/leaderboard.tsx"
+import { generateLeaderboardCard } from "~/images/leaderboard"
 import { BotErrorMessage } from "~/structures/BotError"
+
+import type { LeaderboardUser } from "~/images/leaderboard"
 
 export default new BotSubcommandBuilder()
   .setName("leaderboard")
   .setDescription("Generates the server level leaderboard.")
-  .addIntegerOption((option) =>
-    option
-      .setName("rank-start")
-      .setDescription("What rank to start from.")
+  .addIntegerOption((option) => {
+    return option
+      .setName("start")
+      .setDescription("Specify a rank to start from.")
       .setMinValue(1)
-      .setRequired(true),
-  )
-  .addIntegerOption((option) =>
-    option
-      .setName("rank-count")
-      .setDescription("How many ranks to include (maximum of 15 at a time).")
+      .setRequired(false)
+  })
+  .addIntegerOption((option) => {
+    return option
+      .setName("count")
+      .setDescription("Specify the number of ranks to display.")
       .setMinValue(1)
       .setMaxValue(15)
-      .setRequired(true),
-  )
+      .setRequired(false)
+  })
   .setMetadata({ dmPermission: false })
   .setExecute(async (interaction) => {
-    const rankStart = interaction.options.getInteger("rank-start", true)
-    const rankCount = interaction.options.getInteger("rank-count", true)
-    const rankEnd = rankStart + (rankCount - 1)
-
     const guildDoc = interaction.client.stores.guilds.get(interaction.guildId!)
+    const moduleConfig = guildDoc?.modules?.[ModuleId.Levels]
 
-    if (!guildDoc?.modules?.[ModuleId.Levels]?.enabled) {
-      return void interaction.reply(
-        BotErrorMessage.moduleNotEnabled(ModuleId.Levels).toJSON(),
-      )
+    if (!moduleConfig) {
+      const message = BotErrorMessage.moduleNotEnabled(ModuleId.Levels)
+      return void interaction.reply(message)
     }
 
     await interaction.deferReply()
+
+    const rankCount = interaction.options.getInteger("count") ?? 5
+    const rankStart = interaction.options.getInteger("start") ?? 1
+    const rankEnd = rankStart + (rankCount - 1)
 
     try {
       const usersData = await db.levels
@@ -48,30 +50,19 @@ export default new BotSubcommandBuilder()
         .skip(rankStart - 1)
         .limit(rankEnd - rankStart + 1)
 
-      if (!usersData?.length) {
-        return void interaction.editReply({
-          content: "No users found within the specified rank range.",
-        })
-      }
-
-      const users = []
+      const users: LeaderboardUser[] = []
 
       for (let index = 0; index < usersData.length; index++) {
         const data = usersData[index]!
 
         try {
-          const user = await interaction.client.users.fetch(data.user)
+          const user =
+            interaction.client.users.resolve(data.user) ??
+            (await interaction.client.users.fetch(data.user))
 
           users.push({
-            id: user.id,
             username: user.username,
-            global_name: user.displayName ?? user.username,
-            avatar:
-              user.avatarURL({
-                size: 128,
-                forceStatic: true,
-                extension: "png",
-              }) ?? `https://phasebot.xyz/discord.png`,
+            avatarUrl: user.displayAvatarURL({ size: 64, extension: "png" }),
             level: data.level,
             xp: data.xp,
             rank: rankStart + index,
@@ -82,11 +73,18 @@ export default new BotSubcommandBuilder()
         }
       }
 
+      if (!users.length) {
+        return void interaction.editReply(
+          "No users found within the specified rank range.",
+        )
+      }
+
       const leaderboard = await generateLeaderboardCard(users)
       const leaderboardAttachment = leaderboard.toAttachment()
 
       await interaction.editReply({ files: [leaderboardAttachment] })
     } catch (error) {
+      console.error(`[Levels] Failed to generate leaderboard:`)
       console.error(error)
 
       void interaction.editReply(
