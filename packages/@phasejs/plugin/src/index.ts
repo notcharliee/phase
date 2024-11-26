@@ -39,9 +39,4 @@ export class BotPluginBuilder {
       onLoad: this.onLoad,
     }
   }
-
-  /** @deprecated Use `build` instead */
-  toJSON(): BotPlugin {
-    return this.build()
-  }
 }
