@@ -1,3 +1,3 @@
-import type { StoreManager } from "~/managers/StoreManager"
+import type { BaseKVStore, BaseStore } from "~/stores"
 
-export type Stores = Omit<StoreManager, "client" | "init">
+export type Stores = Record<string, BaseStore | BaseKVStore>

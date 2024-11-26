@@ -14,26 +14,40 @@ import { loadPrestartFile } from "~/loaders/prestart"
 import { CommandManager } from "~/managers/CommandManager"
 import { CronManager } from "~/managers/CronManager"
 import { EventManager } from "~/managers/EventManager"
-import { PluginManager } from "~/managers/PluginManager"
 import { StoreManager } from "~/managers/StoreManager"
 
+import type { BotPlugin } from "~/client/BotPlugin"
 import type { PhaseClientParams } from "~/types/client"
 
 export class BotClient<TReady extends boolean = boolean> {
   public readonly client: DiscordClient<TReady>
-  public readonly plugins: PluginManager
   public readonly stores: StoreManager
   public readonly commands: CommandManager
   public readonly crons: CronManager
   public readonly events: EventManager
 
+  private readonly plugins: {
+    init: BotPlugin<"init">[]
+    ready: BotPlugin<"ready">[]
+  }
+
   constructor(params: PhaseClientParams) {
     this.client = new DiscordClient(params.config)
-    this.plugins = new PluginManager(this.client, params?.plugins)
     this.stores = new StoreManager(this.client, params.stores)
     this.commands = new CommandManager(this.client)
     this.crons = new CronManager(this.client)
     this.events = new EventManager(this.client)
+
+    this.plugins = {
+      init:
+        params.plugins?.filter(
+          (p): p is BotPlugin<"init"> => p.trigger === "init",
+        ) ?? [],
+      ready:
+        params.plugins?.filter(
+          (p): p is BotPlugin<"ready"> => p.trigger === "ready",
+        ) ?? [],
+    }
   }
 
   public isReady(): this is BotClient<true> {
@@ -56,8 +70,12 @@ export class BotClient<TReady extends boolean = boolean> {
       await prestartFunction((this as BotClient<false>).client)
     }
 
-    // initialise plugins and stores
-    await this.plugins.init()
+    // initialise plugins with "init" trigger
+    for (const plugin of this.plugins.init) {
+      await plugin.onLoad(this as BotClient<false>)
+    }
+
+    // initialise stores
     await this.stores.init()
 
     cliSpinner.text = "Loading your code ..."
@@ -99,6 +117,11 @@ export class BotClient<TReady extends boolean = boolean> {
 
     // initialise the client connection
     await this.client.login()
+
+    // initialise plugins with "ready" trigger
+    for (const plugin of this.plugins.ready) {
+      await plugin.onLoad(this as BotClient<true>)
+    }
 
     cliSpinner.succeed(
       `Bot is online! ${chalk.grey(`(${(Bun.nanoseconds() / 1e9).toFixed(2)}s)`)}\n`,

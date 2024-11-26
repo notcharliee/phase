@@ -36,7 +36,6 @@
     }
   },
   "dependencies": {
-    "@phasejs/plugin": "workspace:*",
     "chalk": "^5.3.0",
     "croner": "^8.1.2",
     "deepmerge-ts": "^7.1.3",

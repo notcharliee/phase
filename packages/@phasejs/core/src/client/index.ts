@@ -1,1 +1,5 @@
 export * from "~/client/BotClient"
+export * from "~/client/BotCommand"
+export * from "~/client/BotCron"
+export * from "~/client/BotEvent"
+export * from "~/client/BotPlugin"

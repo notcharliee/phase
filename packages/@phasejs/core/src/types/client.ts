@@ -1,18 +1,11 @@
-import type { StoreManager } from "~/managers/StoreManager"
+import type { BotPlugin } from "~/client/BotPlugin"
 import type { BotCommandFile } from "~/types/commands"
 import type { BotCronFile } from "~/types/crons"
 import type { BotEventFile } from "~/types/events"
 import type { BotMiddleware } from "~/types/middleware"
-import type { BotPlugin } from "~/types/plugin"
 import type { BotPrestart } from "~/types/prestart"
 import type { Stores } from "~/types/stores"
 import type { Client, ClientOptions } from "discord.js"
-
-declare module "discord.js" {
-  interface Client {
-    stores: StoreManager
-  }
-}
 
 export type DjsClient<T extends boolean = boolean> = Client<T>
 

@@ -1,4 +1,4 @@
-import { BotPluginBuilder } from "@phasejs/plugin"
+import { BotPlugin } from "@phasejs/core/client"
 
 import { pluginVersion } from "~/lib/utils"
 
@@ -13,14 +13,14 @@ declare module "discord.js" {
 }
 
 export function musicPlugin() {
-  const musicPluginBuilder = new BotPluginBuilder()
-    .setName("Music")
-    .setVersion(pluginVersion)
-    .setOnLoad((client) => {
-      client.music = new Music(client)
-    })
-
-  return musicPluginBuilder.build()
+  return new BotPlugin({
+    name: "Music",
+    version: pluginVersion,
+    trigger: "init",
+    onLoad: (phase) => {
+      phase.client.music = new Music(phase.client)
+    },
+  })
 }
 
 export * from "~/structures/Music"

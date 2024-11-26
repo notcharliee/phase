@@ -1,6 +1,5 @@
-import { BotPluginBuilder } from "@phasejs/plugin"
+import { BotPlugin } from "@phasejs/core/client"
 
-import type { BotPlugin } from "@phasejs/plugin"
 import type { BridgeEndpoint } from "~/structures/BridgeEndpoint"
 import type { BridgeRouteName, BridgeRoutes } from "~/types/routes"
 import type { Client } from "discord.js"
@@ -93,14 +92,13 @@ export class BridgeServer<
   }
 
   private createPlugin(): BotPlugin {
-    const pluginBuilder = new BotPluginBuilder()
-      .setName("Bridge")
-      .setVersion("0.1.0")
-      .setOnLoad((bot) => {
-        if (bot.isReady()) this.createServer(bot)
-        else bot.once("ready", () => this.createServer(bot))
-      })
-
-    return pluginBuilder.build()
+    return new BotPlugin({
+      name: "Bridge",
+      version: "0.1.0",
+      trigger: "ready",
+      onLoad: (phase) => {
+        this.createServer(phase.client)
+      },
+    })
   }
 }

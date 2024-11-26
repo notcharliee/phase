@@ -1,6 +1,8 @@
 import { version as pkgVersion } from "~/../package.json"
 
-export const pluginVersion = pkgVersion as `${number}.${number}.${number}`
+import type { BotPluginVersion } from "@phasejs/core"
+
+export const pluginVersion = pkgVersion as BotPluginVersion
 
 type Duration = `${number}:${number}` | `${number}:${number}:${number}`
 

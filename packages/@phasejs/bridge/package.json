@@ -16,7 +16,7 @@
     }
   },
   "dependencies": {
-    "@phasejs/plugin": "workspace:*"
+    "@phasejs/core": "workspace:*"
   },
   "devDependencies": {
     "@repo/config": "workspace:*",
