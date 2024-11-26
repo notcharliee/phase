@@ -62,6 +62,7 @@ export default new BotSubcommandBuilder()
 
           users.push({
             username: user.username,
+            displayName: user.displayName,
             avatarUrl: user.displayAvatarURL({ size: 64, extension: "png" }),
             level: data.level,
             xp: data.xp,

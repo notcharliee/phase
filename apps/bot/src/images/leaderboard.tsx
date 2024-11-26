@@ -9,6 +9,7 @@ import type { ImageFont } from "@phasejs/image"
 
 export interface LeaderboardUser {
   username: string
+  displayName: string
   avatarUrl: string
   level: number
   xp: number
@@ -25,57 +26,17 @@ export async function generateLeaderboardCard(users: LeaderboardUser[]) {
     { name: "Geist", weight: 500, data: geistMedium },
   ]
 
-  const width = 450
-  const height = users.length * 64 + (users.length - 1) * 24 + 48
+  const cardUserHeight = 64
+  const cardUserGap = 24
+  const cardPadding = 32
 
-  const element = (
-    <div
-      style={tw`bg-background text-foreground flex w-full flex-col gap-6 p-6`}
-    >
-      {users.map((user, index) => (
-        <div style={tw`flex h-16 items-center gap-6`} key={index}>
-          <img src={user.avatarUrl} style={tw`h-16 w-16 shrink-0 rounded-md`} />
-          <div style={tw`flex flex-col`}>
-            <span style={tw`text-xl font-semibold`}>
-              {`${numberToOrdinal(user.rank)} Place`}
-            </span>
-            <span style={tw`text-muted-foreground text-xl font-medium`}>
-              {`@${user.username}`}
-            </span>
-          </div>
-          <svg
-            style={tw`ml-auto mr-0 h-16 w-16`}
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="-1 -1 34 34"
-          >
-            <g transform="rotate(-90 16 16)">
-              <circle
-                cx="16"
-                cy="16"
-                r="16"
-                fill="none"
-                strokeWidth="2"
-                style={tw`stroke-foreground`}
-              />
-              <circle
-                cx="16"
-                cy="16"
-                r="16"
-                fill="none"
-                strokeWidth="2.5"
-                strokeDasharray="100 100"
-                strokeDashoffset={-((user.xp / user.target) * 100)}
-                style={tw`stroke-accent`}
-              />
-            </g>
-            <span style={tw`m-auto text-xl font-semibold leading-none`}>
-              {user.level}
-            </span>
-          </svg>
-        </div>
-      ))}
-    </div>
-  )
+  const width = 500
+  const height =
+    users.length * cardUserHeight +
+    (users.length - 1) * cardUserGap +
+    cardPadding * 2
+
+  const element = <LevelLeaderboard users={users} />
 
   return await new ImageBuilder()
     .setFonts(fonts)
@@ -83,4 +44,76 @@ export async function generateLeaderboardCard(users: LeaderboardUser[]) {
     .setHeight(height)
     .setElement(element)
     .build()
+}
+
+// components //
+
+interface LevelLeaderboardProps {
+  users: LeaderboardUser[]
+}
+
+function LevelLeaderboard(props: LevelLeaderboardProps) {
+  return (
+    <div
+      style={tw`bg-background text-foreground flex w-full flex-col gap-6 rounded-lg p-8`}
+    >
+      {props.users.map((user, index) => (
+        <div style={tw`relative flex h-16 items-center gap-6`} key={index}>
+          <img src={user.avatarUrl} style={tw`h-16 w-16 shrink-0 rounded-lg`} />
+          <div style={tw`flex flex-col text-xl leading-tight`}>
+            <span style={tw`font-semibold`}>
+              {`${numberToOrdinal(user.rank)} Place`}
+            </span>
+            <span style={tw`text-muted-foreground font-medium`}>
+              {user.username}
+            </span>
+          </div>
+          <div style={tw`absolute right-0 flex items-center justify-center`}>
+            <LevelProgress progress={(user.xp / user.target) * 100} size={64} />
+            <span style={tw`absolute text-xl font-semibold`}>
+              {`${user.level}`}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+interface LevelProgressProps {
+  progress: number
+  size: number
+}
+
+function LevelProgress(props: LevelProgressProps) {
+  const size = props.size
+  const strokeWidth = size / 16
+  const radius = (size - strokeWidth) / 2
+  const circumference = 2 * Math.PI * radius
+  const offset = circumference - (props.progress / 100) * circumference
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      style={{ transform: "rotate(-90deg)", transformOrigin: "center" }}
+    >
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={radius}
+        style={tw`stroke-accent fill-none`}
+        strokeWidth={strokeWidth}
+      />
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={radius}
+        style={tw`stroke-foreground fill-none`}
+        strokeWidth={strokeWidth}
+        strokeDasharray={circumference}
+        strokeDashoffset={offset}
+      />
+    </svg>
+  )
 }
