@@ -101,6 +101,6 @@ export class BridgeServer<
         else bot.once("ready", () => this.createServer(bot))
       })
 
-    return pluginBuilder.toJSON()
+    return pluginBuilder.build()
   }
 }
