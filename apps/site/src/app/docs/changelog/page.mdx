@@ -8,6 +8,45 @@ export const metadata = {
   <HeadingDescription>{metadata.description}</HeadingDescription>
 </Heading>
 
+## November 2024 - v3.28 release
+
+TL;DR: Technical improvements to the codebase.
+
+### Bot stuff
+
+- Sped up image rendering for all cards.
+- Switched to lazy-loading for font file imports.
+- Updated the look of `/level leaderboard` slightly.
+- Removed the `/weather` command.
+
+### Framework stuff
+
+Split up `phasebot` into various `@phasejs/*` packages:
+
+- `@phasejs/core` - Handles core bot functionality.
+- `@phasejs/image` - Renders images from JSX.
+- `@phasejs/bridge` - HTTP client/server package (in-dev).
+
+### Website stuff
+
+- Created new dashboard components that are now used across all module forms.
+- Created a new reusable combobox component and updated old comboboxes to use it.
+- Updated old React 18 components to use new React 19 features.
+- Made the emoji picker component much less hellish to render.
+- Improved WAI-ARIA across dashboard components.
+- Switched from Radix icons to Lucide icons.
+
+### v4 Updates
+
+- Began moving parts of code into new `@plugin/*` packages.
+- Made progress on `@repo/database/postgres` tables.
+- Completed `@repo/form`, module configs will be migrated soon.
+
+### Misc
+
+- Improved turbo config to speed up build times.
+- Fixed a few bugs as usual.
+
 ## October 2024 - v3.27 release
 
 This release focuses mainly on internal updates as we prepare for the upcoming Phase v4.0.0 release. However, here are a few notable additions and changes:
