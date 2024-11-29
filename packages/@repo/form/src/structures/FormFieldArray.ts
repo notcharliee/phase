@@ -1,10 +1,7 @@
 import type { Form } from "~/structures/Form"
 import type { FormField } from "~/structures/FormField"
-import type {
-  FormFieldArray as FormFieldArrayType,
-  FormFieldName,
-  FormFieldParentName,
-} from "~/types/fields"
+import type { FormFieldName, FormFieldParentName } from "~/types/fields"
+import type { FormFieldArrayJSON } from "~/types/json/fields"
 
 export type FormFieldArrayParent<
   TParentName extends FormFieldParentName = undefined,
@@ -23,7 +20,7 @@ export type FormFieldArrayFields<
 export type FormFieldArrayData<
   TParentName extends FormFieldParentName = undefined,
   TFieldName extends FormFieldName<TParentName> = FormFieldName<TParentName>,
-> = Omit<FormFieldArrayType<TParentName, TFieldName>, "fields"> & {
+> = Omit<FormFieldArrayJSON<TParentName, TFieldName>, "fields"> & {
   fields: FormFieldArrayFields<TFieldName>
 }
 
@@ -40,5 +37,14 @@ export class FormFieldArray<
   ) {
     this.parent = parent
     this.data = data
+  }
+
+  public toJSON(): FormFieldArrayJSON<TParentName, TFieldName> {
+    return {
+      ...this.data,
+      fields: this.data
+        .fields({ field: this as unknown as FormFieldArray<`${TFieldName}.$`> })
+        .map((field) => field.toJSON()),
+    }
   }
 }

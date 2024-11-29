@@ -1,27 +1,30 @@
-import type { FormField } from "~/structures/FormField"
-import type { FormFieldArray } from "~/structures/FormFieldArray"
-
-export type FormFields<TFormName extends string | undefined = undefined> =
-  (params: {
-    form: Form<TFormName>
-  }) => (FormField<TFormName> | FormFieldArray<TFormName>)[]
+import type { FormFields } from "~/types/fields"
+import type { FormJSON } from "~/types/json/form"
 
 export class Form<TName extends string | undefined = undefined> {
-  public readonly name: TName = undefined as TName
+  public readonly name: TName
   public readonly label: string
   public readonly description: string
   public readonly fields: FormFields<TName>
 
-  constructor(
-    data: {
-      label: string
-      description: string
-      fields: FormFields<TName>
-    } & ({ name: TName } | {}),
-  ) {
-    if ("name" in data) this.name = data.name
-    this.label = data.label
-    this.description = data.description
-    this.fields = data.fields
+  constructor(params: {
+    name?: TName
+    label: string
+    description: string
+    fields: FormFields<TName>
+  }) {
+    this.name = params.name as TName
+    this.label = params.label
+    this.description = params.description
+    this.fields = params.fields
+  }
+
+  public toJSON(): FormJSON {
+    return {
+      name: this.name,
+      label: this.label,
+      description: this.description,
+      fields: this.fields({ form: this }).map((field) => field.toJSON()),
+    }
   }
 }
