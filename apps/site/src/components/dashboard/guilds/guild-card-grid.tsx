@@ -2,12 +2,15 @@
 
 import { useQueryState } from "nuqs"
 
-import { GuildCard } from "~/components/dashboard/guilds/guild-card"
+import {
+  GuildCard,
+  GuildCardFallback,
+} from "~/components/dashboard/guilds/guild-card"
 
-import type { Guild } from "~/app/dashboard/guilds/actions"
+import type { DashboardGuild } from "~/app/dashboard/guilds/page"
 
-interface GuildCardGridProps {
-  guilds: Guild[]
+export interface GuildCardGridProps {
+  guilds: DashboardGuild[]
 }
 
 export function GuildCardGrid(props: GuildCardGridProps) {
@@ -21,6 +24,20 @@ export function GuildCardGrid(props: GuildCardGridProps) {
     <div className="grid grid-cols-[repeat(var(--column-count),minmax(0,1fr))] gap-4">
       {filteredGuilds.map((guild) => (
         <GuildCard key={guild.id} guild={guild} />
+      ))}
+    </div>
+  )
+}
+
+export interface GuildCardGridFallbackProps {
+  guilds: number
+}
+
+export function GuildCardGridFallback(props: GuildCardGridFallbackProps) {
+  return (
+    <div className="grid grid-cols-[repeat(var(--column-count),minmax(0,1fr))] gap-4">
+      {Array.from({ length: props.guilds }).map((_, index) => (
+        <GuildCardFallback key={index} />
       ))}
     </div>
   )
