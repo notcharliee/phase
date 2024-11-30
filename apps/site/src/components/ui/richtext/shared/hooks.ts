@@ -24,7 +24,8 @@ export function useGuildData(flags: RichTextFlags) {
         dashboard?.guild.channels
           .filter(
             (channel): channel is AllowedAPIChannel =>
-              channel.type in AllowedChannelTypes,
+              AllowedChannelTypes.GuildCategory !== channel.type &&
+              Object.values(AllowedChannelTypes).includes(channel.type),
           )
           .map((channel) => ({
             id: channel.id,
@@ -44,18 +45,15 @@ export function useGuildData(flags: RichTextFlags) {
           type: "here",
           colour: "#f8f8f8",
         },
-        ...(dashboard?.guild.roles
-          .filter((role) => role.name !== "@everyone")
-          .sort((a, b) => a.position + b.position)
-          .map((role) => ({
-            id: role.id,
-            name: role.name,
-            type: "role" as const,
-            colour:
-              role.color !== 0
-                ? `#${role.color.toString(16).padStart(6, "0")}`
-                : "#f8f8f8",
-          })) ?? []),
+        ...(dashboard?.guild.roles.map((role) => ({
+          id: role.id,
+          name: role.name,
+          type: "role" as const,
+          colour:
+            role.color !== 0
+              ? `#${role.color.toString(16).padStart(6, "0")}`
+              : "#f8f8f8",
+        })) ?? []),
       ],
     }),
     [dashboard?.guild.channels, dashboard?.guild.roles],
