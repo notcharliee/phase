@@ -35,7 +35,7 @@
     "prettier-plugin-tailwindcss": "^0.6.8"
   },
   "trustedDependencies": [
-    "@discordjs/opus",
+    "@plugin/voice",
     "aws-sdk",
     "esbuild",
     "ffmpeg-static",

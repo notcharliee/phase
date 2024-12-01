@@ -6,12 +6,8 @@ aptPkgs = ["build-essential", "python3"]
 dependsOn = ["setup"]
 cmds = ["bun install"]
 
-[phases.bodge]
-dependsOn = ["install"]
-cmds = ["bun run scripts/opus-bodge.ts"]
-
 [phases.build]
-dependsOn = ["bodge"]
+dependsOn = ["install"]
 cmds = ["bun run build:bot"]
 
 [start]
