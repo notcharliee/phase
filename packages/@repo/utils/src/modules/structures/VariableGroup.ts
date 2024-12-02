@@ -1,6 +1,8 @@
 import type { Variable } from "~/modules/structures/Variable"
 
-export class VariableGroup<TArgs extends [any, ...any[]] = [any, ...any[]]> {
+export class VariableGroup<
+  TArgs extends [unknown, ...unknown[]] = [unknown, ...unknown[]],
+> {
   readonly variables: Variable<TArgs>[]
   readonly parse: (value: string, ...args: TArgs) => string
 

@@ -1,7 +1,7 @@
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { moduleTags } from "~/modules/constants/tags"
-import { VariableGroup } from "~/modules/structures/VariableGroup"
 
+import type { VariableGroup } from "~/modules/structures/VariableGroup"
 import type { ModuleTag } from "~/modules/types/tags"
 
 export interface ModuleDefinition {

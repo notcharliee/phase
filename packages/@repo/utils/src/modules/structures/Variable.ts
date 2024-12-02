@@ -1,4 +1,6 @@
-export class Variable<TArgs extends [any, ...any[]] = [any, ...any[]]> {
+export class Variable<
+  TArgs extends [unknown, ...unknown[]] = [unknown, ...unknown[]],
+> {
   readonly name: string
   readonly description: string
   readonly syntax: RegExp
