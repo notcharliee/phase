@@ -1,26 +1,19 @@
 {
-  "editor.indentSize": "tabSize",
-  "editor.tabSize": 2,
-
+  // bun stuff
+  "npm.packageManager": "bun",
   "bun.debugTerminal.enabled": true,
   "bun.debugTerminal.stopOnEntry": false,
 
-  "javascript.updateImportsOnFileMove.enabled": "always",
-  "javascript.preferences.importModuleSpecifier": "non-relative",
-  "javascript.preferences.quoteStyle": "double",
-
+  // language stuff
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "typescript.updateImportsOnFileMove.enabled": "always",
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "typescript.preferences.quoteStyle": "double",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "javascript.preferences.quoteStyle": "double",
 
+  // tailwind stuff
   "css.lint.unknownAtRules": "ignore",
-
-  "tailwindCSS.experimental.classRegex": [
-    "tw`([^`]*)", // tw`...`
-    "tw=\"([^\"]*)", // <div tw="..." />
-    "tw={\"([^\"}]*)" // <div tw={"..."} />
-  ],
-
-  "npm.packageManager": "bun"
+  "tailwindCSS.experimental.classRegex": ["tw`([^`]*)"]
 }

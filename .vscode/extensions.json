@@ -4,5 +4,6 @@
     "unifiedjs.vscode-mdx",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
+    "editorconfig.editorconfig"
   ]
 }
