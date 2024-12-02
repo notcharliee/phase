@@ -41,7 +41,6 @@
     "@types/node": "^20.8.9",
     "@types/pg": "^8.11.10",
     "drizzle-kit": "^0.26.2",
-    "eslint": "^9.13.0",
     "tsup": "^8.3.0",
     "typescript": "^5.3.2"
   }

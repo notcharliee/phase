@@ -25,7 +25,6 @@
     "@repo/config": "workspace:*",
     "@types/bun": "^1.1.13",
     "distube": "^5.0.4",
-    "eslint": "^9.15.0",
     "tsup": "^8.3.5",
     "typescript": "^5.6.3"
   },
