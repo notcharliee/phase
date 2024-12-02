@@ -9,8 +9,8 @@ import { SharedBotCommandBuilderDescription } from "./shared/SharedBotCommandBui
 import { SharedBotCommandBuilderName } from "./shared/SharedBotCommandBuilderName"
 import { SharedBotCommandBuilderOptions } from "./shared/SharedBotCommandBuilderOptions"
 
-import type { BotSubcommandBody } from "~/types/commands"
 import type { DjsClient } from "~/types/client"
+import type { BotSubcommandBody } from "~/types/commands"
 
 export class BotSubcommandBuilder extends Mixin(
   SharedBotCommandBuilderBase,

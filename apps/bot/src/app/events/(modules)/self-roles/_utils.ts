@@ -1,5 +1,5 @@
-import type { ModuleId } from "@repo/utils/modules"
 import type { GuildModules } from "@repo/database"
+import type { ModuleId } from "@repo/utils/modules"
 import type { GuildMember } from "discord.js"
 
 type SelfRolesMessage = GuildModules[ModuleId.SelfRoles]["messages"][number]

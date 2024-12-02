@@ -1,6 +1,7 @@
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import { db } from "~/lib/db"
+
 import { BotErrorMessage } from "~/structures/BotError"
 
 import type { GuildTextBasedChannel } from "discord.js"

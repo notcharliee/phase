@@ -2,8 +2,8 @@ import { EmbedBuilder, PermissionFlagsBits } from "discord.js"
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import { PhaseColour } from "~/lib/enums"
-import { BotErrorMessage } from "~/structures/BotError"
 
+import { BotErrorMessage } from "~/structures/BotError"
 import { formatDate } from "./_utils"
 
 import type { GuildMember } from "discord.js"

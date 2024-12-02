@@ -2,10 +2,10 @@ import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import { ModuleDefinitions } from "@repo/utils/modules"
 
-import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 import { db } from "~/lib/db"
 
 import { BotErrorMessage } from "~/structures/BotError"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 import type { ModuleId } from "@repo/utils/modules"
 

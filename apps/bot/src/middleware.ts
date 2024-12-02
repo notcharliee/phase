@@ -2,8 +2,8 @@ import { PermissionFlagsBits } from "discord.js"
 
 import { BotErrorMessage } from "~/structures/BotError"
 
-import type { GuildMember } from "discord.js"
 import type { BotCommandMiddleware } from "@phasejs/core"
+import type { GuildMember } from "discord.js"
 
 export const commands: BotCommandMiddleware = async (
   interaction,
@@ -89,7 +89,9 @@ export const commands: BotCommandMiddleware = async (
     })
 
     if (isExplicitlyDenied) {
-      return await interaction.reply(BotErrorMessage.userMissingPermission().toJSON())
+      return await interaction.reply(
+        BotErrorMessage.userMissingPermission().toJSON(),
+      )
     }
   }
 
@@ -112,7 +114,9 @@ export const commands: BotCommandMiddleware = async (
   const defaultPerm = defaultPermissions[commandName]
 
   if (defaultPerm && !interaction.memberPermissions?.has(defaultPerm)) {
-    return await interaction.reply(BotErrorMessage.userMissingPermission().toJSON())
+    return await interaction.reply(
+      BotErrorMessage.userMissingPermission().toJSON(),
+    )
   }
 
   try {

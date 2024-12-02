@@ -3,6 +3,7 @@ import { BotSubcommandBuilder } from "@phasejs/core/builders"
 import { ModuleId } from "@repo/utils/modules"
 
 import { db } from "~/lib/db"
+
 import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()

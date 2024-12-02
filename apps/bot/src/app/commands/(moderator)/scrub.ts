@@ -7,6 +7,7 @@ import {
 import { BotCommandBuilder } from "@phasejs/core/builders"
 
 import { PhaseColour } from "~/lib/enums"
+
 import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotCommandBuilder()

@@ -4,7 +4,6 @@ import { BotEventBuilder } from "@phasejs/core/builders"
 import { ModuleId } from "@repo/utils/modules"
 
 import { BotErrorMessage } from "~/structures/BotError"
-
 import { updateRoles } from "./_utils"
 
 import type { UUID } from "node:crypto"

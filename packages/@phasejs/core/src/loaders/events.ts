@@ -1,8 +1,9 @@
 import { readdirSync, statSync } from "node:fs"
 import { extname, join } from "node:path"
 
-import { BotEventBuilder } from "~/builders/BotEventBuilder"
 import { validExtnames } from "~/lib/utils"
+
+import { BotEventBuilder } from "~/builders/BotEventBuilder"
 
 import type { DjsClient } from "~/types/client"
 import type { BotEventFile } from "~/types/events"

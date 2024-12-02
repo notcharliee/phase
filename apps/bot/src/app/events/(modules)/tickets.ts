@@ -8,10 +8,10 @@ import { BotEventBuilder } from "@phasejs/core/builders"
 
 import { ModuleId } from "@repo/utils/modules"
 
-import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 import { Emojis } from "~/lib/emojis"
 
 import { BotErrorMessage } from "~/structures/BotError"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 export default new BotEventBuilder()
   .setName("interactionCreate")

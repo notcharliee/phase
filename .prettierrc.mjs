@@ -1,6 +1,7 @@
 /** @type {import("prettier").Config} */
 export default {
   semi: false,
+  endOfLine: "lf",
   plugins: [
     "@ianvs/prettier-plugin-sort-imports",
     "prettier-plugin-tailwindcss",

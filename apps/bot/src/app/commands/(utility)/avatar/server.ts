@@ -1,7 +1,6 @@
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import { BotErrorMessage } from "~/structures/BotError"
-
 import { extensionOption, sizeOption } from "./_options"
 
 import type { ImageExtension, ImageSize } from "discord.js"

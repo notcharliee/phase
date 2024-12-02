@@ -1,9 +1,10 @@
 import { readdirSync, statSync } from "node:fs"
 import { extname, join } from "node:path"
 
+import { validExtnames } from "~/lib/utils"
+
 import { BotCommandBuilder } from "~/builders/BotCommandBuilder"
 import { BotSubcommandBuilder } from "~/builders/BotSubcommandBuilder"
-import { validExtnames } from "~/lib/utils"
 
 import type { DjsClient } from "~/types/client"
 import type { BotCommandFile } from "~/types/commands"

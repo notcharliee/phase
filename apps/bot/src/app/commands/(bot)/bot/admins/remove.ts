@@ -1,6 +1,7 @@
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import { db } from "~/lib/db"
+
 import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
@@ -31,7 +32,9 @@ export default new BotSubcommandBuilder()
 
     if (user.id === interaction.user.id) {
       void interaction.editReply(
-        new BotErrorMessage("You can't remove yourself from the dashboard.").toJSON(),
+        new BotErrorMessage(
+          "You can't remove yourself from the dashboard.",
+        ).toJSON(),
       )
 
       return
@@ -41,7 +44,9 @@ export default new BotSubcommandBuilder()
 
     if (!guildDoc.admins.includes(user.id)) {
       void interaction.editReply(
-        new BotErrorMessage(`<@${user.id}> does not have dashboard access.`).toJSON(),
+        new BotErrorMessage(
+          `<@${user.id}> does not have dashboard access.`,
+        ).toJSON(),
       )
 
       return

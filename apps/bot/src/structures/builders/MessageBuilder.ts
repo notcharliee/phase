@@ -34,10 +34,7 @@ export class MessageBuilder {
 
   setComponents(
     ...builders: RestOrArray<
-      BuilderOrBuilderFunction<
-        ActionRowBuilder,
-        ActionRowBuilderReturnType
-      >
+      BuilderOrBuilderFunction<ActionRowBuilder, ActionRowBuilderReturnType>
     >
   ) {
     const normalisedBuilders = normalizeArray(builders)
@@ -56,9 +53,7 @@ export class MessageBuilder {
     return this
   }
 
-  setEmbeds(
-    ...builders: RestOrArray<BuilderOrBuilderFunction<EmbedBuilder>>
-  ) {
+  setEmbeds(...builders: RestOrArray<BuilderOrBuilderFunction<EmbedBuilder>>) {
     const normalisedBuilders = normalizeArray(builders)
     const embeds: APIEmbed[] = []
 

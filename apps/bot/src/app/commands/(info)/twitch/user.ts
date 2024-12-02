@@ -3,6 +3,7 @@ import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import { twitchAPI } from "~/lib/clients/twitch"
 import { PhaseColour } from "~/lib/enums"
+
 import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()

@@ -7,7 +7,6 @@ import {
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import { MessageBuilder } from "~/structures/builders/MessageBuilder"
-
 import { Connect4 } from "~/structures/games/Connect4"
 
 import type { BoardColumnIndex } from "~/structures/games/Connect4"

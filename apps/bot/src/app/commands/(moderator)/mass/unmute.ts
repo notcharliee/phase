@@ -3,9 +3,8 @@ import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import ms from "ms"
 
-import { MessageBuilder } from "~/structures/builders/MessageBuilder"
-
 import { BotErrorMessage } from "~/structures/BotError"
+import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 import type {
   ApplicationCommandOptionAllowedChannelTypes,

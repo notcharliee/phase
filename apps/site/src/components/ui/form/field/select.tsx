@@ -71,7 +71,10 @@ export function FormFieldSelect<
                         props.placeholder ??
                         "Select an item"}
                     </span>
-                    <LucideIcon name="chevrons-up-down" className="opacity-50" />
+                    <LucideIcon
+                      name="chevrons-up-down"
+                      className="opacity-50"
+                    />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-[--radix-popper-anchor-width]">

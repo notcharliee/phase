@@ -1,7 +1,6 @@
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import { BotErrorMessage } from "~/structures/BotError"
-
 import { extensionOption, sizeOption } from "./_options"
 
 import type { ImageExtension, ImageSize } from "discord.js"
@@ -29,7 +28,9 @@ export default new BotSubcommandBuilder()
       }) ?? undefined
 
     if (!url) {
-      void interaction.reply(new BotErrorMessage("No avatar URL found.").toJSON())
+      void interaction.reply(
+        new BotErrorMessage("No avatar URL found.").toJSON(),
+      )
       return
     }
 

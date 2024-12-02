@@ -2,6 +2,7 @@ import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import { PhaseColour } from "~/lib/enums"
+
 import { BotErrorMessage } from "~/structures/BotError"
 
 import type { GuildMember } from "discord.js"

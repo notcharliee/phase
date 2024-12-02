@@ -19,8 +19,8 @@ import { moduleIdSchema, modulesSchema } from "~/validators/modules"
 
 import type {
   GuildModulesWithData,
-  ModulesFormValuesOutput,
   ModulesFormValuesInputWithData,
+  ModulesFormValuesOutput,
 } from "~/types/dashboard"
 import type { GuildModules } from "~/types/db"
 

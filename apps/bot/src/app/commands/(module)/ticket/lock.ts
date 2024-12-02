@@ -5,6 +5,7 @@ import { ModuleId } from "@repo/utils/modules"
 import dedent from "dedent"
 
 import { PhaseColour } from "~/lib/enums"
+
 import { BotErrorMessage } from "~/structures/BotError"
 
 export default new BotSubcommandBuilder()
@@ -47,7 +48,9 @@ export default new BotSubcommandBuilder()
     }
 
     if (ticket.locked) {
-      void interaction.reply(new BotErrorMessage("Ticket is already locked.").toJSON())
+      void interaction.reply(
+        new BotErrorMessage("Ticket is already locked.").toJSON(),
+      )
 
       return
     }
