@@ -1,5 +1,6 @@
 export class Variable<
-  TArgs extends [unknown, ...unknown[]] = [unknown, ...unknown[]],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TArgs extends [any, ...any[]] = [any, ...any[]],
 > {
   readonly name: string
   readonly description: string

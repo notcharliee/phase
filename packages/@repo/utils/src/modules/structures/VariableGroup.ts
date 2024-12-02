@@ -1,7 +1,8 @@
 import type { Variable } from "~/modules/structures/Variable"
 
 export class VariableGroup<
-  TArgs extends [unknown, ...unknown[]] = [unknown, ...unknown[]],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TArgs extends [any, ...any[]] = [any, ...any[]],
 > {
   readonly variables: Variable<TArgs>[]
   readonly parse: (value: string, ...args: TArgs) => string
