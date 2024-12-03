@@ -16,8 +16,11 @@ export function shared() {
     server: {
       // environment
       SKIP_ENV_VALIDATION: z.boolean().optional(),
-      NODE_ENV: z.enum(["development", "test", "production"]),
+      NODE_ENV: z
+        .enum(["development", "test", "production"])
+        .default("development"),
       BASE_URL: z.string().url().default(BASE_URL),
+      PORT: z.number().default(3000),
       // database
       MONGODB_URI: z.string(),
       POSTGRES_URI: z.string(),
@@ -31,6 +34,8 @@ export function shared() {
       // auth
       AUTH_COOKIE_SECRET: z.string(),
       AUTH_OTP_SECRET: z.string(),
+      // bridge
+      BRIDGE_TOKEN: z.string(),
       // webhook
       WEBHOOK_ALERT: z.string(),
     },

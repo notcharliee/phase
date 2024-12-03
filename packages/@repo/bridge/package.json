@@ -1,0 +1,39 @@
+{
+  "private": true,
+  "name": "@repo/bridge",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint ."
+  },
+  "exports": {
+    "./client": {
+      "types": "./dist/client/index.d.ts",
+      "import": "./dist/client/index.js",
+      "require": "./dist/client/index.js"
+    },
+    "./server": {
+      "types": "./dist/server/index.d.ts",
+      "import": "./dist/server/index.js",
+      "require": "./dist/server/index.js"
+    }
+  },
+  "dependencies": {
+    "@phasejs/core": "workspace:*",
+    "@repo/env": "workspace:*",
+    "@trpc/client": "^11.0.0-rc.648",
+    "@trpc/server": "^11.0.0-rc.648",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@repo/config": "workspace:*",
+    "@repo/database": "workspace:*",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.3"
+  },
+  "peerDependencies": {
+    "discord.js": "^14.x.x"
+  }
+}
