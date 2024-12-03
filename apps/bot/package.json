@@ -17,6 +17,7 @@
     "@phasejs/image": "workspace:*",
     "@plugin/music": "workspace:*",
     "@plugin/voice": "workspace:*",
+    "@repo/bridge": "workspace:*",
     "@repo/config": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/env": "workspace:*",

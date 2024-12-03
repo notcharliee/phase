@@ -3,6 +3,7 @@ import { BotClient } from "@phasejs/core/client"
 
 import { musicPlugin } from "@plugin/music"
 import { voicePlugin } from "@plugin/voice"
+// import { bridgeServerPlugin } from "@repo/bridge/server"
 
 import { Emojis } from "~/lib/emojis"
 
@@ -51,7 +52,11 @@ const phaseClient = new BotClient({
       },
     }),
   },
-  plugins: [voicePlugin(), musicPlugin()],
+  plugins: [
+    voicePlugin(),
+    musicPlugin(),
+    // bridgeServerPlugin(),
+  ],
   stores: {
     config: new ConfigStore(),
     guilds: new GuildStore(),
