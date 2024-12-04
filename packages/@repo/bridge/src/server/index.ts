@@ -2,16 +2,12 @@ import { BotPlugin } from "@phasejs/core/client"
 
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch"
 
-import { env } from "~/lib/env"
-import { pluginVersion } from "~/lib/utils"
-
 import { createContext } from "~/server/context"
+import { env } from "~/server/env"
 import { appRouter } from "~/server/router"
+import { endpoint, version } from "~/utils"
 
 import type { DjsClient } from "~/types/bot"
-
-export const endpoint = "/api/trpc"
-export const url = env.BASE_URL + endpoint
 
 export function startServer({ client }: { client: DjsClient<true> }) {
   return Bun.serve({
@@ -31,7 +27,7 @@ export function bridgeServerPlugin() {
   return new BotPlugin({
     name: "BridgeServer",
     trigger: "ready",
-    version: pluginVersion,
+    version: version,
     onLoad: (phase) => {
       startServer({ client: phase.client })
     },

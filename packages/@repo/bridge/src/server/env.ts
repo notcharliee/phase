@@ -1,3 +1,3 @@
 import { getEnv } from "@repo/env"
 
-export const env = getEnv("shared")
+export const env = getEnv("bot")

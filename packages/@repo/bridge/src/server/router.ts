@@ -7,11 +7,13 @@ import type { GuildModules } from "@repo/db"
 import type { APIRole } from "discord.js"
 
 type GuildModulesWithData = Partial<
-  GuildModules & {
-    [K in ModuleId.TwitchNotifications]: GuildModules[K] & {
-      _data: { streamerNames: string[] }
-    }
-  }
+  GuildModules &
+    Record<
+      ModuleId.TwitchNotifications,
+      GuildModules[ModuleId.TwitchNotifications] & {
+        _data: { streamerNames: string[] }
+      }
+    >
 >
 
 export const appRouter = router({

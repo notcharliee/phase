@@ -1,8 +1,7 @@
 import { createTRPCClient, httpBatchLink } from "@trpc/client"
 
-import { env } from "~/lib/env"
-
-import { url } from "~/server"
+import { env } from "~/client/env"
+import { url } from "~/utils"
 
 import type { AppRouter } from "~/server/router"
 

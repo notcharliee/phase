@@ -1,4 +1,4 @@
-import { env } from "~/lib/env"
+import { env } from "~/server/env"
 
 import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch"
 import type { DjsClient } from "~/types/bot"
