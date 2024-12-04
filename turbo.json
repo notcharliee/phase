@@ -16,6 +16,7 @@
         "TWITCH_CLIENT_ID",
         "AUTH_COOKIE_SECRET",
         "AUTH_OTP_SECRET",
+        "BRIDGE_TOKEN",
         "WEBHOOK_ALERT"
       ]
     },
@@ -33,6 +34,7 @@
         "TWITCH_CLIENT_ID",
         "AUTH_COOKIE_SECRET",
         "AUTH_OTP_SECRET",
+        "BRIDGE_TOKEN",
         "WEBHOOK_ALERT"
       ]
     },
