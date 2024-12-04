@@ -31,6 +31,23 @@ import type { TwitchNotifications } from "~/mongo/models/guilds/modules/twitch-n
 import type { Warnings } from "~/mongo/models/guilds/modules/warnings"
 import type { WelcomeMessages } from "~/mongo/models/guilds/modules/welcome-messages"
 
+export type {
+  AuditLogs,
+  AutoMessages,
+  AutoRoles,
+  BumpReminders,
+  Counters,
+  Forms,
+  JoinToCreates,
+  Levels,
+  ReactionRoles,
+  SelfRoles,
+  Tickets,
+  TwitchNotifications,
+  Warnings,
+  WelcomeMessages,
+}
+
 export interface GuildModules {
   [ModuleId.AuditLogs]: AuditLogs
   [ModuleId.AutoMessages]: AutoMessages

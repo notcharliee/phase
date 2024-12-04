@@ -7,14 +7,15 @@ import { defineModel } from "~/mongo/utils"
 import type { GuildCommand } from "~/mongo/models/guilds/commands"
 import type { GuildModules } from "~/mongo/models/guilds/modules"
 
+export type * from "~/mongo/models/guilds/commands"
+export type * from "~/mongo/models/guilds/modules"
+
 export interface Guild {
   id: string
   admins: string[]
   commands?: Map<string, GuildCommand>
   modules?: Partial<GuildModules>
 }
-
-export type { GuildCommand, GuildModules }
 
 const guildsSchema = new Schema<Guild>({
   id: { type: Schema.Types.String, required: true },
