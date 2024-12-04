@@ -23,6 +23,7 @@
   "dependencies": {
     "@phasejs/core": "workspace:*",
     "@repo/env": "workspace:*",
+    "@repo/utils": "workspace:*",
     "@trpc/client": "^11.0.0-rc.648",
     "@trpc/server": "^11.0.0-rc.648",
     "zod": "^3.23.8"
