@@ -15,13 +15,13 @@
       "require": "./dist/modules/index.js"
     }
   },
-  "peerDependencies": {
-    "@repo/database": "workspace:*",
-    "discord.js": "^14.x.x"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@repo/config": "workspace:*",
     "tsup": "^8.3.0",
     "typescript": "^5.6.3"
+  },
+  "peerDependencies": {
+    "discord.js": "^14.x.x"
   }
 }

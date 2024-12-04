@@ -2,9 +2,15 @@ import { ModuleId } from "~/modules/constants/ids"
 import { Variable } from "~/modules/structures/Variable"
 import { VariableGroup } from "~/modules/structures/VariableGroup"
 
-import type { Level } from "@repo/database"
 import type { ModuleDefinition } from "~/modules/types/definitions"
 import type { User } from "discord.js"
+
+type Level = {
+  guild: string
+  user: string
+  level: number
+  xp: number
+}
 
 export const levels = {
   id: ModuleId.Levels,
