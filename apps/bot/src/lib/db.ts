@@ -1,10 +1,9 @@
-import { Database } from "@repo/database"
+import { Database, mongoose } from "@repo/db"
 
-export { mongoose } from "@repo/database"
-
-export const db = new Database({
+const db = new Database({
   autoIndex: true,
   debug: false,
 })
 
-export type * from "@repo/database"
+export { db, mongoose }
+export type * from "@repo/db"

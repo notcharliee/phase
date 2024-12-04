@@ -1,4 +1,4 @@
-import { Database } from "@repo/database"
+import { Database } from "@repo/db"
 
 import { env } from "~/lib/env"
 
@@ -12,4 +12,4 @@ export async function connectDB() {
   return db
 }
 
-export { mongoose } from "@repo/database"
+export { mongoose } from "@repo/db"

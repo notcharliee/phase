@@ -1,5 +1,5 @@
 import type { BaseKVStore, BaseStore } from "@phasejs/core/stores"
-import type { Config, Guild, mongoose } from "@repo/database"
+import type { Config, Guild, mongoose } from "@repo/db"
 import type { Snowflake } from "discord.js"
 
 import type {} from "@phasejs/core/client"

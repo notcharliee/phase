@@ -1,4 +1,4 @@
-import type { GuildModules } from "@repo/database"
+import type { GuildModules } from "@repo/db"
 import type { ModuleId } from "@repo/utils/modules"
 import type { GuildMember } from "discord.js"
 

@@ -9,7 +9,7 @@ export interface ModuleDefinition {
    * A random ID that uniquely identifies the module.
    *
    * IDs must be 10 characters long and alphanumeric. New IDs can be generated
-   * using the `genkey` script in the `@repo/database` package.
+   * using the `genkey` script in the `@repo/db` package.
    */
   id: string
   /**

@@ -1,1 +1,1 @@
-export type * from "@repo/database"
+export type * from "@repo/db"

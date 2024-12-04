@@ -6,7 +6,7 @@
     "docker:build": "nixpacks build --name bot-image --current-dir ../../",
     "docker:start": "docker run -it --rm bot-image",
     "dev": "NODE_ENV=development bun run --watch src/main.ts",
-    "build": "tsc",
+    "build": "tsc --noEmit",
     "start": "NODE_ENV=production bun run --smol src/main.ts",
     "preview": "bun run build && bun run start",
     "lint": "eslint ."
@@ -19,7 +19,7 @@
     "@plugin/voice": "workspace:*",
     "@repo/bridge": "workspace:*",
     "@repo/config": "workspace:*",
-    "@repo/database": "workspace:*",
+    "@repo/db": "workspace:*",
     "@repo/env": "workspace:*",
     "@repo/utils": "workspace:*",
     "@twurple/api": "^7.2.0",
@@ -34,10 +34,10 @@
   },
   "devDependencies": {
     "@total-typescript/ts-reset": "^0.6.1",
-    "@types/bun": "^1.1.13",
+    "@types/bun": "^1.1.14",
     "@types/react": "npm:types-react@19.0.0-rc.1",
-    "tailwindcss": "^3.4.15",
-    "typescript": "^5.6.3"
+    "tailwindcss": "^3.4.16",
+    "typescript": "^5.7.2"
   },
   "overrides": {
     "@types/react": "npm:types-react@19.0.0-rc.1"

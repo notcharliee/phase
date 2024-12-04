@@ -4,11 +4,10 @@
   "compilerOptions": {
     "outDir": ".tsc",
     "incremental": true,
-    "noEmit": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"],
-      "@repo/database": ["../../node_modules/@repo/database/dist/mongo"]
+      "@repo/db": ["../../node_modules/@repo/db/dist/mongo"]
     }
   }
 }
