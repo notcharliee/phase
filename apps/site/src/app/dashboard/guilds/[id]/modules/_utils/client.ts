@@ -175,10 +175,6 @@ export function getDefaultValues(
         })),
       })) as Required<ModulesFormValuesInput>[ModuleId.SelfRoles]["messages"],
     }),
-    [ModuleId.Tickets]: (data) => ({
-      ...data,
-      message: data._data?.messageContent ?? "",
-    }),
     [ModuleId.TwitchNotifications]: (data) => ({
       ...data,
       streamers: data.streamers.map((streamer, index) => {

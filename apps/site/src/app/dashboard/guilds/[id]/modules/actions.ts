@@ -106,15 +106,9 @@ export async function updateModules(
 
   if (parsedModulesWithData[ModuleId.Forms]) {
     if (dirtyFields.includes(ModuleId.Forms)) {
-      const updatedMessages = await handleFormsModule(
+      await handleFormsModule(
         parsedModulesWithData[ModuleId.Forms].forms,
       )
-
-      parsedModulesWithData[ModuleId.Forms]._data.messages = updatedMessages
-    } else {
-      parsedModulesWithData[ModuleId.Forms]._data.messages = (unsafeFormValues[
-        ModuleId.Forms
-      ] as ModulesFormValuesInputWithData[ModuleId.Forms])!._data.messages
     }
   }
 
@@ -136,13 +130,6 @@ export async function updateModules(
         updatedModule.tickets,
         messageContent,
       )
-
-      updatedModule._data.messageContent = messageContent
-    } else {
-      parsedModulesWithData[ModuleId.Tickets]._data.messageContent =
-        (unsafeFormValues[
-          ModuleId.Tickets
-        ] as ModulesFormValuesInputWithData[ModuleId.Tickets])!._data.messageContent
     }
   }
 

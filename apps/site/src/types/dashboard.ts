@@ -1,7 +1,6 @@
 import type {
   APIGuild,
   APIGuildChannel,
-  APIMessage,
   GuildChannelType,
 } from "@discordjs/core/http-only"
 import type { ModuleId } from "@repo/utils/modules"
@@ -10,13 +9,7 @@ import type { modulesSchema } from "~/validators/modules"
 import type { UseFormReturn } from "react-hook-form"
 import type { z } from "zod"
 
-export interface ModulesDataFields {
-  [ModuleId.Forms]: {
-    messages: APIMessage[]
-  }
-  [ModuleId.Tickets]: {
-    messageContent: string | undefined
-  }
+export interface GuildModulesDataFields {
   [ModuleId.TwitchNotifications]: {
     streamerNames: string[]
   }
@@ -29,13 +22,17 @@ export type ModulesFormReturn = UseFormReturn<ModulesFormValuesInput>
 
 export type ModulesFormValuesInputWithData = Partial<{
   [K in keyof ModulesFormValuesInput]: ModulesFormValuesInput[K] & {
-    _data: K extends keyof ModulesDataFields ? ModulesDataFields[K] : unknown
+    _data: K extends keyof GuildModulesDataFields
+      ? GuildModulesDataFields[K]
+      : unknown
   }
 }>
 
 export type GuildModulesWithData = Partial<{
   [K in keyof GuildModules]: GuildModules[K] & {
-    _data: K extends keyof ModulesDataFields ? ModulesDataFields[K] : unknown
+    _data: K extends keyof GuildModulesDataFields
+      ? GuildModulesDataFields[K]
+      : unknown
   }
 }>
 
