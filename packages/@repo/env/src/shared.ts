@@ -20,7 +20,10 @@ export function shared() {
         .enum(["development", "test", "production"])
         .default("development"),
       BASE_URL: z.string().url().default(BASE_URL),
-      PORT: z.number().default(3000),
+      PORT: z
+        .string()
+        .default("3000")
+        .transform((str) => parseInt(str, 10)),
       // database
       MONGODB_URI: z.string(),
       POSTGRES_URI: z.string(),
