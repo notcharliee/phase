@@ -17,9 +17,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@repo/config": "workspace:*",
-    "tsup": "^8.3.0",
-    "typescript": "^5.6.3"
+    "@repo/config": "workspace:*"
   },
   "peerDependencies": {
     "discord.js": "^14.x.x"

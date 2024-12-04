@@ -24,8 +24,6 @@
     "@types/node": "^20.8.9"
   },
   "peerDependencies": {
-    "eslint": "^9.x",
-    "typescript": "^5.x",
     "tailwindcss": "^3.x",
     "tailwindcss-animate": "^1.x"
   }

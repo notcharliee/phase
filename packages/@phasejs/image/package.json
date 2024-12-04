@@ -21,9 +21,7 @@
   "devDependencies": {
     "@repo/config": "workspace:*",
     "@types/bun": "^1.1.13",
-    "@types/react": "npm:types-react@19.0.0-rc.1",
-    "tsup": "^8.3.5",
-    "typescript": "^5.6.3"
+    "@types/react": "npm:types-react@19.0.0-rc.1"
   },
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",

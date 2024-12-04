@@ -40,8 +40,6 @@
     "@repo/config": "workspace:*",
     "@types/node": "^20.17.9",
     "@types/pg": "^8.11.10",
-    "drizzle-kit": "^0.26.2",
-    "tsup": "^8.3.5",
-    "typescript": "^5.7.2"
+    "drizzle-kit": "^0.26.2"
   }
 }
