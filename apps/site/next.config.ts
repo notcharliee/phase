@@ -8,6 +8,14 @@ const config: NextConfig = {
   transpilePackages: ["lucide-react"],
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
   experimental: { mdxRs: true },
+  async rewrites() {
+    return [
+      {
+        source: "/api/bridge/:endpoint*",
+        destination: `${env.BRIDGE_DOMAIN}/:endpoint*`,
+      },
+    ]
+  },
   async redirects() {
     return [
       {
