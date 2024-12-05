@@ -11,9 +11,9 @@ export function bot() {
     runtimeEnv: process.env,
     skipValidation: !!process.env.SKIP_ENV_VALIDATION,
     server: {
-      PORT: z
+      BRIDGE_PORT: z
         .string()
-        .default("4000")
+        .default(process.env.PORT ?? "4000")
         .transform((str) => parseInt(str, 10)),
     },
   })
