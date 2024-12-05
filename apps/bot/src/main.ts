@@ -10,7 +10,7 @@ import { Emojis } from "~/lib/emojis"
 import { ConfigStore } from "~/structures/stores/ConfigStore"
 import { GuildStore } from "~/structures/stores/GuildStore"
 import { InviteStore } from "~/structures/stores/InviteStore"
-import { TwitchStatusStore } from "~/structures/stores/TwitchStatusStore"
+import { StreamerStore } from "~/structures/stores/StreamerStore"
 
 const phaseClient = new BotClient({
   config: {
@@ -61,7 +61,7 @@ const phaseClient = new BotClient({
     config: new ConfigStore(),
     guilds: new GuildStore(),
     invites: new InviteStore(),
-    twitchStatuses: new TwitchStatusStore(),
+    streamers: new StreamerStore(),
   },
 })
 

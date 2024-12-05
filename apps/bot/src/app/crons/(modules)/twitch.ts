@@ -1,122 +1,93 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  Collection,
-  EmbedBuilder,
-} from "discord.js"
+import { ButtonStyle } from "discord.js"
 import { BotCronBuilder } from "@phasejs/core/builders"
 
-import { ModuleId } from "@repo/utils/modules"
+import { isSendableChannel } from "~/lib/utils/guards"
 
-import { twitchAPI } from "~/lib/clients/twitch"
-import { PhaseColour } from "~/lib/enums"
-
-import type { GuildTextBasedChannel } from "discord.js"
+import { MessageBuilder } from "~/structures/builders"
 
 export default new BotCronBuilder()
   .setPattern("* * * * *")
   .setExecute(async (client) => {
-    const guildDocs = client.stores.guilds.filter(
-      (guildDoc) => guildDoc.modules?.[ModuleId.TwitchNotifications]?.enabled,
-    )
+    // get a before and after snapshot of the streamers store
+    const oldValues = client.stores.streamers.entries()
+    await client.stores.streamers.refreshStreamers()
+    const newValues = client.stores.streamers.entries()
 
-    interface Streamer {
-      id: string
-      notifications: {
-        guildId: string
-        channelId: string
-        mention?: string
-      }[]
-    }
+    // loop through the new streamers
+    for (const [id, streamer] of newValues) {
+      // cross-reference the stream status with the old values
+      const isLiveNow = !!streamer.stream
+      const wasLiveBefore = !!oldValues.find(([k, v]) => k === id && !!v.stream)
 
-    const streamers = guildDocs.reduce((acc, guildDoc) => {
-      const streamers =
-        guildDoc.modules![ModuleId.TwitchNotifications]!.streamers
+      // if the streamer is now live, send a notification
+      if (!wasLiveBefore && isLiveNow) {
+        const stream = streamer.stream!
+        const baseMessage = new MessageBuilder()
 
-      streamers.forEach((streamer) => {
-        const existingStreamer = acc.get(streamer.id)
-
-        if (existingStreamer) {
-          existingStreamer.notifications.push({
-            guildId: guildDoc.id,
-            channelId: streamer.channel,
-            mention: streamer.mention,
-          })
-        } else {
-          acc.set(streamer.id, {
-            id: streamer.id,
-            notifications: [
-              {
-                guildId: guildDoc.id,
-                channelId: streamer.channel,
-                mention: streamer.mention,
-              },
-            ],
-          })
-        }
-      })
-
-      return acc
-    }, new Collection<string, Streamer>())
-
-    for (const [id, streamer] of streamers.entries()) {
-      const stream = await twitchAPI.streams.getStreamByUserId(id)
-
-      const isLiveNow = !!stream
-      const wasLiveBefore = client.stores.twitchStatuses.has(id)
-
-      if (!isLiveNow && wasLiveBefore) {
-        client.stores.twitchStatuses.delete(id)
-      } else if (!wasLiveBefore && isLiveNow) {
-        client.stores.twitchStatuses.set(id, true)
-
-        for (const notification of streamer.notifications) {
-          const channel = client.channels.cache.get(
-            notification.channelId,
-          ) as GuildTextBasedChannel | null
-
-          if (!channel) continue
-
-          void channel
-            .send({
-              content: notification.mention,
-              embeds: [
-                new EmbedBuilder()
-                  .setColor(PhaseColour.Primary)
-                  .setAuthor({
-                    name: `${stream.userDisplayName} is now live on Twitch!`,
-                    url: `https://twitch.tv/${stream.userName}`,
-                  })
-                  .setTitle(stream.title)
-                  .setURL(`https://twitch.tv/${stream.userName}`)
-                  .setFields([
-                    {
-                      name: "Category",
-                      value: stream.gameName,
-                      inline: true,
-                    },
-                    {
-                      name: "Viewers",
-                      value: stream.viewers.toLocaleString(),
-                      inline: true,
-                    },
-                  ])
-                  .setImage(
-                    stream.getThumbnailUrl(400, 225) + `?t=${Date.now()}`,
-                  )
-                  .setTimestamp(),
-              ],
-              components: [
-                new ActionRowBuilder<ButtonBuilder>().addComponents([
-                  new ButtonBuilder()
-                    .setStyle(ButtonStyle.Link)
-                    .setLabel("Watch Stream")
-                    .setURL(`https://twitch.tv/${stream.userName}`),
-                ]),
-              ],
+        // construct the message embed
+        baseMessage.setEmbeds((embed) => {
+          return embed
+            .setColor("Primary")
+            .setAuthor({
+              name: `${streamer.displayName} is now live on Twitch!`,
+              iconURL: streamer.avatarUrl,
+              url: stream.url,
             })
-            .catch(() => null)
+            .setTitle(stream.title)
+            .setURL(stream.url)
+            .setDescription(stream.game)
+            .setImage(stream.thumbnailUrl)
+            .setFields([
+              {
+                name: "Category",
+                value: stream.game,
+                inline: true,
+              },
+              {
+                name: "Viewers",
+                value: stream.viewerCount.toLocaleString(),
+                inline: true,
+              },
+            ])
+        })
+
+        // construct the message action row
+        baseMessage.setComponents((actionrow) => {
+          return actionrow.addButton((button) => {
+            return button
+              .setStyle(ButtonStyle.Link)
+              .setLabel("Watch Stream")
+              .setURL(stream.url)
+          })
+        })
+
+        // loop through the streamer's notifications
+        for (const notification of streamer.notifications) {
+          const message = new MessageBuilder(baseMessage)
+
+          // get the guild and channel
+          const guild = client.guilds.cache.get(notification.guildId)!
+          const channel = guild.channels.cache.get(notification.channelId)
+
+          // if the channel is not sendable, skip it
+          if (!channel || !isSendableChannel(channel)) {
+            continue
+          }
+
+          // add a mention if applicable
+          if (notification.mention) {
+            message.setContent(notification.mention)
+          }
+
+          try {
+            // send the message
+            await channel.send(message)
+          } catch (error) {
+            // log any errors
+            const err = `Failed to send Twitch notification to channel ${channel.id} in guild ${guild.id}:`
+            console.error(err)
+            console.error(error)
+          }
         }
       }
     }
