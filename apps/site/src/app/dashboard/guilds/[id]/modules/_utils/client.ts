@@ -178,7 +178,7 @@ export function getDefaultValues(
     [ModuleId.TwitchNotifications]: (data) => ({
       ...data,
       streamers: data.streamers.map((streamer, index) => {
-        const streamerNames = data._data?.streamerNames as string[] | undefined
+        const streamerNames = data._data?.streamerNames
         const streamerName = streamerNames?.[index]
 
         return {

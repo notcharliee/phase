@@ -12,8 +12,6 @@ import {
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import type { APIGuildCategoryChannel } from "@discordjs/core/http-only"
-import type { AllowedAPIChannel } from "~/components/channel-icons"
 import type { ComboboxItem } from "~/components/ui/combobox"
 import type { Arrayable, Optional } from "~/types/utils"
 
@@ -44,8 +42,8 @@ export function SelectChannel<
   const items = React.useMemo(() => {
     const categories = dashboard.guild.channels
       .filter(
-        (channel): channel is APIGuildCategoryChannel =>
-          channel.type === ChannelType.GuildCategory,
+        (channel) =>
+          (channel.type as ChannelType) === ChannelType.GuildCategory,
       )
       .sort((a, b) => a.position + b.position)
 
@@ -63,8 +61,8 @@ export function SelectChannel<
       for (const category of categories) {
         const channels = dashboard.guild.channels
           .filter(
-            (channel): channel is AllowedAPIChannel =>
-              channel.parent_id === category.id &&
+            (channel) =>
+              channel.parentId === category.id &&
               AllowedChannelTypes[channelType] === channel.type,
           )
           .sort((a, b) => a.position + b.position)

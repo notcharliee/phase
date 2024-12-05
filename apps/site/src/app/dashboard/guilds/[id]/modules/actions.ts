@@ -106,9 +106,7 @@ export async function updateModules(
 
   if (parsedModulesWithData[ModuleId.Forms]) {
     if (dirtyFields.includes(ModuleId.Forms)) {
-      await handleFormsModule(
-        parsedModulesWithData[ModuleId.Forms].forms,
-      )
+      await handleFormsModule(parsedModulesWithData[ModuleId.Forms].forms)
     }
   }
 
@@ -138,7 +136,10 @@ export async function updateModules(
       const updatedModule = parsedModulesWithData[ModuleId.TwitchNotifications]
 
       const streamers = formValues[ModuleId.TwitchNotifications]!.streamers
-      const streamerNames = streamers.map((streamer) => streamer.id)
+      const streamerNames = streamers.reduce<Record<number, string>>(
+        (acc, streamer, index) => ({ ...acc, [index]: streamer.id }),
+        {},
+      )
 
       updatedModule._data.streamerNames = streamerNames
     } else {

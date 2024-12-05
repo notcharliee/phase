@@ -1,17 +1,13 @@
-import type {
-  APIGuild,
-  APIGuildChannel,
-  GuildChannelType,
-} from "@discordjs/core/http-only"
+import type { client } from "@repo/bridge/client"
 import type { ModuleId } from "@repo/utils/modules"
-import type { GuildCommand, GuildModules } from "~/types/db"
+import type { GuildModules } from "~/types/db"
 import type { modulesSchema } from "~/validators/modules"
 import type { UseFormReturn } from "react-hook-form"
 import type { z } from "zod"
 
 export interface GuildModulesDataFields {
   [ModuleId.TwitchNotifications]: {
-    streamerNames: string[]
+    streamerNames: Record<number, string>
   }
 }
 
@@ -36,11 +32,11 @@ export type GuildModulesWithData = Partial<{
   }
 }>
 
+type DashboardGuildData = Exclude<
+  Awaited<ReturnType<typeof client.getGuildById.query>>,
+  null
+>
+
 export interface DashboardData {
-  guild: APIGuild & {
-    channels: APIGuildChannel<GuildChannelType>[]
-    admins: string[]
-    commands: Record<string, GuildCommand> | undefined
-    modules: GuildModulesWithData | undefined
-  }
+  guild: DashboardGuildData
 }

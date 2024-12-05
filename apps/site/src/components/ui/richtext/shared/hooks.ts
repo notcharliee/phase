@@ -7,7 +7,7 @@ import { withPlugins } from "~/components/ui/richtext/shared/plugins"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import type { AllowedAPIChannel } from "~/components/channel-icons"
+import type { ChannelType } from "@discordjs/core/http-only"
 import type { RichTextFlags } from "~/components/ui/richtext/shared/types"
 import type { GuildElementData } from "~/types/slate"
 
@@ -23,8 +23,9 @@ export function useGuildData(flags: RichTextFlags) {
       channels:
         dashboard?.guild.channels
           .filter(
-            (channel): channel is AllowedAPIChannel =>
-              AllowedChannelTypes.GuildCategory !== channel.type &&
+            (channel) =>
+              AllowedChannelTypes.GuildCategory !==
+                (channel.type as ChannelType) &&
               Object.values(AllowedChannelTypes).includes(channel.type),
           )
           .map((channel) => ({
