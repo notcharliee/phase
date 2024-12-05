@@ -7,17 +7,38 @@ import type {} from "@phasejs/core/managers"
 
 type WithId<T> = T & { _id: mongoose.Types.ObjectId }
 
+export interface Streamer {
+  id: string
+  username: string
+  displayName: string
+  avatarUrl: string
+  description: string
+  stream?: {
+    id: string
+    url: string
+    title: string
+    game: string
+    tags: string[]
+    viewerCount: number
+    thumbnailUrl: string
+    startedAt: Date
+  }
+  notifications: {
+    guildId: string
+    channelId: string
+    mention?: string
+  }[]
+}
+
 type ConfigStore = BaseStore & Config
 type GuildStore = BaseKVStore<Snowflake, WithId<Guild>>
-type InviteStore = BaseKVStore // not used here
-type TwitchStatusStore = BaseKVStore // not used here
+type StreamersStore = BaseKVStore<string, Streamer>
 
 declare module "@phasejs/core/managers" {
   interface StoreManager {
     config: ConfigStore
     guilds: GuildStore
-    invites: InviteStore
-    twitchStatuses: TwitchStatusStore
+    streamers: StreamersStore
   }
 }
 

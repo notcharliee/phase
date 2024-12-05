@@ -11,7 +11,7 @@ type GuildModulesWithData = Partial<
     Record<
       ModuleId.TwitchNotifications,
       GuildModules[ModuleId.TwitchNotifications] & {
-        _data: { streamerNames: string[] }
+        _data: { streamerNames: Record<number, string> }
       }
     >
 >
@@ -119,9 +119,13 @@ export const appRouter = router({
 
       if (guildModules[ModuleId.TwitchNotifications]) {
         const guildModule = guildModules[ModuleId.TwitchNotifications]
-        const streamerNames: string[] = []
+        const streamerNames: Record<number, string> = {}
 
-        // todo: do stuff to populate the array
+        for (let i = 0; i < guildModule.streamers.length; i++) {
+          const id = guildModule.streamers[i]!.id
+          const name = client.stores.streamers.get(id)?.username
+          if (name) streamerNames[i] = name
+        }
 
         guildModule._data = {
           streamerNames,
