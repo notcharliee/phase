@@ -33,7 +33,7 @@ export function bridgeServerPlugin() {
     trigger: "ready",
     version: version as BotPluginVersion,
     onLoad: (phase) => {
-      startServer({ client: phase.client })
+      startServer({ client: phase.client as DjsClient<true> })
     },
   })
 }
