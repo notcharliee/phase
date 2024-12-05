@@ -22,6 +22,14 @@ export class MessageBuilder {
   readonly embeds?: BaseMessageOptions["embeds"]
   readonly files?: BaseMessageOptions["files"]
 
+  constructor(data?: BaseMessageOptions) {
+    this.allowedMentions = data?.allowedMentions
+    this.content = data?.content
+    this.components = data?.components
+    this.embeds = data?.embeds
+    this.files = data?.files
+  }
+
   setAllowedMentions(allowedMentions: MessageMentionOptions) {
     Reflect.set(this, "allowedMentions", allowedMentions)
     return this
