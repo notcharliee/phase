@@ -8,16 +8,17 @@ import { MessageBuilder } from "~/structures/builders"
 export default new BotCronBuilder()
   .setPattern("* * * * *")
   .setExecute(async (client) => {
-    // get a before and after snapshot of the streamers store
-    const oldValues = client.stores.streamers.entries()
-    await client.stores.streamers.refreshStreamers()
-    const newValues = client.stores.streamers.entries()
+    // get a before snapshot of the streamers store
+    const oldStreamers = client.stores.streamers.clone()
 
-    // loop through the new streamers
-    for (const [id, streamer] of newValues) {
+    // refresh the streamers store
+    await client.stores.streamers.refreshStreamers()
+
+    // loop through the streamers store
+    for (const [id, streamer] of client.stores.streamers) {
       // cross-reference the stream status with the old values
       const isLiveNow = !!streamer.stream
-      const wasLiveBefore = !!oldValues.find(([k, v]) => k === id && !!v.stream)
+      const wasLiveBefore = !!oldStreamers.get(id)?.stream
 
       // if the streamer is now live, send a notification
       if (!wasLiveBefore && isLiveNow) {
@@ -35,8 +36,6 @@ export default new BotCronBuilder()
             })
             .setTitle(stream.title)
             .setURL(stream.url)
-            .setDescription(stream.game)
-            .setImage(stream.thumbnailUrl)
             .setFields([
               {
                 name: "Category",
@@ -49,6 +48,8 @@ export default new BotCronBuilder()
                 inline: true,
               },
             ])
+            .setImage(stream.thumbnailUrl)
+            .setTimestamp()
         })
 
         // construct the message action row
