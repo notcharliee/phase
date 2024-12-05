@@ -7,8 +7,6 @@ import {
 } from "~/components/ui/hover-card"
 import { Link } from "~/components/ui/link"
 
-import { getInitials } from "~/lib/utils"
-
 export interface UserHoverCardProps {
   username: string
   avatar: string
@@ -26,7 +24,7 @@ export const UserHoverCard = (props: UserHoverCardProps) => (
       <div className="flex justify-between space-x-4">
         <Avatar>
           <AvatarImage src={props.avatar} />
-          <AvatarFallback>{getInitials(props.username)}</AvatarFallback>
+          <AvatarFallback />
         </Avatar>
         <div className="space-y-1">
           <h4 className="text-sm font-semibold">{props.username}</h4>
