@@ -4,7 +4,7 @@ import { z } from "zod"
 import { privateProcedure, publicProcedure, router } from "~/server/trpc"
 
 import type { GuildModules } from "@repo/db"
-import type { APIRole } from "discord.js"
+import type { APIRole, NonThreadGuildBasedChannel } from "discord.js"
 
 type GuildModulesWithData = Partial<
   GuildModules &
@@ -81,27 +81,26 @@ export const appRouter = router({
         return null
 
       const apiChannels = djsGuild.channels.cache
-        .filter((channel) => !channel.isThread())
+        .filter((c): c is NonThreadGuildBasedChannel => !c.isThread())
         .map((channel) => ({
           id: channel.id,
           name: channel.name,
           type: channel.type,
           flags: channel.flags.toJSON(),
           parentId: channel.parentId,
-          permissionOverwrites:
-            "permissionOverwrites" in channel
-              ? channel.permissionOverwrites.cache.map((overwrite) => ({
-                  id: overwrite.id,
-                  type: overwrite.type,
-                  allow: overwrite.allow.toJSON(),
-                  deny: overwrite.deny.toJSON(),
-                }))
-              : undefined,
-          position: "position" in channel ? channel.position : undefined,
+          permissionOverwrites: channel.permissionOverwrites.cache.map(
+            (overwrite) => ({
+              id: overwrite.id,
+              type: overwrite.type,
+              allow: overwrite.allow.toJSON(),
+              deny: overwrite.deny.toJSON(),
+            }),
+          ),
+          position: channel.position,
         }))
 
       const apiRoles = djsGuild.roles.cache
-        .filter((role) => role.id !== guildId)
+        .filter((r) => r.id !== guildId)
         .map((role) => {
           return {
             id: role.id,
