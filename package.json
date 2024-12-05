@@ -10,13 +10,13 @@
     "packages/@repo/*"
   ],
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --filter=bot --filter=site",
     "dev:bot": "turbo run dev --filter=bot",
     "dev:site": "turbo run dev --filter=site",
     "build": "turbo run build",
     "build:bot": "turbo run build --filter=bot",
     "build:site": "turbo run build --filter=site",
-    "start": "turbo run start --filter=./apps/*",
+    "start": "turbo run start --filter=bot --filter=site",
     "start:bot": "cd apps/bot && bun run start",
     "start:site": "cd apps/site && bun run start",
     "preview": "turbo run preview",
