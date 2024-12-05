@@ -1,14 +1,14 @@
+import { getEnv } from "@repo/env"
 import { createTRPCClient, httpBatchLink } from "@trpc/client"
 
-import { env } from "~/client/env"
-import { url } from "~/utils"
-
 import type { AppRouter } from "~/server/router"
+
+export const env = getEnv("site")
 
 export const client = createTRPCClient<AppRouter>({
   links: [
     httpBatchLink({
-      url,
+      url: env.BRIDGE_DOMAIN,
       headers: {
         Authorization: `Secret ${env.BRIDGE_TOKEN}`,
       },

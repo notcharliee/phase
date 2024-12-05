@@ -1,22 +1,21 @@
-import { env } from "~/server/env"
-
 import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch"
 import type { DjsClient } from "~/types/bot"
 
 interface CreateContextParams extends FetchCreateContextFnOptions {
   client: DjsClient
+  token: string
 }
 
-export function createContext({ req, client }: CreateContextParams) {
-  const headers = req.headers
+export function createContext(params: CreateContextParams) {
+  const headers = params.req.headers
 
   const authorization = headers.get("Authorization") ?? ""
   const [prefix, token] = authorization.split(" ")
 
-  const isAuthorized = prefix === "Secret" && token === env.BRIDGE_TOKEN
+  const isAuthorized = prefix === "Secret" && token === params.token
 
   return {
-    client,
+    client: params.client,
     isAuthorized,
   }
 }
