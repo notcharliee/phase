@@ -10,21 +10,6 @@ export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs))
 
 export const absoluteURL = (path: string) => env.BASE_URL + path
 
-export const getInitials = (input: string) => {
-  const words = input
-    .replace(/[^a-zA-Z0-9 ]/g, "")
-    .split(" ")
-    .filter((word) => word.length > 0)
-
-  if (!words.length) return "N/A"
-  if (words.length == 1) return words[0]!.slice(0, 2).toUpperCase()
-
-  return (
-    words[0]!.charAt(0).toUpperCase() +
-    words[words.length - 1]!.charAt(0).toUpperCase()
-  )
-}
-
 export const getOrdinal = (number: number): string => {
   if (number >= 11 && number <= 13) return number + "th"
   return (

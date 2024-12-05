@@ -6,8 +6,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
 import { Card, CardHeader, CardTitle } from "~/components/ui/card"
 import { Skeleton } from "~/components/ui/skeleton"
 
-import { getInitials } from "~/lib/utils"
-
 import type { DashboardGuild } from "~/app/dashboard/guilds/page"
 
 export interface GuildCardProps {
@@ -23,9 +21,9 @@ export function GuildCard(props: GuildCardProps) {
       />
       <div className="flex flex-row items-center gap-4 p-6">
         <Avatar className="h-12 w-12 rounded-md border">
-          <AvatarImage src={props.guild.icon_url ?? undefined} />
+          <AvatarImage src={props.guild.iconURL ?? undefined} />
           <AvatarFallback className="rounded-none">
-            {getInitials(props.guild.name)}
+            {props.guild.nameAcronym}
           </AvatarFallback>
         </Avatar>
         <CardHeader className="p-0">
@@ -33,11 +31,11 @@ export function GuildCard(props: GuildCardProps) {
           <div className="text-muted-foreground flex gap-3 text-sm">
             <div className="inline-flex items-center space-x-1">
               <div className="bg-foreground inline-block size-3 rounded-full" />
-              <span>{props.guild.presence_count} Online</span>
+              <span>{props.guild.presenceCount} Online</span>
             </div>
             <div className="inline-flex items-center space-x-1">
               <div className="bg-muted-foreground my-auto inline-block size-3 rounded-full" />
-              <span>{props.guild.member_count} Members</span>
+              <span>{props.guild.memberCount} Members</span>
             </div>
           </div>
         </CardHeader>
