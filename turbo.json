@@ -15,15 +15,11 @@
       "env": [
         "MONGODB_URI",
         "POSTGRES_URI",
-        "DISCORD_TOKEN",
-        "DISCORD_SECRET",
-        "DISCORD_ID",
-        "TWITCH_CLIENT_SECRET",
-        "TWITCH_CLIENT_ID",
-        "AUTH_COOKIE_SECRET",
-        "AUTH_OTP_SECRET",
-        "BRIDGE_TOKEN",
-        "WEBHOOK_ALERT"
+        "DISCORD_*",
+        "TWITCH_*",
+        "AUTH_*",
+        "BRIDGE_*",
+        "WEBHOOK_*"
       ]
     },
     "site#build": {
@@ -33,15 +29,11 @@
       "env": [
         "MONGODB_URI",
         "POSTGRES_URI",
-        "DISCORD_TOKEN",
-        "DISCORD_SECRET",
-        "DISCORD_ID",
-        "TWITCH_CLIENT_SECRET",
-        "TWITCH_CLIENT_ID",
-        "AUTH_COOKIE_SECRET",
-        "AUTH_OTP_SECRET",
-        "BRIDGE_TOKEN",
-        "WEBHOOK_ALERT"
+        "DISCORD_*",
+        "TWITCH_*",
+        "AUTH_*",
+        "BRIDGE_*",
+        "WEBHOOK_*"
       ]
     },
     "build": {
