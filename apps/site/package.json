@@ -60,8 +60,8 @@
     "nuqs": "^2.2.3",
     "postcss": "^8.4.49",
     "prismjs": "^1.29.0",
-    "react": "^19.0.0-rc.1",
-    "react-dom": "^19.0.0-rc.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-hook-form": "^7.53.2",
     "sharp": "^0.33.5",
     "slate": "^0.110.2",
@@ -82,12 +82,8 @@
     "@types/mdx": "^2.0.13",
     "@types/node": "^20.17.6",
     "@types/prismjs": "^1.26.5",
-    "@types/react": "npm:types-react@19.0.0-rc.1",
-    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@types/uuid": "^10.0.0"
-  },
-  "overrides": {
-    "@types/react": "npm:types-react@19.0.0-rc.1",
-    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
   }
 }
