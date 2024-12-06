@@ -1,14 +1,9 @@
 {
   "private": true,
-  "packageManager": "bun@1.1.16",
   "name": "phase",
   "type": "module",
-  "workspaces": [
-    "apps/*",
-    "packages/@phasejs/*",
-    "packages/@plugin/*",
-    "packages/@repo/*"
-  ],
+  "packageManager": "bun@1.1.16",
+  "prettier": "@repo/config/prettier/base.json",
   "scripts": {
     "dev": "turbo run dev --filter=bot --filter=site",
     "dev:bot": "turbo run dev --filter=bot",
@@ -26,6 +21,12 @@
     "lint:site": "turbo run lint --filter=site",
     "lint:packages": "turbo run lint --filter='./packages/*/*'"
   },
+  "workspaces": [
+    "apps/*",
+    "packages/@phasejs/*",
+    "packages/@plugin/*",
+    "packages/@repo/*"
+  ],
   "dependencies": {
     "@repo/config": "workspace:*",
     "turbo": "^2.3.0"

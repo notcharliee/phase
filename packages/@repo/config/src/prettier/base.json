@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json.schemastore.org/prettierrc",
+  "semi": false,
+  "endOfLine": "lf",
+  "plugins": [
+    "@ianvs/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss"
+  ],
+  "tailwindAttributes": ["class", "className", "tw"],
+  "tailwindFunctions": ["clsx", "cn", "cva", "tw"],
+  "importOrder": [
+    "^(bun/(.*)$)|^(bun$)",
+    "<BUILTIN_MODULES>",
+    "",
+    "^(next/(.*)$)|^(next$)",
+    "^(react/(.*)$)|^(react$)",
+    "^(@phasejs/(.*)$)|^(@phasejs$)",
+    "^(discord.js/(.*)$)|^(discord.js$)",
+    "",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^~/components/(.*)$",
+    "",
+    "^~/hooks/(.*)$",
+    "",
+    "^~/config/(.*)$",
+    "",
+    "^~/lib/(.*)$",
+    "",
+    "^~/styles/(.*)$",
+    "",
+    "^[~/]",
+    "^[.]",
+    "",
+    "<TYPES>"
+  ]
+}

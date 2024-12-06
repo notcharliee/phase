@@ -9,11 +9,9 @@
     "lint": "eslint ."
   },
   "exports": {
-    "./*": {
-      "types": "./dist/*",
-      "import": "./dist/*",
-      "require": "./dist/*"
-    },
+    "./eslint/*": "./dist/eslint/*",
+    "./prettier/*": "./src/prettier/*",
+    "./tailwind/*": "./dist/tailwind/*",
     "./typescript": "./src/typescript/base.json"
   },
   "dependencies": {
