@@ -13,20 +13,21 @@
     "dev": "turbo run dev --filter=bot --filter=site",
     "dev:bot": "turbo run dev --filter=bot",
     "dev:site": "turbo run dev --filter=site",
+    "dev:packages": "turbo run dev --filter='./packages/*/*'",
     "build": "turbo run build",
     "build:bot": "turbo run build --filter=bot",
     "build:site": "turbo run build --filter=site",
+    "build:packages": "turbo run build --filter='./packages/*/*'",
     "start": "turbo run start --filter=bot --filter=site",
     "start:bot": "cd apps/bot && bun run start",
     "start:site": "cd apps/site && bun run start",
-    "preview": "turbo run preview",
-    "preview:bot": "turbo run preview --filter=bot",
-    "preview:site": "turbo run preview --filter=site",
     "lint": "turbo run lint",
     "lint:bot": "turbo run lint --filter=bot",
-    "lint:site": "turbo run lint --filter=site"
+    "lint:site": "turbo run lint --filter=site",
+    "lint:packages": "turbo run lint --filter='./packages/*/*'"
   },
   "dependencies": {
+    "@repo/config": "workspace:*",
     "turbo": "^2.3.0"
   },
   "devDependencies": {

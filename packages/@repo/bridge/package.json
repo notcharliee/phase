@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "build": "tsup",
     "dev": "tsup --watch",
+    "build": "tsup",
     "lint": "eslint ."
   },
   "exports": {
@@ -29,7 +29,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@repo/config": "workspace:*",
     "@repo/db": "workspace:*"
   },
   "peerDependencies": {

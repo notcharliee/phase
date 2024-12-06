@@ -20,7 +20,6 @@
     "satori": "^0.12.0"
   },
   "devDependencies": {
-    "@repo/config": "workspace:*",
     "@types/bun": "^1.1.13",
     "@types/react": "^19.0.0"
   },

@@ -19,7 +19,6 @@
     "@phasejs/core": "workspace:*"
   },
   "devDependencies": {
-    "@repo/config": "workspace:*",
     "@types/bun": "^1.1.13"
   },
   "peerDependencies": {

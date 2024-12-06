@@ -1,14 +1,20 @@
 {
   "private": true,
   "name": "@repo/config",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint ."
+  },
   "exports": {
     "./*": {
-      "types": "./src/*",
-      "import": "./src/*",
-      "require": "./src/*"
-    }
+      "types": "./dist/*",
+      "import": "./dist/*",
+      "require": "./dist/*"
+    },
+    "./typescript": "./src/typescript/base.json"
   },
   "dependencies": {
     "@eslint/js": "^9.10.0",

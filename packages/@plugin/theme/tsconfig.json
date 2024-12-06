@@ -1,5 +1,5 @@
 {
-  "extends": "../../../node_modules/@repo/config/src/typescript/base.json",
+  "extends": "@repo/config/typescript",
   "include": ["src/**/*", "eslint.config.js"],
   "compilerOptions": { "baseUrl": "." }
 }

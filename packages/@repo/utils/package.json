@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build": "tsup",
     "dev": "tsup --watch",
+    "build": "tsup",
     "lint": "eslint ."
   },
   "exports": {
@@ -14,10 +14,6 @@
       "import": "./dist/modules/index.js",
       "require": "./dist/modules/index.js"
     }
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "@repo/config": "workspace:*"
   },
   "peerDependencies": {
     "discord.js": "^14.x.x"

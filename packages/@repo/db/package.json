@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "build": "tsup",
     "dev": "tsup --watch",
+    "build": "tsup",
     "lint": "eslint .",
     "genkey": "bun --print 'require(`src/mongo/utils.ts`).generateKey()'",
     "drizzle:push": "bun run --env-file=.env.local drizzle-kit push",
@@ -37,7 +37,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@repo/config": "workspace:*",
     "@types/node": "^20.17.9",
     "@types/pg": "^8.11.10",
     "drizzle-kit": "^0.26.2"

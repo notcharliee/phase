@@ -26,7 +26,6 @@
     "sodium-native": "^4.3.1"
   },
   "devDependencies": {
-    "@repo/config": "workspace:*",
     "@types/bun": "^1.1.13",
     "@types/fluent-ffmpeg": "^2.1.27"
   },

@@ -1,1 +1,1 @@
-export { default } from "@repo/config/tailwind/site.ts"
+export { default } from "@repo/config/tailwind/site.js"
