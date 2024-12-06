@@ -26,5 +26,7 @@ jobs:
 
       - name: Run turbo lint
         env:
+          TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
           SKIP_ENV_VALIDATION: true
         run: bun run turbo run lint
