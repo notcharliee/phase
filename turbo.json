@@ -2,9 +2,15 @@
   "$schema": "https://turbo.build/schema.json",
   "globalEnv": ["NODE_ENV"],
   "tasks": {
+    "@repo/config#build": {
+      "cache": true,
+      "dependsOn": [],
+      "outputs": ["dist/**"],
+      "env": ["!*"]
+    },
     "bot#build": {
       "cache": true,
-      "dependsOn": ["^build"],
+      "dependsOn": ["@repo/config#build", "^build"],
       "outputs": [".tsc/**"],
       "env": [
         "MONGODB_URI",
@@ -22,7 +28,7 @@
     },
     "site#build": {
       "cache": true,
-      "dependsOn": ["^build"],
+      "dependsOn": ["@repo/config#build", "^build"],
       "outputs": [".next/**", "!.next/cache/**"],
       "env": [
         "MONGODB_URI",
@@ -40,7 +46,7 @@
     },
     "build": {
       "cache": true,
-      "dependsOn": ["^build"],
+      "dependsOn": ["@repo/config#build", "^build"],
       "outputs": ["dist/**"],
       "env": ["!*"]
     },
@@ -51,7 +57,7 @@
     },
     "lint": {
       "cache": false,
-      "dependsOn": ["^build"],
+      "dependsOn": ["@repo/config#build", "^build"],
       "passThroughEnv": ["SKIP_ENV_VALIDATION"]
     }
   },
