@@ -42,15 +42,15 @@
       "outputs": ["dist/**"],
       "env": ["!*"]
     },
+    "lint": {
+      "cache": true,
+      "dependsOn": ["@repo/config#build", "^build"],
+      "passThroughEnv": ["SKIP_ENV_VALIDATION"]
+    },
     "dev": {
       "cache": false,
       "persistent": true,
       "env": ["*"]
-    },
-    "lint": {
-      "cache": false,
-      "dependsOn": ["@repo/config#build", "^build"],
-      "passThroughEnv": ["SKIP_ENV_VALIDATION"]
     }
   },
   "remoteCache": {
