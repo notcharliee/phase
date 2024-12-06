@@ -31,10 +31,8 @@
     "turbo": "^2.3.0"
   },
   "devDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "^4.4.0",
     "eslint": "^9.16.0",
     "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.8",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2"
   },
