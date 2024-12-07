@@ -3,7 +3,7 @@ import { ApplicationCommandType, ApplicationIntegrationType } from "discord.js"
 import { Mixin } from "ts-mixer"
 import { z } from "zod"
 
-import { BotCommand } from "~/client/BotCommand"
+import { BotCommand } from "~/structures/BotCommand"
 import { SharedBotCommandBuilderBase } from "./shared/SharedBotCommandBuilderBase"
 import { SharedBotCommandBuilderDescription } from "./shared/SharedBotCommandBuilderDescription"
 import { SharedBotCommandBuilderName } from "./shared/SharedBotCommandBuilderName"

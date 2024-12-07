@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { BotCron } from "~/client/BotCron"
+import { BotCron } from "~/structures/BotCron"
 
 import type { DjsClient } from "~/types/client"
 import type { BotCronExecute } from "~/types/crons"

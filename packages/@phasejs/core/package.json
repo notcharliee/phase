@@ -15,9 +15,14 @@
       "require": "./dist/index.js"
     },
     "./client": {
-      "types": "./dist/client/index.d.ts",
-      "import": "./dist/client/index.js",
-      "require": "./dist/client/index.js"
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.js",
+      "require": "./dist/client.js"
+    },
+    "./stores": {
+      "types": "./dist/stores.d.ts",
+      "import": "./dist/stores.js",
+      "require": "./dist/stores.js"
     },
     "./builders": {
       "types": "./dist/builders/index.d.ts",
@@ -28,11 +33,6 @@
       "types": "./dist/managers/index.d.ts",
       "import": "./dist/managers/index.js",
       "require": "./dist/managers/index.js"
-    },
-    "./stores": {
-      "types": "./dist/stores/index.d.ts",
-      "import": "./dist/stores/index.js",
-      "require": "./dist/stores/index.js"
     }
   },
   "dependencies": {

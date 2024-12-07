@@ -2,8 +2,8 @@ import { Collection } from "discord.js"
 
 import { BaseManager } from "~/managers/BaseManager"
 
-import type { BotClient } from "~/client/BotClient"
-import type { BotEvent } from "~/client/BotEvent"
+import type { BotClient } from "~/structures/BotClient"
+import type { BotEvent } from "~/structures/BotEvent"
 import type { BotEventName } from "~/types/events"
 
 export class EventManager extends BaseManager {

@@ -3,10 +3,10 @@ import { defineConfig } from "tsup"
 export default defineConfig({
   entry: [
     "./src/index.ts",
-    "./src/client/index.ts",
+    "./src/client.ts",
+    "./src/stores.ts",
     "./src/builders/index.ts",
     "./src/managers/index.ts",
-    "./src/stores/index.ts",
   ],
   format: ["esm"],
   clean: true,

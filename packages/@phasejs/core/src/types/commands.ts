@@ -1,4 +1,4 @@
-import type { BotCommand } from "~/client/BotCommand"
+import type { BotCommand } from "~/structures/BotCommand"
 import type {
   APIApplicationCommandSubcommandOption,
   ChatInputCommandInteraction,

@@ -2,8 +2,8 @@ import { Collection } from "discord.js"
 
 import { BaseManager } from "~/managers/BaseManager"
 
-import type { BotClient } from "~/client/BotClient"
-import type { BotCron } from "~/client/BotCron"
+import type { BotClient } from "~/structures/BotClient"
+import type { BotCron } from "~/structures/BotCron"
 import type { BotCronPattern } from "~/types/crons"
 
 export class CronManager extends BaseManager {

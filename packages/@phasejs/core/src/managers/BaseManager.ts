@@ -1,4 +1,4 @@
-import type { BotClient } from "~/client/BotClient"
+import type { BotClient } from "~/structures/BotClient"
 
 export abstract class BaseManager {
   public readonly phase: BotClient

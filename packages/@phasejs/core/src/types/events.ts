@@ -1,4 +1,4 @@
-import type { BotEvent } from "~/client/BotEvent"
+import type { BotEvent } from "~/structures/BotEvent"
 import type { DjsClient } from "~/types/client"
 import type { CacheType, ClientEvents, Interaction } from "discord.js"
 

@@ -1,6 +1,6 @@
 import { BaseManager } from "~/managers/BaseManager"
 
-import type { BotClient } from "~/client/BotClient"
+import type { BotClient } from "~/structures/BotClient"
 import type { BotStores } from "~/types/stores"
 
 export class StoreManager extends BaseManager {

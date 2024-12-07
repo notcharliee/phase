@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { BotEvent } from "~/client/BotEvent"
+import { BotEvent } from "~/structures/BotEvent"
 
 import type { DjsClient } from "~/types/client"
 import type { BotEventContextMap, BotEventName } from "~/types/events"

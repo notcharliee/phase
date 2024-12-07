@@ -1,4 +1,4 @@
-import type { BotCron } from "~/client/BotCron"
+import type { BotCron } from "~/structures/BotCron"
 import type { DjsClient } from "~/types/client"
 
 export type BotCronPattern = string

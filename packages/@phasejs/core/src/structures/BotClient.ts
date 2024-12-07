@@ -11,7 +11,7 @@ import { CronManager } from "~/managers/CronManager"
 import { EventManager } from "~/managers/EventManager"
 import { StoreManager } from "~/managers/StoreManager"
 
-import type { BotPlugin } from "~/client/BotPlugin"
+import type { BotPlugin } from "~/structures/BotPlugin"
 import type { BotClientEvents } from "~/types/client"
 import type { BotStores } from "~/types/stores"
 import type { Client as DjsClient } from "discord.js"

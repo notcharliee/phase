@@ -1,4 +1,4 @@
-import type { BotClient } from "~/client/BotClient"
+import type { BotClient } from "~/structures/BotClient"
 import type { Awaitable } from "~/types/utils"
 
 export type BotPluginVersion = `${number}.${number}.${number}`

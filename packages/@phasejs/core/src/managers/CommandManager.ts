@@ -2,10 +2,10 @@ import { ChatInputCommandInteraction, Collection } from "discord.js"
 
 import { deepmergeCustom } from "deepmerge-ts"
 
-import { BotCommand } from "~/client/BotCommand"
+import { BotCommand } from "~/structures/BotCommand"
 import { BaseManager } from "~/managers/BaseManager"
 
-import type { BotClient } from "~/client/BotClient"
+import type { BotClient } from "~/structures/BotClient"
 import type { BotCommandBody, BotCommandNameResolvable } from "~/types/commands"
 import type { BotCommandMiddleware } from "~/types/middleware"
 
