@@ -95,27 +95,24 @@ export class CommandManager extends BaseManager {
 
       // sync commands if needed
       if (commandsToSync) {
-        // const symbol = chalk.bold.whiteBright("↻")
-        // console.log(`${symbol} Syncing ${commandsToSync} commands ...`)
-
         // commands to create
         const createPromises = commandsToCreate.map(async (command) => {
           await client.application.commands.create(command)
-          // console.log(chalk.grey(`  created /${command.name}`))
+          void this.phase.emitter.emit("liveCommandCreate", command)
         })
 
         // commands to delete
         const deletePromises = commandsToDelete.map(async (command) => {
           const commandId = getCommandId(command)!
           await client.application.commands.delete(commandId)
-          // console.log(chalk.grey(`  deleted /${command.name}`))
+          void this.phase.emitter.emit("liveCommandDelete", command)
         })
 
         // commands to update
         const updatePromises = commandsToUpdate.map(async (command) => {
           const commandId = getCommandId(command)!
           await client.application.commands.edit(commandId, command)
-          // console.log(chalk.grey(`  updated /${command.name}`))
+          void this.phase.emitter.emit("liveCommandUpdate", command)
         })
 
         try {
