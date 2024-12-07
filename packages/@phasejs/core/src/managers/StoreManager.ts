@@ -1,24 +1,13 @@
-import { BaseManager } from "discord.js"
+import { BaseManager } from "~/managers/BaseManager"
 
-import type { BaseStore } from "~/stores/BaseStore"
-import type { DjsClient } from "~/types/client"
-import type { Stores } from "~/types/stores"
+import type { BotClient } from "~/client/BotClient"
+import type { BotStores } from "~/types/stores"
 
-import type {} from "discord.js"
-
-declare module "discord.js" {
-  interface Client {
-    stores: StoreManager
-  }
-}
-
-/** Manages all of the stores used in the bot. */
 export class StoreManager extends BaseManager {
-  protected readonly _stores: Stores
+  protected readonly _stores: BotStores
 
-  constructor(client: DjsClient, stores: Stores = {}) {
-    super(client)
-
+  constructor(phase: BotClient, stores: BotStores = {}) {
+    super(phase)
     this._stores = stores
 
     return new Proxy(this, {
@@ -32,10 +21,11 @@ export class StoreManager extends BaseManager {
   }
 
   public async init() {
-    this.client.stores = this
+    this.phase.client.stores = this
 
-    for (const key of Object.keys(this._stores)) {
-      await (this._stores[key] as BaseStore).init(this.client)
+    for (const store of Object.values(this._stores)) {
+      await store.init(this.phase.client)
+      void this.phase.emitter.emit("initStore", store)
     }
 
     return this

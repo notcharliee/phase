@@ -1,3 +1,5 @@
+export { version } from "package.json"
+
 export const validExtnames = [
   ".js",
   ".cjs",
@@ -6,5 +8,3 @@ export const validExtnames = [
     ? [".ts", ".cts", ".mts"]
     : []),
 ]
-
-export { version } from "~/../package.json"

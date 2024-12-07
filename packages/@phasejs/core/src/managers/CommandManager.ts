@@ -1,15 +1,11 @@
-import {
-  BaseManager,
-  ChatInputCommandInteraction,
-  Collection,
-} from "discord.js"
+import { ChatInputCommandInteraction, Collection } from "discord.js"
 
-import chalk from "chalk"
 import { deepmergeCustom } from "deepmerge-ts"
 
 import { BotCommand } from "~/client/BotCommand"
+import { BaseManager } from "~/managers/BaseManager"
 
-import type { DjsClient } from "~/types/client"
+import type { BotClient } from "~/client/BotClient"
 import type { BotCommandBody, BotCommandNameResolvable } from "~/types/commands"
 import type { BotCommandMiddleware } from "~/types/middleware"
 
@@ -36,18 +32,18 @@ export class CommandManager extends BaseManager {
   protected _commands: Collection<string, BotCommand>
   protected _middleware?: BotCommandMiddleware
 
-  constructor(client: DjsClient) {
-    super(client)
+  constructor(phase: BotClient) {
+    super(phase)
     this._commands = new Collection()
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    client.on("interactionCreate", async (interaction) => {
+    phase.client.on("interactionCreate", async (interaction) => {
       if (!interaction.isChatInputCommand()) return
       await this.execute(interaction)
     })
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    client.once("ready", async (client) => {
+    phase.client.once("ready", async (client) => {
       const localAPICommands = new Collection<string, BotCommandBody>()
       const remoteAPICommands = new Collection<string, BotCommandBody>()
 
@@ -99,27 +95,27 @@ export class CommandManager extends BaseManager {
 
       // sync commands if needed
       if (commandsToSync) {
-        const symbol = chalk.bold.whiteBright("↻")
-        console.log(`${symbol} Syncing ${commandsToSync} commands ...`)
+        // const symbol = chalk.bold.whiteBright("↻")
+        // console.log(`${symbol} Syncing ${commandsToSync} commands ...`)
 
         // commands to create
         const createPromises = commandsToCreate.map(async (command) => {
           await client.application.commands.create(command)
-          console.log(chalk.grey(`  created /${command.name}`))
+          // console.log(chalk.grey(`  created /${command.name}`))
         })
 
         // commands to delete
         const deletePromises = commandsToDelete.map(async (command) => {
           const commandId = getCommandId(command)!
           await client.application.commands.delete(commandId)
-          console.log(chalk.grey(`  deleted /${command.name}`))
+          // console.log(chalk.grey(`  deleted /${command.name}`))
         })
 
         // commands to update
         const updatePromises = commandsToUpdate.map(async (command) => {
           const commandId = getCommandId(command)!
           await client.application.commands.edit(commandId, command)
-          console.log(chalk.grey(`  updated /${command.name}`))
+          // console.log(chalk.grey(`  updated /${command.name}`))
         })
 
         try {
@@ -140,7 +136,7 @@ export class CommandManager extends BaseManager {
    * Adds a command to the command manager.
    */
   public create(command: BotCommand) {
-    if (this.client.isReady()) {
+    if (this.phase.client.isReady()) {
       throw new Error("Commands cannot be created post client initialisation")
     }
 
@@ -151,13 +147,15 @@ export class CommandManager extends BaseManager {
     }
 
     this._commands.set(name, command)
+
+    void this.phase.emitter.emit("initCommand", command)
   }
 
   /**
    * Removes a command from the command manager.
    */
   public delete(name: string) {
-    if (this.client.isReady()) {
+    if (this.phase.client.isReady()) {
       throw new Error("Commands cannot be deleted post client initialisation")
     }
 

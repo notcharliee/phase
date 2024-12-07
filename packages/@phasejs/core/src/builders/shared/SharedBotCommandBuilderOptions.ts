@@ -10,7 +10,7 @@ import {
   SlashCommandUserOption,
 } from "discord.js"
 
-import { resolveBuilder } from "~/lib/builders"
+import { resolveBuilder } from "~/utils/resolvers"
 
 import type { BuilderOrBuilderFunction } from "~/types/builders"
 import type { BotCommandOrSubcommandBody } from "~/types/commands"

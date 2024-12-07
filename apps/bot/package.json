@@ -1,6 +1,7 @@
 {
   "private": true,
   "name": "bot",
+  "version": "3.28.0",
   "type": "module",
   "scripts": {
     "docker:build": "nixpacks build --name bot-image --current-dir ../../",
@@ -15,6 +16,7 @@
     "@octokit/rest": "^20.1.1",
     "@phasejs/core": "workspace:*",
     "@phasejs/image": "workspace:*",
+    "@plugin/logs": "workspace:*",
     "@plugin/music": "workspace:*",
     "@plugin/voice": "workspace:*",
     "@repo/bridge": "workspace:*",

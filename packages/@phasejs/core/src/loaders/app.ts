@@ -1,7 +1,7 @@
 import { existsSync, readdirSync, statSync } from "node:fs"
 import { basename, extname, join } from "node:path"
 
-import { validExtnames } from "~/lib/utils"
+import { validExtnames } from "~/utils/constants"
 
 export function analyseApp() {
   const srcDirPath = join(process.cwd(), "src")

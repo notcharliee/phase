@@ -7,4 +7,4 @@ export * from "~/types/plugin"
 export * from "~/types/prestart"
 export * from "~/types/stores"
 
-export { version } from "~/lib/utils"
+export { version } from "~/utils/constants"

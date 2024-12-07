@@ -1,7 +1,7 @@
 import { readdirSync, statSync } from "node:fs"
 import { extname, join } from "node:path"
 
-import { validExtnames } from "~/lib/utils"
+import { validExtnames } from "~/utils/constants"
 
 import { BotCronBuilder } from "~/builders/BotCronBuilder"
 

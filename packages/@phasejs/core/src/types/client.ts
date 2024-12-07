@@ -1,55 +1,44 @@
+import type { BotClient } from "~/client/BotClient"
+import type { BotCommand } from "~/client/BotCommand"
+import type { BotCron } from "~/client/BotCron"
+import type { BotEvent } from "~/client/BotEvent"
 import type { BotPlugin } from "~/client/BotPlugin"
-import type { BotCommandFile } from "~/types/commands"
-import type { BotCronFile } from "~/types/crons"
-import type { BotEventFile } from "~/types/events"
+import type { StoreManager } from "~/managers/StoreManager"
+import type { BotCommandBody } from "~/types/commands"
 import type { BotMiddleware } from "~/types/middleware"
 import type { BotPrestart } from "~/types/prestart"
-import type { Stores } from "~/types/stores"
-import type { Client, ClientOptions } from "discord.js"
+import type { BotStore } from "~/types/stores"
+import type { Client } from "discord.js"
+
+import type {} from "discord.js"
+
+declare module "discord.js" {
+  interface Client {
+    phase: BotClient
+    stores: StoreManager
+  }
+}
 
 export type DjsClient<T extends boolean = boolean> = Client<T>
 
-export interface PhaseClientParams {
-  /**
-   * Whether or not to run the bot in development mode.
-   *
-   * @remarks This will override the `NODE_ENV` environment variable.
-   *
-   * @deprecated
-   */
-  dev?: boolean
+export interface BotClientEvents {
+  ready: BotClient<true>
 
-  /**
-   * The files to pass to the bot handlers.
-   *
-   * @remarks This is used for production builds to avoid loading the command files at runtime.
-   *
-   * @deprecated
-   */
-  files?: {
-    commands?: BotCommandFile[]
-    crons?: BotCronFile[]
-    events?: BotEventFile[]
-    middleware?: BotMiddleware
-    prestart?: BotPrestart
-  }
+  init: BotClient<false>
+  initCommand: BotCommand
+  initCron: BotCron
+  initEvent: BotEvent
+  initMiddleware: BotMiddleware
+  initPlugin: BotPlugin
+  initStore: BotStore
 
-  /**
-   * The discord.js client options.
-   */
-  config: ClientOptions
+  liveCommandCreate: BotCommandBody
+  liveCommandDelete: BotCommandBody
+  liveCommandUpdate: BotCommandBody
 
-  /**
-   * The plugins to load.
-   *
-   * @remarks Plugins are loaded in the order they are specified.
-   */
-  plugins?: BotPlugin[]
-
-  /**
-   * The stores to create.
-   *
-   * @remarks Stores are created in the order they are specified.
-   */
-  stores?: Stores
+  commandRun: BotCommand
+  cronRun: BotCron
+  eventRun: BotEvent
+  prestartRun: BotPrestart
+  middlewareRun: BotMiddleware
 }

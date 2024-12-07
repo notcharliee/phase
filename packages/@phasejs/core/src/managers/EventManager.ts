@@ -1,14 +1,16 @@
-import { BaseManager, Collection } from "discord.js"
+import { Collection } from "discord.js"
 
+import { BaseManager } from "~/managers/BaseManager"
+
+import type { BotClient } from "~/client/BotClient"
 import type { BotEvent } from "~/client/BotEvent"
-import type { DjsClient } from "~/types/client"
 import type { BotEventName } from "~/types/events"
 
 export class EventManager extends BaseManager {
   protected _events: Collection<BotEventName, BotEvent[]>
 
-  constructor(client: DjsClient) {
-    super(client)
+  constructor(phase: BotClient) {
+    super(phase)
     this._events = new Collection()
   }
 
@@ -20,6 +22,8 @@ export class EventManager extends BaseManager {
 
     eventArray.push(event)
     this._events.set(event.name, eventArray)
+
+    void this.phase.emitter.emit("initEvent", event)
 
     event.init()
 

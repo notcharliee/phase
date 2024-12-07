@@ -1,19 +1,22 @@
-import { BaseManager, Collection } from "discord.js"
+import { Collection } from "discord.js"
 
+import { BaseManager } from "~/managers/BaseManager"
+
+import type { BotClient } from "~/client/BotClient"
 import type { BotCron } from "~/client/BotCron"
-import type { DjsClient } from "~/types/client"
 import type { BotCronPattern } from "~/types/crons"
 
 export class CronManager extends BaseManager {
   protected _crons: Collection<BotCronPattern, BotCron[]>
 
-  constructor(client: DjsClient) {
-    super(client)
+  constructor(phase: BotClient) {
+    super(phase)
+
     this._crons = new Collection()
 
     // if the client is not ready, wait for it to be ready before starting crons
-    if (!this.client.isReady()) {
-      this.client.once("ready", () => {
+    if (!this.phase.client.isReady()) {
+      void this.phase.emitter.once("ready").then(() => {
         this._crons.forEach((cronArray) => {
           cronArray.forEach((cron) => cron.init())
         })
@@ -30,10 +33,10 @@ export class CronManager extends BaseManager {
     cronArray.push(cron)
     this._crons.set(cron.pattern, cronArray)
 
-    // if the client is already ready, start the cron immediately
-    if (this.client.isReady()) cron.init()
+    void this.phase.emitter.emit("initCron", cron)
 
-    return this
+    // if the client is already ready, start the cron immediately
+    if (this.phase.isReady()) cron.init()
   }
 
   /**
