@@ -9,7 +9,7 @@ node_modules
 # build
 .turbo
 .nixpacks
-.tsc
+.phase
 .next
 dist
 

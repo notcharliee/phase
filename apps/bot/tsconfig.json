@@ -1,8 +1,9 @@
 {
   "extends": "../../node_modules/@repo/config/src/typescript/base.json",
-  "include": ["src/**/*", "eslint.config.js"],
+  "include": ["src/**/*", "scripts/**/*", "eslint.config.js"],
+  "exclude": [".phase"],
   "compilerOptions": {
-    "outDir": ".tsc",
+    "outDir": ".phase",
     "incremental": true,
     "baseUrl": ".",
     "paths": {

@@ -11,7 +11,7 @@
     "bot#build": {
       "cache": true,
       "dependsOn": ["@repo/config#build", "^build"],
-      "outputs": [".tsc/**"],
+      "outputs": [".phase/**"],
       "env": [
         "MONGODB_URI",
         "POSTGRES_URI",

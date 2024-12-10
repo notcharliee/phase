@@ -6,9 +6,9 @@
   "scripts": {
     "docker:build": "nixpacks build --name bot-image --current-dir ../../",
     "docker:start": "docker run -it --rm bot-image",
-    "dev": "NODE_ENV=development bun run --watch src/main.ts",
-    "build": "tsc --noEmit",
-    "start": "NODE_ENV=production bun run --smol src/main.ts",
+    "dev": "bun run scripts/dev.sh",
+    "build": "bun run scripts/build.ts",
+    "start": "bun run scripts/start.sh",
     "preview": "bun run build && bun run start",
     "lint": "eslint ."
   },
