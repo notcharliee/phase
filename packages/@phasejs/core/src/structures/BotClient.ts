@@ -19,6 +19,14 @@ import type { BotClientEvents } from "~/types/client"
 import type { BotStores } from "~/types/stores"
 import type { Client as DjsClient } from "discord.js"
 
+interface AppManifest {
+  middleware: string | undefined
+  prestart: string | undefined
+  commands: string[]
+  crons: string[]
+  events: string[]
+}
+
 export class BotClient<TReady extends boolean = boolean> {
   public readonly emitter: Emittery<BotClientEvents>
 
@@ -60,7 +68,7 @@ export class BotClient<TReady extends boolean = boolean> {
 
     void this.emitter.emit("init", this as BotClient<false>)
 
-    const paths = BotClient.analyseApp()
+    const paths = await BotClient.analyseApp()
 
     if (paths.prestart) {
       const prestartFunction = await loadPrestart(paths.prestart)
@@ -100,8 +108,15 @@ export class BotClient<TReady extends boolean = boolean> {
     return this as BotClient<true>
   }
 
-  static analyseApp() {
-    const srcDirPath = join(process.cwd(), "src")
+  static async analyseApp(srcDir?: string): Promise<AppManifest> {
+    const manifestFile = Bun.file("./app-build-manifest.json")
+
+    if (await manifestFile.exists()) {
+      const manifest = (await manifestFile.json()) as AppManifest
+      return manifest
+    }
+
+    const srcDirPath = srcDir ?? join(process.cwd(), "src")
     const appDirPath = join(srcDirPath, "app")
 
     if (!existsSync(srcDirPath)) {
@@ -112,19 +127,12 @@ export class BotClient<TReady extends boolean = boolean> {
       throw new Error("No app directory found.")
     }
 
-    const srcDirContentPaths: {
-      middleware: string | undefined
-      prestart: string | undefined
-    } = {
+    const srcDirContentPaths: Pick<AppManifest, "middleware" | "prestart"> = {
       middleware: undefined,
       prestart: undefined,
     }
 
-    const appDirContentPaths: {
-      commands: string[]
-      crons: string[]
-      events: string[]
-    } = {
+    const appDirContentPaths: Omit<AppManifest, "middleware" | "prestart"> = {
       commands: [],
       crons: [],
       events: [],
