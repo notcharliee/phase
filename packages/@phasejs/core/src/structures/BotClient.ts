@@ -3,11 +3,11 @@ import { basename, extname, join } from "node:path"
 
 import Emittery from "emittery"
 
-import { loadCommandFiles } from "~/loaders/commands"
-import { loadCronFiles } from "~/loaders/crons"
-import { loadEventFiles } from "~/loaders/events"
-import { loadMiddlewareFile } from "~/loaders/middleware"
-import { loadPrestartFile } from "~/loaders/prestart"
+import { loadCommands } from "~/loaders/commands"
+import { loadCrons } from "~/loaders/crons"
+import { loadEvents } from "~/loaders/events"
+import { loadMiddleware } from "~/loaders/middleware"
+import { loadPrestart } from "~/loaders/prestart"
 import { CommandManager } from "~/managers/CommandManager"
 import { CronManager } from "~/managers/CronManager"
 import { EventManager } from "~/managers/EventManager"
@@ -63,29 +63,29 @@ export class BotClient<TReady extends boolean = boolean> {
     const paths = BotClient.analyseApp()
 
     if (paths.prestart) {
-      const prestartFunction = await loadPrestartFile(paths.prestart)
+      const prestartFunction = await loadPrestart(paths.prestart)
       await prestartFunction((this as BotClient<false>).client)
       void this.emitter.emit("prestartRun", prestartFunction)
     }
 
     if (paths.middleware) {
-      const middlewares = await loadMiddlewareFile(paths.middleware)
+      const middlewares = await loadMiddleware(paths.middleware)
       if (middlewares.commands) this.commands.use(middlewares.commands)
       void this.emitter.emit("initMiddleware", middlewares)
     }
 
     await this.stores.init()
 
-    const [commandFiles, cronFiles, eventFiles] = await Promise.all([
-      loadCommandFiles(this.client, paths.commands),
-      loadCronFiles(this.client, paths.crons),
-      loadEventFiles(this.client, paths.events),
+    const [commands, crons, events] = await Promise.all([
+      loadCommands(this.client, paths.commands),
+      loadCrons(this.client, paths.crons),
+      loadEvents(this.client, paths.events),
     ])
 
     await Promise.all([
-      ...commandFiles.map(({ command }) => this.commands.create(command)),
-      ...cronFiles.map(({ cron }) => this.crons.create(cron)),
-      ...eventFiles.map(({ event }) => this.events.create(event)),
+      ...commands.map((command) => this.commands.create(command)),
+      ...crons.map((cron) => this.crons.create(cron)),
+      ...events.map((event) => this.events.create(event)),
     ])
 
     await this.client.login()
@@ -171,7 +171,7 @@ export class BotClient<TReady extends boolean = boolean> {
         }
 
         appDirContentPaths[entry as keyof typeof appDirContentPaths].push(
-          entryPath,
+          ...BotClient.analyseDirectory([], entryPath),
         )
       }
     }
@@ -183,5 +183,24 @@ export class BotClient<TReady extends boolean = boolean> {
       ...srcDirContentPaths,
       ...appDirContentPaths,
     }
+  }
+
+  static analyseDirectory(accPaths: string[], currentDirPath: string) {
+    const entries = readdirSync(currentDirPath)
+
+    for (const entry of entries) {
+      if (entry.startsWith("_")) continue
+
+      const entryPath = join(currentDirPath, entry)
+      const entryStats = statSync(entryPath)
+
+      if (entryStats.isDirectory()) {
+        BotClient.analyseDirectory(accPaths, entryPath)
+      } else if (validExtnames.includes(extname(entry))) {
+        accPaths.push(entryPath)
+      }
+    }
+
+    return accPaths
   }
 }

@@ -1,6 +1,6 @@
 import type { BotPrestart } from "~/types/prestart"
 
-export async function loadPrestartFile(path: string): Promise<BotPrestart> {
+export async function loadPrestart(path: string): Promise<BotPrestart> {
   try {
     const prestartExports = (await import(path)) as Record<string, unknown>
     return prestartExports.default as BotPrestart
