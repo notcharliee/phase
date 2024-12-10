@@ -3,15 +3,17 @@ import { BaseKVStore } from "@phasejs/core/stores"
 import { db } from "~/lib/db"
 
 import type { Guild, mongoose } from "~/lib/db"
-import type { Snowflake } from "discord.js"
+import type { Client, Snowflake } from "discord.js"
 
 type WithId<T> = T & { _id: mongoose.Types.ObjectId }
 
 export class GuildStore extends BaseKVStore<Snowflake, WithId<Guild>> {
-  public async init() {
+  public async init(client: Client) {
     if (this._init) return this
 
-    const guildDocs = await db.guilds.find({})
+    const guildIds = (await client.guilds.fetch()).map((guild) => guild.id)
+
+    const guildDocs = await db.guilds.find({ id: { $in: guildIds } })
     const guildObjs = guildDocs.map((doc) => doc.toObject())
 
     for (const guild of guildObjs) {
