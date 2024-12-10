@@ -1,5 +1,6 @@
-import fs from "node:fs"
-import path from "node:path"
+import { $, build, write } from "bun"
+import { existsSync, rmSync, statSync } from "node:fs"
+import { join } from "node:path"
 
 import { BotClient } from "@phasejs/core/client"
 
@@ -24,17 +25,19 @@ async function main() {
   console.log(`${chalk.bold.greenBright(`✓`)} Build complete!`)
 }
 
-void main()
+await main()
 
 // helpers //
 
 function remove(path: string) {
-  if (!fs.existsSync(path)) return
-  const stats = fs.statSync(path)
-  fs.rmSync(path, { recursive: stats.isDirectory() })
+  if (!existsSync(path)) return
+  const stats = statSync(path)
+  rmSync(path, { recursive: stats.isDirectory() })
 }
 
 function cleanup() {
+  if (!existsSync(".phase")) return
+
   remove(".phase/src")
   remove(".phase/assets")
   remove(".phase/chunks")
@@ -43,7 +46,7 @@ function cleanup() {
 
 async function cmdExists(cmd: string) {
   try {
-    await Bun.$`${cmd} -v`.quiet()
+    await $`${cmd} -v`.quiet()
     return true
   } catch {
     return false
@@ -55,19 +58,19 @@ async function cmdExists(cmd: string) {
 async function typecheck() {
   if (!(await cmdExists("tsc"))) return
   console.log(chalk.grey(`- Validating types ...`))
-  await Bun.$`tsc --noEmit`
+  await $`tsc --noEmit`
 }
 
 async function lint() {
   if (!(await cmdExists("eslint"))) return
   console.log(chalk.grey(`- Linting code ...`))
-  await Bun.$`eslint .`
+  await $`eslint .`
 }
 
 async function bundle() {
   console.log(chalk.grey(`- Generating bundle ...`))
 
-  const outDir = path.join(process.cwd(), ".phase")
+  const outDir = join(process.cwd(), ".phase")
 
   const entrypoints = Object.values({ ...(await BotClient.analyseApp()) })
     .filter(Boolean)
@@ -75,7 +78,7 @@ async function bundle() {
 
   const externals = Object.keys(dependencies)
 
-  const output = await Bun.build({
+  const output = await build({
     target: "bun",
     outdir: outDir,
     entrypoints: ["src/main.ts", ...entrypoints],
@@ -94,10 +97,10 @@ async function bundle() {
     throw new AggregateError(output.logs, "Build failed")
   }
 
-  const buildDir = path.join(outDir, "src")
+  const buildDir = join(outDir, "src")
   const buildPaths = await BotClient.analyseApp(buildDir)
 
-  await Bun.write(
+  await write(
     ".phase/app-build-manifest.json",
     JSON.stringify(buildPaths, null, 2),
   )
