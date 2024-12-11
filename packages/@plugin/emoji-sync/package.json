@@ -1,0 +1,26 @@
+{
+  "private": true,
+  "name": "@plugin/emoji-sync",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "lint": "eslint ."
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@phasejs/core": "workspace:*",
+    "sharp": "^0.33.5",
+    "sharp-phash": "^2.2.0"
+  },
+  "peerDependencies": {
+    "discord.js": "^14.16.x"
+  }
+}
