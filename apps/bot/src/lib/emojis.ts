@@ -61,25 +61,68 @@ export const emojiSync = new EmojiSync(async () => {
 export const emojiSyncPlugin = emojiSync.plugin.bind(emojiSync)
 
 export const Emojis = {
+  // unchanging values //
+
   ZeroWidthJoiner: "‍",
   GiveawayReaction: "🎉",
-  Connect4Empty: emojiSync.emojis.connect4Empty,
-  Connect4Player1: emojiSync.emojis.connect4Player1,
-  Connect4Player2: emojiSync.emojis.connect4Player2,
-  LockClosed: emojiSync.emojis.lockClosed,
-  LockOpen: emojiSync.emojis.lockOpen,
-  Delete: emojiSync.emojis.delete,
-  Edit: emojiSync.emojis.edit,
-  Minus: emojiSync.emojis.minus,
-  Muted: emojiSync.emojis.muted,
-  NextTrack: emojiSync.emojis.nextTrack,
-  Pause: emojiSync.emojis.pause,
-  Play: emojiSync.emojis.play,
-  Plus: emojiSync.emojis.plus,
-  PreviousTrack: emojiSync.emojis.previousTrack,
-  Repeat: emojiSync.emojis.repeat,
-  Shuffle: emojiSync.emojis.shuffle,
-  Stop: emojiSync.emojis.stop,
-  Transfer: emojiSync.emojis.transfer,
-  Users: emojiSync.emojis.users,
+
+  // getters for emoji sync //
+
+  get Connect4Empty() {
+    return emojiSync.emojis.connect4Empty
+  },
+  get Connect4Player1() {
+    return emojiSync.emojis.connect4Player1
+  },
+  get Connect4Player2() {
+    return emojiSync.emojis.connect4Player2
+  },
+  get LockClosed() {
+    return emojiSync.emojis.lockClosed
+  },
+  get LockOpen() {
+    return emojiSync.emojis.lockOpen
+  },
+  get Delete() {
+    return emojiSync.emojis.delete
+  },
+  get Edit() {
+    return emojiSync.emojis.edit
+  },
+  get Minus() {
+    return emojiSync.emojis.minus
+  },
+  get Muted() {
+    return emojiSync.emojis.muted
+  },
+  get NextTrack() {
+    return emojiSync.emojis.nextTrack
+  },
+  get Pause() {
+    return emojiSync.emojis.pause
+  },
+  get Play() {
+    return emojiSync.emojis.play
+  },
+  get Plus() {
+    return emojiSync.emojis.plus
+  },
+  get PreviousTrack() {
+    return emojiSync.emojis.previousTrack
+  },
+  get Repeat() {
+    return emojiSync.emojis.repeat
+  },
+  get Shuffle() {
+    return emojiSync.emojis.shuffle
+  },
+  get Stop() {
+    return emojiSync.emojis.stop
+  },
+  get Transfer() {
+    return emojiSync.emojis.transfer
+  },
+  get Users() {
+    return emojiSync.emojis.users
+  },
 }
