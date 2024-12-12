@@ -1,11 +1,9 @@
-import { EmbedBuilder } from "discord.js"
 import { BotEventBuilder } from "@phasejs/core/builders"
-
-import dedent from "dedent"
 
 import { alertWebhook } from "~/lib/clients/webhooks/alert"
 import { db } from "~/lib/db"
-import { PhaseColour } from "~/lib/enums"
+
+import { MessageBuilder } from "~/structures/builders"
 
 export default new BotEventBuilder()
   .setName("guildDelete")
@@ -15,23 +13,25 @@ export default new BotEventBuilder()
     // means the guild is blacklisted so was auto removed (see ./join.ts)
     if (!existsInDatabase) return
 
-    alertWebhook
-      .send({
-        embeds: [
-          new EmbedBuilder()
-            .setColor(PhaseColour.Primary)
+    try {
+      await alertWebhook.send(
+        new MessageBuilder().setEmbeds((embed) => {
+          return embed
+            .setColor("Primary")
             .setTitle("Bot was kicked")
             .setThumbnail(guild.iconURL())
-            .setTimestamp()
             .setDescription(
-              dedent`
-              **Name:** \`${guild.name}\`
-              **ID:** \`${guild.id}\`
-            `,
-            ),
-        ],
-      })
-      .catch(console.error)
+              `
+                **Name:** \`${guild.name}\`
+                **ID:** \`${guild.id}\`
+              `,
+            )
+            .setTimestamp()
+        }),
+      )
+    } catch (error) {
+      console.error(error)
+    }
 
     Promise.all([
       db.guilds.deleteOne({ id: guild.id }),
