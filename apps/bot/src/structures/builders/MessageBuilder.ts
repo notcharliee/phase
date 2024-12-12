@@ -35,7 +35,7 @@ export class MessageBuilder {
     return this
   }
 
-  setContent(content: string) {
+  setContent(content: string | undefined) {
     Reflect.set(this, "content", content)
     return this
   }
