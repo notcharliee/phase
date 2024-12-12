@@ -1,22 +1,19 @@
+import { BotEventBuilder } from "@phasejs/core/builders"
 import {
   ActionRowBuilder,
-  ButtonBuilder,
   ButtonStyle,
   ChannelType,
-  EmbedBuilder,
   ModalBuilder,
   PermissionFlagsBits,
   TextInputBuilder,
   TextInputStyle,
   ThreadAutoArchiveDuration,
 } from "discord.js"
-import { BotEventBuilder } from "@phasejs/core/builders"
 
 import { ModuleId } from "@repo/utils/modules"
 
-import { PhaseColour } from "~/lib/enums"
-
 import { BotErrorMessage } from "~/structures/BotError"
+import { MessageBuilder } from "~/structures/builders"
 import { getFormFile, getFormFileMessage, updateFormFile } from "./_form"
 import { handleInput, validateValue } from "./_inputs"
 import { createQuestionInputModal, createQuestionMessage } from "./_questions"
@@ -205,30 +202,33 @@ export default new BotEventBuilder()
 
             await threadChannel.send(createQuestionMessage(formFile, 0))
 
-            return await interaction.editReply({
-              embeds: [
-                new EmbedBuilder()
-                  .setColor(PhaseColour.Primary)
-                  .setTitle("Form created")
-                  .setDescription(
-                    "Your form has been created and is ready to be filled out.",
-                  ),
-              ],
-              components: [
-                new ActionRowBuilder<ButtonBuilder>().addComponents(
-                  new ButtonBuilder()
-                    .setURL(threadChannel.url)
-                    .setLabel("Go to form")
-                    .setStyle(ButtonStyle.Link),
-                  new ButtonBuilder()
-                    .setCustomId(
-                      formCustomIds.delete(form.id, threadChannel.id),
+            return await interaction.editReply(
+              new MessageBuilder()
+                .setEmbeds((embed) => {
+                  return embed
+                    .setColor("Primary")
+                    .setTitle("Form created")
+                    .setDescription(
+                      "Your form has been created and is ready to be filled out.",
                     )
-                    .setLabel("Delete form")
-                    .setStyle(ButtonStyle.Danger),
-                ),
-              ],
-            })
+                })
+                .setComponents((actionrow) => {
+                  return actionrow
+                    .addButton((button) => {
+                      return button
+                        .setURL(threadChannel.url)
+                        .setLabel("Go to form")
+                        .setStyle(ButtonStyle.Link)
+                    })
+                    .addButton((button) => {
+                      const id = formCustomIds.delete(form.id, threadChannel.id)
+                      return button
+                        .setCustomId(id)
+                        .setLabel("Delete form")
+                        .setStyle(ButtonStyle.Danger)
+                    })
+                }),
+            )
           }
           case FormAction.DeleteForm: {
             await formThread!.delete()

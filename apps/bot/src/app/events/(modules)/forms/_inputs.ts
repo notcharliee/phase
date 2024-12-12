@@ -11,13 +11,8 @@ import { formCustomIds, formErrors } from "./_utils"
 
 import type { FormFile } from "./_form"
 import type { FormQuestion } from "./_questions"
-import type {
-  BaseGuildTextChannel,
-  ButtonInteraction,
-  Message,
-  ModalMessageModalSubmitInteraction,
-  StringSelectMenuInteraction,
-} from "discord.js"
+import type { FormInputInteraction } from "./_utils"
+import type { Message } from "discord.js"
 
 /**
  * Validates a string value against the question schema.
@@ -79,10 +74,7 @@ export function validateValue(question: FormQuestion, value: string) {
 export async function handleInput(
   initialFormMessage: Message,
   formFile: FormFile,
-  interaction:
-    | ButtonInteraction
-    | ModalMessageModalSubmitInteraction
-    | StringSelectMenuInteraction,
+  interaction: FormInputInteraction,
   value: string | number | boolean | null,
 ) {
   await interaction.deferUpdate()
@@ -110,14 +102,15 @@ export async function handleInput(
       await interaction.update(nextQuestionMessage)
     }
   } else {
-    const submissionsChannel = (interaction.client.channels.cache.get(
-      formFile.metadata.submissionChannelId,
-    ) ??
-      (await interaction.client.channels
-        .fetch(formFile.metadata.submissionChannelId)
-        .catch(() => null))) as BaseGuildTextChannel | null
+    const guild = interaction.guild!
 
-    if (!submissionsChannel) {
+    const submissionsChannel =
+      guild.channels.cache.get(formFile.metadata.submissionChannelId) ??
+      (await guild.channels
+        .fetch(formFile.metadata.submissionChannelId)
+        .catch(() => null))
+
+    if (!submissionsChannel?.isSendable()) {
       return await interaction.message.edit({
         ...formErrors.submissionsChannelNotFound(true),
         components: [],

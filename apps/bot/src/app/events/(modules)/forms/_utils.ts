@@ -1,5 +1,23 @@
 import { BotErrorMessage } from "~/structures/BotError"
 
+import type {
+  ButtonInteraction,
+  ModalMessageModalSubmitInteraction,
+  StringSelectMenuInteraction,
+  ThreadChannel,
+} from "discord.js"
+
+export type FormThread = ThreadChannel
+
+export type FormActionInteraction =
+  | ButtonInteraction
+  | ModalMessageModalSubmitInteraction
+
+export type FormInputInteraction =
+  | ButtonInteraction
+  | ModalMessageModalSubmitInteraction
+  | StringSelectMenuInteraction
+
 export enum FormAction {
   CreateForm = "start", // TODO: rename to create
   DeleteForm = "delete",

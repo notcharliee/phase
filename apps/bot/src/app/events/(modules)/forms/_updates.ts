@@ -1,15 +1,12 @@
-import { ActionRowBuilder, EmbedBuilder } from "discord.js"
+import { bold, userMention } from "discord.js"
 
-import { PhaseColour } from "~/lib/enums"
+import {
+  ActionRowBuilder,
+  EmbedBuilder,
+  MessageBuilder,
+} from "~/structures/builders"
 
-import type { FormAction } from "./_utils"
-import type {
-  ButtonBuilder,
-  MessageComponentInteraction,
-  MessageCreateOptions,
-  ModalMessageModalSubmitInteraction,
-  ThreadChannel,
-} from "discord.js"
+import type { FormAction, FormActionInteraction, FormThread } from "./_utils"
 
 /**
  * Handles the status update for a form submission.
@@ -18,88 +15,88 @@ import type {
  * @param formThread The form thread that the submission is in.
  * @param interaction The interaction that triggered the action.
  * @param reason The reason for the action.
- * @returns
  */
 export async function handleStatusUpdate(
   formAction: FormAction,
-  formThread: ThreadChannel,
-  interaction: MessageComponentInteraction | ModalMessageModalSubmitInteraction,
+  formThread: FormThread,
+  interaction: FormActionInteraction,
   reason?: string,
 ) {
-  const newStatus = formAction.split("_")[0] + "ed"
+  const embed = interaction.message.embeds[0]!
+  const components = interaction.message.components
 
-  const userId = interaction.message.embeds[0]?.footer?.text.split(": ")[1]
+  const newStatus =
+    `${formAction.split("_")[0] as "accept" | "reject"}ed` as const
 
-  const submissionStatusUpdateMessage = {
-    content: userId ? `<@${userId}>` : undefined,
-    embeds: [
-      new EmbedBuilder()
-        .setColor(PhaseColour.Primary)
-        .setTitle("Submission Updated")
-        .setDescription(
-          `Your form submission has been **${newStatus}** by <@${interaction.user.id}> ${reason ? `for the following reason:\n\n*${reason}*` : ""}`,
-        )
-        .setTimestamp(),
-    ],
-  } satisfies MessageCreateOptions
+  const submitterUserId = embed.footer?.text.split(": ")[1]
+  const moderatorUserId = interaction.user.id
 
   try {
-    if (formThread.lastMessage) {
-      await formThread.lastMessage.reply(submissionStatusUpdateMessage)
-    } else {
-      await formThread.send(submissionStatusUpdateMessage)
-    }
+    const statusUpdateMessage = new MessageBuilder()
+      .setContent(submitterUserId ? userMention(submitterUserId) : undefined)
+      .setEmbeds((embed) => {
+        return embed
+          .setColor("Primary")
+          .setTitle("Submission Updated")
+          .setDescription(
+            `Your form submission has been ${bold(newStatus)} by ${userMention(
+              moderatorUserId,
+            )} ${reason ? `with the following reason:\n\n*${reason}*` : ""}`,
+          )
+          .setTimestamp()
+      })
+
+    if (!formThread.lastMessage) await formThread.send(statusUpdateMessage)
+    else await formThread.lastMessage.reply(statusUpdateMessage)
   } catch (error) {
-    console.error(
-      `Failed to send form submission status update to form thread ${formThread.id} of parent channel ${formThread.parentId} in guild ${interaction.guildId}:`,
-    )
+    const message = `Failed to send form submission status update to form thread ${formThread.id} from parent channel ${formThread.parentId} in guild ${interaction.guildId}:`
+    console.error(message)
     console.error(error)
   }
 
-  // the bot will always have the permissions to edit this, so we don't need to check
-  await interaction.message.edit({
-    embeds: [
-      new EmbedBuilder(interaction.message.embeds[0]!.toJSON()).setDescription(
-        interaction.message.embeds[0]!.description!.replace(
-          "**Status:** `pending`",
-          `**Status:** \`${newStatus}\``,
+  try {
+    const updatedSubmissionMessage = new MessageBuilder()
+      .setEmbeds(
+        new EmbedBuilder(embed.toJSON()).setDescription(
+          embed.description!.replace(
+            `**Status:** \`pending\``,
+            `**Status:** \`${newStatus}\``,
+          ),
         ),
-      ),
-    ],
-    components: [
-      ...interaction.message.components.map((actionRow) => {
-        const disabledButtons = actionRow.components.map((button) => ({
-          ...button.toJSON(),
-          disabled: true,
-        }))
-
-        return new ActionRowBuilder<ButtonBuilder>({
-          components: disabledButtons,
-        })
-      }),
-    ],
-  })
-
-  await interaction.message
-    .reply({
-      embeds: [
-        new EmbedBuilder()
-          .setColor(PhaseColour.Primary)
-          .setTitle("Submission Updated")
-          .setDescription(
-            `Submission was **${newStatus}** by <@${interaction.user.id}> ${reason ? `for the following reason:\n\n*${reason}*` : ""}`,
-          )
-          .setTimestamp(),
-      ],
-    })
-    .catch((error) => {
-      console.error(
-        `Failed to send form submission status update to submissions channel ${interaction.channelId} in guild ${interaction.guildId}:`,
-        error,
       )
+      .setComponents(
+        components.map((actionrow) => {
+          return new ActionRowBuilder({
+            components: actionrow.components.map((button) => ({
+              ...button.toJSON(),
+              disabled: true,
+            })),
+          })
+        }),
+      )
+
+    await interaction.message.edit(updatedSubmissionMessage)
+  } catch (error) {
+    console.error(`Failed to edit form submission message:`)
+    console.error(error)
+  }
+
+  try {
+    const statusUpdateMessage = new MessageBuilder().setEmbeds((embed) => {
+      return embed
+        .setColor("Primary")
+        .setTitle("Submission Updated")
+        .setDescription(
+          `Submission was ${bold(newStatus)} by ${userMention(
+            moderatorUserId,
+          )} ${reason ? `with the following reason:\n\n*${reason}*` : ""}`,
+        )
+        .setTimestamp()
     })
 
-  return await interaction.editReply({
-    content: "Submission status updated.",
-  })
+    return await interaction.editReply(statusUpdateMessage)
+  } catch (error) {
+    console.error(`Failed to send form submission status update:`)
+    console.error(error)
+  }
 }
