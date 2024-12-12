@@ -1,10 +1,10 @@
-import { EmbedBuilder } from "discord.js"
 import { BotEventBuilder } from "@phasejs/core/builders"
 
 import { ModuleId } from "@repo/utils/modules"
 
 import { db } from "~/lib/db"
-import { PhaseColour } from "~/lib/enums"
+
+import { MessageBuilder } from "~/structures/builders"
 
 export default new BotEventBuilder()
   .setName("messageCreate")
@@ -25,19 +25,18 @@ export default new BotEventBuilder()
       mention: moduleConfig.mention,
     })
 
-    await message
-      .reply({
-        embeds: [
-          new EmbedBuilder()
-            .setColor(PhaseColour.Primary)
+    try {
+      await message.reply(
+        new MessageBuilder().setEmbeds((embed) => {
+          return embed
+            .setColor("Primary")
             .setTitle("Bump Reminder")
-            .setDescription(moduleConfig.initialMessage),
-        ],
-      })
-      .catch((error) => {
-        console.error(
-          `Failed to send a bump reminder in channel ${message.channelId} in guild ${message.guildId}:`,
-          error,
-        )
-      })
+            .setDescription(moduleConfig.initialMessage)
+        }),
+      )
+    } catch (error) {
+      const errMessage = `Failed to send a bump reminder in channel ${message.channelId} in guild ${message.guildId}:`
+      console.error(errMessage)
+      console.error(error)
+    }
   })
