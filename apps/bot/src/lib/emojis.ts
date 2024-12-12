@@ -1,51 +1,85 @@
-import { env } from "~/lib/env"
+import { EmojiSync } from "@plugin/emoji-sync"
 
-export const ApplicationEmojis = {
-  Connect4Empty: "<:connect4_empty:1287414239098835025>",
-  Connect4Player1: "<:connect4_player1:1287414378412642304>",
-  Connect4Player2: "<:connect4_player2:1287539813058084914>",
-  LockClosed: `<:lock_closed:1293180513816809496>`,
-  LockOpen: `<:lock_open:1293180537317494815>`,
-  Delete: `<:delete:1293180561598447656>`,
-  PencilEdit: `<:pencil_edit:1293297875601588405>`,
-  MicrophoneOff: `<:microphone_off:1293297932774150214>`,
-  Users: `<:users:1293297987375595590>`,
-  Transfer: `<:transfer:1293549888679710771>`,
-  Plus: "<:plus:1297802422579630231>",
-  Minus: "<:minus:1297802433019252786>",
-  Play: "<:play:1297802467551215667>",
-  Pause: "<:pause:1297802457392480297>",
-  Stop: "<:stop:1297802542951956562>",
-  Shuffle: "<:shuffle:1297802481484697623>",
-  Repeat: "<:repeat:1297802492750463036>",
-  NextTrack: "<:next_track:1297802528142004235>",
-  PreviousTrack: "<:previous_track:1297802516146421854>",
-}
+import {
+  connect4EmptyFile,
+  connect4Player1File,
+  connect4Player2File,
+  deleteFile,
+  editFile,
+  lockClosedFile,
+  lockOpenFile,
+  minusFile,
+  mutedFile,
+  nextTrackFile,
+  pauseFile,
+  playFile,
+  plusFile,
+  previousTrackFile,
+  repeatFile,
+  shuffleFile,
+  stopFile,
+  transferFile,
+  usersFile,
+} from "~/assets/emojis"
 
-export const FallbackEmojis = {
-  Connect4Empty: "⬛",
-  Connect4Player1: "⚪",
-  Connect4Player2: "🟣",
-  LockClosed: "🔒",
-  LockOpen: "🔓",
-  Delete: "🗑️",
-  PencilEdit: "📝",
-  MicrophoneOff: "🎙️",
-  Users: "👥",
-  Transfer: "➡️",
-  Plus: "➕",
-  Minus: "➖",
-  Play: "▶️",
-  Pause: "⏸️",
-  Stop: "⏹️",
-  Shuffle: "🔀",
-  Repeat: "🔁",
-  NextTrack: "⏭️",
-  PreviousTrack: "⏮️",
-} satisfies Record<keyof typeof ApplicationEmojis, string>
+import type { BotEmoji, BotEmojiType } from "@plugin/emoji-sync"
+import type { BunFile } from "bun"
+
+export const emojiSync = new EmojiSync(async () => {
+  const defineEmoji = async <TName extends string>(
+    name: TName,
+    file: BunFile,
+  ) => ({
+    name,
+    type: file.type.replace("image/", "") as BotEmojiType,
+    data: Buffer.from(await file.arrayBuffer()),
+  })
+
+  return {
+    connect4Empty: await defineEmoji("connect4_empty", connect4EmptyFile),
+    connect4Player1: await defineEmoji("connect4_player1", connect4Player1File),
+    connect4Player2: await defineEmoji("connect4_player2", connect4Player2File),
+    lockClosed: await defineEmoji("lock_closed", lockClosedFile),
+    lockOpen: await defineEmoji("lock_open", lockOpenFile),
+    delete: await defineEmoji("delete", deleteFile),
+    edit: await defineEmoji("edit", editFile),
+    minus: await defineEmoji("minus", minusFile),
+    muted: await defineEmoji("muted", mutedFile),
+    nextTrack: await defineEmoji("next_track", nextTrackFile),
+    pause: await defineEmoji("pause", pauseFile),
+    play: await defineEmoji("play", playFile),
+    plus: await defineEmoji("plus", plusFile),
+    previousTrack: await defineEmoji("previous_track", previousTrackFile),
+    repeat: await defineEmoji("repeat", repeatFile),
+    shuffle: await defineEmoji("shuffle", shuffleFile),
+    stop: await defineEmoji("stop", stopFile),
+    transfer: await defineEmoji("transfer", transferFile),
+    users: await defineEmoji("users", usersFile),
+  } as const satisfies Record<string, BotEmoji>
+})
+
+export const emojiSyncPlugin = emojiSync.plugin.bind(emojiSync)
 
 export const Emojis = {
   ZeroWidthJoiner: "‍",
   GiveawayReaction: "🎉",
-  ...(env.NODE_ENV === "production" ? ApplicationEmojis : FallbackEmojis),
+  Connect4Empty: emojiSync.emojis.connect4Empty,
+  Connect4Player1: emojiSync.emojis.connect4Player1,
+  Connect4Player2: emojiSync.emojis.connect4Player2,
+  LockClosed: emojiSync.emojis.lockClosed,
+  LockOpen: emojiSync.emojis.lockOpen,
+  Delete: emojiSync.emojis.delete,
+  Edit: emojiSync.emojis.edit,
+  Minus: emojiSync.emojis.minus,
+  Muted: emojiSync.emojis.muted,
+  NextTrack: emojiSync.emojis.nextTrack,
+  Pause: emojiSync.emojis.pause,
+  Play: emojiSync.emojis.play,
+  Plus: emojiSync.emojis.plus,
+  PreviousTrack: emojiSync.emojis.previousTrack,
+  Repeat: emojiSync.emojis.repeat,
+  Shuffle: emojiSync.emojis.shuffle,
+  Stop: emojiSync.emojis.stop,
+  Transfer: emojiSync.emojis.transfer,
+  Users: emojiSync.emojis.users,
 }

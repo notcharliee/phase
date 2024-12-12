@@ -16,6 +16,7 @@
     "@octokit/rest": "^20.1.1",
     "@phasejs/core": "workspace:*",
     "@phasejs/image": "workspace:*",
+    "@plugin/emoji-sync": "workspace:*",
     "@plugin/logs": "workspace:*",
     "@plugin/music": "workspace:*",
     "@plugin/voice": "workspace:*",

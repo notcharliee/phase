@@ -53,10 +53,10 @@ export default new BotEventBuilder()
                 `
                   Use the buttons below to configure your voice channel.
   
-                  ${Emojis.PencilEdit} - Edit the channel name.
+                  ${Emojis.Edit} - Edit the channel name.
                   ${Emojis.Users} - Disconnect a member.
                   ${Emojis.LockClosed} - Toggle the channel lock.
-                  ${Emojis.MicrophoneOff} - Toggle the channel mute.
+                  ${Emojis.Muted} - Toggle the channel mute.
                   ${Emojis.Transfer} - Transfer channel ownership.
                   ${Emojis.Delete} - Delete the channel.
                 `,
@@ -70,7 +70,7 @@ export default new BotEventBuilder()
                   return button
                     .setStyle(ButtonStyle.Secondary)
                     .setCustomId("jtc.panel.name")
-                    .setEmoji(Emojis.PencilEdit)
+                    .setEmoji(Emojis.Edit)
                 })
                 .addButton((button) => {
                   return button
@@ -91,7 +91,7 @@ export default new BotEventBuilder()
                   return button
                     .setStyle(ButtonStyle.Secondary)
                     .setCustomId("jtc.panel.mute")
-                    .setEmoji(Emojis.MicrophoneOff)
+                    .setEmoji(Emojis.Muted)
                 })
                 .addButton((button) => {
                   return button

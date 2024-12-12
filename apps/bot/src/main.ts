@@ -7,7 +7,7 @@ import { voicePlugin } from "@plugin/voice"
 import { bridgeServerPlugin } from "@repo/bridge/server"
 
 import { botConfig } from "~/lib/config"
-import { Emojis } from "~/lib/emojis"
+import { Emojis, emojiSyncPlugin } from "~/lib/emojis"
 import { env } from "~/lib/env"
 
 import { ConfigStore } from "~/structures/stores/ConfigStore"
@@ -62,6 +62,7 @@ const phaseClient = new BotClient(djsClient, {
     logsPlugin(botConfig),
     voicePlugin(),
     musicPlugin(),
+    emojiSyncPlugin(),
     bridgeServerPlugin(),
   ],
   stores: {
