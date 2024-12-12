@@ -1,10 +1,10 @@
+import { BotEventBuilder } from "@phasejs/core/builders"
 import {
   AuditLogEvent,
   AutoModerationActionType,
   AutoModerationRuleEventType,
   AutoModerationRuleTriggerType,
   ChannelType,
-  EmbedBuilder,
   GuildDefaultMessageNotifications,
   GuildExplicitContentFilter,
   GuildMFALevel,
@@ -17,19 +17,19 @@ import {
   StickerFormatType,
   WebhookType,
 } from "discord.js"
-import { BotEventBuilder } from "@phasejs/core/builders"
 
 import { ModuleId } from "@repo/utils/modules"
 import { capitalCase } from "change-case"
 import dedent from "dedent"
 import ms from "ms"
 
-import { PhaseColour } from "~/lib/enums"
 import {
   dateToTimestamp,
   truncateString,
   wrapText,
 } from "~/lib/utils/formatting"
+
+import { EmbedBuilder } from "~/structures/builders"
 
 import type { GuildModules } from "~/lib/db"
 import type {
@@ -294,7 +294,7 @@ export default new BotEventBuilder()
       : null
 
     const embed = new EmbedBuilder()
-      .setColor(PhaseColour.Primary)
+      .setColor("Primary")
       .setTitle(AuditLogTitles[action])
       .setTimestamp()
 
