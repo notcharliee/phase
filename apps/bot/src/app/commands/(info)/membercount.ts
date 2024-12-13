@@ -1,9 +1,6 @@
-import { EmbedBuilder } from "discord.js"
 import { BotCommandBuilder } from "@phasejs/core/builders"
 
-import dedent from "dedent"
-
-import { PhaseColour } from "~/lib/enums"
+import { MessageBuilder } from "~/structures/builders"
 
 export default new BotCommandBuilder()
   .setName("membercount")
@@ -18,18 +15,18 @@ export default new BotCommandBuilder()
 
     const percentage = (val: number) => `${((val / total) * 100).toFixed(1)}%`
 
-    void interaction.reply({
-      embeds: [
-        new EmbedBuilder()
+    return await interaction.reply(
+      new MessageBuilder().setEmbeds((embed) => {
+        return embed
           .setTitle("Member Count")
+          .setColor("Primary")
           .setDescription(
-            dedent`
+            `
               **Total:** ${total}
               **Online:** ${online} (${percentage(online)})
               **Offline:** ${offline} (${percentage(offline)})
             `,
           )
-          .setColor(PhaseColour.Primary),
-      ],
-    })
+      }),
+    )
   })
