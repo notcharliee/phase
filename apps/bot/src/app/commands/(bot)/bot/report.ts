@@ -1,23 +1,28 @@
-import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
+import { hyperlink } from "discord.js"
 
-import { PhaseColour } from "~/lib/enums"
+import { MessageBuilder } from "~/structures/builders"
 
 export default new BotSubcommandBuilder()
   .setName("report")
   .setDescription("Reports a bug to the developers.")
   .setExecute(async (interaction) => {
-    void interaction.reply({
-      embeds: [
-        new EmbedBuilder()
-          .setColor(PhaseColour.Primary)
+    const bugReportURL = new URL("https://phasebot.xyz/contact/bug-report")
+
+    if (interaction.guildId) {
+      bugReportURL.searchParams.set("guildId", interaction.guildId)
+      bugReportURL.searchParams.set("channelId", interaction.channelId)
+    }
+
+    const bugReportLink = hyperlink("Please click here", bugReportURL)
+
+    return await interaction.reply(
+      new MessageBuilder().setEmbeds((embed) => {
+        return embed
+          .setColor("Primary")
           .setTitle("Bug Report")
-          .setDescription(
-            `[Click here](https://phasebot.xyz/contact/bug-report) to send a bug report to the developers.`,
-          )
-          .setFooter({
-            text: "Thanks for taking the time to do this! 🤍",
-          }),
-      ],
-    })
+          .setDescription(`${bugReportLink} to send your bug report.`)
+          .setFooter({ text: "Thanks for taking the time to do this! 🤍" })
+      }),
+    )
   })
