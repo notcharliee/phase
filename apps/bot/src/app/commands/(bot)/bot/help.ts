@@ -1,8 +1,6 @@
 import { ButtonStyle } from "discord.js"
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
-import { PhaseColour } from "~/lib/enums"
-
 import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 
 export default new BotSubcommandBuilder()
@@ -13,7 +11,7 @@ export default new BotSubcommandBuilder()
       new MessageBuilder()
         .setEmbeds((embed) => {
           return embed
-            .setColor(PhaseColour.Primary)
+            .setColor("Primary")
             .setTitle("Help")
             .setDescription(
               "You can read our docs or ask the team directly using the buttons below!",
