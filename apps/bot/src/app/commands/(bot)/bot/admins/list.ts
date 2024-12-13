@@ -1,41 +1,32 @@
-import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
-
-import { PhaseColour } from "~/lib/enums"
+import { userMention } from "discord.js"
 
 import { BotErrorMessage } from "~/structures/BotError"
+import { MessageBuilder } from "~/structures/builders"
 
 export default new BotSubcommandBuilder()
   .setName("list")
   .setDescription("Lists the members that have dashboard access.")
+  .setMetadata({ dmPermission: false })
   .setExecute(async (interaction) => {
-    await interaction.deferReply({
-      ephemeral: true,
-    })
+    const guild = interaction.guild!
+    const guildDoc = interaction.client.stores.guilds.get(guild.id)!
 
-    if (!interaction.guild) {
-      void interaction.editReply(BotErrorMessage.serverOnlyCommand().toJSON())
-      return
+    if (guild.ownerId !== interaction.user.id) {
+      const errorMessage = BotErrorMessage.userNotOwner()
+      return await interaction.reply(errorMessage)
     }
 
-    if (interaction.guild.ownerId !== interaction.user.id) {
-      void interaction.editReply(BotErrorMessage.userNotOwner().toJSON())
-
-      return
-    }
-
-    const guildDoc = interaction.client.stores.guilds.get(interaction.guildId!)!
-
-    void interaction.editReply({
-      embeds: [
-        new EmbedBuilder()
+    return await interaction.reply(
+      new MessageBuilder().setEmbeds((embed) => {
+        return embed
           .setTitle("Dashboard Admins")
+          .setColor("Primary")
           .setDescription(
             guildDoc.admins
-              .map((adminId, index) => `${index + 1}. <@!${adminId}>`)
+              .map((adminId, index) => `${index + 1}. ${userMention(adminId)}`)
               .join("\n"),
           )
-          .setColor(PhaseColour.Primary),
-      ],
-    })
+      }),
+    )
   })
