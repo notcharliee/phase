@@ -1,48 +1,49 @@
-import { EmbedBuilder } from "discord.js"
 import { BotEventBuilder } from "@phasejs/core/builders"
+import { userMention } from "discord.js"
 
 import { db } from "~/lib/db"
-import { PhaseColour } from "~/lib/enums"
+
+import { MessageBuilder } from "~/structures/builders"
 
 export default new BotEventBuilder()
   .setName("messageCreate")
   .setExecute(async (_, message) => {
-    if (!message.inGuild()) return
-
-    const afkDoc = await db.afks.findOne({ user: message.author.id })
+    const afkDoc = await db.afks.findOneAndDelete({ user: message.author.id })
 
     if (afkDoc) {
-      await afkDoc.deleteOne()
-
-      await message.reply({
-        embeds: [
-          new EmbedBuilder()
-            .setColor(PhaseColour.Primary)
-            .setDescription("Your AFK status has been updated to **false**.")
-            .setTitle("AFK Status Changed"),
-        ],
-      })
-    } else {
-      const mentionedMembers = message.mentions.users.map((user) => user.id)
-      if (!mentionedMembers) return
-
-      for (const mentionedMember of mentionedMembers) {
-        const mentionAFKSchema = await db.afks.findOne({
-          user: mentionedMember,
-        })
-
-        if (mentionAFKSchema) {
-          const memberName = await message.guild.members.fetch(mentionedMember)
-
-          await message.reply({
-            embeds: [
-              new EmbedBuilder()
-                .setColor(PhaseColour.Primary)
-                .setDescription(mentionAFKSchema.reason ?? null)
-                .setTitle(`${memberName.displayName} is currently AFK`),
-            ],
-          })
-        }
-      }
+      await message.reply(
+        new MessageBuilder().setEmbeds((embed) => {
+          return embed
+            .setColor("Primary")
+            .setTitle("AFK Status Changed")
+            .setDescription("You are no longer AFK.")
+        }),
+      )
     }
+
+    const mentionedUsers = message.mentions.users.map((user) => user.id)
+    if (!mentionedUsers) return
+
+    const afkUserIds = (
+      await Promise.all(
+        mentionedUsers.map(async (user) => {
+          const exists = await db.afks.exists({ user })
+          return exists ? user : null
+        }),
+      )
+    ).filter(Boolean)
+
+    if (!afkUserIds.length) return
+
+    const mentions = afkUserIds.map((id) => userMention(id)).join(", ")
+    const linkingVerb = afkUserIds.length > 1 ? "are" : "is"
+
+    await message.reply(
+      new MessageBuilder().setEmbeds((embed) => {
+        return embed
+          .setColor("Primary")
+          .setTitle("AFK Users Mentioned")
+          .setDescription(`${mentions} ${linkingVerb} currently AFK.`)
+      }),
+    )
   })
