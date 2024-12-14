@@ -1,10 +1,10 @@
+import { BotCommandBuilder } from "@phasejs/core/builders"
 import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
   EmbedBuilder,
 } from "discord.js"
-import { BotCommandBuilder } from "@phasejs/core/builders"
 
 import { PhaseColour } from "~/lib/enums"
 

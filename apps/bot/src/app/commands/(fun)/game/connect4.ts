@@ -1,10 +1,10 @@
+import { BotSubcommandBuilder } from "@phasejs/core/builders"
 import {
   ComponentType,
   DiscordjsError,
   DiscordjsErrorCodes,
   StringSelectMenuBuilder,
 } from "discord.js"
-import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 import { Connect4 } from "~/structures/games/Connect4"

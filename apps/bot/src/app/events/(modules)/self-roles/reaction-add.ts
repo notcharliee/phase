@@ -1,5 +1,5 @@
-import { GuildEmoji } from "discord.js"
 import { BotEventBuilder } from "@phasejs/core/builders"
+import { GuildEmoji } from "discord.js"
 
 import { ModuleId } from "@repo/utils/modules"
 

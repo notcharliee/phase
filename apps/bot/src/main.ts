@@ -1,7 +1,8 @@
 import { BotClient } from "@phasejs/core/client"
+import { loadApp } from "@phasejs/loaders"
+import { logsPlugin } from "@phasejs/logs"
 import { Client, GatewayIntentBits, Options, Partials } from "discord.js"
 
-import { logsPlugin } from "@phasejs/logs"
 import { musicPlugin } from "@plugin/music"
 import { voicePlugin } from "@plugin/voice"
 import { bridgeServerPlugin } from "@repo/bridge/server"
@@ -14,7 +15,6 @@ import { ConfigStore } from "~/structures/stores/ConfigStore"
 import { GuildStore } from "~/structures/stores/GuildStore"
 import { InviteStore } from "~/structures/stores/InviteStore"
 import { StreamerStore } from "~/structures/stores/StreamerStore"
-import { loadApp } from "@phasejs/loaders"
 
 // create the underlying discord.js client
 const djsClient = new Client({

@@ -1,5 +1,5 @@
-import { ButtonStyle } from "discord.js"
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
+import { ButtonStyle } from "discord.js"
 
 import { MessageBuilder } from "~/structures/builders/MessageBuilder"
 

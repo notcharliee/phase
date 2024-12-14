@@ -1,3 +1,4 @@
+import { BotEventBuilder } from "@phasejs/core/builders"
 import {
   ActionRowBuilder,
   EmbedBuilder,
@@ -5,7 +6,6 @@ import {
   TextInputBuilder,
   TextInputStyle,
 } from "discord.js"
-import { BotEventBuilder } from "@phasejs/core/builders"
 
 import { BotErrorMessage } from "~/structures/BotError"
 

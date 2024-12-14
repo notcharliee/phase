@@ -1,10 +1,10 @@
+import { BotSubcommandBuilder } from "@phasejs/core/builders"
 import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
   ComponentType,
 } from "discord.js"
-import { BotSubcommandBuilder } from "@phasejs/core/builders"
 
 import dedent from "dedent"
 

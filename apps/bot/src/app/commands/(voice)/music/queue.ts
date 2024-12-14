@@ -1,5 +1,5 @@
-import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
+import { EmbedBuilder } from "discord.js"
 
 import { QueueRepeatMode } from "@plugin/music"
 import dedent from "dedent"

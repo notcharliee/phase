@@ -19,7 +19,7 @@ export class BotCommandBuilder extends Mixin(
   SharedBotCommandBuilderDescription,
   SharedBotCommandBuilderOptions,
 ) {
-  protected declare body: BotCommandBody
+  declare protected body: BotCommandBody
 
   constructor() {
     super()

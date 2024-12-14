@@ -1,5 +1,5 @@
-import { GuildFeature } from "discord.js"
 import { BotEventBuilder } from "@phasejs/core/builders"
+import { GuildFeature } from "discord.js"
 
 import { ModuleId } from "@repo/utils/modules"
 

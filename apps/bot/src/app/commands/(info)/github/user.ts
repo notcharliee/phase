@@ -1,5 +1,5 @@
-import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
+import { EmbedBuilder } from "discord.js"
 
 import { Octokit } from "@octokit/rest"
 import dedent from "dedent"

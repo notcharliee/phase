@@ -1,5 +1,5 @@
-import { AttachmentBuilder } from "discord.js"
 import { BotCommandBuilder } from "@phasejs/core/builders"
+import { AttachmentBuilder } from "discord.js"
 
 import { BotErrorMessage } from "~/structures/BotError"
 import { MessageBuilder } from "~/structures/builders/MessageBuilder"

@@ -1,10 +1,10 @@
+import { BotEventBuilder } from "@phasejs/core/builders"
 import {
   ActionRowBuilder,
   ModalBuilder,
   TextInputBuilder,
   TextInputStyle,
 } from "discord.js"
-import { BotEventBuilder } from "@phasejs/core/builders"
 
 import { db } from "~/lib/db"
 

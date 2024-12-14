@@ -20,7 +20,7 @@ import type {
 } from "discord.js"
 
 export class SharedBotCommandBuilderOptions {
-  protected declare body: BotCommandOrSubcommandBody
+  declare protected body: BotCommandOrSubcommandBody
 
   /**
    * Adds an attachment option.

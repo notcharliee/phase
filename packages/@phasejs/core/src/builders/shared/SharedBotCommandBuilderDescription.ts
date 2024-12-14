@@ -4,7 +4,7 @@ import type { BotCommandOrSubcommandBody } from "~/types/commands"
 import type { LocalizationMap } from "discord.js"
 
 export class SharedBotCommandBuilderDescription {
-  protected declare body: BotCommandOrSubcommandBody
+  declare protected body: BotCommandOrSubcommandBody
 
   /**
    * Sets the description of this command.

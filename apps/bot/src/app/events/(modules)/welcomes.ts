@@ -1,5 +1,5 @@
-import { DiscordAPIError } from "discord.js"
 import { BotEventBuilder } from "@phasejs/core/builders"
+import { DiscordAPIError } from "discord.js"
 
 import { ModuleDefinitions, ModuleId } from "@repo/utils/modules"
 

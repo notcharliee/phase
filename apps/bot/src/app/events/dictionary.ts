@@ -1,7 +1,7 @@
 import { PassThrough } from "node:stream"
 
-import { MessageFlags, Routes } from "discord.js"
 import { BotEventBuilder } from "@phasejs/core/builders"
+import { MessageFlags, Routes } from "discord.js"
 
 import ffmpegPath from "ffmpeg-static"
 import ffmpeg from "fluent-ffmpeg"

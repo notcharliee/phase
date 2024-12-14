@@ -1,5 +1,5 @@
-import { ChannelType } from "discord.js"
 import { BotEventBuilder } from "@phasejs/core/builders"
+import { ChannelType } from "discord.js"
 
 import { ModuleId } from "@repo/utils/modules"
 

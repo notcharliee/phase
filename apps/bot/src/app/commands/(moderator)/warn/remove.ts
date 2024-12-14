@@ -1,5 +1,5 @@
-import { EmbedBuilder } from "discord.js"
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
+import { EmbedBuilder } from "discord.js"
 
 import { ModuleId } from "@repo/utils/modules"
 import dedent from "dedent"

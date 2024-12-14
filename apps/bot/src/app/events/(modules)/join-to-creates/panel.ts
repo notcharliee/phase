@@ -1,3 +1,4 @@
+import { BotEventBuilder } from "@phasejs/core/builders"
 import {
   ActionRowBuilder,
   ModalBuilder,
@@ -5,7 +6,6 @@ import {
   TextInputStyle,
   userMention,
 } from "discord.js"
-import { BotEventBuilder } from "@phasejs/core/builders"
 
 import { ModuleId } from "@repo/utils/modules"
 

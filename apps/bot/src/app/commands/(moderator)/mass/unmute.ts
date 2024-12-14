@@ -1,5 +1,5 @@
-import { ChannelType, PermissionFlagsBits } from "discord.js"
 import { BotSubcommandBuilder } from "@phasejs/core/builders"
+import { ChannelType, PermissionFlagsBits } from "discord.js"
 
 import ms from "ms"
 
