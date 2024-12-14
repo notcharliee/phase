@@ -1,9 +1,0 @@
-node_modules
-
-**/next-env.d.ts
-.next
-dist
-
-.turbo
-
-bun.lockb
