@@ -5,6 +5,7 @@
   "packageManager": "bun@1.1.16",
   "prettier": "@repo/config/prettier/base.json",
   "scripts": {
+    "format": "prettier --write .",
     "dev": "turbo run dev --filter=bot --filter=site",
     "dev:bot": "turbo run dev --filter=bot",
     "dev:site": "turbo run dev --filter=site",
