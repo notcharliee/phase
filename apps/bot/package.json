@@ -17,7 +17,7 @@
     "@phasejs/core": "workspace:*",
     "@phasejs/image": "workspace:*",
     "@plugin/emoji-sync": "workspace:*",
-    "@plugin/logs": "workspace:*",
+    "@phasejs/logs": "workspace:*",
     "@plugin/music": "workspace:*",
     "@plugin/voice": "workspace:*",
     "@repo/bridge": "workspace:*",

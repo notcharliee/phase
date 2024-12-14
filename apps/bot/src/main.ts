@@ -1,7 +1,7 @@
 import { BotClient } from "@phasejs/core/client"
 import { Client, GatewayIntentBits, Options, Partials } from "discord.js"
 
-import { logsPlugin } from "@plugin/logs"
+import { logsPlugin } from "@phasejs/logs"
 import { musicPlugin } from "@plugin/music"
 import { voicePlugin } from "@plugin/voice"
 import { bridgeServerPlugin } from "@repo/bridge/server"

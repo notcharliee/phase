@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@plugin/logs",
+  "name": "@phasejs/logs",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
