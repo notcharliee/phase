@@ -1,7 +1,7 @@
-import { BotCronBuilder } from "~/builders/BotCronBuilder"
+import { BotCronBuilder } from "@phasejs/core/builders"
 
-import type { BotCron } from "~/structures/BotCron"
-import type { DjsClient } from "~/types/client"
+import type { DjsClient } from "@phasejs/core"
+import type { BotCron } from "@phasejs/core/client"
 
 export async function loadCrons(client: DjsClient, paths: string[]) {
   const crons: BotCron[] = []

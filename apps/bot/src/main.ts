@@ -14,6 +14,7 @@ import { ConfigStore } from "~/structures/stores/ConfigStore"
 import { GuildStore } from "~/structures/stores/GuildStore"
 import { InviteStore } from "~/structures/stores/InviteStore"
 import { StreamerStore } from "~/structures/stores/StreamerStore"
+import { loadApp } from "@phasejs/loaders"
 
 // create the underlying discord.js client
 const djsClient = new Client({
@@ -78,4 +79,5 @@ phaseClient.client.token = env.DISCORD_TOKEN
 phaseClient.client.rest.setToken(env.DISCORD_TOKEN)
 
 // start the client
-await phaseClient.init()
+const app = await loadApp(phaseClient)
+await phaseClient.init(app)

@@ -1,8 +1,7 @@
-import { BotCommandBuilder } from "~/builders/BotCommandBuilder"
-import { BotSubcommandBuilder } from "~/builders/BotSubcommandBuilder"
+import { BotCommandBuilder, BotSubcommandBuilder } from "@phasejs/core/builders"
 
-import type { BotCommand } from "~/structures/BotCommand"
-import type { DjsClient } from "~/types/client"
+import type { DjsClient } from "@phasejs/core"
+import type { BotCommand } from "@phasejs/core/client"
 
 export async function loadCommands(client: DjsClient, paths: string[]) {
   const commands: BotCommand[] = []

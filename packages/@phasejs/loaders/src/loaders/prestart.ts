@@ -1,4 +1,4 @@
-import type { BotPrestart } from "~/types/prestart"
+import type { BotPrestart } from "@phasejs/core"
 
 export async function loadPrestart(path: string): Promise<BotPrestart> {
   try {

@@ -2,7 +2,7 @@ import { $, build, write } from "bun"
 import { existsSync, rmSync, statSync } from "node:fs"
 import { join } from "node:path"
 
-import { BotClient } from "@phasejs/core/client"
+import { analyseApp } from "@phasejs/loaders"
 
 import chalk from "chalk"
 
@@ -72,7 +72,7 @@ async function bundle() {
 
   const outDir = join(process.cwd(), ".phase")
 
-  const entrypoints = Object.values({ ...(await BotClient.analyseApp()) })
+  const entrypoints = Object.values({ ...(await analyseApp()) })
     .filter(Boolean)
     .flat()
 
@@ -98,7 +98,7 @@ async function bundle() {
   }
 
   const buildDir = join(outDir, "src")
-  const buildPaths = await BotClient.analyseApp(buildDir)
+  const buildPaths = await analyseApp(buildDir)
 
   await write(
     ".phase/app-build-manifest.json",

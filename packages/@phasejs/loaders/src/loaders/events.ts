@@ -1,7 +1,7 @@
-import { BotEventBuilder } from "~/builders/BotEventBuilder"
+import { BotEventBuilder } from "@phasejs/core/builders"
 
-import type { BotEvent } from "~/structures/BotEvent"
-import type { DjsClient } from "~/types/client"
+import type { DjsClient } from "@phasejs/core"
+import type { BotEvent } from "@phasejs/core/client"
 
 export async function loadEvents(client: DjsClient, paths: string[]) {
   const events: BotEvent[] = []

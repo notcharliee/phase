@@ -1,4 +1,4 @@
-import type { BotMiddleware } from "~/types/middleware"
+import type { BotMiddleware } from "@phasejs/core"
 
 export async function loadMiddleware(path: string): Promise<BotMiddleware> {
   try {
