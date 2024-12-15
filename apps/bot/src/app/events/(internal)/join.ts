@@ -1,48 +1,50 @@
 import { BotEventBuilder } from "@phasejs/core/builders"
 
+import { EntryType } from "@plugin/blacklist"
+
 import { alertWebhook } from "~/lib/clients/webhooks/alert"
 import { db } from "~/lib/db"
 
 import { MessageBuilder } from "~/structures/builders"
 
 export default new BotEventBuilder()
-  .setName("guildCreate")
-  .setExecute(async (client, guild) => {
-    const guildId = guild.id
-    const ownerId = guild.ownerId
-    const owner = await guild.fetchOwner().catch(() => null)
-
-    const blacklist = client.stores.config.blacklist
-
-    const guildIsBlacklisted = blacklist.guilds.find(({ id }) => guildId === id)
-    const userIsBlacklisted = blacklist.users.find(({ id }) => ownerId === id)
-
-    if (guildIsBlacklisted || userIsBlacklisted) {
-      await guild.leave()
-
-      const blacklistEntry = guildIsBlacklisted ?? userIsBlacklisted!
-      const blacklistType = guildIsBlacklisted ? "guild" : "user"
-
+  .setName("ready")
+  .setListenerType("once")
+  .setExecute(async (client) => {
+    client.phase.emitter.on("blacklist.joinPrevented", async (entry) => {
       const alertMessage = new MessageBuilder().setEmbeds((embed) => {
         return embed
           .setColor("Destructive")
           .setTitle("Server join prevented")
-          .setFooter({ text: "Guild ID: " + guild.id })
+          .setTimestamp()
           .setDescription(
             `
-              The bot was blocked from joining a server because its ${blacklistType === "user" ? "owner" : "ID"} was found on the ${blacklistType} blacklist.
+              The bot was blocked from joining a server because its ${entry.type === EntryType.User ? "owner" : "ID"} was found on the ${entry.type} blacklist.
 
-              **Blacklisted ${blacklistType}:**
-              ${blacklistEntry.id}
+              **Blacklisted ${entry.type}:**
+              ${entry.id}
 
               **Reason for blacklist:**
-              ${blacklistEntry.reason ?? "No reason provided"}
+              ${entry.reason ?? "No reason provided"}
             `,
           )
       })
 
-      await alertWebhook.send(alertMessage)
-    } else {
+      try {
+        await alertWebhook.send(alertMessage)
+      } catch (error) {
+        console.log("Failed to send alert message:")
+        console.error(error)
+      }
+    })
+
+    client.phase.emitter.on("blacklist.joinSuccess", async (guild) => {
+      const guildId = guild.id
+      const ownerId = guild.ownerId
+      const owner = await guild.fetchOwner().catch(() => null)
+
+      await db.guilds.create({ id: guildId, admins: [ownerId] })
+
       const ownedGuildsCount = client.guilds.cache.filter(
         (g) => ownerId === g.ownerId,
       ).size
@@ -67,7 +69,11 @@ export default new BotEventBuilder()
           )
       })
 
-      await alertWebhook.send(alertMessage)
-      await db.guilds.create({ id: guildId, admins: [ownerId] })
-    }
+      try {
+        await alertWebhook.send(alertMessage)
+      } catch (error) {
+        console.log("Failed to send alert message:")
+        console.error(error)
+      }
+    })
   })

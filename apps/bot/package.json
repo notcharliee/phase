@@ -18,6 +18,7 @@
     "@phasejs/image": "workspace:*",
     "@phasejs/loaders": "workspace:*",
     "@phasejs/logs": "workspace:*",
+    "@plugin/blacklist": "workspace:*",
     "@plugin/emoji-sync": "workspace:*",
     "@plugin/music": "workspace:*",
     "@plugin/voice": "workspace:*",

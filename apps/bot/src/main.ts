@@ -3,10 +3,12 @@ import { loadApp } from "@phasejs/loaders"
 import { logsPlugin } from "@phasejs/logs"
 import { Client, GatewayIntentBits, Options, Partials } from "discord.js"
 
+import { blacklistPlugin } from "@plugin/blacklist"
 import { musicPlugin } from "@plugin/music"
 import { voicePlugin } from "@plugin/voice"
 import { bridgeServerPlugin } from "@repo/bridge/server"
 
+import { blacklistOptions } from "~/lib/blacklist"
 import { botConfig } from "~/lib/config"
 import { Emojis, emojiSyncPlugin } from "~/lib/emojis"
 import { env } from "~/lib/env"
@@ -61,6 +63,7 @@ const djsClient = new Client({
 const phaseClient = new BotClient(djsClient, {
   plugins: [
     logsPlugin(botConfig),
+    blacklistPlugin(blacklistOptions),
     voicePlugin(),
     musicPlugin(),
     emojiSyncPlugin(),
