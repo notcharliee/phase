@@ -3,9 +3,15 @@ import { Emojis } from "~/lib/emojis"
 import type { Client, Snowflake, User } from "discord.js"
 
 export const Markers = {
-  Empty: Emojis.Connect4Empty,
-  Player1: Emojis.Connect4Player1,
-  Player2: Emojis.Connect4Player2,
+  get Empty() {
+    return Emojis.Connect4Empty
+  },
+  get Player1() {
+    return Emojis.Connect4Player1
+  },
+  get Player2() {
+    return Emojis.Connect4Player2
+  },
 }
 
 export type Marker = (typeof Markers)[keyof typeof Markers]
@@ -45,16 +51,14 @@ export class Connect4 {
   public readonly players: [Player, Player]
   public readonly board: Board
 
-  constructor(
-    client: Client,
-    users: [User, User],
-    board: Board = Array.from({ length: 6 }, () =>
-      Array<Marker>(7).fill(Markers.Empty),
-    ) as Board,
-  ) {
+  constructor(client: Client, users: [User, User], board?: Board) {
     this.client = client
     this.players = [] as unknown as [Player, Player]
-    this.board = board
+    this.board =
+      board ??
+      (Array.from({ length: 6 }, () =>
+        Array<Marker>(7).fill(Markers.Empty),
+      ) as Board)
 
     for (const user of users) {
       this.players.push(new Player(this, user))
