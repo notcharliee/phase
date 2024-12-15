@@ -35,6 +35,7 @@ export class BotClient<TReady extends boolean = boolean> {
     this.emitter = new Emittery()
 
     this.client = client
+    this.client.phase = this
     this.plugins = options.plugins ?? []
 
     this.stores = new StoreManager(this, options.stores)
