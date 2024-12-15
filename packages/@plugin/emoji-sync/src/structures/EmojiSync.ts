@@ -14,13 +14,23 @@ type BotEmojiStringRecord<TEmojis extends BotEmojiRecord> = Record<
   BotEmojiString
 >
 
+declare global {
+  // eslint-disable-next-line no-var
+  var emojiSync: EmojiSync<BotEmojiRecord>
+}
+
 export class EmojiSync<TEmojis extends BotEmojiRecord> {
-  public readonly loader: BotEmojiLoader<TEmojis>
-  public readonly emojis: BotEmojiStringRecord<TEmojis>
+  public readonly loader!: BotEmojiLoader<TEmojis>
+  public readonly emojis!: BotEmojiStringRecord<TEmojis>
 
   constructor(loader: BotEmojiLoader<TEmojis>) {
-    this.emojis = {} as BotEmojiStringRecord<TEmojis>
-    this.loader = loader
+    if (!globalThis.emojiSync) {
+      this.emojis = {} as BotEmojiStringRecord<TEmojis>
+      this.loader = loader
+      globalThis.emojiSync = this
+    }
+
+    return globalThis.emojiSync as this
   }
 
   public plugin() {
