@@ -1,11 +1,12 @@
-import { deepmerge } from "deepmerge-ts"
 import animate from "tailwindcss-animate"
 
 import baseConfig from "./base"
 
 import type { Config } from "tailwindcss"
 
-const siteConfig = {
+export default {
+  presets: [baseConfig],
+  content: [...baseConfig.content, "../../node_modules/@repo/ui/dist/**/*.js"],
   theme: {
     container: {
       center: true,
@@ -79,6 +80,4 @@ const siteConfig = {
     },
   },
   plugins: [animate],
-} satisfies Partial<Config>
-
-export default deepmerge(baseConfig, siteConfig)
+} satisfies Config
