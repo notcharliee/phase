@@ -1,8 +1,6 @@
-import { cva } from "class-variance-authority"
-
 import { Slot } from "~/components/slot"
 
-import { cn } from "~/lib/utils"
+import { cn, cva } from "~/lib/utils"
 
 import type { VariantProps } from "class-variance-authority"
 
