@@ -1,5 +1,5 @@
-import type { Guild } from "discord.js"
 import type { Entry } from "~/structures/Entry"
+import type { Guild } from "discord.js"
 
 import type {} from "@phasejs/core"
 
