@@ -1,5 +1,6 @@
-import { Slot } from "@radix-ui/react-slot"
 import { cva } from "class-variance-authority"
+
+import { Slot } from "~/components/slot"
 
 import { cn } from "~/lib/utils"
 

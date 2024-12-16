@@ -133,6 +133,11 @@
       "types": "./dist/components/skeleton/index.d.ts",
       "import": "./dist/components/skeleton/index.js",
       "require": "./dist/components/skeleton/index.js"
+    },
+    "./slot": {
+      "types": "./dist/components/slot/index.d.ts",
+      "import": "./dist/components/slot/index.js",
+      "require": "./dist/components/slot/index.js"
     }
   },
   "dependencies": {

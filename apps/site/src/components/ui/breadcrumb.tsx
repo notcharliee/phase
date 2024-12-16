@@ -1,8 +1,8 @@
 import Link from "next/link"
 import * as React from "react"
 
-import { Slot } from "@radix-ui/react-slot"
 import { LucideIcon } from "@repo/ui/lucide-icon"
+import { Slot } from "@repo/ui/slot"
 
 import { cn } from "~/lib/utils"
 
