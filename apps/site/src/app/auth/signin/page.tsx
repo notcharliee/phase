@@ -1,4 +1,4 @@
-import { Codeblock } from "~/components/ui/codeblock"
+import { Codeblock } from "@repo/ui/codeblock"
 
 import { SignInMethods } from "~/app/auth/signin/components"
 

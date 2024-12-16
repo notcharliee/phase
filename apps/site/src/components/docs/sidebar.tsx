@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-import { ScrollArea } from "~/components/ui/scroll-area"
+import { ScrollArea } from "@repo/ui/scroll-area"
 
 import { docsPages, splitPagesByCategory } from "~/config/nav"
 

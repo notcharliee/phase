@@ -1,5 +1,5 @@
-import { LucideIcon } from "~/components/icons/lucide"
-import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
+import { Alert, AlertDescription, AlertTitle } from "@repo/ui/alert"
+import { LucideIcon } from "@repo/ui/lucide-icon"
 
 export function BetaAlert() {
   return (

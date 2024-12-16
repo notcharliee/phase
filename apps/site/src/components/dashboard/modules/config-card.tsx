@@ -1,18 +1,13 @@
 import React from "react"
 
-import { cva } from "class-variance-authority"
-
-import { BetaAlert } from "~/components/dashboard/modules/beta-alert"
-import { ModuleTags } from "~/components/dashboard/modules/module-tags"
-import { LucideIcon } from "~/components/icons/lucide"
-import { Button } from "~/components/ui/button"
+import { Button } from "@repo/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card"
+} from "@repo/ui/card"
 import {
   Credenza,
   CredenzaContent,
@@ -20,17 +15,22 @@ import {
   CredenzaHeader,
   CredenzaTitle,
   CredenzaTrigger,
-} from "~/components/ui/credenza"
+} from "@repo/ui/credenza"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu"
+} from "@repo/ui/dropdown-menu"
+import { LucideIcon } from "@repo/ui/lucide-icon"
+import { cva } from "class-variance-authority"
 
+import { BetaAlert } from "~/components/dashboard/modules/beta-alert"
+import { ModuleTags } from "~/components/dashboard/modules/module-tags"
+
+import type { LucideIconName } from "@repo/ui/lucide-icon"
 import type { ModuleDefinition, ModuleTag } from "@repo/utils/modules"
 import type { ModuleData } from "~/app/dashboard/guilds/[id]/modules/page"
-import type { LucideIconName } from "~/components/icons/lucide"
 
 export type ConfigCardData = ModuleDefinition
 export type ConfigCardOption = (typeof moduleOptions)[number]["value"]

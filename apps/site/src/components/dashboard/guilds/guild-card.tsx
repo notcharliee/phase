@@ -2,9 +2,9 @@
 
 import Link from "next/link"
 
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
-import { Card, CardHeader, CardTitle } from "~/components/ui/card"
-import { Skeleton } from "~/components/ui/skeleton"
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar"
+import { Card, CardHeader, CardTitle } from "@repo/ui/card"
+import { Skeleton } from "@repo/ui/skeleton"
 
 import type { DashboardGuild } from "~/app/dashboard/guilds/page"
 

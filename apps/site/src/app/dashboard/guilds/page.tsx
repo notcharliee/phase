@@ -2,14 +2,14 @@ import NextLink from "next/link"
 import { Suspense } from "react"
 
 import { client } from "@repo/bridge/client"
+import { Button } from "@repo/ui/button"
+import { LucideIcon } from "@repo/ui/lucide-icon"
 
 import {
   GuildCardGrid,
   GuildCardGridFallback,
 } from "~/components/dashboard/guilds/guild-card-grid"
 import { GuildCardSearch } from "~/components/dashboard/guilds/guild-card-search"
-import { LucideIcon } from "~/components/icons/lucide"
-import { Button } from "~/components/ui/button"
 
 import { auth } from "~/auth"
 

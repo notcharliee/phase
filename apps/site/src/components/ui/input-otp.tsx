@@ -2,9 +2,8 @@
 
 import * as React from "react"
 
+import { LucideIcon } from "@repo/ui/lucide-icon"
 import { OTPInput, OTPInputContext } from "input-otp"
-
-import { LucideIcon } from "~/components/icons/lucide"
 
 import { cn } from "~/lib/utils"
 

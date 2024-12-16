@@ -1,8 +1,8 @@
 "use client"
 
+import { LucideIcon } from "@repo/ui/lucide-icon"
 import { useQueryState } from "nuqs"
 
-import { LucideIcon } from "~/components/icons/lucide"
 import { Input } from "~/components/ui/input"
 
 export function GuildCardSearch() {

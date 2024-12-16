@@ -2,21 +2,17 @@
 
 import * as React from "react"
 
-import { Command as CommandPrimitive } from "cmdk"
-import { Editor, Element, Transforms } from "slate"
-
-import { ChannelIcon } from "~/components/channel-icons"
 import {
   CommandEmpty,
   CommandGroup,
   CommandItem,
   CommandList,
-} from "~/components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover"
+} from "@repo/ui/command"
+import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover"
+import { Command as CommandPrimitive } from "cmdk"
+import { Editor, Element, Transforms } from "slate"
+
+import { ChannelIcon } from "~/components/channel-icons"
 
 import { useElementSize } from "~/hooks/use-element-size"
 

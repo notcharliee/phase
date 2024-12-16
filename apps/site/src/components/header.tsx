@@ -3,12 +3,7 @@
 import { useRouter } from "next/navigation"
 import * as React from "react"
 
-import { useIntersectionObserver } from "@uidotdev/usehooks"
-
-import { LucideIcon } from "~/components/icons/lucide"
-import { SimpleIcon } from "~/components/icons/simple"
-import { Moon } from "~/components/moon"
-import { Button } from "~/components/ui/button"
+import { Button } from "@repo/ui/button"
 import {
   CommandDialog,
   CommandEmpty,
@@ -17,7 +12,12 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "~/components/ui/command"
+} from "@repo/ui/command"
+import { LucideIcon } from "@repo/ui/lucide-icon"
+import { SimpleIcon } from "@repo/ui/simple-icon"
+import { useIntersectionObserver } from "@uidotdev/usehooks"
+
+import { Moon } from "~/components/moon"
 import { Link } from "~/components/ui/link"
 
 import { docsPages, mainPages, splitPagesByCategory } from "~/config/nav"

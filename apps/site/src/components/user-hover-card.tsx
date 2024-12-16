@@ -1,10 +1,11 @@
-import { LucideIcon } from "~/components/icons/lucide"
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar"
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "~/components/ui/hover-card"
+} from "@repo/ui/hover-card"
+import { LucideIcon } from "@repo/ui/lucide-icon"
+
 import { Link } from "~/components/ui/link"
 
 export interface UserHoverCardProps {

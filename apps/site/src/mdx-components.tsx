@@ -1,15 +1,16 @@
 import {
-  Heading,
-  HeadingDescription,
-  HeadingTitle,
-} from "~/components/docs/heading"
-import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "~/components/ui/accordion"
-import { Codeblock } from "~/components/ui/codeblock"
+} from "@repo/ui/accordion"
+import { Codeblock } from "@repo/ui/codeblock"
+
+import {
+  Heading,
+  HeadingDescription,
+  HeadingTitle,
+} from "~/components/docs/heading"
 import { Link } from "~/components/ui/link"
 import { UserHoverCard } from "~/components/user-hover-card"
 

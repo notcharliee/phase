@@ -1,5 +1,5 @@
-import type { LucideIconName } from "~/components/icons/lucide"
-import type { SimpleIconName } from "~/components/icons/simple"
+import type { LucideIconName } from "@repo/ui/lucide-icon"
+import type { SimpleIconName } from "@repo/ui/simple-icon"
 
 type NavItemIcon =
   | {

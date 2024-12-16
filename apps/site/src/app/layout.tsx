@@ -5,7 +5,6 @@ import { GeistMono } from "geist/font/mono"
 import { GeistSans } from "geist/font/sans"
 import { NuqsAdapter } from "nuqs/adapters/next/pages"
 
-import { LoadingBar } from "~/components/loading-bar"
 import { Toaster } from "~/components/ui/sonner"
 
 import { siteConfig } from "~/config/site"
@@ -65,7 +64,6 @@ export default function RootLayout({ children }: LayoutProps) {
         <NuqsAdapter>{children}</NuqsAdapter>
         <Toaster />
         <Analytics />
-        <LoadingBar />
       </body>
     </html>
   )

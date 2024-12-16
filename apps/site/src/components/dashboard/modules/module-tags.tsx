@@ -1,4 +1,4 @@
-import { badgeVariants } from "~/components/ui/badge"
+import { badgeVariants } from "@repo/ui/badge"
 
 import { cn } from "~/lib/utils"
 

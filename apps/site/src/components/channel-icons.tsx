@@ -1,9 +1,8 @@
 import { ChannelType } from "@discordjs/core/http-only"
-
-import { LucideIcon } from "~/components/icons/lucide"
+import { LucideIcon } from "@repo/ui/lucide-icon"
 
 import type { APIChannel } from "@discordjs/core/http-only"
-import type { LucideIconName, LucideIconProps } from "~/components/icons/lucide"
+import type { LucideIconName, LucideIconProps } from "@repo/ui/lucide-icon"
 
 export const AllowedChannelTypes = {
   GuildAnnouncement: ChannelType.GuildAnnouncement,

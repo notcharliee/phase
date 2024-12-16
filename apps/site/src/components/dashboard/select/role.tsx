@@ -7,11 +7,11 @@ import {
   ComboboxContent,
   ComboboxTrigger,
   ComboboxValue,
-} from "~/components/ui/combobox"
+} from "@repo/ui/combobox"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
-import type { ComboboxItem } from "~/components/ui/combobox"
+import type { ComboboxItem } from "@repo/ui/combobox"
 import type { Arrayable, Optional } from "~/types/utils"
 
 interface SelectRoleProps<

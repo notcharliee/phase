@@ -3,9 +3,10 @@
 import NextLink from "next/link"
 import { usePathname } from "next/navigation"
 
-import { LucideIcon } from "~/components/icons/lucide"
-import { SimpleIcon } from "~/components/icons/simple"
-import { Label } from "~/components/ui/label"
+import { Label } from "@repo/ui/label"
+import { LucideIcon } from "@repo/ui/lucide-icon"
+import { SimpleIcon } from "@repo/ui/simple-icon"
+
 import { Link, linkVariants } from "~/components/ui/link"
 
 import { dashboardPages } from "~/config/nav"

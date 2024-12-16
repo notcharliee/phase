@@ -1,7 +1,8 @@
+import { Button } from "@repo/ui/button"
+import { LucideIcon } from "@repo/ui/lucide-icon"
+
 import { Header } from "~/components/header"
-import { LucideIcon } from "~/components/icons/lucide"
 import { OrbitingDots } from "~/components/orbiting-dots"
-import { Button } from "~/components/ui/button"
 import { Link } from "~/components/ui/link"
 
 import { siteConfig } from "~/config/site"

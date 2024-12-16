@@ -1,13 +1,14 @@
-import { LucideIcon } from "~/components/icons/lucide"
-import { Button } from "~/components/ui/button"
-import { ButtonGroup } from "~/components/ui/button-group"
-import { Card, CardContent, CardTitle } from "~/components/ui/card"
+import { Button } from "@repo/ui/button"
+import { ButtonGroup } from "@repo/ui/button-group"
+import { Card, CardContent, CardTitle } from "@repo/ui/card"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu"
+} from "@repo/ui/dropdown-menu"
+import { LucideIcon } from "@repo/ui/lucide-icon"
+
 import {
   FormControl,
   FormDescription,

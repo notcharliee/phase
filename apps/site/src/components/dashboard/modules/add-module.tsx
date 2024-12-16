@@ -1,15 +1,13 @@
 import React from "react"
 
-import { ModuleTags } from "~/components/dashboard/modules/module-tags"
-import { LucideIcon } from "~/components/icons/lucide"
-import { Button } from "~/components/ui/button"
+import { Button } from "@repo/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card"
+} from "@repo/ui/card"
 import {
   Credenza,
   CredenzaBody,
@@ -18,7 +16,10 @@ import {
   CredenzaHeader,
   CredenzaTitle,
   CredenzaTrigger,
-} from "~/components/ui/credenza"
+} from "@repo/ui/credenza"
+import { LucideIcon } from "@repo/ui/lucide-icon"
+
+import { ModuleTags } from "~/components/dashboard/modules/module-tags"
 
 import type { ModuleId } from "@repo/utils/modules"
 import type { ModuleData } from "~/app/dashboard/guilds/[id]/modules/page"

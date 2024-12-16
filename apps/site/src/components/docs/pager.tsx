@@ -3,8 +3,8 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-import { LucideIcon } from "~/components/icons/lucide"
-import { Button } from "~/components/ui/button"
+import { Button } from "@repo/ui/button"
+import { LucideIcon } from "@repo/ui/lucide-icon"
 
 import { docsPages } from "~/config/nav"
 
