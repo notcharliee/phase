@@ -48,7 +48,6 @@ export function AuditLogs() {
       <FormFieldSelectChannel
         label="Voice Logs"
         description="Logs for voice channel join and leave events"
-        channelType="GuildVoice"
         control={control}
         name={`${baseName}.voice`}
       />
