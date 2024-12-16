@@ -1,4 +1,4 @@
-import { BotCommandBuilder } from "@phasejs/core/builders"
+import { BotCommandBuilder } from "@phasejs/builders"
 import { chatInputApplicationCommandMention } from "discord.js"
 
 import { BotErrorMessage } from "~/structures/BotError"

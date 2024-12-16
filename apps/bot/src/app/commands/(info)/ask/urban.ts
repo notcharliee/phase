@@ -1,4 +1,4 @@
-import { BotSubcommandBuilder } from "@phasejs/core/builders"
+import { BotSubcommandBuilder } from "@phasejs/builders"
 
 import { getUrbanPost } from "~/lib/apis/urban"
 import { truncateString } from "~/lib/utils/formatting"

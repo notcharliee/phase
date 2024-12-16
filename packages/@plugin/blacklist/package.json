@@ -16,6 +16,7 @@
     }
   },
   "dependencies": {
+    "@phasejs/builders": "workspace:*",
     "@phasejs/core": "workspace:*"
   },
   "peerDependencies": {

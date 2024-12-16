@@ -1,4 +1,4 @@
-import { BotCronBuilder } from "@phasejs/core/builders"
+import { BotCronBuilder } from "@phasejs/builders"
 
 import { db } from "~/lib/db"
 import { Emojis } from "~/lib/emojis"

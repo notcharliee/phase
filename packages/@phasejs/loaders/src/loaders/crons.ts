@@ -1,4 +1,4 @@
-import { BotCronBuilder } from "@phasejs/core/builders"
+import { BotCronBuilder } from "@phasejs/builders"
 
 import type { DjsClient } from "@phasejs/core"
 import type { BotCron } from "@phasejs/core/client"

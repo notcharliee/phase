@@ -1,4 +1,4 @@
-import { BotSubcommandBuilder } from "@phasejs/core/builders"
+import { BotSubcommandBuilder } from "@phasejs/builders"
 import { hyperlink } from "discord.js"
 
 import { MessageBuilder } from "~/structures/builders"

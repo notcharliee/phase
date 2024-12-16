@@ -1,4 +1,4 @@
-import { BotEventBuilder } from "@phasejs/core/builders"
+import { BotEventBuilder } from "@phasejs/builders"
 
 import { alertWebhook } from "~/lib/clients/webhooks/alert"
 import { db } from "~/lib/db"

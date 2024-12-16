@@ -1,4 +1,4 @@
-import { BotSubcommandBuilder } from "@phasejs/core/builders"
+import { BotSubcommandBuilder } from "@phasejs/builders"
 
 import { BotErrorMessage } from "~/structures/BotError"
 import { extensionOption, sizeOption } from "./_options"

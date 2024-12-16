@@ -1,4 +1,4 @@
-import { BotEventBuilder } from "@phasejs/core/builders"
+import { BotEventBuilder } from "@phasejs/builders"
 import { ButtonStyle, ModalBuilder, TextInputStyle } from "discord.js"
 
 import { QueueRepeatMode } from "@plugin/music"

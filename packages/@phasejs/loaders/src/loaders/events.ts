@@ -1,4 +1,4 @@
-import { BotEventBuilder } from "@phasejs/core/builders"
+import { BotEventBuilder } from "@phasejs/builders"
 
 import type { DjsClient } from "@phasejs/core"
 import type { BotEvent } from "@phasejs/core/client"

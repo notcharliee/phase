@@ -1,6 +1,6 @@
 import { createHmac } from "node:crypto"
 
-import { BotSubcommandBuilder } from "@phasejs/core/builders"
+import { BotSubcommandBuilder } from "@phasejs/builders"
 import { bold, ButtonStyle } from "discord.js"
 
 import { db } from "~/lib/db"

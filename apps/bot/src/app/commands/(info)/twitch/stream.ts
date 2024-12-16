@@ -1,4 +1,4 @@
-import { BotSubcommandBuilder } from "@phasejs/core/builders"
+import { BotSubcommandBuilder } from "@phasejs/builders"
 import { EmbedBuilder } from "discord.js"
 
 import { twitchAPI } from "~/lib/clients/twitch"

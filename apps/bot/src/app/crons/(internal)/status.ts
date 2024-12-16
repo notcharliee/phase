@@ -1,4 +1,4 @@
-import { BotCronBuilder } from "@phasejs/core/builders"
+import { BotCronBuilder } from "@phasejs/builders"
 import { ActivityType } from "discord.js"
 
 export default new BotCronBuilder()

@@ -1,4 +1,4 @@
-import { BotEventBuilder } from "@phasejs/core/builders"
+import { BotEventBuilder } from "@phasejs/builders"
 import { GuildMember } from "discord.js"
 
 import { ModuleId } from "@repo/utils/modules"

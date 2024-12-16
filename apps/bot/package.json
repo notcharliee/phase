@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^20.1.1",
+    "@phasejs/builders": "workspace:*",
     "@phasejs/core": "workspace:*",
     "@phasejs/image": "workspace:*",
     "@phasejs/loaders": "workspace:*",

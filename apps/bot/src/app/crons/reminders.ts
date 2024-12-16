@@ -1,4 +1,4 @@
-import { BotCronBuilder } from "@phasejs/core/builders"
+import { BotCronBuilder } from "@phasejs/builders"
 import { EmbedBuilder } from "discord.js"
 
 import { db } from "~/lib/db"

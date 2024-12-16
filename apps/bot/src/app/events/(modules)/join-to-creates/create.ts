@@ -1,4 +1,4 @@
-import { BotEventBuilder } from "@phasejs/core/builders"
+import { BotEventBuilder } from "@phasejs/builders"
 import { ButtonStyle, ChannelType, userMention } from "discord.js"
 
 import { ModuleId } from "@repo/utils/modules"

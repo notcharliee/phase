@@ -1,4 +1,4 @@
-import { BotCronBuilder, BotEventBuilder } from "@phasejs/core/builders"
+import { BotCronBuilder, BotEventBuilder } from "@phasejs/builders"
 import { BotPlugin } from "@phasejs/core/client"
 
 import { version } from "~/lib/utils"

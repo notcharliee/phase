@@ -1,4 +1,4 @@
-import { BotCommandBuilder, BotSubcommandBuilder } from "@phasejs/core/builders"
+import { BotCommandBuilder, BotSubcommandBuilder } from "@phasejs/builders"
 
 import type { DjsClient } from "@phasejs/core"
 import type { BotCommand } from "@phasejs/core/client"

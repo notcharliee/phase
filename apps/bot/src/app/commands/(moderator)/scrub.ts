@@ -1,4 +1,4 @@
-import { BotCommandBuilder } from "@phasejs/core/builders"
+import { BotCommandBuilder } from "@phasejs/builders"
 import {
   ActionRowBuilder,
   ButtonBuilder,
