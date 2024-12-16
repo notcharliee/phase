@@ -38,6 +38,7 @@
     "@repo/config": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/env": "workspace:*",
+    "@repo/ui": "workspace:*",
     "@repo/utils": "workspace:*",
     "@twurple/api": "^7.2.0",
     "@twurple/auth": "^7.2.0",
