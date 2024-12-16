@@ -86,7 +86,7 @@ export interface FormLabelProps
 export function FormLabel({ className, asChild, ...props }: FormLabelProps) {
   const { error, formItemId } = useFormField()
 
-  const Comp = asChild ? Slot : Label
+  const Comp = asChild ? (Slot as unknown as typeof Label) : Label
 
   return (
     <Comp
