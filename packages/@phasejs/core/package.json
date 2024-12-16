@@ -24,11 +24,6 @@
       "import": "./dist/stores.js",
       "require": "./dist/stores.js"
     },
-    "./builders": {
-      "types": "./dist/builders/index.d.ts",
-      "import": "./dist/builders/index.js",
-      "require": "./dist/builders/index.js"
-    },
     "./managers": {
       "types": "./dist/managers/index.d.ts",
       "import": "./dist/managers/index.js",
@@ -39,9 +34,7 @@
     "croner": "^8.1.2",
     "deepmerge-ts": "^7.1.3",
     "emittery": "^1.0.3",
-    "lodash": "^4.17.21",
-    "ts-mixer": "^6.0.4",
-    "zod": "^3.23.8"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.13",
