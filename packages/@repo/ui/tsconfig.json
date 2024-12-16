@@ -1,10 +1,6 @@
 {
   "extends": "@repo/config/typescript",
-  "include": [
-    "src/**/*",
-    "eslint.config.js",
-    "tailwind.config.ts"
-  ],
+  "include": ["src/**/*", "eslint.config.js", "tailwind.config.ts"],
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext"],
     "jsx": "react-jsx",
