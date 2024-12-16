@@ -14,7 +14,7 @@ export default defineConfig({
   clean: true,
   dts: true,
   minify: true,
-  splitting: false,
+  splitting: true,
   sourcemap: true,
   treeshake: true,
   async onSuccess() {
