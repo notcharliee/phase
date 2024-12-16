@@ -52,7 +52,7 @@ export function BreadcrumbLink({
   className,
   ...props
 }: BreadcrumbLinkProps) {
-  const Comp = asChild ? Slot : Link
+  const Comp = asChild ? (Slot as unknown as typeof Link) : Link
 
   return (
     <Comp
