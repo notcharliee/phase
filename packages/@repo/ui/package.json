@@ -1,0 +1,40 @@
+{
+  "private": true,
+  "name": "@repo/ui",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "lint": "eslint ."
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./card": {
+      "types": "./dist/components/card/index.d.ts",
+      "import": "./dist/components/card/index.js",
+      "require": "./dist/components/card/index.js"
+    },
+    "./skeleton": {
+      "types": "./dist/components/skeleton/index.d.ts",
+      "import": "./dist/components/skeleton/index.js",
+      "require": "./dist/components/skeleton/index.js"
+    }
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^2.5.5"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tailwindcss": "^3.4.16"
+  }
+}
