@@ -1,8 +1,8 @@
 import { bot } from "~/bot"
 import { shared } from "~/shared"
-import { site } from "~/site"
+import { www } from "~/www"
 
-const envs = { bot, site, shared } as const
+const envs = { bot, www, shared } as const
 
 type EnvNames = keyof typeof envs
 type EnvValues<TName extends EnvNames> = ReturnType<(typeof envs)[TName]>

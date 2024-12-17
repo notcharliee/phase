@@ -4,7 +4,7 @@ import { z } from "zod"
 
 import { shared } from "~/shared"
 
-export function site() {
+export function www() {
   return createEnv({
     extends: [vercel(), shared()],
     emptyStringAsUndefined: true,

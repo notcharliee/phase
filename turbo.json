@@ -22,7 +22,7 @@
         "WEBHOOK_*"
       ]
     },
-    "site#build": {
+    "www#build": {
       "cache": true,
       "dependsOn": ["@repo/config#build", "^build"],
       "outputs": [".next/**", "!.next/cache/**"],

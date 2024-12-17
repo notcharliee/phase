@@ -3,7 +3,7 @@ import { createTRPCClient, httpBatchLink } from "@trpc/client"
 
 import type { AppRouter } from "~/server/router"
 
-export const env = getEnv("site")
+export const env = getEnv("www")
 
 export const client = createTRPCClient<AppRouter>({
   links: [
