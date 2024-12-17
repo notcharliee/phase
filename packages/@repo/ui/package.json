@@ -34,6 +34,11 @@
       "import": "./dist/components/badge/index.js",
       "require": "./dist/components/badge/index.js"
     },
+    "./base-link": {
+      "types": "./dist/components/base-link/index.d.ts",
+      "import": "./dist/components/base-link/index.js",
+      "require": "./dist/components/base-link/index.js"
+    },
     "./button": {
       "types": "./dist/components/button/index.d.ts",
       "import": "./dist/components/button/index.js",
