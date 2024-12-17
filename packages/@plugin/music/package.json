@@ -22,7 +22,6 @@
   },
   "devDependencies": {
     "@plugin/voice": "workspace:*",
-    "@types/bun": "^1.1.13",
     "distube": "^5.0.4"
   },
   "peerDependencies": {

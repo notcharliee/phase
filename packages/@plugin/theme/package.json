@@ -18,9 +18,6 @@
   "dependencies": {
     "@phasejs/core": "workspace:*"
   },
-  "devDependencies": {
-    "@types/bun": "^1.1.13"
-  },
   "peerDependencies": {
     "discord.js": "^14.16.x"
   }
