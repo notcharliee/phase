@@ -1,6 +1,6 @@
 import { Button } from "@repo/ui/button"
 
-import { useFormFieldArrayContext } from "~/components/ui/form/field/array"
+import { useFormFieldArrayContext } from "~/components/form/field/array"
 
 export interface FormFieldArrayAppendButtonProps
   extends React.ComponentPropsWithRef<typeof Button> {

@@ -6,7 +6,7 @@ import {
 } from "@repo/ui/hover-card"
 import { LucideIcon } from "@repo/ui/lucide-icon"
 
-import { Link } from "~/components/ui/link"
+import { Link } from "~/components/link"
 
 export interface UserHoverCardProps {
   username: string

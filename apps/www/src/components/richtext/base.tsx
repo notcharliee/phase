@@ -5,11 +5,11 @@ import * as React from "react"
 import { Editor, Node, Text, Transforms } from "slate"
 import { Editable, Slate } from "slate-react"
 
-import { decorateEntry } from "~/components/ui/richtext/shared/decorators"
-import { ElementNode } from "~/components/ui/richtext/shared/nodes/element"
-import { LeafNode } from "~/components/ui/richtext/shared/nodes/leaf"
-import { PlaceholderNode } from "~/components/ui/richtext/shared/nodes/placeholder"
-import { isRootElement } from "~/components/ui/richtext/shared/utils"
+import { decorateEntry } from "~/components/richtext/shared/decorators"
+import { ElementNode } from "~/components/richtext/shared/nodes/element"
+import { LeafNode } from "~/components/richtext/shared/nodes/leaf"
+import { PlaceholderNode } from "~/components/richtext/shared/nodes/placeholder"
+import { isRootElement } from "~/components/richtext/shared/utils"
 
 import { cn } from "~/lib/utils"
 
@@ -19,7 +19,7 @@ import type {
   RichTextFlags,
   RichTextSerialiser,
   RichTextTransform,
-} from "~/components/ui/richtext/shared/types"
+} from "~/components/richtext/shared/types"
 import type { Descendant, NodeEntry, Path } from "slate"
 
 export interface BaseRichtextProps

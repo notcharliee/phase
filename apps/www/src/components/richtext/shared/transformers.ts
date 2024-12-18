@@ -1,7 +1,7 @@
 import type {
   RichTextFlags,
   RichTextTransform,
-} from "~/components/ui/richtext/shared/types"
+} from "~/components/richtext/shared/types"
 import type { GuildElementData } from "~/types/slate"
 import type { Element } from "slate"
 

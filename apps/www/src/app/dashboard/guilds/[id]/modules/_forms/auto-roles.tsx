@@ -3,12 +3,12 @@
 import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
-import { FormFieldArray } from "~/components/ui/form/field/array"
-import { FormFieldArrayAppendButton } from "~/components/ui/form/field/array-append-button"
-import { FormFieldArrayCard } from "~/components/ui/form/field/array-card"
-import { FormFieldSelect } from "~/components/ui/form/field/select"
-import { FormFieldSelectRole } from "~/components/ui/form/field/select-role"
-import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
+import { FormFieldArray } from "~/components/form/field/array"
+import { FormFieldArrayAppendButton } from "~/components/form/field/array-append-button"
+import { FormFieldArrayCard } from "~/components/form/field/array-card"
+import { FormFieldSelect } from "~/components/form/field/select"
+import { FormFieldSelectRole } from "~/components/form/field/select-role"
+import { FormFieldWrapper } from "~/components/form/field/wrapper"
 
 import { getOrdinal } from "~/lib/utils"
 

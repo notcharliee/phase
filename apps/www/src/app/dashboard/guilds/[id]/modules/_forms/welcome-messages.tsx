@@ -3,11 +3,11 @@
 import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
-import { FormFieldInput } from "~/components/ui/form/field/input"
-import { FormFieldRichTextarea } from "~/components/ui/form/field/rich-textarea"
-import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channel"
-import { FormFieldSwitch } from "~/components/ui/form/field/switch"
-import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
+import { FormFieldInput } from "~/components/form/field/input"
+import { FormFieldRichTextarea } from "~/components/form/field/rich-textarea"
+import { FormFieldSelectChannel } from "~/components/form/field/select-channel"
+import { FormFieldSwitch } from "~/components/form/field/switch"
+import { FormFieldWrapper } from "~/components/form/field/wrapper"
 
 import type { ModulesFormValuesInput } from "~/types/dashboard"
 

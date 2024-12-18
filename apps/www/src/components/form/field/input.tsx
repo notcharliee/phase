@@ -5,12 +5,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form"
-import { RichTextarea } from "~/components/ui/richtext/textarea"
+} from "~/components/form"
+import { Input } from "@repo/ui/input"
 
 import type { Control, FieldPath, FieldValues } from "react-hook-form"
 
-export interface FormFieldRichTextareaProps<
+export interface FormFieldInputProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > {
@@ -20,12 +20,13 @@ export interface FormFieldRichTextareaProps<
   description: string
   placeholder?: string
   disabled?: boolean
+  type?: React.HTMLInputTypeAttribute
 }
 
-export function FormFieldRichTextarea<
+export function FormFieldInput<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->(props: FormFieldRichTextareaProps<TFieldValues, TName>) {
+>(props: FormFieldInputProps<TFieldValues, TName>) {
   return (
     <FormField
       control={props.control}
@@ -35,7 +36,11 @@ export function FormFieldRichTextarea<
         <FormItem>
           <FormLabel>{props.label}</FormLabel>
           <FormControl>
-            <RichTextarea placeholder={props.placeholder} {...field} />
+            <Input
+              type={props.type}
+              placeholder={props.placeholder}
+              {...field}
+            />
           </FormControl>
           <FormDescription>{props.description}</FormDescription>
           <FormMessage />

@@ -1,7 +1,7 @@
 import type {
   RichTextDeserialiser,
   RichTextFlags,
-} from "~/components/ui/richtext/shared/types"
+} from "~/components/richtext/shared/types"
 import type {
   ChannelElement,
   GuildElementData,

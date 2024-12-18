@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu"
 
-import { useFormFieldArrayContext } from "~/components/ui/form/field/array"
+import { useFormFieldArrayContext } from "~/components/form/field/array"
 
 interface FormFieldArrayAppendSelectItem {
   label: string

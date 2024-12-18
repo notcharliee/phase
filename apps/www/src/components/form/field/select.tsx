@@ -16,7 +16,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form"
+} from "~/components/form"
 
 import type { LucideIconName } from "@repo/ui/lucide-icon"
 import type { Control, FieldPath, FieldValues } from "react-hook-form"

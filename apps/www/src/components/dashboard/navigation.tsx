@@ -7,7 +7,7 @@ import { Label } from "@repo/ui/label"
 import { LucideIcon } from "@repo/ui/lucide-icon"
 import { SimpleIcon } from "@repo/ui/simple-icon"
 
-import { Link, linkVariants } from "~/components/ui/link"
+import { Link, linkVariants } from "~/components/link"
 
 import { dashboardPages } from "~/config/nav"
 

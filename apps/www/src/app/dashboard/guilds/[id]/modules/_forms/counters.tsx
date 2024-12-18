@@ -3,13 +3,13 @@
 import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
-import { FormFieldArray } from "~/components/ui/form/field/array"
-import { FormFieldArrayAppendButton } from "~/components/ui/form/field/array-append-button"
-import { FormFieldArrayCard } from "~/components/ui/form/field/array-card"
-import { FormFieldInput } from "~/components/ui/form/field/input"
-import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channel"
-import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
-import { Link } from "~/components/ui/link"
+import { FormFieldArray } from "~/components/form/field/array"
+import { FormFieldArrayAppendButton } from "~/components/form/field/array-append-button"
+import { FormFieldArrayCard } from "~/components/form/field/array-card"
+import { FormFieldInput } from "~/components/form/field/input"
+import { FormFieldSelectChannel } from "~/components/form/field/select-channel"
+import { FormFieldWrapper } from "~/components/form/field/wrapper"
+import { Link } from "~/components/link"
 
 import type { ModulesFormValuesInput } from "~/types/dashboard"
 

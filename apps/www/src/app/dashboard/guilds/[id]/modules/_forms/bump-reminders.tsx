@@ -3,10 +3,10 @@
 import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
-import { FormFieldInput } from "~/components/ui/form/field/input"
-import { FormFieldRichTextarea } from "~/components/ui/form/field/rich-textarea"
-import { FormFieldSelectMention } from "~/components/ui/form/field/select-mention"
-import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
+import { FormFieldInput } from "~/components/form/field/input"
+import { FormFieldRichTextarea } from "~/components/form/field/rich-textarea"
+import { FormFieldSelectMention } from "~/components/form/field/select-mention"
+import { FormFieldWrapper } from "~/components/form/field/wrapper"
 
 import type { ModulesFormValuesInput } from "~/types/dashboard"
 

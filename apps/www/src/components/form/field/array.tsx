@@ -11,7 +11,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form"
+} from "~/components/form"
 
 import { cn } from "~/lib/utils"
 

@@ -11,7 +11,7 @@ import {
   HeadingDescription,
   HeadingTitle,
 } from "~/components/docs/heading"
-import { Link } from "~/components/ui/link"
+import { Link } from "~/components/link"
 import { UserHoverCard } from "~/components/user-hover-card"
 
 import { cn } from "~/lib/utils"

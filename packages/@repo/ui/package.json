@@ -39,6 +39,11 @@
       "import": "./dist/components/base-link/index.js",
       "require": "./dist/components/base-link/index.js"
     },
+    "./breadcrumb": {
+      "types": "./dist/components/breadcrumb/index.d.ts",
+      "import": "./dist/components/breadcrumb/index.js",
+      "require": "./dist/components/breadcrumb/index.js"
+    },
     "./button": {
       "types": "./dist/components/button/index.d.ts",
       "import": "./dist/components/button/index.js",
@@ -99,6 +104,11 @@
       "import": "./dist/components/hover-card/index.js",
       "require": "./dist/components/hover-card/index.js"
     },
+    "./input": {
+      "types": "./dist/components/input/index.d.ts",
+      "import": "./dist/components/input/index.js",
+      "require": "./dist/components/input/index.js"
+    },
     "./label": {
       "types": "./dist/components/label/index.d.ts",
       "import": "./dist/components/label/index.js",
@@ -143,6 +153,16 @@
       "types": "./dist/components/slot/index.d.ts",
       "import": "./dist/components/slot/index.js",
       "require": "./dist/components/slot/index.js"
+    },
+    "./switch": {
+      "types": "./dist/components/switch/index.d.ts",
+      "import": "./dist/components/switch/index.js",
+      "require": "./dist/components/switch/index.js"
+    },
+    "./textarea": {
+      "types": "./dist/components/textarea/index.d.ts",
+      "import": "./dist/components/textarea/index.js",
+      "require": "./dist/components/textarea/index.js"
     }
   },
   "dependencies": {
@@ -159,6 +179,7 @@
     "@radix-ui/react-scroll-area": "^1.2.2",
     "@radix-ui/react-select": "^2.1.3",
     "@radix-ui/react-slot": "^1.1.1",
+    "@radix-ui/react-switch": "^1.1.2",
     "@uidotdev/usehooks": "^2.4.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

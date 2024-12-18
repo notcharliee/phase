@@ -1,4 +1,4 @@
-import { SelectRole } from "~/components/dashboard/select/role"
+import { SelectChannel } from "~/components/dashboard/select/channel"
 import {
   FormControl,
   FormDescription,
@@ -6,11 +6,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form"
+} from "~/components/form"
 
+import type { AllowedChannelTypes } from "~/components/channel-icons"
 import type { Control, FieldPath, FieldValues } from "react-hook-form"
 
-export interface FormFieldSelectRoleProps<
+export interface FormFieldSelectChannelProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > {
@@ -19,14 +20,15 @@ export interface FormFieldSelectRoleProps<
   label: string
   description: string
   placeholder?: string
+  channelType?: keyof typeof AllowedChannelTypes
   multiselect?: boolean
   disabled?: boolean
 }
 
-export function FormFieldSelectRole<
+export function FormFieldSelectChannel<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->(props: FormFieldSelectRoleProps<TFieldValues, TName>) {
+>(props: FormFieldSelectChannelProps<TFieldValues, TName>) {
   return (
     <FormField
       control={props.control}
@@ -36,7 +38,8 @@ export function FormFieldSelectRole<
         <FormItem>
           <FormLabel>{props.label}</FormLabel>
           <FormControl>
-            <SelectRole
+            <SelectChannel
+              channelType={props.channelType}
               multiselect={props.multiselect}
               onValueChange={onChange}
               {...field}

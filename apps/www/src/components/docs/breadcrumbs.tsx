@@ -9,7 +9,7 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from "~/components/ui/breadcrumb"
+} from "@repo/ui/breadcrumb"
 
 import { cn } from "~/lib/utils"
 

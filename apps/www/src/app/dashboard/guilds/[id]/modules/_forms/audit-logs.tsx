@@ -3,8 +3,8 @@
 import { ModuleId } from "@repo/utils/modules"
 import { useFormContext } from "react-hook-form"
 
-import { FormFieldSelectChannel } from "~/components/ui/form/field/select-channel"
-import { FormFieldWrapper } from "~/components/ui/form/field/wrapper"
+import { FormFieldSelectChannel } from "~/components/form/field/select-channel"
+import { FormFieldWrapper } from "~/components/form/field/wrapper"
 
 import type { ModulesFormValuesInput } from "~/types/dashboard"
 

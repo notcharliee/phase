@@ -22,9 +22,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
-import { Textarea } from "~/components/ui/textarea"
+} from "~/components/form"
+import { Input } from "@repo/ui/input"
+import { Textarea } from "@repo/ui/textarea"
 
 import { createBugReport } from "./actions"
 import { formSchema } from "./schema"

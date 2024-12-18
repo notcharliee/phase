@@ -3,7 +3,7 @@ import { LucideIcon } from "@repo/ui/lucide-icon"
 
 import { Header } from "~/components/header"
 import { OrbitingDots } from "~/components/orbiting-dots"
-import { Link } from "~/components/ui/link"
+import { Link } from "~/components/link"
 
 import { siteConfig } from "~/config/site"
 

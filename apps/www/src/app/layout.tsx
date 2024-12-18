@@ -5,7 +5,7 @@ import { GeistMono } from "geist/font/mono"
 import { GeistSans } from "geist/font/sans"
 import { NuqsAdapter } from "nuqs/adapters/next/pages"
 
-import { Toaster } from "~/components/ui/sonner"
+import { Toaster } from "~/components/sonner"
 
 import { siteConfig } from "~/config/site"
 

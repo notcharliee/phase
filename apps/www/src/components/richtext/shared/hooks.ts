@@ -3,12 +3,12 @@ import * as React from "react"
 import { createEditor } from "slate"
 
 import { AllowedChannelTypes } from "~/components/channel-icons"
-import { withPlugins } from "~/components/ui/richtext/shared/plugins"
+import { withPlugins } from "~/components/richtext/shared/plugins"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 
 import type { ChannelType } from "@discordjs/core/http-only"
-import type { RichTextFlags } from "~/components/ui/richtext/shared/types"
+import type { RichTextFlags } from "~/components/richtext/shared/types"
 import type { GuildElementData } from "~/types/slate"
 
 export function useEditor() {

@@ -13,7 +13,7 @@ import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
-} from "~/components/ui/input-otp"
+} from "~/components/auth/input-otp"
 
 import { cn } from "~/lib/utils"
 

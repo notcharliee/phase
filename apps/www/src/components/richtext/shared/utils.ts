@@ -5,7 +5,7 @@ import type {
   RichTextEditor,
   RichTextFlags,
   RichTextRootElement,
-} from "~/components/ui/richtext/shared/types"
+} from "~/components/richtext/shared/types"
 import type { BasePoint } from "slate"
 import type { ReactEditor } from "slate-react"
 

@@ -1,4 +1,3 @@
-import { SelectMention } from "~/components/dashboard/select/mention"
 import {
   FormControl,
   FormDescription,
@@ -6,11 +5,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form"
+} from "~/components/form"
+import { Switch } from "@repo/ui/switch"
 
 import type { Control, FieldPath, FieldValues } from "react-hook-form"
 
-export interface FormFieldSelectMentionProps<
+export interface FormFieldSwitchProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > {
@@ -18,31 +18,27 @@ export interface FormFieldSelectMentionProps<
   name: TName
   label: string
   description: string
-  placeholder?: string
-  multiselect?: boolean
   disabled?: boolean
 }
 
-export function FormFieldSelectMention<
+export function FormFieldSwitch<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->(props: FormFieldSelectMentionProps<TFieldValues, TName>) {
+>(props: FormFieldSwitchProps<TFieldValues, TName>) {
   return (
     <FormField
       control={props.control}
       name={props.name}
       disabled={props.disabled}
-      render={({ field: { onChange, ...field } }) => (
-        <FormItem>
-          <FormLabel>{props.label}</FormLabel>
+      render={({ field: { value, onChange, ...field } }) => (
+        <FormItem className="flex items-center justify-between space-y-0">
+          <div>
+            <FormLabel>{props.label}</FormLabel>
+            <FormDescription>{props.description}</FormDescription>
+          </div>
           <FormControl>
-            <SelectMention
-              multiselect={props.multiselect}
-              onValueChange={onChange}
-              {...field}
-            />
+            <Switch checked={value} onCheckedChange={onChange} {...field} />
           </FormControl>
-          <FormDescription>{props.description}</FormDescription>
           <FormMessage />
         </FormItem>
       )}

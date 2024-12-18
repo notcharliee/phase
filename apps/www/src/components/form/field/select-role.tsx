@@ -1,3 +1,4 @@
+import { SelectRole } from "~/components/dashboard/select/role"
 import {
   FormControl,
   FormDescription,
@@ -5,12 +6,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
+} from "~/components/form"
 
 import type { Control, FieldPath, FieldValues } from "react-hook-form"
 
-export interface FormFieldInputProps<
+export interface FormFieldSelectRoleProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > {
@@ -19,26 +19,26 @@ export interface FormFieldInputProps<
   label: string
   description: string
   placeholder?: string
+  multiselect?: boolean
   disabled?: boolean
-  type?: React.HTMLInputTypeAttribute
 }
 
-export function FormFieldInput<
+export function FormFieldSelectRole<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->(props: FormFieldInputProps<TFieldValues, TName>) {
+>(props: FormFieldSelectRoleProps<TFieldValues, TName>) {
   return (
     <FormField
       control={props.control}
       name={props.name}
       disabled={props.disabled}
-      render={({ field }) => (
+      render={({ field: { onChange, ...field } }) => (
         <FormItem>
           <FormLabel>{props.label}</FormLabel>
           <FormControl>
-            <Input
-              type={props.type}
-              placeholder={props.placeholder}
+            <SelectRole
+              multiselect={props.multiselect}
+              onValueChange={onChange}
               {...field}
             />
           </FormControl>

@@ -13,7 +13,7 @@ import {
   ConfigCardStatus,
 } from "~/components/dashboard/modules/config-card"
 import { SelectFilter } from "~/components/dashboard/modules/select-filter"
-import { Form } from "~/components/ui/form"
+import { Form } from "~/components/form"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 

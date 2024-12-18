@@ -15,8 +15,8 @@ import {
   FormField,
   FormItem,
   FormLabel,
-} from "~/components/ui/form"
-import { useFormFieldArrayContext } from "~/components/ui/form/field/array"
+} from "~/components/form"
+import { useFormFieldArrayContext } from "~/components/form/field/array"
 
 import type { Control, FieldPath, FieldValues } from "react-hook-form"
 

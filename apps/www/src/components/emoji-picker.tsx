@@ -12,7 +12,7 @@ import { useDebounce } from "@uidotdev/usehooks"
 import { init as emojiMartInit, SearchIndex } from "emoji-mart"
 
 import { Spinner } from "~/components/spinner"
-import { Input } from "~/components/ui/input"
+import { Input } from "@repo/ui/input"
 
 import { cn } from "~/lib/utils"
 

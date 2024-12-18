@@ -1,9 +1,9 @@
-import { isText } from "~/components/ui/richtext/shared/utils"
+import { isText } from "~/components/richtext/shared/utils"
 
 import type {
   RichTextFlags,
   RichTextSerialiser,
-} from "~/components/ui/richtext/shared/types"
+} from "~/components/richtext/shared/types"
 
 export function createSerialiser(flags: RichTextFlags) {
   const serialise: RichTextSerialiser = (value) => {

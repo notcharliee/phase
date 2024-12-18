@@ -1,4 +1,3 @@
-import { SelectChannel } from "~/components/dashboard/select/channel"
 import {
   FormControl,
   FormDescription,
@@ -6,12 +5,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form"
+} from "~/components/form"
+import { RichTextarea } from "~/components/richtext/textarea"
 
-import type { AllowedChannelTypes } from "~/components/channel-icons"
 import type { Control, FieldPath, FieldValues } from "react-hook-form"
 
-export interface FormFieldSelectChannelProps<
+export interface FormFieldRichTextareaProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > {
@@ -20,30 +19,23 @@ export interface FormFieldSelectChannelProps<
   label: string
   description: string
   placeholder?: string
-  channelType?: keyof typeof AllowedChannelTypes
-  multiselect?: boolean
   disabled?: boolean
 }
 
-export function FormFieldSelectChannel<
+export function FormFieldRichTextarea<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->(props: FormFieldSelectChannelProps<TFieldValues, TName>) {
+>(props: FormFieldRichTextareaProps<TFieldValues, TName>) {
   return (
     <FormField
       control={props.control}
       name={props.name}
       disabled={props.disabled}
-      render={({ field: { onChange, ...field } }) => (
+      render={({ field }) => (
         <FormItem>
           <FormLabel>{props.label}</FormLabel>
           <FormControl>
-            <SelectChannel
-              channelType={props.channelType}
-              multiselect={props.multiselect}
-              onValueChange={onChange}
-              {...field}
-            />
+            <RichTextarea placeholder={props.placeholder} {...field} />
           </FormControl>
           <FormDescription>{props.description}</FormDescription>
           <FormMessage />

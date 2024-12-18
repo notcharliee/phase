@@ -1,8 +1,7 @@
-import Link from "next/link"
 import * as React from "react"
 
-import { LucideIcon } from "@repo/ui/lucide-icon"
-import { Slot } from "@repo/ui/slot"
+import { LucideIcon } from "~/components/lucide-icon"
+import { Slot } from "~/components/slot"
 
 import { cn } from "~/lib/utils"
 
@@ -41,8 +40,7 @@ export function BreadcrumbItem({ className, ...props }: BreadcrumbItemProps) {
   )
 }
 
-export interface BreadcrumbLinkProps
-  extends React.ComponentPropsWithRef<typeof Link> {
+export interface BreadcrumbLinkProps extends React.ComponentPropsWithRef<"a"> {
   asChild?: boolean
 }
 
@@ -51,7 +49,7 @@ export function BreadcrumbLink({
   className,
   ...props
 }: BreadcrumbLinkProps) {
-  const Comp = asChild ? (Slot as unknown as typeof Link) : Link
+  const Comp = asChild ? Slot : "a"
 
   return (
     <Comp
