@@ -4,6 +4,7 @@ import { use, useState } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@repo/ui/button"
+import { Input } from "@repo/ui/input"
 import {
   Select,
   SelectContent,
@@ -11,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/select"
+import { Textarea } from "@repo/ui/textarea"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -23,8 +25,6 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/form"
-import { Input } from "@repo/ui/input"
-import { Textarea } from "@repo/ui/textarea"
 
 import { createBugReport } from "./actions"
 import { formSchema } from "./schema"

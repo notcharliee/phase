@@ -17,8 +17,8 @@ import { LucideIcon } from "@repo/ui/lucide-icon"
 import { SimpleIcon } from "@repo/ui/simple-icon"
 import { useIntersectionObserver } from "@uidotdev/usehooks"
 
-import { Moon } from "~/components/moon"
 import { Link } from "~/components/link"
+import { Moon } from "~/components/moon"
 
 import { docsPages, mainPages, splitPagesByCategory } from "~/config/nav"
 

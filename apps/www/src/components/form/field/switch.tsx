@@ -1,3 +1,5 @@
+import { Switch } from "@repo/ui/switch"
+
 import {
   FormControl,
   FormDescription,
@@ -6,7 +8,6 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/form"
-import { Switch } from "@repo/ui/switch"
 
 import type { Control, FieldPath, FieldValues } from "react-hook-form"
 
