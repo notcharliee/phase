@@ -20,7 +20,7 @@
     "@mdx-js/react": "^3.1.0",
     "@next/mdx": "^15.0.3",
     "@radix-ui/react-switch": "^1.1.1",
-    "@repo/bridge": "workspace:*",
+    "@repo/trpc": "workspace:*",
     "@repo/config": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/env": "workspace:*",

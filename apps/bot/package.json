@@ -23,7 +23,7 @@
     "@plugin/emoji-sync": "workspace:*",
     "@plugin/music": "workspace:*",
     "@plugin/voice": "workspace:*",
-    "@repo/bridge": "workspace:*",
+    "@repo/trpc": "workspace:*",
     "@repo/config": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/env": "workspace:*",

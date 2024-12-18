@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@repo/bridge",
+  "name": "@repo/trpc",
   "version": "0.1.0",
   "type": "module",
   "scripts": {

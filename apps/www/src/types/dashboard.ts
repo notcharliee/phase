@@ -1,4 +1,4 @@
-import type { client } from "@repo/bridge/client"
+import type { client } from "@repo/trpc/client"
 import type { ModuleId } from "@repo/utils/modules"
 import type { GuildModules } from "~/types/db"
 import type { modulesSchema } from "~/validators/modules"

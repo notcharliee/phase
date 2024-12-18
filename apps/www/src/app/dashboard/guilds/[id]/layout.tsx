@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 
-import { client } from "@repo/bridge/client"
+import { client } from "@repo/trpc/client"
 
 import { ClientOnly } from "~/components/client-only"
 import { DashboardProvider } from "~/components/dashboard/context"

@@ -6,7 +6,7 @@ import { Client, GatewayIntentBits, Options, Partials } from "discord.js"
 import { blacklistPlugin } from "@plugin/blacklist"
 import { musicPlugin } from "@plugin/music"
 import { voicePlugin } from "@plugin/voice"
-import { bridgeServerPlugin } from "@repo/bridge/server"
+import { bridgeServerPlugin } from "@repo/trpc/server"
 
 import { blacklistOptions } from "~/lib/blacklist"
 import { botConfig } from "~/lib/config"
