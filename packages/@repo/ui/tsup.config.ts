@@ -1,14 +1,15 @@
 import fs from "node:fs/promises"
 import path from "node:path"
 
-import { defineConfig } from "tsup"
+import prettier from "prettier"
+import tsup from "tsup"
 
 type ExportsField = Record<
   string,
   { types: string; import: string; require: string } | string
 >
 
-export default defineConfig({
+export default tsup.defineConfig({
   entry: ["./src/index.ts", "./src/components/**/index.tsx"],
   format: ["esm"],
   clean: true,
@@ -17,35 +18,51 @@ export default defineConfig({
   splitting: true,
   sourcemap: true,
   treeshake: true,
-  async onSuccess() {
-    const componentsDirPath = path.resolve("./dist/components")
-    const packageJsonPath = path.resolve("./package.json")
-    const subdirs = await fs.readdir(componentsDirPath, { withFileTypes: true })
-
-    const exportsField: ExportsField = {
-      ".": {
-        types: `./dist/index.d.ts`,
-        import: `./dist/index.js`,
-        require: `./dist/index.js`,
-      },
-    }
-
-    for (const subdir of subdirs) {
-      if (!subdir.isDirectory()) continue
-      const subdirName = subdir.name
-      exportsField[`./${subdirName}`] = {
-        types: `./dist/components/${subdirName}/index.d.ts`,
-        import: `./dist/components/${subdirName}/index.js`,
-        require: `./dist/components/${subdirName}/index.js`,
-      }
-    }
-
-    const packageJson = JSON.parse(
-      await fs.readFile(packageJsonPath, "utf8"),
-    ) as Record<"exports", ExportsField>
-
-    packageJson.exports = exportsField
-
-    await fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2))
-  },
+  onSuccess,
 })
+
+async function onSuccess() {
+  const componentsDirPath = path.resolve("./dist/components")
+  const packageJsonPath = path.resolve("./package.json")
+
+  const packageJsonExportsField: ExportsField = {
+    ".": {
+      types: `./dist/index.d.ts`,
+      import: `./dist/index.js`,
+      require: `./dist/index.js`,
+    },
+  }
+
+  // read the directory contents
+  const subdirs = await fs.readdir(componentsDirPath, { withFileTypes: true })
+
+  // iterate through each subdirectory
+  for (const subdir of subdirs) {
+    if (!subdir.isDirectory()) continue
+    const subdirName = subdir.name
+
+    // define the exports field for the subdirectory
+    packageJsonExportsField[`./${subdirName}`] = {
+      types: `./dist/components/${subdirName}/index.d.ts`,
+      import: `./dist/components/${subdirName}/index.js`,
+      require: `./dist/components/${subdirName}/index.js`,
+    }
+  }
+
+  // read and parse package.json data
+  const packageJson = JSON.parse(
+    await fs.readFile(packageJsonPath, "utf8"),
+  ) as Record<"exports", ExportsField>
+
+  // update the exports field
+  packageJson.exports = packageJsonExportsField
+
+  // format the data
+  const packageJsonData = await prettier.format(
+    JSON.stringify(packageJson, null, 2),
+    { parser: "json" },
+  )
+
+  // write the data to package.json
+  await fs.writeFile(packageJsonPath, packageJsonData)
+}
