@@ -1,6 +1,5 @@
 import { Button } from "@repo/ui/button"
 import { LucideIcon } from "@repo/ui/lucide-icon"
-
 import { Header } from "~/components/header"
 import { Link } from "~/components/link"
 import { OrbitingDots } from "~/components/orbiting-dots"

@@ -4,10 +4,10 @@ import Link from "next/link"
 import React from "react"
 
 import { SiDiscord as DiscordLogoIcon } from "@icons-pack/react-simple-icons"
-import { Button } from "@repo/ui/button"
-import { Label } from "@repo/ui/label"
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp"
 
+import { Button } from "@repo/ui/button"
+import { Label } from "@repo/ui/label"
 import {
   InputOTP,
   InputOTPGroup,

@@ -1,5 +1,4 @@
 import { Switch } from "@repo/ui/switch"
-
 import {
   FormControl,
   FormDescription,

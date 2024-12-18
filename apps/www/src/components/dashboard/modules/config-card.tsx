@@ -1,5 +1,7 @@
 import React from "react"
 
+import { cva } from "class-variance-authority"
+
 import { Button } from "@repo/ui/button"
 import {
   Card,
@@ -23,8 +25,6 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu"
 import { LucideIcon } from "@repo/ui/lucide-icon"
-import { cva } from "class-variance-authority"
-
 import { BetaAlert } from "~/components/dashboard/modules/beta-alert"
 import { ModuleTags } from "~/components/dashboard/modules/module-tags"
 

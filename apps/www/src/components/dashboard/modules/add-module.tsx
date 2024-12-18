@@ -18,7 +18,6 @@ import {
   CredenzaTrigger,
 } from "@repo/ui/credenza"
 import { LucideIcon } from "@repo/ui/lucide-icon"
-
 import { ModuleTags } from "~/components/dashboard/modules/module-tags"
 
 import type { ModuleId } from "@repo/utils/modules"

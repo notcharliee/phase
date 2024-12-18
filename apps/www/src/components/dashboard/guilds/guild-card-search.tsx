@@ -1,8 +1,9 @@
 "use client"
 
+import { useQueryState } from "nuqs"
+
 import { Input } from "@repo/ui/input"
 import { LucideIcon } from "@repo/ui/lucide-icon"
-import { useQueryState } from "nuqs"
 
 export function GuildCardSearch() {
   const [guildName, setGuildName] = useQueryState("name", {

@@ -5,7 +5,6 @@ import {
   AccordionTrigger,
 } from "@repo/ui/accordion"
 import { Codeblock } from "@repo/ui/codeblock"
-
 import {
   Heading,
   HeadingDescription,

@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation"
 import * as React from "react"
 
+import { useIntersectionObserver } from "@uidotdev/usehooks"
+
 import { Button } from "@repo/ui/button"
 import {
   CommandDialog,
@@ -15,8 +17,6 @@ import {
 } from "@repo/ui/command"
 import { LucideIcon } from "@repo/ui/lucide-icon"
 import { SimpleIcon } from "@repo/ui/simple-icon"
-import { useIntersectionObserver } from "@uidotdev/usehooks"
-
 import { Link } from "~/components/link"
 import { Moon } from "~/components/moon"
 

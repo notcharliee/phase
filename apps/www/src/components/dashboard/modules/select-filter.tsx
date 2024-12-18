@@ -1,5 +1,7 @@
 import * as React from "react"
 
+import { moduleTags } from "@repo/utils/modules"
+
 import {
   Select,
   SelectContent,
@@ -7,7 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/select"
-import { moduleTags } from "@repo/utils/modules"
 
 export interface FilterOption<
   T extends string = (typeof moduleTags)[number] | "None",

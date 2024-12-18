@@ -2,9 +2,9 @@ import NextLink from "next/link"
 import { Suspense } from "react"
 
 import { client } from "@repo/trpc/client"
+
 import { Button } from "@repo/ui/button"
 import { LucideIcon } from "@repo/ui/lucide-icon"
-
 import {
   GuildCardGrid,
   GuildCardGridFallback,

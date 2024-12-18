@@ -1,13 +1,13 @@
 import * as React from "react"
 
 import { ChannelType } from "@discordjs/core/http-only"
+
 import {
   Combobox,
   ComboboxContent,
   ComboboxTrigger,
   ComboboxValue,
 } from "@repo/ui/combobox"
-
 import { AllowedChannelTypes, channelIcons } from "~/components/channel-icons"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
