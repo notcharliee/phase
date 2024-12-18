@@ -18,7 +18,7 @@ export default async function GuildLayout({
   const userId = session.user.id
   const guildId = (await params).id
 
-  const guildData = await client.getGuildById.query({
+  const guildData = await client.guilds.getById.query({
     guildId,
     adminId: userId,
   })

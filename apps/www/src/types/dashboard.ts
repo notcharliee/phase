@@ -33,7 +33,7 @@ export type GuildModulesWithData = Partial<{
 }>
 
 type DashboardGuildData = Exclude<
-  Awaited<ReturnType<typeof client.getGuildById.query>>,
+  Awaited<ReturnType<typeof client.guilds.getById.query>>,
   null
 >
 

@@ -14,7 +14,7 @@ import { GuildCardSearch } from "~/components/dashboard/guilds/guild-card-search
 import { auth } from "~/auth"
 
 export type DashboardGuild = Awaited<
-  ReturnType<typeof client.getGuilds.query>
+  ReturnType<typeof client.guilds.getByAdminId.query>
 >[number]
 
 export default function GuildsPage() {
@@ -45,7 +45,7 @@ export default function GuildsPage() {
 async function GuildCards() {
   const session = (await auth())!
 
-  const guilds = await client.getGuilds.query({
+  const guilds = await client.guilds.getByAdminId.query({
     adminId: session.user.id,
   })
 

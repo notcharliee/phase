@@ -1,7 +1,7 @@
 import { ModuleId } from "@repo/utils/modules"
 import { z } from "zod"
 
-import { privateProcedure, publicProcedure, router } from "~/server/trpc"
+import { privateProcedure, router } from "~/server/trpc"
 
 import type { GuildModules } from "@repo/db"
 import type { APIRole, NonThreadGuildBasedChannel } from "discord.js"
@@ -16,60 +16,9 @@ type GuildModulesWithData = Partial<
     >
 >
 
-export const appRouter = router({
-  // public procedures
-
-  status: publicProcedure.query(({ ctx }) => {
-    const { client } = ctx
-
-    const config = client.stores.config
-    const statusType = config.status.type as "idle" | "dnd" | "online"
-
-    const status =
-      statusType === "idle"
-        ? "Minor issues"
-        : statusType === "dnd"
-          ? "Major issues"
-          : "Operational"
-
-    const statusText = config.status.text
-
-    return {
-      status,
-      statusText,
-      uptime: client.uptime,
-      latency: client.ws.ping,
-    }
-  }),
-
-  // private procedures
-
-  getGuilds: privateProcedure
-    .input(z.object({ adminId: z.string() }))
-    .query(({ ctx, input }) => {
-      const { client } = ctx
-      const { adminId } = input
-
-      const dbGuildIds = client.stores.guilds
-        .filter((guild) => guild.admins.includes(adminId))
-        .map((guild) => guild.id)
-
-      const guilds = client.guilds.cache
-        .filter((guild) => dbGuildIds.includes(guild.id))
-        .map((guild) => ({
-          id: guild.id,
-          name: guild.name,
-          nameAcronym: guild.nameAcronym,
-          iconURL: guild.iconURL({ size: 256 }),
-          memberCount: guild.approximateMemberCount ?? 0,
-          presenceCount: guild.approximatePresenceCount ?? 0,
-        }))
-
-      return guilds
-    }),
-
-  getGuildById: privateProcedure
-    .input(z.object({ guildId: z.string(), adminId: z.string() }))
+export const guildsRouter = router({
+  getById: privateProcedure
+    .input(z.object({ guildId: z.string(), adminId: z.string().optional() }))
     .query(async ({ ctx, input }) => {
       const { client } = ctx
       const { guildId, adminId } = input
@@ -77,8 +26,13 @@ export const appRouter = router({
       const dbGuild = client.stores.guilds.get(guildId)
       const djsGuild = client.guilds.cache.get(guildId)
 
-      if (!dbGuild || !djsGuild || !dbGuild.admins.includes(adminId))
+      if (
+        !dbGuild ||
+        !djsGuild ||
+        (adminId && !dbGuild.admins.includes(adminId))
+      ) {
         return null
+      }
 
       const apiChannels = djsGuild.channels.cache
         .filter((c): c is NonThreadGuildBasedChannel => !c.isThread())
@@ -140,6 +94,28 @@ export const appRouter = router({
         modules: guildModules,
       }
     }),
-})
 
-export type AppRouter = typeof appRouter
+  getByAdminId: privateProcedure
+    .input(z.object({ adminId: z.string() }))
+    .query(({ ctx, input }) => {
+      const { client } = ctx
+      const { adminId } = input
+
+      const dbGuildIds = client.stores.guilds
+        .filter((guild) => guild.admins.includes(adminId))
+        .map((guild) => guild.id)
+
+      const guilds = client.guilds.cache
+        .filter((guild) => dbGuildIds.includes(guild.id))
+        .map((guild) => ({
+          id: guild.id,
+          name: guild.name,
+          nameAcronym: guild.nameAcronym,
+          iconURL: guild.iconURL({ size: 256 }),
+          memberCount: guild.approximateMemberCount ?? 0,
+          presenceCount: guild.approximatePresenceCount ?? 0,
+        }))
+
+      return guilds
+    }),
+})
