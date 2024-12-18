@@ -108,15 +108,15 @@ async function processAudioURL(url: string): Promise<{
     const oggStream = new PassThrough()
 
     const waveformPromise = new Promise<Buffer>((resolve, reject) => {
-      const buffers: Buffer[] = []
-      rawAudioStream.on("data", (chunk: Buffer) => buffers.push(chunk))
+      const buffers: Uint8Array[] = []
+      rawAudioStream.on("data", (chunk: Uint8Array) => buffers.push(chunk))
       rawAudioStream.on("end", () => resolve(Buffer.concat(buffers)))
       rawAudioStream.on("error", reject)
     })
 
     const oggPromise = new Promise<Buffer>((resolve, reject) => {
-      const buffers: Buffer[] = []
-      oggStream.on("data", (chunk: Buffer) => buffers.push(chunk))
+      const buffers: Uint8Array[] = []
+      oggStream.on("data", (chunk: Uint8Array) => buffers.push(chunk))
       oggStream.on("end", () => resolve(Buffer.concat(buffers)))
       oggStream.on("error", reject)
     })
