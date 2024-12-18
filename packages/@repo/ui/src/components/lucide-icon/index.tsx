@@ -17,11 +17,13 @@ type PascalToKebab<
     : PascalToKebab<Rest, `${TAccumulator}${First}`>
   : TAccumulator
 
-export type LucideIconName = PascalToKebab<keyof typeof lucideIcons>
 export type LucideIconPascalName = keyof typeof lucideIcons
+export type LucideIconName = PascalToKebab<LucideIconPascalName>
+
+const pascalIconNames = Object.keys(lucideIcons) as LucideIconPascalName[]
 
 function isValidIconName(name: string): name is LucideIconPascalName {
-  return name in lucideIcons
+  return pascalIconNames.includes(name as LucideIconPascalName)
 }
 
 export interface LucideIconProps extends LucideProps {
