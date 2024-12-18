@@ -6,10 +6,10 @@
   "prettier": "@repo/config/prettier/base.json",
   "scripts": {
     "format": "prettier --write .",
-    "dev": "turbo run dev --filter=bot --filter=www",
+    "dev": "turbo run dev --filter='./apps/*'",
     "dev:bot": "turbo run dev --filter=bot",
     "dev:site": "turbo run dev --filter=www",
-    "start": "turbo run start --filter=bot --filter=www",
+    "start": "turbo run start --filter='./apps/*'",
     "start:bot": "cd apps/bot && bun run start",
     "start:site": "cd apps/site && bun run start",
     "build": "turbo run build",
