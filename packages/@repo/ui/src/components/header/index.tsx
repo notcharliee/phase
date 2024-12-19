@@ -20,6 +20,7 @@ import { cn } from "~/lib/utils"
 import type { BaseLink } from "~/components/base-link"
 import type { LucideIconName } from "~/components/lucide-icon"
 import type { SimpleIconName } from "~/components/simple-icon"
+import type { WithRequired } from "~/types/utils"
 
 interface NavItem {
   label: string
@@ -30,9 +31,7 @@ interface NavItem {
     | { type: "simple"; name: SimpleIconName }
 }
 
-interface NavItemWithIcon
-  extends Omit<NavItem, "icon">,
-    Required<Pick<NavItem, "icon">> {}
+interface NavItemWithIcon extends WithRequired<NavItem, "icon"> {}
 
 export interface HeaderNavItems {
   main: NavItem[]
@@ -120,10 +119,7 @@ export function Header({ className, link: Link, ...props }: HeaderProps) {
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-between space-x-3 md:justify-end">
-          <NavigationCombobox
-            navItems={{ ...headerNavItems.main, ...headerNavItems.icons }}
-            link={Link}
-          />
+          <NavigationCombobox link={Link} />
           <nav className="flex items-center gap-1.5">
             {headerNavItems.icons.map((item) => (
               <Button
@@ -151,11 +147,10 @@ export function Header({ className, link: Link, ...props }: HeaderProps) {
 }
 
 interface NavigationComboboxProps {
-  navItems: NavItem[]
   link: typeof BaseLink
 }
 
-function NavigationCombobox({ navItems, link: Link }: NavigationComboboxProps) {
+function NavigationCombobox({ link: Link }: NavigationComboboxProps) {
   const [open, setOpen] = React.useState(false)
 
   React.useEffect(() => {
@@ -177,6 +172,8 @@ function NavigationCombobox({ navItems, link: Link }: NavigationComboboxProps) {
     document.addEventListener("keydown", onKeyDown)
     return () => document.removeEventListener("keydown", onKeyDown)
   }, [])
+
+  const onItemClick = React.useCallback(() => setOpen(false), [])
 
   return (
     <div className="w-full flex-1 md:w-auto md:flex-none">
@@ -205,14 +202,19 @@ function NavigationCombobox({ navItems, link: Link }: NavigationComboboxProps) {
         <CommandList>
           <CommandEmpty>{"No results found :("}</CommandEmpty>
           <CommandGroup heading="Main Links">
-            {navItems.map((item) => (
+            {[...headerNavItems.main, ...headerNavItems.icons].map((item) => (
               <CommandItem key={item.href} value={item.label} asChild>
-                <Link href={item.href} external={item.external}>
-                  {item.external ? (
-                    <LucideIcon name="external-link" className="mr-2" />
-                  ) : (
-                    <LucideIcon name="scroll-text" className="mr-2" />
-                  )}
+                <Link
+                  label={item.label}
+                  href={item.href}
+                  external={item.external}
+                  variant={"no-underline"}
+                  onClick={onItemClick}
+                >
+                  <LucideIcon
+                    name={item.external ? "external-link" : "scroll-text"}
+                    className="mr-2"
+                  />
                   {item.label}
                 </Link>
               </CommandItem>
