@@ -1,3 +1,5 @@
+"use client"
+
 import NextLink from "next/link"
 
 import { BaseLink, baseLinkVariants } from "@repo/ui/base-link"
