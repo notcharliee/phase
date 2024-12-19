@@ -8,7 +8,10 @@ import {
   ComboboxTrigger,
   ComboboxValue,
 } from "@repo/ui/combobox"
-import { AllowedChannelTypes, channelIcons } from "~/components/channel-icons"
+import {
+  AllowedChannelTypes,
+  channelIcons,
+} from "~/components/dashboard/channel-icons"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"
 

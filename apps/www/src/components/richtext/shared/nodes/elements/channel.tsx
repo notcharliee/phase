@@ -1,6 +1,6 @@
 "use client"
 
-import { ChannelIcon } from "~/components/channel-icons"
+import { ChannelIcon } from "~/components/dashboard/channel-icons"
 
 import type { RenderElementProps } from "slate-react"
 

@@ -12,7 +12,7 @@ import {
   CommandList,
 } from "@repo/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover"
-import { ChannelIcon } from "~/components/channel-icons"
+import { ChannelIcon } from "~/components/dashboard/channel-icons"
 
 import { useElementSize } from "~/hooks/use-element-size"
 

@@ -1,4 +1,4 @@
-import type { AllowedChannelType } from "~/components/channel-icons"
+import type { AllowedChannelType } from "~/components/dashboard/channel-icons"
 
 // base interfaces //
 

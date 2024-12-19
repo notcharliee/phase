@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { createEditor } from "slate"
 
-import { AllowedChannelTypes } from "~/components/channel-icons"
+import { AllowedChannelTypes } from "~/components/dashboard/channel-icons"
 import { withPlugins } from "~/components/richtext/shared/plugins"
 
 import { useDashboardContext } from "~/hooks/use-dashboard-context"

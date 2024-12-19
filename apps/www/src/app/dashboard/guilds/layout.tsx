@@ -1,4 +1,4 @@
-import { ClientOnly } from "~/components/client-only"
+import { ClientOnly } from "~/components/dashboard/client-only"
 import { DashboardNavigation } from "~/components/dashboard/navigation"
 
 import type { LayoutProps } from "~/types/props"

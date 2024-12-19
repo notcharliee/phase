@@ -13,7 +13,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "~/components/auth/input-otp"
-import { OrSeparator } from "~/components/or-separator"
+import { OrSeparator } from "~/components/auth/or-separator"
 
 import { cn } from "~/lib/utils"
 

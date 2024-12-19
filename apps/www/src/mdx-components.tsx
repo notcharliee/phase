@@ -10,8 +10,8 @@ import {
   HeadingDescription,
   HeadingTitle,
 } from "~/components/docs/heading"
+import { UserHoverCard } from "~/components/docs/user-hover-card"
 import { Link } from "~/components/link"
-import { UserHoverCard } from "~/components/user-hover-card"
 
 import { cn } from "~/lib/utils"
 

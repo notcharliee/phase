@@ -8,7 +8,7 @@ import {
   FormMessage,
 } from "~/components/form"
 
-import type { AllowedChannelTypes } from "~/components/channel-icons"
+import type { AllowedChannelTypes } from "~/components/dashboard/channel-icons"
 import type { Control, FieldPath, FieldValues } from "react-hook-form"
 
 export interface FormFieldSelectChannelProps<

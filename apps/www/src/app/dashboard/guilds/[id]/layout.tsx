@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 
 import { client } from "@repo/trpc/client"
 
-import { ClientOnly } from "~/components/client-only"
+import { ClientOnly } from "~/components/dashboard/client-only"
 import { DashboardProvider } from "~/components/dashboard/context"
 
 import { auth } from "~/auth"
