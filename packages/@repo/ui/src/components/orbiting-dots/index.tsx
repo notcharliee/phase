@@ -21,16 +21,16 @@ export const orbitingDotsVariants = cva(undefined, {
   },
 })
 
-interface OrbitingDotsProps
+export interface OrbitingDotsProps
   extends React.ComponentPropsWithRef<"svg">,
     VariantProps<typeof orbitingDotsVariants> {}
 
-export const OrbitingDots = ({
+export function OrbitingDots({
   className,
   animate,
   size,
   ...props
-}: OrbitingDotsProps) => {
+}: OrbitingDotsProps) {
   return (
     <svg
       width="1156"

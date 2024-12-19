@@ -114,10 +114,25 @@
       "import": "./dist/components/label/index.js",
       "require": "./dist/components/label/index.js"
     },
+    "./loading": {
+      "types": "./dist/components/loading/index.d.ts",
+      "import": "./dist/components/loading/index.js",
+      "require": "./dist/components/loading/index.js"
+    },
     "./lucide-icon": {
       "types": "./dist/components/lucide-icon/index.d.ts",
       "import": "./dist/components/lucide-icon/index.js",
       "require": "./dist/components/lucide-icon/index.js"
+    },
+    "./moon": {
+      "types": "./dist/components/moon/index.d.ts",
+      "import": "./dist/components/moon/index.js",
+      "require": "./dist/components/moon/index.js"
+    },
+    "./orbiting-dots": {
+      "types": "./dist/components/orbiting-dots/index.d.ts",
+      "import": "./dist/components/orbiting-dots/index.js",
+      "require": "./dist/components/orbiting-dots/index.js"
     },
     "./popover": {
       "types": "./dist/components/popover/index.d.ts",
@@ -153,6 +168,11 @@
       "types": "./dist/components/slot/index.d.ts",
       "import": "./dist/components/slot/index.js",
       "require": "./dist/components/slot/index.js"
+    },
+    "./spinner": {
+      "types": "./dist/components/spinner/index.d.ts",
+      "import": "./dist/components/spinner/index.js",
+      "require": "./dist/components/spinner/index.js"
     },
     "./switch": {
       "types": "./dist/components/switch/index.d.ts",

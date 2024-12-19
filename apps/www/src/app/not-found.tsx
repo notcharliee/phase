@@ -1,7 +1,7 @@
 import { type Metadata } from "next"
 
+import { Moon } from "@repo/ui/moon"
 import { Header } from "~/components/header"
-import { Moon } from "~/components/moon"
 
 export const metadata: Metadata = {
   title: "Not Found - Phase Bot",

@@ -1,4 +1,4 @@
-import { OrbitingDots } from "~/components/orbiting-dots"
+import { OrbitingDots } from "@repo/ui/orbiting-dots"
 
 import type { LayoutProps } from "~/types/props"
 

@@ -5,7 +5,7 @@ import { useRef } from "react"
 import { useFormContext } from "react-hook-form"
 
 import { Button } from "@repo/ui/button"
-import { Spinner } from "~/components/spinner"
+import { Spinner } from "@repo/ui/spinner"
 
 import { useElementSize } from "~/hooks/use-element-size"
 

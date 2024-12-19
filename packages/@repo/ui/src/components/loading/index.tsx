@@ -1,11 +1,11 @@
+import { Moon } from "~/components/moon"
+import { OrbitingDots } from "~/components/orbiting-dots"
+
 import { cn } from "~/lib/utils"
 
-import { Moon } from "./moon"
-import { OrbitingDots } from "./orbiting-dots"
+export interface LoadingProps extends React.ComponentPropsWithRef<"div"> {}
 
-interface LoadingProps extends React.ComponentPropsWithRef<"div"> {}
-
-export const Loading = ({ className, ...props }: LoadingProps) => {
+export function Loading({ className, ...props }: LoadingProps) {
   return (
     <div
       className={cn(

@@ -16,9 +16,9 @@ import {
   CommandSeparator,
 } from "@repo/ui/command"
 import { LucideIcon } from "@repo/ui/lucide-icon"
+import { Moon } from "@repo/ui/moon"
 import { SimpleIcon } from "@repo/ui/simple-icon"
 import { Link } from "~/components/link"
-import { Moon } from "~/components/moon"
 
 import { docsPages, mainPages, splitPagesByCategory } from "~/config/nav"
 

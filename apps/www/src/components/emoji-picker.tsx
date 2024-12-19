@@ -12,7 +12,7 @@ import { Input } from "@repo/ui/input"
 import { Label } from "@repo/ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover"
 import { ScrollArea } from "@repo/ui/scroll-area"
-import { Spinner } from "~/components/spinner"
+import { Spinner } from "@repo/ui/spinner"
 
 import { cn } from "~/lib/utils"
 
