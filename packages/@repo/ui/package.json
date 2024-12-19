@@ -99,6 +99,11 @@
       "import": "./dist/components/dropdown-menu/index.js",
       "require": "./dist/components/dropdown-menu/index.js"
     },
+    "./header": {
+      "types": "./dist/components/header/index.d.ts",
+      "import": "./dist/components/header/index.js",
+      "require": "./dist/components/header/index.js"
+    },
     "./hover-card": {
       "types": "./dist/components/hover-card/index.d.ts",
       "import": "./dist/components/hover-card/index.js",

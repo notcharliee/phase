@@ -1,7 +1,8 @@
 import { type Metadata } from "next"
 
+import { Header } from "@repo/ui/header"
 import { Moon } from "@repo/ui/moon"
-import { Header } from "~/components/header"
+import { Link } from "~/components/link"
 
 export const metadata: Metadata = {
   title: "Not Found - Phase Bot",
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <main className="flex min-h-screen w-full flex-col">
-      <Header />
+      <Header link={Link} />
       <div className="grid h-[calc(100vh-4rem-1px)]">
         <div className="absolute animate-[text-fade-in_1s_2s_forwards] place-self-center text-center opacity-0">
           <h1 className="text-[9rem] font-black leading-none tracking-tighter">

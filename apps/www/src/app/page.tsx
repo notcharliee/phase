@@ -1,7 +1,7 @@
 import { Button } from "@repo/ui/button"
+import { Header } from "@repo/ui/header"
 import { LucideIcon } from "@repo/ui/lucide-icon"
 import { OrbitingDots } from "@repo/ui/orbiting-dots"
-import { Header } from "~/components/header"
 import { Link } from "~/components/link"
 
 import { siteConfig } from "~/config/site"
@@ -12,7 +12,7 @@ export default function Home() {
       <div className="fixed left-1/2 top-1/2 -z-10 -translate-x-1/2 -translate-y-1/2">
         <OrbitingDots size={"screen"} />
       </div>
-      <Header />
+      <Header link={Link} />
       <div className="container grid h-full place-items-center">
         <section className="flex max-w-[980px] flex-col items-center md:py-12 md:pb-8 lg:py-24 lg:pb-20">
           <div className="hidden md:mb-6 md:block">
