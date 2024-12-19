@@ -17,7 +17,6 @@ export default tsup.defineConfig({
   minify: true,
   splitting: true,
   sourcemap: true,
-  treeshake: true,
   onSuccess,
 })
 
