@@ -7,12 +7,12 @@ import emojiData from "@emoji-mart/data/sets/15/twitter.json"
 import { useDebounce } from "@uidotdev/usehooks"
 import { init as emojiMartInit, SearchIndex } from "emoji-mart"
 
-import { Button } from "@repo/ui/button"
-import { Input } from "@repo/ui/input"
-import { Label } from "@repo/ui/label"
-import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover"
-import { ScrollArea } from "@repo/ui/scroll-area"
-import { Spinner } from "@repo/ui/spinner"
+import { Button } from "~/components/button"
+import { Input } from "~/components/input"
+import { Label } from "~/components/label"
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/popover"
+import { ScrollArea } from "~/components/scroll-area"
+import { Spinner } from "~/components/spinner"
 
 import { cn } from "~/lib/utils"
 

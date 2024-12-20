@@ -99,6 +99,11 @@
       "import": "./dist/components/dropdown-menu/index.js",
       "require": "./dist/components/dropdown-menu/index.js"
     },
+    "./emoji-picker": {
+      "types": "./dist/components/emoji-picker/index.d.ts",
+      "import": "./dist/components/emoji-picker/index.js",
+      "require": "./dist/components/emoji-picker/index.js"
+    },
     "./header": {
       "types": "./dist/components/header/index.d.ts",
       "import": "./dist/components/header/index.js",
@@ -191,6 +196,8 @@
     }
   },
   "dependencies": {
+    "@discordjs/collection": "^2.1.1",
+    "@emoji-mart/data": "^1.2.1",
     "@icons-pack/react-simple-icons": "^10.2.0",
     "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-avatar": "^1.1.2",
@@ -209,6 +216,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.4",
+    "emoji-mart": "^5.6.0",
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -216,6 +224,7 @@
     "vaul": "^1.1.2"
   },
   "devDependencies": {
+    "@total-typescript/ts-reset": "^0.6.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "tailwindcss": "^3.4.16"

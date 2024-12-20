@@ -1,4 +1,4 @@
-import { EmojiPicker } from "~/components/emoji-picker"
+import { EmojiPicker } from "@repo/ui/emoji-picker"
 import {
   FormControl,
   FormDescription,
